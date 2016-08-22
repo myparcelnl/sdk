@@ -45,28 +45,6 @@ Also the php curl extension needs to be installed.
 ### Quick start and examples
 
 ```php
-use DivideBV\Postnl\Postnl;
-use DivideBV\Postnl\ComplexTypes;
-
-// Create client class using credentials received from PostNL.
-$client = new Postnl(
-    12345678,   // Customer number
-    'ABCD',     // Customer code
-    'Acme BV',  // Customer name
-    'Acme',     // Username
-    'Password', // Password
-    123456,     // Collection location
-    'CD1234',   // Globalpack
-    true        // Whether to use PostNL's sandbox environment.
-);
-
-/**
- * Jan Smit
- * Smit & Zonen
- * Hoofdstraat 1A
- * 1234 AB Heikant
- * The Netherlands
- */
 $receiverAddress = ComplexTypes\Address::create()
     ->setAddressType('01')
     ->setFirstName('Jan')
