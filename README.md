@@ -59,6 +59,7 @@ $receiverAddress = ComplexTypes\Address::create()
 
 
 ```
+![Alt text](https://monosnap.com/file/aWQJie1Uli0QD55z7jVA85LG34kbdQ.png)
 
 ### Testing
 Please run ```vendor/bin/phpunit --bootstrap vendor/autoload.php  tests/``` to test the application
