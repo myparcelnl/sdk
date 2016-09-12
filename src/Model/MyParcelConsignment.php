@@ -16,14 +16,14 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since release 0.1.0
  */
-namespace MyParcel\sdk\Model;
+namespace myparcelnl\sdk\Model;
 
 
 /**
  * A model of a consignment
  *
  * Class Consignment
- * @package MyParcel\sdk\Model
+ * @package myparcelnl\sdk\Model
  */
 class MyParcelConsignment
 {
@@ -50,17 +50,17 @@ class MyParcelConsignment
     /**
      * @var string
      */
-    private $cc;
+    private $cc = '';
 
     /**
      * @var string
      */
-    private $city;
+    private $city = '';
 
     /**
      * @var string
      */
-    private $street;
+    private $street = '';
 
     /**
      * @var integer
@@ -70,42 +70,42 @@ class MyParcelConsignment
     /**
      * @var string
      */
-    private $number_suffix;
+    private $number_suffix = '';
 
     /**
      * @var string
      */
-    private $postal_code;
+    private $postal_code = '';
 
     /**
      * @var string
      */
-    private $person;
+    private $person = '';
 
     /**
      * @var string
      */
-    private $company;
+    private $company = '';
 
     /**
      * @var string
      */
-    private $email;
+    private $email = '';
 
     /**
      * @var string
      */
-    private $phone;
+    private $phone = '';
 
     /**
      * @var integer
      */
-    private $package_type;
+    private $package_type = 1;
 
     /**
      * @var integer
      */
-    private $delivery_type;
+    private $delivery_type = 2;
 
     /**
      * @var string
@@ -140,12 +140,12 @@ class MyParcelConsignment
     /**
      * @var string
      */
-    private $label_description;
+    private $label_description = '';
 
     /**
      * @var array
      */
-    private $insurance = [];
+    private $insurance = 0;
 
     /**
      * @var int
@@ -173,11 +173,16 @@ class MyParcelConsignment
     /**
      * The id of the consignment
      *
+     * Save this id in your database
+     *
+     * @return $this
+     *
      * @param int $id
      */
     public function setId($id)
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -194,27 +199,24 @@ class MyParcelConsignment
      * The key must be given to each shipment. So you can create multiple shipments
      * in one time for different shops. This way you will not have to ask for the
      * shop ID. The field shop ID is therefore not necessary.
+     * Required: Yes
      *
      * @param string $apiKey
+     *
+     * @return $this
      */
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+        return $this;
     }
 
     /**
-     * @return int
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Status of the consignment
+     * Get the status of the consignment
      *
-     * Pattern: [1 – 99]
-     * Example: 1 pending - concept
+     * Pattern: [1 – 99]<br>
+     * Example:
+     *          1 pending - concept
      *          2 pending - registered
      *          3 enroute - handed to carrier
      *          4 enroute - sorting
@@ -238,11 +240,24 @@ class MyParcelConsignment
      *          38 inactive - delivered - package picked up
      *          99 inactive - unknown
      *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Status of the consignment
+     *
      * @param int $status
+     *
+     * @return $this
      */
     public function setStatus($status)
     {
         $this->status = $status;
+        return $this;
     }
 
     /**
@@ -260,16 +275,19 @@ class MyParcelConsignment
      * Required: No
      *
      * @param mixed $shop_id
+     *
+     * @return $this
      */
     public function setShopId($shop_id)
     {
         $this->shop_id = $shop_id;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getCc()
+    public function getCountry()
     {
         return $this->cc;
     }
@@ -277,16 +295,21 @@ class MyParcelConsignment
     /**
      * The address country code
      *
-     * ISO3166-1 alpha2 country code
-     * Pattern: [A-Z]{2,2}
-     * Example: NL, BE, CW
+     * ISO3166-1 alpha2 country code<br>
+     * <br>
+     * Pattern: [A-Z]{2,2}<br>
+     * Example: NL, BE, CW<br>
      * Required: Yes
      *
      * @param string $cc
+     *
+     * @return $this
      */
-    public function setCc($cc)
+    public function setCountry($cc)
     {
         $this->cc = $cc;
+
+        return $this;
     }
 
     /**
@@ -303,10 +326,13 @@ class MyParcelConsignment
      * Required: Yes
      *
      * @param string $city
+     *
+     * @return $this
      */
     public function setCity($city)
     {
         $this->city = $city;
+        return $this;
     }
 
     /**
@@ -320,13 +346,16 @@ class MyParcelConsignment
     /**
      * The address street name
      *
-     * Required: Yes, for international shipment use setFullStreet()
+     * Required: Yes or use setFullStreet()
      *
      * @param string $street
+     *
+     * @return $this
      */
     public function setStreet($street)
     {
         $this->street = $street;
+        return $this;
     }
 
     /**
@@ -346,10 +375,13 @@ class MyParcelConsignment
      * Required: Yes for NL
      *
      * @param int $number
+     *
+     * @return $this
      */
     public function setNumber($number)
     {
         $this->number = $number;
+        return $this;
     }
 
     /**
@@ -366,10 +398,13 @@ class MyParcelConsignment
      * Required: no
      *
      * @param string $number_suffix
+     *
+     * @return $this
      */
     public function setNumberSuffix($number_suffix)
     {
         $this->number_suffix = $number_suffix;
+        return $this;
     }
 
     /**
@@ -386,10 +421,13 @@ class MyParcelConsignment
      * Required: Yes for NL and EU destinations except for IE
      *
      * @param string $postal_code
+     *
+     * @return $this
      */
     public function setPostalCode($postal_code)
     {
         $this->postal_code = $postal_code;
+        return $this;
     }
 
     /**
@@ -406,10 +444,13 @@ class MyParcelConsignment
      * Required: Yes
      *
      * @param string $person
+     *
+     * @return $this
      */
     public function setPerson($person)
     {
         $this->person = $person;
+        return $this;
     }
 
     /**
@@ -426,10 +467,13 @@ class MyParcelConsignment
      * Required: no
      *
      * @param string $company
+     *
+     * @return $this
      */
     public function setCompany($company)
     {
         $this->company = $company;
+        return $this;
     }
 
     /**
@@ -446,10 +490,13 @@ class MyParcelConsignment
      * Required: no
      *
      * @param string $email
+     *
+     * @return $this
      */
     public function setEmail($email)
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -466,10 +513,13 @@ class MyParcelConsignment
      * Required: no
      *
      * @param string $phone
+     *
+     * @return $this
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
+        return $this;
     }
 
     /**
@@ -488,14 +538,16 @@ class MyParcelConsignment
      * Example: 1. package
      *          2. mailbox package
      *          3. letter
-     *
      * Required: Yes
      *
      * @param int $package_type
+     *
+     * @return $this
      */
     public function setPackageType($package_type)
     {
         $this->package_type = $package_type;
+        return $this;
     }
 
     /**
@@ -512,10 +564,13 @@ class MyParcelConsignment
      * Required: Yes if delivery_date has been specified
      *
      * @param int $delivery_type
+     *
+     * @return $this
      */
     public function setDeliveryType($delivery_type)
     {
         $this->delivery_type = $delivery_type;
+        return $this;
     }
 
     /**
@@ -533,10 +588,13 @@ class MyParcelConsignment
      * Required: Yes if delivery type has been specified
      *
      * @param string $delivery_date
+     *
+     * @return $this
      */
     public function setDeliveryDate($delivery_date)
     {
         $this->delivery_date = $delivery_date;
+        return $this;
     }
 
     /**
@@ -553,10 +611,13 @@ class MyParcelConsignment
      * Required: No
      *
      * @param string $delivery_remark
+     *
+     * @return $this
      */
     public function setDeliveryRemark($delivery_remark)
     {
         $this->delivery_remark = $delivery_remark;
+        return $this;
     }
 
     /**
@@ -573,10 +634,13 @@ class MyParcelConsignment
      * Required: No
      *
      * @param boolean $only_recipient
+     *
+     * @return $this
      */
     public function setOnlyRecipient($only_recipient)
     {
         $this->only_recipient = $only_recipient;
+        return $this;
     }
 
     /**
@@ -593,10 +657,13 @@ class MyParcelConsignment
      * Required: No
      *
      * @param boolean $signature
+     *
+     * @return $this
      */
     public function setSignature($signature)
     {
         $this->signature = $signature;
+        return $this;
     }
 
     /**
@@ -613,10 +680,13 @@ class MyParcelConsignment
      * Required: No
      *
      * @param boolean $return
+     *
+     * @return $this
      */
     public function setReturn($return)
     {
         $this->return = $return;
+        return $this;
     }
 
     /**
@@ -633,10 +703,13 @@ class MyParcelConsignment
      * Required: No
      *
      * @param boolean $large_format
+     *
+     * @return $this
      */
     public function setLargeFormat($large_format)
     {
         $this->large_format = $large_format;
+        return $this;
     }
 
     /**
@@ -655,10 +728,13 @@ class MyParcelConsignment
      * Required: No
      *
      * @param mixed $label_description
+     *
+     * @return $this
      */
     public function setLabelDescription($label_description)
     {
         $this->label_description = $label_description;
+        return $this;
     }
 
     /**
@@ -674,15 +750,17 @@ class MyParcelConsignment
      *
      * Composite type containing integer and currency. The amount is without decimal
      * separators (in cents).
-     * Pattern: {"amount": integer, "currency": currency }
-     * Example: {"amount": 5000, "currency": "EUR"}
+     * Pattern: [50, 250, 500, 1000, 1500, (...) - 5000]
      * Required: No
      *
      * @param array $insurance
+     *
+     * @return $this
      */
     public function setInsurance($insurance)
     {
         $this->insurance = $insurance;
+        return $this;
     }
 
     /**
@@ -699,7 +777,7 @@ class MyParcelConsignment
      * The package contents are only needed in case of shipping outside EU,
      * this is mandatory info for customs form.
      * Pattern: [1 - 5]
-     * Example  1. commerial goods
+     * Example  1. commercial goods
      *          2. commercial samples
      *          3. documents
      *          4. gifts
@@ -707,10 +785,13 @@ class MyParcelConsignment
      * Required: Yes
      *
      * @param int $contents
+     *
+     * @return $this
      */
     public function setContents($contents)
     {
         $this->contents = $contents;
+        return $this;
     }
 
 
@@ -728,10 +809,13 @@ class MyParcelConsignment
      * Required: Yes for commercial goods, commercial samples and return shipment package contents.
      *
      * @param string $invoice
+     *
+     * @return $this
      */
     public function setInvoice($invoice)
     {
         $this->invoice = $invoice;
+        return $this;
     }
 
     /**

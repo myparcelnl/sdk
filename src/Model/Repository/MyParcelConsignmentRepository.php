@@ -14,16 +14,16 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since release 0.1.0
  */
-namespace MyParcel\sdk\Model\Repository;
+namespace myparcelnl\sdk\Model\Repository;
 
 
-use MyParcel\sdk\Model\MyParcelConsignment;
+use myparcelnl\sdk\Model\MyParcelConsignment;
 
 /**
  * The repository of a MyParcel consignment
  *
  * Class MyParcelConsignmentRepository
- * @package MyParcel\sdk\Model\Repository
+ * @package myparcelnl\sdk\Model\Repository
  */
 class MyParcelConsignmentRepository extends MyParcelConsignment
 {
@@ -54,21 +54,22 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
-     * Splitting a full NL address and save it in this class
+     * Splitting a full NL address and save it in this object
      *
-     * Required: Yes for international shipment
+     * Required: Yes or use setStreet()
      *
      * @param $fullStreet
      *
+     * @return $this
      * @throws \Exception
      */
     public function setFullStreet($fullStreet)
     {
-        if ($this->getCc() === null) {
+        if ($this->getCountry() === null) {
             throw new \Exception('First set the country code with setCc() before running setFullStreet()');
         }
 
-        if ($this->getCc() == 'NL') {
+        if ($this->getCountry() == 'NL') {
             $streetData = $this->_splitStreet($fullStreet);
             $this->setStreet($streetData['street']);
             $this->setNumber($streetData['number']);
@@ -76,6 +77,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         } else {
             $this->setStreet($fullStreet);
         }
+        return $this;
     }
 
 

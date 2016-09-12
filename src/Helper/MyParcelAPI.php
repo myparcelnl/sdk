@@ -16,8 +16,11 @@
  * @since       File available since Release 0.1.0
  */
 
-namespace MyParcel\sdk\Helper;
-use MyParcel\sdk\Model\Repository\MyParcelConsignmentRepository;
+namespace myparcelnl\sdk\Helper;
+
+use myparcelnl\sdk\Model\MyParcelConsignment;
+use myparcelnl\sdk\Model\MyParcelRequest;
+use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
@@ -29,9 +32,42 @@ use MyParcel\sdk\Model\Repository\MyParcelConsignmentRepository;
 class MyParcelAPI
 {
     /**
+     * Supported request types.
+     */
+    const REQUEST_TYPE_CREATE_CONSIGNMENT = 'shipments';
+
+    /**
+     * API headers
+     */
+    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json; ';
+    const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; ';
+
+    /**
      * @var array
      */
     private $consignments = [];
+
+    /**
+     * @var string
+     */
+    private $paper_size = 'A6';
+
+    /**
+     * The position of the label on the paper.
+     * pattern: [1 - 4]
+     * example: 1. (top-left)
+     *          2. (top-right)
+     *          3. (bottom-left)
+     *          4. (bottom-right)
+     *
+     * @var string
+     */
+    private $label_position = null;
+
+    /**
+     * @var bool
+     */
+    private $return = false;
 
     /**
      * @return array
@@ -49,29 +85,155 @@ class MyParcelAPI
     /**
      * @param MyParcelConsignmentRepository $consignment
      *
+     * @return $this
      * @throws \Exception
      */
     public function addConsignment(MyParcelConsignmentRepository $consignment)
     {
-        if ($consignment->getApiKey() === null) {
-            throw new \Exception('First set the API key with setCc() before running addConsignment()');
+        if ($consignment->getApiKey() === null)
+            throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
+
+        $this->consignments[] = $consignment;
+        return $this;
+    }
+
+    public function createConcepts()
+    {
+        $consignmentsSortedByKey = $this->getConsignmentsOrderByKey();
+
+        foreach ($consignmentsSortedByKey as $key => $consignments) {
+
+            $data = $this->getData($consignments);
+            $request = new MyParcelRequest();
+            $request
+                ->setRequestParameters($data, $key, 'shipments', self::REQUEST_HEADER_SHIPMENT)
+                ->sendRequest();
+
+            if($request->getError()) {
+                throw new \Exception('Error in createConcepts(): ' . $request->getError());
+            }
+
+            var_dump($request->getResult());
         }
 
-        $this->consignments[][$consignment->getApiKey()] = $consignment;
+        return $this;
     }
 
-    public function registerConcept()
+    public function getLatestData()
     {
-        var_dump($this->consignments);
+        return $this;
     }
 
-    public function getLabel()
+    public function isReturn($return = true)
     {
-        var_dump($this->consignments);
+        $this->return = $return;
+        return $this;
     }
 
-    public function getReturnLabel()
+    /**
+     * @param array|int|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
+     *                                  number, the following labels will fill the ascending positions. Positioning is
+     *                                  only applied on the first page with labels. All subsequent pages will use the
+     *                                  default positioning [1,2,3,4].
+     *
+     * @return $this
+     */
+    public function setA4($positions = 1)
     {
-        var_dump($this->consignments);
+        /** If $positions is not false, set paper size to A4 */
+        if (is_numeric($positions)) {
+            /** Generating positions for A4 paper */
+            $this->paper_size = 'A4';
+            $this->label_position = $this->getPositions($positions);
+        } elseif (is_array($positions)) {
+            /** Set positions for A4 paper */
+            $positions = implode(';', $positions);
+            $this->paper_size = 'A4';
+            $this->label_position = $positions;
+        } else {
+            /** Set paper size to A6 */
+            $this->paper_size = 'A6';
+            $this->label_position = null;
+        }
+
+        return $this;
+    }
+
+    private function getData($consignments)
+    {
+        $data = [];
+        /** @var $consignment MyParcelConsignmentRepository */
+        foreach ($consignments as $consignment) {
+            $aConsignment = array(
+                'recipient' => array(
+                    'cc' => $consignment->getCountry(),
+                    'person' => $consignment->getPerson(),
+                    'company' => $consignment->getCompany(),
+                    'postal_code' => $consignment->getPostalCode(),
+                    'street' => $consignment->getStreet(),
+                    'number' => $consignment->getNumber(),
+                    'number_suffix' => $consignment->getNumberSuffix(),
+                    'city' => $consignment->getCity(),
+                    'email' => $consignment->getEmail(),
+                    'phone' => $consignment->getPhone(),
+                ),
+                'options' => [
+                    'package_type' => $consignment->getPackageType(),
+                    'large_format' => $consignment->isLargeFormat() ? 1 : 0,
+                    'only_recipient' => $consignment->isOnlyRecipient() ? 1 : 0,
+                    'signature' => $consignment->isSignature() ? 1 : 0,
+                    'return' => $this->return ? 1 : 0,
+                    'label_description' => $consignment->getLabelDescription(),
+                    'delivery_type' => $consignment->getDeliveryType(),
+                ],
+                'carrier' => 1
+            );
+
+            if ($consignment->getInsurance() > 1) {
+                $aConsignment['options']['insurance'] = ['amount' => $consignment->getInsurance(), 'currency' => 'EUR'];
+            }
+            if($consignment->getDeliveryDate())
+                $aConsignment['options']['delivery_date'] = $consignment->getDeliveryDate();
+
+            $data['data']['shipments'][] = $aConsignment;
+
+        }
+        return json_encode($data);
+    }
+
+    /**
+     * Generating positions for A4 paper
+     *
+     * @param int $start
+     *
+     * @return string
+     */
+    private function getPositions($start)
+    {
+        $aPositions = array();
+        switch ($start) {
+            case 1:
+                $aPositions[] = 1;
+            case 2:
+                $aPositions[] = 2;
+            case 3:
+                $aPositions[] = 3;
+            case 4:
+                $aPositions[] = 4;
+                break;
+        }
+
+        return implode(';', $aPositions);
+    }
+
+    private function getConsignmentsOrderByKey()
+    {
+        $aConsignments = [];
+        /** @var $consignment MyParcelConsignment */
+        foreach ($this->getConsignments() as $consignment) {
+            $aConsignments[$consignment->getApiKey()][] = $consignment;
+        }
+        return $aConsignments;
     }
 }

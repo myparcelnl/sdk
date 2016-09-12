@@ -17,7 +17,7 @@
  * @since       File available since Release 0.1.0
  */
 
-namespace MyParcel\sdk\Model;
+namespace myparcelnl\sdk\Model;
 
 
 /**
