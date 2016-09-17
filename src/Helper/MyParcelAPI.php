@@ -32,17 +32,6 @@ use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
 class MyParcelAPI
 {
     /**
-     * Supported request types.
-     */
-    const REQUEST_TYPE_CREATE_CONSIGNMENT = 'shipments';
-
-    /**
-     * API headers
-     */
-    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json; ';
-    const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; ';
-
-    /**
      * @var array
      */
     private $consignments = [];
@@ -99,19 +88,15 @@ class MyParcelAPI
 
     public function createConcepts()
     {
-        $consignmentsSortedByKey = $this->getConsignmentsOrderByKey();
+        $consignmentsSortedByKey = $this->getConsignmentsSortedByKey();
 
         foreach ($consignmentsSortedByKey as $key => $consignments) {
 
-            $data = $this->getData($consignments);
+            $data = $this->apiEncode($consignments);
             $request = new MyParcelRequest();
             $request
-                ->setRequestParameters($data, $key, 'shipments', self::REQUEST_HEADER_SHIPMENT)
+                ->setRequestParameters($data, $key, 'shipments', $request::REQUEST_HEADER_SHIPMENT)
                 ->sendRequest();
-
-            if($request->getError()) {
-                throw new \Exception('Error in createConcepts(): ' . $request->getError());
-            }
 
             var_dump($request->getResult());
         }
@@ -160,43 +145,12 @@ class MyParcelAPI
         return $this;
     }
 
-    private function getData($consignments)
+    private function apiEncode($consignments)
     {
         $data = [];
         /** @var $consignment MyParcelConsignmentRepository */
         foreach ($consignments as $consignment) {
-            $aConsignment = array(
-                'recipient' => array(
-                    'cc' => $consignment->getCountry(),
-                    'person' => $consignment->getPerson(),
-                    'company' => $consignment->getCompany(),
-                    'postal_code' => $consignment->getPostalCode(),
-                    'street' => $consignment->getStreet(),
-                    'number' => $consignment->getNumber(),
-                    'number_suffix' => $consignment->getNumberSuffix(),
-                    'city' => $consignment->getCity(),
-                    'email' => $consignment->getEmail(),
-                    'phone' => $consignment->getPhone(),
-                ),
-                'options' => [
-                    'package_type' => $consignment->getPackageType(),
-                    'large_format' => $consignment->isLargeFormat() ? 1 : 0,
-                    'only_recipient' => $consignment->isOnlyRecipient() ? 1 : 0,
-                    'signature' => $consignment->isSignature() ? 1 : 0,
-                    'return' => $this->return ? 1 : 0,
-                    'label_description' => $consignment->getLabelDescription(),
-                    'delivery_type' => $consignment->getDeliveryType(),
-                ],
-                'carrier' => 1
-            );
-
-            if ($consignment->getInsurance() > 1) {
-                $aConsignment['options']['insurance'] = ['amount' => $consignment->getInsurance(), 'currency' => 'EUR'];
-            }
-            if($consignment->getDeliveryDate())
-                $aConsignment['options']['delivery_date'] = $consignment->getDeliveryDate();
-
-            $data['data']['shipments'][] = $aConsignment;
+            $data['data']['shipments'][] = $consignment->apiEncode();
 
         }
         return json_encode($data);
@@ -227,7 +181,7 @@ class MyParcelAPI
         return implode(';', $aPositions);
     }
 
-    private function getConsignmentsOrderByKey()
+    private function getConsignmentsSortedByKey()
     {
         $aConsignments = [];
         /** @var $consignment MyParcelConsignment */

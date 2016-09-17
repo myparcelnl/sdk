@@ -38,6 +38,11 @@ class MyParcelConsignment
     private $apiKey;
 
     /**
+     * @var null
+     */
+    private $barcode = null;
+
+    /**
      * @var int
      */
     private $status = 0;
@@ -208,6 +213,25 @@ class MyParcelConsignment
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param null $barcode
+     *
+     * @return $this
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
         return $this;
     }
 
@@ -727,13 +751,13 @@ class MyParcelConsignment
      *
      * Required: No
      *
-     * @param mixed $label_description
+     * @param string $label_description
      *
      * @return $this
      */
     public function setLabelDescription($label_description)
     {
-        $this->label_description = $label_description;
+        $this->label_description = (string)$label_description;
         return $this;
     }
 

@@ -23,6 +23,17 @@ use myparcelnl\sdk\Helper\MyParcelCurl;
 class MyParcelRequest
 {
     /**
+     * Supported request types.
+     */
+    const REQUEST_TYPE_CREATE_CONSIGNMENT = 'shipments';
+
+    /**
+     * API headers
+     */
+    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json; ';
+    const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; ';
+
+    /**
      * @var string
      */
     private $api_key = '';
@@ -38,7 +49,7 @@ class MyParcelRequest
      */
     public function getResult()
     {
-        return $this->result;
+        return json_decode($this->result, true);
     }
 
     /**
@@ -61,7 +72,7 @@ class MyParcelRequest
      *
      * @return $this
      */
-    public function setRequestParameters($body, $apiKey, $requestType = 'shipment', $requestHeader = '')
+    public function setRequestParameters($body, $apiKey, $requestType = 'shipments', $requestHeader = '')
     {
         $this->api_key = $apiKey;
         $this->body = $body;
@@ -79,11 +90,13 @@ class MyParcelRequest
      * send the created request to MyParcel
      *
      * @param string $method
+     *
      * @param string $uri
      *
-     * @return $this|false|array|string
+     * @return $this|array|false|string
+     * @throws \Exception
      */
-    public function sendRequest($uri = 'shipments', $method = 'POST')
+    public function sendRequest($method = 'POST', $uri = 'shipments')
     {
         if (!$this->checkConfigForRequest()) {
             return false;
@@ -144,21 +157,17 @@ class MyParcelRequest
             if ($response === false) {
                 $error              = $request->getError();
                 $this->error = $error;
-                return $this;
             }
 
             //check if the response has errors codes
             if(isset($aResult['errors'][0]['code'])){
-                var_dump($aResult);
                 if(key_exists('message', $aResult)){
                     $message = $aResult['message'];
                 } else {
                     $message = $aResult['errors'][0]['message'];
                 }
-                $this->error = $aResult['errors'][0]['code'] . ' - ' . $message;
+                $this->error = $aResult['errors'][0]['code'] . ' - ' . $aResult['errors'][0]['human'][0] . ' - ' . $message;
                 $request->close();
-
-                return $this;
             }
         }
 
@@ -166,6 +175,10 @@ class MyParcelRequest
 
         //close the server connection with MyParcel
         $request->close();
+
+        if ($this->getError()) {
+            throw new \Exception('Error in API request: ' . $this->getError());
+        }
 
         return $this;
     }

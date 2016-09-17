@@ -56,7 +56,6 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
         }
 
         $myParcelAPI
-            ->setA4([2,4])
             ->createConcepts();
     }
 
@@ -74,7 +73,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
                 'full_street_test' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3-b',
+                'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
                 'number_suffix' => 'b',

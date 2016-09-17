@@ -18,6 +18,7 @@ namespace myparcelnl\sdk\Model\Repository;
 
 
 use myparcelnl\sdk\Model\MyParcelConsignment;
+use myparcelnl\sdk\Model\MyParcelRequest;
 
 /**
  * The repository of a MyParcel consignment
@@ -96,7 +97,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $number = '';
         $number_suffix = '';
 
-        $fullStreet = preg_replace("/[\n\r]/", "", $fullStreet);
         $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
         if (!$result || !is_array($matches) || $fullStreet != $matches[0]) {
@@ -140,5 +140,132 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     public function getTotalWeight()
     {
         return;
+    }
+
+
+    /**
+     * Create concept
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function createConcept()
+    {
+        $data = $this->apiEncode(true);
+        $request = new MyParcelRequest();
+        $request
+            ->setRequestParameters($data, $this->getApiKey(), 'shipments', $request::REQUEST_HEADER_SHIPMENT)
+            ->sendRequest();
+
+        $result = $request->getResult();
+        $this->setId($result['data']['ids'][0]['id']);
+
+        $this->getLatestData();
+
+        return $this;
+    }
+
+
+    /**
+     * Get all current data
+     *
+     * Set id and run this function to get all the information about this shipment
+     *
+     * @throws \Exception
+     */
+    public function getLatestData()
+    {
+        $request = new MyParcelRequest();
+        $request
+            ->setRequestParameters('/' . $this->getId(), $this->getApiKey(), 'shipments', $request::REQUEST_HEADER_SHIPMENT)
+            ->sendRequest('GET');
+
+        $result = $request->getResult();
+        $this->apiDecode($result['data']['shipments'][0]);
+    }
+
+    /**
+     * Encode all the data before sending it to MyParcel
+     *
+     * @param bool $returnJson
+     *
+     * @return array|string
+     */
+    public function apiEncode($returnJson = false)
+    {
+        $aConsignment = array(
+            'recipient' => array(
+                'cc' => $this->getCountry(),
+                'person' => $this->getPerson(),
+                'company' => $this->getCompany(),
+                'postal_code' => $this->getPostalCode(),
+                'street' => $this->getStreet(),
+                'number' => $this->getNumber(),
+                'number_suffix' => $this->getNumberSuffix(),
+                'city' => $this->getCity(),
+                'email' => $this->getEmail(),
+                'phone' => $this->getPhone(),
+            ),
+            'options' => [
+                'package_type' => $this->getPackageType(),
+                'large_format' => $this->isLargeFormat() ? 1 : 0,
+                'only_recipient' => $this->isOnlyRecipient() ? 1 : 0,
+                'signature' => $this->isSignature() ? 1 : 0,
+                'return' => $this->isReturn() ? 1 : 0,
+                'label_description' => $this->getLabelDescription(),
+                'delivery_type' => $this->getDeliveryType(),
+            ],
+            'carrier' => 1,
+        );
+
+        if ($this->getInsurance() > 1) {
+            $aConsignment['options']['insurance'] = ['amount' => $this->getInsurance(), 'currency' => 'EUR'];
+        }
+        if ($this->getDeliveryDate())
+            $aConsignment['options']['delivery_date'] = $this->getDeliveryDate();
+
+        if ($returnJson) {
+            $data['data']['shipments'][] = $aConsignment;
+            return json_encode($data);
+        } else {
+            return $aConsignment;
+        }
+
+    }
+
+    /**
+     * Decode all the data after the request with the API
+     *
+     * @param $data
+     *
+     * @return $this
+     */
+    private function apiDecode($data)
+    {
+        $recipient = $data['recipient'];
+        $options = $data['options'];
+        $this
+            ->setId($data['id'])
+            ->setBarcode($data['barcode'])
+            ->setStatus($data['status'])
+            ->setCountry($recipient['cc'])
+            ->setPerson($recipient['person'])
+            ->setCompany($recipient['company'])
+            ->setPostalCode($recipient['postal_code'])
+            ->setStreet($recipient['street'])
+            ->setNumber($recipient['number'])
+            ->setNumberSuffix($recipient['number_suffix'])
+            ->setCity($recipient['city'])
+            ->setEmail($recipient['email'])
+            ->setPhone($recipient['phone'])
+            ->setPackageType($options['package_type'])
+            ->setLargeFormat($options['large_format'])
+            ->setOnlyRecipient($options['only_recipient'])
+            ->setSignature($options['signature'])
+            ->setReturn($options['return'])
+            ->setLabelDescription($options['label_description'])
+        ;
+
+        return $this;
     }
 }
