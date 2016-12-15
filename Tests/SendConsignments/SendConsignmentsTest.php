@@ -41,6 +41,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
 
             $consignment = new MyParcelConsignmentRepository();
             $consignment
+                ->setReferenceId($consignmentTest['reference_id'])
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -50,13 +51,17 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 ->setPackageType(1)
                 ->setCity($consignmentTest['city'])
                 ->setEmail('reindert@myparcel.nl')
-
             ;
             $myParcelAPI->addConsignment($consignment);
         }
 
+        /**
+         * Get label
+         */
         $myParcelAPI
-            ->createConcepts();
+            ->getLinkOfLabels();
+
+        $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLabelLink()), 'Can\'t get link of PDF');
     }
 
     /**
@@ -68,6 +73,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
+                'reference_id' => 101,
                 'api_key' => 'MYSNIzQWqNrYaDeFxJtVrujS9YEuF9kiykBxf8Sj',
                 'cc' => 'NL',
                 'person' => 'Reindert',
@@ -81,6 +87,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Rijnsburg',
             ],
             [
+                'reference_id' => 102,
                 'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
                 'cc' => 'NL',
                 'person' => 'Piet',
@@ -92,6 +99,64 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'number_suffix' => '',
                 'postal_code' => '2231 JE',
                 'city' => 'Katwijk',
+            ],
+            [
+                'reference_id' => 103,
+                'api_key' => 'MYSNIzQWqNrYaDeFxJtVrujS9YEuF9kiykBxf8Sj',
+                'cc' => 'NL',
+                'person' => 'Reindert',
+                'company' => 'Big Sale BV',
+                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street' => 'Plein 1940-45 3 b',
+                'street' => 'Plein 1940-45',
+                'number' => 3,
+                'number_suffix' => 'b',
+                'postal_code' => '2231JE',
+                'city' => 'Rijnsburg',
+                'phone' => '123456',
+            ],
+            [
+                'reference_id' => 104,
+                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'cc' => 'NL',
+                'person' => 'Piet',
+                'company' => 'Mega Store',
+                'full_street_test' => 'Koestraat 55',
+                'full_street' => 'Koestraat 55',
+                'street' => 'Koestraat',
+                'number' => 55,
+                'number_suffix' => '',
+                'postal_code' => '2231JE',
+                'city' => 'Katwijk',
+                'phone' => '123-45-235-435',
+                'package_type' => 1,
+                'large_format' => false,
+                'only_recipient' => false,
+                'signature' => false,
+                'return' => false,
+                'label_description' => 'Label description',
+            ],
+            [
+                'reference_id' => 105,
+                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'cc' => 'NL',
+                'person' => 'The insurance man',
+                'company' => 'Mega Store',
+                'full_street_test' => 'Koestraat 55',
+                'full_street' => 'Koestraat 55',
+                'street' => 'Koestraat',
+                'number' => 55,
+                'number_suffix' => '',
+                'postal_code' => '2231JE',
+                'city' => 'Katwijk',
+                'phone' => '123-45-235-435',
+                'package_type' => 1,
+                'large_format' => true,
+                'only_recipient' => true,
+                'signature' => true,
+                'return' => true,
+                'label_description' => 1234,
+                'insurance' => 250,
             ]
         ];
     }

@@ -37,6 +37,8 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
     {
         foreach ($this->additionProvider() as $consignmentTest) {
 
+            $myParcelAPI = new MyParcelAPI();
+
             $consignment = new MyParcelConsignmentRepository();
             $consignment
                 ->setApiKey($consignmentTest['api_key'])
@@ -65,15 +67,19 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             if (key_exists('return', $consignmentTest))
                 $consignment->setReturn($consignmentTest['return']);
 
+            if (key_exists('insurance', $consignmentTest))
+                $consignment->setInsurance($consignmentTest['insurance']);
+
             if (key_exists('label_description', $consignmentTest))
                 $consignment->setLabelDescription($consignmentTest['label_description']);
 
+            $myParcelAPI->addConsignment($consignment);
             /**
              * Create concept
              */
-            $consignment->createConcept();
+            $myParcelAPI->createConcepts();
 
-            $this->assertEquals(true, $consignment->getId() > 1, 'No id found');
+            $this->assertEquals(true, $consignment->getMyParcelId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
             $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
             $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
@@ -102,6 +108,18 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
 
             if (key_exists('label_description', $consignmentTest))
                 $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
+
+            if (key_exists('insurance', $consignmentTest))
+                $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
+
+            /**
+             * Get label
+             */
+            $myParcelAPI
+                ->getLinkOfLabels();
+
+            $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLabelLink()), 'Can\'t get link of PDF');
+
         }
     }
 
@@ -150,7 +168,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             [
                 'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
                 'cc' => 'NL',
-                'person' => 'Piet',
+                'person' => 'The insurance man',
                 'company' => 'Mega Store',
                 'full_street_test' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
@@ -166,6 +184,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
                 'signature' => true,
                 'return' => true,
                 'label_description' => 1234,
+                'insurance' => 250,
             ]
         ];
     }

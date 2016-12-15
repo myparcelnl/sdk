@@ -27,10 +27,12 @@ namespace myparcelnl\sdk\Model;
  */
 class MyParcelConsignment
 {
+    private $referenceId;
+
     /**
      * @var int
      */
-    private $id;
+    private $myParcelId;
 
     /**
      * @var string
@@ -148,7 +150,7 @@ class MyParcelConsignment
     private $label_description = '';
 
     /**
-     * @var array
+     * @var int
      */
     private $insurance = 0;
 
@@ -168,11 +170,33 @@ class MyParcelConsignment
     private $items = [];
 
     /**
-     * @return int
+     * MyParcelConsignment constructor.
+     *
+     * @param $referenceId
      */
-    public function getId()
+    public function __construct($referenceId = null)
     {
-        return $this->id;
+        $this->referenceId = $referenceId;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getReferenceId()
+    {
+        return $this->referenceId;
+    }
+
+    /**
+     * @param mixed $referenceId
+     *
+     * @return $this
+     */
+    public function setReferenceId($referenceId)
+    {
+        $this->referenceId = $referenceId;
+        return $this;
     }
 
     /**
@@ -180,13 +204,23 @@ class MyParcelConsignment
      *
      * Save this id in your database
      *
+     * @return int
+     */
+    public function getMyParcelId()
+    {
+        return $this->myParcelId;
+    }
+
+    /**
+     * The id of the consignment
+     *
      * @return $this
      *
      * @param int $id
      */
-    public function setId($id)
+    public function setMyParcelId($id)
     {
-        $this->id = $id;
+        $this->myParcelId = $id;
         return $this;
     }
 
@@ -558,8 +592,9 @@ class MyParcelConsignment
      * The package type
      *
      * For international shipment only package type 1 is allowed
-     * Pattern: [1 – 3]
-     * Example: 1. package
+     * Pattern: [1 – 3]<br>
+     * Example:
+     *          1. package
      *          2. mailbox package
      *          3. letter
      * Required: Yes
@@ -762,7 +797,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return array
+     * @return int
      */
     public function getInsurance()
     {
@@ -773,11 +808,11 @@ class MyParcelConsignment
      * Insurance price for the package.
      *
      * Composite type containing integer and currency. The amount is without decimal
-     * separators (in cents).
-     * Pattern: [50, 250, 500, 1000, 1500, (...) - 5000]
+     * separators.
+     * Pattern: [50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
      * Required: No
      *
-     * @param array $insurance
+     * @param int $insurance
      *
      * @return $this
      */

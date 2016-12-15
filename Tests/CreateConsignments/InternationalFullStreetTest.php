@@ -35,8 +35,10 @@
             foreach ($this->additionProvider() as $consignmentTest) {
 
                 $consignment = new MyParcelConsignmentRepository();
-                $consignment->setCountry($consignmentTest['cc']);
-                $consignment->setFullStreet($consignmentTest['full_street']);
+                $consignment
+                    ->setCountry($consignmentTest['cc'])
+                    ->setFullStreet($consignmentTest['full_street'])
+                ;
 
                 $this->assertEquals($consignmentTest['full_street'],    $consignment->getFullStreet(),  'Full street: ' . $consignmentTest['full_street']);
             }

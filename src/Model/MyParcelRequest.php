@@ -23,15 +23,24 @@ use myparcelnl\sdk\Helper\MyParcelCurl;
 class MyParcelRequest
 {
     /**
+     * API URL
+     */
+    const REQUEST_URL = 'https://api.myparcel.nl';
+
+    /**
      * Supported request types.
      */
-    const REQUEST_TYPE_CREATE_CONSIGNMENT = 'shipments';
+    const REQUEST_TYPE_CREATE_CONSIGNMENT   = 'shipments';
+    const REQUEST_TYPE_RETRIEVE_LABEL       = 'shipment_labels';
 
     /**
      * API headers
      */
-    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json; ';
-    const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; ';
+    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json; charset=utf-8';
+    const REQUEST_HEADER_RETRIEVE_SHIPMENT = 'Accept: application/json; charset=utf8';
+    const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
+    const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf';
+    const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
 
     /**
      * @var string
@@ -39,8 +48,6 @@ class MyParcelRequest
     private $api_key = '';
     private $header = '';
     private $body = '';
-    private $url = '';
-    private $type = '';
     private $error = null;
     private $result = null;
 
@@ -49,7 +56,7 @@ class MyParcelRequest
      */
     public function getResult()
     {
-        return json_decode($this->result, true);
+        return $this->result;
     }
 
     /**
@@ -65,18 +72,16 @@ class MyParcelRequest
      * Sets the parameters for an API call based on a string with all required request parameters and the requested API
      * method.
      *
-     * @param string $body
      * @param string $apiKey
-     * @param string $requestType
+     * @param string $body
      * @param string $requestHeader
      *
      * @return $this
      */
-    public function setRequestParameters($body, $apiKey, $requestType = 'shipments', $requestHeader = '')
+    public function setRequestParameters($apiKey, $body = '', $requestHeader = '')
     {
         $this->api_key = $apiKey;
         $this->body = $body;
-        $this->type = $requestType;
 
         $header[] = $requestHeader . 'charset=utf-8';
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
@@ -116,6 +121,7 @@ class MyParcelRequest
 
         //instantiate the curl adapter
         $request = new MyParcelCurl();
+
         //add the options
         foreach($options as $option => $value)
         {
@@ -123,6 +129,7 @@ class MyParcelRequest
         }
 
         $header = $this->header;
+        $url = self::REQUEST_URL . '/' . $uri;
 
         //do the curl request
         if($method == 'POST'){
@@ -130,17 +137,12 @@ class MyParcelRequest
             //curl request string
             $body = $this->body;
 
-            //complete request url
-            $url = 'https://api.myparcel.nl/' . $uri;
-
             $request->setConfig($config)
                 ->write('POST', $url, '1.1', $header, $body);
         } else {
-
+            
             //complete request url
-            $url  = 'https://api.myparcel.nl/';
-            $url .= $uri;
-            $url .= $this->body;
+            $url .= '/' . $this->body;
 
             $request->setConfig($config)
                 ->write('GET', $url, '1.1', $header);
@@ -149,35 +151,40 @@ class MyParcelRequest
         //read the response
         $response = $request->read();
 
-        $aResult = json_decode($response, true);
+        if(preg_match("/^%PDF-1./", $response)) {
+            $this->result = $response;
+        } else {
+            $this->result = json_decode($response, true);
 
-        if(is_array($aResult)){
+            if (is_array($this->result)) {
 
-            //check if there are curl-errors
-            if ($response === false) {
-                $error              = $request->getError();
-                $this->error = $error;
-            }
-
-            //check if the response has errors codes
-            if(isset($aResult['errors'][0]['code'])){
-                if(key_exists('message', $aResult)){
-                    $message = $aResult['message'];
-                } else {
-                    $message = $aResult['errors'][0]['message'];
+                //check if there are curl-errors
+                if ($response === false) {
+                    $error = $request->getError();
+                    $this->error = $error;
                 }
-                $this->error = $aResult['errors'][0]['code'] . ' - ' . $aResult['errors'][0]['human'][0] . ' - ' . $message;
-                $request->close();
+
+                //check if the response has errors codes
+                if (isset($this->result['errors'][0]['code'])) {
+
+                    if (key_exists('message', $this->result)) {
+                        $message = $this->result['message'];
+                    } else {
+                        $message = $this->result['errors'][0]['message'];
+                    }
+
+                    $humanMessage = key_exists('human', $this->result['errors'][0]) ? $this->result['errors'][0]['human'][0] : '';
+                    $this->error = $this->result['errors'][0]['code'] . ' - ' . $humanMessage . ' - ' . $message;
+                    $request->close();
+                }
             }
         }
-
-        $this->result = $response;
 
         //close the server connection with MyParcel
         $request->close();
 
         if ($this->getError()) {
-            throw new \Exception('Error in API request: ' . $this->getError());
+            throw new \Exception('Error in MyParcel API request: ' . $this->getError());
         }
 
         return $this;
@@ -193,14 +200,6 @@ class MyParcelRequest
     {
         if(empty($this->api_key)){
             throw new \Exception('api_key not found');
-        }
-
-        if(empty($this->type)){
-            throw new \Exception('requestType not found');
-        }
-
-        if(empty($this->body)){
-            throw new \Exception('requestString not found');
         }
 
         return true;
