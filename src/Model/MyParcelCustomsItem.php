@@ -17,7 +17,7 @@
  * @since       File available since Release 0.1.0
  */
 
-namespace myparcelnl\sdk\Model;
+namespace MyParcelNL\Sdk\src\Model;
 
 
 /**
@@ -25,7 +25,7 @@ namespace myparcelnl\sdk\Model;
  * mandatory for non-EU shipments.
  *
  * Class MyParcelCustomsItem
- * @package myparcelnl\sdk\Model\Repository
+ * @package MyParcelNL\Sdk\Model\Repository
  */
 class MyParcelCustomsItem
 {

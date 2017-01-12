@@ -16,16 +16,17 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release 0.1.0
  */
-namespace myparcelnl\sdk\tests\SendConsignments\
+namespace MyParcelNL\Sdk\tests\SendConsignments\
 SendOneConsignmentTest;
 
-use myparcelnl\sdk\Helper\MyParcelAPI;
-use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
+//use MyParcelNL\Sdk\src\Helper\MyParcelAPI;
+use MyParcelNL\Sdk\src\Helper\MyParcelAPI;
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
  * Class SendOneConsignmentTest
- * @package myparcelnl\sdk\tests\SendOneConsignmentTest
+ * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,8 +40,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
 
             $myParcelAPI = new MyParcelAPI();
 
-            $consignment = new MyParcelConsignmentRepository();
-            $consignment
+            $consignment = (new MyParcelConsignmentRepository())
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -74,12 +74,13 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
 
             $myParcelAPI->addConsignment($consignment);
+
             /**
              * Create concept
              */
             $myParcelAPI->createConcepts();
 
-            $this->assertEquals(true, $consignment->getMyParcelId() > 1, 'No id found');
+            $this->assertEquals(true, $consignment->getApiId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
             $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
             $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
@@ -116,10 +117,13 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
              * Get label
              */
             $myParcelAPI
-                ->getLinkOfLabels();
+                ->setLinkOfLabels();
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLabelLink()), 'Can\'t get link of PDF');
 
+            /** @var MyParcelConsignmentRepository $consignment */
+            $consignment = $myParcelAPI->getOneConsignment();
+            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
         }
     }
 

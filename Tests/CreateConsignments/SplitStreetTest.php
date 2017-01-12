@@ -16,13 +16,13 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release 0.1.0
  */
-namespace myparcelnl\sdk\tests\CreateConsignments\SplitStreetTest;
-use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
+namespace MyParcelNL\Sdk\tests\CreateConsignments\SplitStreetTest;
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
  * Class SplitStreetTest
- * @package myparcelnl\sdk\tests\SplitStreetTest
+ * @package MyParcelNL\Sdk\tests\SplitStreetTest
  */
 class SplitStreetTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,9 +34,9 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
     {
         foreach ($this->additionProvider() as $consignmentTest) {
 
-            $consignment = new MyParcelConsignmentRepository();
-            $consignment->setCountry('NL');
-            $consignment->setFullStreet($consignmentTest['full_street_test']);
+            $consignment = (new MyParcelConsignmentRepository())
+                ->setCountry('NL')
+                ->setFullStreet($consignmentTest['full_street_test']);
 
             $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'Number suffix from: ' . $consignmentTest['full_street_test']);
             $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'Number from: ' . $consignmentTest['full_street_test']);

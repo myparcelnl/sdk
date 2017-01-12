@@ -16,14 +16,14 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since release 0.1.0
  */
-namespace myparcelnl\sdk\Model;
+namespace MyParcelNL\Sdk\src\Model;
 
 
 /**
  * A model of a consignment
  *
  * Class Consignment
- * @package myparcelnl\sdk\Model
+ * @package MyParcelNL\Sdk\Model
  */
 class MyParcelConsignment
 {
@@ -32,7 +32,7 @@ class MyParcelConsignment
     /**
      * @var int
      */
-    private $myParcelId;
+    private $apiId = null;
 
     /**
      * @var string
@@ -57,17 +57,17 @@ class MyParcelConsignment
     /**
      * @var string
      */
-    private $cc = '';
+    private $cc = null;
 
     /**
      * @var string
      */
-    private $city = '';
+    private $city = null;
 
     /**
      * @var string
      */
-    private $street = '';
+    private $street = null;
 
     /**
      * @var integer
@@ -82,12 +82,12 @@ class MyParcelConsignment
     /**
      * @var string
      */
-    private $postal_code = '';
+    private $postal_code = null;
 
     /**
      * @var string
      */
-    private $person = '';
+    private $person = null;
 
     /**
      * @var string
@@ -97,7 +97,7 @@ class MyParcelConsignment
     /**
      * @var string
      */
-    private $email = '';
+    private $email = null;
 
     /**
      * @var string
@@ -170,17 +170,6 @@ class MyParcelConsignment
     private $items = [];
 
     /**
-     * MyParcelConsignment constructor.
-     *
-     * @param $referenceId
-     */
-    public function __construct($referenceId = null)
-    {
-        $this->referenceId = $referenceId;
-    }
-
-
-    /**
      * @return mixed
      */
     public function getReferenceId()
@@ -206,9 +195,9 @@ class MyParcelConsignment
      *
      * @return int
      */
-    public function getMyParcelId()
+    public function getApiId()
     {
-        return $this->myParcelId;
+        return $this->apiId;
     }
 
     /**
@@ -218,9 +207,9 @@ class MyParcelConsignment
      *
      * @param int $id
      */
-    public function setMyParcelId($id)
+    public function setApiId($id)
     {
-        $this->myParcelId = $id;
+        $this->apiId = $id;
         return $this;
     }
 

@@ -17,12 +17,12 @@
      * @since       File available since Release 0.1.0
      * @todo        Allow street number for international shipment
      */
-    namespace myparcelnl\sdk\tests\CreateConsignments\InternationalStreetTest;
+    namespace MyParcelNL\Sdk\tests\CreateConsignments\InternationalStreetTest;
 
 
     /**
      * Class InternationalStreetTest
-     * @package myparcelnl\sdk\tests\InternationalStreetTest
+     * @package MyParcelNL\Sdk\tests\InternationalStreetTest
      */
     class InternationalStreetTest extends \PHPUnit_Framework_TestCase
     {

@@ -16,9 +16,9 @@
  * @since       File available since Release 0.1.0
  */
 
-namespace myparcelnl\sdk\Model;
+namespace MyParcelNL\Sdk\src\Model;
 
-use myparcelnl\sdk\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 
 class MyParcelRequest
 {
@@ -98,7 +98,7 @@ class MyParcelRequest
      *
      * @param string $uri
      *
-     * @return $this|array|false|string
+     * @return MyParcelRequest|array|false|string
      * @throws \Exception
      */
     public function sendRequest($method = 'POST', $uri = 'shipments')
@@ -146,6 +146,7 @@ class MyParcelRequest
 
             $request->setConfig($config)
                 ->write('GET', $url, '1.1', $header);
+
         }
 
         //read the response

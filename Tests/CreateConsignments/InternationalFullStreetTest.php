@@ -16,13 +16,13 @@
      * @link        https://github.com/myparcelnl/sdk
      * @since       File available since Release 0.1.0
      */
-    namespace myparcelnl\sdk\tests\CreateConsignments\InternationalFullStreetTest;
-    use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
+    namespace MyParcelNL\Sdk\tests\CreateConsignments\InternationalFullStreetTest;
+    use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
     /**
      * Class InternationalFullStreetTest
-     * @package myparcelnl\sdk\tests\InternationalFullStreetTest
+     * @package MyParcelNL\Sdk\tests\InternationalFullStreetTest
      */
     class InternationalFullStreetTest extends \PHPUnit_Framework_TestCase
     {
@@ -34,8 +34,7 @@
         {
             foreach ($this->additionProvider() as $consignmentTest) {
 
-                $consignment = new MyParcelConsignmentRepository();
-                $consignment
+                $consignment = (new MyParcelConsignmentRepository())
                     ->setCountry($consignmentTest['cc'])
                     ->setFullStreet($consignmentTest['full_street'])
                 ;

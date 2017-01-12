@@ -14,15 +14,15 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since release 0.1.0
  */
-namespace myparcelnl\sdk\Model\Repository;
+namespace MyParcelNL\Sdk\src\Model\Repository;
 
 
-use myparcelnl\sdk\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 /**
  * The repository of a MyParcel consignment
  *
  * Class MyParcelConsignmentRepository
- * @package myparcelnl\sdk\Model\Repository
+ * @package MyParcelNL\Sdk\Model\Repository
  */
 class MyParcelConsignmentRepository extends MyParcelConsignment
 {
@@ -34,16 +34,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      * @link https://gist.github.com/reindert-vetter/a90fdffe7d452f92d1c65bbf759f6e38
      */
     const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)-?(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$))$~';
-
-    /**
-     * MyParcelConsignmentRepository constructor.
-     *
-     * @param $reference string Set a reference id
-     */
-    public function __construct($reference = null)
-    {
-        parent::__construct($reference);
-    }
 
     /**
      * Get entire street
@@ -75,9 +65,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function setFullStreet($fullStreet)
     {
-        if ($this->getCountry() === null) {
-            throw new \Exception('First set the country code with setCc() before running setFullStreet()');
-        }
+        if ($this->getCountry() === null)
+            throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
 
         if ($this->getCountry() == 'NL') {
             $streetData = $this->splitStreet($fullStreet);
@@ -156,7 +145,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $options = $data['options'];
 
         $this
-            ->setMyParcelId($data['id'])
+            ->setApiId($data['id'])
             ->setBarcode($data['barcode'])
             ->setStatus($data['status'])
             ->setCountry($recipient['cc'])

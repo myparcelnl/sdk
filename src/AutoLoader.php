@@ -1,7 +1,10 @@
 <?php
-function dump($var) {
-    var_dump($var);
-    exit;
+
+if(!function_exists('dump')) {
+    function dump($var) {
+        var_dump($var);
+        exit;
+    }
 }
 
 include_once ('Helper/MyParcelAPI.php');

@@ -16,12 +16,12 @@
  * @since       File available since Release 0.1.0
  */
 
-namespace myparcelnl\sdk\Helper;
+namespace MyParcelNL\Sdk\src\Helper;
 
 
 /**
  * Class Curl
- * @package myparcelnl\sdk\Helper
+ * @package MyParcelNL\Sdk\src\Helper
  */
 class MyParcelCurl
 {

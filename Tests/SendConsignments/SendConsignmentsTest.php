@@ -16,16 +16,16 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release 0.1.0
  */
-namespace myparcelnl\sdk\tests\SendConsignments\
+namespace MyParcelNL\Sdk\tests\SendConsignments\
 SendOneConsignmentTest;
 
-use myparcelnl\sdk\Helper\MyParcelAPI;
-use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Helper\MyParcelAPI;
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
  * Class SendOneConsignmentTest
- * @package myparcelnl\sdk\tests\SendConsignmentsTest
+ * @package MyParcelNL\Sdk\tests\SendConsignmentsTest
  */
 class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,11 +37,10 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
     {
         $myParcelAPI = new MyParcelAPI();
 
-        foreach ($this->additionProvider() as $consignmentTest) {
+        foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
 
-            $consignment = new MyParcelConsignmentRepository();
-            $consignment
-                ->setReferenceId($consignmentTest['reference_id'])
+            $consignment = (new MyParcelConsignmentRepository())
+                ->setReferenceId($referenceId)
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -59,9 +58,14 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
          * Get label
          */
         $myParcelAPI
-            ->getLinkOfLabels();
+            ->setLinkOfLabels();
 
         $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLabelLink()), 'Can\'t get link of PDF');
+
+        foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
+            $consignment = $myParcelAPI->getConsignmentByReferenceId($referenceId);
+            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+        }
     }
 
     /**
@@ -72,8 +76,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
     public function additionProvider()
     {
         return [
-            [
-                'reference_id' => 101,
+            101 => [
                 'api_key' => 'MYSNIzQWqNrYaDeFxJtVrujS9YEuF9kiykBxf8Sj',
                 'cc' => 'NL',
                 'person' => 'Reindert',
@@ -86,37 +89,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'postal_code' => '2231 JE',
                 'city' => 'Rijnsburg',
             ],
-            [
-                'reference_id' => 102,
-                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231 JE',
-                'city' => 'Katwijk',
-            ],
-            [
-                'reference_id' => 103,
-                'api_key' => 'MYSNIzQWqNrYaDeFxJtVrujS9YEuF9kiykBxf8Sj',
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-            ],
-            [
-                'reference_id' => 104,
+            104 => [
                 'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
                 'cc' => 'NL',
                 'person' => 'Piet',
@@ -136,8 +109,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'return' => false,
                 'label_description' => 'Label description',
             ],
-            [
-                'reference_id' => 105,
+            105 => [
                 'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
                 'cc' => 'NL',
                 'person' => 'The insurance man',

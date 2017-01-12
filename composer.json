@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/sdk",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "This package is designed to send and receive data from MyParcel by means of an API.",
     "homepage": "https://www.myparcel.nl",
     "tags": ["MyParcel", "My Parcel", "Post NL", "PostNL"],
@@ -8,7 +8,9 @@
     "authors": [
         {
             "name": "Reindert Vetter",
-            "email": "reindert@myparcel.nl"
+            "email": "reindert@myparcel.nl",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Developer"
         }
     ],
     "repository": {
@@ -22,8 +24,8 @@
         "phpunit/phpunit": "^4.8"
     },
     "autoload": {
-        "classmap": [
-            "src/"
-        ]
+        "psr-4" : {
+            "MyParcelNL\\Sdk\\" : "src/"
+        }
     }
 }

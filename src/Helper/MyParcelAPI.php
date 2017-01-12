@@ -16,11 +16,11 @@
  * @since       File available since Release 0.1.0
  */
 
-namespace myparcelnl\sdk\Helper;
+namespace MyParcelNL\Sdk\src\Helper;
 
-use myparcelnl\sdk\Model\MyParcelConsignment;
-use myparcelnl\sdk\Model\MyParcelRequest;
-use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
@@ -31,6 +31,11 @@ use myparcelnl\sdk\Model\Repository\MyParcelConsignmentRepository;
  */
 class MyParcelAPI
 {
+    const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
+    const PREFIX_MYPARCEL_ID = 'MYPARCEL_ID_';
+
+    const PREFIX_PDF_FILENAME = 'myparcel-label-';
+
     /**
      * @var MyParcelConsignmentRepository[]
      */
@@ -80,14 +85,72 @@ class MyParcelAPI
         return $this->consignments;
     }
 
-    /**
-     * @param $reference string|int
-     *
-     * @return MyParcelConsignmentRepository[]
-     */
-    public function getConsignmentByReferenceId($reference)
+    public function getOneConsignment($throwException = true)
     {
-        return $this->consignments[$reference];
+        if (count($this->getConsignments()) > 1) {
+            if ($throwException) {
+                throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
+            } else {
+                return null;
+            }
+        } else {
+            foreach ($this->getConsignments() as $consignment) {
+                return $consignment;
+            }
+        }
+    }
+
+    /**
+     * @param $id string|int
+     *
+     * @return MyParcelConsignmentRepository
+     */
+    public function getConsignmentByReferenceId($id)
+    {
+        // return consignment if only one is available
+        $consignment = $this->getOneConsignment(false);
+        if ($consignment !== null) {
+            return $consignment;
+        }
+
+        // return if referenceId is set as a key
+        if (key_exists(self::PREFIX_REFERENCE_ID . $id, $this->consignments)) {
+            return $this->getConsignments()[self::PREFIX_REFERENCE_ID . $id];
+        }
+
+        // return if referenceId not is set as a key
+        foreach ($this->getConsignments() as $consignment) {
+            if ($consignment->getReferenceId() == $id) {
+                return $consignment;
+            }
+        }
+    }
+
+    /**
+     * @param $id string|int
+     *
+     * @return MyParcelConsignmentRepository
+     */
+    public function getConsignmentByApiId($id)
+    {
+        // return consignment if only one is available
+        $consignment = $this->getOneConsignment(false);
+        if ($consignment !== null) {
+            return $consignment;
+        }
+
+        // return if ApiId is set as a key
+        if (key_exists(self::PREFIX_MYPARCEL_ID . $id, $this->consignments)) {
+            return $this->getConsignments()[self::PREFIX_MYPARCEL_ID . $id];
+        }
+
+        // return if ApiId not is set as a key
+        foreach ($this->getConsignments() as $consignment) {
+            if ($consignment->getApiId() == $id) {
+                return $consignment;
+            }
+        }
+        return null;
     }
 
     /**
@@ -131,10 +194,13 @@ class MyParcelAPI
                 throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
         }
 
-        if ($consignment->getReferenceId() === null)
+        if ($consignment->getReferenceId() !== null) {
+            $this->consignments[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
+        } elseif ($consignment->getApiId() !== null) {
+            $this->consignments[self::PREFIX_MYPARCEL_ID . $consignment->getApiId()] = $consignment;
+        } else {
             $this->consignments[] = $consignment;
-        else
-            $this->consignments[$consignment->getReferenceId()] = $consignment;
+        }
         
         return $this;
     }
@@ -150,21 +216,19 @@ class MyParcelAPI
     public function createConcepts()
     {
         /* @var $consignments MyParcelConsignmentRepository[] */
-
         foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
             foreach ($consignments as $consignment) {
-                if ($consignment->getMyParcelId() === null) {
+                if ($consignment->getApiId() === null) {
                     $data = $this->apiEncode([$consignment]);
-                    $request = new MyParcelRequest();
-                    $request
+                    $request = (new MyParcelRequest())
                         ->setRequestParameters(
                             $key,
                             $data,
-                            $request::REQUEST_HEADER_SHIPMENT
+                            MyParcelRequest::REQUEST_HEADER_SHIPMENT
                         )
                         ->sendRequest();
 
-                    $consignment->setMyParcelId($request->getResult()['data']['ids'][0]['id']);
+                    $consignment->setApiId($request->getResult()['data']['ids'][0]['id']);
                 }
             }
         }
@@ -181,19 +245,18 @@ class MyParcelAPI
     {
         $conceptIds = $this->getConsignmentIds($key);
 
-        $request = new MyParcelRequest();
-        $request
+        $request = (new MyParcelRequest())
             ->setRequestParameters(
                 $key,
                 implode(';', $conceptIds),
-                $request::REQUEST_HEADER_RETRIEVE_SHIPMENT
+                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
             )
             ->sendRequest('GET');
 
-        /* @todo; Update shipment */
-        /*foreach ($request->getResult()['data']['shipments'] as $shipment) {
-//            $this->getConsignmentByMyParcelId()
-        }*/
+        foreach ($request->getResult()['data']['shipments'] as $shipment) {
+            $consignment = $this->getConsignmentByApiId($shipment['id']);
+            $consignment->apiDecode($shipment);
+        }
         return $this;
     }
 
@@ -208,22 +271,37 @@ class MyParcelAPI
      *
      * @return $this
      */
-    public function getLinkOfLabels($positions = false)
+    public function setLinkOfLabels($positions = false)
     {
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
-            ->setA4($positions)
-            ->setLinkOfLabels()
+            ->setA4($positions);
+
+        $conceptIds = $this->getConsignmentIds($key);
+
+        if ($key) {
+            $request = (new MyParcelRequest())
+                ->setRequestParameters(
+                    $key,
+                    implode(';', $conceptIds),
+                    MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
+                )
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+
+            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult()['data']['pdfs']['url'];
+        }
+
+        $this
             ->setLatestData();
 
         return $this;
     }
 
     /**
-     * Download labels
+     * Receive label PDF
      *
-     * ALPHA
+     * After setPdfOfLabels() apiId and barcode is present
      *
      * @param array|int|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
@@ -233,78 +311,50 @@ class MyParcelAPI
      *
      * @return $this
      */
-    public function downloadPdfOfLabels($positions = false)
+    public function setPdfOfLabels($positions = false)
     {
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
-            ->setA4($positions)
-            ->setPdfOfLabels()
-            ->setLatestData();
+            ->setA4($positions);
+        $conceptIds = $this->getConsignmentIds($key);
 
+        if ($key) {
+            $request = (new MyParcelRequest())
+                ->setRequestParameters(
+                    $key,
+                    implode(';', $conceptIds) . '/' . $this->getRequestBody(),
+                    MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_PDF
+                )
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
-        $name = 'file.pdf';
+            $this->label_pdf = $request->getResult();
+        }
+        $this->setLatestData();
+
+        return $this;
+    }
+
+    /**
+     * Download labels
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function downloadPdfOfLabels()
+    {
+        if ($this->label_pdf == null)
+            throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
 
         header('Content-Type: application/pdf');
         header('Content-Length: '.strlen( $this->label_pdf ));
-        header('Content-disposition: inline; filename="' . $name . '"');
+        header('Content-disposition: attachment; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
         header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
         echo $this->label_pdf;
         exit;
-    }
-
-    /**
-     * Set link of PDF
-     *
-     * @return $this
-     */
-    private function setLinkOfLabels()
-    {
-
-        $conceptIds = $this->getConsignmentIds($key);
-
-        if ($key) {
-            $request = new MyParcelRequest();
-            $request
-                ->setRequestParameters(
-                    $key,
-                    implode(';', $conceptIds),
-                    $request::REQUEST_HEADER_RETRIEVE_LABEL_LINK
-                )
-                ->sendRequest('GET', $request::REQUEST_TYPE_RETRIEVE_LABEL);
-
-            $this->label_link = $request::REQUEST_URL . $request->getResult()['data']['pdfs']['url'];
-        }
-
-        return $this;
-    }
-
-    /**
-     * Receive label PDF
-     *
-     * @return $this
-     */
-    private function setPdfOfLabels()
-    {
-        $conceptIds = $this->getConsignmentIds($key);
-
-        if ($key) {
-            $request = new MyParcelRequest();
-            $request
-                ->setRequestParameters(
-                    $key,
-                    implode(';', $conceptIds),
-                    $request::REQUEST_HEADER_RETRIEVE_LABEL_PDF
-                )
-                ->sendRequest('GET', $request::REQUEST_TYPE_RETRIEVE_LABEL);
-
-            $this->label_pdf = $request->getResult();
-        }
-
-        return $this;
     }
 
     /**
@@ -316,9 +366,11 @@ class MyParcelAPI
      */
     private function getConsignmentIds(&$key)
     {
+//        dump($this->getConsignments());
+//        exit('test13');
         $conceptIds = [];
         foreach ($this->getConsignments() as $consignment) {
-            $conceptIds[] = $consignment->getMyParcelId();
+            $conceptIds[] = $consignment->getApiId();
             $key = $consignment->getApiKey();
         }
         return $conceptIds;
@@ -353,6 +405,15 @@ class MyParcelAPI
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRequestBody()
+    {
+        $body = $this->paper_size == 'A4' ? '?format=A4&positions=' . $this->label_position : '';
+        return $body;
     }
 
     /**
@@ -397,6 +458,9 @@ class MyParcelAPI
         return implode(';', $aPositions);
     }
 
+    /**
+     * @return MyParcelConsignmentRepository[]
+     */
     private function getConsignmentsSortedByKey()
     {
         $aConsignments = [];
