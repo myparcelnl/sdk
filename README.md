@@ -1,4 +1,3 @@
-[![Latest Stable Version](https://poser.pugx.org/myparcelnl/sdk/v/stable)](https://packagist.org/packages/myparcelnl/sdk)
 [![Latest Unstable Version](https://poser.pugx.org/myparcelnl/sdk/v/unstable)](https://packagist.org/packages/myparcelnl/sdk)
 [![Build Status](https://travis-ci.org/myparcel/sdk.svg?branch=master)](https://travis-ci.org/myparcelnl/sdk)
 # MyParcel SDK
