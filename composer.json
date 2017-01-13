@@ -20,6 +20,9 @@
     "bugs": {
         "url": "https://github.com/myparcelnl/sdk/issues"
     },
+    "require": {
+        "php": "~5.6.5"
+    },
     "require-dev": {
         "phpunit/phpunit": "^4.8"
     },
