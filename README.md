@@ -37,27 +37,29 @@ You can download the zip on the projects [releases](https://github.com/myparceln
 
 ### Requirements
 
-The MyParcel SDK works on php versions 5.3, 5.4, 5.5, 5.6 and 7.0
+The MyParcel SDK works on php versions 5.6 and 7.0
 Also the php curl extension needs to be installed.
 
 ### Quick start and examples
 
 ```php
-$receiverAddress = ComplexTypes\Address::create()
-    ->setAddressType('01')
-    ->setFirstName('Jan')
-    ->setName('Smit')
-    ->setCompanyName('Smit & Zonen')
-    ->setStreet('Hoofdstraat')
-    ->setHouseNr('1')
-    ->setHouseNrExt('A')
-    ->setZipcode('1234AB')
-    ->setCity('Heikant')
-    ->setCountrycode('NL');
+$myParcelAPI = new MyParcelAPI();
 
-
+$consignment = (new MyParcelConsignmentRepository())
+    ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setCountry('NL')
+    ->setPerson('Piet Hier')
+    ->setCompany('Piet BV')
+    ->setFullStreet('Plein 1945 55b')
+    ->setPostalCode('2231JE')
+    ->setCity('Amsterdam')
+    ->setEmail('test@test.nl');
+    
+$myParcelAPI
+    ->addConsignment($consignment)
+    ->setPdfOfLabels()
+    ->downloadPdfOfLabels();
 ```
-![Alt text](https://monosnap.com/file/aWQJie1Uli0QD55z7jVA85LG34kbdQ.png)
 
 ### Testing
 Please run ```vendor/bin/phpunit --bootstrap vendor/autoload.php  tests/``` to test the application
@@ -65,7 +67,49 @@ Please run ```vendor/bin/phpunit --bootstrap vendor/autoload.php  tests/``` to t
 
 ### Available Methods
 ```php
-ConsignmentRepository::setName($name = null)
+$myParcelAPI = new MyParcelAPI();
+
+$consignment = (new MyParcelConsignmentRepository())
+    ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setCountry('NL')
+    ->setPerson('Piet Hier')
+    ->setCompany('Piet BV')
+    ->setFullStreet('Plein 1945 55b')
+    ->setPostalCode('2231JE')
+    ->setPackageType(1)
+    ->setCity('Amsterdam')
+    ->setEmail('test@test.nl')
+    ->setPhone('+31 (0)634213465')
+    ->setLargeFormat(false)
+    ->setOnlyRecipient(false)
+    ->setSignature(false)
+    ->setReturn(false)
+    ->setInsurance(false)
+    ->setLabelDescription('Order 10034');
+    
+$myParcelAPI
+    ->addConsignment($consignment)
+```
+```php
+$myParcelAPI->createConcepts();
+```
+```php
+$myParcelAPI->setPdfOfLabels();
+$consignment = $myParcelAPI->getOneConsignment();
+$consignment->getBarcode(); // You can save the barcode in your database
+$consignment->getApiId(); // Keep this in your database. With this id you can easily retrieve the latest status.
+$myParcelAPI->downloadPdfOfLabels();
+```
+```php
+$myParcelAPI
+    ->setLinkOfLabels()
+    ->getLabelLink()
+```
+```php
+
+$myParcelAPI
+    ->setLatestData()
+    ->getOneConsignment()
 ```
 
 ### Contribute
