@@ -11,7 +11,7 @@
 - [Contribute](#contribute)
 
 ---
-Please, star this repository if you use this repository.
+Please, star this repository if you use this repository. :star:
 
 ### Installation
 
