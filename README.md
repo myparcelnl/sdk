@@ -11,6 +11,7 @@
 - [Contribute](#contribute)
 
 ---
+Please, star this repository if you use this repository.
 
 ### Installation
 
@@ -96,8 +97,6 @@ $myParcelAPI->createConcepts();
 ```php
 $myParcelAPI->setPdfOfLabels();
 $consignment = $myParcelAPI->getOneConsignment();
-$consignment->getBarcode(); // You can save the barcode in your database
-$consignment->getApiId(); // Keep this in your database. With this id you can easily retrieve the latest status.
 $myParcelAPI->downloadPdfOfLabels();
 ```
 ```php
@@ -105,12 +104,40 @@ $myParcelAPI
     ->setLinkOfLabels()
     ->getLabelLink()
 ```
+After setPdfOfLabels(), setLinkOfLabels() and createConcepts() you can save the api id to your database. With this id you can easily retrieve the latest status.
 ```php
-
-$myParcelAPI
-    ->setLatestData()
-    ->getOneConsignment()
+$consignment->getApiId();
 ```
+The barcode is available after setPdfOfLabels() and setLinkOfLabels()
+```php
+$consignment->getBarcode();
+```
+After setPdfOfLabels(), setLinkOfLabels() and createConcepts() you can get the status.
+```php
+$consignment->getStatus();
+```
+In a new request, you can pick up al the data.
+```php
+consignment = (new MyParcelConsignmentRepository())
+    ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setApiId(205670)
+$myParcelAPI
+    ->addConsignment($consignment)
+    ->setLatestData()
+$consignment = $myParcelAPI
+    ->getOneConsignment()
+
+$status = $consignment->getStatus();
+$barcode = $consignment->getBarcode();
+```
+To create multiple consignments or get one pdf with multiple consignments, set multiple consignments
+```
+$myParcelAPI
+    ->addConsignment($consignment1)
+    ->addConsignment($consignment2)
+    ->addConsignment($consignment3)
+    ->addConsignment($consignment4)
+```php
 
 ### Contribute
 1. Check for open issues or open a new issue to start a discussion around a bug or feature.
