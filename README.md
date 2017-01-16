@@ -124,7 +124,7 @@ $consignment->getStatus();
 #### Multiple shipments
 To create multiple consignments or get one pdf with multiple consignments, set multiple consignments. It's faster and cleaner.
 ```php
-$myParcelAPI = new MyParcelAPI();
+$myParcelAPI = new MyParcelAPI();  
 
 foreach ($yourShipments as $shipment) {
     (...) // Set Consignment
@@ -138,11 +138,14 @@ In a new request, you can get al the data again.
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setApiId(205670);
+
 $myParcelAPI
     ->addConsignment($consignment)
     ->setLatestData();
+
 $consignment = $myParcelAPI
     ->getOneConsignment();
+
 $status = $consignment->getStatus();
 $barcode = $consignment->getBarcode();
 ```
