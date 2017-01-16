@@ -91,53 +91,61 @@ $consignment = (new MyParcelConsignmentRepository())
 $myParcelAPI
     ->addConsignment($consignment)
 ```
+#### Create concept
 ```php
 $myParcelAPI->createConcepts();
 ```
+#### Download labels
 ```php
 $myParcelAPI->setPdfOfLabels();
-$consignment = $myParcelAPI->getOneConsignment();
 $myParcelAPI->downloadPdfOfLabels();
 ```
+#### Get label link
 ```php
 $myParcelAPI
     ->setLinkOfLabels()
-    ->getLabelLink()
+    ->getLinkOfLabels()
 ```
+#### Save MyParcel id
 After setPdfOfLabels(), setLinkOfLabels() and createConcepts() you can save the api id to your database. With this id you can easily retrieve the latest status.
 ```php
 $consignment->getApiId();
 ```
+#### Get barcode
 The barcode is available after setPdfOfLabels() and setLinkOfLabels()
 ```php
 $consignment->getBarcode();
 ```
+#### Get status
 After setPdfOfLabels(), setLinkOfLabels() and createConcepts() you can get the status.
 ```php
 $consignment->getStatus();
 ```
-In a new request, you can pick up al the data.
+#### Multiple shipments
+To create multiple consignments or get one pdf with multiple consignments, set multiple consignments. It's faster and cleaner.
+```php
+$myParcelAPI = new MyParcelAPI();
+
+foreach ($yourShipments as $shipment) {
+    (...) // Set Consignment
+    $myParcelAPI
+        ->addConsignment($consignment)
+}
+```
+#### Later on
+In a new request, you can get al the data again.
 ```php
 consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setApiId(205670)
+    ->setApiId(205670);
 $myParcelAPI
     ->addConsignment($consignment)
-    ->setLatestData()
+    ->setLatestData();
 $consignment = $myParcelAPI
-    ->getOneConsignment()
-
+    ->getOneConsignment();
 $status = $consignment->getStatus();
 $barcode = $consignment->getBarcode();
 ```
-To create multiple consignments or get one pdf with multiple consignments, set multiple consignments
-```
-$myParcelAPI
-    ->addConsignment($consignment1)
-    ->addConsignment($consignment2)
-    ->addConsignment($consignment3)
-    ->addConsignment($consignment4)
-```php
 
 ### Contribute
 1. Check for open issues or open a new issue to start a discussion around a bug or feature.
