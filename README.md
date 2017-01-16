@@ -107,17 +107,17 @@ $myParcelAPI
     ->getLinkOfLabels()
 ```
 #### Save MyParcel id
-After setPdfOfLabels(), setLinkOfLabels() and createConcepts() you can save the api id to your database. With this id you can easily retrieve the latest status.
+After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can save the api id to your database. With this id you can easily retrieve the latest status.
 ```php
 $consignment->getApiId();
 ```
 #### Get barcode
-The barcode is available after setPdfOfLabels() and setLinkOfLabels()
+The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
 ```php
 $consignment->getBarcode();
 ```
 #### Get status
-After setPdfOfLabels(), setLinkOfLabels() and createConcepts() you can get the status.
+After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can get the status.
 ```php
 $consignment->getStatus();
 ```
