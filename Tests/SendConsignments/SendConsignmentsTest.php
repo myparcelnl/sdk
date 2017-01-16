@@ -60,7 +60,7 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
         $myParcelAPI
             ->setLinkOfLabels();
 
-        $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLabelLink()), 'Can\'t get link of PDF');
+        $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLinkOfLabels()), 'Can\'t get link of PDF');
 
         foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
             $consignment = $myParcelAPI->getConsignmentByReferenceId($referenceId);

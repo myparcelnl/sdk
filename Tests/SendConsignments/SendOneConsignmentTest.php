@@ -47,7 +47,6 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
                 ->setCompany($consignmentTest['company'])
                 ->setFullStreet($consignmentTest['full_street_test'])
                 ->setPostalCode($consignmentTest['postal_code'])
-                ->setPackageType(1)
                 ->setCity($consignmentTest['city'])
                 ->setEmail('reindert@myparcel.nl')
                 ->setPhone($consignmentTest['phone']);
@@ -119,7 +118,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             $myParcelAPI
                 ->setLinkOfLabels();
 
-            $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLabelLink()), 'Can\'t get link of PDF');
+            $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLinkOfLabels()), 'Can\'t get link of PDF');
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelAPI->getOneConsignment();

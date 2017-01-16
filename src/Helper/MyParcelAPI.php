@@ -164,7 +164,7 @@ class MyParcelAPI
     /**
      * @return string
      */
-    public function getLabelLink()
+    public function getLinkOfLabels()
     {
         return $this->label_link;
     }
@@ -366,8 +366,6 @@ class MyParcelAPI
      */
     private function getConsignmentIds(&$key)
     {
-//        dump($this->getConsignments());
-//        exit('test13');
         $conceptIds = [];
         foreach ($this->getConsignments() as $consignment) {
             $conceptIds[] = $consignment->getApiId();
