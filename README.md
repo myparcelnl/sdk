@@ -135,7 +135,7 @@ foreach ($yourShipments as $shipment) {
 #### Later on
 In a new request, you can get al the data again.
 ```php
-consignment = (new MyParcelConsignmentRepository())
+$consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setApiId(205670);
 $myParcelAPI
