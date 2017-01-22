@@ -81,11 +81,11 @@ $consignment = (new MyParcelConsignmentRepository())
     ->setCity('Amsterdam')
     ->setEmail('test@test.nl')
     ->setPhone('+31 (0)634213465')
-    ->setLargeFormat(false)
-    ->setOnlyRecipient(false)
-    ->setSignature(false)
-    ->setReturn(false)
-    ->setInsurance(false)
+    ->setLargeFormat(true)
+    ->setOnlyRecipient(true)
+    ->setSignature(true)
+    ->setReturn(true)
+    ->setInsurance(250)
     ->setLabelDescription('Order 10034');
     
 $myParcelAPI
