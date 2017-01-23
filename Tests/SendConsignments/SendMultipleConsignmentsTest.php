@@ -19,7 +19,8 @@
 namespace MyParcelNL\Sdk\tests\SendConsignments\
 SendOneConsignmentTest;
 
-use MyParcelNL\Sdk\src\Helper\MyParcelAPI;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -27,15 +28,15 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendConsignmentsTest
  */
-class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
+class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Test one shipment with createConcepts()
      */
     public function testSendOneConsignment()
     {
-        $myParcelAPI = new MyParcelAPI();
+        /** move to __constructor */
+        $myParcelCollection = new MyParcelCollection();
 
         foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
 
@@ -51,19 +52,23 @@ class SendConsignmentsTest extends \PHPUnit_Framework_TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('reindert@myparcel.nl')
             ;
-            $myParcelAPI->addConsignment($consignment);
+            $myParcelCollection->addConsignment($consignment);
         }
 
         /**
          * Get label
          */
-        $myParcelAPI
+        $myParcelCollection
             ->setLinkOfLabels();
 
-        $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLinkOfLabels()), 'Can\'t get link of PDF');
+        $this->assertEquals(
+            true,
+            preg_match("#^" . MyParcelRequest::REQUEST_URL . "/pdfs#", $myParcelCollection->getLinkOfLabels()),
+            'Can\'t get link of PDF'
+        );
 
         foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
-            $consignment = $myParcelAPI->getConsignmentByReferenceId($referenceId);
+            $consignment = $myParcelCollection->getConsignmentByReferenceId($referenceId);
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
         }
     }

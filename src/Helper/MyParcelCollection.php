@@ -26,10 +26,10 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 /**
  * Stores all data to communicate with the MyParcel API
  *
- * Class MyParcelAPI
+ * Class MyParcelCollection
  * @package Model
  */
-class MyParcelAPI
+class MyParcelCollection
 {
     const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
     const PREFIX_MYPARCEL_ID = 'MYPARCEL_ID_';
@@ -146,10 +146,11 @@ class MyParcelAPI
 
         // return if ApiId not is set as a key
         foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getApiId() == $id) {
+            if ($consignment->getMyParcelConsignmentId() == $id) {
                 return $consignment;
             }
         }
+
         return null;
     }
 
@@ -172,6 +173,7 @@ class MyParcelAPI
     public function isReturn($return = true)
     {
         $this->return = $return;
+
         return $this;
     }
 
@@ -196,8 +198,8 @@ class MyParcelAPI
 
         if ($consignment->getReferenceId() !== null) {
             $this->consignments[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
-        } elseif ($consignment->getApiId() !== null) {
-            $this->consignments[self::PREFIX_MYPARCEL_ID . $consignment->getApiId()] = $consignment;
+        } elseif ($consignment->getMyParcelConsignmentId() !== null) {
+            $this->consignments[self::PREFIX_MYPARCEL_ID . $consignment->getMyParcelConsignmentId()] = $consignment;
         } else {
             $this->consignments[] = $consignment;
         }
@@ -218,7 +220,7 @@ class MyParcelAPI
         /* @var $consignments MyParcelConsignmentRepository[] */
         foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
             foreach ($consignments as $consignment) {
-                if ($consignment->getApiId() === null) {
+                if ($consignment->getMyParcelConsignmentId() === null) {
                     $data = $this->apiEncode([$consignment]);
                     $request = (new MyParcelRequest())
                         ->setRequestParameters(
@@ -228,7 +230,7 @@ class MyParcelAPI
                         )
                         ->sendRequest();
 
-                    $consignment->setApiId($request->getResult()['data']['ids'][0]['id']);
+                    $consignment->setMyParcelConsignmentId($request->getResult()['data']['ids'][0]['id']);
                 }
             }
         }
@@ -257,6 +259,7 @@ class MyParcelAPI
             $consignment = $this->getConsignmentByApiId($shipment['id']);
             $consignment->apiDecode($shipment);
         }
+
         return $this;
     }
 
@@ -347,7 +350,7 @@ class MyParcelAPI
             throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
 
         header('Content-Type: application/pdf');
-        header('Content-Length: '.strlen( $this->label_pdf ));
+        header('Content-Length: ' . strlen($this->label_pdf));
         header('Content-disposition: attachment; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
@@ -368,9 +371,10 @@ class MyParcelAPI
     {
         $conceptIds = [];
         foreach ($this->getConsignments() as $consignment) {
-            $conceptIds[] = $consignment->getApiId();
+            $conceptIds[] = $consignment->getMyParcelConsignmentId();
             $key = $consignment->getApiKey();
         }
+
         return $conceptIds;
     }
 
@@ -411,6 +415,7 @@ class MyParcelAPI
     public function getRequestBody()
     {
         $body = $this->paper_size == 'A4' ? '?format=A4&positions=' . $this->label_position : '';
+
         return $body;
     }
 
@@ -426,8 +431,8 @@ class MyParcelAPI
         $data = [];
         foreach ($consignments as $consignment) {
             $data['data']['shipments'][] = $consignment->apiEncode();
-
         }
+
         return json_encode($data);
     }
 
@@ -440,14 +445,17 @@ class MyParcelAPI
      */
     private function getPositions($start)
     {
-        $aPositions = array();
+        $aPositions = [];
         switch ($start) {
             case 1:
                 $aPositions[] = 1;
+            // No break
             case 2:
                 $aPositions[] = 2;
+            // No break
             case 3:
                 $aPositions[] = 3;
+            // No break
             case 4:
                 $aPositions[] = 4;
                 break;
@@ -466,6 +474,7 @@ class MyParcelAPI
         foreach ($this->getConsignments() as $consignment) {
             $aConsignments[$consignment->getApiKey()][] = $consignment;
         }
+
         return $aConsignments;
     }
 }

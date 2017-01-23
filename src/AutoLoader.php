@@ -7,7 +7,7 @@ if(!function_exists('dump')) {
     }
 }
 
-include_once ('Helper/MyParcelAPI.php');
+include_once ('Helper/MyParcelCollection.php');
 include_once ('Helper/MyParcelCurl.php');
 include_once ('Model/MyParcelRequest.php');
 include_once ('Model/MyParcelConsignment.php');

@@ -32,12 +32,12 @@ class MyParcelConsignment
     /**
      * @var int
      */
-    private $apiId = null;
+    private $myparcel_consignment_id = null;
 
     /**
      * @var string
      */
-    private $apiKey;
+    private $api_key;
 
     /**
      * @var null
@@ -195,9 +195,9 @@ class MyParcelConsignment
      *
      * @return int
      */
-    public function getApiId()
+    public function getMyParcelConsignmentId()
     {
-        return $this->apiId;
+        return $this->myparcel_consignment_id;
     }
 
     /**
@@ -207,9 +207,9 @@ class MyParcelConsignment
      *
      * @param int $id
      */
-    public function setApiId($id)
+    public function setMyParcelConsignmentId($id)
     {
-        $this->apiId = $id;
+        $this->myparcel_consignment_id = $id;
         return $this;
     }
 
@@ -218,7 +218,7 @@ class MyParcelConsignment
      */
     public function getApiKey()
     {
-        return $this->apiKey;
+        return $this->api_key;
     }
 
     /**
@@ -235,7 +235,7 @@ class MyParcelConsignment
      */
     public function setApiKey($apiKey)
     {
-        $this->apiKey = $apiKey;
+        $this->api_key = $apiKey;
         return $this;
     }
 

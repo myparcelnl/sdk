@@ -16,11 +16,9 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release 0.1.0
  */
-namespace MyParcelNL\Sdk\tests\SendConsignments\
-SendOneConsignmentTest;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
-//use MyParcelNL\Sdk\src\Helper\MyParcelAPI;
-use MyParcelNL\Sdk\src\Helper\MyParcelAPI;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -38,7 +36,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
     {
         foreach ($this->additionProvider() as $consignmentTest) {
 
-            $myParcelAPI = new MyParcelAPI();
+            $myParcelCollection = new MyParcelCollection();
 
             $consignment = (new MyParcelConsignmentRepository())
                 ->setApiKey($consignmentTest['api_key'])
@@ -72,14 +70,14 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             if (key_exists('label_description', $consignmentTest))
                 $consignment->setLabelDescription($consignmentTest['label_description']);
 
-            $myParcelAPI->addConsignment($consignment);
+            $myParcelCollection->addConsignment($consignment);
 
             /**
              * Create concept
              */
-            $myParcelAPI->createConcepts();
+            $myParcelCollection->createConcepts();
 
-            $this->assertEquals(true, $consignment->getApiId() > 1, 'No id found');
+            $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
             $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
             $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
@@ -115,14 +113,16 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             /**
              * Get label
              */
-            $myParcelAPI
+            $myParcelCollection
                 ->setLinkOfLabels();
 
-            $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelAPI->getLinkOfLabels()), 'Can\'t get link of PDF');
+            $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
             /** @var MyParcelConsignmentRepository $consignment */
-            $consignment = $myParcelAPI->getOneConsignment();
+            $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+
+            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 

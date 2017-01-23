@@ -44,7 +44,7 @@ Also the php curl extension needs to be installed.
 ### Quick start and examples
 
 ```php
-$myParcelAPI = new MyParcelAPI();
+$myParcelCollection = new MyParcelCollection();
 
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
@@ -56,7 +56,7 @@ $consignment = (new MyParcelConsignmentRepository())
     ->setCity('Amsterdam')
     ->setEmail('test@test.nl');
     
-$myParcelAPI
+$myParcelCollection
     ->addConsignment($consignment)
     ->setPdfOfLabels()
     ->downloadPdfOfLabels();
@@ -68,7 +68,7 @@ Please run ```vendor/bin/phpunit --bootstrap vendor/autoload.php  tests/``` to t
 
 ### Available Methods
 ```php
-$myParcelAPI = new MyParcelAPI();
+$myParcelCollection = new MyParcelCollection();
 
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
@@ -88,28 +88,28 @@ $consignment = (new MyParcelConsignmentRepository())
     ->setInsurance(250)
     ->setLabelDescription('Order 10034');
     
-$myParcelAPI
+$myParcelCollection
     ->addConsignment($consignment)
 ```
 #### Create concept
 ```php
-$myParcelAPI->createConcepts();
+$myParcelCollection->createConcepts();
 ```
 #### Download labels
 ```php
-$myParcelAPI->setPdfOfLabels();
-$myParcelAPI->downloadPdfOfLabels();
+$myParcelCollection->setPdfOfLabels();
+$myParcelCollection->downloadPdfOfLabels();
 ```
 #### Get label link
 ```php
-$myParcelAPI
+$myParcelCollection
     ->setLinkOfLabels()
     ->getLinkOfLabels()
 ```
 #### Save MyParcel id
 After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can save the api id to your database. With this id you can easily retrieve the latest status.
 ```php
-$consignment->getApiId();
+$consignment->getMyParcelConsignmentId();
 ```
 #### Get barcode
 The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
@@ -124,11 +124,11 @@ $consignment->getStatus();
 #### Multiple shipments
 To create multiple consignments or get one pdf with multiple consignments, set multiple consignments. It's faster and cleaner.
 ```php
-$myParcelAPI = new MyParcelAPI();
+$myParcelCollection = new MyParcelCollection();
 
 foreach ($yourShipments as $shipment) {
     (...) // Set $consignment
-    $myParcelAPI
+    $myParcelCollection
         ->addConsignment($consignment)
 }
 ```
@@ -137,13 +137,13 @@ In a new request, you can get al the data again.
 ```php
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setApiId(205670);
+    ->setMyParcelConsignmentId(205670);
 
-$myParcelAPI
+$myParcelCollection
     ->addConsignment($consignment)
     ->setLatestData();
 
-$consignment = $myParcelAPI
+$consignment = $myParcelCollection
     ->getOneConsignment();
 
 $status = $consignment->getStatus();

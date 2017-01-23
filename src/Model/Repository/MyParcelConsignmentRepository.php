@@ -145,7 +145,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $options = $data['options'];
 
         $this
-            ->setApiId($data['id'])
+            ->setMyParcelConsignmentId($data['id'])
             ->setBarcode($data['barcode'])
             ->setStatus($data['status'])
             ->setCountry($recipient['cc'])

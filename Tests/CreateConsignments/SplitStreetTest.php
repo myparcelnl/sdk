@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Test for split addresses from full street
+ * For Dutch consignments the street should be divided into name, number and addition. This code tests whether the
+ * street is split properly.
  *
- * LICENSE: This source file is subject to the Creative Commons License.
  * It is available through the world-wide-web at this URL:
  * http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -187,7 +186,6 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
                 'number_suffix' => '',
             ],
             [
-                /** @todo support 'street 39-1hg' */
                 'full_street_test' => 'street 39-1hg',
                 'full_street' => 'street 39- 1 hg',
                 'street' => 'street 39-',
