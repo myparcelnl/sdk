@@ -125,23 +125,23 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
             [
                 'full_street_test' => 'Zonegge 23 12',
                 'full_street' => 'Zonegge 23 12',
-                'street' => 'Zonegge 23',
-                'number' => 12,
-                'number_suffix' => '',
+                'street' => 'Zonegge',
+                'number' => 23,
+                'number_suffix' => '12',
             ],
             [
                 'full_street_test' => 'Markerkant 10 142',
                 'full_street' => 'Markerkant 10 142',
-                'street' => 'Markerkant 10',
-                'number' => 142,
-                'number_suffix' => '',
+                'street' => 'Markerkant',
+                'number' => 10,
+                'number_suffix' => '142',
             ],
             [
                 'full_street_test' => 'Markerkant 10 11e',
-                'full_street' => 'Markerkant 10 11 e',
-                'street' => 'Markerkant 10',
-                'number' => 11,
-                'number_suffix' => 'e',
+                'full_street' => 'Markerkant 10 11e',
+                'street' => 'Markerkant',
+                'number' => 10,
+                'number_suffix' => '11e',
             ],
             [
                 'full_street_test' => 'Sir Winston Churchillln 283 F008',
@@ -153,9 +153,9 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
             [
                 'full_street_test' => 'Sir Winston Churchilllaan 283 59',
                 'full_street' => 'Sir Winston Churchilllaan 283 59',
-                'street' => 'Sir Winston Churchilllaan 283',
-                'number' => 59,
-                'number_suffix' => '',
+                'street' => 'Sir Winston Churchilllaan',
+                'number' => 283,
+                'number_suffix' => '59',
             ],
             [
                 'full_street_test' => 'Insulindestreet 69 B03',
@@ -192,6 +192,20 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
                 'number' => 1,
                 'number_suffix' => 'hg',
             ],
+            [
+                'full_street_test' => 'Nicolaas Ruyschstraat 8 02L',
+                'full_street' => 'Nicolaas Ruyschstraat 8 02L',
+                'street' => 'Nicolaas Ruyschstraat',
+                'number' => 8,
+                'number_suffix' => '02L',
+            ],
+            /*[
+                'full_street_test' => 'Bilderdijkstraat 157 A 1',
+                'full_street' => 'Bilderdijkstraat 157 A 1',
+                'street' => 'Bilderdijkstraat 157',
+                'number' => 157,
+                'number_suffix' => 'A 1',
+            ],*/
         ];
     }
 }
