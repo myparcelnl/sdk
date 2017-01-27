@@ -1,4 +1,4 @@
-[![Latest Unstable Version](https://poser.pugx.org/myparcelnl/sdk/v/unstable)](https://packagist.org/packages/myparcelnl/sdk) [![Quality Score](https://img.shields.io/scrutinizer/g/myparcelnl/sdk.svg?style=plastic)](https://scrutinizer-ci.com/g/myparcelnl/sdk)
+[![Latest Unstable Version](https://poser.pugx.org/myparcelnl/sdk/v/unstable)](https://packagist.org/packages/myparcelnl/sdk) [![Quality Score](https://img.shields.io/scrutinizer/g/myparcelnl/sdk.svg)](https://scrutinizer-ci.com/g/myparcelnl/sdk)
 
 # MyParcel SDK
 
