@@ -166,17 +166,25 @@ class MyParcelRequest
                 }
 
                 //check if the response has errors codes
-                if (isset($this->result['errors'][0]['code'])) {
+                if (isset($this->result['errors'])) {
+                    foreach($this->result['errors'] as $error) {
+                        $errorMessage = '';
+                        if (key_exists('message', $this->result)) {
+                            $message = $this->result['message'];
+                        }
+                        else {
+                            $message = $error['message'];
+                        }
 
-                    if (key_exists('message', $this->result)) {
-                        $message = $this->result['message'];
-                    } else {
-                        $message = $this->result['errors'][0]['message'];
+                        if (key_exists('code', $error)){
+                            $errorMessage = $error['code'];
+                        } elseif (key_exists('fields', $error)){
+                            $errorMessage = $error['fields'][0];
+                        }
+                        $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
+                        $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
+                        $request->close();
                     }
-
-                    $humanMessage = key_exists('human', $this->result['errors'][0]) ? $this->result['errors'][0]['human'][0] : '';
-                    $this->error = $this->result['errors'][0]['code'] . ' - ' . $humanMessage . ' - ' . $message;
-                    $request->close();
                 }
             }
         }
@@ -185,7 +193,7 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            throw new \Exception('Error in MyParcel API request: ' . $this->getError());
+            throw new \Exception('Error in MyParcel API request: ' . $this->getError() . '. Request: ' . $this->body);
         }
 
         return $this;

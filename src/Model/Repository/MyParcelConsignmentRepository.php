@@ -88,7 +88,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function getTotalWeight()
     {
-        return;
+        return 0;
     }
 
     /**
@@ -98,36 +98,78 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function apiEncode()
     {
-        $aConsignment = array(
-            'recipient' => array(
+        $aConsignment = [
+            'recipient' => [
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
                 'company' => $this->getCompany(),
                 'postal_code' => $this->getPostalCode(),
                 'street' => $this->getStreet(),
-                'number' => $this->getNumber(),
-                'number_suffix' => $this->getNumberSuffix(),
                 'city' => $this->getCity(),
                 'email' => $this->getEmail(),
                 'phone' => $this->getPhone(),
-            ),
+            ],
             'options' => [
                 'package_type' => $this->getPackageType(),
-                'large_format' => $this->isLargeFormat() ? 1 : 0,
-                'only_recipient' => $this->isOnlyRecipient() ? 1 : 0,
-                'signature' => $this->isSignature() ? 1 : 0,
-                'return' => $this->isReturn() ? 1 : 0,
                 'label_description' => $this->getLabelDescription(),
-                'delivery_type' => $this->getDeliveryType(),
             ],
             'carrier' => 1,
-        );
+        ];
 
-        if ($this->getInsurance() > 1) {
-            $aConsignment['options']['insurance'] = ['amount' => (int)$this->getInsurance() * 100, 'currency' => 'EUR'];
+        if ($this->getCountry() == 'NL') {
+            $aConsignment = array_merge_recursive(
+                $aConsignment, [
+                    'recipient' => [
+                        'number' => $this->getNumber(),
+                        'number_suffix' => $this->getNumberSuffix(),
+                    ],
+                    'options' => [
+                        'large_format' => $this->isLargeFormat() ? 1 : 0,
+                        'only_recipient' => $this->isOnlyRecipient() ? 1 : 0,
+                        'signature' => $this->isSignature() ? 1 : 0,
+                        'return' => $this->isReturn() ? 1 : 0,
+                        'delivery_type' => $this->getDeliveryType(),
+                    ],
+                ]
+            );
+
+            if ($this->getInsurance() > 1)
+                $aConsignment['options']['insurance'] = ['amount' => (int)$this->getInsurance() * 100, 'currency' => 'EUR'];
         }
+
+        // @todo; Is not EU
+        if ($this->getCountry() != 'NL') {
+            $aConsignment = array_merge_recursive(
+                $aConsignment, [
+                    'customs_declaration' => [
+                        'contents' => 1,
+                        'weight' => $this->getTotalWeight(),
+                        'items' => [
+                            [
+                                'description' => 'Product',
+                                'amount' => 1,
+                                'weight' => 0,
+                                'classification' => '',
+                                'country' => 'NL',
+                                'item_value' =>
+                                    [
+                                        'amount' => 100,
+                                        'currency' => "EUR",
+                                    ],
+                            ]
+                        ],
+                        'invoice' => '',
+                    ],
+                    'physical_properties' => [
+                        'weight' => $this->getTotalWeight()
+                    ]
+                ]
+            );
+        }
+
         if ($this->getDeliveryDate())
             $aConsignment['options']['delivery_date'] = $this->getDeliveryDate();
+
 
         return $aConsignment;
     }
