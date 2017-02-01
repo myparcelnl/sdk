@@ -104,7 +104,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'person' => $this->getPerson(),
                 'company' => $this->getCompany(),
                 'postal_code' => $this->getPostalCode(),
-                'street' => $this->getStreet(),
                 'city' => $this->getCity(),
                 'email' => $this->getEmail(),
                 'phone' => $this->getPhone(),
@@ -118,8 +117,10 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
         if ($this->getCountry() == 'NL') {
             $aConsignment = array_merge_recursive(
-                $aConsignment, [
+                $aConsignment,
+                [
                     'recipient' => [
+                        'street' => $this->getStreet(),
                         'number' => $this->getNumber(),
                         'number_suffix' => $this->getNumberSuffix(),
                     ],
@@ -134,11 +135,17 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             );
 
             if ($this->getInsurance() > 1)
-                $aConsignment['options']['insurance'] = ['amount' => (int)$this->getInsurance() * 100, 'currency' => 'EUR'];
+                $aConsignment['options']['insurance'] = [
+                    'amount' => (int)$this->getInsurance() * 100,
+                    'currency' => 'EUR',
+                ];
+
+        }
+        else {
+            $aConsignment['recipient']['street'] = $this->getFullStreet();
         }
 
-        // @todo; Is not EU
-        if ($this->getCountry() != 'NL') {
+        if ($this->isCdCountry()) {
             $aConsignment = array_merge_recursive(
                 $aConsignment, [
                     'customs_declaration' => [
@@ -264,5 +271,41 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         );
 
         return $streetData;
+    }
+
+    private function isCdCountry()
+    {
+        return !in_array(
+            $this->getCountry(),
+            [
+                'NL',
+                'BE',
+                'AT',
+                'BG',
+                'CZ',
+                'CY',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GB',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+                'XK',
+            ]
+        );
     }
 }
