@@ -88,7 +88,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function getTotalWeight()
     {
-        return 0;
+        return 1;
     }
 
     /**
@@ -156,7 +156,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                                 'description' => 'Product',
                                 'amount' => 1,
                                 'weight' => 0,
-                                'classification' => '',
+                                'classification' => '0000',
                                 'country' => 'NL',
                                 'item_value' =>
                                     [
@@ -165,7 +165,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                                     ],
                             ]
                         ],
-                        'invoice' => '',
+                        'invoice' => $this->getLabelDescription(),
                     ],
                     'physical_properties' => [
                         'weight' => $this->getTotalWeight()
@@ -202,18 +202,27 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setCompany($recipient['company'])
             ->setPostalCode($recipient['postal_code'])
             ->setStreet($recipient['street'])
-            ->setNumber($recipient['number'])
-            ->setNumberSuffix($recipient['number_suffix'])
             ->setCity($recipient['city'])
             ->setEmail($recipient['email'])
             ->setPhone($recipient['phone'])
             ->setPackageType($options['package_type'])
-            ->setLargeFormat($options['large_format'])
-            ->setOnlyRecipient($options['only_recipient'])
-            ->setSignature($options['signature'])
-            ->setReturn($options['return'])
             ->setLabelDescription($options['label_description'])
         ;
+
+        if (key_exists('only_recipient', $recipient))
+            $this->setOnlyRecipient($recipient['only_recipient']);
+
+        if (key_exists('signature', $recipient))
+            $this->setSignature($recipient['signature']);
+
+        if (key_exists('return', $recipient))
+            $this->setReturn($recipient['return']);
+
+        if (key_exists('number', $recipient))
+            $this->setNumber($recipient['number']);
+
+        if (key_exists('number_suffix', $recipient))
+            $this->setNumberSuffix($recipient['number_suffix']);
 
         if (key_exists('insurance', $data['options']))
             $this->setInsurance($data['options']['insurance']['amount'] / 100);

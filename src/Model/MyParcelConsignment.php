@@ -72,7 +72,7 @@ class MyParcelConsignment
     /**
      * @var integer
      */
-    private $number;
+    private $number = null;
 
     /**
      * @var string
