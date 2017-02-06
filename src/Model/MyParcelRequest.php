@@ -46,7 +46,7 @@ class MyParcelRequest
      * @var string
      */
     private $api_key = '';
-    private $header = '';
+    private $header = [];
     private $body = '';
     private $error = null;
     private $result = null;
