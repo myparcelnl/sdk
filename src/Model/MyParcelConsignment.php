@@ -781,7 +781,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setLabelDescription($label_description)
     {
-        $this->label_description = (string)$label_description;
+        $this->label_description = (string) $label_description;
         return $this;
     }
 

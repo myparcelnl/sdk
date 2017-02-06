@@ -60,7 +60,7 @@ class MyParcelRequest
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getError()
     {
@@ -123,7 +123,7 @@ class MyParcelRequest
         $request = new MyParcelCurl();
 
         //add the options
-        foreach($options as $option => $value)
+        foreach ($options as $option => $value)
         {
             $request->addOption($option, $value);
         }
@@ -132,7 +132,7 @@ class MyParcelRequest
         $url = self::REQUEST_URL . '/' . $uri;
 
         //do the curl request
-        if($method == 'POST'){
+        if ($method == 'POST') {
 
             //curl request string
             $body = $this->body;
@@ -152,7 +152,7 @@ class MyParcelRequest
         //read the response
         $response = $request->read();
 
-        if(preg_match("/^%PDF-1./", $response)) {
+        if (preg_match("/^%PDF-1./", $response)) {
             $this->result = $response;
         } else {
             $this->result = json_decode($response, true);
@@ -167,18 +167,17 @@ class MyParcelRequest
 
                 //check if the response has errors codes
                 if (isset($this->result['errors'])) {
-                    foreach($this->result['errors'] as $error) {
+                    foreach ($this->result['errors'] as $error) {
                         $errorMessage = '';
                         if (key_exists('message', $this->result)) {
                             $message = $this->result['message'];
-                        }
-                        else {
+                        } else {
                             $message = $error['message'];
                         }
 
-                        if (key_exists('code', $error)){
+                        if (key_exists('code', $error)) {
                             $errorMessage = $error['code'];
-                        } elseif (key_exists('fields', $error)){
+                        } elseif (key_exists('fields', $error)) {
                             $errorMessage = $error['fields'][0];
                         }
                         $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
@@ -208,7 +207,7 @@ class MyParcelRequest
      */
     private function checkConfigForRequest()
     {
-        if(empty($this->api_key)){
+        if (empty($this->api_key)) {
             throw new \Exception('api_key not found');
         }
 
