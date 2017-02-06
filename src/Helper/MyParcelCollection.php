@@ -85,6 +85,14 @@ class MyParcelCollection
         return $this->consignments;
     }
 
+    /**
+     * Get one consignment
+     *
+     * @param bool $throwException
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository|null
+     * @throws \Exception
+     */
     public function getOneConsignment($throwException = true)
     {
         if (count($this->getConsignments()) > 1) {
@@ -98,6 +106,8 @@ class MyParcelCollection
                 return $consignment;
             }
         }
+
+        return null;
     }
 
     /**
@@ -124,6 +134,8 @@ class MyParcelCollection
                 return $consignment;
             }
         }
+
+        return null;
     }
 
     /**
@@ -178,7 +190,7 @@ class MyParcelCollection
     }
 
     /**
-     * @param MyParcelConsignmentRepository $consignment
+     * @param \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository $consignment
      *
      * @return $this
      * @throws \Exception
