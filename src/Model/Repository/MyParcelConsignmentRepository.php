@@ -136,7 +136,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
             if ($this->getInsurance() > 1)
                 $aConsignment['options']['insurance'] = [
-                    'amount' => (int)$this->getInsurance() * 100,
+                    'amount' => (int) $this->getInsurance() * 100,
                     'currency' => 'EUR',
                 ];
 

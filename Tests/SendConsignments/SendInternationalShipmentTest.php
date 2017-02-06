@@ -46,8 +46,9 @@ class SendInternationalShipmentTest extends \PHPUnit_Framework_TestCase
                 ->setEmail('reindert@myparcel.nl')
                 ->setPhone($consignmentTest['phone']);
 
-            if (key_exists('label_description', $consignmentTest))
-                $consignment->setLabelDescription($consignmentTest['label_description']);
+            if (key_exists('label_description', $consignmentTest)) {
+                            $consignment->setLabelDescription($consignmentTest['label_description']);
+            }
 
             $myParcelCollection->addConsignment($consignment);
 
@@ -66,8 +67,9 @@ class SendInternationalShipmentTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
 
-            if (key_exists('label_description', $consignmentTest))
-                $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
+            if (key_exists('label_description', $consignmentTest)) {
+                            $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
+            }
         }
     }
 

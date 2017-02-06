@@ -200,7 +200,7 @@ class MyParcelCollection
         if ($consignment->getApiKey() === null)
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
 
-        if (!empty($this->consignments)){
+        if (!empty($this->consignments)) {
             if ($consignment->getReferenceId() === null)
                 throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
 
@@ -358,8 +358,9 @@ class MyParcelCollection
      */
     public function downloadPdfOfLabels()
     {
-        if ($this->label_pdf == null)
-            throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
+        if ($this->label_pdf == null) {
+                    throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
+        }
 
         header('Content-Type: application/pdf');
         header('Content-Length: ' . strlen($this->label_pdf));
@@ -367,7 +368,7 @@ class MyParcelCollection
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
-        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         echo $this->label_pdf;
         exit;
     }
