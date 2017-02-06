@@ -282,39 +282,16 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         return $streetData;
     }
 
+    /**
+     * Check if the address is outside the EU
+     *
+     * @return bool
+     */
     private function isCdCountry()
     {
         return !in_array(
             $this->getCountry(),
-            [
-                'NL',
-                'BE',
-                'AT',
-                'BG',
-                'CZ',
-                'CY',
-                'DK',
-                'EE',
-                'FI',
-                'FR',
-                'DE',
-                'GB',
-                'GR',
-                'HU',
-                'IE',
-                'IT',
-                'LV',
-                'LT',
-                'LU',
-                'PL',
-                'PT',
-                'RO',
-                'SK',
-                'SI',
-                'ES',
-                'SE',
-                'XK',
-            ]
+            self::EU_COUNTRIES
         );
     }
 }

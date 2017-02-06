@@ -25,7 +25,7 @@ namespace MyParcelNL\Sdk\src\Model;
  * Class Consignment
  * @package MyParcelNL\Sdk\Model
  */
-class MyParcelConsignment
+class MyParcelConsignment extends MyParcelClassConstants
 {
     private $referenceId;
 
