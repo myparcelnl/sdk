@@ -110,6 +110,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ],
             'carrier' => 1,
         ];
+
         if ($this->getCompany())
             $aConsignment['recipient']['company'] = $this->getCompany();
 
@@ -196,7 +197,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setStatus($data['status'])
             ->setCountry($recipient['cc'])
             ->setPerson($recipient['person'])
-            ->setCompany($recipient['company'])
             ->setPostalCode($recipient['postal_code'])
             ->setStreet($recipient['street'])
             ->setCity($recipient['city'])
@@ -205,6 +205,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPackageType($options['package_type'])
             ->setLabelDescription($options['label_description'])
         ;
+
+        if (key_exists('company', $recipient))
+            $this->setCompany($recipient['company']);
 
         if (key_exists('only_recipient', $recipient))
             $this->setOnlyRecipient($recipient['only_recipient']);
