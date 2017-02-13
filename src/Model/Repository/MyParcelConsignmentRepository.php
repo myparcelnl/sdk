@@ -99,7 +99,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             'recipient' => [
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
-                'company' => $this->getCompany(),
                 'postal_code' => $this->getPostalCode(),
                 'city' => $this->getCity(),
                 'email' => $this->getEmail(),
@@ -111,6 +110,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ],
             'carrier' => 1,
         ];
+        if ($this->getCompany())
+            $aConsignment['recipient']['company'] = $this->getCompany();
 
         if ($this->getCountry() == 'NL') {
             $aConsignment = array_merge_recursive(
@@ -137,8 +138,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                     'currency' => 'EUR',
                 ];
 
-        }
-        else {
+        } else {
             $aConsignment['recipient']['street'] = $this->getFullStreet();
         }
 

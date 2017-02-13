@@ -12,7 +12,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace myparcelnl\sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model;
 
 
 class MyParcelClassConstants
