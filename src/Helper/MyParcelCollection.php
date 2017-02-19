@@ -28,8 +28,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class MyParcelCollection
 {
     const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
-    const PREFIX_MYPARCEL_ID = 'MYPARCEL_ID_';
-
     const PREFIX_PDF_FILENAME = 'myparcel-label-';
 
     /**
@@ -147,11 +145,6 @@ class MyParcelCollection
             return $consignment;
         }
 
-        // return if ApiId is set as a key
-        if (key_exists(self::PREFIX_MYPARCEL_ID . $id, $this->consignments)) {
-            return $this->getConsignments()[self::PREFIX_MYPARCEL_ID . $id];
-        }
-
         // return if ApiId not is set as a key
         foreach ($this->getConsignments() as $consignment) {
             if ($consignment->getMyParcelConsignmentId() == $id) {
@@ -206,8 +199,6 @@ class MyParcelCollection
 
         if ($consignment->getReferenceId() !== null) {
             $this->consignments[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
-        } elseif ($consignment->getMyParcelConsignmentId() !== null) {
-            $this->consignments[self::PREFIX_MYPARCEL_ID . $consignment->getMyParcelConsignmentId()] = $consignment;
         } else {
             $this->consignments[] = $consignment;
         }
@@ -237,7 +228,6 @@ class MyParcelCollection
                             MyParcelRequest::REQUEST_HEADER_SHIPMENT
                         )
                         ->sendRequest();
-
                     $consignment->setMyParcelConsignmentId($request->getResult()['data']['ids'][0]['id']);
                 }
             }
