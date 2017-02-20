@@ -370,10 +370,10 @@ class MyParcelCollection
     {
         $conceptIds = [];
         foreach ($this->getConsignments() as $consignment) {
-            //if ($consignment->getMyParcelConsignmentId()) {
+            if ($consignment->getMyParcelConsignmentId()) {
                 $conceptIds[] = $consignment->getMyParcelConsignmentId();
                 $key = $consignment->getApiKey();
-            //}
+            }
         }
 
         return $conceptIds;
