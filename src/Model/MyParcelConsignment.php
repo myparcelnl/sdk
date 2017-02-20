@@ -19,6 +19,7 @@ namespace MyParcelNL\Sdk\src\Model;
  * A model of a consignment
  *
  * Class Consignment
+ *
  * @package MyParcelNL\Sdk\Model
  */
 class MyParcelConsignment extends MyParcelClassConstants
@@ -103,7 +104,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * @var integer
      */
-    private $package_type = 1;
+    private $package_type = null;
 
     /**
      * @var integer
@@ -181,6 +182,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setReferenceId($referenceId)
     {
         $this->referenceId = $referenceId;
+
         return $this;
     }
 
@@ -206,6 +208,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setMyParcelConsignmentId($id)
     {
         $this->myparcel_consignment_id = $id;
+
         return $this;
     }
 
@@ -232,6 +235,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setApiKey($apiKey)
     {
         $this->api_key = $apiKey;
+
         return $this;
     }
 
@@ -251,6 +255,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setBarcode($barcode)
     {
         $this->barcode = $barcode;
+
         return $this;
     }
 
@@ -300,6 +305,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -324,6 +330,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setShopId($shop_id)
     {
         $this->shop_id = $shop_id;
+
         return $this;
     }
 
@@ -375,6 +382,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setCity($city)
     {
         $this->city = $city;
+
         return $this;
     }
 
@@ -398,6 +406,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setStreet($street)
     {
         $this->street = $street;
+
         return $this;
     }
 
@@ -424,6 +433,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setNumber($number)
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -447,6 +457,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setNumberSuffix($number_suffix)
     {
         $this->number_suffix = $number_suffix;
+
         return $this;
     }
 
@@ -470,6 +481,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setPostalCode($postal_code)
     {
         $this->postal_code = $postal_code;
+
         return $this;
     }
 
@@ -493,6 +505,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setPerson($person)
     {
         $this->person = $person;
+
         return $this;
     }
 
@@ -516,6 +529,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setCompany($company)
     {
         $this->company = $company;
+
         return $this;
     }
 
@@ -539,6 +553,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -562,6 +577,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setPhone($phone)
     {
         $this->phone = $phone;
+
         return $this;
     }
 
@@ -591,6 +607,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setPackageType($package_type)
     {
         $this->package_type = $package_type;
+
         return $this;
     }
 
@@ -614,6 +631,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setDeliveryType($delivery_type)
     {
         $this->delivery_type = $delivery_type;
+
         return $this;
     }
 
@@ -638,6 +656,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setDeliveryDate($delivery_date)
     {
         $this->delivery_date = $delivery_date;
+
         return $this;
     }
 
@@ -661,6 +680,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setDeliveryRemark($delivery_remark)
     {
         $this->delivery_remark = $delivery_remark;
+
         return $this;
     }
 
@@ -683,7 +703,8 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setOnlyRecipient($only_recipient)
     {
-        $this->only_recipient = $only_recipient;
+        $this->only_recipient = $this->canHaveOption($only_recipient);
+
         return $this;
     }
 
@@ -706,7 +727,8 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setSignature($signature)
     {
-        $this->signature = $signature;
+        $this->signature = $this->canHaveOption($signature);
+
         return $this;
     }
 
@@ -729,7 +751,8 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setReturn($return)
     {
-        $this->return = $return;
+        $this->return = $this->canHaveOption($return);
+
         return $this;
     }
 
@@ -752,7 +775,8 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setLargeFormat($large_format)
     {
-        $this->large_format = $large_format;
+        $this->large_format = $this->canHaveOption($large_format);
+
         return $this;
     }
 
@@ -777,7 +801,8 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setLabelDescription($label_description)
     {
-        $this->label_description = (string) $label_description;
+        $this->label_description = (string)$label_description;
+
         return $this;
     }
 
@@ -803,7 +828,8 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setInsurance($insurance)
     {
-        $this->insurance = $insurance;
+        $this->insurance = $this->canHaveOption($insurance);
+
         return $this;
     }
 
@@ -835,6 +861,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setContents($contents)
     {
         $this->contents = $contents;
+
         return $this;
     }
 
@@ -859,6 +886,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setInvoice($invoice)
     {
         $this->invoice = $invoice;
+
         return $this;
     }
 
@@ -883,4 +911,20 @@ class MyParcelConsignment extends MyParcelClassConstants
         $this->items[] = $item;
     }
 
+    /**
+     * Only package type 1 can have extra options
+     *
+     * @param $option
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function canHaveOption($option)
+    {
+        if ($this->getPackageType() === null) {
+            throw new \Exception('Set package type before ' . $option);
+        }
+
+        return $this->getPackageType() == 1 ? $option : false;
+    }
 }
