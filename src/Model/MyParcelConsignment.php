@@ -828,7 +828,11 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setInsurance($insurance)
     {
-        $this->insurance = $this->canHaveOption($insurance);
+        if (!$this->canHaveOption()) {
+            $insurance = 0;
+        }
+
+        $this->insurance = $insurance;
 
         return $this;
     }
@@ -919,7 +923,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      * @return bool
      * @throws \Exception
      */
-    private function canHaveOption($option)
+    private function canHaveOption($option = true)
     {
         if ($this->getPackageType() === null) {
             throw new \Exception('Set package type before ' . $option);

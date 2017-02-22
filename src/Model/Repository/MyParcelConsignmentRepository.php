@@ -226,7 +226,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
         if (key_exists('insurance', $data['options']))
             $this->setInsurance($data['options']['insurance']['amount'] / 100);
-        ;
 
         if (key_exists('delivery_date', $data['options']))
             $this->setDeliveryDate($data['options']['delivery_date']);
