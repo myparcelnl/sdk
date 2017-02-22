@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/sdk",
-    "version": "v0.2.8",
+    "version": "v0.2.9",
     "description": "This package is designed to send and receive data from MyParcel by means of an API.",
     "homepage": "https://www.myparcel.nl",
     "tags": ["MyParcel", "My Parcel", "Post NL", "PostNL"],
@@ -26,9 +26,4 @@
     "require-dev": {
         "phpunit/phpunit": "^4.8"
     },
-    "autoload": {
-        "psr-4" : {
-            "MyParcelNL\\Sdk\\" : "src/"
-        }
-    }
 }
