@@ -94,7 +94,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * @var string
      */
-    private $email = null;
+    private $email = '';
 
     /**
      * @var string
