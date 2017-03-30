@@ -248,7 +248,7 @@ class MyParcelCollection
         $request = (new MyParcelRequest())
             ->setRequestParameters(
                 $key,
-                implode(';', $conceptIds),
+                implode(';', $conceptIds) . '?size=300',
                 MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
             )
             ->sendRequest('GET');

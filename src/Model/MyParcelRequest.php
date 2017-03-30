@@ -97,7 +97,7 @@ class MyParcelRequest
      * @return MyParcelRequest|array|false|string
      * @throws \Exception
      */
-    public function sendRequest($method = 'POST', $uri = 'shipments')
+    public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_CREATE_CONSIGNMENT)
     {
         if (!$this->checkConfigForRequest()) {
             return false;
@@ -125,7 +125,7 @@ class MyParcelRequest
         }
 
         $header = $this->header;
-        $url = self::REQUEST_URL . '/' . $uri;
+        $url = $this->getRequestUrl($uri);
 
         //do the curl request
         if ($method == 'POST') {
@@ -193,6 +193,20 @@ class MyParcelRequest
         }
 
         return $this;
+    }
+
+    /**
+     * Get request url
+     *
+     * @param $uri
+     *
+     * @return string
+     */
+    private function getRequestUrl($uri)
+    {
+        $url = self::REQUEST_URL . '/' . $uri;
+
+        return $url;
     }
 
     /**
