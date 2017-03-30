@@ -138,7 +138,8 @@ class MyParcelRequest
         } else {
             
             //complete request url
-            $url .= '/' . $this->body;
+            if($this->body)
+                $url .= '/' . $this->body;
 
             $request->setConfig($config)
                 ->write('GET', $url, '1.1', $header);
