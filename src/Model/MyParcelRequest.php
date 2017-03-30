@@ -198,7 +198,7 @@ class MyParcelRequest
     /**
      * Get request url
      *
-     * @param $uri
+     * @param string $uri
      *
      * @return string
      */
