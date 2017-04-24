@@ -14,7 +14,7 @@
 ---
 Please, star this repository if you use this repository. :star:
 
-### Installation
+### Installation with composer
 
 This SDK uses composer.
 
