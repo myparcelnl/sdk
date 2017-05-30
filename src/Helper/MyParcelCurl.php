@@ -98,7 +98,7 @@ class MyParcelCurl
      * Add additional option to cURL
      *
      * @param  int $option      the CURLOPT_* constants
-     * @param  mixed $value
+     * @param  boolean $value
      * @return MyParcelCurl
      */
     public function addOption($option, $value)
