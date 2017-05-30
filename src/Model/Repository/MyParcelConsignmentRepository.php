@@ -283,7 +283,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        if ($this->getCountry() !== 'NL' && $this->getDeliveryType() == 4 || $this->getDeliveryType() == 5) {
+        if ($this->getCountry() !== 'NL' && $this->getDeliveryType() !== 4 && $this->getDeliveryType() !== 5) {
             return $this;
         }
 
@@ -293,11 +293,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             !is_array($aCheckoutData) ||
             !key_exists('location', $aCheckoutData)
         ) {
-            return $this;
+            throw new \Exception('No PostNL location found in checkout data: ' . $checkoutData);
         }
 
         if ($this->getDeliveryDate() == null) {
-            $this->setDeliveryDate($aCheckoutData['date'] . ' 00:00:00');
+            $this->setDeliveryDate($aCheckoutData['date']);
         }
 
         $this

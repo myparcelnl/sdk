@@ -20,10 +20,10 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
- * Class SendPickupFromCheckoutDataTest
+ * Class SendMorningShipmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
+class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test one shipment with createConcepts()
@@ -44,6 +44,9 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('reindert@myparcel.nl')
                 ->setPhone($consignmentTest['phone']);
+
+            if (key_exists('delivery_date', $consignmentTest))
+                $consignment->setDeliveryDate($consignmentTest['delivery_date']);
 
             if (key_exists('package_type', $consignmentTest))
                 $consignment->setPackageType($consignmentTest['package_type']);
@@ -91,6 +94,9 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
 
+            if (key_exists('delivery_date', $consignmentTest))
+                $this->assertEquals($consignmentTest['delivery_date'] . ' 00:00:00', $consignment->getDeliveryDate(), 'getDeliveryDate()');
+
             if (key_exists('package_type', $consignmentTest))
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
 
@@ -114,13 +120,6 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
 
             if (key_exists('delivery_type', $consignmentTest))
                 $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
-
-            $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
-            $this->assertEquals($consignmentTest['pickup_postal_code'], $consignment->getPickupPostalCode(), 'getPickupPostalCode()');
-            $this->assertEquals($consignmentTest['pickup_street'], $consignment->getPickupStreet(), 'getPickupStreet()');
-            $this->assertEquals($consignmentTest['pickup_city'], $consignment->getPickupCity(), 'getPickupCity()');
-            $this->assertEquals($consignmentTest['pickup_number'], $consignment->getPickupNumber(), 'getPickupNumber()');
-            $this->assertEquals($consignmentTest['pickup_location_name'], $consignment->getPickupLocationName(), 'getPickupLocationName()');
 
             /**
              * Get label
@@ -162,15 +161,29 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Katwijk',
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
-                'delivery_type' => 4,
+                'delivery_type' => 1,
                 'label_description' => 'Label description',
-                'checkout_data' => '{"date":"2018-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
-                'pickup_postal_code' => '2231GT',
-                'pickup_street' => 'Anjelierenstraat',
-                'pickup_city' => 'Rijnsburg',
-                'pickup_number' => '43',
-                'pickup_location_name' => 'The Read Shop',
+                'delivery_date' => '2019-05-31'
             ],
+            [
+                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
+                'cc' => 'NL',
+                'person' => 'Piet',
+                'company' => 'Mega Store',
+                'full_street_test' => 'Koestraat 55',
+                'full_street' => 'Koestraat 55',
+                'street' => 'Koestraat',
+                'number' => 55,
+                'number_suffix' => '',
+                'postal_code' => '2231JE',
+                'city' => 'Katwijk',
+                'phone' => '123-45-235-435',
+                'signature' => 1,
+                'package_type' => 1,
+                'delivery_type' => 1,
+                'label_description' => 'Label description',
+                'delivery_date' => '2019-05-31'
+            ]
         ];
     }
 }

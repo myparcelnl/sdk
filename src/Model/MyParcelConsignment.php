@@ -27,6 +27,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * Regular expression used to make sure the date is correct.
      */
+    const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
 
     private $referenceId;
@@ -631,11 +632,15 @@ class MyParcelConsignment extends MyParcelClassConstants
      * Required: Yes
      *
      * @param int $package_type
-     *
      * @return $this
+     * @throws \Exception
      */
     public function setPackageType($package_type)
     {
+        if ($package_type !== 2 && $this->getDeliveryDate() == null) {
+            throw new \Exception('If package type !== 2, first set delivery date with setDeliveryDate() before running setPackageType()');
+        }
+
         $this->package_type = $package_type;
 
         return $this;
@@ -675,8 +680,8 @@ class MyParcelConsignment extends MyParcelClassConstants
 
     /**
      * The delivery date time for this shipment
-     * Pattern: YYYY-MM-DD HH:MM:SS
-     * Example: 2017-01-01 00:00:00
+     * Pattern: YYYY-MM-DD | YYYY-MM-DD HH:MM:SS
+     * Example: 2017-01-01 | 2017-01-01 00:00:00
      * Required: Yes if delivery type has been specified
      *
      * @param string $delivery_date
@@ -686,10 +691,16 @@ class MyParcelConsignment extends MyParcelClassConstants
     public function setDeliveryDate($delivery_date)
     {
 
-        $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
+        $result = preg_match(self::DATE_REGEX, $delivery_date, $matches);
 
-        if (!$result) {
-            throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
+        if ($result) {
+            $delivery_date = (string)$delivery_date . ' 00:00:00';
+        } else {
+            $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
+
+            if (!$result) {
+                throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
+            }
         }
 
         $this->delivery_date = (string) $delivery_date;
