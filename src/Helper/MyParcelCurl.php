@@ -150,7 +150,7 @@ class MyParcelCurl
      * Send request to the remote server
      *
      * @param string               $method
-     * @param string|Zend_Uri_Http $url
+     * @param string               $url
      * @param string               $http_ver
      * @param array                $headers
      * @param string               $body
