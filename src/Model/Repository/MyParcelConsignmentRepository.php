@@ -33,6 +33,15 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s|-]?(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
 
     /**
+     * Consignment types
+     */
+    const TYPE_MORNING             = 1;
+    const TYPE_STANDARD            = 2;
+    const TYPE_NIGHT               = 3;
+    const TYPE_RETAIL              = 4;
+    const TYPE_RETAIL_EXPRESS      = 5;
+
+    /**
      * @var array
      */
     private $consignment = [];
@@ -130,9 +139,79 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
+     * Get delivery type from checkout
+     *
+     * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+     *
+     * @param string $checkoutData
+     * @return $this
+     * @throws \Exception
+     */
+    public function getDeliveryTypeFromCheckout($checkoutData)
+    {
+        $aCheckoutData = json_decode($checkoutData, true);
+        $deliveryType = self::TYPE_STANDARD;
+
+        if (key_exists('time', $aCheckoutData) &&
+            key_exists('price_comment', $aCheckoutData['time'][0]) &&
+            $aCheckoutData['time'][0]['price_comment'] !== null
+        ) {
+            switch ($aCheckoutData['time'][0]['price_comment']) {
+                case 'morning':
+                    $deliveryType = self::TYPE_MORNING;
+                    break;
+                case 'standard':
+                    $deliveryType = self::TYPE_STANDARD;
+                    break;
+                case 'night':
+                    $deliveryType = self::TYPE_NIGHT;
+                    break;
+            }
+        } elseif (key_exists('price_comment', $aCheckoutData) && $aCheckoutData['price_comment'] !== null) {
+            switch ($aCheckoutData['price_comment']) {
+                case 'retail':
+                    $deliveryType = self::TYPE_RETAIL;
+                    break;
+                case 'retailexpress':
+                    $deliveryType = self::TYPE_RETAIL_EXPRESS;
+                    break;
+            }
+        }
+
+        return $deliveryType;
+    }
+
+    /**
+     * Convert delivery date from checkout
+     *
+     * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+     *
+     * @param string $checkoutData
+     * @return $this
+     * @throws \Exception
+     */
+    public function setDeliveryDateFromCheckout($checkoutData)
+    {
+        $aCheckoutData = json_decode($checkoutData, true);
+
+        if (
+            !is_array($aCheckoutData) ||
+            !key_exists('date', $aCheckoutData)
+        ) {
+            return $this;
+        }
+
+        if ($this->getDeliveryDate() == null) {
+            $this->setDeliveryDate($aCheckoutData['date']);
+        }
+
+        return $this;
+    }
+
+    /**
      * Convert pickup data from checkout
      *
-     * You can use this if you use the following code: https://github.com/myparcelnl/checkout
+     * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
      * @return $this
@@ -140,7 +219,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        if ($this->getCountry() !== 'NL' && $this->getDeliveryType() !== 4 && $this->getDeliveryType() !== 5) {
+        if ($this->getCountry() !== 'NL' || ($this->getDeliveryType() !== 4 && $this->getDeliveryType() !== 5)) {
             return $this;
         }
 
