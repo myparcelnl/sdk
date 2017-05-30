@@ -133,11 +133,30 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 ]
             );
 
-            if ($this->getInsurance() > 1)
+            // Set insurance
+            if ($this->getInsurance() > 1) {
                 $aConsignment['options']['insurance'] = [
-                    'amount' => (int) $this->getInsurance() * 100,
+                    'amount' => (int)$this->getInsurance() * 100,
                     'currency' => 'EUR',
                 ];
+            }
+            
+            // Set pickup address
+            if (
+                $this->getPickupPostalCode() !== null &&
+                $this->getPickupStreet() !== null &&
+                $this->getPickupCity() !== null &&
+                $this->getPickupNumber() !== null &&
+                $this->getPickupLocationName() !== null
+            ) {
+                $aConsignment['pickup'] = [
+                      'postal_code' => $this->getPickupPostalCode(),
+                      'street' => $this->getPickupStreet(),
+                      'city' => $this->getPickupCity(),
+                      'number' => $this->getPickupNumber(),
+                      'location_name' => $this->getPickupLocationName(),
+                ];
+            }
 
         } else {
             $aConsignment['recipient']['street'] = $this->getFullStreet();
@@ -231,48 +250,62 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         if (key_exists('delivery_date', $data['options']))
             $this->setDeliveryDate($data['options']['delivery_date']);
 
+        if (key_exists('delivery_type', $data['options']))
+            $this->setDeliveryType($data['options']['delivery_type']);
+
         // Set pickup
-        if (key_exists('pickup_postal_code', $data['pickup']))
-            $this->setDeliveryDate($data['pickup']['pickup_postal_code']);
+        if (key_exists('pickup', $data)  && $data['pickup'] !== null) {
+            if (key_exists('pickup_postal_code', $data['pickup']))
+                $this->setPostalCode($data['pickup']['pickup_postal_code']);
 
-        if (key_exists('pickup_street', $data['pickup']))
-            $this->setDeliveryDate($data['pickup']['pickup_street']);
+            if (key_exists('pickup_street', $data['pickup']))
+                $this->getPickupStreet($data['pickup']['pickup_street']);
 
-        if (key_exists('pickup_city', $data['pickup']))
-            $this->setDeliveryDate($data['pickup']['pickup_city']);
+            if (key_exists('pickup_city', $data['pickup']))
+                $this->setPickupCity($data['pickup']['pickup_city']);
 
-        if (key_exists('pickup_number', $data['pickup']))
-            $this->setDeliveryDate($data['pickup']['pickup_number']);
+            if (key_exists('pickup_number', $data['pickup']))
+                $this->setPickupNumber($data['pickup']['pickup_number']);
 
-        if (key_exists('pickup_location_name', $data['pickup']))
-            $this->setDeliveryDate($data['pickup']['pickup_location_name']);
+            if (key_exists('pickup_location_name', $data['pickup']))
+                $this->getPickupLocationName($data['pickup']['pickup_location_name']);
+        } else {
+            $this
+                ->setPickupPostalCode(null)
+                ->setPickupStreet(null)
+                ->setPickupCity(null)
+                ->setPickupNumber(null)
+                ->setPickupLocationName(null);
+        }
 
         return $this;
     }
 
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        $aCheckoutData = json_decode($checkoutData);
+        if ($this->getCountry() !== 'NL' && $this->getDeliveryType() == 4 || $this->getDeliveryType() == 5) {
+            return $this;
+        }
+
+        $aCheckoutData = json_decode($checkoutData, true);
 
         if (
-            is_array($checkoutData) &&
-            key_exists('time', $checkoutData) &&
-            is_array($checkoutData['time']) &&
-            $checkoutData['time'][0]['price_comment'] == 'mailbox'
+            !is_array($aCheckoutData) ||
+            !key_exists('location', $aCheckoutData)
         ) {
-            return true;
+            return $this;
         }
 
         if ($this->getDeliveryDate() == null) {
-            $this->setDeliveryDate(123);
+            $this->setDeliveryDate($aCheckoutData['date'] . ' 00:00:00');
         }
 
         $this
-            ->setPickupPostalCode()
-            ->setPickupStreet()
-            ->setPickupCity()
-            ->setPickupNumber()
-            ->setPickupLocationName();
+            ->setPickupPostalCode($aCheckoutData['postal_code'])
+            ->setPickupStreet($aCheckoutData['street'])
+            ->setPickupCity($aCheckoutData['city'])
+            ->setPickupNumber($aCheckoutData['number'])
+            ->setPickupLocationName($aCheckoutData['location']);
 
         return $this;
     }

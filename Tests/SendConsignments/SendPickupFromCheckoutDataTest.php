@@ -70,12 +70,15 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
             if (key_exists('checkout_data', $consignmentTest))
                 $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
 
+            if (key_exists('delivery_type', $consignmentTest))
+                $consignment->setDeliveryType($consignmentTest['delivery_type']);
+
             $myParcelCollection->addConsignment($consignment);
-exit('testdf');
+
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts();
+            $myParcelCollection->createConcepts()->setLatestData();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
@@ -110,7 +113,10 @@ exit('testdf');
             if (key_exists('insurance', $consignmentTest))
                 $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
 
+            if (key_exists('delivery_type', $consignmentTest))
+                $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
 
+            $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
             $this->assertEquals($consignmentTest['pickup_postal_code'], $consignment->getPickupPostalCode(), 'getPickupPostalCode()');
             $this->assertEquals($consignmentTest['pickup_street'], $consignment->getPickupStreet(), 'getPickupStreet()');
             $this->assertEquals($consignmentTest['pickup_city'], $consignment->getPickupCity(), 'getPickupCity()');
@@ -124,6 +130,8 @@ exit('testdf');
                 ->setLinkOfLabels();
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
+
+            print_r($myParcelCollection->getLinkOfLabels());
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
@@ -142,7 +150,7 @@ exit('testdf');
     {
         return [
             [
-                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -158,11 +166,11 @@ exit('testdf');
                 'delivery_type' => 4,
                 'label_description' => 'Label description',
                 'checkout_data' => '{"date":"2018-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
-                'pickup_postal_code' => '2132BH',
-                'pickup_street' => 'Burgemeester van Stamplein',
-                'pickup_city' => 'Hoofddorp',
-                'pickup_number' => '270',
-                'pickup_location_name' => 'Albert Heijn',
+                'pickup_postal_code' => '2231GT',
+                'pickup_street' => 'Anjelierenstraat',
+                'pickup_city' => 'Rijnsburg',
+                'pickup_number' => '43',
+                'pickup_location_name' => 'The Read Shop',
             ],
         ];
     }

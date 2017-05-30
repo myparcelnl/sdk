@@ -27,7 +27,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * Regular expression used to make sure the date is correct.
      */
-    const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) $~';
+    const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
 
     private $referenceId;
 
@@ -174,27 +174,27 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * @var string
      */
-    private $pickup_postal_code = '';
+    private $pickup_postal_code = null;
 
     /**
      * @var string
      */
-    private $pickup_street = '';
+    private $pickup_street = null;
 
     /**
      * @var string
      */
-    private $pickup_city = '';
+    private $pickup_city = null;
 
     /**
      * @var string
      */
-    private $pickup_number = '';
+    private $pickup_number = null;
 
     /**
      * @var string
      */
-    private $pickup_location_name = '';
+    private $pickup_location_name = null;
 
     /**
      * @return mixed
@@ -689,7 +689,7 @@ class MyParcelConsignment extends MyParcelClassConstants
         $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
 
         if (!$result) {
-            throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS');
+            throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
         }
 
         $this->delivery_date = (string) $delivery_date;
