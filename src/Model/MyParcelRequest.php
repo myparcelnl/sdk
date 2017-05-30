@@ -138,7 +138,7 @@ class MyParcelRequest
         } else {
             
             //complete request url
-            if($this->body)
+            if ($this->body)
                 $url .= '/' . $this->body;
 
             $request->setConfig($config)

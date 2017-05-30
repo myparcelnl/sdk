@@ -694,7 +694,7 @@ class MyParcelConsignment extends MyParcelClassConstants
         $result = preg_match(self::DATE_REGEX, $delivery_date, $matches);
 
         if ($result) {
-            $delivery_date = (string)$delivery_date . ' 00:00:00';
+            $delivery_date = (string) $delivery_date . ' 00:00:00';
         } else {
             $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
 
@@ -849,7 +849,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setLabelDescription($label_description)
     {
-        $this->label_description = (string)$label_description;
+        $this->label_description = (string) $label_description;
 
         return $this;
     }
@@ -1058,7 +1058,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setPickupNumber($pickup_number)
     {
-        $this->pickup_number = (string)$pickup_number;
+        $this->pickup_number = (string) $pickup_number;
 
         return $this;
     }
