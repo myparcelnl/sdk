@@ -24,6 +24,11 @@ namespace MyParcelNL\Sdk\src\Model;
  */
 class MyParcelConsignment extends MyParcelClassConstants
 {
+    /**
+     * Regular expression used to make sure the date is correct.
+     */
+    const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) $~';
+
     private $referenceId;
 
     /**
@@ -114,7 +119,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * @var string
      */
-    private $delivery_date;
+    private $delivery_date = null;
 
     /**
      * @var string
@@ -165,6 +170,31 @@ class MyParcelConsignment extends MyParcelClassConstants
      * @var array
      */
     private $items = [];
+
+    /**
+     * @var string
+     */
+    private $pickup_postal_code = '';
+
+    /**
+     * @var string
+     */
+    private $pickup_street = '';
+
+    /**
+     * @var string
+     */
+    private $pickup_city = '';
+
+    /**
+     * @var string
+     */
+    private $pickup_number = '';
+
+    /**
+     * @var string
+     */
+    private $pickup_location_name = '';
 
     /**
      * @return mixed
@@ -645,17 +675,24 @@ class MyParcelConsignment extends MyParcelClassConstants
 
     /**
      * The delivery date time for this shipment
-     * Pattern: YYYY-MM-DD
-     * Example: 2017-01-01
+     * Pattern: YYYY-MM-DD HH:MM:SS
+     * Example: 2017-01-01 00:00:00
      * Required: Yes if delivery type has been specified
      *
      * @param string $delivery_date
-     *
      * @return $this
+     * @throws \Exception
      */
     public function setDeliveryDate($delivery_date)
     {
-        $this->delivery_date = $delivery_date;
+
+        $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
+
+        if (!$result) {
+            throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS');
+        }
+
+        $this->delivery_date = (string) $delivery_date;
 
         return $this;
     }
@@ -851,12 +888,12 @@ class MyParcelConsignment extends MyParcelClassConstants
      * The package contents are only needed in case of shipping outside EU,
      * this is mandatory info for customs form.
      * Pattern: [1 - 5]
-     * Example  1. commercial goods
+     * Example: 1. commercial goods
      *          2. commercial samples
      *          3. documents
      *          4. gifts
      *          5. return shipment
-     * Required: Yes
+     * Required: Yes for shipping outside EU
      *
      * @param int $contents
      *
@@ -881,7 +918,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * The invoice number for the commercial goods or samples of package contents.
      *
-     * Required: Yes for commercial goods, commercial samples and return shipment package contents.
+     * Required: Yes for commercial goods, commercial samples and return shipment package contents outside EU.
      *
      * @param string $invoice
      *
@@ -909,10 +946,134 @@ class MyParcelConsignment extends MyParcelClassConstants
      * Required: Yes for international shipments
      *
      * @param array $item
+     *
+     * @return $this
      */
     public function addItems($item)
     {
         $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupPostalCode()
+    {
+        return $this->pickup_postal_code;
+    }
+
+    /**
+     * Pattern:  d{4}\s?[A-Z]{2}
+     * Example:  2132BH
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_postal_code
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupPostalCode($pickup_postal_code)
+    {
+        $this->pickup_postal_code = $pickup_postal_code;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupStreet()
+    {
+        return $this->pickup_street;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Burgemeester van Stamplein
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_street
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupStreet($pickup_street)
+    {
+        $this->pickup_street = $pickup_street;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupCity()
+    {
+        return $this->pickup_city;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Hoofddorp
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_city
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupCity($pickup_city)
+    {
+        $this->pickup_city = $pickup_city;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupNumber()
+    {
+        return $this->pickup_number;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  270
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_number
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupNumber($pickup_number)
+    {
+        $this->pickup_number = (string)$pickup_number;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupLocationName()
+    {
+        return $this->pickup_location_name;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_location_name
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupLocationName($pickup_location_name)
+    {
+        $this->pickup_location_name = $pickup_location_name;
+
+        return $this;
     }
 
     /**

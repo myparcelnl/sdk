@@ -224,11 +224,55 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         if (key_exists('number_suffix', $recipient))
             $this->setNumberSuffix($recipient['number_suffix']);
 
+        // Set options
         if (key_exists('insurance', $data['options']))
             $this->setInsurance($data['options']['insurance']['amount'] / 100);
 
         if (key_exists('delivery_date', $data['options']))
             $this->setDeliveryDate($data['options']['delivery_date']);
+
+        // Set pickup
+        if (key_exists('pickup_postal_code', $data['pickup']))
+            $this->setDeliveryDate($data['pickup']['pickup_postal_code']);
+
+        if (key_exists('pickup_street', $data['pickup']))
+            $this->setDeliveryDate($data['pickup']['pickup_street']);
+
+        if (key_exists('pickup_city', $data['pickup']))
+            $this->setDeliveryDate($data['pickup']['pickup_city']);
+
+        if (key_exists('pickup_number', $data['pickup']))
+            $this->setDeliveryDate($data['pickup']['pickup_number']);
+
+        if (key_exists('pickup_location_name', $data['pickup']))
+            $this->setDeliveryDate($data['pickup']['pickup_location_name']);
+
+        return $this;
+    }
+
+    public function setPickupAddressFromCheckout($checkoutData)
+    {
+        $aCheckoutData = json_decode($checkoutData);
+
+        if (
+            is_array($checkoutData) &&
+            key_exists('time', $checkoutData) &&
+            is_array($checkoutData['time']) &&
+            $checkoutData['time'][0]['price_comment'] == 'mailbox'
+        ) {
+            return true;
+        }
+
+        if ($this->getDeliveryDate() == null) {
+            $this->setDeliveryDate(123);
+        }
+
+        $this
+            ->setPickupPostalCode()
+            ->setPickupStreet()
+            ->setPickupCity()
+            ->setPickupNumber()
+            ->setPickupLocationName();
 
         return $this;
     }
