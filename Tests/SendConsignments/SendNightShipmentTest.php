@@ -165,7 +165,7 @@ class SendNightShipmentTest extends \PHPUnit_Framework_TestCase
                 'package_type' => 1,
                 'delivery_type' => 3,
                 'label_description' => 'Label description',
-                'delivery_date' => '2019-05-31'
+                'delivery_date' => '2019-07-28'
             ],
             [
                 'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
@@ -184,7 +184,7 @@ class SendNightShipmentTest extends \PHPUnit_Framework_TestCase
                 'package_type' => 1,
                 'delivery_type' => 3,
                 'label_description' => 'Label description',
-                'delivery_date' => '2019-05-31'
+                'delivery_date' => '2019-07-28'
             ]
         ];
     }

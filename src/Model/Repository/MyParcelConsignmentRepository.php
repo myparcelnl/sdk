@@ -33,6 +33,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s|-]?(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
 
     /**
+     * @var array
+     */
+    private $consignment = [];
+
+    /**
      * Get entire street
      *
      * @return string Entire street
@@ -95,107 +100,13 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function apiEncode()
     {
-        $aConsignment = [
-            'recipient' => [
-                'cc' => $this->getCountry(),
-                'person' => $this->getPerson(),
-                'postal_code' => $this->getPostalCode(),
-                'city' => $this->getCity(),
-                'email' => $this->getEmail(),
-                'phone' => $this->getPhone(),
-            ],
-            'options' => [
-                'package_type' => $this->getPackageType(),
-                'label_description' => $this->getLabelDescription(),
-            ],
-            'carrier' => 1,
-        ];
+        $this
+            ->encodeBaseOptions()
+            ->encodeStreet()
+            ->encodeExtraOptions()
+            ->encodeCdCountry();
 
-        if ($this->getCompany())
-            $aConsignment['recipient']['company'] = $this->getCompany();
-
-        if ($this->getCountry() == 'NL') {
-            $aConsignment = array_merge_recursive(
-                $aConsignment,
-                [
-                    'recipient' => [
-                        'street' => $this->getStreet(),
-                        'number' => $this->getNumber(),
-                        'number_suffix' => $this->getNumberSuffix(),
-                    ],
-                    'options' => [
-                        'large_format' => $this->isLargeFormat() ? 1 : 0,
-                        'only_recipient' => $this->isOnlyRecipient() ? 1 : 0,
-                        'signature' => $this->isSignature() ? 1 : 0,
-                        'return' => $this->isReturn() ? 1 : 0,
-                        'delivery_type' => $this->getDeliveryType(),
-                    ],
-                ]
-            );
-
-            // Set insurance
-            if ($this->getInsurance() > 1) {
-                $aConsignment['options']['insurance'] = [
-                    'amount' => (int)$this->getInsurance() * 100,
-                    'currency' => 'EUR',
-                ];
-            }
-            
-            // Set pickup address
-            if (
-                $this->getPickupPostalCode() !== null &&
-                $this->getPickupStreet() !== null &&
-                $this->getPickupCity() !== null &&
-                $this->getPickupNumber() !== null &&
-                $this->getPickupLocationName() !== null
-            ) {
-                $aConsignment['pickup'] = [
-                      'postal_code' => $this->getPickupPostalCode(),
-                      'street' => $this->getPickupStreet(),
-                      'city' => $this->getPickupCity(),
-                      'number' => $this->getPickupNumber(),
-                      'location_name' => $this->getPickupLocationName(),
-                ];
-            }
-
-        } else {
-            $aConsignment['recipient']['street'] = $this->getFullStreet();
-        }
-
-        if ($this->isCdCountry()) {
-            $aConsignment = array_merge_recursive(
-                $aConsignment, [
-                    'customs_declaration' => [
-                        'contents' => 1,
-                        'weight' => $this->getTotalWeight(),
-                        'items' => [
-                            [
-                                'description' => 'Product',
-                                'amount' => 1,
-                                'weight' => 0,
-                                'classification' => '0000',
-                                'country' => 'NL',
-                                'item_value' =>
-                                    [
-                                        'amount' => 100,
-                                        'currency' => "EUR",
-                                    ],
-                            ]
-                        ],
-                        'invoice' => $this->getLabelDescription(),
-                    ],
-                    'physical_properties' => [
-                        'weight' => $this->getTotalWeight()
-                    ]
-                ]
-            );
-        }
-
-        if ($this->getDeliveryDate())
-            $aConsignment['options']['delivery_date'] = $this->getDeliveryDate();
-
-
-        return $aConsignment;
+        return $this->consignment;
     }
 
     /**
@@ -207,80 +118,23 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function apiDecode($data)
     {
-        $recipient = $data['recipient'];
-        $options = $data['options'];
-
         $this
-            ->setMyParcelConsignmentId($data['id'])
-            ->setBarcode($data['barcode'])
-            ->setStatus($data['status'])
-            ->setCountry($recipient['cc'])
-            ->setPerson($recipient['person'])
-            ->setPostalCode($recipient['postal_code'])
-            ->setStreet($recipient['street'])
-            ->setCity($recipient['city'])
-            ->setEmail($recipient['email'])
-            ->setPhone($recipient['phone'])
-            ->setPackageType($options['package_type'])
-            ->setLabelDescription($options['label_description'])
-        ;
-
-        if (key_exists('company', $recipient))
-            $this->setCompany($recipient['company']);
-
-        if (key_exists('only_recipient', $recipient))
-            $this->setOnlyRecipient($recipient['only_recipient']);
-
-        if (key_exists('signature', $recipient))
-            $this->setSignature($recipient['signature']);
-
-        if (key_exists('return', $recipient))
-            $this->setReturn($recipient['return']);
-
-        if (key_exists('number', $recipient))
-            $this->setNumber($recipient['number']);
-
-        if (key_exists('number_suffix', $recipient))
-            $this->setNumberSuffix($recipient['number_suffix']);
-
-        // Set options
-        if (key_exists('insurance', $data['options']))
-            $this->setInsurance($data['options']['insurance']['amount'] / 100);
-
-        if (key_exists('delivery_date', $data['options']))
-            $this->setDeliveryDate($data['options']['delivery_date']);
-
-        if (key_exists('delivery_type', $data['options']))
-            $this->setDeliveryType($data['options']['delivery_type']);
-
-        // Set pickup
-        if (key_exists('pickup', $data)  && $data['pickup'] !== null) {
-            if (key_exists('pickup_postal_code', $data['pickup']))
-                $this->setPostalCode($data['pickup']['pickup_postal_code']);
-
-            if (key_exists('pickup_street', $data['pickup']))
-                $this->getPickupStreet($data['pickup']['pickup_street']);
-
-            if (key_exists('pickup_city', $data['pickup']))
-                $this->setPickupCity($data['pickup']['pickup_city']);
-
-            if (key_exists('pickup_number', $data['pickup']))
-                $this->setPickupNumber($data['pickup']['pickup_number']);
-
-            if (key_exists('pickup_location_name', $data['pickup']))
-                $this->getPickupLocationName($data['pickup']['pickup_location_name']);
-        } else {
-            $this
-                ->setPickupPostalCode(null)
-                ->setPickupStreet(null)
-                ->setPickupCity(null)
-                ->setPickupNumber(null)
-                ->setPickupLocationName(null);
-        }
+            ->decodeBaseOptions($data)
+            ->decodeExtraOptions($data)
+            ->decodePickup($data);
 
         return $this;
     }
 
+    /**
+     * Convert pickup data from checkout
+     *
+     * You can use this if you use the following code: https://github.com/myparcelnl/checkout
+     *
+     * @param string $checkoutData
+     * @return $this
+     * @throws \Exception
+     */
     public function setPickupAddressFromCheckout($checkoutData)
     {
         if ($this->getCountry() !== 'NL' && $this->getDeliveryType() !== 4 && $this->getDeliveryType() !== 5) {
@@ -369,5 +223,260 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             $this->getCountry(),
             self::EU_COUNTRIES
         );
+    }
+
+    /**
+     * @return $this
+     */
+    private function encodeBaseOptions()
+    {
+        $this->consignment = [
+            'recipient' => [
+                'cc' => $this->getCountry(),
+                'person' => $this->getPerson(),
+                'postal_code' => $this->getPostalCode(),
+                'city' => $this->getCity(),
+                'email' => $this->getEmail(),
+                'phone' => $this->getPhone(),
+            ],
+            'options' => [
+                'package_type' => $this->getPackageType(),
+                'label_description' => $this->getLabelDescription(),
+            ],
+            'carrier' => 1,
+        ];
+
+        if ($this->getCompany())
+            $this->consignment['recipient']['company'] = $this->getCompany();
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function encodeStreet()
+    {
+        if ($this->getCountry() == 'NL') {
+            $this->consignment = array_merge_recursive(
+                $this->consignment,
+                [
+                    'recipient' => [
+                        'street' => $this->getStreet(),
+                        'number' => $this->getNumber(),
+                        'number_suffix' => $this->getNumberSuffix(),
+                    ],
+                ]
+            );
+        } else {
+            $this->consignment['recipient']['street'] = $this->getFullStreet();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function encodeExtraOptions() {
+        if ($this->getCountry() == 'NL') {
+            $this->consignment = array_merge_recursive(
+                $this->consignment,
+                [
+                    'options' => [
+                        'large_format' => $this->isLargeFormat() ? 1 : 0,
+                        'only_recipient' => $this->isOnlyRecipient() ? 1 : 0,
+                        'signature' => $this->isSignature() ? 1 : 0,
+                        'return' => $this->isReturn() ? 1 : 0,
+                        'delivery_type' => $this->getDeliveryType(),
+                        'delivery_date' => $this->getDeliveryDate(),
+                    ],
+                ]
+            );
+            $this
+                ->encodePickup()
+                ->encodeInsurance();
+        }
+
+        if ($this->getDeliveryDate())
+            $this->consignment['options']['delivery_date'] = $this->getDeliveryDate();
+
+        return $this;
+    }
+
+    private function encodePickup()
+    {
+        // Set pickup address
+        if (
+            $this->getPickupPostalCode() !== null &&
+            $this->getPickupStreet() !== null &&
+            $this->getPickupCity() !== null &&
+            $this->getPickupNumber() !== null &&
+            $this->getPickupLocationName() !== null
+        ) {
+            $this->consignment['pickup'] = [
+                'postal_code' => $this->getPickupPostalCode(),
+                'street' => $this->getPickupStreet(),
+                'city' => $this->getPickupCity(),
+                'number' => $this->getPickupNumber(),
+                'location_name' => $this->getPickupLocationName(),
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function encodeInsurance()
+    {
+        // Set insurance
+        if ($this->getInsurance() > 1) {
+            $this->consignment['options']['insurance'] = [
+                'amount' => (int)$this->getInsurance() * 100,
+                'currency' => 'EUR',
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function encodeCdCountry()
+    {
+        if ($this->isCdCountry()) {
+            $this->consignment = array_merge_recursive(
+                $this->consignment, [
+                    'customs_declaration' => [
+                        'contents' => 1,
+                        'weight' => $this->getTotalWeight(),
+                        'items' => [
+                            [
+                                'description' => 'Product',
+                                'amount' => 1,
+                                'weight' => 0,
+                                'classification' => '0000',
+                                'country' => 'NL',
+                                'item_value' =>
+                                    [
+                                        'amount' => 100,
+                                        'currency' => "EUR",
+                                    ],
+                            ]
+                        ],
+                        'invoice' => $this->getLabelDescription(),
+                    ],
+                    'physical_properties' => [
+                        'weight' => $this->getTotalWeight()
+                    ]
+                ]
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    private function decodeBaseOptions($data)
+    {
+        $recipient = $data['recipient'];
+        $options = $data['options'];
+
+        $this
+            ->setMyParcelConsignmentId($data['id'])
+            ->setBarcode($data['barcode'])
+            ->setStatus($data['status'])
+            ->setCountry($recipient['cc'])
+            ->setPerson($recipient['person'])
+            ->setPostalCode($recipient['postal_code'])
+            ->setStreet($recipient['street'])
+            ->setCity($recipient['city'])
+            ->setEmail($recipient['email'])
+            ->setPhone($recipient['phone'])
+            ->setPackageType($options['package_type'])
+            ->setLabelDescription($options['label_description'])
+        ;
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    private function decodeExtraOptions($data)
+    {
+        $recipient = $data['recipient'];
+
+        if (key_exists('company', $recipient))
+            $this->setCompany($recipient['company']);
+
+        if (key_exists('only_recipient', $recipient))
+            $this->setOnlyRecipient($recipient['only_recipient']);
+
+        if (key_exists('signature', $recipient))
+            $this->setSignature($recipient['signature']);
+
+        if (key_exists('return', $recipient))
+            $this->setReturn($recipient['return']);
+
+        if (key_exists('number', $recipient))
+            $this->setNumber($recipient['number']);
+
+        if (key_exists('number_suffix', $recipient))
+            $this->setNumberSuffix($recipient['number_suffix']);
+
+        // Set options
+        if (key_exists('insurance', $data['options']))
+            $this->setInsurance($data['options']['insurance']['amount'] / 100);
+
+        if (key_exists('delivery_date', $data['options']))
+            $this->setDeliveryDate($data['options']['delivery_date']);
+
+        if (key_exists('delivery_type', $data['options']))
+            $this->setDeliveryType($data['options']['delivery_type']);
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    private function decodePickup($data)
+    {
+        // Set pickup
+        if (key_exists('pickup', $data)  && $data['pickup'] !== null) {
+            $pickup = $data['pickup'];
+            if (key_exists('pickup_postal_code', $data['pickup']))
+                $this->setPostalCode($pickup['pickup_postal_code']);
+
+            if (key_exists('pickup_street', $pickup))
+                $this->getPickupStreet($pickup['pickup_street']);
+
+            if (key_exists('pickup_city', $pickup))
+                $this->setPickupCity($pickup['pickup_city']);
+
+            if (key_exists('pickup_number', $pickup))
+                $this->setPickupNumber($pickup['pickup_number']);
+
+            if (key_exists('pickup_location_name', $pickup))
+                $this->getPickupLocationName($pickup['pickup_location_name']);
+        } else {
+            $this
+                ->setPickupPostalCode(null)
+                ->setPickupStreet(null)
+                ->setPickupCity(null)
+                ->setPickupNumber(null)
+                ->setPickupLocationName(null);
+        }
+
+        return $this;
     }
 }
