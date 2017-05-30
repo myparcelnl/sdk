@@ -47,11 +47,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $fullStreet = $this->getStreet();
 
         if ($this->getNumber()) {
-                    $fullStreet .= ' ' . $this->getNumber();
+            $fullStreet .= ' ' . $this->getNumber();
         }
 
         if ($this->getNumberSuffix()) {
-                    $fullStreet .= ' ' . $this->getNumberSuffix();
+            $fullStreet .= ' ' . $this->getNumberSuffix();
         }
 
         return trim($fullStreet);
@@ -70,7 +70,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     public function setFullStreet($fullStreet)
     {
         if ($this->getCountry() === null) {
-                    throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
+            throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
         }
 
         if ($this->getCountry() == 'NL') {
@@ -250,7 +250,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         ];
 
         if ($this->getCompany()) {
-                    $this->consignment['recipient']['company'] = $this->getCompany();
+            $this->consignment['recipient']['company'] = $this->getCompany();
         }
 
         return $this;
@@ -420,40 +420,40 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $recipient = $data['recipient'];
 
         if (key_exists('company', $recipient)) {
-                    $this->setCompany($recipient['company']);
+            $this->setCompany($recipient['company']);
         }
 
         if (key_exists('only_recipient', $recipient)) {
-                    $this->setOnlyRecipient($recipient['only_recipient']);
+            $this->setOnlyRecipient($recipient['only_recipient']);
         }
 
         if (key_exists('signature', $recipient)) {
-                    $this->setSignature($recipient['signature']);
+            $this->setSignature($recipient['signature']);
         }
 
         if (key_exists('return', $recipient)) {
-                    $this->setReturn($recipient['return']);
+            $this->setReturn($recipient['return']);
         }
 
         if (key_exists('number', $recipient)) {
-                    $this->setNumber($recipient['number']);
+            $this->setNumber($recipient['number']);
         }
 
         if (key_exists('number_suffix', $recipient)) {
-                    $this->setNumberSuffix($recipient['number_suffix']);
+            $this->setNumberSuffix($recipient['number_suffix']);
         }
 
         // Set options
         if (key_exists('insurance', $data['options'])) {
-                    $this->setInsurance($data['options']['insurance']['amount'] / 100);
+            $this->setInsurance($data['options']['insurance']['amount'] / 100);
         }
 
         if (key_exists('delivery_date', $data['options'])) {
-                    $this->setDeliveryDate($data['options']['delivery_date']);
+            $this->setDeliveryDate($data['options']['delivery_date']);
         }
 
         if (key_exists('delivery_type', $data['options'])) {
-                    $this->setDeliveryType($data['options']['delivery_type']);
+            $this->setDeliveryType($data['options']['delivery_type']);
         }
 
         return $this;
@@ -469,23 +469,23 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         if (key_exists('pickup', $data) && $data['pickup'] !== null) {
             $pickup = $data['pickup'];
             if (key_exists('pickup_postal_code', $data['pickup'])) {
-                            $this->setPostalCode($pickup['pickup_postal_code']);
+                $this->setPostalCode($pickup['pickup_postal_code']);
             }
 
             if (key_exists('pickup_street', $pickup)) {
-                            $this->getPickupStreet($pickup['pickup_street']);
+                $this->getPickupStreet($pickup['pickup_street']);
             }
 
             if (key_exists('pickup_city', $pickup)) {
-                            $this->setPickupCity($pickup['pickup_city']);
+                $this->setPickupCity($pickup['pickup_city']);
             }
 
             if (key_exists('pickup_number', $pickup)) {
-                            $this->setPickupNumber($pickup['pickup_number']);
+                $this->setPickupNumber($pickup['pickup_number']);
             }
 
             if (key_exists('pickup_location_name', $pickup)) {
-                            $this->getPickupLocationName($pickup['pickup_location_name']);
+                $this->getPickupLocationName($pickup['pickup_location_name']);
             }
         } else {
             $this
