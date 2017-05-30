@@ -418,6 +418,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     private function decodeExtraOptions($data)
     {
         $recipient = $data['recipient'];
+        $options = $data['options'];
 
         if (key_exists('company', $recipient)) {
             $this->setCompany($recipient['company']);
@@ -444,16 +445,16 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         // Set options
-        if (key_exists('insurance', $data['options'])) {
-            $this->setInsurance($data['options']['insurance']['amount'] / 100);
+        if (key_exists('insurance', $options)) {
+            $this->setInsurance($options['insurance']['amount'] / 100);
         }
 
-        if (key_exists('delivery_date', $data['options'])) {
-            $this->setDeliveryDate($data['options']['delivery_date']);
+        if (key_exists('delivery_date', $options)) {
+            $this->setDeliveryDate($options['delivery_date']);
         }
 
-        if (key_exists('delivery_type', $data['options'])) {
-            $this->setDeliveryType($data['options']['delivery_type']);
+        if (key_exists('delivery_type', $options)) {
+            $this->setDeliveryType($options['delivery_type']);
         }
 
         return $this;
