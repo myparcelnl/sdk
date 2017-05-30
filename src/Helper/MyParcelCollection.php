@@ -105,7 +105,7 @@ class MyParcelCollection
     }
 
     /**
-     * @param $id string|int
+     * @param string $id
      *
      * @return MyParcelConsignmentRepository
      */
@@ -133,7 +133,7 @@ class MyParcelCollection
     }
 
     /**
-     * @param $id string|int
+     * @param integer $id
      *
      * @return MyParcelConsignmentRepository
      */
@@ -304,7 +304,7 @@ class MyParcelCollection
      *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param array|int|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param array|integer|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
