@@ -20,7 +20,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
- * Class SendMorningShipmentTest
+ * Class SendNightShipmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendNightShipmentTest extends \PHPUnit_Framework_TestCase
