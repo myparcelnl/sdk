@@ -46,43 +46,43 @@ class SendNightShipmentTest extends \PHPUnit_Framework_TestCase
                 ->setPhone($consignmentTest['phone']);
 
             if (key_exists('delivery_date', $consignmentTest)) {
-                            $consignment->setDeliveryDate($consignmentTest['delivery_date']);
+                $consignment->setDeliveryDate($consignmentTest['delivery_date']);
             }
 
             if (key_exists('package_type', $consignmentTest)) {
-                            $consignment->setPackageType($consignmentTest['package_type']);
+                $consignment->setPackageType($consignmentTest['package_type']);
             }
 
             if (key_exists('large_format', $consignmentTest)) {
-                            $consignment->setLargeFormat($consignmentTest['large_format']);
+                $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
-                            $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
+                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }
 
             if (key_exists('signature', $consignmentTest)) {
-                            $consignment->setSignature($consignmentTest['signature']);
+                $consignment->setSignature($consignmentTest['signature']);
             }
 
             if (key_exists('return', $consignmentTest)) {
-                            $consignment->setReturn($consignmentTest['return']);
+                $consignment->setReturn($consignmentTest['return']);
             }
 
             if (key_exists('insurance', $consignmentTest)) {
-                            $consignment->setInsurance($consignmentTest['insurance']);
+                $consignment->setInsurance($consignmentTest['insurance']);
             }
 
             if (key_exists('label_description', $consignmentTest)) {
-                            $consignment->setLabelDescription($consignmentTest['label_description']);
+                $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
             if (key_exists('checkout_data', $consignmentTest)) {
-                            $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
+                $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
             }
 
             if (key_exists('delivery_type', $consignmentTest)) {
-                            $consignment->setDeliveryType($consignmentTest['delivery_type']);
+                $consignment->setDeliveryType($consignmentTest['delivery_type']);
             }
 
             $myParcelCollection->addConsignment($consignment);
@@ -105,39 +105,39 @@ class SendNightShipmentTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
 
             if (key_exists('delivery_date', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['delivery_date'] . ' 00:00:00', $consignment->getDeliveryDate(), 'getDeliveryDate()');
+                $this->assertEquals($consignmentTest['delivery_date'] . ' 00:00:00', $consignment->getDeliveryDate(), 'getDeliveryDate()');
             }
 
             if (key_exists('package_type', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
+                $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
             }
 
             if (key_exists('large_format', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
+                $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
+                $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
             }
 
             if (key_exists('signature', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature()');
+                $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature()');
             }
 
             if (key_exists('return', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['return'], $consignment->isReturn(), 'isReturn()');
+                $this->assertEquals($consignmentTest['return'], $consignment->isReturn(), 'isReturn()');
             }
 
             if (key_exists('label_description', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
+                $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
             }
 
             if (key_exists('insurance', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
+                $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
             }
 
             if (key_exists('delivery_type', $consignmentTest)) {
-                            $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
+                $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
             }
 
             /**

@@ -47,31 +47,31 @@ class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
                 ->setPhone($consignmentTest['phone']);
 
             if (key_exists('package_type', $consignmentTest)) {
-                            $consignment->setPackageType($consignmentTest['package_type']);
+                $consignment->setPackageType($consignmentTest['package_type']);
             }
 
             if (key_exists('large_format', $consignmentTest)) {
-                            $consignment->setLargeFormat($consignmentTest['large_format']);
+                $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
-                            $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
+                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }
 
             if (key_exists('signature', $consignmentTest)) {
-                            $consignment->setSignature($consignmentTest['signature']);
+                $consignment->setSignature($consignmentTest['signature']);
             }
 
             if (key_exists('return', $consignmentTest)) {
-                            $consignment->setReturn($consignmentTest['return']);
+                $consignment->setReturn($consignmentTest['return']);
             }
 
             if (key_exists('insurance', $consignmentTest)) {
-                            $consignment->setInsurance($consignmentTest['insurance']);
+                $consignment->setInsurance($consignmentTest['insurance']);
             }
 
             if (key_exists('label_description', $consignmentTest)) {
-                            $consignment->setLabelDescription($consignmentTest['label_description']);
+                $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
             $myParcelCollection->addConsignment($consignment);
