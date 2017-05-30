@@ -45,6 +45,9 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 ->setEmail('reindert@myparcel.nl')
                 ->setPhone($consignmentTest['phone']);
 
+            if (key_exists('checkout_data', $consignmentTest))
+                $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
+
             if (key_exists('package_type', $consignmentTest))
                 $consignment->setPackageType($consignmentTest['package_type']);
 
@@ -65,9 +68,6 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
 
             if (key_exists('label_description', $consignmentTest))
                 $consignment->setLabelDescription($consignmentTest['label_description']);
-
-            if (key_exists('checkout_data', $consignmentTest))
-                $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
 
             if (key_exists('delivery_type', $consignmentTest))
                 $consignment->setDeliveryType($consignmentTest['delivery_type']);
@@ -131,6 +131,8 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
             print_r($myParcelCollection->getLinkOfLabels());
+            echo '
+';
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
@@ -164,13 +166,36 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'package_type' => 1,
                 'delivery_type' => 4,
                 'label_description' => 'Label description',
-                'checkout_data' => '{"date":"2018-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
+                'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
                 'pickup_postal_code' => '2231GT',
                 'pickup_street' => 'Anjelierenstraat',
                 'pickup_city' => 'Rijnsburg',
                 'pickup_number' => '43',
                 'pickup_location_name' => 'The Read Shop',
             ],
+            [
+                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
+                'cc' => 'NL',
+                'person' => 'Piet',
+                'company' => 'Mega Store',
+                'full_street_test' => 'Koestraat 55',
+                'full_street' => 'Koestraat 55',
+                'street' => 'Koestraat',
+                'number' => 55,
+                'number_suffix' => '',
+                'postal_code' => '2231JE',
+                'city' => 'Katwijk',
+                'phone' => '123-45-235-435',
+                'package_type' => 1,
+                'delivery_type' => 5,
+                'label_description' => 'Label description',
+                'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}},{"start":"08:30:00","type":5,"price":{"amount":125,"currency":"EUR"}}],"location":"KantoorExpert Katwijk","street":"Scheepmakerstraat","number":"63","postal_code":"2222AB","city":"Katwijk","start_time":"08:30:00","price":125,"price_comment":"retailexpress","comment":"Dit is een Business Point. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"088-3224400","opening_hours":{"monday":["08:00-18:30"],"tuesday":["08:00-18:30"],"wednesday":["08:00-18:30"],"thursday":["08:00-18:30"],"friday":["08:00-18:30"],"saturday":["08:00-09:00"],"sunday":[]},"distance":"1006","location_code":"159146","options":{"signature":false,"only_recipient":false}}',
+                'pickup_postal_code' => '2222AB',
+                'pickup_street' => 'Scheepmakerstraat',
+                'pickup_city' => 'Katwijk',
+                'pickup_number' => '63',
+                'pickup_location_name' => 'KantoorExpert Katwijk',
+            ]
         ];
     }
 }

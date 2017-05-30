@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendMorningShipmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
+class SendNightShipmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test one shipment with createConcepts()
@@ -163,7 +163,7 @@ class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Katwijk',
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
-                'delivery_type' => 1,
+                'delivery_type' => 3,
                 'label_description' => 'Label description',
                 'delivery_date' => '2019-05-31'
             ],
@@ -182,7 +182,7 @@ class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
                 'phone' => '123-45-235-435',
                 'signature' => 1,
                 'package_type' => 1,
-                'delivery_type' => 1,
+                'delivery_type' => 3,
                 'label_description' => 'Label description',
                 'delivery_date' => '2019-05-31'
             ]
