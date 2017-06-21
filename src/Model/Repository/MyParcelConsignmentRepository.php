@@ -144,7 +144,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
-     * @return $this
+     * @return int
      * @throws \Exception
      */
     public function getDeliveryTypeFromCheckout($checkoutData)
