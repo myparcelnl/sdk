@@ -372,7 +372,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                         'signature' => $this->isSignature() ? 1 : 0,
                         'return' => $this->isReturn() ? 1 : 0,
                         'delivery_type' => $this->getDeliveryType(),
-                        'delivery_date' => $this->getDeliveryDate(),
                     ],
                 ]
             );
