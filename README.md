@@ -61,11 +61,7 @@ $myParcelCollection
     ->downloadPdfOfLabels();
 ```
 
-### Testing
-Please run ```vendor/bin/phpunit --bootstrap vendor/autoload.php  tests/``` to test the application
-
-
-### Available Methods
+## Available Methods
 ```php
 $myParcelCollection = new MyParcelCollection();
 
@@ -94,9 +90,9 @@ $myParcelCollection
 
 ### Submitting address in pieces
 ```php
-    ->setStreet($consignmentTest['street'])
-    ->setNumber((string)$consignmentTest['number'])
-    ->setNumberSuffix($consignmentTest['number_suffix'])
+    ->setStreet('Plein 1945')
+    ->setNumber((string)55)
+    ->setNumberSuffix('b')
 ```
 #### Create concept
 ```php
