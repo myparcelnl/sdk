@@ -1,5 +1,3 @@
-[![Latest Unstable Version](https://poser.pugx.org/myparcelnl/sdk/v/unstable)](https://packagist.org/packages/myparcelnl/sdk) [![Quality Score](https://img.shields.io/scrutinizer/g/myparcelnl/sdk.svg)](https://scrutinizer-ci.com/g/myparcelnl/sdk)
-
 # MyParcel SDK
 
 ---
@@ -34,12 +32,12 @@ You can download the zip on the projects [releases](https://github.com/myparceln
 
 1. Download the package zip (SDKvx.x.x.zip).
 2. Unzip the contents of the zip, and upload the vendor directory to your server.
-3. In your project, require the file vendor/autoload.php
+3. In your project, require the file src/AutoLoader.php
 4. You can now use the SDK in your project
 
 ### Requirements
 
-The MyParcel SDK works on php versions 5.6 and 7.0
+The MyParcel SDK works on php versions 5.6, 7.0 and 7.1
 Also the php curl extension needs to be installed.
 
 ### Quick start and examples
@@ -73,6 +71,7 @@ $myParcelCollection = new MyParcelCollection();
 
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setReferenceId('Order 1203')
     ->setCountry('NL')
     ->setPerson('Piet Hier')
     ->setCompany('Piet BV')
@@ -107,28 +106,35 @@ $myParcelCollection
     ->setLinkOfLabels()
     ->getLinkOfLabels()
 ```
-#### Save MyParcel id
-After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can save the api id to your database. With this id you can easily retrieve the latest status.
+#### MyParcel consignment id
+If you don't use ```setReferenceId()```, you can also use the MyParcelConsignmentId when you create a concept:
+After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()```, you can save the api id to your database. With this id you can easily retrieve the latest status.
 ```php
 $consignment->getMyParcelConsignmentId();
-```
-#### Get barcode
-The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
-```php
-$consignment->getBarcode();
 ```
 #### Get status
 After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can get the status.
 ```php
-$consignment->getStatus();
+$status = $consignment->getStatus();
+```
+#### Get barcode
+The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
+```php
+$barcode = $consignment->getBarcode();
 ```
 #### Multiple shipments
 To create multiple consignments or get one pdf with multiple consignments, set multiple consignments. It's faster and cleaner.
 ```php
 $myParcelCollection = new MyParcelCollection();
 
-foreach ($yourShipments as $shipment) {
-    (...) // Set $consignment
+foreach ($yourShipments as $yourShipment) {
+
+    $consignment = (new MyParcelConsignmentRepository())
+        ->setApiKey('api_key_from_MyParcel_backoffice')
+        ->setReferenceId($yourShipment->getOrderId()
+        ->setName('Piet Hier');
+        /** @todo; set all info */
+        
     $myParcelCollection
         ->addConsignment($consignment)
 }
@@ -138,7 +144,7 @@ In a new request, you can get al the data again.
 ```php
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setMyParcelConsignmentId(205670);
+    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
 
 $myParcelCollection
     ->addConsignment($consignment)
