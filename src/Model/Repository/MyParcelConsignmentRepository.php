@@ -313,6 +313,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     private function encodeBaseOptions()
     {
         $this->consignment = [
+            'reference_identifier' => $this->getReferenceId(),
             'recipient' => [
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
@@ -322,7 +323,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'phone' => $this->getPhone(),
             ],
             'options' => [
-                'package_type' => $this->getPackageType(),
+                'package_type' => $this->getPackageType()?:2,
                 'label_description' => $this->getLabelDescription(),
             ],
             'carrier' => 1,
@@ -381,7 +382,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         if ($this->getDeliveryDate()) {
-                    $this->consignment['options']['delivery_date'] = $this->getDeliveryDate();
+            $this->consignment['options']['delivery_date'] = $this->getDeliveryDate();
         }
 
         return $this;
@@ -473,6 +474,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
         $this
             ->setMyParcelConsignmentId($data['id'])
+            ->setReferenceId($data['reference_identifier'])
             ->setBarcode($data['barcode'])
             ->setStatus($data['status'])
             ->setCountry($recipient['cc'])

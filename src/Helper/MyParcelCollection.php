@@ -244,12 +244,18 @@ class MyParcelCollection
      */
     public function setLatestData()
     {
-        $conceptIds = $this->getConsignmentIds($key);
+        $consignmentIds = $this->getConsignmentIds($key);
+        if ($consignmentIds !== null) {
+            $params = implode(';', $consignmentIds) . '?size=300';
+        } else {
+            $referenceIds = $this->getConsignmentReferenceIds($key);
+            $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=300';
+        }
 
         $request = (new MyParcelRequest())
             ->setRequestParameters(
                 $key,
-                implode(';', $conceptIds) . '?size=300',
+                $params,
                 MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
             )
             ->sendRequest('GET');
@@ -376,8 +382,34 @@ class MyParcelCollection
                 $key = $consignment->getApiKey();
             }
         }
+        if (empty($conceptIds)) {
+            return null;
+        }
 
         return $conceptIds;
+    }
+
+    /**
+     * Get all consignment ids
+     *
+     * @param $key
+     *
+     * @return array
+     */
+    private function getConsignmentReferenceIds(&$key)
+    {
+        $referenceIds = [];
+        foreach ($this->getConsignments() as $consignment) {
+            if ($consignment->getReferenceId()) {
+                $referenceIds[] = $consignment->getReferenceId();
+                $key = $consignment->getApiKey();
+            }
+        }
+        if (empty($referenceIds)) {
+            return null;
+        }
+
+        return $referenceIds;
     }
 
     /**
