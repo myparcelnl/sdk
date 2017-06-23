@@ -91,6 +91,13 @@ $consignment = (new MyParcelConsignmentRepository())
 $myParcelCollection
     ->addConsignment($consignment)
 ```
+
+### Submitting address in pieces
+```php
+    ->setStreet($consignmentTest['street'])
+    ->setNumber((string)$consignmentTest['number'])
+    ->setNumberSuffix($consignmentTest['number_suffix'])
+```
 #### Create concept
 ```php
 $myParcelCollection->createConcepts();
