@@ -71,6 +71,8 @@ class MyParcelCollection
      */
     private $return = false;
 
+    private $user_agent = '';
+
     /**
      * @return MyParcelConsignmentRepository[]
      */
@@ -223,6 +225,7 @@ class MyParcelCollection
                 if ($consignment->getMyParcelConsignmentId() === null) {
                     $data = $this->apiEncode([$consignment]);
                     $request = (new MyParcelRequest())
+                        ->setUserAgent($this->getUserAgent())
                         ->setRequestParameters(
                             $key,
                             $data,
@@ -253,6 +256,7 @@ class MyParcelCollection
         }
 
         $request = (new MyParcelRequest())
+            ->setUserAgent($this->getUserAgent())
             ->setRequestParameters(
                 $key,
                 $params,
@@ -290,6 +294,7 @@ class MyParcelCollection
 
         if ($key) {
             $request = (new MyParcelRequest())
+                ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
                     implode(';', $conceptIds),
@@ -329,6 +334,7 @@ class MyParcelCollection
 
         if ($key) {
             $request = (new MyParcelRequest())
+                ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
                     implode(';', $conceptIds) . '/' . $this->getRequestBody(),
@@ -451,6 +457,24 @@ class MyParcelCollection
         $body = $this->paper_size == 'A4' ? '?format=A4&positions=' . $this->label_position : '';
 
         return $body;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent(): string
+    {
+        return $this->user_agent;
+    }
+
+    /**
+     * @param string $platform
+     * @param string $version
+     * @internal param string $user_agent
+     */
+    public function setUserAgent(string $platform, string $version = 'unknown')
+    {
+        $this->user_agent = 'MyParcel-' . $platform . '/' . str_replace('v', '', $version);
     }
 
     /**

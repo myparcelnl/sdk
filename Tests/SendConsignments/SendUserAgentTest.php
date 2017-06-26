@@ -13,7 +13,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
+namespace MyParcelNL\Sdk\tests\SendConsignments;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendPickupFromCheckoutDataTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
+class SendUserAgentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test one shipment with createConcepts()
@@ -102,6 +102,10 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
 
             if (key_exists('pickup_location_name', $consignmentTest)) {
                 $consignment->setPickupLocationName($consignmentTest['pickup_location_name']);
+            }
+
+            if (key_exists('user_agent', $consignmentTest)) {
+                $myParcelCollection->setUserAgent($consignmentTest['user_agent']['platform'], $consignmentTest['user_agent']['version']);
             }
 
             $myParcelCollection->addConsignment($consignment);
@@ -187,10 +191,6 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo '
-';
-
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
@@ -220,9 +220,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'postal_code' => '2231JE',
                 'city' => 'Katwijk',
                 'phone' => '123-45-235-435',
-                'package_type' => 1,
                 'label_description' => 'Label description',
-                'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
             ],
             [
                 'api_key' => 'f8912fb260639db3b1ceaef2730a4b0643ff0c34',
@@ -238,14 +236,12 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Katwijk',
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
-                'delivery_type' => 5,
-                'delivery_date' => '2017-07-12 00:00:00',
                 'label_description' => 'Label description',
-                'pickup_postal_code' => '2222AB',
-                'pickup_street' => 'Scheepmakerstraat',
-                'pickup_city' => 'Katwijk',
-                'pickup_number' => '63',
-                'pickup_location_name' => 'KantoorExpert Katwijk',
+                'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
+                'user_agent' => [
+                    'platform' => 'SDK_UNIT_TEST',
+                    'version' => 'v1.2.0',
+                ],
             ]
         ];
     }
