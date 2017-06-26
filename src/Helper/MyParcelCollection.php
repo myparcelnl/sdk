@@ -473,9 +473,12 @@ class MyParcelCollection
      * @internal param string $user_agent
      * @return $this
      */
-    public function setUserAgent(string $platform, string $version = 'unknown')
+    public function setUserAgent(string $platform, string $version = null)
     {
-        $this->user_agent = 'MyParcel-' . $platform . '/' . str_replace('v', '', $version);
+        $this->user_agent = 'MyParcel-' . $platform;
+        if ($version !== null) {
+            $this->user_agent .= '/' . str_replace('v', '', $version);
+        }
 
         return $this;
     }
