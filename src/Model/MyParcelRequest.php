@@ -236,7 +236,7 @@ class MyParcelRequest
     /**
      * @return string
      */
-    public function getUserAgent(): string
+    public function getUserAgent()
     {
         return $this->userAgent;
     }

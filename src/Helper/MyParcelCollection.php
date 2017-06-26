@@ -462,7 +462,7 @@ class MyParcelCollection
     /**
      * @return string
      */
-    public function getUserAgent(): string
+    public function getUserAgent()
     {
         return $this->user_agent;
     }
