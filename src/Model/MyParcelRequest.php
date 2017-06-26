@@ -46,6 +46,7 @@ class MyParcelRequest
     private $body = '';
     private $error = null;
     private $result = null;
+    private $userAgent = null;
 
     /**
      * @return null
@@ -118,6 +119,12 @@ class MyParcelRequest
         //instantiate the curl adapter
         $request = new MyParcelCurl();
 
+        if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
+            $request->setUserAgent($this->getUserAgentFromComposer());
+        } else {
+            $request->setUserAgent($this->getUserAgent());
+        }
+
         //add the options
         foreach ($options as $option => $value)
         {
@@ -139,7 +146,7 @@ class MyParcelRequest
             
             //complete request url
             if ($this->body) {
-                            $url .= '/' . $this->body;
+                $url .= '/' . $this->body;
             }
 
             $request->setConfig($config)
@@ -224,5 +231,39 @@ class MyParcelRequest
         }
 
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent(): string
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * @param string $userAgent
+     * @return $this
+     */
+    public function setUserAgent(string $userAgent)
+    {
+        $this->userAgent = $userAgent;
+
+        return $this;
+    }
+
+    /**
+     * Get version of in composer file
+     */
+    public function getUserAgentFromComposer()
+    {
+        $composerData = file_get_contents('../../composer.json');
+        $jsonComposerData = json_decode($composerData, true);
+        if (!empty($jsonComposerData['version'])) {
+            $version = str_replace('v', '', $jsonComposerData['version']);
+            return 'MyParcelNL-SDK/' . $version;
+        }
+
+        return null;
     }
 }
