@@ -47,6 +47,7 @@ $myParcelCollection = new MyParcelCollection();
 
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setReferenceId('Order 1203')
     ->setCountry('NL')
     ->setPerson('Piet Hier')
     ->setCompany('Piet BV')
@@ -143,7 +144,7 @@ foreach ($yourShipments as $yourShipment) {
 }
 ```
 #### Later on
-In a new request, you can get al the data again.
+In a new request, you can get all the data again.
 ```php
 $consignment = (new MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
