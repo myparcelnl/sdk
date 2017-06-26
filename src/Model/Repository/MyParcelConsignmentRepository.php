@@ -219,7 +219,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        if ($this->getCountry() !== 'NL' || ($this->getDeliveryType() !== 4 && $this->getDeliveryType() !== 5)) {
+        if ($this->getCountry() !== 'NL') {
             return $this;
         }
 
@@ -229,11 +229,19 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             !is_array($aCheckoutData) ||
             !key_exists('location', $aCheckoutData)
         ) {
-            throw new \Exception('No PostNL location found in checkout data: ' . $checkoutData);
+            return $this;
         }
 
         if ($this->getDeliveryDate() == null) {
             $this->setDeliveryDate($aCheckoutData['date']);
+        }
+
+        if ($aCheckoutData['price_comment'] == 'retail') {
+            $this->setDeliveryType(4);
+        } else if ($aCheckoutData['price_comment'] == 'retailexpress') {
+            $this->setDeliveryType(5);
+        } else {
+            throw new \Exception('No PostNL location found in checkout data: ' . $checkoutData);
         }
 
         $this
@@ -313,7 +321,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     private function encodeBaseOptions()
     {
         $this->consignment = [
-            'reference_identifier' => $this->getReferenceId(),
             'recipient' => [
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
@@ -328,6 +335,10 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ],
             'carrier' => 1,
         ];
+
+        if ($this->getReferenceId()) {
+            $this->consignment['reference_identifier'] = $this->getReferenceId();
+        }
 
         if ($this->getCompany()) {
             $this->consignment['recipient']['company'] = $this->getCompany();
@@ -551,11 +562,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         if (key_exists('pickup', $data) && $data['pickup'] !== null) {
             $pickup = $data['pickup'];
             if (key_exists('pickup_postal_code', $data['pickup'])) {
-                $this->setPostalCode($pickup['pickup_postal_code']);
+                $this->setPickupPostalCode($pickup['pickup_postal_code']);
             }
 
             if (key_exists('pickup_street', $pickup)) {
-                $this->getPickupStreet($pickup['pickup_street']);
+                $this->setPickupStreet($pickup['pickup_street']);
             }
 
             if (key_exists('pickup_city', $pickup)) {
@@ -567,7 +578,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             }
 
             if (key_exists('pickup_location_name', $pickup)) {
-                $this->getPickupLocationName($pickup['pickup_location_name']);
+                $this->setPickupLocationName($pickup['pickup_location_name']);
             }
         } else {
             $this
