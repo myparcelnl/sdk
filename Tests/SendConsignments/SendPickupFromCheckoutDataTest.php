@@ -31,9 +31,6 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
     public function testSendOneConsignment()
     {
         foreach ($this->additionProvider() as $consignmentTest) {
-            echo $consignmentTest['print'];
-            echo '
-';
 
             $myParcelCollection = new MyParcelCollection();
             $consignment = (new MyParcelConsignmentRepository())
@@ -211,7 +208,6 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'print' => 'Start pickup checkout data',
                 'api_key' => 'f8912fb260639db3b1ceaef2730a4b0643ff0c34',
                 'cc' => 'NL',
                 'person' => 'Piet',
@@ -229,7 +225,6 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
             ],
             [
-                'print' => 'Start pickup separate',
                 'api_key' => 'f8912fb260639db3b1ceaef2730a4b0643ff0c34',
                 'cc' => 'NL',
                 'person' => 'Piet',
