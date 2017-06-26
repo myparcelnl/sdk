@@ -149,6 +149,10 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
+        if ($checkoutData === null) {
+            return self::TYPE_STANDARD;
+        }
+
         $aCheckoutData = json_decode($checkoutData, true);
         $deliveryType = self::TYPE_STANDARD;
 
