@@ -244,6 +244,8 @@ class MyParcelCollection
      * Get all current data
      *
      * Set id and run this function to update all the information about this shipment
+     *
+     * @throws \Exception
      */
     public function setLatestData()
     {
@@ -263,6 +265,10 @@ class MyParcelCollection
                 MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
             )
             ->sendRequest('GET');
+
+        if ($request->getResult() === null) {
+            throw new \Exception('Unable to transport data to MyParcel.');
+        }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
             $consignment = $this->getConsignmentByApiId($shipment['id']);
@@ -358,7 +364,7 @@ class MyParcelCollection
     public function downloadPdfOfLabels()
     {
         if ($this->label_pdf == null) {
-                    throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
+            throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
         }
 
         header('Content-Type: application/pdf');
@@ -473,7 +479,7 @@ class MyParcelCollection
      * @internal param string $user_agent
      * @return $this
      */
-    public function setUserAgent(string $platform, string $version = null)
+    public function setUserAgent($platform, string $version = null)
     {
         $this->user_agent = 'MyParcel-' . $platform;
         if ($version !== null) {

@@ -245,7 +245,7 @@ class MyParcelRequest
      * @param string $userAgent
      * @return $this
      */
-    public function setUserAgent(string $userAgent)
+    public function setUserAgent($userAgent)
     {
         $this->userAgent = $userAgent;
 
