@@ -562,7 +562,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setCompany($company)
     {
-        $this->company = (string) $company;
+        $this->company = $company;
 
         return $this;
     }
@@ -586,7 +586,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setEmail($email)
     {
-        $this->email = (string) $email;
+        $this->email = $email;
 
         return $this;
     }
@@ -610,7 +610,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setPhone($phone)
     {
-        $this->phone = (string) $phone;
+        $this->phone = $phone;
 
         return $this;
     }

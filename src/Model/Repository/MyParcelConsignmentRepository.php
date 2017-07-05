@@ -329,9 +329,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
                 'postal_code' => $this->getPostalCode(),
-                'city' => $this->getCity(),
-                'email' => $this->getEmail(),
-                'phone' => $this->getPhone(),
+                'city' => (string)$this->getCity(),
+                'email' => (string)$this->getEmail(),
+                'phone' => (string)$this->getPhone(),
             ],
             'options' => [
                 'package_type' => $this->getPackageType()?:2,
