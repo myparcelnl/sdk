@@ -705,6 +705,12 @@ class MyParcelConsignment extends MyParcelClassConstants
             }
         }
 
+        if (new \DateTime() > new \DateTime($delivery_date)) {
+            $datetime = new \DateTime();
+            $datetime->modify('+1 day');
+            $delivery_date = $datetime->format('Y\-m\-d\ h:i:s');
+        }
+
         $this->delivery_date = (string) $delivery_date;
 
         return $this;
