@@ -275,14 +275,14 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
         $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
-        if (!$result || !is_array($matches) || $fullStreet != $matches[0]) {
-            if ($fullStreet != $matches[0]) {
-                // Characters are gone by preg_match
-                throw new \Exception('Something went wrong with splitting up address ' . $fullStreet);
-            } else {
-                // Invalid full street supplied
-                throw new \Exception('Invalid full street supplied: ' . $fullStreet);
-            }
+        if (!$result || !is_array($matches)) {
+            // Invalid full street supplied
+            throw new \Exception('Invalid full street supplied: ' . $fullStreet);
+        }
+
+        if ($fullStreet != $matches[0]) {
+            // Characters are gone by preg_match
+            throw new \Exception('Something went wrong with splitting up address ' . $fullStreet);
         }
 
         if (isset($matches['street'])) {
