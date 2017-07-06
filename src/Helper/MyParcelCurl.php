@@ -272,7 +272,7 @@ class MyParcelCurl
      */
     public function setUserAgent($agent)
     {
-        return curl_setopt($this->_getResource(), CURLOPT_USERAGENT, $agent);
+        return curl_setopt($this->_getResource(), CURLOPT_USERAGENT, (string)$agent);
     }
 
     /**

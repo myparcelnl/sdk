@@ -257,11 +257,14 @@ class MyParcelRequest
      */
     public function getUserAgentFromComposer()
     {
-        $composerData = file_get_contents('../../composer.json');
-        $jsonComposerData = json_decode($composerData, true);
-        if (!empty($jsonComposerData['version'])) {
-            $version = str_replace('v', '', $jsonComposerData['version']);
-            return 'MyParcelNL-SDK/' . $version;
+        $composer = 'vendor/myparcelnl/sdk/composer.json';
+        if (file_exists($composer)) {
+            $composerData = file_get_contents($composer);
+            $jsonComposerData = json_decode($composerData, true);
+            if (!empty($jsonComposerData['version'])) {
+                $version = str_replace('v', '', $jsonComposerData['version']);
+                return 'MyParcelNL-SDK/' . $version;
+            }
         }
 
         return null;
