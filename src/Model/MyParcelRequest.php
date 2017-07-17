@@ -198,6 +198,7 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
+            throw new \Exception('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
         }
 
         return $this;
