@@ -26,7 +26,7 @@ class MyParcelRequest
     /**
      * Supported request types.
      */
-    const REQUEST_TYPE_CREATE_CONSIGNMENT   = 'shipments';
+    const REQUEST_TYPE_SHIPMENTS   = 'shipments';
     const REQUEST_TYPE_RETRIEVE_LABEL       = 'shipment_labels';
 
     /**
@@ -98,7 +98,7 @@ class MyParcelRequest
      * @return MyParcelRequest|array|false|string
      * @throws \Exception
      */
-    public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_CREATE_CONSIGNMENT)
+    public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_SHIPMENTS)
     {
         if (!$this->checkConfigForRequest()) {
             return false;
@@ -198,7 +198,6 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            throw new \Exception('Error in MyParcel API request: ' . $this->getError() . '. Url: ' . $url . ' Request: ' . $this->body);
         }
 
         return $this;
