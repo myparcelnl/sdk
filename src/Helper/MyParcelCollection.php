@@ -254,7 +254,11 @@ class MyParcelCollection
             $params = implode(';', $consignmentIds) . '?size=300';
         } else {
             $referenceIds = $this->getConsignmentReferenceIds($key);
-            $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=300';
+            if ($referenceIds != null) {
+                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=300';
+            } else {
+                return $this;
+            }
         }
 
         $request = (new MyParcelRequest())
