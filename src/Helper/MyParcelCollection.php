@@ -259,7 +259,7 @@ class MyParcelCollection
                             $consignment->getMyParcelConsignmentId(),
                             MyParcelRequest::REQUEST_HEADER_DELETE
                         )
-                        ->sendRequest();
+                        ->sendRequest('DELETE');
                 }
             }
         }
