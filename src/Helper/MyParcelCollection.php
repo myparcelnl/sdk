@@ -239,6 +239,33 @@ class MyParcelCollection
 
         return $this;
     }
+    
+     /**
+     * Delete concepts in MyParcel
+     *
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function deleteConcepts()
+    {
+        /* @var $consignments MyParcelConsignmentRepository[] */
+        foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
+            foreach ($consignments as $consignment) {
+                if ($consignment->getMyParcelConsignmentId() !== null) {
+                    $request = (new MyParcelRequest())
+                        ->setUserAgent($this->getUserAgent())
+                        ->setRequestParameters(
+                            $key,
+                            $consignment->getMyParcelConsignmentId(),
+                            MyParcelRequest::REQUEST_HEADER_DELETE
+                        )
+                        ->sendRequest();
+                }
+            }
+        }
+
+        return $this;
+    }
 
     /**
      * Get all current data
