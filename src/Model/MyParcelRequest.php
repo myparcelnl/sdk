@@ -37,6 +37,7 @@ class MyParcelRequest
     const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf';
     const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
+    const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
 
     /**
      * @var string
@@ -142,6 +143,15 @@ class MyParcelRequest
 
             $request->setConfig($config)
                 ->write('POST', $url, '1.1', $header, $body);
+        } else if ($method == 'DELETE') {
+
+            //complete request url
+            if ($this->body) {
+                $url .= '/' . $this->body;
+            }
+
+            $request->setConfig($config)
+                ->write('DELETE', $url, '1.1', $header);
         } else {
             
             //complete request url
