@@ -30,6 +30,11 @@ class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendOneConsignment()
     {
+        if (getenv('API_KEY') == null) {
+            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31\n\033[0m";
+            return $this;
+        }
+
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
@@ -148,9 +153,9 @@ class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
+            echo "\033[32mGenerated morning shipment label: \033[0m";
             print_r($myParcelCollection->getLinkOfLabels());
-            echo '
-';
+            echo "\n\033[0m";
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
@@ -169,7 +174,7 @@ class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -187,7 +192,7 @@ class SendMorningShipmentTest extends \PHPUnit_Framework_TestCase
                 'delivery_date' => '2019-06-28'
             ],
             [
-                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',

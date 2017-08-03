@@ -13,17 +13,17 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendReferenceIdentifierConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
- * Class SendOneConsignmentTest
+ * Class SendReferenceIdentifierConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -31,6 +31,11 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendOneConsignment()
     {
+        if (getenv('API_KEY') == null) {
+            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31\n\033[0m";
+            return $this;
+        }
+
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
@@ -149,7 +154,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
+                'api_key' => getenv('API_KEY'),
                 'reference_identifier' => (string)(new \DateTime())->getTimestamp(),
                 'cc' => 'NL',
                 'person' => 'Reindert',

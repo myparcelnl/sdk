@@ -276,6 +276,9 @@ class MyParcelCollection
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
             $consignment = $this->getConsignmentByApiId($shipment['id']);
+            if ($consignment === null) {
+                $consignment = $this->getConsignmentByReferenceId($shipment['reference_identifier']);
+            }
             $consignment->apiDecode($shipment);
         }
 

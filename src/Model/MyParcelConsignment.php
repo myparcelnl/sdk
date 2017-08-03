@@ -215,7 +215,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setReferenceId($reference_id)
     {
-        $this->reference_id = $reference_id;
+        $this->reference_id = (string)$reference_id;
 
         return $this;
     }

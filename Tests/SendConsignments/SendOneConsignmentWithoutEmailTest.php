@@ -30,6 +30,11 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendOneConsignment()
     {
+        if (getenv('API_KEY') == null) {
+            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31\n\033[0m";
+            return $this;
+        }
+
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
@@ -81,7 +86,7 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'api_key' => '94a98610ab9bf67a82873196c9ca688c601c179a',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
