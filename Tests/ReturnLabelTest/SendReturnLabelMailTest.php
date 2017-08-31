@@ -25,9 +25,6 @@ class SendReturnLabelMailTest extends \PHPUnit_Framework_TestCase
 {
     public function testSendReturnLabelMail()
     {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
-
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
             return $this;
