@@ -33,16 +33,16 @@ class SendReturnLabelMailTest extends \PHPUnit_Framework_TestCase
             return $this;
         }
 
-        $parentConsignment = $this->getParentConsignment();
-        $parentConsignment->sendReturnLabelMail();
+        $myParcelCollection = $this->getCollectionWithParentConsignment();
+        $myParcelCollection->sendReturnLabelMails();
 
-        $this->assertNotNull($parentConsignment);
+        $this->assertNotNull($myParcelCollection);
     }
 
     /**
-     * @return MyParcelConsignmentRepository
+     * @return MyParcelCollection
      */
-    private function getParentConsignment()
+    private function getCollectionWithParentConsignment()
     {
         $consignmentTest = $this->additionProviderNewConsignment();
 
@@ -59,11 +59,12 @@ class SendReturnLabelMailTest extends \PHPUnit_Framework_TestCase
             ->setEmail($consignmentTest['email'])
             ->setPhone($consignmentTest['phone']);
 
-        $myParcelCollection->addConsignment($consignment)->createConcepts();
+        $myParcelCollection
+            ->addConsignment($consignment)
+            ->setLinkOfLabels()
+            ->setLatestData();
 
-        $consignment = $myParcelCollection->getOneConsignment();
-
-        return $consignment;
+        return $myParcelCollection;
     }
 
     /**

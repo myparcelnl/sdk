@@ -386,6 +386,42 @@ class MyParcelCollection
     }
 
     /**
+     * Send return label to custommer. The customer can pay and download the label.
+     *
+     * @throws \Exception
+     * @return $this
+     */
+    public function sendReturnLabelMails()
+    {
+        $apiKey = $this->getOneConsignment()->getApiKey();
+        $data = $this->apiEncodeReturnShipments($this->getConsignments());
+
+        $request = (new MyParcelRequest())
+            ->setUserAgent($this->getUserAgent())
+            ->setRequestParameters(
+                $apiKey,
+                $data,
+                MyParcelRequest::REQUEST_HEADER_RETURN
+            )
+            ->sendRequest('POST');
+
+        $result = $request->getResult();
+
+        if ($result === null) {
+            throw new \Exception('Unable to connect to MyParcel.');
+        }
+
+        if (
+            empty($result['data']['ids'][0]['id']) ||
+            (int)$result['data']['ids'][0]['id'] < 1
+        ) {
+            throw new \Exception('Can\'t send retour label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get all consignment ids
      *
      * @param $key
@@ -395,12 +431,14 @@ class MyParcelCollection
     private function getConsignmentIds(&$key)
     {
         $conceptIds = [];
+
         foreach ($this->getConsignments() as $consignment) {
             if ($consignment->getMyParcelConsignmentId()) {
                 $conceptIds[] = $consignment->getMyParcelConsignmentId();
                 $key = $consignment->getApiKey();
             }
         }
+
         if (empty($conceptIds)) {
             return null;
         }
@@ -506,8 +544,27 @@ class MyParcelCollection
     private function apiEncode($consignments)
     {
         $data = [];
+
         foreach ($consignments as $consignment) {
             $data['data']['shipments'][] = $consignment->apiEncode();
+        }
+
+        return json_encode($data);
+    }
+
+    /**
+     * Encode multiple ReturnShipment Objects
+     *
+     * @param $consignments MyParcelConsignmentRepository[]
+     *
+     * @return string
+     */
+    private function apiEncodeReturnShipments($consignments)
+    {
+        $data = [];
+
+        foreach ($consignments as $consignment) {
+            $data['data']['return_shipments'][] = $consignment->apiEncodeReturnShipment();
         }
 
         return json_encode($data);
