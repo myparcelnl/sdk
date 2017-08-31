@@ -122,18 +122,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
-     * Encode all the data before sending it to MyParcel
-     *
-     * @return array
-     */
-    public function apiEncodeReturnShipment()
-    {
-        $data = $this->encodeReturnShipment();
-
-        return $data;
-    }
-
-    /**
      * Decode all the data after the request with the API
      *
      * @param $data
@@ -268,6 +256,23 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPickupLocationName($aCheckoutData['location']);
 
         return $this;
+    }
+
+    /**
+     * Get ReturnShipment Object to send to MyParcel
+     *
+     * @return array
+     */
+    public function encodeReturnShipment(){
+
+        $data = [
+            'parent' => $this->getMyParcelConsignmentId(),
+            'carrier' => 1,
+            'email' => $this->getEmail(),
+            'name' => $this->getPerson(),
+        ];
+
+        return $data;
     }
 
     /**
@@ -488,23 +493,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         return $this;
-    }
-
-    /**
-     * Get ReturnShipment Object to send to MyParcel
-     *
-     * @return array
-     */
-    private function encodeReturnShipment(){
-
-        $data = [
-            'parent' => $this->getMyParcelConsignmentId(),
-            'carrier' => 1,
-            'email' => $this->getEmail(),
-            'name' => $this->getPerson(),
-        ];
-
-        return $data;
     }
 
     /**

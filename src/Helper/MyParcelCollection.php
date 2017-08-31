@@ -564,7 +564,7 @@ class MyParcelCollection
         $data = [];
 
         foreach ($consignments as $consignment) {
-            $data['data']['return_shipments'][] = $consignment->apiEncodeReturnShipment();
+            $data['data']['return_shipments'][] = $consignment->encodeReturnShipment();
         }
 
         return json_encode($data);
