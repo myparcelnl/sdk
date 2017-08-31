@@ -259,6 +259,23 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
+     * Get ReturnShipment Object to send to MyParcel
+     *
+     * @return array
+     */
+    public function encodeReturnShipment(){
+
+        $data = [
+            'parent' => $this->getMyParcelConsignmentId(),
+            'carrier' => 1,
+            'email' => $this->getEmail(),
+            'name' => $this->getPerson(),
+        ];
+
+        return $data;
+    }
+
+    /**
      * Splits street data into separate parts for street name, house number and extension.
      *
      * @param string $fullStreet The full street name including all parts
