@@ -29,6 +29,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
+    const INSURANCE_POSSIBILITIES = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
     const STATUS_CONCEPT = 1;
 
     /**
@@ -876,7 +877,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      *
      * Composite type containing integer and currency. The amount is without decimal
      * separators.
-     * Pattern: [50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
+     * Pattern: [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
      * Required: No
      *
      * @param int $insurance
@@ -887,6 +888,10 @@ class MyParcelConsignment extends MyParcelClassConstants
     {
         if (!$this->canHaveOption()) {
             $insurance = 0;
+        }
+
+        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES)) {
+            throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
         $this->insurance = $insurance;
