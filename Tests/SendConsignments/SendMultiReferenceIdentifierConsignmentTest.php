@@ -35,7 +35,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_Tes
         ini_set('display_errors', 1);
 
         if (getenv('API_KEY') == null) {
-            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31\n\033[0m";
+            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31\n\033[0m. PhpStorm example: http://take.ms/sgpgU5";
             return $this;
         }
 
