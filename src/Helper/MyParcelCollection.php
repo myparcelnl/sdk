@@ -194,9 +194,9 @@ class MyParcelCollection
 
         if (!empty($this->consignments)) {
             if ($consignment->getReferenceId() === null) {
-                            throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
+                 throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
             } elseif (key_exists($consignment->getReferenceId(), $this->consignments)) {
-                            throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
+                 throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
             }
         }
 
