@@ -160,7 +160,7 @@ class MyParcelRequest
             $this->result = json_decode($response, true);
 
             $this
-                ->checkCurlErrors($response)
+                ->checkCurlErrors($request)
                 ->checkMyParcelErrors();
         }
 
@@ -179,9 +179,9 @@ class MyParcelRequest
      *
      * @return $this
      */
-    private function checkCurlErrors($response)
+    private function checkCurlErrors($request)
     {
-        if ($response === false) {
+        if ($request->read() === false) {
             $this->error = $request->getError();
         }
 
