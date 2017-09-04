@@ -117,7 +117,7 @@ class MyParcelRequest
         );
 
         //instantiate the curl adapter
-        $request = new MyParcelCurl();
+        $request = (new MyParcelCurl())->setConfig($config);
 
         if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
             $request->setUserAgent($this->getUserAgentFromComposer());
@@ -140,8 +140,7 @@ class MyParcelRequest
             //curl request string
             $body = $this->body;
 
-            $request->setConfig($config)
-                ->write('POST', $url, '1.1', $header, $body);
+            $request->write('POST', $url, '1.1', $header, $body);
         } else {
             
             //complete request url
@@ -149,9 +148,7 @@ class MyParcelRequest
                 $url .= '/' . $this->body;
             }
 
-            $request->setConfig($config)
-                ->write('GET', $url, '1.1', $header);
-
+            $request->write('GET', $url, '1.1', $header);
         }
 
         //read the response

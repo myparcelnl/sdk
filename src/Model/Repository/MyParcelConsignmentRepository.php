@@ -484,6 +484,10 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             throw new \Exception('For international shipments, package_type must be 1 (normal package).');
         }
 
+        if (empty($this->getLabelDescription())) {
+            throw new \Exception('Label description/invoice id is required for international shipments. Use getLabelDescription().');
+        }
+
         $items = [];
         foreach ($this->getItems() as $item) {
             $items[] = $this->encodeCdCountryItem($item);

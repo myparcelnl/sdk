@@ -890,7 +890,7 @@ class MyParcelConsignment extends MyParcelClassConstants
             $insurance = 0;
         }
 
-        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES)) {
+        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES) && $this->getCountry() == 'NL') {
             throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
@@ -943,7 +943,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * The invoice number for the commercial goods or samples of package contents.
      *
-     * Required: Yes for commercial goods, commercial samples and return shipment package contents outside EU.
+     * Required: Yes for international shipments
      *
      * @param string $invoice
      *

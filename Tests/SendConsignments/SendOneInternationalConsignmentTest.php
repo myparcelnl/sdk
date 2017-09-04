@@ -116,7 +116,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+            $this->assertEquals(true, preg_match("#^CV#", $consignment->getBarcode()), 'Barcode is not set');
 
             /** @todo; clear consignment in MyParcelCollection */
         }
@@ -144,23 +144,16 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Rijnsburg',
                 'phone' => '123456',
                 'package_type' => 1,
+                'label_description' => 112345,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
                         'amount' => 2,
                         'weight' => 2000,
-                        'item_value' => 400,
-                        'classification' => 2008,
-                        'country' => 'BE',
-                    ],
-                    [
-                        'description' => 'Nice Mobile',
-                        'amount' => 3,
-                        'weight' => 3000,
-                        'item_value' => 400,
+                        'item_value' => 40000,
                         'classification' => 2008,
                         'country' => 'DU',
-                    ],
+                    ]
                 ],
             ],
         ];
