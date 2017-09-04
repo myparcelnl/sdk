@@ -162,44 +162,9 @@ class MyParcelRequest
         } else {
             $this->result = json_decode($response, true);
 
-            if (is_array($this->result)) {
-
-                //check if there are curl-errors
-                if ($response === false) {
-                    $error = $request->getError();
-                    $this->error = $error;
-                }
-
-                //check if the response has errors codes
-                if (isset($this->result['errors'])) {
-                    foreach ($this->result['errors'] as $error) {
-
-                        if ((int)key($error) > 0) {
-                            $error = current($error);
-                        }
-
-                        $errorMessage = '';
-                        if (key_exists('message', $this->result)) {
-                            $message = $this->result['message'];
-                        } elseif (key_exists('message', $error)) {
-                            $message = $error['message'];
-                        } else {
-                            $message = 'Unknow error: ' . json_encode($error). '. Please contact MyParcel.';
-                        }
-
-                        if (key_exists('code', $error)) {
-                            $errorMessage = $error['code'];
-                        } elseif (key_exists('fields', $error)) {
-                            $errorMessage = $error['fields'][0];
-                        }
-
-                        $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
-                        $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
-                        $request->close();
-                        break;
-                    }
-                }
-            }
+            $this
+                ->checkCurlErrors($response)
+                ->checkMyParcelErrors();
         }
 
         //close the server connection with MyParcel
@@ -210,6 +175,62 @@ class MyParcelRequest
         }
 
         return $this;
+    }
+
+    /**
+     * Check if there are curl-errors
+     *
+     * @return $this
+     */
+    private function checkCurlErrors($response)
+    {
+        if ($response === false) {
+            $this->error = $request->getError();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if MyParcel gives an error
+     *
+     * @return $this
+     */
+    private function checkMyParcelErrors()
+    {
+        if (!is_array($this->result)) {
+            return;
+        }
+
+        if (empty($this->result['errors'])) {
+            return;
+        }
+
+        foreach ($this->result['errors'] as $error) {
+
+            if ((int)key($error) > 0) {
+                $error = current($error);
+            }
+
+            $errorMessage = '';
+            if (key_exists('message', $this->result)) {
+                $message = $this->result['message'];
+            } elseif (key_exists('message', $error)) {
+                $message = $error['message'];
+            } else {
+                $message = 'Unknow error: ' . json_encode($error). '. Please contact MyParcel.';
+            }
+
+            if (key_exists('code', $error)) {
+                $errorMessage = $error['code'];
+            } elseif (key_exists('fields', $error)) {
+                $errorMessage = $error['fields'][0];
+            }
+
+            $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
+            $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
+            break;
+        }
     }
 
     /**
