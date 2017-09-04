@@ -189,7 +189,7 @@ class MyParcelCollection
     public function addConsignment(MyParcelConsignmentRepository $consignment)
     {
         if ($consignment->getApiKey() === null) {
-                    throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
+            throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
         }
 
         if (!empty($this->consignments)) {

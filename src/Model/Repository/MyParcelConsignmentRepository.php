@@ -15,6 +15,8 @@ namespace MyParcelNL\Sdk\src\Model\Repository;
 
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+
 /**
  * The repository of a MyParcel consignment
  *
@@ -44,7 +46,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     /**
      * @var array
      */
-    private $consignment = [];
+    private $consignmentEncoded  = [];
 
     /**
      * Get entire street
@@ -96,13 +98,20 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     /**
      * The total weight for all items in whole grams
      *
-     * @todo get weight of all items
-     *
      * @return int
      */
     public function getTotalWeight()
     {
-        return 1;
+        $weight = 0;
+
+        foreach ($this->getItems() as $item) {
+            $weight += ($item->getWeight());
+        }
+
+        if ($weight == 0) {
+        }
+
+        return $weight;
     }
 
     /**
@@ -118,7 +127,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->encodeExtraOptions()
             ->encodeCdCountry();
 
-        return $this->consignment;
+        return $this->consignmentEncoded;
     }
 
     /**
@@ -341,7 +350,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     private function encodeBaseOptions()
     {
-        $this->consignment = [
+        $this->consignmentEncoded = [
             'recipient' => [
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
@@ -358,11 +367,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         ];
 
         if ($this->getReferenceId()) {
-            $this->consignment['reference_identifier'] = $this->getReferenceId();
+            $this->consignmentEncoded['reference_identifier'] = $this->getReferenceId();
         }
 
         if ($this->getCompany()) {
-            $this->consignment['recipient']['company'] = $this->getCompany();
+            $this->consignmentEncoded['recipient']['company'] = $this->getCompany();
         }
 
         return $this;
@@ -374,8 +383,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     private function encodeStreet()
     {
         if ($this->getCountry() == 'NL') {
-            $this->consignment = array_merge_recursive(
-                $this->consignment,
+            $this->consignmentEncoded = array_merge_recursive(
+                $this->consignmentEncoded,
                 [
                     'recipient' => [
                         'street' => $this->getStreet(),
@@ -385,7 +394,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 ]
             );
         } else {
-            $this->consignment['recipient']['street'] = $this->getFullStreet();
+            $this->consignmentEncoded['recipient']['street'] = $this->getFullStreet();
         }
 
         return $this;
@@ -396,8 +405,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     private function encodeExtraOptions() {
         if ($this->getCountry() == 'NL') {
-            $this->consignment = array_merge_recursive(
-                $this->consignment,
+            $this->consignmentEncoded = array_merge_recursive(
+                $this->consignmentEncoded,
                 [
                     'options' => [
                         'large_format' => $this->isLargeFormat() ? 1 : 0,
@@ -414,7 +423,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         if ($this->getDeliveryDate()) {
-            $this->consignment['options']['delivery_date'] = $this->getDeliveryDate();
+            $this->consignmentEncoded['options']['delivery_date'] = $this->getDeliveryDate();
         }
 
         return $this;
@@ -430,7 +439,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             $this->getPickupNumber() !== null &&
             $this->getPickupLocationName() !== null
         ) {
-            $this->consignment['pickup'] = [
+            $this->consignmentEncoded['pickup'] = [
                 'postal_code' => $this->getPickupPostalCode(),
                 'street' => $this->getPickupStreet(),
                 'city' => $this->getPickupCity(),
@@ -449,7 +458,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     {
         // Set insurance
         if ($this->getInsurance() > 1) {
-            $this->consignment['options']['insurance'] = [
+            $this->consignmentEncoded['options']['insurance'] = [
                 'amount' => (int) $this->getInsurance() * 100,
                 'currency' => 'EUR',
             ];
@@ -463,36 +472,63 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     private function encodeCdCountry()
     {
-        if ($this->isCdCountry()) {
-            $this->consignment = array_merge_recursive(
-                $this->consignment, [
-                    'customs_declaration' => [
-                        'contents' => 1,
-                        'weight' => $this->getTotalWeight(),
-                        'items' => [
-                            [
-                                'description' => 'Product',
-                                'amount' => 1,
-                                'weight' => 0,
-                                'classification' => '0000',
-                                'country' => 'NL',
-                                'item_value' =>
-                                    [
-                                        'amount' => 100,
-                                        'currency' => "EUR",
-                                    ],
-                            ]
-                        ],
-                        'invoice' => $this->getLabelDescription(),
-                    ],
-                    'physical_properties' => [
-                        'weight' => $this->getTotalWeight()
-                    ]
-                ]
-            );
+        if (!$this->isCdCountry()) {
+            return $this;
         }
 
+        if (empty($this->getItems())) {
+            throw new \Exception('Product data must be set for international MyParcel shipments. Use addItem().');
+        }
+
+        if (!$this->getPackageType() === 1) {
+            throw new \Exception('For international shipments, package_type must be 1 (normal package).');
+        }
+
+        $items = [];
+        foreach ($this->getItems() as $item) {
+            $items[] = $this->encodeCdCountryItem($item);
+        }
+
+        $this->consignmentEncoded = array_merge_recursive(
+            $this->consignmentEncoded, [
+                'customs_declaration' => [
+                    'contents' => 1,
+                    'weight' => $this->getTotalWeight(),
+                    'items' => $items,
+                    'invoice' => $this->getLabelDescription(),
+                ],
+                'physical_properties' => [
+                    'weight' => $this->getTotalWeight()
+                ]
+            ]
+        );
+
         return $this;
+    }
+
+    /**
+     * Encode product for the request
+     *
+     * @var MyParcelCustomsItem $customsItem
+     * @var string $currency
+     * @return array
+     */
+    private function encodeCdCountryItem($customsItem, $currency = 'EUR')
+    {
+        $item = [
+            'description' => $customsItem->getDescription(),
+            'amount' => $customsItem->getAmount(),
+            'weight' => $customsItem->getWeight(),
+            'classification' => $customsItem->getClassification(),
+            'country' => $customsItem->getCountry(),
+            'item_value' =>
+                [
+                    'amount' => $customsItem->getItemValue(),
+                    'currency' => $currency,
+                ],
+        ];
+
+        return $item;
     }
 
     /**

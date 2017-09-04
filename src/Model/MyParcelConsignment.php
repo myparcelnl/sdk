@@ -957,7 +957,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * @return array
+     * @return MyParcelCustomsItem[]
      */
     public function getItems()
     {
@@ -970,16 +970,21 @@ class MyParcelConsignment extends MyParcelClassConstants
      *
      * Required: Yes for international shipments
      *
-     * @param array $item
+     * @param MyParcelCustomsItem $item
      *
      * @return $this
      */
-    public function addItems($item)
+    public function addItem($item)
     {
-        $this->items[] = $item;
+        if ($item->isFullyFilledItem() == true) {
+            $this->items[] = $item;
+        }
 
         return $this;
     }
+
+
+
 
     /**
      * @return string

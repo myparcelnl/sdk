@@ -173,11 +173,18 @@ class MyParcelRequest
                 //check if the response has errors codes
                 if (isset($this->result['errors'])) {
                     foreach ($this->result['errors'] as $error) {
+
+                        if ((int)key($error) > 0) {
+                            $error = current($error);
+                        }
+
                         $errorMessage = '';
                         if (key_exists('message', $this->result)) {
                             $message = $this->result['message'];
-                        } else {
+                        } elseif (key_exists('message', $error)) {
                             $message = $error['message'];
+                        } else {
+                            $message = 'Unknow error: ' . json_encode($error). '. Please contact MyParcel.';
                         }
 
                         if (key_exists('code', $error)) {
@@ -185,6 +192,7 @@ class MyParcelRequest
                         } elseif (key_exists('fields', $error)) {
                             $errorMessage = $error['fields'][0];
                         }
+
                         $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
                         $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
                         $request->close();
