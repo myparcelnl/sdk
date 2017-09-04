@@ -886,12 +886,12 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setInsurance($insurance)
     {
-        if (!$this->canHaveOption()) {
-            $insurance = 0;
-        }
-
         if (!in_array($insurance, self::INSURANCE_POSSIBILITIES) && $this->getCountry() == 'NL') {
             throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
+        }
+
+        if (!$this->canHaveOption()) {
+            $insurance = 0;
         }
 
         $this->insurance = $insurance;
