@@ -95,17 +95,8 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
                 $consignment->addItem($item);
             }
 
-            $myParcelCollection->addConsignment($consignment);
-
-            /**
-             * Create concept
-             */
-            $myParcelCollection->createConcepts();
-
-            /**
-             * Get label
-             */
             $myParcelCollection
+                ->addConsignment($consignment)
                 ->setLinkOfLabels();
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
