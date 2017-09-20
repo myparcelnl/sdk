@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create one concept
+ * Create one consignment
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl

@@ -886,12 +886,12 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setInsurance($insurance)
     {
-        if (!$this->canHaveOption()) {
-            $insurance = 0;
+        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES) && $this->getCountry() == 'NL') {
+            throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
-        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES)) {
-            throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
+        if (!$this->canHaveOption()) {
+            $insurance = 0;
         }
 
         $this->insurance = $insurance;
@@ -943,7 +943,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * The invoice number for the commercial goods or samples of package contents.
      *
-     * Required: Yes for commercial goods, commercial samples and return shipment package contents outside EU.
+     * Required: Yes for international shipments
      *
      * @param string $invoice
      *
@@ -957,7 +957,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * @return array
+     * @return MyParcelCustomsItem[]
      */
     public function getItems()
     {
@@ -970,16 +970,21 @@ class MyParcelConsignment extends MyParcelClassConstants
      *
      * Required: Yes for international shipments
      *
-     * @param array $item
+     * @param MyParcelCustomsItem $item
      *
      * @return $this
      */
-    public function addItems($item)
+    public function addItem($item)
     {
-        $this->items[] = $item;
+        if ($item->isFullyFilledItem() == true) {
+            $this->items[] = $item;
+        }
 
         return $this;
     }
+
+
+
 
     /**
      * @return string
