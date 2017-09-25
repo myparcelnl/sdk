@@ -28,18 +28,16 @@ class InternationalFullStreetTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Test setFullStreet()
+     * @covers \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::getFullStreet
+     * @dataProvider additionProvider()
      */
-    public function testSplitStreet()
+    public function testSplitStreet($cc, $fullStreet)
     {
-        foreach ($this->additionProvider() as $consignmentTest) {
+        $consignment = (new MyParcelConsignmentRepository())
+            ->setCountry($cc)
+            ->setFullStreet($fullStreet);
 
-            $consignment = (new MyParcelConsignmentRepository())
-                ->setCountry($consignmentTest['cc'])
-                ->setFullStreet($consignmentTest['full_street']);
-
-            $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'Full street: ' . $consignmentTest['full_street']);
-        }
+        $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreet);
     }
 
     /**

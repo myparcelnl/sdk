@@ -27,7 +27,8 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Test one shipment with createConcepts()
+     * Test one shipment
+     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::createConcepts
      */
     public function testSendOneConsignment()
     {
