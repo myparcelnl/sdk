@@ -311,7 +311,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      *
      * @return bool
      */
-    private function isCdCountry()
+    protected function isCdCountry()
     {
         return !in_array(
             $this->getCountry(),
