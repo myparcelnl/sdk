@@ -285,19 +285,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
-     * Check if the address is outside the EU
-     *
-     * @return bool
-     */
-    public function isCdCountry()
-    {
-        return !in_array(
-            $this->getCountry(),
-            self::EU_COUNTRIES
-        );
-    }
-
-    /**
      * Splits street data into separate parts for street name, house number and extension.
      *
      * @param string $fullStreet The full street name including all parts
@@ -343,6 +330,19 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         );
 
         return $streetData;
+    }
+
+    /**
+     * Check if the address is outside the EU
+     *
+     * @return bool
+     */
+    protected function isCdCountry()
+    {
+        return !in_array(
+            $this->getCountry(),
+            self::EU_COUNTRIES
+        );
     }
 
     /**
