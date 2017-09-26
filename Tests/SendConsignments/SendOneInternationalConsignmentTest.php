@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create one mailbox
+ * Create international consignment
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
@@ -13,17 +13,18 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
- * Class SendMailboxConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendMailboxConsignmentTest
+ * Class SendOneInternationalConsignmentTest
+ * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -31,6 +32,8 @@ class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendOneConsignment()
     {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
             return $this;
@@ -45,7 +48,7 @@ class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_test'])
+                ->setFullStreet($consignmentTest['full_street'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('reindert@myparcel.nl')
@@ -79,44 +82,32 @@ class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
-            $myParcelCollection->addConsignment($consignment);
+            // Add items for international shipments
+            foreach ($consignmentTest['custom_items'] as $customItem) {
+                $item = (new MyParcelCustomsItem())
+                    ->setDescription($customItem['description'])
+                    ->setAmount($customItem['amount'])
+                    ->setWeight($customItem['weight'])
+                    ->setItemValue($customItem['item_value'])
+                    ->setClassification($customItem['classification'])
+                    ->setCountry($customItem['country']);
 
-            /**
-             * Create concept
-             */
-            $myParcelCollection->createConcepts()->setLatestData();
+                $consignment->addItem($item);
+            }
 
-            $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
-            $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
-            $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
-            $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
-            $this->assertEquals($consignmentTest['company'], $consignment->getCompany(), 'getCompany()');
-            $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'getFullStreet()');
-            $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'getNumber()');
-            $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
-            $this->assertEquals($consignmentTest['postal_code'], $consignment->getPostalCode(), 'getPostalCode()');
-            $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
-            $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
-
-            $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
-            $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
-            $this->assertEquals(false, $consignment->isLargeFormat(), 'isLargeFormat()');
-            $this->assertEquals(false, $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
-            $this->assertEquals(false, $consignment->isSignature(), 'isSignature()');
-            $this->assertEquals(false, $consignment->isReturn(), 'isReturn()');
-            $this->assertEquals(false, $consignment->getInsurance(), 'getInsurance()');
-
-            /**
-             * Get label
-             */
             $myParcelCollection
+                ->addConsignment($consignment)
                 ->setLinkOfLabels();
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
+            echo "\033[32mGenerated international shipment label: \033[0m";
+            print_r($myParcelCollection->getLinkOfLabels());
+            echo "\n\033[0m";
+
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+            $this->assertEquals(true, preg_match("#^CV#", $consignment->getBarcode()), 'Barcode is not set');
 
             /** @todo; clear consignment in MyParcelCollection */
         }
@@ -132,25 +123,30 @@ class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'The insurance man',
-                'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
+                'cc' => 'CA',
+                'person' => 'Reindert',
+                'company' => 'Big Sale BV',
+                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street' => 'Plein 1940-45 3 b',
+                'street' => 'Plein 1940-45',
+                'number' => 3,
+                'number_suffix' => 'b',
                 'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 2,
-                'large_format' => true,
-                'only_recipient' => true,
-                'signature' => true,
-                'return' => true,
-                'label_description' => 1234,
-                'insurance' => 250,
-            ]
+                'city' => 'Rijnsburg',
+                'phone' => '123456',
+                'package_type' => 1,
+                'label_description' => 112345,
+                'custom_items' => [
+                    [
+                        'description' => 'Cool Mobile',
+                        'amount' => 2,
+                        'weight' => 2000,
+                        'item_value' => 40000,
+                        'classification' => 2008,
+                        'country' => 'DU',
+                    ]
+                ],
+            ],
         ];
     }
 }

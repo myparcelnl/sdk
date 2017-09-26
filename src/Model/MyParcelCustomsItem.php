@@ -95,6 +95,10 @@ class MyParcelCustomsItem
      */
     public function setWeight($weight)
     {
+        if ($weight == 0) {
+            throw new \Exception('Weight must be set for a MyParcel product');
+        }
+
         $this->weight = $weight;
 
         return $this;
@@ -124,7 +128,7 @@ class MyParcelCustomsItem
      */
     public function setItemValue($item_value)
     {
-        $this->item_value = $item_value;
+        $this->item_value = (int)$item_value;
 
         return $this;
     }
@@ -144,14 +148,14 @@ class MyParcelCustomsItem
      * Example: 0111 (Growing of cereals (except rice), leguminous crops and oil seeds)
      * Required: Yes
      *
-     * @link http://gebruikstarief.douane.nl/
+     * @link https://www.cbs.nl/-/media/cbsvooruwbedrijf/internationale%20handel%20in%20goederen/goederencodes%20in%20excel.xlsx?la=nl-nl
      *
      * @param int $classification
      * @return $this
      */
     public function setClassification($classification)
     {
-        $this->classification = $classification;
+        $this->classification = substr($classification, 0, 4);
 
         return $this;
     }
@@ -182,5 +186,38 @@ class MyParcelCustomsItem
         return $this;
     }
 
+    /**
+     * Check if object is fully filled
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function isFullyFilledItem ()
+    {
+        if ($this->getDescription() === null) {
+            throw new \Exception('setDescription() must be set');
+        }
 
+        if ($this->getAmount() === null) {
+            throw new \Exception('setAmount() must be set');
+        }
+
+        if ($this->getWeight() === null) {
+            throw new \Exception('setWeight() must be set');
+        }
+
+        if ($this->getItemValue() === null) {
+            throw new \Exception('setItemValue() must be set');
+        }
+
+        if ($this->getClassification() === null) {
+            throw new \Exception('setClassification() must be set');
+        }
+
+        if ($this->getCountry() === null) {
+            throw new \Exception('setCountry() must be set');
+        }
+
+        return true;
+    }
 }
