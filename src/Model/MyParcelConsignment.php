@@ -959,16 +959,15 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * An array containing CustomsItem objects with description for each item
-     * in the package.
+     * A CustomsItem objects with description in the package.
      *
      * Required: Yes for international shipments
      *
-     * @param array $item
+     * @param MyParcelCustomsItem $item
      *
      * @return $this
      */
-    public function addItems($item)
+    public function addItem($item)
     {
         $this->items[] = $item;
 

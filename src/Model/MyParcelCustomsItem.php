@@ -45,10 +45,13 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param mixed $description
+     * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
     }
 
     /**
@@ -65,10 +68,13 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $amount
+     * @return $this
      */
     public function setAmount($amount)
     {
         $this->amount = $amount;
+
+        return $this;
     }
 
     /**
@@ -85,10 +91,13 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $weight
+     * @return $this
      */
     public function setWeight($weight)
     {
         $this->weight = $weight;
+
+        return $this;
     }
 
     /**
@@ -111,10 +120,13 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $item_value
+     * @return $this
      */
     public function setItemValue($item_value)
     {
         $this->item_value = $item_value;
+
+        return $this;
     }
 
     /**
@@ -135,10 +147,13 @@ class MyParcelCustomsItem
      * @link http://gebruikstarief.douane.nl/
      *
      * @param int $classification
+     * @return $this
      */
     public function setClassification($classification)
     {
         $this->classification = $classification;
+
+        return $this;
     }
 
     /**
@@ -158,10 +173,13 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param string $country
+     * @return $this
      */
     public function setCountry($country)
     {
         $this->country = $country;
+
+        return $this;
     }
 
 
