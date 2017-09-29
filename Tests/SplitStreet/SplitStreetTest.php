@@ -26,21 +26,19 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Test setFullStreet()
+     * @covers \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::setFullStreet
+     * @dataProvider additionProvider()
      */
-    public function testSplitStreet()
+    public function testSplitStreet($fullStreetTest, $fullStreet, $street, $number, $numberSuffix)
     {
-        foreach ($this->additionProvider() as $consignmentTest) {
+        $consignment = (new MyParcelConsignmentRepository())
+            ->setCountry('NL')
+            ->setFullStreet($fullStreetTest);
 
-            $consignment = (new MyParcelConsignmentRepository())
-                ->setCountry('NL')
-                ->setFullStreet($consignmentTest['full_street_test']);
-
-            $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'Number suffix from: ' . $consignmentTest['full_street_test']);
-            $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'Number from: ' . $consignmentTest['full_street_test']);
-            $this->assertEquals($consignmentTest['street'], $consignment->getStreet(), 'Street: ' . $consignmentTest['full_street_test']);
-            $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'Full street: ' . $consignmentTest['full_street_test']);
-        }
+        $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreetTest);
+        $this->assertEquals($street, $consignment->getStreet(), 'Street: ' . $fullStreetTest);
+        $this->assertEquals($number, $consignment->getNumber(), 'Number from: ' . $fullStreetTest);
+        $this->assertEquals($numberSuffix, $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetTest);
     }
 
     /**

@@ -159,8 +159,10 @@ class MyParcelRequest
         } else {
             $this->result = json_decode($response, true);
 
+            if ($response === false) {
+                $this->error = $request->getError();
+            }
             $this
-                ->checkCurlErrors($request)
                 ->checkMyParcelErrors();
         }
 
@@ -169,20 +171,6 @@ class MyParcelRequest
 
         if ($this->getError()) {
             throw new \Exception('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Check if there are curl-errors
-     *
-     * @return $this
-     */
-    private function checkCurlErrors($request)
-    {
-        if ($request->read() === false) {
-            $this->error = $request->getError();
         }
 
         return $this;

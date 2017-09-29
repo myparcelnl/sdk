@@ -212,7 +212,7 @@ class MyParcelCollection
     /**
      * Create concepts in MyParcel
      *
-     * @todo    Later, when the api supports a reference ID, we can produce all the items in one time.
+     * @todo    Produce all the items in one time with reference ID.
      *
      * @return  $this
      * @throws  \Exception
