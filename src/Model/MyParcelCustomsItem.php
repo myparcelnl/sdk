@@ -45,6 +45,7 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param mixed $description
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -67,6 +68,7 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $amount
+     * @return $this
      */
     public function setAmount($amount)
     {
@@ -89,6 +91,7 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $weight
+     * @return $this
      */
     public function setWeight($weight)
     {
@@ -121,6 +124,7 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $item_value
+     * @return $this
      */
     public function setItemValue($item_value)
     {
@@ -147,6 +151,7 @@ class MyParcelCustomsItem
      * @link https://www.cbs.nl/-/media/cbsvooruwbedrijf/internationale%20handel%20in%20goederen/goederencodes%20in%20excel.xlsx?la=nl-nl
      *
      * @param int $classification
+     * @return $this
      */
     public function setClassification($classification)
     {
@@ -172,6 +177,7 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param string $country
+     * @return $this
      */
     public function setCountry($country)
     {
