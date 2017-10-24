@@ -72,7 +72,7 @@ class MyParcelCustomsItem
      */
     public function setAmount($amount)
     {
-        $this->amount = $amount;
+        $this->amount = (int)$amount;
 
         return $this;
     }
@@ -99,7 +99,7 @@ class MyParcelCustomsItem
             throw new \Exception('Weight must be set for a MyParcel product');
         }
 
-        $this->weight = $weight;
+        $this->weight = (int)$weight;
 
         return $this;
     }
