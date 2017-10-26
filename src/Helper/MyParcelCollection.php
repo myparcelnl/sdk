@@ -239,6 +239,33 @@ class MyParcelCollection
 
         return $this;
     }
+    
+     /**
+     * Delete concepts in MyParcel
+     *
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function deleteConcepts()
+    {
+        /* @var $consignments MyParcelConsignmentRepository[] */
+        foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
+            foreach ($consignments as $consignment) {
+                if ($consignment->getMyParcelConsignmentId() !== null) {
+                    $request = (new MyParcelRequest())
+                        ->setUserAgent($this->getUserAgent())
+                        ->setRequestParameters(
+                            $key,
+                            $consignment->getMyParcelConsignmentId(),
+                            MyParcelRequest::REQUEST_HEADER_DELETE
+                        )
+                        ->sendRequest('DELETE');
+                }
+            }
+        }
+
+        return $this;
+    }
 
     /**
      * Get all current data
@@ -368,7 +395,7 @@ class MyParcelCollection
      * @return $this
      * @throws \Exception
      */
-    public function downloadPdfOfLabels()
+    public function downloadPdfOfLabels($inline_download = false)
     {
         if ($this->label_pdf == null) {
             throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
@@ -376,7 +403,7 @@ class MyParcelCollection
 
         header('Content-Type: application/pdf');
         header('Content-Length: ' . strlen($this->label_pdf));
-        header('Content-disposition: attachment; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
+        header('Content-disposition: '.($inline_download === true ? "inline" : "attachment").'; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
