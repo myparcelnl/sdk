@@ -32,6 +32,11 @@ class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendOneConsignment()
     {
+        if (getenv('API_KEY') == null || getenv('API_KEY2') == null) {
+            echo "\033[31m Set 2 MyParcel API-keys in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31 and API_KEY2=f8912fb260sert4564bdsafds45y6afasd7fdas\n\033[0m";
+            return $this;
+        }
+
         /** move to __constructor */
         $myParcelCollection = new MyParcelCollection();
 
@@ -79,7 +84,7 @@ class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
     {
         return [
             101 => [
-                'api_key' => 'MYSNIzQWqNrYaDeFxJtVrujS9YEuF9kiykBxf8Sj',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -92,7 +97,7 @@ class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Rijnsburg',
             ],
             104 => [
-                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'api_key' => getenv('API_KEY2'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -112,7 +117,7 @@ class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
                 'label_description' => 'Label description',
             ],
             105 => [
-                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'api_key' => getenv('API_KEY2'),
                 'cc' => 'NL',
                 'person' => 'The insurance man',
                 'company' => 'Mega Store',

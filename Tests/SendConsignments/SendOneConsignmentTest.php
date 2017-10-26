@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create one concept
+ * Create one consignment
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
@@ -27,10 +27,16 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Test one shipment with createConcepts()
+     * Test one shipment
+     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::createConcepts
      */
     public function testSendOneConsignment()
     {
+        if (getenv('API_KEY') == null) {
+            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+            return $this;
+        }
+
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
@@ -146,7 +152,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'api_key' => 'MYSNIzQWqNrYaDeFxJtVrujS9YEuF9kiykBxf8Sj',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -160,7 +166,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
                 'phone' => '123456',
             ],
             [
-                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -180,7 +186,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
                 'label_description' => 'Label description',
             ],
             [
-                'api_key' => 'a5cbbf2a81e3a7fe51752f51cedb157acffe6f1f',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'The insurance man',
                 'company' => 'Mega Store',

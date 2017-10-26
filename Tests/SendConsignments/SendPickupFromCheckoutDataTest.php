@@ -30,6 +30,11 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendOneConsignment()
     {
+        if (getenv('API_KEY') == null) {
+            echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+            return $this;
+        }
+
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
@@ -187,9 +192,9 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
+            echo "\033[32mGenerated pickup label from checkout label: \033[0m";
             print_r($myParcelCollection->getLinkOfLabels());
-            echo '
-';
+            echo "\n\033[0m";
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
@@ -206,9 +211,14 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
      */
     public function additionProvider()
     {
+
+        $datetime = new \DateTime();
+        $datetime->modify('+1 day');
+        $delivery_date = $datetime->format('Y\-m\-d\ h:i:s');
+
         return [
             [
-                'api_key' => 'f8912fb260639db3b1ceaef2730a4b0643ff0c34',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -225,7 +235,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
             ],
             [
-                'api_key' => 'f8912fb260639db3b1ceaef2730a4b0643ff0c34',
+                'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -239,7 +249,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'delivery_type' => 5,
-                'delivery_date' => '2017-07-12 00:00:00',
+                'delivery_date' => $delivery_date,
                 'label_description' => 'Label description',
                 'pickup_postal_code' => '2222AB',
                 'pickup_street' => 'Scheepmakerstraat',

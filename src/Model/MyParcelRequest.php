@@ -118,7 +118,7 @@ class MyParcelRequest
         );
 
         //instantiate the curl adapter
-        $request = new MyParcelCurl();
+        $request = (new MyParcelCurl())->setConfig($config);
 
         if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
             $request->setUserAgent($this->getUserAgentFromComposer());
@@ -141,8 +141,7 @@ class MyParcelRequest
             //curl request string
             $body = $this->body;
 
-            $request->setConfig($config)
-                ->write('POST', $url, '1.1', $header, $body);
+            $request->write('POST', $url, '1.1', $header, $body);
         } else if ($method == 'DELETE') {
 
             //complete request url
@@ -150,8 +149,7 @@ class MyParcelRequest
                 $url .= '/' . $this->body;
             }
 
-            $request->setConfig($config)
-                ->write('DELETE', $url, '1.1', $header);
+            $request->write('DELETE', $url, '1.1', $header);
         } else {
             
             //complete request url
@@ -159,9 +157,7 @@ class MyParcelRequest
                 $url .= '/' . $this->body;
             }
 
-            $request->setConfig($config)
-                ->write('GET', $url, '1.1', $header);
-
+            $request->write('GET', $url, '1.1', $header);
         }
 
         //read the response
@@ -172,36 +168,11 @@ class MyParcelRequest
         } else {
             $this->result = json_decode($response, true);
 
-            if (is_array($this->result)) {
-
-                //check if there are curl-errors
-                if ($response === false) {
-                    $error = $request->getError();
-                    $this->error = $error;
-                }
-
-                //check if the response has errors codes
-                if (isset($this->result['errors'])) {
-                    foreach ($this->result['errors'] as $error) {
-                        $errorMessage = '';
-                        if (key_exists('message', $this->result)) {
-                            $message = $this->result['message'];
-                        } else {
-                            $message = $error['message'];
-                        }
-
-                        if (key_exists('code', $error)) {
-                            $errorMessage = $error['code'];
-                        } elseif (key_exists('fields', $error)) {
-                            $errorMessage = $error['fields'][0];
-                        }
-                        $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
-                        $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
-                        $request->close();
-                        break;
-                    }
-                }
+            if ($response === false) {
+                $this->error = $request->getError();
             }
+            $this
+                ->checkMyParcelErrors();
         }
 
         //close the server connection with MyParcel
@@ -212,6 +183,48 @@ class MyParcelRequest
         }
 
         return $this;
+    }
+
+    /**
+     * Check if MyParcel gives an error
+     *
+     * @return $this
+     */
+    private function checkMyParcelErrors()
+    {
+        if (!is_array($this->result)) {
+            return;
+        }
+
+        if (empty($this->result['errors'])) {
+            return;
+        }
+
+        foreach ($this->result['errors'] as $error) {
+
+            if ((int)key($error) > 0) {
+                $error = current($error);
+            }
+
+            $errorMessage = '';
+            if (key_exists('message', $this->result)) {
+                $message = $this->result['message'];
+            } elseif (key_exists('message', $error)) {
+                $message = $error['message'];
+            } else {
+                $message = 'Unknow error: ' . json_encode($error). '. Please contact MyParcel.';
+            }
+
+            if (key_exists('code', $error)) {
+                $errorMessage = $error['code'];
+            } elseif (key_exists('fields', $error)) {
+                $errorMessage = $error['fields'][0];
+            }
+
+            $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
+            $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
+            break;
+        }
     }
 
     /**
