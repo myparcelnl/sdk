@@ -285,7 +285,22 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
+     * Check if address is correct
+     * Only for Dutch addresses
+     *
+     * @param $fullStreet
+     * @return bool
+     */
+    public function isCorrectAddress($fullStreet)
+    {
+        $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
+
+        return (bool)$result;
+    }
+
+    /**
      * Splits street data into separate parts for street name, house number and extension.
+     * Only for Dutch addresses
      *
      * @param string $fullStreet The full street name including all parts
      *
