@@ -43,9 +43,9 @@ Also the php curl extension needs to be installed.
 ### Quick start and examples
 
 ```php
-$myParcelCollection = new MyParcelCollection();
+$myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
 
-$consignment = (new MyParcelConsignmentRepository())
+$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     ->setCountry('NL')
@@ -64,9 +64,9 @@ $myParcelCollection
 
 ## Available Methods
 ```php
-$myParcelCollection = new MyParcelCollection();
+$myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
 
-$consignment = (new MyParcelConsignmentRepository())
+$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     ->setCountry('NL')
@@ -129,11 +129,11 @@ $barcode = $consignment->getBarcode();
 #### Multiple shipments
 To create multiple consignments or get one pdf with multiple consignments, set multiple consignments. It's faster and cleaner.
 ```php
-$myParcelCollection = new MyParcelCollection();
+$myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
 
 foreach ($yourShipments as $yourShipment) {
 
-    $consignment = (new MyParcelConsignmentRepository())
+    $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
         ->setApiKey('api_key_from_MyParcel_backoffice')
         ->setReferenceId($yourShipment->getOrderId()
         ->setName('Piet Hier');
@@ -146,7 +146,7 @@ foreach ($yourShipments as $yourShipment) {
 #### Later on
 In a new request, you can get all the data again.
 ```php
-$consignment = (new MyParcelConsignmentRepository())
+$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
 
