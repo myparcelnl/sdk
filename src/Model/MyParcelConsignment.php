@@ -231,7 +231,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function getMyParcelConsignmentId()
     {
-        return $this->myparcel_consignment_id;
+        return (int) $this->myparcel_consignment_id;
     }
 
     /**
