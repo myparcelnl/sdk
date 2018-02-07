@@ -91,16 +91,12 @@ class MyParcelCollection
      */
     public function getOneConsignment($throwException = true)
     {
-        if (count($this->getConsignments()) > 1) {
-            if ($throwException) {
-                throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
-            } else {
-                return null;
-            }
-        } else {
-            foreach ($this->getConsignments() as $consignment) {
-                return $consignment;
-            }
+        if (count($this->getConsignments()) > 1 && $throwException) {
+            throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
+        }
+
+        foreach ($this->getConsignments() as $consignment) {
+            return $consignment;
         }
 
         return null;
@@ -420,8 +416,8 @@ class MyParcelCollection
      */
     public function sendReturnLabelMails()
     {
-        $apiKey = $this->getOneConsignment()->getApiKey();
-        $data = $this->apiEncodeReturnShipments($this->getConsignments());
+        $apiKey = $this->getOneConsignment(false)->getApiKey();
+        $data = $this->apiEncodeReturnShipments($this->getOneConsignment(false));
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -582,17 +578,13 @@ class MyParcelCollection
     /**
      * Encode multiple ReturnShipment Objects
      *
-     * @param $consignments MyParcelConsignmentRepository[]
+     * @param $consignment MyParcelConsignmentRepository
      *
      * @return string
      */
-    private function apiEncodeReturnShipments($consignments)
+    private function apiEncodeReturnShipments($consignment)
     {
-        $data = [];
-
-        foreach ($consignments as $consignment) {
-            $data['data']['return_shipments'][] = $consignment->encodeReturnShipment();
-        }
+        $data['data']['return_shipments'][] = $consignment->encodeReturnShipment();
 
         return json_encode($data);
     }
