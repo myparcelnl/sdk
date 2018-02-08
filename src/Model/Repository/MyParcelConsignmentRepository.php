@@ -35,15 +35,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s-]{0,2}(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
 
     /**
-     * Consignment types
-     */
-    const TYPE_MORNING             = 1;
-    const TYPE_STANDARD            = 2;
-    const TYPE_NIGHT               = 3;
-    const TYPE_RETAIL              = 4;
-    const TYPE_RETAIL_EXPRESS      = 5;
-
-    /**
      * @var array
      */
     private $consignmentEncoded  = [];
@@ -374,7 +365,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'phone' => (string)$this->getPhone(),
             ],
             'options' => [
-                'package_type' => $this->getPackageType()?:2,
+                'package_type' => $this->getPackageType()?:self::TYPE_STANDARD,
                 'label_description' => $this->getLabelDescription(),
             ],
             'carrier' => 1,
@@ -616,13 +607,15 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             $this->setInsurance($insuranceAmount / 100);
         }
 
-        if (key_exists('delivery_date', $options)) {
-            $this->setDeliveryDate($options['delivery_date']);
-        }
+	    if (isset($options['delivery_date'])) {
+		    $this->setDeliveryDate($options['delivery_date']);
+	    }
 
-        if (key_exists('delivery_type', $options)) {
-            $this->setDeliveryType($options['delivery_type']);
-        }
+	    if (isset($options['delivery_type'])) {
+		    $this->setDeliveryType($options['delivery_type']);
+	    } else {
+		    $this->setDeliveryType(self::TYPE_STANDARD);
+	    }
 
         return $this;
     }
