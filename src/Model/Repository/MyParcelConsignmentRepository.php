@@ -55,11 +55,13 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     /**
      * Get entire street
      *
+     * @var bool
+     *
      * @return string Entire street
      */
-    public function getFullStreet()
+    public function getFullStreet($useStreetAdditionalInfo = false)
     {
-        $fullStreet = $this->getStreet();
+        $fullStreet = $this->getStreet($useStreetAdditionalInfo);
 
         if ($this->getNumber()) {
             $fullStreet .= ' ' . $this->getNumber();
@@ -406,14 +408,16 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 $this->consignmentEncoded,
                 [
                     'recipient' => [
-                        'street' => $this->getStreet(),
+                        'street' => $this->getStreet(true),
+                        'street_additional_info' => $this->getStreetAdditionalInfo(),
                         'number' => $this->getNumber(),
                         'number_suffix' => $this->getNumberSuffix(),
                     ],
                 ]
             );
         } else {
-            $this->consignmentEncoded['recipient']['street'] = $this->getFullStreet();
+            $this->consignmentEncoded['recipient']['street'] = $this->getFullStreet(true);
+            $this->consignmentEncoded['recipient']['street_additional_info'] = $this->getStreetAdditionalInfo();
         }
 
         return $this;

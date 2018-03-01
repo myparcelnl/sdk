@@ -31,6 +31,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
     const INSURANCE_POSSIBILITIES = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
     const STATUS_CONCEPT = 1;
+    const MAX_STREET_LENTH = 40;
 
     /**
      * @var string
@@ -423,11 +424,32 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
+     * @var bool
      * @return string
      */
-    public function getStreet()
+    public function getStreet($useStreetAdditionalInfo = false)
     {
+        if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENTH) {
+            $streetParts = $this->getStreetParts();
+
+            return $streetParts[0];
+        }
+
         return $this->street;
+    }
+
+    /**
+     * Get additional information for the street that should not be included in the street field
+     */
+    public function getStreetAdditionalInfo()
+    {
+        $streetParts = $this->getStreetParts();
+
+        if (isset($streetParts[1])) {
+            return $streetParts[1];
+        }
+
+        return '';
     }
 
     /**
@@ -1120,5 +1142,15 @@ class MyParcelConsignment extends MyParcelClassConstants
         }
 
         return $this->getPackageType() == 1 ? $option : false;
+    }
+
+    /**
+     * Wraps a street to max street lenth
+     *
+     * @return array
+     */
+    private function getStreetParts ()
+    {
+        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENTH));
     }
 }
