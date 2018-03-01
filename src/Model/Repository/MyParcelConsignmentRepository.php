@@ -37,16 +37,18 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     /**
      * Consignment types
      */
-    const TYPE_MORNING             = 1;
-    const TYPE_STANDARD            = 2;
-    const TYPE_NIGHT               = 3;
-    const TYPE_RETAIL              = 4;
-    const TYPE_RETAIL_EXPRESS      = 5;
+    const DELIVERY_TYPE_MORNING             = 1;
+    const DELIVERY_TYPE_STANDARD            = 2;
+    const DELIVERY_TYPE_NIGHT               = 3;
+    const DELIVERY_TYPE_RETAIL              = 4;
+    const DELIVERY_TYPE_RETAIL_EXPRESS      = 5;
+
+    const PACKAGE_TYPE_NORMAL = 2;
 
     /**
      * @var array
      */
-    private $consignmentEncoded  = [];
+    private $consignmentEncoded = [];
 
     /**
      * Get entire street
@@ -159,11 +161,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
         if ($checkoutData === null) {
-            return self::TYPE_STANDARD;
+            return self::DELIVERY_TYPE_STANDARD;
         }
 
         $aCheckoutData = json_decode($checkoutData, true);
-        $deliveryType = self::TYPE_STANDARD;
+        $deliveryType = self::DELIVERY_TYPE_STANDARD;
 
         if (key_exists('time', $aCheckoutData) &&
             key_exists('price_comment', $aCheckoutData['time'][0]) &&
@@ -171,22 +173,22 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         ) {
             switch ($aCheckoutData['time'][0]['price_comment']) {
                 case 'morning':
-                    $deliveryType = self::TYPE_MORNING;
+                    $deliveryType = self::DELIVERY_TYPE_MORNING;
                     break;
                 case 'standard':
-                    $deliveryType = self::TYPE_STANDARD;
+                    $deliveryType = self::DELIVERY_TYPE_STANDARD;
                     break;
                 case 'night':
-                    $deliveryType = self::TYPE_NIGHT;
+                    $deliveryType = self::DELIVERY_TYPE_NIGHT;
                     break;
             }
         } elseif (key_exists('price_comment', $aCheckoutData) && $aCheckoutData['price_comment'] !== null) {
             switch ($aCheckoutData['price_comment']) {
                 case 'retail':
-                    $deliveryType = self::TYPE_RETAIL;
+                    $deliveryType = self::DELIVERY_TYPE_RETAIL;
                     break;
                 case 'retailexpress':
-                    $deliveryType = self::TYPE_RETAIL_EXPRESS;
+                    $deliveryType = self::DELIVERY_TYPE_RETAIL_EXPRESS;
                     break;
             }
         }
@@ -617,12 +619,14 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             $this->setInsurance($insuranceAmount / 100);
         }
 
-        if (key_exists('delivery_date', $options)) {
+        if (isset($options['delivery_date'])) {
             $this->setDeliveryDate($options['delivery_date']);
         }
 
-        if (key_exists('delivery_type', $options)) {
+        if (isset($options['delivery_type'])) {
             $this->setDeliveryType($options['delivery_type']);
+        } else {
+            $this->setDeliveryType(self::PACKAGE_TYPE_NORMAL);
         }
 
         return $this;
