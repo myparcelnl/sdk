@@ -30,9 +30,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      * Regular expression used to split street name from house number.
      *
      * For the full description go to:
-     * @link https://gist.github.com/reindert-vetter/a90fdffe7d452f92d1c65bbf759f6e38
+     * @link https://gist.github.com/RichardPerdaan/1e6ce1588f3990e856b55255572692d1
      */
-    const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s|-]?(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
+    const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s-]{0,2}(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
 
     /**
      * Consignment types
@@ -647,24 +647,24 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         // Set pickup
         if (key_exists('pickup', $data) && $data['pickup'] !== null) {
             $pickup = $data['pickup'];
-            if (key_exists('pickup_postal_code', $data['pickup'])) {
-                $this->setPickupPostalCode($pickup['pickup_postal_code']);
+            if (key_exists('postal_code', $pickup)) {
+                $this->setPickupPostalCode($pickup['postal_code']);
             }
 
-            if (key_exists('pickup_street', $pickup)) {
-                $this->setPickupStreet($pickup['pickup_street']);
+            if (key_exists('street', $pickup)) {
+                $this->setPickupStreet($pickup['street']);
             }
 
-            if (key_exists('pickup_city', $pickup)) {
-                $this->setPickupCity($pickup['pickup_city']);
+            if (key_exists('city', $pickup)) {
+                $this->setPickupCity($pickup['city']);
             }
 
-            if (key_exists('pickup_number', $pickup)) {
-                $this->setPickupNumber($pickup['pickup_number']);
+            if (key_exists('number', $pickup)) {
+                $this->setPickupNumber($pickup['number']);
             }
 
-            if (key_exists('pickup_location_name', $pickup)) {
-                $this->setPickupLocationName($pickup['pickup_location_name']);
+            if (key_exists('location_name', $pickup)) {
+                $this->setPickupLocationName($pickup['location_name']);
             }
         } else {
             $this
