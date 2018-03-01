@@ -45,6 +45,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
     const PACKAGE_TYPE_NORMAL = 2;
 
+    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_NORMAL;
+
     /**
      * @var array
      */
@@ -626,7 +628,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         if (isset($options['delivery_type'])) {
             $this->setDeliveryType($options['delivery_type']);
         } else {
-            $this->setDeliveryType(self::PACKAGE_TYPE_NORMAL);
+            $this->setDeliveryType(self::DEFAULT_PACKAGE_TYPE);
         }
 
         return $this;
