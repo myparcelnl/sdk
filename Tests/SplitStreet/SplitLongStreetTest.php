@@ -71,8 +71,8 @@ class SplitLongStreetTest extends \PHPUnit_Framework_TestCase
             [
                 'BE',
                 'full_street_test' => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
-                'street' => 'Wethouder Fierman Eduard Meerburg senior 14 t',
-                'street_additional_info' => 'kade',
+                'street' => 'Wethouder Fierman Eduard Meerburg senior',
+                'street_additional_info' => 'kade 14 t',
             ],
             [
                 'NL',
