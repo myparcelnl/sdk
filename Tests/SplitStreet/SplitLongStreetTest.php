@@ -58,9 +58,15 @@ class SplitLongStreetTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'BE',
-                'full_street_test' => 'testtienpp testtienpp testtienpp testtienpp testtienpp 14 t',
-                'street' => 'testtienpp testtienpp testtienpp',
-                'street_additional_info' => 'testtienpp testtienpp 14 t',
+                'full_street_test' => 'Ir. Mr. Dr. van Waterschoot van der Grachtstraat in Heerlen 14 t',
+                'street' => 'Ir. Mr. Dr. van Waterschoot van der',
+                'street_additional_info' => 'Grachtstraat in Heerlen 14 t',
+            ],
+            [
+                'NZ',
+                'full_street_test' => 'Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu',
+                'street' => 'Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu',
+                'street_additional_info' => '',
             ],
             [
                 'BE',
