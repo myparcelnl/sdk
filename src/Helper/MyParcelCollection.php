@@ -401,7 +401,7 @@ class MyParcelCollection
 
         header('Content-Type: application/pdf');
         header('Content-Length: ' . strlen($this->label_pdf));
-        header('Content-disposition: '.($inline_download === true ? "inline" : "attachment").'; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
+        header('Content-disposition: ' . ($inline_download === true ? "inline" : "attachment") . '; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -438,7 +438,7 @@ class MyParcelCollection
 
         if (
             empty($result['data']['ids'][0]['id']) ||
-            (int)$result['data']['ids'][0]['id'] < 1
+            (int) $result['data']['ids'][0]['id'] < 1
         ) {
             throw new \Exception('Can\'t send retour label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
@@ -501,7 +501,7 @@ class MyParcelCollection
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @param array|int|bool $positions
+     * @param integer $positions
      *
      * @return $this
      */
@@ -580,7 +580,7 @@ class MyParcelCollection
     /**
      * Encode multiple ReturnShipment Objects
      *
-     * @param $consignment MyParcelConsignmentRepository
+     * @param MyParcelConsignmentRepository|null $consignment MyParcelConsignmentRepository
      *
      * @return string
      */
