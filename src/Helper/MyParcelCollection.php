@@ -580,7 +580,7 @@ class MyParcelCollection
     /**
      * Encode multiple ReturnShipment Objects
      *
-     * @param MyParcelConsignmentRepository|null $consignment MyParcelConsignmentRepository
+     * @param MyParcelConsignmentRepository $consignment
      *
      * @return string
      */
