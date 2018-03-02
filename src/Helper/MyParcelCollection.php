@@ -388,6 +388,8 @@ class MyParcelCollection
     /**
      * Download labels
      *
+     * @param bool $inline_download
+     *
      * @return $this
      * @throws \Exception
      */

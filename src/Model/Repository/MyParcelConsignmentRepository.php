@@ -35,18 +35,33 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s-]{0,2}(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
 
     /**
+     * Consignment types
+     */
+    const DELIVERY_TYPE_MORNING             = 1;
+    const DELIVERY_TYPE_STANDARD            = 2;
+    const DELIVERY_TYPE_NIGHT               = 3;
+    const DELIVERY_TYPE_RETAIL              = 4;
+    const DELIVERY_TYPE_RETAIL_EXPRESS      = 5;
+
+    const PACKAGE_TYPE_NORMAL = 2;
+
+    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_NORMAL;
+
+    /**
      * @var array
      */
-    private $consignmentEncoded  = [];
+    private $consignmentEncoded = [];
 
     /**
      * Get entire street
      *
+     * @var bool
+     *
      * @return string Entire street
      */
-    public function getFullStreet()
+    public function getFullStreet($useStreetAdditionalInfo = false)
     {
-        $fullStreet = $this->getStreet();
+        $fullStreet = $this->getStreet($useStreetAdditionalInfo);
 
         if ($this->getNumber()) {
             $fullStreet .= ' ' . $this->getNumber();
@@ -150,11 +165,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
         if ($checkoutData === null) {
-            return self::TYPE_STANDARD;
+            return self::DELIVERY_TYPE_STANDARD;
         }
 
         $aCheckoutData = json_decode($checkoutData, true);
-        $deliveryType = self::TYPE_STANDARD;
+        $deliveryType = self::DELIVERY_TYPE_STANDARD;
 
         if (key_exists('time', $aCheckoutData) &&
             key_exists('price_comment', $aCheckoutData['time'][0]) &&
@@ -162,22 +177,22 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         ) {
             switch ($aCheckoutData['time'][0]['price_comment']) {
                 case 'morning':
-                    $deliveryType = self::TYPE_MORNING;
+                    $deliveryType = self::DELIVERY_TYPE_MORNING;
                     break;
                 case 'standard':
-                    $deliveryType = self::TYPE_STANDARD;
+                    $deliveryType = self::DELIVERY_TYPE_STANDARD;
                     break;
                 case 'night':
-                    $deliveryType = self::TYPE_NIGHT;
+                    $deliveryType = self::DELIVERY_TYPE_NIGHT;
                     break;
             }
         } elseif (key_exists('price_comment', $aCheckoutData) && $aCheckoutData['price_comment'] !== null) {
             switch ($aCheckoutData['price_comment']) {
                 case 'retail':
-                    $deliveryType = self::TYPE_RETAIL;
+                    $deliveryType = self::DELIVERY_TYPE_RETAIL;
                     break;
                 case 'retailexpress':
-                    $deliveryType = self::TYPE_RETAIL_EXPRESS;
+                    $deliveryType = self::DELIVERY_TYPE_RETAIL_EXPRESS;
                     break;
             }
         }
@@ -392,14 +407,16 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 $this->consignmentEncoded,
                 [
                     'recipient' => [
-                        'street' => $this->getStreet(),
+                        'street' => $this->getStreet(true),
+                        'street_additional_info' => $this->getStreetAdditionalInfo(),
                         'number' => $this->getNumber(),
                         'number_suffix' => $this->getNumberSuffix(),
                     ],
                 ]
             );
         } else {
-            $this->consignmentEncoded['recipient']['street'] = $this->getFullStreet();
+            $this->consignmentEncoded['recipient']['street'] = $this->getFullStreet(true);
+            $this->consignmentEncoded['recipient']['street_additional_info'] = $this->getStreetAdditionalInfo();
         }
 
         return $this;
@@ -607,15 +624,15 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             $this->setInsurance($insuranceAmount / 100);
         }
 
-	    if (isset($options['delivery_date'])) {
-		    $this->setDeliveryDate($options['delivery_date']);
-	    }
+        if (isset($options['delivery_date'])) {
+            $this->setDeliveryDate($options['delivery_date']);
+        }
 
-	    if (isset($options['delivery_type'])) {
-		    $this->setDeliveryType($options['delivery_type']);
-	    } else {
-		    $this->setDeliveryType(self::TYPE_STANDARD);
-	    }
+        if (isset($options['delivery_type'])) {
+            $this->setDeliveryType($options['delivery_type']);
+        } else {
+            $this->setDeliveryType(self::DEFAULT_PACKAGE_TYPE);
+        }
 
         return $this;
     }
