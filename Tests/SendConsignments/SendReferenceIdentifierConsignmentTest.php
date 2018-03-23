@@ -47,7 +47,7 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
                 ->setStreet($consignmentTest['street'])
-                ->setNumber((string)$consignmentTest['number'])
+                ->setNumber((string) $consignmentTest['number'])
                 ->setNumberSuffix($consignmentTest['number_suffix'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
@@ -155,7 +155,7 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string)(new \DateTime())->getTimestamp(),
+                'reference_identifier' => (string) (new \DateTime())->getTimestamp(),
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
