@@ -26,8 +26,8 @@ class MyParcelRequest
     /**
      * Supported request types.
      */
-    const REQUEST_TYPE_SHIPMENTS   = 'shipments';
-    const REQUEST_TYPE_RETRIEVE_LABEL       = 'shipment_labels';
+    const REQUEST_TYPE_SHIPMENTS = 'shipments';
+    const REQUEST_TYPE_RETRIEVE_LABEL = 'shipment_labels';
 
     /**
      * API headers
@@ -202,7 +202,7 @@ class MyParcelRequest
 
         foreach ($this->result['errors'] as $error) {
 
-            if ((int)key($error) > 0) {
+            if ((int) key($error) > 0) {
                 $error = current($error);
             }
 
@@ -212,7 +212,7 @@ class MyParcelRequest
             } elseif (key_exists('message', $error)) {
                 $message = $error['message'];
             } else {
-                $message = 'Unknow error: ' . json_encode($error). '. Please contact MyParcel.';
+                $message = 'Unknow error: ' . json_encode($error) . '. Please contact MyParcel.';
             }
 
             if (key_exists('code', $error)) {

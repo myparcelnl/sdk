@@ -47,12 +47,12 @@ class MyParcelClassConstants
         'XK',
     ];
 
-	/**
-	 * Consignment types
-	 */
-	const TYPE_MORNING             = 1;
-	const TYPE_STANDARD            = 2;
-	const TYPE_NIGHT               = 3;
-	const TYPE_RETAIL              = 4;
-	const TYPE_RETAIL_EXPRESS      = 5;
+    /**
+     * Consignment types
+     */
+    const TYPE_MORNING             = 1;
+    const TYPE_STANDARD            = 2;
+    const TYPE_NIGHT               = 3;
+    const TYPE_RETAIL              = 4;
+    const TYPE_RETAIL_EXPRESS      = 5;
 }

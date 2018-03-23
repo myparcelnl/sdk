@@ -278,7 +278,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      *
      * @return array
      */
-    public function encodeReturnShipment(){
+    public function encodeReturnShipment() {
         $data = [
             'parent' => $this->getMyParcelConsignmentId(),
             'carrier' => 1,
@@ -300,7 +300,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     {
         $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
-        return (bool)$result;
+        return (bool) $result;
     }
 
     /**
@@ -381,9 +381,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'cc' => $this->getCountry(),
                 'person' => $this->getPerson(),
                 'postal_code' => $this->getPostalCode(),
-                'city' => (string)$this->getCity(),
-                'email' => (string)$this->getEmail(),
-                'phone' => (string)$this->getPhone(),
+                'city' => (string) $this->getCity(),
+                'email' => (string) $this->getEmail(),
+                'phone' => (string) $this->getPhone(),
             ],
             'options' => [
                 'package_type' => $packageType,

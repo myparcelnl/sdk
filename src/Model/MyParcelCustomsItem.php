@@ -72,7 +72,7 @@ class MyParcelCustomsItem
      */
     public function setAmount($amount)
     {
-        $this->amount = (int)$amount;
+        $this->amount = (int) $amount;
 
         return $this;
     }
@@ -99,7 +99,7 @@ class MyParcelCustomsItem
             throw new \Exception('Weight must be set for a MyParcel product');
         }
 
-        $this->weight = (int)$weight;
+        $this->weight = (int) $weight;
 
         return $this;
     }
@@ -128,7 +128,7 @@ class MyParcelCustomsItem
      */
     public function setItemValue($item_value)
     {
-        $this->item_value = (int)$item_value;
+        $this->item_value = (int) $item_value;
 
         return $this;
     }
@@ -192,7 +192,7 @@ class MyParcelCustomsItem
      * @return bool
      * @throws \Exception
      */
-    public function isFullyFilledItem ()
+    public function isFullyFilledItem()
     {
         if ($this->getDescription() === null) {
             throw new \Exception('setDescription() must be set');
