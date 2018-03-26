@@ -196,13 +196,13 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
                 'number' => 8,
                 'number_suffix' => '02L',
             ],
-	        [
-		        'full_street_test' => 'Landsdijk 49 -A',
-		        'full_street' => 'Landsdijk 49 A',
-		        'street' => 'Landsdijk',
-		        'number' => 49,
-		        'number_suffix' => 'A',
-	        ],
+            [
+                'full_street_test' => 'Landsdijk 49 -A',
+                'full_street' => 'Landsdijk 49 A',
+                'street' => 'Landsdijk',
+                'number' => 49,
+                'number_suffix' => 'A',
+            ],
         ];
     }
 }

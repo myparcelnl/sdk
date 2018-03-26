@@ -204,7 +204,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     private $pickup_location_name = null;
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getReferenceId()
     {
@@ -218,7 +218,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setReferenceId($reference_id)
     {
-        $this->reference_id = (string)$reference_id;
+        $this->reference_id = (string) $reference_id;
 
         return $this;
     }
@@ -277,7 +277,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getBarcode()
     {
@@ -347,7 +347,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getShopId()
     {
@@ -861,7 +861,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLabelDescription()
     {
@@ -922,7 +922,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getContents()
     {
@@ -1149,7 +1149,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      *
      * @return array
      */
-    private function getStreetParts ()
+    private function getStreetParts()
     {
         return explode("\n", wordwrap($this->street, self::MAX_STREET_LENTH));
     }
