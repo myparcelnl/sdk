@@ -85,7 +85,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts();
+            $myParcelCollection->createConcepts()->setLatestData();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
@@ -101,6 +101,8 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
 
             if (key_exists('package_type', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
+            } else {
+                $this->assertEquals(1, $consignment->getPackageType(), 'getPackageType()');
             }
 
             if (key_exists('large_format', $consignmentTest)) {
@@ -190,9 +192,10 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'testtienpp testtienpp testtienpp testtienpp testtienpp 14 t',
-                'full_street' => 'testtienpp testtienpp testtienpp testtienpp testtienpp 14 t',
-                'street' => 'testtienpp testtienpp testtienpp testtienpp testtienpp',
+                'full_street_test' => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
+                'full_street' => 'Wethouder Fierman Eduard Meerburg senior 14 t',
+                'street' => 'Wethouder Fierman Eduard Meerburg senior',
+                'street_additional_info' => 'kade',
                 'number' => 14,
                 'number_suffix' => 't',
                 'postal_code' => '2231JE',
