@@ -154,11 +154,13 @@ $myParcelCollection
     ->addConsignment($consignment)
     ->setLatestData();
 
-$consignment = $myParcelCollection
-    ->getOneConsignment();
+$consignments = $myParcelCollection
+    ->getConsignments();
 
-$status = $consignment->getStatus();
-$barcode = $consignment->getBarcode();
+$firstConsignment = $consignments[0];
+
+$status = $firstConsignment->getStatus();
+$barcode = $firstConsignment->getBarcode();
 ```
 
 ### Contribute
