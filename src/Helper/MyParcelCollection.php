@@ -411,7 +411,7 @@ class MyParcelCollection
      */
     public function sendReturnLabelMails()
     {
-        $apiKey = $this->getOneConsignment(false)->getApiKey();
+        $apiKey = $this->getConsignments()[0]->getApiKey();
         $data = $this->apiEncodeReturnShipments($this->getConsignments()[0]);
 
         $request = (new MyParcelRequest())
