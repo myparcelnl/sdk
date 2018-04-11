@@ -287,7 +287,6 @@ class MyParcelCollection
             if ($consignment === null) {
                 $consignment = $this->getConsignmentByReferenceId($shipment['reference_identifier']);
             }
-            $consignment->apiDecode($shipment);
 
             $consignmentsToReplace[] = $consignment->apiDecode($shipment);
         }
