@@ -287,7 +287,6 @@ class MyParcelCollection
             if ($consignment === null) {
                 $consignment = $this->getConsignmentByReferenceId($shipment['reference_identifier']);
             }
-            $consignment->apiDecode($shipment);
 
             $consignmentsToReplace[] = $consignment->apiDecode($shipment);
         }
@@ -411,7 +410,7 @@ class MyParcelCollection
      */
     public function sendReturnLabelMails()
     {
-        $apiKey = $this->getOneConsignment(false)->getApiKey();
+        $apiKey = $this->getConsignments()[0]->getApiKey();
         $data = $this->apiEncodeReturnShipments($this->getConsignments()[0]);
 
         $request = (new MyParcelRequest())
