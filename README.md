@@ -37,7 +37,7 @@ You can download the zip on the projects [releases](https://github.com/myparceln
 
 ### Requirements
 
-The MyParcel SDK works on php versions 5.6, 7.0 and 7.1.
+The MyParcel SDK works on php versions 5.6, 7.x.
 Also the php curl extension needs to be installed.
 
 ### Quick start and examples
@@ -154,11 +154,13 @@ $myParcelCollection
     ->addConsignment($consignment)
     ->setLatestData();
 
-$consignment = $myParcelCollection
-    ->getOneConsignment();
+$consignments = $myParcelCollection
+    ->getConsignments();
 
-$status = $consignment->getStatus();
-$barcode = $consignment->getBarcode();
+$firstConsignment = $consignments[0];
+
+$status = $firstConsignment->getStatus();
+$barcode = $firstConsignment->getBarcode();
 ```
 
 ### Contribute
