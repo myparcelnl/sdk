@@ -522,7 +522,7 @@ class MyParcelCollection
      */
     public function getRequestBody()
     {
-        $body = $this->paper_size == 'A4' ? '?format=A4&positions=' . $this->label_position : '';
+        $body = $this->paper_size == 'A4' ? '?format=A4&positions=' . $this->label_position : '?format=A6';
 
         return $body;
     }
