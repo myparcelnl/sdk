@@ -73,12 +73,18 @@ class MyParcelCollection
 
     private $user_agent = '';
 
-    /**
-     * @return MyParcelConsignmentRepository[]
-     */
-    public function getConsignments()
+	/**
+	 * @param bool $keepKeys
+	 *
+	 * @return MyParcelConsignmentRepository[]
+	 */
+    public function getConsignments($keepKeys = true)
     {
-        return $this->consignments;
+	    if ( $keepKeys ) {
+            return $this->consignments;
+	    }
+
+	    return array_values($this->consignments);
     }
 
     /**
@@ -410,8 +416,10 @@ class MyParcelCollection
      */
     public function sendReturnLabelMails()
     {
-        $apiKey = $this->getConsignments()[0]->getApiKey();
-        $data = $this->apiEncodeReturnShipments($this->getConsignments()[0]);
+    	$parentConsignment = $this->getConsignments(false)[0];
+
+        $apiKey = $parentConsignment->getApiKey();
+        $data = $this->apiEncodeReturnShipments($parentConsignment);
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
