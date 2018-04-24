@@ -163,19 +163,21 @@ class MyParcelCollection
         return $this;
     }
 
-    /**
-     * @param \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository $consignment
-     *
-     * @return $this
-     * @throws \Exception
-     */
-    public function addConsignment(MyParcelConsignmentRepository $consignment)
+	/**
+	 * @param \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository $consignment
+	 *
+	 * @param bool $needReferenceId
+	 *
+	 * @return $this
+	 * @throws \Exception
+	 */
+    public function addConsignment(MyParcelConsignmentRepository $consignment, $needReferenceId = true)
     {
         if ($consignment->getApiKey() === null) {
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
         }
 
-        if (!empty($this->consignments)) {
+        if ($needReferenceId && !empty($this->consignments)) {
             if ($consignment->getReferenceId() === null) {
                  throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
             } elseif (key_exists($consignment->getReferenceId(), $this->consignments)) {
@@ -183,7 +185,7 @@ class MyParcelCollection
             }
         }
 
-        if ($consignment->getReferenceId() !== null) {
+        if ($consignment->getReferenceId()) {
             $this->consignments[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
         } else {
             $this->consignments[] = $consignment;
@@ -252,22 +254,25 @@ class MyParcelCollection
         return $this;
     }
 
-    /**
-     * Get all current data
-     *
-     * Set id and run this function to update all the information about this shipment
-     *
-     * @throws \Exception
-     */
-    public function setLatestData()
+	/**
+	 * Get all current data
+	 *
+	 * Set id and run this function to update all the information about this shipment
+	 *
+	 * @param int $size
+	 *
+	 * @return $this
+	 * @throws \Exception
+	 */
+    public function setLatestData($size = 300)
     {
         $consignmentIds = $this->getConsignmentIds($key);
         if ($consignmentIds !== null) {
-            $params = implode(';', $consignmentIds) . '?size=300';
+            $params = implode(';', $consignmentIds) . '?size=' . $size;
         } else {
             $referenceIds = $this->getConsignmentReferenceIds($key);
             if ($referenceIds != null) {
-                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=300';
+                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
             } else {
                 return $this;
             }
@@ -300,8 +305,46 @@ class MyParcelCollection
         $this->clearConsignmentsCollection();
 
         foreach ($consignmentsToReplace as $consignmentToReplace) {
-            $this->addConsignment($consignmentToReplace);
+            $this->addConsignment($consignmentToReplace, false);
         }
+
+        return $this;
+    }
+
+	/**
+	 * Get all current data
+	 *
+	 * Set id and run this function to update all the information about this shipment
+	 *
+	 * @param $key
+	 * @param int $size
+	 *
+	 * @return $this
+	 * @throws \Exception
+	 */
+    public function setLatestDataWithoutIds($key, $size = 300)
+    {
+	    $params = '?size=' . $size;
+
+        $request = (new MyParcelRequest())
+            ->setUserAgent($this->getUserAgent())
+            ->setRequestParameters(
+                $key,
+                $params,
+                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
+            )
+            ->sendRequest('GET');
+
+        if ($request->getResult() === null) {
+            throw new \Exception('Unable to transport data to MyParcel.');
+        }
+
+        foreach ($request->getResult()['data']['shipments'] as $shipment) {
+	        $consignment = new MyParcelConsignmentRepository();
+            $consignment->setApiKey($key)->apiDecode($shipment);
+	        $this->addConsignment($consignment, false);
+        }
+
 
         return $this;
     }

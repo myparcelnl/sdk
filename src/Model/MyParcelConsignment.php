@@ -36,7 +36,7 @@ class MyParcelConsignment extends MyParcelClassConstants
     /**
      * @var string
      */
-    private $reference_id;
+    private $reference_id = null;
 
     /**
      * @var int
@@ -218,7 +218,9 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setReferenceId($reference_id)
     {
-        $this->reference_id = (string) $reference_id;
+    	if ($reference_id !== null) {
+		    $this->reference_id = (string) $reference_id;
+	    }
 
         return $this;
     }
@@ -676,19 +678,21 @@ class MyParcelConsignment extends MyParcelClassConstants
         return $this->delivery_type;
     }
 
-    /**
-     * The delivery type for the package
-     *
-     * Required: Yes if delivery_date has been specified
-     *
-     * @param int $delivery_type
-     * @return $this
-     * @throws \Exception
-     */
-    public function setDeliveryType($delivery_type)
+	/**
+	 * The delivery type for the package
+	 *
+	 * Required: Yes if delivery_date has been specified
+	 *
+	 * @param int $delivery_type
+	 * @param bool $needDeliveryDate
+	 *
+	 * @return $this
+	 * @throws \Exception
+	 */
+    public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
-        if ($delivery_type !== 2 && $this->getDeliveryDate() == null) {
-            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType()');
+        if ($needDeliveryDate && $delivery_type !== 2 && $this->getDeliveryDate() == null) {
+            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
         }
 
         $this->delivery_type = $delivery_type;
