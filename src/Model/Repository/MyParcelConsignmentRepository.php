@@ -587,7 +587,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setEmail($recipient['email'])
             ->setPhone($recipient['phone'])
             ->setPackageType($options['package_type'])
-            ->setLabelDescription($options['label_description'])
+            ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
         ;
 
         return $this;
@@ -637,9 +637,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         if (isset($options['delivery_type'])) {
-            $this->setDeliveryType($options['delivery_type']);
+            $this->setDeliveryType($options['delivery_type'], false);
         } else {
-            $this->setDeliveryType(self::DEFAULT_DELIVERY_TYPE);
+            $this->setDeliveryType(self::DEFAULT_DELIVERY_TYPE, false);
         }
 
         return $this;
