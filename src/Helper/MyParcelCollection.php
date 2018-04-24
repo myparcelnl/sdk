@@ -80,7 +80,7 @@ class MyParcelCollection
      */
     public function getConsignments($keepKeys = true)
     {
-        if ( $keepKeys ) {
+        if ($keepKeys) {
             return $this->consignments;
         }
 
