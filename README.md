@@ -168,6 +168,7 @@ It is also possible to have the customer pay for his return label
         $consignment = (new MyParcelConsignmentRepository())
             ->setApiKey('api_key_from_MyParcel_backoffice');
     	    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
+	    
         $myParcelCollection = (new MyParcelCollection())
             ->addConsignment($consignment)
             ->setLatestData()
