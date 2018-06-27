@@ -162,8 +162,8 @@ $firstConsignment = $consignments[0];
 $status = $firstConsignment->getStatus();
 $barcode = $firstConsignment->getBarcode();
 ```
-#### Send retour label via e-mail
-It is also possible to have the customer pay for his return label
+#### Send a return label via email
+It is possible to send a return email with the shop settings you set at the Backoffice of MyParcel
 ```php
         $consignment = (new MyParcelConsignmentRepository())
             ->setApiKey('api_key_from_MyParcel_backoffice');
