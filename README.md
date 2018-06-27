@@ -135,7 +135,7 @@ foreach ($yourShipments as $yourShipment) {
 
     $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
         ->setApiKey('api_key_from_MyParcel_backoffice')
-        ->setReferenceId($yourShipment->getOrderId()
+        ->setReferenceId($yourShipment->getOrderId())
         ->setName('Piet Hier');
         /** @todo; set all info */
         
@@ -161,6 +161,17 @@ $firstConsignment = $consignments[0];
 
 $status = $firstConsignment->getStatus();
 $barcode = $firstConsignment->getBarcode();
+```
+#### Send retour label via e-mail
+It is also possible to have the customer pay for his return label
+```php
+        $consignment = (new MyParcelConsignmentRepository())
+            ->setApiKey('api_key_from_MyParcel_backoffice');
+    	    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
+        $myParcelCollection = (new MyParcelCollection())
+            ->addConsignment($consignment)
+            ->setLatestData()
+            ->sendReturnLabelMails();
 ```
 
 ### Contribute
