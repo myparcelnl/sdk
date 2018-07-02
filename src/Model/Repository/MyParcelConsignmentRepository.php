@@ -25,14 +25,21 @@ use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
  */
 class MyParcelConsignmentRepository extends MyParcelConsignment
 {
-
     /**
      * Regular expression used to split street name from house number.
      *
-     * For the full description go to:
-     * @link https://gist.github.com/RichardPerdaan/1e6ce1588f3990e856b55255572692d1
+     * This regex goes from right to left
+     * Contains php keys to store the data in an array
      */
-    const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s-]{0,2}(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
+    const SPLIT_STREET_REGEX =  '~(?P<street>.*?)'.     // The rest belongs to the street
+                                '\s?'.                  // Separator between street and number
+                                '(?P<number>\d{1,4})'.  // Number can contain a maximum of 4 numbers
+                                '[/\s-]{0,2}'.          // Separators between number and addition
+                                '(?P<number_suffix>'.
+                                    '[\D]{0,4}|'.       // Number suffix has up to 4 letters or
+                                    '\w{1}\d{1,3}|'.    // starts with a letter followed by numbers or
+                                    '\d{2}\w{1,2}'.     // starts with 2 numbers followed by letters
+                                ')$~';
 
     /**
      * Consignment types
