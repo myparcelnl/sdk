@@ -17,33 +17,5 @@ namespace MyParcelNL\Sdk\src\Model;
 
 class MyParcelClassConstants
 {
-    const EU_COUNTRIES = [
-        'NL',
-        'BE',
-        'AT',
-        'BG',
-        'CZ',
-        'CY',
-        'DK',
-        'EE',
-        'FI',
-        'FR',
-        'DE',
-        'GB',
-        'GR',
-        'HU',
-        'IE',
-        'IT',
-        'LV',
-        'LT',
-        'LU',
-        'PL',
-        'PT',
-        'RO',
-        'SK',
-        'SI',
-        'ES',
-        'SE',
-        'XK',
-    ];
+    
 }
