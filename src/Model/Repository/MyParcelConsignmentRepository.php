@@ -370,7 +370,35 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     {
         return !in_array(
             $this->getCountry(),
-            self::EU_COUNTRIES
+            array (
+                'NL',
+                'BE',
+                'AT',
+                'BG',
+                'CZ',
+                'CY',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GB',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+                'XK',
+            );
         );
     }
 
