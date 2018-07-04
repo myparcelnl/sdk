@@ -22,7 +22,7 @@ namespace MyParcelNL\Sdk\src\Model;
  *
  * @package MyParcelNL\Sdk\Model
  */
-class MyParcelConsignment extends MyParcelClassConstants
+class MyParcelConsignment
 {
     /**
      * Regular expression used to make sure the date is correct.
