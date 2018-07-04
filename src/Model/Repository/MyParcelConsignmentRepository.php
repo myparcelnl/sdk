@@ -398,7 +398,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'ES',
                 'SE',
                 'XK',
-            );
+            )
         );
     }
 
