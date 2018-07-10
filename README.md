@@ -176,9 +176,9 @@ $barcode = $firstConsignment->getBarcode();
 #### Send a return label via email
 It is possible to send a return email with the shop settings you set at the Backoffice of MyParcel
 ```php
- $consignment = (new MyParcelConsignmentRepository())
-     ->setApiKey('api_key_from_MyParcel_backoffice');
-      ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
+$consignment = (new MyParcelConsignmentRepository())
+    ->setApiKey('api_key_from_MyParcel_backoffice');
+    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
 
 $myParcelCollection = (new MyParcelCollection())
      ->setUserAgent('your_cms_name', '1.0')
