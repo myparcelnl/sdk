@@ -59,10 +59,11 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
 $myParcelCollection
     ->addConsignment($consignment)
     ->setPdfOfLabels()
-    ->downloadPdfOfLabels();
+    ->downloadPdfOfLabels()
+    ->setUserAgent('your_cms_name', '1.0');
 ```
 
-## Available Methods
+## Available consignment methods
 ```php
 $myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
 
@@ -88,7 +89,15 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
 $myParcelCollection
     ->addConsignment($consignment)
 ```
-
+### Always send your user-agent
+To give us insight that you use the API documentation, you should always send an User-Agent in your header. If you are using a known CMS system then you must use the name of the CMS system followed by a version number. Version is not required.
+```
+    ->setUserAgent('your_cms_name', '1.0')
+```
+### Submitting full address
+```
+    ->setFullStreet('Plein 1945 55b')
+```
 ### Submitting address in pieces
 ```php
     ->setStreet('Plein 1945')
@@ -140,6 +149,7 @@ foreach ($yourShipments as $yourShipment) {
         /** @todo; set all info */
         
     $myParcelCollection
+    	->setUserAgent('your_cms_name', '1.0')
         ->addConsignment($consignment)
 }
 ```
@@ -151,6 +161,7 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
 
 $myParcelCollection
+    ->setUserAgent('your_cms_name', '1.0')
     ->addConsignment($consignment)
     ->setLatestData();
 
@@ -170,6 +181,7 @@ It is possible to send a return email with the shop settings you set at the Back
     	    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
 	    
         $myParcelCollection = (new MyParcelCollection())
+    	    ->setUserAgent('your_cms_name', '1.0')
             ->addConsignment($consignment)
             ->setLatestData()
             ->sendReturnLabelMails();
