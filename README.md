@@ -90,7 +90,7 @@ $myParcelCollection
     ->addConsignment($consignment)
 ```
 ### Always send your user-agent
-To give us insight that you use the API documentation, you should always send an User-Agent in your header. If you are using a known CMS system then you must use the name of the CMS system followed by a version number. Version is not required.
+To give us insight into which cms system you make a connection, you should send an User-Agent. If you are using a known CMS system it's required. You must send the name of the CMS system followed by a version number. Version is not required.
 ```
     ->setUserAgent('name_of_cms', '1.0')
 ```
