@@ -29,7 +29,6 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
-    const INSURANCE_POSSIBILITIES = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
     const STATUS_CONCEPT = 1;
     const MAX_STREET_LENTH = 40;
 
@@ -908,7 +907,7 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setInsurance($insurance)
     {
-        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES) && $this->getCountry() == 'NL') {
+        if (!in_array($insurance, array(0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000)) && $this->getCountry() == 'NL') {
             throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
