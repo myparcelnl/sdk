@@ -59,10 +59,11 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
 $myParcelCollection
     ->addConsignment($consignment)
     ->setPdfOfLabels()
-    ->downloadPdfOfLabels();
+    ->downloadPdfOfLabels()
+    ->setUserAgent('name_of_cms', '1.0');
 ```
 
-## Available Methods
+## Available consignment methods
 ```php
 $myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
 
@@ -88,7 +89,15 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
 $myParcelCollection
     ->addConsignment($consignment)
 ```
-
+### User-agent
+To give us insight into which CMS system you make a connection from, you should send a User-Agent. If you're using a known CMS system it's required. You must send the name of the CMS system followed by a version number. A version is not required.
+```
+    ->setUserAgent('name_of_cms', '1.0')
+```
+### Submitting full address
+```
+    ->setFullStreet('Plein 1945 55b')
+```
 ### Submitting address in pieces
 ```php
     ->setStreet('Plein 1945')
@@ -135,11 +144,12 @@ foreach ($yourShipments as $yourShipment) {
 
     $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
         ->setApiKey('api_key_from_MyParcel_backoffice')
-        ->setReferenceId($yourShipment->getOrderId()
+        ->setReferenceId($yourShipment->getOrderId())
         ->setName('Piet Hier');
         /** @todo; set all info */
         
     $myParcelCollection
+        ->setUserAgent('name_of_cms', '1.0')
         ->addConsignment($consignment)
 }
 ```
@@ -151,6 +161,7 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
 
 $myParcelCollection
+    ->setUserAgent('name_of_cms', '1.0')
     ->addConsignment($consignment)
     ->setLatestData();
 
@@ -161,6 +172,19 @@ $firstConsignment = $consignments[0];
 
 $status = $firstConsignment->getStatus();
 $barcode = $firstConsignment->getBarcode();
+```
+#### Send a return label via email
+It is possible to send a return email with the shop settings you set at the Backoffice of MyParcel
+```php
+$consignment = (new MyParcelConsignmentRepository())
+    ->setApiKey('api_key_from_MyParcel_backoffice');
+    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
+
+$myParcelCollection = (new MyParcelCollection())
+     ->setUserAgent('name_of_cms', '1.0')
+     ->addConsignment($consignment)
+     ->setLatestData()
+     ->sendReturnLabelMails();
 ```
 
 ### Contribute

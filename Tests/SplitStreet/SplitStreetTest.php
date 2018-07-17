@@ -22,12 +22,13 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SplitStreetTest
  * @package MyParcelNL\Sdk\tests\SplitStreetTest
  */
-class SplitStreetTest extends \PHPUnit_Framework_TestCase
+class SplitStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::setFullStreet
+     * @covers       \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::setFullStreet
      * @dataProvider additionProvider()
+     * @throws \Exception
      */
     public function testSplitStreet($fullStreetTest, $fullStreet, $street, $number, $numberSuffix)
     {
@@ -35,10 +36,10 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
             ->setCountry('NL')
             ->setFullStreet($fullStreetTest);
 
-        $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreetTest);
-        $this->assertEquals($street, $consignment->getStreet(), 'Street: ' . $fullStreetTest);
-        $this->assertEquals($number, $consignment->getNumber(), 'Number from: ' . $fullStreetTest);
-        $this->assertEquals($numberSuffix, $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetTest);
+        $this->assertEquals($street,        $consignment->getStreet(),       'Street: ' . $fullStreetTest);
+        $this->assertEquals($number,        $consignment->getNumber(),       'Number from: ' . $fullStreetTest);
+        $this->assertEquals($numberSuffix,  $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetTest);
+        $this->assertEquals($fullStreet,    $consignment->getFullStreet(),   'Full street: ' . $fullStreetTest);
     }
 
     /**
@@ -49,6 +50,13 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
     public function additionProvider()
     {
         return [
+            [
+                'full_street_test' => 'Plein 1945 27',
+                'full_street' => 'Plein 1945 27',
+                'street' => 'Plein 1945',
+                'number' => 27,
+                'number_suffix' => '',
+            ],
             [
                 'full_street_test' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
@@ -122,9 +130,9 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
             [
                 'full_street_test' => 'Zonegge 23 12',
                 'full_street' => 'Zonegge 23 12',
-                'street' => 'Zonegge',
-                'number' => 23,
-                'number_suffix' => '12',
+                'street' => 'Zonegge 23',
+                'number' => 12,
+                'number_suffix' => '',
             ],
             [
                 'full_street_test' => 'Markerkant 10 142',
@@ -148,11 +156,11 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
                 'number_suffix' => 'F008',
             ],
             [
-                'full_street_test' => 'Sir Winston Churchilllaan 283 59',
-                'full_street' => 'Sir Winston Churchilllaan 283 59',
-                'street' => 'Sir Winston Churchilllaan',
+                'full_street_test' => 'Woning Sir Winston Churchillln 283-9',
+                'full_street' => 'Woning Sir Winston Churchillln 283 9',
+                'street' => 'Woning Sir Winston Churchillln',
                 'number' => 283,
-                'number_suffix' => '59',
+                'number_suffix' => '9',
             ],
             [
                 'full_street_test' => 'Insulindestreet 69 B03',
@@ -163,10 +171,10 @@ class SplitStreetTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'full_street_test' => 'Scheepvaartlaan 34/302',
-                'full_street' => 'Scheepvaartlaan 34 /302',
+                'full_street' => 'Scheepvaartlaan 34 302',
                 'street' => 'Scheepvaartlaan',
                 'number' => 34,
-                'number_suffix' => '/302',
+                'number_suffix' => '302',
             ],
             [
                 'full_street_test' => 'oan e dijk 48',

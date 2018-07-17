@@ -22,21 +22,21 @@ namespace MyParcelNL\Sdk\src\Model;
  *
  * @package MyParcelNL\Sdk\Model
  */
-class MyParcelConsignment extends MyParcelClassConstants
+class MyParcelConsignment
 {
     /**
      * Regular expression used to make sure the date is correct.
      */
     const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
-    const INSURANCE_POSSIBILITIES = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
     const STATUS_CONCEPT = 1;
     const MAX_STREET_LENTH = 40;
+    private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
      * @var string
      */
-    private $reference_id;
+    private $reference_id = null;
 
     /**
      * @var int
@@ -218,7 +218,9 @@ class MyParcelConsignment extends MyParcelClassConstants
      */
     public function setReferenceId($reference_id)
     {
-        $this->reference_id = (string) $reference_id;
+    	if ($reference_id !== null) {
+		    $this->reference_id = (string) $reference_id;
+	    }
 
         return $this;
     }
@@ -676,19 +678,21 @@ class MyParcelConsignment extends MyParcelClassConstants
         return $this->delivery_type;
     }
 
-    /**
-     * The delivery type for the package
-     *
-     * Required: Yes if delivery_date has been specified
-     *
-     * @param int $delivery_type
-     * @return $this
-     * @throws \Exception
-     */
-    public function setDeliveryType($delivery_type)
+	/**
+	 * The delivery type for the package
+	 *
+	 * Required: Yes if delivery_date has been specified
+	 *
+	 * @param int $delivery_type
+	 * @param bool $needDeliveryDate
+	 *
+	 * @return $this
+	 * @throws \Exception
+	 */
+    public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
-        if ($delivery_type !== 2 && $this->getDeliveryDate() == null) {
-            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType()');
+        if ($needDeliveryDate && $delivery_type !== 2 && $this->getDeliveryDate() == null) {
+            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
         }
 
         $this->delivery_type = $delivery_type;
@@ -905,10 +909,11 @@ class MyParcelConsignment extends MyParcelClassConstants
      * @param int $insurance
      *
      * @return $this
+     * @throws \Exception
      */
     public function setInsurance($insurance)
     {
-        if (!in_array($insurance, self::INSURANCE_POSSIBILITIES) && $this->getCountry() == 'NL') {
+        if (!in_array($insurance, $this->insurance_possibilities) && $this->getCountry() == 'NL') {
             throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 

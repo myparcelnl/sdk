@@ -25,14 +25,22 @@ use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
  */
 class MyParcelConsignmentRepository extends MyParcelConsignment
 {
-
     /**
      * Regular expression used to split street name from house number.
      *
-     * For the full description go to:
-     * @link https://gist.github.com/RichardPerdaan/1e6ce1588f3990e856b55255572692d1
+     * This regex goes from right to left
+     * Contains php keys to store the data in an array
      */
-    const SPLIT_STREET_REGEX = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)[\s-]{0,2}(?P<number_suffix>[a-zA-Z/\s]{0,5}$|[0-9/]{0,5}$|\s[a-zA-Z]{1}[0-9]{0,3}$|\s[0-9]{2}[a-zA-Z]{0,3}$))$~';
+    const SPLIT_STREET_REGEX =  '~(?P<street>.*?)'.                  // The rest belongs to the street
+                                '\s?'.                               // Separator between street and number
+                                '(?P<number>\d{1,4})'.               // Number can contain a maximum of 4 numbers
+                                '[/\s\-]{0,2}'.                      // Separators between number and addition
+                                '(?P<number_suffix>'.
+                                    '[a-zA-Z]{1}\d{1,3}|'.           // Numbers suffix starts with a letter followed by numbers or
+                                    '-\d{1,4}|'.                     // starts with - and has up to 4 numbers or
+                                    '\d{2}\w{1,2}|'.                 // starts with 2 numbers followed by letters or
+                                    '[a-zA-Z]{1}[a-zA-Z\s]{0,3}'.    // has up to 4 letters with a space
+                                ')?$~';
 
     /**
      * Consignment types
@@ -117,6 +125,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         if ($weight == 0) {
+            $weight = 1;
         }
 
         return $weight;
@@ -126,6 +135,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      * Encode all the data before sending it to MyParcel
      *
      * @return array
+     * @throws \Exception
      */
     public function apiEncode()
     {
@@ -302,6 +312,16 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     {
         $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
+        if (!$result || !is_array($matches)) {
+            // Invalid full street supplied
+            return false;
+        }
+
+        if ($fullStreet != $matches[0]) {
+            // Characters are gone by preg_match
+            return false;
+        }
+
         return (bool) $result;
     }
 
@@ -342,7 +362,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         if (isset($matches['number_suffix'])) {
-            $number_suffix = trim($matches['number_suffix']);
+            $number_suffix = trim($matches['number_suffix'], '-');
         }
 
         $streetData = array(
@@ -363,7 +383,35 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     {
         return !in_array(
             $this->getCountry(),
-            self::EU_COUNTRIES
+            array (
+                'NL',
+                'BE',
+                'AT',
+                'BG',
+                'CZ',
+                'CY',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GB',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+                'XK',
+            )
         );
     }
 
@@ -499,6 +547,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
     /**
      * @return $this
+     * @throws \Exception
      */
     private function encodeCdCountry()
     {
@@ -587,7 +636,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setEmail($recipient['email'])
             ->setPhone($recipient['phone'])
             ->setPackageType($options['package_type'])
-            ->setLabelDescription($options['label_description'])
+            ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
         ;
 
         return $this;
@@ -637,9 +686,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         }
 
         if (isset($options['delivery_type'])) {
-            $this->setDeliveryType($options['delivery_type']);
+            $this->setDeliveryType($options['delivery_type'], false);
         } else {
-            $this->setDeliveryType(self::DEFAULT_DELIVERY_TYPE);
+            $this->setDeliveryType(self::DEFAULT_DELIVERY_TYPE, false);
         }
 
         return $this;
