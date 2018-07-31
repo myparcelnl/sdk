@@ -326,6 +326,47 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     }
 
     /**
+     * Check if the address is outside the EU
+     *
+     * @return bool
+     */
+    public function isCdCountry()
+    {
+        return !in_array(
+            $this->getCountry(),
+            array (
+                'NL',
+                'BE',
+                'AT',
+                'BG',
+                'CZ',
+                'CY',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GB',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+                'XK',
+            )
+        );
+    }
+
+    /**
      * Splits street data into separate parts for street name, house number and extension.
      * Only for Dutch addresses
      *
@@ -372,47 +413,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         );
 
         return $streetData;
-    }
-
-    /**
-     * Check if the address is outside the EU
-     *
-     * @return bool
-     */
-    protected function isCdCountry()
-    {
-        return !in_array(
-            $this->getCountry(),
-            array (
-                'NL',
-                'BE',
-                'AT',
-                'BG',
-                'CZ',
-                'CY',
-                'DK',
-                'EE',
-                'FI',
-                'FR',
-                'DE',
-                'GB',
-                'GR',
-                'HU',
-                'IE',
-                'IT',
-                'LV',
-                'LT',
-                'LU',
-                'PL',
-                'PT',
-                'RO',
-                'SK',
-                'SI',
-                'ES',
-                'SE',
-                'XK',
-            )
-        );
     }
 
     /**
