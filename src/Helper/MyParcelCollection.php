@@ -73,18 +73,18 @@ class MyParcelCollection
 
     private $user_agent = '';
 
-	/**
-	 * @param bool $keepKeys
-	 *
-	 * @return MyParcelConsignmentRepository[]
-	 */
+    /**
+     * @param bool $keepKeys
+     *
+     * @return MyParcelConsignmentRepository[]
+     */
     public function getConsignments($keepKeys = true)
     {
-	    if ( $keepKeys ) {
+        if ($keepKeys) {
             return $this->consignments;
-	    }
+        }
 
-	    return array_values($this->consignments);
+        return array_values($this->consignments);
     }
 
     /**
@@ -179,9 +179,9 @@ class MyParcelCollection
 
         if ($needReferenceId && !empty($this->consignments)) {
             if ($consignment->getReferenceId() === null) {
-                 throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
+                    throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
             } elseif (key_exists($consignment->getReferenceId(), $this->consignments)) {
-                 throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
+                    throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
             }
         }
 
@@ -227,12 +227,12 @@ class MyParcelCollection
         return $this;
     }
     
-     /**
-     * Delete concepts in MyParcel
-     *
-     * @return  $this
-     * @throws  \Exception
-     */
+        /**
+         * Delete concepts in MyParcel
+         *
+         * @return  $this
+         * @throws  \Exception
+         */
     public function deleteConcepts()
     {
         /* @var $consignments MyParcelConsignmentRepository[] */
@@ -459,7 +459,7 @@ class MyParcelCollection
      */
     public function sendReturnLabelMails()
     {
-    	$parentConsignment = $this->getConsignments(false)[0];
+        $parentConsignment = $this->getConsignments(false)[0];
 
         $apiKey = $parentConsignment->getApiKey();
         $data = $this->apiEncodeReturnShipments($parentConsignment);
