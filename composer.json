@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/sdk",
-    "version": "v1.3.15",
+    "version": "v1.3.16",
     "description": "This package is designed to send and receive data from MyParcel by means of an API.",
     "homepage": "https://www.myparcel.nl",
     "tags": ["MyParcel", "My Parcel", "Post NL", "PostNL"],
@@ -9,6 +9,14 @@
         {
             "name": "Reindert Vetter",
             "email": "reindert@myparcel.nl",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Developer"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Richard Perdaan",
+            "email": "richard@myparcel.nl",
             "homepage": "https://www.myparcel.nl",
             "role": "Developer"
         }
