@@ -100,7 +100,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
         }
 
-        if ($this->getCountry() == 'NL') {
+        if ($this->getCountry() == MyParcelConsignment::CC_NL) {
             $streetData = $this->splitStreet($fullStreet);
             $this->setStreet($streetData['street']);
             $this->setNumber($streetData['number']);
@@ -251,7 +251,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        if ($this->getCountry() !== 'NL') {
+        if ($this->getCountry() !== MyParcelConsignment::CC_NL) {
             return $this;
         }
 
@@ -459,7 +459,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     private function encodeStreet()
     {
-        if ($this->getCountry() == 'NL') {
+        if ($this->getCountry() == MyParcelConsignment::CC_NL) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
                 [
@@ -483,7 +483,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      * @return $this
      */
     private function encodeExtraOptions() {
-        if ($this->getCountry() == 'NL') {
+        if ( $this->getCountry() == self::CC_NL || $this->getCountry() == self::CC_BE ) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
                 [
