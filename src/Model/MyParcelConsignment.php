@@ -15,6 +15,8 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+
 /**
  * A model of a consignment
  *
@@ -31,6 +33,10 @@ class MyParcelConsignment
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
     const STATUS_CONCEPT = 1;
     const MAX_STREET_LENTH = 40;
+
+    const CC_NL = 'NL';
+    const CC_BE = 'BE';
+
     private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
@@ -121,7 +127,7 @@ class MyParcelConsignment
     /**
      * @var integer
      */
-    private $delivery_type = 2;
+    private $delivery_type = MyParcelConsignmentRepository::DEFAULT_DELIVERY_TYPE;
 
     /**
      * @var string
@@ -913,7 +919,7 @@ class MyParcelConsignment
      */
     public function setInsurance($insurance)
     {
-        if (!in_array($insurance, $this->insurance_possibilities) && $this->getCountry() == 'NL') {
+        if (!in_array($insurance, $this->insurance_possibilities) && $this->getCountry() == self::CC_NL) {
             throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
