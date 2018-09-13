@@ -195,6 +195,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                     $deliveryType = self::DELIVERY_TYPE_STANDARD;
                     break;
                 case 'night':
+                case 'avond':
                     $deliveryType = self::DELIVERY_TYPE_NIGHT;
                     break;
             }
