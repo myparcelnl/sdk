@@ -109,6 +109,10 @@ class SendUserAgentTest extends \PHPUnit_Framework_TestCase
                 $consignment->setPickupLocationName($consignmentTest['pickup_location_name']);
             }
 
+            if (key_exists('pickup_location_code', $consignmentTest)) {
+                $consignment->setPickupLocationCode($consignmentTest['pickup_location_code']);
+            }
+
             if (key_exists('user_agent', $consignmentTest)) {
                 $myParcelCollection->setUserAgent($consignmentTest['user_agent']['platform'], $consignmentTest['user_agent']['version']);
             }
@@ -186,6 +190,14 @@ class SendUserAgentTest extends \PHPUnit_Framework_TestCase
 
             if (!empty($consignmentTest['pickup_location_name'])) {
                 $this->assertEquals($consignmentTest['pickup_location_name'], $consignment->getPickupLocationName(), 'getPickupLocationName()');
+            }
+
+            if (!empty($consignmentTest['pickup_location_code'])) {
+                $this->assertEquals($consignmentTest['pickup_location_code'], $consignment->getPickupLocationCode(), 'getPickupLocationCode()');
+            }
+
+            if (!empty($consignmentTest['pickup_network_id'])) {
+                $this->assertEquals($consignmentTest['pickup_network_id'], $consignment->getPickupNetworkId(), 'getPickupNetworkId()');
             }
 
             /**

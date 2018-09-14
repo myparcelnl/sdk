@@ -251,7 +251,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        if ($this->getCountry() !== MyParcelConsignment::CC_NL) {
+        if ($this->getCountry() !== MyParcelConsignment::CC_NL && $this->getCountry() !== MyParcelConsignment::CC_BE) {
             return $this;
         }
 
@@ -281,7 +281,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPickupStreet($aCheckoutData['street'])
             ->setPickupCity($aCheckoutData['city'])
             ->setPickupNumber($aCheckoutData['number'])
-            ->setPickupLocationName($aCheckoutData['location']);
+            ->setPickupLocationName($aCheckoutData['location'])
+            ->setPickupLocationCode($aCheckoutData['location_code'])
+            ->setPickupNetworkId($aCheckoutData['retail_network_id']);
 
         return $this;
     }
@@ -524,6 +526,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 'city' => $this->getPickupCity(),
                 'number' => $this->getPickupNumber(),
                 'location_name' => $this->getPickupLocationName(),
+                'location_code' => $this->getPickupLocationCode(),
+                'retail_network_id' => $this->getPickupNetworkId(),
             ];
         }
 
@@ -723,13 +727,23 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             if (key_exists('location_name', $pickup)) {
                 $this->setPickupLocationName($pickup['location_name']);
             }
+
+            if (key_exists('location_code', $pickup)) {
+                $this->setPickupLocationCode($pickup['location_code']);
+            }
+
+            if (key_exists('retail_network_id', $pickup)) {
+                $this->setPickupNetworkId($pickup['retail_network_id']);
+            }
         } else {
             $this
                 ->setPickupPostalCode(null)
                 ->setPickupStreet(null)
                 ->setPickupCity(null)
                 ->setPickupNumber(null)
-                ->setPickupLocationName(null);
+                ->setPickupLocationName(null)
+                ->setPickupLocationCode(null)
+                ->getPickupNetworkId(null);
         }
 
         return $this;
