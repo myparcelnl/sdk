@@ -487,7 +487,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 $this->consignmentEncoded,
                 [
                     'options' => [
-                        'large_format' => $this->isLargeFormat() ? 1 : 0,
                         'only_recipient' => $this->isOnlyRecipient() ? 1 : 0,
                         'signature' => $this->isSignature() ? 1 : 0,
                         'return' => $this->isReturn() ? 1 : 0,
@@ -498,6 +497,10 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             $this
                 ->encodePickup()
                 ->encodeInsurance();
+        }
+
+        if ($this->isCdCountry()) {
+            $this->consignmentEncoded['options']['large_format'] = $this->isLargeFormat() ? 1 : 0;
         }
 
         if ($this->getDeliveryDate()) {
