@@ -8,7 +8,13 @@
     "authors": [
         {
             "name": "Reindert Vetter",
-            "email": "reindert@myparcel.nl",
+            "email": "support@myparcel.nl",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Developer"
+        },
+        {
+            "name": "Richard Perdaan",
+            "email": "support@myparcel.nl",
             "homepage": "https://www.myparcel.nl",
             "role": "Developer"
         }
