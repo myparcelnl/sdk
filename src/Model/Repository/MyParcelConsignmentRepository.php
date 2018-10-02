@@ -333,7 +333,16 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     public function isCdCountry()
     {
-        return !in_array(
+        return false == $this->isEuCountry();
+    }
+
+    /**
+     * Check if the address is inside the EU
+     *
+     * @return bool
+     */
+    public function isEuCountry() {
+        return in_array(
             $this->getCountry(),
             array (
                 'NL',
@@ -555,7 +564,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     private function encodeCdCountry()
     {
-        if (!$this->isCdCountry()) {
+        if ($this->isEuCountry()) {
             return $this;
         }
 
