@@ -29,6 +29,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test one shipment with createConcepts()
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
@@ -107,7 +108,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals(true, preg_match("#^CV#", $consignment->getBarcode()), 'Barcode is not set');
+            $this->assertEquals(true, preg_match("#^C#", $consignment->getBarcode()), 'Barcode is not set');
 
             /** @todo; clear consignment in MyParcelCollection */
         }
@@ -143,7 +144,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
                         'weight' => 2000,
                         'item_value' => 40000,
                         'classification' => 2008,
-                        'country' => 'DU',
+                        'country' => 'DE',
                     ]
                 ],
             ],
