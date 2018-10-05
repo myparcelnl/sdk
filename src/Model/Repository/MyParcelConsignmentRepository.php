@@ -669,19 +669,19 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         if (key_exists('company', $recipient)) {
             $this->setCompany($recipient['company']);
         } else {
-            $this->setCompany(false);
+            $this->setCompany('');
         }
 
         if (key_exists('number', $recipient)) {
             $this->setNumber($recipient['number']);
         } else {
-            $this->setNumber(false);
+            $this->setNumber(null);
         }
 
         if (key_exists('number_suffix', $recipient)) {
             $this->setNumberSuffix($recipient['number_suffix']);
         } else {
-            $this->setNumberSuffix(false);
+            $this->setNumberSuffix('');
         }
 
         if (key_exists('only_recipient', $options)) {
