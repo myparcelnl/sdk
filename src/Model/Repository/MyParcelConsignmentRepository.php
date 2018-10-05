@@ -509,7 +509,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 ->encodeInsurance();
         }
 
-        if ($this->isCdCountry()) {
+        if ($this->isEuCountry()) {
             $this->consignmentEncoded['options']['large_format'] = $this->isLargeFormat() ? 1 : 0;
         }
 
@@ -657,7 +657,9 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
     /**
      * @param array $data
+     *
      * @return $this
+     * @throws \Exception
      */
     private function decodeExtraOptions($data)
     {
@@ -666,32 +668,52 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
         if (key_exists('company', $recipient)) {
             $this->setCompany($recipient['company']);
-        }
-
-        if (key_exists('only_recipient', $recipient)) {
-            $this->setOnlyRecipient($recipient['only_recipient']);
-        }
-
-        if (key_exists('signature', $recipient)) {
-            $this->setSignature($recipient['signature']);
-        }
-
-        if (key_exists('return', $recipient)) {
-            $this->setReturn($recipient['return']);
+        } else {
+            $this->setCompany('');
         }
 
         if (key_exists('number', $recipient)) {
             $this->setNumber($recipient['number']);
+        } else {
+            $this->setNumber(null);
         }
 
         if (key_exists('number_suffix', $recipient)) {
             $this->setNumberSuffix($recipient['number_suffix']);
+        } else {
+            $this->setNumberSuffix('');
+        }
+
+        if (key_exists('only_recipient', $options)) {
+            $this->setOnlyRecipient($options['only_recipient']);
+        } else {
+            $this->setOnlyRecipient(false);
+        }
+
+        if (key_exists('large_format', $options)) {
+            $this->setLargeFormat($options['large_format']);
+        } else {
+            $this->setLargeFormat(false);
+        }
+
+        if (key_exists('signature', $options)) {
+            $this->setSignature($options['signature']);
+        } else {
+            $this->setSignature(false);
+        }
+
+        if (key_exists('return', $options)) {
+            $this->setReturn($options['return']);
+        } else {
+            $this->setReturn(false);
         }
 
         // Set options
         if (key_exists('insurance', $options)) {
             $insuranceAmount = $options['insurance']['amount'];
             $this->setInsurance($insuranceAmount / 100);
+        } else {
+            $this->setInsurance( 0 );
         }
 
         if (isset($options['delivery_date'])) {

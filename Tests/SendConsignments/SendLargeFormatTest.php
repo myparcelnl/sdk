@@ -17,7 +17,6 @@ namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentT
 
 use MyParcelNL\sdk\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -25,7 +24,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneInternationalConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendLargeFormatTest extends \PHPUnit_Framework_TestCase
 {
     use HasCustomItems;
 
@@ -48,6 +47,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
 
             $consignment = (new MyParcelConsignmentRepository())
                 ->setApiKey($consignmentTest['api_key'])
+                ->setPackageType(1)
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
@@ -55,14 +55,11 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('reindert@myparcel.nl')
-                ->setPhone($consignmentTest['phone']);
+                ->setPhone($consignmentTest['phone'])
+                ->setLargeFormat($consignmentTest['large_format']);
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
-            }
-
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -99,7 +96,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals(true, preg_match("#^C#", $consignment->getBarcode()), 'Barcode is not set');
+            $this->assertEquals($consignmentTest['large_format_after_request'], $consignment->isLargeFormat(), 'error Large Fromat');
 
             /** @todo; clear consignment in MyParcelCollection */
         }
@@ -128,6 +125,64 @@ class SendOneInternationalConsignmentTest extends \PHPUnit_Framework_TestCase
                 'phone' => '123456',
                 'package_type' => 1,
                 'label_description' => 112345,
+                'large_format' => true,
+                'large_format_after_request' => false,
+                'custom_items' => [
+                    [
+                        'description' => 'Cool Mobile',
+                        'amount' => 2,
+                        'weight' => 2000,
+                        'item_value' => 40000,
+                        'classification' => 2008,
+                        'country' => 'DE',
+                    ]
+                ],
+            ],
+           [
+                'api_key' => getenv('API_KEY'),
+                'cc' => 'BE',
+                'person' => 'Reindert',
+                'company' => 'Big Sale BV',
+                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street' => 'Plein 1940-45 3 b',
+                'street' => 'Plein 1940-45',
+                'number' => 3,
+                'number_suffix' => 'b',
+                'postal_code' => '2231JE',
+                'city' => 'Rijnsburg',
+                'phone' => '123456',
+                'package_type' => 1,
+                'label_description' => 112345,
+                'large_format' => true,
+                'large_format_after_request' => true,
+                'custom_items' => [
+                    [
+                        'description' => 'Cool Mobile',
+                        'amount' => 2,
+                        'weight' => 2000,
+                        'item_value' => 40000,
+                        'classification' => 2008,
+                        'country' => 'DE',
+                    ]
+                ],
+            ],
+            [
+                'api_key' => getenv('API_KEY'),
+                'cc' => 'NL',
+                'person' => 'Reindert',
+                'company' => 'Big Sale BV',
+                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street' => 'Plein 1940-45 3 b',
+                'street' => 'Plein 1940-45',
+                'number' => 3,
+                'number_suffix' => 'b',
+                'postal_code' => '2231JE',
+                'city' => 'Rijnsburg',
+                'phone' => '123456',
+                'package_type' => 1,
+                'label_description' => 112345,
+                'large_format' => true,
+                'large_format_after_request' => true,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
