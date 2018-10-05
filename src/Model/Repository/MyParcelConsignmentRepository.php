@@ -392,7 +392,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $street = '';
         $number = '';
         $number_suffix = '';
-        $fullStreet = str_replace('\n', ' ', $fullStreet);
+
+        $fullStreet = trim( preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
         if (!$result || !is_array($matches)) {
