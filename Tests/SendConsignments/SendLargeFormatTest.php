@@ -15,8 +15,8 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentTest;
 
+use MyParcelNL\sdk\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -26,6 +26,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  */
 class SendLargeFormatTest extends \PHPUnit_Framework_TestCase
 {
+    use HasCustomItems;
 
     /**
      * Test one shipment with createConcepts()
@@ -81,18 +82,7 @@ class SendLargeFormatTest extends \PHPUnit_Framework_TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
-            // Add items for international shipments
-            foreach ($consignmentTest['custom_items'] as $customItem) {
-                $item = (new MyParcelCustomsItem())
-                    ->setDescription($customItem['description'])
-                    ->setAmount($customItem['amount'])
-                    ->setWeight($customItem['weight'])
-                    ->setItemValue($customItem['item_value'])
-                    ->setClassification($customItem['classification'])
-                    ->setCountry($customItem['country']);
-
-                $consignment->addItem($item);
-            }
+            $this->setCustomItems( $consignmentTest, $consignment );
 
             $myParcelCollection
                 ->addConsignment($consignment)

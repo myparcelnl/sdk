@@ -6,3 +6,4 @@ require_once ('Model/MyParcelRequest.php');
 require_once ('Model/MyParcelConsignment.php');
 require_once ('Model/Repository/MyParcelConsignmentRepository.php');
 require_once ('Model/MyParcelCustomsItem.php');
+require_once ('Concerns/HasCustomItems.php');
