@@ -617,6 +617,7 @@ class MyParcelCollection
      * @param $consignments MyParcelConsignmentRepository[]
      *
      * @return string
+     * @throws \Exception
      */
     private function apiEncode($consignments)
     {
@@ -626,7 +627,8 @@ class MyParcelCollection
             $data['data']['shipments'][] = $consignment->apiEncode();
         }
 
-        return json_encode($data);
+        // Remove \\n because json_encode encode \\n for \s
+        return str_replace('\\n'," ", json_encode( $data ));
     }
 
     /**
