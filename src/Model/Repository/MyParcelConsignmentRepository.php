@@ -318,6 +318,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             return false;
         }
 
+        $fullStreet = str_replace('\n', ' ', $fullStreet);
         if ($fullStreet != $matches[0]) {
             // Characters are gone by preg_match
             return false;
@@ -391,7 +392,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         $street = '';
         $number = '';
         $number_suffix = '';
-
+        $fullStreet = str_replace('\n', ' ', $fullStreet);
         $result = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
         if (!$result || !is_array($matches)) {

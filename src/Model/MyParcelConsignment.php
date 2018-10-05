@@ -471,7 +471,7 @@ class MyParcelConsignment
      */
     public function setStreet($street)
     {
-        $this->street = $street;
+        $this->street = trim(str_replace('\n', ' ', $street));
 
         return $this;
     }
