@@ -359,6 +359,7 @@ class MyParcelCollection
      *                                  default positioning [1,2,3,4].
      *
      * @return $this
+     * @throws \Exception
      */
     public function setLinkOfLabels($positions = false)
     {
@@ -400,6 +401,7 @@ class MyParcelCollection
      *                                  default positioning [1,2,3,4].
      *
      * @return $this
+     * @throws \Exception
      */
     public function setPdfOfLabels($positions = false)
     {
