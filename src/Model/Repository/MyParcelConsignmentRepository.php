@@ -154,12 +154,14 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      * @param $data
      *
      * @return $this
+     * @throws \Exception
      */
     public function apiDecode($data)
     {
         $this
             ->decodeBaseOptions($data)
             ->decodeExtraOptions($data)
+            ->decodeRecipient($data)
             ->decodePickup($data);
 
         return $this;
@@ -282,8 +284,11 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPickupCity($aCheckoutData['city'])
             ->setPickupNumber($aCheckoutData['number'])
             ->setPickupLocationName($aCheckoutData['location'])
-            ->setPickupLocationCode($aCheckoutData['location_code'])
-            ->setPickupNetworkId($aCheckoutData['retail_network_id']);
+            ->setPickupLocationCode($aCheckoutData['location_code']);
+
+        if (isset($aCheckoutData['retail_network_id'])) {
+            $aCheckoutData->setPickupNetworkId($aCheckoutData['retail_network_id']);
+        }
 
         return $this;
     }
@@ -667,68 +672,65 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
      */
     private function decodeExtraOptions($data)
     {
-        $recipient = $data['recipient'];
         $options = $data['options'];
+        $fields = [
+            'only_recipient' => false,
+            'large_format' => false,
+            'signature' => false,
+            'return' => false,
+            'delivery_date' => null,
+            'delivery_type' => self::DEFAULT_DELIVERY_TYPE,
+        ];
+        /** @noinspection PhpInternalEntityUsedInspection */
+        $this->clearFields($fields);
 
-        if (key_exists('company', $recipient)) {
-            $this->setCompany($recipient['company']);
-        } else {
-            $this->setCompany('');
-        }
+        $methods = [
+            'OnlyRecipient' => 'only_recipient',
+            'LargeFormat' => 'large_format',
+            'Signature' => 'signature',
+            'Return' => 'return',
+            'DeliveryDate' => 'delivery_date',
+        ];
+        /** @noinspection PhpInternalEntityUsedInspection */
+        $this->setByMethods($options, $methods);
 
-        if (key_exists('number', $recipient)) {
-            $this->setNumber($recipient['number']);
-        } else {
-            $this->setNumber(null);
-        }
-
-        if (key_exists('number_suffix', $recipient)) {
-            $this->setNumberSuffix($recipient['number_suffix']);
-        } else {
-            $this->setNumberSuffix('');
-        }
-
-        if (key_exists('only_recipient', $options)) {
-            $this->setOnlyRecipient($options['only_recipient']);
-        } else {
-            $this->setOnlyRecipient(false);
-        }
-
-        if (key_exists('large_format', $options)) {
-            $this->setLargeFormat($options['large_format']);
-        } else {
-            $this->setLargeFormat(false);
-        }
-
-        if (key_exists('signature', $options)) {
-            $this->setSignature($options['signature']);
-        } else {
-            $this->setSignature(false);
-        }
-
-        if (key_exists('return', $options)) {
-            $this->setReturn($options['return']);
-        } else {
-            $this->setReturn(false);
-        }
-
-        // Set options
         if (key_exists('insurance', $options)) {
             $insuranceAmount = $options['insurance']['amount'];
             $this->setInsurance($insuranceAmount / 100);
-        } else {
-            $this->setInsurance( 0 );
-        }
-
-        if (isset($options['delivery_date'])) {
-            $this->setDeliveryDate($options['delivery_date']);
         }
 
         if (isset($options['delivery_type'])) {
             $this->setDeliveryType($options['delivery_type'], false);
-        } else {
-            $this->setDeliveryType(self::DEFAULT_DELIVERY_TYPE, false);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    private function decodeRecipient($data)
+    {
+        $recipient = $data['recipient'];
+        $fields = [
+            'company' => '',
+            'number' => null,
+            'number_suffix' => '',
+
+        ];
+        /** @noinspection PhpInternalEntityUsedInspection */
+        $this->clearFields($fields);
+
+        $methods = [
+            'Company' => 'company',
+            'Number' => 'number',
+            'NumberSuffix' => 'number_suffix',
+        ];
+        /** @noinspection PhpInternalEntityUsedInspection */
+        $this->setByMethods($recipient, $methods);
 
         return $this;
     }
@@ -741,43 +743,31 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     {
         // Set pickup
         if (key_exists('pickup', $data) && $data['pickup'] !== null) {
-            $pickup = $data['pickup'];
-            if (key_exists('postal_code', $pickup)) {
-                $this->setPickupPostalCode($pickup['postal_code']);
-            }
-
-            if (key_exists('street', $pickup)) {
-                $this->setPickupStreet($pickup['street']);
-            }
-
-            if (key_exists('city', $pickup)) {
-                $this->setPickupCity($pickup['city']);
-            }
-
-            if (key_exists('number', $pickup)) {
-                $this->setPickupNumber($pickup['number']);
-            }
-
-            if (key_exists('location_name', $pickup)) {
-                $this->setPickupLocationName($pickup['location_name']);
-            }
-
-            if (key_exists('location_code', $pickup)) {
-                $this->setPickupLocationCode($pickup['location_code']);
-            }
-
-            if (key_exists('retail_network_id', $pickup)) {
-                $this->setPickupNetworkId($pickup['retail_network_id']);
-            }
+            $methods = [
+                'PickupPostalCode' => 'pickup_postal_code',
+                'PickupStreet' => 'pickup_street',
+                'PickupCity' => 'pickup_city',
+                'PickupNumber' => 'pickup_number',
+                'PickupLocationName' => 'pickup_location_name',
+                'PickupLocationCode' => 'pickup_location_code',
+                'PickupNetworkId' => 'pickup_network_id',
+            ];
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $this->setByMethods($data['pickup'], $methods);
         } else {
-            $this
-                ->setPickupPostalCode(null)
-                ->setPickupStreet(null)
-                ->setPickupCity(null)
-                ->setPickupNumber(null)
-                ->setPickupLocationName(null)
-                ->setPickupLocationCode(null)
-                ->setPickupNetworkId(null);
+
+            $fields = [
+                'pickup_postal_code' => null,
+                'pickup_street' => null,
+                'pickup_city' => null,
+                'pickup_number' => null,
+                'pickup_location_name' => null,
+                'pickup_location_code' => '',
+                'pickup_network_id' => '',
+
+            ];
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $this->clearFields($fields);
         }
 
         return $this;

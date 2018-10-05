@@ -761,6 +761,39 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
+     * @param $fields
+     *
+     * @return $this
+     */
+    public function clearFields($fields) {
+        foreach ($fields as $field => $default) {
+            $this->{$field} = $default;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     *
+     * @param array $data
+     * @param array $methods
+     *
+     * @return $this
+     */
+    public function setByMethods($data, $methods) {
+        foreach ($methods as $method => $value) {
+            if (isset($data[$value])) {
+                $this->{'set' . $method}($data[$value]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getDeliveryRemark()
