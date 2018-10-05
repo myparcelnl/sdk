@@ -743,7 +743,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                 ->setPickupNumber(null)
                 ->setPickupLocationName(null)
                 ->setPickupLocationCode(null)
-                ->getPickupNetworkId(null);
+                ->setPickupNetworkId(null);
         }
 
         return $this;
