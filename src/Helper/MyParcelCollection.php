@@ -29,6 +29,7 @@ class MyParcelCollection
 {
     const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
     const PREFIX_PDF_FILENAME = 'myparcel-label-';
+		const DEFAULT_A4_POSITION = 1;
 
     /**
      * @var MyParcelConsignmentRepository[]
@@ -352,7 +353,7 @@ class MyParcelCollection
     /**
      * Get link of labels
      *
-     * @param array|int|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param array|int|bool $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
@@ -361,7 +362,7 @@ class MyParcelCollection
      * @return $this
      * @throws \Exception
      */
-    public function setLinkOfLabels($positions = false)
+    public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
         /** If $positions is not false, set paper size to A4 */
         $this
@@ -375,7 +376,7 @@ class MyParcelCollection
                 ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    implode(';', $conceptIds),
+                    implode(';', $conceptIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
                 )
                 ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
