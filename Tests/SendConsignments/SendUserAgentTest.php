@@ -46,7 +46,7 @@ class SendUserAgentTest extends \PHPUnit_Framework_TestCase
                 ->setFullStreet($consignmentTest['full_street_test'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
-                ->setEmail('reindert@myparcel.nl')
+                ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone']);
 
             if (key_exists('checkout_data', $consignmentTest)) {
