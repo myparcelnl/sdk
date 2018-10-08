@@ -366,7 +366,7 @@ class MyParcelCollection
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
-            ->setA4($positions);
+            ->setPosition($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
 
@@ -408,7 +408,7 @@ class MyParcelCollection
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
-            ->setA4($positions);
+            ->setPosition($positions);
         $conceptIds = $this->getConsignmentIds($key);
 
         if ($key) {
@@ -550,7 +550,7 @@ class MyParcelCollection
      *
      * @return $this
      */
-    private function setA4($positions = 1)
+    private function setPosition($positions = 1)
     {
         /** If $positions is not false, set paper size to A4 */
         if (is_numeric($positions)) {
