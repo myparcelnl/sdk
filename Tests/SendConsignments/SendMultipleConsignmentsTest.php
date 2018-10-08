@@ -52,7 +52,7 @@ class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setPackageType(1)
                 ->setCity($consignmentTest['city'])
-                ->setEmail('reindert@myparcel.nl')
+                ->setEmail('your_email@test.nl')
             ;
             $myParcelCollection->addConsignment($consignment);
         }

@@ -53,7 +53,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_Tes
                 ->setNumberSuffix($consignmentTest['number_suffix'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
-                ->setEmail('reindert@myparcel.nl')
+                ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone']);
 
             if (key_exists('package_type', $consignmentTest)) {

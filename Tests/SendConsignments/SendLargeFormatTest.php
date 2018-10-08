@@ -54,7 +54,7 @@ class SendLargeFormatTest extends \PHPUnit_Framework_TestCase
                 ->setFullStreet($consignmentTest['full_street'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
-                ->setEmail('reindert@myparcel.nl')
+                ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone'])
                 ->setLargeFormat($consignmentTest['large_format']);
 
