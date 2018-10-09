@@ -96,7 +96,7 @@ class SendLargeFormatTest extends \PHPUnit_Framework_TestCase
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals($consignmentTest['large_format_after_request'], $consignment->isLargeFormat(), 'error Large Fromat');
+            $this->assertEquals($consignmentTest['large_format_after_request'], $consignment->isLargeFormat(), 'error Large Format');
 
             /** @todo; clear consignment in MyParcelCollection */
         }

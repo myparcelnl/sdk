@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test for split addresses from full street
+ * Create multiple consignments
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
@@ -13,8 +13,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments\
-SendOneConsignmentTest;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
@@ -22,15 +21,17 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
- * Class SendOneConsignmentTest
+ * Class SendMultipleConsignmentsTest
  * @package MyParcelNL\Sdk\tests\SendConsignmentsTest
  */
 class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
-     * Test one shipment with createConcepts()
+     * Create multiple shipments with createConcepts()
+     * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendMultipleConsignments()
     {
         if (getenv('API_KEY') == null || getenv('API_KEY2') == null) {
             echo "\033[31m Set 2 MyParcel API-keys in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31 and API_KEY2=f8912fb260sert4564bdsafds45y6afasd7fdas\n\033[0m";
