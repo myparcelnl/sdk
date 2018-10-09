@@ -212,7 +212,7 @@ class MyParcelRequest
             } elseif (key_exists('message', $error)) {
                 $message = $error['message'];
             } else {
-                $message = 'Unknow error: ' . json_encode($error) . '. Please contact MyParcel.';
+                $message = 'Unknown error: ' . json_encode($error) . '. Please contact MyParcel.';
             }
 
             if (key_exists('code', $error)) {

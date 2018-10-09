@@ -454,7 +454,7 @@ class MyParcelCollection
     }
 
     /**
-     * Send return label to custommer. The customer can pay and download the label.
+     * Send return label to customer. The customer can pay and download the label.
      *
      * @throws \Exception
      * @return $this

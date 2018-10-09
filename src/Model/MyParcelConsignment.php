@@ -32,7 +32,7 @@ class MyParcelConsignment
     const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
     const STATUS_CONCEPT = 1;
-    const MAX_STREET_LENTH = 40;
+    const MAX_STREET_LENGTH = 40;
 
     const CC_NL = 'NL';
     const CC_BE = 'BE';
@@ -437,7 +437,7 @@ class MyParcelConsignment
      */
     public function getStreet($useStreetAdditionalInfo = false)
     {
-        if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENTH) {
+        if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
             $streetParts = $this->getStreetParts();
 
             return $streetParts[0];
@@ -1162,6 +1162,6 @@ class MyParcelConsignment
      */
     private function getStreetParts()
     {
-        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENTH));
+        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENGTH));
     }
 }
