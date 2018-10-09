@@ -13,8 +13,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments\
-SendOneConsignmentTest;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
