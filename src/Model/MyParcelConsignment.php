@@ -210,6 +210,16 @@ class MyParcelConsignment
     private $pickup_location_name = null;
 
     /**
+     * @var string
+     */
+    private $pickup_location_code = '';
+
+    /**
+     * @var string
+     */
+    private $pickup_network_id = '';
+
+    /**
      * @return string
      */
     public function getReferenceId()
@@ -751,6 +761,39 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
+     * @param $fields
+     *
+     * @return $this
+     */
+    public function clearFields($fields) {
+        foreach ($fields as $field => $default) {
+            $this->{$field} = $default;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     *
+     * @param array $data
+     * @param array $methods
+     *
+     * @return $this
+     */
+    public function setByMethods($data, $methods) {
+        foreach ($methods as $method => $value) {
+            if (isset($data[$value])) {
+                $this->{'set' . $method}($data[$value]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getDeliveryRemark()
@@ -1134,6 +1177,54 @@ class MyParcelConsignment
     public function setPickupLocationName($pickup_location_name)
     {
         $this->pickup_location_name = $pickup_location_name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupLocationCode()
+    {
+        return $this->pickup_location_code;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_location_code
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupLocationCode($pickup_location_code)
+    {
+        $this->pickup_location_code = $pickup_location_code;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupNetworkId()
+    {
+        return $this->pickup_network_id;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_network_id
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupNetworkId($pickup_network_id)
+    {
+        $this->pickup_network_id = $pickup_network_id;
 
         return $this;
     }
