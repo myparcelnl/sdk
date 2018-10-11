@@ -287,7 +287,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPickupLocationCode($aCheckoutData['location_code']);
 
         if (isset($aCheckoutData['retail_network_id'])) {
-            $aCheckoutData->setPickupNetworkId($aCheckoutData['retail_network_id']);
+            $this->setPickupNetworkId($aCheckoutData['retail_network_id']);
         }
 
         return $this;
