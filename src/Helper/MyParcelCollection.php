@@ -403,7 +403,7 @@ class MyParcelCollection
      * @return $this
      * @throws \Exception
      */
-    public function setPdfOfLabels($positions = false)
+    public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
         /** If $positions is not false, set paper size to A4 */
         $this
@@ -550,7 +550,7 @@ class MyParcelCollection
      *
      * @return $this
      */
-    private function setLabelFormat($positions = 1)
+    private function setLabelFormat($positions)
     {
         /** If $positions is not false, set paper size to A4 */
         if (is_numeric($positions)) {
