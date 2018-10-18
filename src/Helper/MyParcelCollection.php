@@ -68,10 +68,8 @@ class MyParcelCollection
     private $label_pdf = null;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $return = false;
-
     private $user_agent = '';
 
     /**
@@ -144,24 +142,9 @@ class MyParcelCollection
     /**
      * @return string
      */
-    public function getLabelPdf()
-    {
-        return $this->label_pdf;
-    }
-
-    /**
-     * @return string
-     */
     public function getLinkOfLabels()
     {
         return $this->label_link;
-    }
-
-    public function isReturn($return = true)
-    {
-        $this->return = $return;
-
-        return $this;
     }
 
     /**
@@ -239,7 +222,9 @@ class MyParcelCollection
         /* @var $consignments MyParcelConsignmentRepository[] */
         foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
             foreach ($consignments as $consignment) {
+                pp($consignment->getMyParcelConsignmentId());
                 if ($consignment->getMyParcelConsignmentId() !== null) {
+
                     $request = (new MyParcelRequest())
                         ->setUserAgent($this->getUserAgent())
                         ->setRequestParameters(
@@ -248,6 +233,7 @@ class MyParcelCollection
                             MyParcelRequest::REQUEST_HEADER_DELETE
                         )
                         ->sendRequest('DELETE');
+                    var_dump($request);
                 }
             }
         }
