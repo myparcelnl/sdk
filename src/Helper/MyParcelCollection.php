@@ -222,9 +222,7 @@ class MyParcelCollection
         /* @var $consignments MyParcelConsignmentRepository[] */
         foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
             foreach ($consignments as $consignment) {
-                pp($consignment->getMyParcelConsignmentId());
                 if ($consignment->getMyParcelConsignmentId() !== null) {
-
                     $request = (new MyParcelRequest())
                         ->setUserAgent($this->getUserAgent())
                         ->setRequestParameters(
@@ -233,7 +231,6 @@ class MyParcelCollection
                             MyParcelRequest::REQUEST_HEADER_DELETE
                         )
                         ->sendRequest('DELETE');
-                    var_dump($request);
                 }
             }
         }
