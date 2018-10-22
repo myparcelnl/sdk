@@ -68,10 +68,8 @@ class MyParcelCollection
     private $label_pdf = null;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $return = false;
-
     private $user_agent = '';
 
     /**
@@ -143,6 +141,8 @@ class MyParcelCollection
 
     /**
      * @return string
+     *
+     * this is used by third parties to access the label_pdf variable.
      */
     public function getLabelPdf()
     {
@@ -155,13 +155,6 @@ class MyParcelCollection
     public function getLinkOfLabels()
     {
         return $this->label_link;
-    }
-
-    public function isReturn($return = true)
-    {
-        $this->return = $return;
-
-        return $this;
     }
 
     /**
