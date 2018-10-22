@@ -141,6 +141,16 @@ class MyParcelCollection
 
     /**
      * @return string
+     *
+     * this is used by third parties to access the label_pdf variable.
+     */
+    public function getLabelPdf()
+    {
+        return $this->label_pdf;
+    }
+
+    /**
+     * @return string
      */
     public function getLinkOfLabels()
     {
