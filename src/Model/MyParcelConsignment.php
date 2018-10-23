@@ -254,6 +254,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The id of the consignment
      *
      * @return $this
@@ -303,6 +305,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * @param null $barcode
      *
      * @return $this
@@ -351,6 +355,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * Status of the consignment
      *
      * @param int $status
@@ -373,6 +379,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The shop id to which this shipment belongs
      *
      * When the store ID is not specified, the API will look at the API key.
