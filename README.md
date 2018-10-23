@@ -75,21 +75,23 @@ $myParcelCollection = (new MyParcelCollection())
 This example creates multiple consignments by adding them to one ```MyParcelCollection()``` and then creates and downloads one PDF with all labels.
 
 ```php
-$myParcelCollection = new MyParcelCollection(); // Note: Create the collection before the loop
+// Create the collection before the loop
+$myParcelCollection = (new MyParcelCollection())
+    ->setUserAgent('name_of_cms', '1.0'); 
 
 // Loop through your shipments, adding each to the same MyParcelCollection()
-foreach ($your_shipments as $your_shipment) {
+foreach ($yourShipments as $yourShipment) {
 
     $consignment = (new MyParcelConsignmentRepository())
         ->setApiKey('api_key_from_MyParcel_backoffice')
-        ->setReferenceId($your_shipment['reference_id']) // Note: Make sure every shipment gets a unique reference ID
-        ->setPerson($your_shipment['name'])
-        ->setPostalCode($your_shipment['postal_code'])
-        ->setFullStreet($your_shipment['full_street']) 
-        ->setCity($your_shipment['city']);
+        ->setReferenceId($yourShipment['reference_id']) // Note: Make sure every shipment gets a unique reference ID
+        ->setPerson($yourShipment['name'])
+        ->setPostalCode($yourShipment['postal_code'])
+        ->setFullStreet($yourShipment['full_street']) 
+        ->setCity($yourShipment['city']);
         
+    // Add each consignment to the collection created before
     $myParcelCollection
-        ->setUserAgent('name_of_cms', '1.0')
         ->addConsignment($consignment);
 }
 ```
@@ -142,7 +144,7 @@ Available options:
   - Set: `setLargeFormat(true)`
   - Get: `isLargeFormat()`
 - insurance: This option allows a shipment to be insured up to certain amount. NL shipments can be insured for 5000,- euros. EU shipments must be insured for 500,- euros. Global shipments must be insured for 200,- euros. The following shipment options are mandatory when insuring an NL shipment: only_recipient and signature.
-  - Set: `setInsurance($amount)`
+  - Set: `setInsurance(250)` (amount in EUR)
   - Get: `getInsurance()`
 
 More information: https://myparcelnl.github.io/api/#6_A_3
@@ -154,7 +156,7 @@ $consignment = new MyParcelConsignmentRepository();
 
 echo $consignment->getFullStreet();
 echo $consignment->getPerson();
-echo $consignment->get();
+echo $consignment->getPhone();
 echo $consignment->getStreet();
 // etc...
 ```
@@ -180,12 +182,12 @@ More information: https://myparcelnl.github.io/api/#6_F
 This is a list of all the classes in this SDK and their available methods.
 
 ### Models
-`\MyParcelNL\Sdk\src\Model`
+`MyParcelNL/Sdk/src/Model`
 
 #### MyParcelConsignment
-IMPORTANT! Access these methods through `Repository\MyParcelConsignmentRepository`, which extends `MyParcelConsignment`.
+:warning: Access these methods through `\MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository` (which extends `MyParcelConsignment`).
 
-```\MyParcelNL\Sdk\src\Model\MyParcelConsignment.php```
+```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
 ```php
 $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
     ->setApiKey('api_key_from_MyParcel_backoffice')
@@ -226,24 +228,18 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setDeliveryType()
     ->setDeliveryDate()
     ->setDeliveryRemark()    
-        
+    
     // Set pickup location
-    ->setPickupLocationName()
-    ->setPickupStreet()
-    ->setPickupNumber()
-    ->setPickupPostalCode()
-    ->setPickupCity()
+    ->setPickupLocationName('Supermarkt')
+    ->setPickupStreet('Straatnaam')
+    ->setPickupNumber('32')
+    ->setPickupPostalCode('1234 AB')
+    ->setPickupCity('Hoofddorp')
    
     // Non-EU shipment attributes: see https://myparcelnl.github.io/api/#7_E
     ->setInvoice()
     ->setContents()
-    ->addItem()
-    
-    // Other attributes
-    ->setBarcode()
-    ->setMyParcelConsignmentId()
-    ->setShopId() 
-    ->setStatus();
+    ->addItem();
 
 // Get attributes from consignment
 $consignment
@@ -302,14 +298,16 @@ $consignment
 #### MyParcelCustomsItem
 This object is embedded in the MyParcelConsignment object for global shipments and is mandatory for non-EU shipments.
 
-```\MyParcelNL\Sdk\src\Model\MyParcelCustomsItem.php```
+```MyParcelNL/Sdk/src/Model/MyParcelCustomsItem.php```
 ```php
-  ->setAmount()
-  ->setClassification()
-  ->setCountry()
-  ->setDescription()
-  ->setItemValue()
-  ->setWeight()
+  ->setAmount(3) // Amount of items in the package
+  
+  // ISIC/IDEP code (https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/lopend/internationale-handel-in-goederen/idep-codelijsten) 
+  ->setClassification(0111) // Example: 0111 = "Growing of cereals (except rice), leguminous crops and oil seeds"  
+  ->setCountry('NL') // Country of origin
+  ->setDescription('Cereal grains')
+  ->setItemValue({"amount": 200, "currency": "EUR"}) // Must be array with amount and currency like in the example
+  ->setWeight() // The total weight for these items in whole grams. Between 0 and 20000 grams.
   
   ->getAmount()
   ->getClassification()
@@ -324,7 +322,7 @@ This object is embedded in the MyParcelConsignment object for global shipments a
 #### MyParcelRequest
 This model represents one request
 
-```\MyParcelNL\Sdk\src\Model\MyParcelRequest.php```
+```MyParcelNL/Sdk/src/Model/MyParcelRequest.php```
 ```php
   ->sendRequest()
   ->setRequestParameters()
@@ -339,30 +337,36 @@ This model represents one request
 #### Repository\MyParcelConsignmentRepository
 The repository of a MyParcel consignment.
 
-```\MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository.php```
+```MyParcelNL/Sdk/src/Model/Repository/MyParcelConsignmentRepository.php```
 ```php
-  ->setDeliveryDateFromCheckout()
-  ->setFullStreet()
-  ->setPickupAddressFromCheckout()
-
+  ->setFullStreet('Street 23b, 1234 AB City')
+  
   ->apiDecode()
   ->apiEncode()
   ->encodeReturnShipment()
   
+  // Convert pickup data from checkout
+  // You can use these if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+  ->setDeliveryDateFromCheckout()
+  ->setPickupAddressFromCheckout()
+  
   ->getDeliveryTypeFromCheckout()
+  
   ->getFullStreet()
   ->getTotalWeight()
+  
   ->isCdCountry()
   ->isCorrectAddress()
   ->isEuCountry()
 ```
 
 ### Helpers
+```MyParcelNL/Sdk/src/Helper```
 
 #### MyParcelCollection
 Stores all data to communicate with the MyParcel API.
 
-```\MyParcelNL\Sdk\src\Helper\MyParcelCollection.php```
+```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
 ```php
     ->addConsignment() // Add consignment to collection
 
@@ -400,7 +404,7 @@ Stores all data to communicate with the MyParcel API.
 #### MyParcelCurl
 Curl to use in the MyParcel API.
 
-```\MyParcelNL\Sdk\src\Helper\MyParcelCurl.php```
+```MyParcelNL/Sdk/src/Helper/MyParcelCurl.php```
 ```php
   ->addOption()
   ->addOptions()
