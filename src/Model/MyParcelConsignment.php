@@ -85,6 +85,11 @@ class MyParcelConsignment
     private $street = null;
 
     /**
+     * @var string
+     */
+    private $street_additional_info = null;
+
+    /**
      * @var integer
      */
     private $number = null;
@@ -465,17 +470,36 @@ class MyParcelConsignment
     }
 
     /**
+     * The street additional info
+     * Required: No
+     *
+     * @param string $street_additional_info
+     *
+     * @return $this
+     */
+    public function setStreetAdditionalInfo($street_additional_info)
+    {
+        $this->street_additional_info = $street_additional_info;
+
+        return $this;
+    }
+
+    /**
      * Get additional information for the street that should not be included in the street field
+     *
+     * @return string
      */
     public function getStreetAdditionalInfo()
     {
         $streetParts = $this->getStreetParts();
+        $result = '';
 
         if (isset($streetParts[1])) {
-            return $streetParts[1];
+            $result .= $streetParts[1];
         }
 
-        return '';
+        $result .= ' ' . (string) $this->street_additional_info;
+        return trim($result);
     }
 
     /**
