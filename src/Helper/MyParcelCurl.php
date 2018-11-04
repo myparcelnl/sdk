@@ -1,6 +1,6 @@
 <?php
 /**
- * Curl to use in de api
+ * Curl to use in the api
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl

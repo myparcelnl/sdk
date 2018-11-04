@@ -46,7 +46,7 @@ class SendUserAgentTest extends \PHPUnit_Framework_TestCase
                 ->setFullStreet($consignmentTest['full_street_test'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
-                ->setEmail('reindert@myparcel.nl')
+                ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone']);
 
             if (key_exists('checkout_data', $consignmentTest)) {
@@ -107,6 +107,10 @@ class SendUserAgentTest extends \PHPUnit_Framework_TestCase
 
             if (key_exists('pickup_location_name', $consignmentTest)) {
                 $consignment->setPickupLocationName($consignmentTest['pickup_location_name']);
+            }
+
+            if (key_exists('pickup_location_code', $consignmentTest)) {
+                $consignment->setPickupLocationCode($consignmentTest['pickup_location_code']);
             }
 
             if (key_exists('user_agent', $consignmentTest)) {
@@ -186,6 +190,14 @@ class SendUserAgentTest extends \PHPUnit_Framework_TestCase
 
             if (!empty($consignmentTest['pickup_location_name'])) {
                 $this->assertEquals($consignmentTest['pickup_location_name'], $consignment->getPickupLocationName(), 'getPickupLocationName()');
+            }
+
+            if (!empty($consignmentTest['pickup_location_code'])) {
+                $this->assertEquals($consignmentTest['pickup_location_code'], $consignment->getPickupLocationCode(), 'getPickupLocationCode()');
+            }
+
+            if (!empty($consignmentTest['pickup_network_id'])) {
+                $this->assertEquals($consignmentTest['pickup_network_id'], $consignment->getPickupNetworkId(), 'getPickupNetworkId()');
             }
 
             /**

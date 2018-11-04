@@ -148,7 +148,7 @@ class MyParcelCustomsItem
      * Example: 0111 (Growing of cereals (except rice), leguminous crops and oil seeds)
      * Required: Yes
      *
-     * @link https://www.cbs.nl/-/media/cbsvooruwbedrijf/internationale%20handel%20in%20goederen/goederencodes%20in%20excel.xlsx?la=nl-nl
+     * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/lopend/internationale-handel-in-goederen/idep-codelijsten
      *
      * @param int $classification
      * @return $this
@@ -171,10 +171,12 @@ class MyParcelCustomsItem
     /**
      * The country of origin for this item
      *
-     * ISO3166-1 alpha2 country code
+     * ISO 3166-1 alpha-2 code
      * Pattern: [A-Z]{2,2}
      * Example: NL, BE, CW
      * Required: Yes
+     *
+     * @link https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
      *
      * @param string $country
      * @return $this

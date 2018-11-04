@@ -32,7 +32,7 @@ class MyParcelConsignment
     const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
     const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
     const STATUS_CONCEPT = 1;
-    const MAX_STREET_LENTH = 40;
+    const MAX_STREET_LENGTH = 40;
 
     const CC_NL = 'NL';
     const CC_BE = 'BE';
@@ -83,6 +83,11 @@ class MyParcelConsignment
      * @var string
      */
     private $street = null;
+
+    /**
+     * @var string
+     */
+    private $street_additional_info = null;
 
     /**
      * @var integer
@@ -210,6 +215,16 @@ class MyParcelConsignment
     private $pickup_location_name = null;
 
     /**
+     * @var string
+     */
+    private $pickup_location_code = '';
+
+    /**
+     * @var string
+     */
+    private $pickup_network_id = '';
+
+    /**
      * @return string
      */
     public function getReferenceId()
@@ -244,6 +259,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The id of the consignment
      *
      * @return $this
@@ -293,6 +310,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * @param null $barcode
      *
      * @return $this
@@ -341,6 +360,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * Status of the consignment
      *
      * @param int $status
@@ -363,6 +384,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The shop id to which this shipment belongs
      *
      * When the store ID is not specified, the API will look at the API key.
@@ -437,7 +460,7 @@ class MyParcelConsignment
      */
     public function getStreet($useStreetAdditionalInfo = false)
     {
-        if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENTH) {
+        if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
             $streetParts = $this->getStreetParts();
 
             return $streetParts[0];
@@ -447,17 +470,36 @@ class MyParcelConsignment
     }
 
     /**
+     * The street additional info
+     * Required: No
+     *
+     * @param string $street_additional_info
+     *
+     * @return $this
+     */
+    public function setStreetAdditionalInfo($street_additional_info)
+    {
+        $this->street_additional_info = $street_additional_info;
+
+        return $this;
+    }
+
+    /**
      * Get additional information for the street that should not be included in the street field
+     *
+     * @return string
      */
     public function getStreetAdditionalInfo()
     {
         $streetParts = $this->getStreetParts();
+        $result = '';
 
         if (isset($streetParts[1])) {
-            return $streetParts[1];
+            $result .= $streetParts[1];
         }
 
-        return '';
+        $result .= ' ' . (string) $this->street_additional_info;
+        return trim($result);
     }
 
     /**
@@ -471,7 +513,7 @@ class MyParcelConsignment
      */
     public function setStreet($street)
     {
-        $this->street = $street;
+        $this->street = trim(str_replace('\n', ' ', $street));
 
         return $this;
     }
@@ -746,6 +788,39 @@ class MyParcelConsignment
         }
 
         $this->delivery_date = (string) $delivery_date;
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     *
+     * @param $fields
+     *
+     * @return $this
+     */
+    public function clearFields($fields) {
+        foreach ($fields as $field => $default) {
+            $this->{$field} = $default;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     *
+     * @param array $data
+     * @param array $methods
+     *
+     * @return $this
+     */
+    public function setByMethods($data, $methods) {
+        foreach ($methods as $method => $value) {
+            if (isset($data[$value])) {
+                $this->{'set' . $method}($data[$value]);
+            }
+        }
 
         return $this;
     }
@@ -1139,6 +1214,54 @@ class MyParcelConsignment
     }
 
     /**
+     * @return string
+     */
+    public function getPickupLocationCode()
+    {
+        return $this->pickup_location_code;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_location_code
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupLocationCode($pickup_location_code)
+    {
+        $this->pickup_location_code = $pickup_location_code;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupNetworkId()
+    {
+        return $this->pickup_network_id;
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $pickup_network_id
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPickupNetworkId($pickup_network_id)
+    {
+        $this->pickup_network_id = $pickup_network_id;
+
+        return $this;
+    }
+
+    /**
      * Only package type 1 can have extra options
      *
      * @param $option
@@ -1162,6 +1285,6 @@ class MyParcelConsignment
      */
     private function getStreetParts()
     {
-        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENTH));
+        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENGTH));
     }
 }
