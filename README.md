@@ -127,6 +127,11 @@ Note: If you still make the request with additional options, bear in mind that y
 #### 3: Letter 
 This package type is available for NL, EU and global shipments. The label for this shipment is unpaid meaning that you will need to pay the postal office/courier to send this letter/package. Therefore, it does not support additional options.
 
+#### 4: Digital stamp 
+This package type is only available for NL shipments and does not support any additional options. Its price is calculated using the package weight.
+
+> Note: This shipment will appear on your invoice on shipment_status 2 (pending - registered) instead of all other shipment types, which don't appear until shipment status 3. Read more: https://myparcelnl.github.io/api/#6_A_1
+
 #### Package options
 These options are only available for package type 1 (package).
 
