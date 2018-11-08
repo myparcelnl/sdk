@@ -354,6 +354,7 @@ class MyParcelConsignment
      * Status of the consignment
      *
      * @param int $status
+     * @internal
      *
      * @return $this
      */

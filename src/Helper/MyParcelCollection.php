@@ -17,6 +17,10 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use /** @noinspection PhpUndefinedClassInspection */
+    MyParcelNL\Sdk\src\Support\CollectionProxy;
+
+/** @noinspection PhpUndefinedClassInspection */
 
 
 /**
@@ -25,7 +29,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class MyParcelCollection
  * @package Model
  */
-class MyParcelCollection
+class MyParcelCollection extends CollectionProxy
 {
     const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
     const PREFIX_PDF_FILENAME = 'myparcel-label-';
@@ -656,15 +660,15 @@ class MyParcelCollection
     {
         $aPositions = [];
         switch ($start) {
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 1:
                 $aPositions[] = 1;
-            // No break
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 2:
                 $aPositions[] = 2;
-            // No break
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 3:
                 $aPositions[] = 3;
-            // No break
             case 4:
                 $aPositions[] = 4;
                 break;
