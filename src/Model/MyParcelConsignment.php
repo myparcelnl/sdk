@@ -175,6 +175,11 @@ class MyParcelConsignment
     private $insurance = 0;
 
     /**
+     * @var array
+     */
+    private $physical_properties = [];
+
+    /**
      * @var int
      */
     private $contents;
@@ -1008,6 +1013,28 @@ class MyParcelConsignment
     }
 
     /**
+     * Required: Yes for non-EU shipments and digital stamps
+     *
+     * @param array $physical_properties
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPhysicalProperties($physical_properties)
+    {
+        $this->physical_properties = $physical_properties;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPhysicalProperties()
+    {
+        return $this->physical_properties;
+    }
+
+    /**
      * @return integer
      */
     public function getContents()
@@ -1089,9 +1116,6 @@ class MyParcelConsignment
 
         return $this;
     }
-
-
-
 
     /**
      * @return string

@@ -54,6 +54,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
     const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
 
     const PACKAGE_TYPE_NORMAL = 1;
+    const PACKAGE_TYPE_DIGITAL_STAMP = 4;
 
     const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_NORMAL;
 
@@ -515,7 +516,8 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             );
             $this
                 ->encodePickup()
-                ->encodeInsurance();
+                ->encodeInsurance()
+                ->encodePhysicalProperties();
         }
 
         if ($this->isEuCountry()) {
@@ -569,6 +571,18 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
         return $this;
     }
 
+    private function encodePhysicalProperties()
+    {
+        if (empty($this->getPhysicalProperties())) {
+            return $this;
+        }
+        if ($this->getPackageType() == self::PACKAGE_TYPE_DIGITAL_STAMP && !isset($this->getPhysicalProperties()['weight'])) {
+            throw new \Exception('Weight in physical properties must be set for digital stamp shipments.');
+        }
+
+        $this->consignmentEncoded['physical_properties'] = $this->getPhysicalProperties();
+    }
+
     /**
      * @return $this
      * @throws \Exception
@@ -604,9 +618,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
                     'items' => $items,
                     'invoice' => $this->getLabelDescription(),
                 ],
-                'physical_properties' => [
-                    'weight' => $this->getTotalWeight()
-                ]
+                'physical_properties' => $this->getPhysicalProperties() + ['weight' => $this->getTotalWeight()],
             ]
         );
 
@@ -661,6 +673,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPhone($recipient['phone'])
             ->setPackageType($options['package_type'])
             ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
+            // ->setPhysicalProperties()
         ;
 
         return $this;
