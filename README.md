@@ -128,7 +128,12 @@ Note: If you still make the request with additional options, bear in mind that y
 This package type is available for NL, EU and global shipments. The label for this shipment is unpaid meaning that you will need to pay the postal office/courier to send this letter/package. Therefore, it does not support additional options.
 
 #### 4: Digital stamp 
-This package type is only available for NL shipments and does not support any additional options. Its price is calculated using the package weight.
+This package type is only available for NL shipments and does not support any additional options. Its price is calculated using the package weight, which is set using `setPhysicalProperties()`.
+
+```php
+    ->setPackageType(4)
+    ->setPhysicalProperties(['weight' => 300]); // weight in grams (required)
+```
 
 > Note: This shipment will appear on your invoice on shipment_status 2 (pending - registered) instead of all other shipment types, which don't appear until shipment status 3. Read more: https://myparcelnl.github.io/api/#6_A_1
 
@@ -204,20 +209,21 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setPhone('+31 612345678') // Phone number
     ->setCompany('Piet BV')     // Company
     
-    ->setFullStreet('Plein 1945 55b')   // Street, number and suffix in one line 
+    ->setFullStreet('Plein 1945 55b') // Street, number and suffix in one line 
     // OR send the street data separately:
-    ->setStreet('Plein 1945')           // Street
-    ->setNumber((string)55)             // Number
-    ->setNumberSuffix('b')              // Suffix
+    ->setStreet('Plein 1945') / Street
+    ->setNumber((string)55)   // Number
+    ->setNumberSuffix('b')    // Suffix
     
-    ->setCity('Amsterdam')      // City
-    ->setPostalCode('2231JE')   // Postal code
-    ->setCountry('NL')          // Country                
+    ->setCity('Amsterdam')    // City
+    ->setPostalCode('2231JE') // Postal code
+    ->setCountry('NL')        // Country                
             
     // Available package types:
     // 1: Package (default)
     // 2: Mailbox package
     // 3: Letter
+    // 4: Digital stamp
     ->setPackageType(1)
 
     // Options (https://myparcelnl.github.io/api/#6_A_3)
@@ -240,7 +246,10 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setPickupNumber('32')
     ->setPickupPostalCode('1234 AB')
     ->setPickupCity('Hoofddorp')
-   
+      
+    // Physical properties
+    ->setPhysicalProperties(['weight' => 73]) // Array with physical properties of the shipment. Currently only used to set the weight in grams for digital stamps (which is required)
+    
     // Non-EU shipment attributes: see https://myparcelnl.github.io/api/#7_E
     ->setInvoice()
     ->setContents()
@@ -294,6 +303,9 @@ $consignment
     ->getDeliveryRemark()
     ->getDeliveryType()
     
+    // Physical properties (digital stamps or non-EU shipments)
+    ->getPhysicalProperties()
+        
     // Non-EU attributes
     ->getInvoice()
     ->getContents()
@@ -311,7 +323,7 @@ This object is embedded in the MyParcelConsignment object for global shipments a
   ->setClassification(0111) // Example: 0111 = "Growing of cereals (except rice), leguminous crops and oil seeds"  
   ->setCountry('NL') // Country of origin
   ->setDescription('Cereal grains')
-  ->setItemValue({"amount": 200, "currency": "EUR"}) // Must be array with amount and currency like in the example
+  ->setItemValue(["amount" => 200, "currency" => "EUR"]) // Must be array with amount and currency like in the example
   ->setWeight() // The total weight for these items in whole grams. Between 0 and 20000 grams.
   
   ->getAmount()
