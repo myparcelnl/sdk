@@ -93,11 +93,7 @@ class MyParcelCollection extends CollectionProxy
             throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
         }
 
-        foreach ($this->getConsignments() as $consignment) {
-            return $consignment;
-        }
-
-        return null;
+        return $this->first();
     }
 
     /**
