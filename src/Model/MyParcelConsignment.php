@@ -37,197 +37,238 @@ class MyParcelConsignment
     const CC_NL = 'NL';
     const CC_BE = 'BE';
 
-    private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
-
     /**
+     * @internal
      * @var string
      */
-    private $reference_id = null;
+    public $reference_id = null;
 
     /**
+     * @internal
      * @var int
      */
-    private $myparcel_consignment_id = null;
+    public $myparcel_consignment_id = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $api_key;
+    public $api_key = null;
 
     /**
+     * @internal
      * @var null
      */
-    private $barcode = null;
+    public $barcode = null;
 
     /**
+     * @internal
      * @var int
      */
-    private $status = 0;
+    public $status = 0;
 
     /**
+     * @internal
      * @var integer
      */
-    private $shop_id;
+    public $shop_id = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $cc = null;
+    public $cc = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $city = null;
+    public $city = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $street = null;
+    public $street = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $street_additional_info = null;
+    public $street_additional_info = null;
 
     /**
+     * @internal
      * @var integer
      */
-    private $number = null;
+    public $number = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $number_suffix = '';
+    public $number_suffix = '';
 
     /**
+     * @internal
      * @var string
      */
-    private $postal_code = null;
+    public $postal_code = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $person = null;
+    public $person = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $company = '';
+    public $company = '';
 
     /**
+     * @internal
      * @var string
      */
-    private $email = '';
+    public $email = '';
 
     /**
+     * @internal
      * @var string
      */
-    private $phone = '';
+    public $phone = '';
 
     /**
+     * @internal
      * @var integer
      */
-    private $package_type = null;
+    public $package_type = null;
 
     /**
+     * @internal
      * @var integer
      */
-    private $delivery_type = MyParcelConsignmentRepository::DEFAULT_DELIVERY_TYPE;
+    public $delivery_type = MyParcelConsignmentRepository::DEFAULT_DELIVERY_TYPE;
 
     /**
+     * @internal
      * @var string
      */
-    private $delivery_date = null;
+    public $delivery_date = null;
 
     /**
+     * @internal
      * @var string
      */
-    private $delivery_remark;
+    public $delivery_remark;
 
     /**
+     * @internal
      * @var boolean
      */
-    private $only_recipient;
+    public $only_recipient;
 
     /**
+     * @internal
      * @var boolean
      */
-    private $signature;
+    public $signature;
 
     /**
+     * @internal
      * @var boolean
      */
-    private $return;
+    public $return;
 
     /**
+     * @internal
      * @var boolean
      */
-    private $large_format;
+    public $large_format;
 
     /**
+     * @internal
      * @var string
      */
-    private $label_description = '';
+    public $label_description = '';
 
     /**
+     * @internal
      * @var int
      */
-    private $insurance = 0;
+    public $insurance = 0;
+
+    /**
+     * @internal
+     * @var array
+     */
+    public $physical_properties = [];
+
+    /**
+     * @internal
+     * @var int
+     */
+    public $contents;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $invoice;
+
+    /**
+     * @internal
+     * @var array
+     */
+    public $items = [];
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_postal_code = null;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_street = null;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_city = null;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_number = null;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_location_name = null;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_location_code = '';
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_network_id = '';
 
     /**
      * @var array
      */
-    private $physical_properties = [];
-
-    /**
-     * @var int
-     */
-    private $contents;
-
-    /**
-     * @var string
-     */
-    private $invoice;
-
-    /**
-     * @var array
-     */
-    private $items = [];
-
-    /**
-     * @var string
-     */
-    private $pickup_postal_code = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_street = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_city = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_number = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_location_name = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_location_code = '';
-
-    /**
-     * @var string
-     */
-    private $pickup_network_id = '';
+    private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
      * @var \Helpers
@@ -376,11 +417,9 @@ class MyParcelConsignment
 
     /**
      * @internal
-     *
      * Status of the consignment
      *
      * @param int $status
-     * @internal
      *
      * @return $this
      */
@@ -400,13 +439,12 @@ class MyParcelConsignment
     }
 
     /**
-     * @internal
-     *
      * The shop id to which this shipment belongs
      *
      * When the store ID is not specified, the API will look at the API key.
      * Required: No
      *
+     * @internal
      * @param mixed $shop_id
      *
      * @return $this
@@ -755,7 +793,10 @@ class MyParcelConsignment
 	 */
     public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
-        if ($needDeliveryDate && $delivery_type !== 2 && $this->getDeliveryDate() == null) {
+        if ($needDeliveryDate &&
+            $delivery_type !== MyParcelConsignmentRepository::DELIVERY_TYPE_STANDARD &&
+            $this->getDeliveryDate() == null
+        ) {
             throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
         }
 
