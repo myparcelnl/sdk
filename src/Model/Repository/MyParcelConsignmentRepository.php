@@ -573,7 +573,7 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
 
     private function encodePhysicalProperties()
     {
-        if (empty($this->getPhysicalProperties()) && $this->getPackageType() != 4) {
+        if (empty($this->getPhysicalProperties()) && $this->getPackageType() != self::PACKAGE_TYPE_DIGITAL_STAMP) {
             return $this;
         }
         if ($this->getPackageType() == self::PACKAGE_TYPE_DIGITAL_STAMP && !isset($this->getPhysicalProperties()['weight'])) {
