@@ -4,6 +4,10 @@ use Illuminate\Support\Arr;
 use MyParcelNL\Sdk\src\Support\CollectionProxy;
 use MyParcelNL\Sdk\src\Support\Str;
 
+/**
+ * Class Helpers
+ * @example https://laravel.com/docs/5.7/helpers
+ */
 class Helpers {
     /**
      * Assign high numeric IDs to a config item to force appending.

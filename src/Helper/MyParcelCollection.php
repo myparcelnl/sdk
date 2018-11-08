@@ -36,11 +36,6 @@ class MyParcelCollection extends CollectionProxy
     const DEFAULT_A4_POSITION = 1;
 
     /**
-     * @var MyParcelConsignmentRepository[]
-     */
-    private $consignments = [];
-
-    /**
      * @var string
      */
     private $paper_size = 'A6';
@@ -86,10 +81,10 @@ class MyParcelCollection extends CollectionProxy
     public function getConsignments($keepKeys = true)
     {
         if ($keepKeys) {
-            return $this->consignments;
+            return $this->items;
         }
 
-        return array_values($this->consignments);
+        return array_values($this->items);
     }
 
     /**
@@ -182,18 +177,18 @@ class MyParcelCollection extends CollectionProxy
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
         }
 
-        if ($needReferenceId && !empty($this->consignments)) {
+        if ($needReferenceId && !empty($this->items)) {
             if ($consignment->getReferenceId() === null) {
                 throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
-            } elseif (key_exists($consignment->getReferenceId(), $this->consignments)) {
+            } elseif (key_exists($consignment->getReferenceId(), $this->items)) {
                 throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
             }
         }
 
         if ($consignment->getReferenceId()) {
-            $this->consignments[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
+            $this->items[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
         } else {
-            $this->consignments[] = $consignment;
+            $this->items[] = $consignment;
         }
 
         return $this;
@@ -612,7 +607,7 @@ class MyParcelCollection extends CollectionProxy
      * Clear this collection
      */
     public function clearConsignmentsCollection() {
-        $this->consignments = [];
+        $this->items = [];
     }
 
     /**
