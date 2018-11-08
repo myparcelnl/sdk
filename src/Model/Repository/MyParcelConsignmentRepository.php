@@ -673,7 +673,6 @@ class MyParcelConsignmentRepository extends MyParcelConsignment
             ->setPhone($recipient['phone'])
             ->setPackageType($options['package_type'])
             ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
-            // ->setPhysicalProperties()
         ;
 
         return $this;
