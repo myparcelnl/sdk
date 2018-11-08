@@ -24,11 +24,11 @@ class HigherOrderCollectionProxy
     /**
      * Create a new proxy instance.
      *
-     * @param  Collection  $collection
+     * @param  CollectionProxy  $collection
      * @param  string  $method
      * @return void
      */
-    public function __construct(Collection $collection, $method)
+    public function __construct(CollectionProxy $collection, $method)
     {
         $this->method = $method;
         $this->collection = $collection;

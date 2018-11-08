@@ -398,7 +398,7 @@ class Helpers {
 
         while (! is_null($segment = array_shift($key))) {
             if ($segment === '*') {
-                if ($target instanceof Collection) {
+                if ($target instanceof CollectionProxy) {
                     $target = $target->all();
                 } elseif (! is_array($target)) {
                     return $this->value($default);
