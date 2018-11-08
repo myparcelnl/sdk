@@ -1285,6 +1285,9 @@ class MyParcelConsignment
      */
     private function getStreetParts()
     {
-        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENGTH));
+        $streetWrap = wordwrap($this->street, self::MAX_STREET_LENGTH, 'BREAK_LINE');
+        $parts      = explode("BREAK_LINE", $streetWrap);
+
+        return $parts;
     }
 }
