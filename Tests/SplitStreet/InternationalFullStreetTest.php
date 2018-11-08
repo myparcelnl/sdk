@@ -24,7 +24,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  *
  * @package MyParcelNL\Sdk\tests\InternationalFullStreetTest
  */
-class InternationalFullStreetTest extends \PHPUnit_Framework_TestCase
+class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

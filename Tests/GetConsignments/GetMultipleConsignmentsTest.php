@@ -6,7 +6,7 @@
  * Time: 14:09
  */
 
-class GetMultipleConsignments extends \PHPUnit\Framework\TestCase {
+class GetMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase {
 
 	const NUMBER_OF_CONSIGNMENTS = 200;
 

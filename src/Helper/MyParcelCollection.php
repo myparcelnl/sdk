@@ -17,11 +17,7 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-use /** @noinspection PhpUndefinedClassInspection */
-    MyParcelNL\Sdk\src\Support\CollectionProxy;
-
-/** @noinspection PhpUndefinedClassInspection */
-
+use MyParcelNL\Sdk\src\Support\CollectionProxy;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -71,6 +67,9 @@ class MyParcelCollection extends CollectionProxy
      */
     private $return = false;
 
+    /**
+     * @var string
+     */
     private $user_agent = '';
 
     /**

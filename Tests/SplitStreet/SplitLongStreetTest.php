@@ -22,7 +22,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SplitStreetTest
  * @package MyParcelNL\Sdk\tests\SplitStreetTest
  */
-class SplitLongStreetTest extends \PHPUnit_Framework_TestCase
+class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
