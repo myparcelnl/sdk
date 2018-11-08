@@ -1,193 +1,446 @@
 # MyParcel SDK
+This SDK connects to the MyParcel API using PHP.
 
----
+## Contents
 
+- [Contents](#contents)
 - [Installation](#installation)
-- [Installation without composer](#installation-without-composer)
-- [Requirements](#requirements)
+    - [Requirements](#requirements)
+    - [Installation with Composer](#installation-with-composer)
+    - [Installation without Composer](#installation-without-composer)
 - [Quick start and examples](#quick-start-and-examples)
-- [Available Methods](#available-methods)
+    - [Create a consignment](#create-a-consignment)
+    - [Create multiple consignments](#create-multiple-consignments)
+    - [Label format and position](#label-format-and-position)
+    - [Package type and options](#package-type-and-options)
+    - [Retrieve data from a consignment](#retrieve-data-from-a-consignment)
+    - [Create and download label(s)](#create-and-download-label-s-)
+- [List of classes and their methods](#list-of-classes-and-their-methods)
+    - [Models](#models)
+    - [Helpers](#helpers)
 - [Contribute](#contribute)
 
----
-Please, star this repository if you use this repository. :star:
-
-### Installation with composer
-
-This SDK uses composer.
-
-Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
-
-For more information on how to use/install composer, please visit: [https://github.com/composer/composer](https://github.com/composer/composer)
-
-To install the MyParcel SDK into your project, simply
-
-	$ composer require myparcelnl/sdk
-	
-### Installation without composer
-
-If you don't have experience with composer, it is possible to use the SDK without using composer.
-
-You can download the zip on the projects [releases](https://github.com/myparcelnl/sdk/releases) page.
-
-1. Download the package zip (SDKvx.x.x.zip).
-2. Unzip the contents of the zip, and upload the vendor directory to your server.
-3. In your project, require the file src/AutoLoader.php
-4. You can now use the SDK in your project
+## Installation
 
 ### Requirements
+The MyParcel SDK works with PHP versions 5.4, 5.6 and 7.x. The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
 
-The MyParcel SDK works on php versions 5.4, 5.6 and 7.x.
-Also the php curl extension needs to be installed.
+### Installation with Composer
+This SDK uses Composer. Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. For more information on how to use/install composer, please visit https://getcomposer.org/
 
-### Quick start and examples
+To install the MyParcel SDK into your project, simply use
+```
+$ composer require myparcelnl/sdk
+```
+	
+### Installation without Composer
+It's also possible to use the SDK without installing it with Composer.
+
+You can download the zip on the project's [releases page](https://github.com/myparcelnl/sdk/releases).
+
+1. Download the package (SDKvx.x.x.zip).
+2. Extract the downloaded .zip file and upload the vendor directory to your server.
+3. Require `src/AutoLoader.php`
+4. You can now use the SDK in your project!
+
+## Quick start and examples
+Add the following lines to your project to import the SDK classes for creating shipments.
 
 ```php
-$myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
-
-$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
-    ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setReferenceId('Order 1203')
-    ->setCountry('NL')
-    ->setPerson('Piet Hier')
-    ->setCompany('Piet BV')
-    ->setFullStreet('Plein 1945 55b')
-    ->setPostalCode('2231JE')
-    ->setCity('Amsterdam')
-    ->setEmail('test@test.nl');
-    
-$myParcelCollection
-    ->addConsignment($consignment)
-    ->setPdfOfLabels()
-    ->downloadPdfOfLabels()
-    ->setUserAgent('name_of_cms', '1.0');
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 ```
 
-## Available consignment methods
-```php
-$myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
+### Create a consignment
+This example uses only the required methods to create a shipment and download its label.
 
-$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
-    ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setReferenceId('Order 1203')
-    ->setCountry('NL')
-    ->setPerson('Piet Hier')
-    ->setCompany('Piet BV')
-    ->setFullStreet('Plein 1945 55b')
-    ->setPostalCode('2231JE')
-    ->setPackageType(1)
-    ->setCity('Amsterdam')
-    ->setEmail('test@test.nl')
-    ->setPhone('+31 (0)634213465')
-    ->setLargeFormat(true)
-    ->setOnlyRecipient(true)
-    ->setSignature(true)
-    ->setReturn(true)
-    ->setInsurance(250)
-    ->setLabelDescription('Order 10034');
-    
-$myParcelCollection
-    ->addConsignment($consignment)
-```
-### User-agent
-To give us insight into which CMS system you make a connection from, you should send a User-Agent. If you're using a known CMS system it's required. You must send the name of the CMS system followed by a version number. A version is not required.
-```
-    ->setUserAgent('name_of_cms', '1.0')
-```
-### Submitting full address
-```
-    ->setFullStreet('Plein 1945 55b')
-```
-### Submitting address in pieces
-```php
-    ->setStreet('Plein 1945')
-    ->setNumber((string)55)
-    ->setNumberSuffix('b')
-```
-#### Create concept
-```php
-$myParcelCollection->createConcepts();
-```
-#### Download labels
-```php
-$myParcelCollection->setPdfOfLabels();
-$myParcelCollection->downloadPdfOfLabels();
-```
-#### Get label link
-```php
-$myParcelCollection
-    ->setLinkOfLabels()
-    ->getLinkOfLabels()
-```
-#### MyParcel consignment id
-If you don't use ```setReferenceId()```, you can also use the MyParcelConsignmentId when you create a concept:
-After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()```, you can save the api id to your database. With this id you can easily retrieve the latest status.
-```php
-$consignment->getMyParcelConsignmentId();
-```
-#### Get status
-After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can get the status.
-```php
-$status = $consignment->getStatus();
-```
-#### Get barcode
-The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
-```php
-$barcode = $consignment->getBarcode();
-```
-#### Multiple shipments
-To create multiple consignments or get one pdf with multiple consignments, set multiple consignments. It's faster and cleaner.
-```php
-$myParcelCollection = new \MyParcelNL\Sdk\src\Helper\MyParcelCollection();
-
-foreach ($yourShipments as $yourShipment) {
-
-    $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
-        ->setApiKey('api_key_from_MyParcel_backoffice')
-        ->setReferenceId($yourShipment->getOrderId())
-        ->setName('Piet Hier');
-        /** @todo; set all info */
-        
-    $myParcelCollection
-        ->setUserAgent('name_of_cms', '1.0')
-        ->addConsignment($consignment)
-}
-```
-#### Later on
-In a new request, you can get all the data again.
-```php
-$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
-    ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
-
-$myParcelCollection
-    ->setUserAgent('name_of_cms', '1.0')
-    ->addConsignment($consignment)
-    ->setLatestData();
-
-$consignments = $myParcelCollection
-    ->getConsignments();
-
-$firstConsignment = $consignments[0];
-
-$status = $firstConsignment->getStatus();
-$barcode = $firstConsignment->getBarcode();
-```
-#### Send a return label via email
-It is possible to send a return email with the shop settings you set at the Backoffice of MyParcel
 ```php
 $consignment = (new MyParcelConsignmentRepository())
-    ->setApiKey('api_key_from_MyParcel_backoffice');
-    ->setReferenceId('Order 1203'); // or setMyParcelConsignmentId(123456)
-
+    ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setReferenceId('Order 146')
+    ->setCountry('NL')
+    ->setPerson('Piet Hier')
+    ->setFullStreet('Plein 1945 55b')
+    ->setPostalCode('2231JE')
+    ->setCity('Amsterdam')
+    ->setEmail('piet.hier@test.nl');
+    
 $myParcelCollection = (new MyParcelCollection())
-     ->setUserAgent('name_of_cms', '1.0')
-     ->addConsignment($consignment)
-     ->setLatestData()
-     ->sendReturnLabelMails();
+    ->addConsignment($consignment)
+    ->setPdfOfLabels()
+    ->downloadPdfOfLabels();
 ```
 
-### Contribute
+### Create multiple consignments
+This example creates multiple consignments by adding them to one ```MyParcelCollection()``` and then creates and downloads one PDF with all labels.
+
+```php
+// Create the collection before the loop
+$myParcelCollection = (new MyParcelCollection())
+    ->setUserAgent('name_of_cms', '1.0'); 
+
+// Loop through your shipments, adding each to the same MyParcelCollection()
+foreach ($yourShipments as $yourShipment) {
+
+    $consignment = (new MyParcelConsignmentRepository())
+        ->setApiKey('api_key_from_MyParcel_backoffice')
+        ->setReferenceId($yourShipment['reference_id']) // Note: Make sure every shipment gets a unique reference ID
+        ->setPerson($yourShipment['name'])
+        ->setPostalCode($yourShipment['postal_code'])
+        ->setFullStreet($yourShipment['full_street']) 
+        ->setCity($yourShipment['city']);
+        
+    // Add each consignment to the collection created before
+    $myParcelCollection
+        ->addConsignment($consignment);
+}
+```
+
+### Label format and position
+Choose to output the label as either A4 or A6 when creating a pdf or download link with the argument `$positions` of `setPdfOfLabels($positions)` and `setLinkOfLabels($positions)`.
+
+Example values for `$positions`:
+```
+A4:            A6:
+┏━━━━━┳━━━━━┓  ┏━━━━━┓
+┃  1  ┃  2  ┃  ┃  x  ┃
+┣━━━━━╋━━━━━┫  ┗━━━━━┛
+┃  3  ┃  4  ┃
+┗━━━━━┻━━━━━┛  
+```
+1. `1`: Default value. Outputs A4, starting at top left position.
+1. `false`: Outputs at A6 format
+1. `[1,4]`: Defines the position of labels on an A4 sheet. Only applies to the first page, subsequent pages will use the default positioning (1,2,3,4)
+
+More information: https://myparcelnl.github.io/api/#6_F
+
+### Package type and options
+Set package type with `setPackageType($type)`. Retrieve it after with `getPackageType()`. For more details on the different types of packages: https://myparcelnl.github.io/api/#6_A_1
+
+#### 1: Package
+This is the default package type. It must be explicitly set to allow enabling of further shipment options. It's available for NL, EU and global shipments.
+
+#### 2: Mailbox package
+This package type is only available for NL shipments that fit into a mailbox. It does not support additional options.
+Note: If you still make the request with additional options, bear in mind that you need to pay more than is necessary!
+
+#### 3: Letter 
+This package type is available for NL, EU and global shipments. The label for this shipment is unpaid meaning that you will need to pay the postal office/courier to send this letter/package. Therefore, it does not support additional options.
+
+#### 4: Digital stamp 
+This package type is only available for NL shipments and does not support any additional options. Its price is calculated using the package weight, which is set using `setPhysicalProperties()`.
+
+```php
+    ->setPackageType(4)
+    ->setPhysicalProperties(['weight' => 300]); // weight in grams (required)
+```
+
+> Note: This shipment will appear on your invoice on shipment_status 2 (pending - registered) instead of all other shipment types, which don't appear until shipment status 3. Read more: https://myparcelnl.github.io/api/#6_A_1
+
+#### Package options
+These options are only available for package type 1 (package).
+
+Available options:
+- only_recipient: Deliver the package only at address of the intended recipient. This option is required for Morning and Evening delivery types.
+  - Set: `setOnlyRecipient(true)`
+  - Get: `isOnlyRecipient()`
+- signature: Recipient must sign for the package. This option is required for Pickup and Pickup express delivery types.
+  - Set: `setSignature(true)`
+  - Get: `isSignature()`
+- return: Return the package to the sender when the recipient is not home.
+  - Set: `setReturn(true)`
+  - Get: `isReturn()`
+- large_format: This option must be specified if the dimensions of the package are between 100 x 70 x 50 and 175 x 78 x 58 cm. If the scanned dimensions from the carrier indicate that this package is large format and it has not been specified then it will be added to the shipment in the billing process. This option is also available for EU shipments. 
+  - Set: `setLargeFormat(true)`
+  - Get: `isLargeFormat()`
+- insurance: This option allows a shipment to be insured up to certain amount. NL shipments can be insured for 5000,- euros. EU shipments must be insured for 500,- euros. Global shipments must be insured for 200,- euros. The following shipment options are mandatory when insuring an NL shipment: only_recipient and signature.
+  - Set: `setInsurance(250)` (amount in EUR)
+  - Get: `getInsurance()`
+
+More information: https://myparcelnl.github.io/api/#6_A_3
+
+### Retrieve data from a consignment
+Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#myparcelconsignment) for consignments here. 
+```php
+$consignment = new MyParcelConsignmentRepository();
+
+echo $consignment->getFullStreet();
+echo $consignment->getPerson();
+echo $consignment->getPhone();
+echo $consignment->getStreet();
+// etc...
+```
+
+### Create and download label(s)
+Create and directly download PDF with `setPdfOfLabels($position)` where `$positions` is the [label position](#label-format-and-position) value. 
+```php
+$myParcelCollection
+    ->setPdfOfLabels()
+    ->downloadPdfOfLabels(false); // Opens pdf "inline" by default, pass false as argument to download file  
+```
+
+Create and echo download link to PDF with `setLinkOfLabels($position)` where `$positions` is the [label position](#label-format-and-position) value.
+```php
+echo $myParcelCollection 
+    ->setLinkOfLabels($positions)
+    ->getLinkOfLabels();
+```
+
+More information: https://myparcelnl.github.io/api/#6_F
+
+## List of classes and their methods
+This is a list of all the classes in this SDK and their available methods.
+
+### Models
+`MyParcelNL/Sdk/src/Model`
+
+#### MyParcelConsignment
+:warning: Access these methods through `\MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository` (which extends `MyParcelConsignment`).
+
+```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
+```php
+$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
+    ->setApiKey('api_key_from_MyParcel_backoffice')
+    ->setReferenceId('Order 1203')
+    
+    // Recipient/address: https://myparcelnl.github.io/api/#7_B
+    ->setPerson('Piet Hier')    // Name
+    ->setEmail('test@test.nl')  // E-mail address
+    ->setPhone('+31 612345678') // Phone number
+    ->setCompany('Piet BV')     // Company
+    
+    ->setFullStreet('Plein 1945 55b') // Street, number and suffix in one line 
+    // OR send the street data separately:
+    ->setStreet('Plein 1945') / Street
+    ->setNumber((string)55)   // Number
+    ->setNumberSuffix('b')    // Suffix
+    
+    ->setCity('Amsterdam')    // City
+    ->setPostalCode('2231JE') // Postal code
+    ->setCountry('NL')        // Country                
+            
+    // Available package types:
+    // 1: Package (default)
+    // 2: Mailbox package
+    // 3: Letter
+    // 4: Digital stamp
+    ->setPackageType(1)
+
+    // Options (https://myparcelnl.github.io/api/#6_A_3)
+    ->setOnlyRecipient(false)   // Deliver the package only at address of the intended recipient. This option is required for Morning and Evening delivery types.
+    ->setSignature(true)        // Recipient must sign for the package. This option is required for Pickup and Pickup express delivery types. 
+    ->setReturn(true)           // Return the package to the sender when the recipient is not home.
+    ->setLargeFormat(false)     // Must be specified if the dimensions of the package are between 100x70x50 and 175x78x58 cm. 
+    ->setInsurance(250)         // Allows a shipment to be insured up to certain amount. Only packages (package type 1) can be insured. 
+    
+    ->setLabelDescription('Order 10034') // This description will appear on the shipment label for non-return shipments. 
+        
+    // Delivery: https://myparcelnl.github.io/api/#8
+    ->setDeliveryType()
+    ->setDeliveryDate()
+    ->setDeliveryRemark()    
+    
+    // Set pickup location
+    ->setPickupLocationName('Supermarkt')
+    ->setPickupStreet('Straatnaam')
+    ->setPickupNumber('32')
+    ->setPickupPostalCode('1234 AB')
+    ->setPickupCity('Hoofddorp')
+      
+    // Physical properties
+    ->setPhysicalProperties(['weight' => 73]) // Array with physical properties of the shipment. Currently only used to set the weight in grams for digital stamps (which is required)
+    
+    // Non-EU shipment attributes: see https://myparcelnl.github.io/api/#7_E
+    ->setInvoice()
+    ->setContents()
+    ->addItem();
+
+// Get attributes from consignment
+$consignment
+    ->getApiKey()
+    ->getReferenceId()
+    ->getBarcode() // Barcode is available after using setLinkOfLabels() or setPdfOfLabels() on the MyParcelCollection the consignment has been added to
+    
+    ->getLabelDescription()
+    ->getMyParcelConsignmentId()
+    ->getShopId()
+    ->getStatus()
+    
+    // Recipient info
+    ->getPerson()
+    ->getEmail()    
+    ->getPhone()
+    ->getCompany()
+
+    // It doesn't matter whether you used setFullStreet() or set all parts separately
+    ->getStreet()
+    ->getStreetAdditionalInfo()
+    ->getNumber()
+    ->getNumberSuffix()
+    ->getPostalCode()
+    ->getCity()
+    ->getCountry()
+        
+    // Package type
+    ->getPackageType()
+    
+    // Get value of options
+    ->isOnlyRecipient()
+    ->isSignature()
+    ->isReturn()
+    ->isLargeFormat()
+    ->getInsurance()
+        
+    // Get pickup location info
+    ->getPickupLocationName()
+    ->getPickupStreet()
+    ->getPickupNumber()
+    ->getPickupPostalCode()
+    ->getPickupCity()
+    
+    // Delivery
+    ->getDeliveryDate()
+    ->getDeliveryRemark()
+    ->getDeliveryType()
+    
+    // Physical properties (digital stamps or non-EU shipments)
+    ->getPhysicalProperties()
+        
+    // Non-EU attributes
+    ->getInvoice()
+    ->getContents()
+    ->getItems();
+```
+
+#### MyParcelCustomsItem
+This object is embedded in the MyParcelConsignment object for global shipments and is mandatory for non-EU shipments.
+
+```MyParcelNL/Sdk/src/Model/MyParcelCustomsItem.php```
+```php
+  ->setAmount(3) // Amount of items in the package
+  
+  // ISIC/IDEP code (https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/lopend/internationale-handel-in-goederen/idep-codelijsten) 
+  ->setClassification(0111) // Example: 0111 = "Growing of cereals (except rice), leguminous crops and oil seeds"  
+  ->setCountry('NL') // Country of origin
+  ->setDescription('Cereal grains')
+  ->setItemValue(["amount" => 200, "currency" => "EUR"]) // Must be array with amount and currency like in the example
+  ->setWeight() // The total weight for these items in whole grams. Between 0 and 20000 grams.
+  
+  ->getAmount()
+  ->getClassification()
+  ->getCountry()
+  ->getDescription()
+  ->getItemValue()
+  ->getWeight()
+  
+  ->isFullyFilledItem()
+```
+
+#### MyParcelRequest
+This model represents one request
+
+```MyParcelNL/Sdk/src/Model/MyParcelRequest.php```
+```php
+  ->sendRequest()
+  ->setRequestParameters()
+  ->setUserAgent()
+
+  ->getError()
+  ->getResult()
+  ->getUserAgent()
+  ->getUserAgentFromComposer()
+```
+
+#### Repository\MyParcelConsignmentRepository
+The repository of a MyParcel consignment.
+
+```MyParcelNL/Sdk/src/Model/Repository/MyParcelConsignmentRepository.php```
+```php
+  ->setFullStreet('Street 23b, 1234 AB City')
+  
+  ->apiDecode()
+  ->apiEncode()
+  ->encodeReturnShipment()
+  
+  // Convert pickup data from checkout
+  // You can use these if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+  ->setDeliveryDateFromCheckout()
+  ->setPickupAddressFromCheckout()
+  
+  ->getDeliveryTypeFromCheckout()
+  
+  ->getFullStreet()
+  ->getTotalWeight()
+  
+  ->isCdCountry()
+  ->isCorrectAddress()
+  ->isEuCountry()
+```
+
+### Helpers
+```MyParcelNL/Sdk/src/Helper```
+
+#### MyParcelCollection
+Stores all data to communicate with the MyParcel API.
+
+```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
+```php
+    ->addConsignment() // Add consignment to collection
+
+    // Get consignments from the collection
+    ->getConsignments()
+    ->getConsignmentByApiId()
+    ->getConsignmentByReferenceId()
+
+    ->clearConsignmentsCollection() // Clear the collection
+    
+    ->createConcepts() // Create concept shipment in the MyParcel Backoffice
+    ->deleteConcepts()
+    
+    ->getOneConsignment()
+    ->getRequestBody()
+    
+    ->sendReturnLabelMails() // Send return label to customer. The customer can pay and download the label
+    ->setLatestData() // Set id and run this function to update all the information about this shipment
+    ->setLatestDataWithoutIds()
+    
+    ->setLinkOfLabels()
+    ->getLinkOfLabels()
+
+    // Refer to 
+    ->setPdfOfLabels()
+    ->downloadPdfOfLabels()
+    
+    // To give us insight into which CMS system you're connecting from, you should send a User-Agent. 
+    // If you're using a known CMS system it's required. 
+    // You must send the name of the CMS system followed by a version number.
+    ->setUserAgent('name_of_cms', '1.0')
+    ->getUserAgent()
+```
+
+#### MyParcelCurl
+Curl to use in the MyParcel API.
+
+```MyParcelNL/Sdk/src/Helper/MyParcelCurl.php```
+```php
+  ->addOption()
+  ->addOptions()
+  ->close()
+  ->connect()
+  ->getErrno()
+  ->getError()
+  ->getInfo()
+  ->multiRequest()
+  ->read()
+  ->setConfig()
+  ->setOptions()
+  ->setUserAgent()
+  ->write()
+```
+
+
+## Contribute
+
 1. Check for open issues or open a new issue to start a discussion around a bug or feature.
 1. Fork the repository on GitHub to start making your changes.
 1. Write one or more tests for the new feature or that expose the bug.

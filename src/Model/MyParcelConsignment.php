@@ -85,6 +85,11 @@ class MyParcelConsignment
     private $street = null;
 
     /**
+     * @var string
+     */
+    private $street_additional_info = null;
+
+    /**
      * @var integer
      */
     private $number = null;
@@ -168,6 +173,11 @@ class MyParcelConsignment
      * @var int
      */
     private $insurance = 0;
+
+    /**
+     * @var array
+     */
+    private $physical_properties = [];
 
     /**
      * @var int
@@ -254,6 +264,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The id of the consignment
      *
      * @return $this
@@ -303,6 +315,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * @param null $barcode
      *
      * @return $this
@@ -351,6 +365,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * Status of the consignment
      *
      * @param int $status
@@ -374,6 +390,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The shop id to which this shipment belongs
      *
      * When the store ID is not specified, the API will look at the API key.
@@ -458,17 +476,36 @@ class MyParcelConsignment
     }
 
     /**
+     * The street additional info
+     * Required: No
+     *
+     * @param string $street_additional_info
+     *
+     * @return $this
+     */
+    public function setStreetAdditionalInfo($street_additional_info)
+    {
+        $this->street_additional_info = $street_additional_info;
+
+        return $this;
+    }
+
+    /**
      * Get additional information for the street that should not be included in the street field
+     *
+     * @return string
      */
     public function getStreetAdditionalInfo()
     {
         $streetParts = $this->getStreetParts();
+        $result = '';
 
         if (isset($streetParts[1])) {
-            return $streetParts[1];
+            $result .= $streetParts[1];
         }
 
-        return '';
+        $result .= ' ' . (string) $this->street_additional_info;
+        return trim($result);
     }
 
     /**
@@ -977,6 +1014,28 @@ class MyParcelConsignment
     }
 
     /**
+     * Required: Yes for non-EU shipments and digital stamps
+     *
+     * @param array $physical_properties
+     *
+     * @return MyParcelConsignment
+     */
+    public function setPhysicalProperties($physical_properties)
+    {
+        $this->physical_properties = $physical_properties;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPhysicalProperties()
+    {
+        return $this->physical_properties;
+    }
+
+    /**
      * @return integer
      */
     public function getContents()
@@ -1058,9 +1117,6 @@ class MyParcelConsignment
 
         return $this;
     }
-
-
-
 
     /**
      * @return string
@@ -1254,6 +1310,9 @@ class MyParcelConsignment
      */
     private function getStreetParts()
     {
-        return explode("\n", wordwrap($this->street, self::MAX_STREET_LENGTH));
+        $streetWrap = wordwrap($this->street, self::MAX_STREET_LENGTH, 'BREAK_LINE');
+        $parts      = explode("BREAK_LINE", $streetWrap);
+
+        return $parts;
     }
 }

@@ -141,6 +141,8 @@ class MyParcelCollection extends CollectionProxy
 
     /**
      * @return string
+     *
+     * this is used by third parties to access the label_pdf variable.
      */
     public function getLabelPdf()
     {
@@ -218,7 +220,6 @@ class MyParcelCollection extends CollectionProxy
                         ->sendRequest();
 
                     $consignment->setMyParcelConsignmentId($request->getResult()['data']['ids'][0]['id']);
-
                 }
             }
         }
