@@ -63,11 +63,6 @@ class MyParcelCollection extends CollectionProxy
     private $label_pdf = null;
 
     /**
-     * @var bool
-     */
-    private $return = false;
-
-    /**
      * @var string
      */
     private $user_agent = '';
@@ -155,13 +150,6 @@ class MyParcelCollection extends CollectionProxy
     public function getLinkOfLabels()
     {
         return $this->label_link;
-    }
-
-    public function isReturn($return = true)
-    {
-        $this->return = $return;
-
-        return $this;
     }
 
     /**
