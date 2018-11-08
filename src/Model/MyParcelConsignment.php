@@ -230,6 +230,16 @@ class MyParcelConsignment
     private $pickup_network_id = '';
 
     /**
+     * @var \Helpers
+     */
+    private $helper;
+
+    public function __construct()
+    {
+        $this->helper = new \Helpers();
+    }
+
+    /**
      * @return string
      */
     public function getReferenceId()

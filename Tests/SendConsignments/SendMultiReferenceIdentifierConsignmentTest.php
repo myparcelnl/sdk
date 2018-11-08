@@ -28,6 +28,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
     /**
      * Test one shipment with createConcepts()
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
