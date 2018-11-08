@@ -213,7 +213,6 @@ class MyParcelCollection
                         ->sendRequest();
 
                     $consignment->setMyParcelConsignmentId($request->getResult()['data']['ids'][0]['id']);
-
                 }
             }
         }
