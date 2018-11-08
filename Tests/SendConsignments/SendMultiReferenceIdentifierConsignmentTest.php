@@ -26,6 +26,12 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
+    private $timestamp;
+
+    public function setUp() {
+        $this->timestamp = (new \DateTime())->getTimestamp();
+    }
+
     /**
      * Test one shipment with createConcepts()
      * @throws \Exception
@@ -163,7 +169,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_test3',
+                'reference_identifier' => (string)$this->timestamp . '_test3',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -178,7 +184,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_test2',
+                'reference_identifier' => (string)$this->timestamp . '_test2',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
