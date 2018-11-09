@@ -14,6 +14,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use Illuminate\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 
 class MyParcelRequest
@@ -50,11 +51,13 @@ class MyParcelRequest
     private $userAgent = null;
 
     /**
+     * Get an item from tje result using "dot" notation.
+     * @param string $key
      * @return null
      */
-    public function getResult()
+    public function getResult($key = null)
     {
-        return $this->result;
+        return Arr::get($this->result, $key);
     }
 
     /**

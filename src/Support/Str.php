@@ -700,7 +700,7 @@ class Str
             ];
         }
 
-        if ($languageSpecific[$language]) {
+        if (isset($languageSpecific[$language])) {
             return $languageSpecific[$language];
         }
 

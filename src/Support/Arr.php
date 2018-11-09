@@ -280,7 +280,7 @@ class Arr
             return (new Helpers())->value($default);
         }
 
-        if (is_null($key)) {
+        if (is_null($key) || empty($key)) {
             return $array;
         }
 
@@ -289,7 +289,7 @@ class Arr
         }
 
         if (strpos($key, '.') === false) {
-            if ($array[$key]) {
+            if (isset($array[$key])) {
                 return $array[$key];
             } else {
                 return (new Helpers())->value($default);

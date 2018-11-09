@@ -203,7 +203,7 @@ class MyParcelCollection extends CollectionProxy
                         )
                         ->sendRequest();
 
-                    $consignment->setMyParcelConsignmentId($request->getResult()['data']['ids'][0]['id']);
+                    $consignment->setMyParcelConsignmentId($request->getResult('data.ids.0.id'));
                 }
             }
         }
@@ -277,7 +277,7 @@ class MyParcelCollection extends CollectionProxy
 
         $consignmentsToReplace = [];
 
-        foreach ($request->getResult()['data']['shipments'] as $shipment) {
+        foreach ($request->getResult('data.shipments') as $shipment) {
             $consignment = $this->getConsignmentByApiId($shipment['id']);
             if ($consignment === null) {
                 $consignment = $this->getConsignmentByReferenceId($shipment['reference_identifier']);
@@ -363,7 +363,7 @@ class MyParcelCollection extends CollectionProxy
                 )
                 ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
-            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult()['data']['pdfs']['url'];
+            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
         }
 
         $this
