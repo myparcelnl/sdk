@@ -874,7 +874,7 @@ class MyParcelConsignment
      */
     public function setByMethods($data, $methods) {
         foreach ($methods as $method => $value) {
-            if (isset($data[$value])) {
+            if (! empty($data[$value])) {
                 $this->{'set' . $method}($data[$value]);
             }
         }
@@ -983,7 +983,7 @@ class MyParcelConsignment
      */
     public function isLargeFormat()
     {
-        return $this->large_format;
+        return (bool)$this->large_format;
     }
 
     /**

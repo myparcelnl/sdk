@@ -17,6 +17,7 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\src\Support\CollectionProxy;
 
 /**
@@ -268,26 +269,24 @@ class MyParcelCollection extends CollectionProxy
             throw new \Exception('Unable to transport data to MyParcel.');
         }
 
-        $consignmentsToReplace = [];
-
+        $newCollection = new MyParcelCollection();
         foreach ($request->getResult('data.shipments') as $shipment) {
+
+            /** @var Collection|MyParcelConsignmentRepository[] $consignments */
             $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
 
             if ($consignments->isEmpty()) {
                 $consignments = $this->getByReferenceId($shipment['reference_identifier']);
             }
 
-            foreach ($consignments as $consignment) {
-                /** @var MyParcelConsignmentRepository $consignment */
-                $consignmentsToReplace[] = $consignment->apiDecode($shipment);
-            }
+            $consignment = (new MyParcelConsignmentRepository())
+                ->setApiKey($consignments->first()->getApiKey())
+                ->apiDecode($shipment);
+
+            $newCollection->addConsignment($consignment, false);
         }
 
-        $this->clearConsignmentsCollection();
-
-        foreach ($consignmentsToReplace as $consignmentToReplace) {
-            $this->addConsignment($consignmentToReplace, false);
-        }
+        $this->items = $newCollection->items;
 
         return $this;
     }
@@ -363,8 +362,7 @@ class MyParcelCollection extends CollectionProxy
             $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
         }
 
-        $this
-            ->setLatestData();
+        $this->setLatestData();
 
         return $this;
     }
@@ -589,6 +587,11 @@ class MyParcelCollection extends CollectionProxy
      */
     public function clearConsignmentsCollection() {
         $this->items = [];
+    }
+
+    public function create()
+    {
+        return new MyParcelCollection();
     }
 
     /**
