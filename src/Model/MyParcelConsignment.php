@@ -98,6 +98,11 @@ class MyParcelConsignment
     public $street_additional_info = null;
 
     /**
+     * @var string
+     */
+    private $street_additional_info = null;
+
+    /**
      * @internal
      * @var integer
      */
@@ -204,6 +209,11 @@ class MyParcelConsignment
      * @var array
      */
     public $physical_properties = [];
+
+    /**
+     * @var array
+     */
+    private $physical_properties = [];
 
     /**
      * @internal
@@ -416,9 +426,9 @@ class MyParcelConsignment
     }
 
     /**
-     * @internal
      * Status of the consignment
      *
+     * @internal
      * @param int $status
      *
      * @return $this
@@ -439,6 +449,8 @@ class MyParcelConsignment
     }
 
     /**
+     * @internal
+     *
      * The shop id to which this shipment belongs
      *
      * When the store ID is not specified, the API will look at the API key.
