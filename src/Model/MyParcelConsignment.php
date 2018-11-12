@@ -98,11 +98,6 @@ class MyParcelConsignment
     public $street_additional_info = null;
 
     /**
-     * @var string
-     */
-    private $street_additional_info = null;
-
-    /**
      * @internal
      * @var integer
      */
@@ -209,11 +204,6 @@ class MyParcelConsignment
      * @var array
      */
     public $physical_properties = [];
-
-    /**
-     * @var array
-     */
-    private $physical_properties = [];
 
     /**
      * @internal
