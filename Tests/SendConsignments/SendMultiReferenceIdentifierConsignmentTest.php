@@ -114,7 +114,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         $savedCollection->setLatestData();
 
         $consignmentTest = $this->additionProvider()[0];
-        $savedConsignment = $savedCollection->getConsignmentByReferenceId($consignmentTest['reference_identifier']);
+        $savedConsignment = $savedCollection->getByReferenceId($consignmentTest['reference_identifier'])->first();
 
         $this->assertEquals(true, $savedConsignment->getMyParcelConsignmentId() > 1, 'No id found');
         $this->assertEquals($consignmentTest['api_key'], $savedConsignment->getApiKey(), 'getApiKey()');

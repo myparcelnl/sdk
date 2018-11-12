@@ -390,7 +390,7 @@ Stores all data to communicate with the MyParcel API.
     // Get consignments from the collection
     ->getConsignments()
     ->getConsignmentByApiId()
-    ->getConsignmentByReferenceId()
+    ->getByReferenceId()
 
     ->clearConsignmentsCollection() // Clear the collection
     

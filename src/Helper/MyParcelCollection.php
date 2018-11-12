@@ -27,7 +27,6 @@ use MyParcelNL\Sdk\src\Support\CollectionProxy;
  */
 class MyParcelCollection extends CollectionProxy
 {
-    const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
     const PREFIX_PDF_FILENAME = 'myparcel-label-';
     const DEFAULT_A4_POSITION = 1;
 
@@ -89,7 +88,7 @@ class MyParcelCollection extends CollectionProxy
      */
     public function getOneConsignment()
     {
-        if (count($this->getConsignments()) > 1) {
+        if ($this->count() > 1) {
             throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
         }
 
@@ -99,18 +98,23 @@ class MyParcelCollection extends CollectionProxy
     /**
      * @param string $id
      *
-     * @return MyParcelConsignmentRepository
+     * @return MyParcelCollection
+     */
+    public function getByReferenceId($id)
+    {
+        return $this->where('reference_id', $id);
+    }
+
+    /**
+     * This is deprecated because there may be multiple consignments with the same reference id
+     *
+     * @deprecated Use getByReferenceId instead
+     * @param $id
+     * @return mixed
      */
     public function getConsignmentByReferenceId($id)
     {
-        // return if referenceId not is set as a key
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getReferenceId() == $id) {
-                return $consignment;
-            }
-        }
-
-        return null;
+        return $this->getByReferenceId($id)->first();
     }
 
     /**
@@ -120,14 +124,7 @@ class MyParcelCollection extends CollectionProxy
      */
     public function getConsignmentByApiId($id)
     {
-        // return if ApiId not is set as a key
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getMyParcelConsignmentId() == $id) {
-                return $consignment;
-            }
-        }
-
-        return null;
+        return $this->where('myparcel_consignment_id', $id)->first();
     }
 
     /**
@@ -170,11 +167,7 @@ class MyParcelCollection extends CollectionProxy
             }
         }
 
-        if ($consignment->getReferenceId()) {
-            $this->items[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
-        } else {
-            $this->items[] = $consignment;
-        }
+        $this->push($consignment);
 
         return $this;
     }
@@ -223,7 +216,7 @@ class MyParcelCollection extends CollectionProxy
         foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
             foreach ($consignments as $consignment) {
                 if ($consignment->getMyParcelConsignmentId() !== null) {
-                    $request = (new MyParcelRequest())
+                    (new MyParcelRequest())
                         ->setUserAgent($this->getUserAgent())
                         ->setRequestParameters(
                             $key,
@@ -278,12 +271,16 @@ class MyParcelCollection extends CollectionProxy
         $consignmentsToReplace = [];
 
         foreach ($request->getResult('data.shipments') as $shipment) {
-            $consignment = $this->getConsignmentByApiId($shipment['id']);
-            if ($consignment === null) {
-                $consignment = $this->getConsignmentByReferenceId($shipment['reference_identifier']);
+            $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
+
+            if ($consignments->isEmpty()) {
+                $consignments = $this->getByReferenceId($shipment['reference_identifier']);
             }
 
-            $consignmentsToReplace[] = $consignment->apiDecode($shipment);
+            foreach ($consignments as $consignment) {
+                /** @var MyParcelConsignmentRepository $consignment */
+                $consignmentsToReplace[] = $consignment->apiDecode($shipment);
+            }
         }
 
         $this->clearConsignmentsCollection();
