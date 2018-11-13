@@ -27,20 +27,15 @@ trait HasCheckoutFields
         switch ($typeFromCheckout) {
             case 'morning':
                 return MyParcelConsignment::DELIVERY_TYPE_MORNING;
-                break;
             case 'standard':
                 return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
-                break;
             case 'night':
             case 'avond':
                 return MyParcelConsignment::DELIVERY_TYPE_NIGHT;
-                break;
             case 'retail':
                 return MyParcelConsignment::DELIVERY_TYPE_RETAIL;
-                break;
             case 'retailexpress':
                 return MyParcelConsignment::DELIVERY_TYPE_RETAIL_EXPRESS;
-                break;
             default:
                 return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
         }
