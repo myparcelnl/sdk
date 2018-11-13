@@ -21,7 +21,6 @@ trait HasCheckoutFields
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
         $aCheckoutData = json_decode($checkoutData, true);
-
         $typeFromCheckout = $this->getTypeFromCheckout($aCheckoutData);
 
         switch ($typeFromCheckout) {

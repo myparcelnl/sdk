@@ -532,7 +532,7 @@ class MyParcelCollection extends CollectionProxy
         if (is_numeric($positions)) {
             /** Generating positions for A4 paper */
             $this->paper_size = 'A4';
-            $this->label_position = $this->getPositions($positions);
+            $this->label_position = LabelHelper::getPositions($positions);
         } elseif (is_array($positions)) {
             /** Set positions for A4 paper */
             $this->paper_size = 'A4';
@@ -587,11 +587,6 @@ class MyParcelCollection extends CollectionProxy
         $this->items = [];
     }
 
-    public function create()
-    {
-        return new MyParcelCollection();
-    }
-
     /**
      * Encode multiple shipments so that the data can be sent to MyParcel.
      *
@@ -632,34 +627,6 @@ class MyParcelCollection extends CollectionProxy
         $data['data']['return_shipments'][] = $shipment;
 
         return json_encode($data);
-    }
-
-    /**
-     * Generating positions for A4 paper
-     *
-     * @param int $start
-     *
-     * @return string
-     */
-    private function getPositions($start)
-    {
-        $aPositions = [];
-        switch ($start) {
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 1:
-                $aPositions[] = 1;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 2:
-                $aPositions[] = 2;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 3:
-                $aPositions[] = 3;
-            case 4:
-                $aPositions[] = 4;
-                break;
-        }
-
-        return implode(';', $aPositions);
     }
 
     /**
