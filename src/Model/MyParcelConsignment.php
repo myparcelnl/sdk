@@ -15,6 +15,7 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
+use MyParcelNL\sdk\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
@@ -27,6 +28,28 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  */
 class MyParcelConsignment
 {
+    use HasCheckoutFields;
+
+    /**
+     * Consignment types
+     */
+    const DELIVERY_TYPE_MORNING             = 1;
+    const DELIVERY_TYPE_STANDARD            = 2;
+    const DELIVERY_TYPE_NIGHT               = 3;
+    const DELIVERY_TYPE_RETAIL              = 4;
+    const DELIVERY_TYPE_RETAIL_EXPRESS      = 5;
+
+    const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
+
+    /**
+     * Package types
+     */
+    const PACKAGE_TYPE_NORMAL = 1;
+    const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+
+    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_NORMAL;
+
+
     /**
      * Regular expression used to make sure the date is correct.
      */
@@ -575,6 +598,22 @@ class MyParcelConsignment
     }
 
     /**
+     * The address street name
+     *
+     * Required: Yes or use setFullStreet()
+     *
+     * @param string $street
+     *
+     * @return $this
+     */
+    public function setStreet($street)
+    {
+        $this->street = trim(str_replace('\n', ' ', $street));
+
+        return $this;
+    }
+
+    /**
      * Get additional information for the street that should not be included in the street field
      *
      * @todo move to hasStreet
@@ -635,18 +674,29 @@ class MyParcelConsignment
     }
 
     /**
-     * The address street name
+     * Splitting a full NL address and save it in this object
      *
-     * Required: Yes or use setFullStreet()
+     * Required: Yes or use setStreet()
      *
-     * @param string $street
+     * @param $fullStreet
      *
      * @return $this
+     * @throws \Exception
      */
-    public function setStreet($street)
+    public function setFullStreet($fullStreet)
     {
-        $this->street = trim(str_replace('\n', ' ', $street));
+        if ($this->getCountry() === null) {
+            throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
+        }
 
+        if ($this->getCountry() == MyParcelConsignment::CC_NL) {
+            $streetData = SplitStreet::splitStreet($fullStreet);
+            $this->setStreet($streetData['street']);
+            $this->setNumber($streetData['number']);
+            $this->setNumberSuffix($streetData['number_suffix']);
+        } else {
+            $this->setStreet($fullStreet);
+        }
         return $this;
     }
 

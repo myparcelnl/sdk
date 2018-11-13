@@ -17,3 +17,4 @@ require_once ('Builders/ConsignmentBuilder.php');
 require_once ('Model/Repository/MyParcelConsignmentRepository.php');
 require_once ('Model/MyParcelCustomsItem.php');
 require_once ('Concerns/HasCustomItems.php');
+require_once ('Concerns/HasCheckoutFields.php');
