@@ -20,41 +20,30 @@ trait HasCheckoutFields
      */
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
-        if ($checkoutData === null) {
-            return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
-        }
-
         $aCheckoutData = json_decode($checkoutData, true);
-        $deliveryType = MyParcelConsignment::DELIVERY_TYPE_STANDARD;
 
-        if (key_exists('time', $aCheckoutData) &&
-            key_exists('price_comment', $aCheckoutData['time'][0]) &&
-            $aCheckoutData['time'][0]['price_comment'] !== null
-        ) {
-            switch ($aCheckoutData['time'][0]['price_comment']) {
-                case 'morning':
-                    $deliveryType = MyParcelConsignment::DELIVERY_TYPE_MORNING;
-                    break;
-                case 'standard':
-                    $deliveryType = MyParcelConsignment::DELIVERY_TYPE_STANDARD;
-                    break;
-                case 'night':
-                case 'avond':
-                    $deliveryType = MyParcelConsignment::DELIVERY_TYPE_NIGHT;
-                    break;
-            }
-        } elseif (key_exists('price_comment', $aCheckoutData) && $aCheckoutData['price_comment'] !== null) {
-            switch ($aCheckoutData['price_comment']) {
-                case 'retail':
-                    $deliveryType = MyParcelConsignment::DELIVERY_TYPE_RETAIL;
-                    break;
-                case 'retailexpress':
-                    $deliveryType = MyParcelConsignment::DELIVERY_TYPE_RETAIL_EXPRESS;
-                    break;
-            }
+        $typeFromCheckout = $this->getTypeFromCheckout($aCheckoutData);
+
+        switch ($typeFromCheckout) {
+            case 'morning':
+                return MyParcelConsignment::DELIVERY_TYPE_MORNING;
+                break;
+            case 'standard':
+                return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
+                break;
+            case 'night':
+            case 'avond':
+                return MyParcelConsignment::DELIVERY_TYPE_NIGHT;
+                break;
+            case 'retail':
+                return MyParcelConsignment::DELIVERY_TYPE_RETAIL;
+                break;
+            case 'retailexpress':
+                return MyParcelConsignment::DELIVERY_TYPE_RETAIL_EXPRESS;
+                break;
+            default:
+                return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
         }
-
-        return $deliveryType;
     }
 
     /**
@@ -132,6 +121,23 @@ trait HasCheckoutFields
         }
 
         return $this;
+    }
+
+    /**
+     * @param $aCheckoutData
+     * @return array
+     */
+    private function getTypeFromCheckout($aCheckoutData)
+    {
+        $typeFromCheckout = null;
+
+        if (!empty($aCheckoutData['time'][0]['price_comment'])) {
+            $typeFromCheckout = $aCheckoutData['time'][0]['price_comment'];
+        } elseif (!empty($aCheckoutData['price_comment'])) {
+            $typeFromCheckout = $aCheckoutData['price_comment'];
+        }
+
+        return $typeFromCheckout;
     }
 
 }
