@@ -10,11 +10,11 @@
  * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release v0.1.0
- * @deprecated  Use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder instead
+ * @deprecated  Use MyParcelNL\Sdk\src\Model\MyParcelConsignment instead
  */
 namespace MyParcelNL\Sdk\src\Model\Repository;
 
-use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 /**
  * The repository of a MyParcel consignment
@@ -22,6 +22,6 @@ use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder;
  * Class MyParcelConsignmentRepository
  * @package MyParcelNL\Sdk\Model\Repository
  */
-class MyParcelConsignmentRepository extends ConsignmentBuilder
+class MyParcelConsignmentRepository extends MyParcelConsignment
 {
 }

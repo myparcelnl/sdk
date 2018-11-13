@@ -1437,6 +1437,25 @@ class MyParcelConsignment
 
         return $this;
     }
+    /**
+     * The total weight for all items in whole grams
+     *
+     * @return int
+     */
+    public function getTotalWeight()
+    {
+        $weight = 0;
+
+        foreach ($this->getItems() as $item) {
+            $weight += ($item->getWeight());
+        }
+
+        if ($weight == 0) {
+            $weight = 1;
+        }
+
+        return $weight;
+    }
 
     /**
      * Only package type 1 can have extra options

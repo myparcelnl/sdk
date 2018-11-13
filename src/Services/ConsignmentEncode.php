@@ -12,7 +12,6 @@
 
 namespace MyParcelNL\Sdk\src\Services;
 
-use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
@@ -59,7 +58,7 @@ class ConsignmentEncode
         $packageType = $consignment->getPackageType();
 
         if ($packageType == null) {
-            $packageType = ConsignmentBuilder::DEFAULT_PACKAGE_TYPE;
+            $packageType = MyParcelConsignment::DEFAULT_PACKAGE_TYPE;
         }
 
         $this->consignmentEncoded = [

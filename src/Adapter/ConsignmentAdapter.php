@@ -11,7 +11,7 @@
  */
 namespace MyParcelNL\Sdk\src\Adapter;
 
-use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 class ConsignmentAdapter
@@ -21,9 +21,9 @@ class ConsignmentAdapter
     private $options;
 
     /**
-     * @var ConsignmentBuilder
+     * @var MyParcelConsignment
      */
-    private $builder;
+    private $consignment;
 
     /**
      * ConsignmentDecode constructor.
@@ -36,7 +36,7 @@ class ConsignmentAdapter
         $this->data      = $data;
         $this->recipient = $data['recipient'];
         $this->options   = $data['options'];
-        $this->builder   = (new ConsignmentBuilder())->setApiKey($apiKey);
+        $this->consignment   = (new MyParcelConsignment())->setApiKey($apiKey);
 
         $this
             ->baseOptions()
@@ -48,11 +48,11 @@ class ConsignmentAdapter
     /**
      * Decode all the data after the request with the API
      *
-     * @return ConsignmentBuilder
+     * @return MyParcelConsignment
      */
     public function getConsignment()
     {
-        return $this->builder;
+        return $this->consignment;
     }
 
     /**
@@ -61,7 +61,7 @@ class ConsignmentAdapter
     private function baseOptions()
     {
         /** @noinspection PhpInternalEntityUsedInspection */
-        $this->builder
+        $this->consignment
             ->setMyParcelConsignmentId($this->data['id'])
             ->setReferenceId($this->data['reference_identifier'])
             ->setBarcode($this->data['barcode'])
@@ -109,11 +109,11 @@ class ConsignmentAdapter
 
         if (key_exists('insurance', $this->options)) {
             $insuranceAmount = $this->options['insurance']['amount'];
-            $this->builder->setInsurance($insuranceAmount / 100);
+            $this->consignment->setInsurance($insuranceAmount / 100);
         }
 
         if (isset($this->options['delivery_type'])) {
-            $this->builder->setDeliveryType($this->options['delivery_type'], false);
+            $this->consignment->setDeliveryType($this->options['delivery_type'], false);
         }
 
         return $this;
@@ -190,7 +190,7 @@ class ConsignmentAdapter
     private function setByMethods($data, $methods) {
         foreach ($methods as $method => $value) {
             if (! empty($data[$value])) {
-                $this->builder->{'set' . $method}($data[$value]);
+                $this->consignment->{'set' . $method}($data[$value]);
             }
         }
 
@@ -204,7 +204,7 @@ class ConsignmentAdapter
      */
     private function clearFields($fields) {
         foreach ($fields as $field => $default) {
-            $this->builder->{$field} = $default;
+            $this->consignment->{$field} = $default;
         }
 
         return $this;

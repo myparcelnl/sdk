@@ -15,7 +15,6 @@
 namespace MyParcelNL\Sdk\src\Helper;
 
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
-use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
@@ -150,14 +149,13 @@ class MyParcelCollection extends CollectionProxy
     }
 
     /**
-     * @param ConsignmentBuilder $consignment
-     *
+     * @param MyParcelConsignment $consignment
      * @param bool $needReferenceId
      *
      * @return $this
      * @throws \Exception
      */
-    public function addConsignment(ConsignmentBuilder $consignment, $needReferenceId = true)
+    public function addConsignment(MyParcelConsignment $consignment, $needReferenceId = true)
     {
         if ($consignment->getApiKey() === null) {
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
@@ -442,7 +440,7 @@ class MyParcelCollection extends CollectionProxy
         $parentConsignment = $this->getConsignments(false)[0];
 
         $apiKey = $parentConsignment->getApiKey();
-        $data = $this->apiEncodeReturnShipments($parentConsignment);
+        $data = $this->apiEncodeReturnShipment($parentConsignment);
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -615,15 +613,21 @@ class MyParcelCollection extends CollectionProxy
     }
 
     /**
-     * Encode multiple ReturnShipment Objects
+     * Encode ReturnShipment to send to MyParcel
      *
      * @param MyParcelConsignmentRepository $consignment
      *
      * @return string
      */
-    private function apiEncodeReturnShipments($consignment)
+    private function apiEncodeReturnShipment($consignment)
     {
-        $data['data']['return_shipments'][] = $consignment->encodeReturnShipment();
+        $shipment = [
+            'parent' => $consignment->getMyParcelConsignmentId(),
+            'carrier' => 1,
+            'email' => $consignment->getEmail(),
+            'name' => $consignment->getPerson(),
+        ];
+        $data['data']['return_shipments'][] = $shipment;
 
         return json_encode($data);
     }
