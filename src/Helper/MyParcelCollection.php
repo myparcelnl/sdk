@@ -621,12 +621,14 @@ class MyParcelCollection extends CollectionProxy
      */
     private function apiEncodeReturnShipment($consignment)
     {
+        $data = [];
         $shipment = [
             'parent' => $consignment->getMyParcelConsignmentId(),
             'carrier' => 1,
             'email' => $consignment->getEmail(),
             'name' => $consignment->getPerson(),
         ];
+
         $data['data']['return_shipments'][] = $shipment;
 
         return json_encode($data);
