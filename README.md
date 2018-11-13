@@ -300,7 +300,6 @@ $consignment
     
     // Delivery
     ->getDeliveryDate()
-    ->getDeliveryRemark()
     ->getDeliveryType()
     
     // Physical properties (digital stamps or non-EU shipments)

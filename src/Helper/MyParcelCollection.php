@@ -14,9 +14,12 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
+use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
+use MyParcelNL\Sdk\src\Builders\ConsignmentBuilder;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\src\Support\CollectionProxy;
 
@@ -147,14 +150,14 @@ class MyParcelCollection extends CollectionProxy
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository $consignment
+     * @param ConsignmentBuilder $consignment
      *
      * @param bool $needReferenceId
      *
      * @return $this
      * @throws \Exception
      */
-    public function addConsignment(MyParcelConsignmentRepository $consignment, $needReferenceId = true)
+    public function addConsignment(ConsignmentBuilder $consignment, $needReferenceId = true)
     {
         if ($consignment->getApiKey() === null) {
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
@@ -279,11 +282,9 @@ class MyParcelCollection extends CollectionProxy
                 $consignments = $this->getByReferenceId($shipment['reference_identifier']);
             }
 
-            $consignment = (new MyParcelConsignmentRepository())
-                ->setApiKey($consignments->first()->getApiKey())
-                ->apiDecode($shipment);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
 
-            $newCollection->addConsignment($consignment, false);
+            $newCollection->addConsignment($consignmentAdapter->getConsignment(), false);
         }
 
         $this->items = $newCollection->items;
@@ -320,9 +321,8 @@ class MyParcelCollection extends CollectionProxy
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignment = new MyParcelConsignmentRepository();
-            $consignment->setApiKey($key)->apiDecode($shipment);
-            $this->addConsignment($consignment, false);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $key);
+            $this->addConsignment($consignmentAdapter->getConsignment(), false);
         }
 
         return $this;
@@ -607,7 +607,7 @@ class MyParcelCollection extends CollectionProxy
         $data = [];
 
         foreach ($consignments as $consignment) {
-            $data['data']['shipments'][] = $consignment->apiEncode();
+            $data['data']['shipments'][] = (new ConsignmentEncode($consignment))->apiEncode();
         }
 
         // Remove \\n because json_encode encode \\n for \s

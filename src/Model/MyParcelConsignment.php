@@ -15,6 +15,7 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
+use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 /**
@@ -156,12 +157,6 @@ class MyParcelConsignment
      * @var string
      */
     public $delivery_date = null;
-
-    /**
-     * @internal
-     * @var string
-     */
-    public $delivery_remark;
 
     /**
      * @internal
@@ -487,6 +482,60 @@ class MyParcelConsignment
     }
 
     /**
+     * Check if the address is outside the EU
+     *
+     * @todo move to hasCountry
+     *
+     * @return bool
+     */
+    public function isCdCountry()
+    {
+        return false == $this->isEuCountry();
+    }
+
+    /**
+     * Check if the address is inside the EU
+     *
+     * @todo move to hasCountry
+     *
+     * @return bool
+     */
+    public function isEuCountry() {
+        return in_array(
+            $this->getCountry(),
+            array (
+                'NL',
+                'BE',
+                'AT',
+                'BG',
+                'CZ',
+                'CY',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GB',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+                'XK',
+            )
+        );
+    }
+
+    /**
      * @return string
      */
     public function getCity()
@@ -526,6 +575,27 @@ class MyParcelConsignment
     }
 
     /**
+     * Get additional information for the street that should not be included in the street field
+     *
+     * @todo move to hasStreet
+     *
+     * @return string
+     */
+    public function getStreetAdditionalInfo()
+    {
+        $streetParts = $this->getStreetParts();
+        $result = '';
+
+        if (isset($streetParts[1])) {
+            $result .= $streetParts[1];
+        }
+
+        $result .= ' ' . (string) $this->street_additional_info;
+
+        return trim($result);
+    }
+
+    /**
      * The street additional info
      * Required: No
      *
@@ -541,21 +611,27 @@ class MyParcelConsignment
     }
 
     /**
-     * Get additional information for the street that should not be included in the street field
+     * Get entire street
      *
-     * @return string
+     * @todo move to hasCountry
+     *
+     * @var bool
+     *
+     * @return string Entire street
      */
-    public function getStreetAdditionalInfo()
+    public function getFullStreet($useStreetAdditionalInfo = false)
     {
-        $streetParts = $this->getStreetParts();
-        $result = '';
+        $fullStreet = $this->getStreet($useStreetAdditionalInfo);
 
-        if (isset($streetParts[1])) {
-            $result .= $streetParts[1];
+        if ($this->getNumber()) {
+            $fullStreet .= ' ' . $this->getNumber();
         }
 
-        $result .= ' ' . (string) $this->street_additional_info;
-        return trim($result);
+        if ($this->getNumberSuffix()) {
+            $fullStreet .= ' ' . $this->getNumberSuffix();
+        }
+
+        return trim($fullStreet);
     }
 
     /**
@@ -623,6 +699,31 @@ class MyParcelConsignment
         $this->number_suffix = $number_suffix;
 
         return $this;
+    }
+
+    /**
+     * Check if address is correct
+     * Only for Dutch addresses
+     *
+     * @param $fullStreet
+     * @return bool
+     */
+    public function isCorrectAddress($fullStreet)
+    {
+        $result = preg_match(SplitStreet::SPLIT_STREET_REGEX, $fullStreet, $matches);
+
+        if (!$result || !is_array($matches)) {
+            // Invalid full street supplied
+            return false;
+        }
+
+        $fullStreet = str_replace('\n', ' ', $fullStreet);
+        if ($fullStreet != $matches[0]) {
+            // Characters are gone by preg_match
+            return false;
+        }
+
+        return (bool) $result;
     }
 
     /**
@@ -852,63 +953,6 @@ class MyParcelConsignment
     }
 
     /**
-     * @internal
-     *
-     * @param $fields
-     *
-     * @return $this
-     */
-    public function clearFields($fields) {
-        foreach ($fields as $field => $default) {
-            $this->{$field} = $default;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @internal
-     *
-     * @param array $data
-     * @param array $methods
-     *
-     * @return $this
-     */
-    public function setByMethods($data, $methods) {
-        foreach ($methods as $method => $value) {
-            if (! empty($data[$value])) {
-                $this->{'set' . $method}($data[$value]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryRemark()
-    {
-        return $this->delivery_remark;
-    }
-
-    /**
-     * The delivery remark.
-     *
-     * Required: No
-     *
-     * @param string $delivery_remark
-     *
-     * @return $this
-     */
-    public function setDeliveryRemark($delivery_remark)
-    {
-        $this->delivery_remark = $delivery_remark;
-
-        return $this;
-    }
-
-    /**
      * @return boolean
      */
     public function isOnlyRecipient()
@@ -924,6 +968,7 @@ class MyParcelConsignment
      * @param boolean $only_recipient
      *
      * @return $this
+     * @throws \Exception
      */
     public function setOnlyRecipient($only_recipient)
     {
@@ -948,6 +993,7 @@ class MyParcelConsignment
      * @param boolean $signature
      *
      * @return $this
+     * @throws \Exception
      */
     public function setSignature($signature)
     {
@@ -972,6 +1018,7 @@ class MyParcelConsignment
      * @param boolean $return
      *
      * @return $this
+     * @throws \Exception
      */
     public function setReturn($return)
     {
@@ -996,6 +1043,7 @@ class MyParcelConsignment
      * @param boolean $large_format
      *
      * @return $this
+     * @throws \Exception
      */
     public function setLargeFormat($large_format)
     {
@@ -1161,6 +1209,7 @@ class MyParcelConsignment
      * @param MyParcelCustomsItem $item
      *
      * @return $this
+     * @throws \Exception
      */
     public function addItem($item)
     {
@@ -1342,6 +1391,8 @@ class MyParcelConsignment
     /**
      * Only package type 1 can have extra options
      *
+     * @todo move to helper
+     *
      * @param $option
      *
      * @return bool
@@ -1358,6 +1409,8 @@ class MyParcelConsignment
 
     /**
      * Wraps a street to max street lenth
+     *
+     * @todo move to streetHelper
      *
      * @return array
      */
