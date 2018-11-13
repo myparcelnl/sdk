@@ -329,7 +329,7 @@ class MyParcelCollection extends CollectionProxy
     /**
      * Get link of labels
      *
-     * @param array|int|bool $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
+     * @param integer $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
      *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
      *                                  not specify an array, but specify a number, the following labels will fill the
      *                                  ascending positions. Positioning is only applied on the first page with labels.
@@ -370,7 +370,7 @@ class MyParcelCollection extends CollectionProxy
      *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param array|integer|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param integer $positions The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
@@ -609,7 +609,7 @@ class MyParcelCollection extends CollectionProxy
         }
 
         // Remove \\n because json_encode encode \\n for \s
-        return str_replace('\\n'," ", json_encode( $data ));
+        return str_replace('\\n', " ", json_encode($data));
     }
 
     /**
