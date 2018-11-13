@@ -307,7 +307,7 @@ class MyParcelRequest
             './composer.json'
         ];
 
-        foreach ( $composer_locations as $composer_file ) {
+        foreach ($composer_locations as $composer_file) {
             if (file_exists($composer_file)) {
                 return $composer_file;
             }
