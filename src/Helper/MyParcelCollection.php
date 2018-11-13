@@ -246,16 +246,7 @@ class MyParcelCollection extends CollectionProxy
     public function setLatestData($size = 300)
     {
         $consignmentIds = $this->getConsignmentIds($key);
-        if ($consignmentIds !== null) {
-            $params = implode(';', $consignmentIds) . '?size=' . $size;
-        } else {
-            $referenceIds = $this->getConsignmentReferenceIds($key);
-            if ($referenceIds != null) {
-                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
-            } else {
-                return $this;
-            }
-        }
+        $params = $this->getLatestDataParams($size, $consignmentIds);
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -267,23 +258,11 @@ class MyParcelCollection extends CollectionProxy
             ->sendRequest('GET');
 
         if ($request->getResult() === null) {
-            throw new \Exception('Unable to transport data to MyParcel.');
+            throw new \Exception('Unable to transport data to/from MyParcel');
         }
 
-        $newCollection = new MyParcelCollection();
-        foreach ($request->getResult('data.shipments') as $shipment) {
-
-            /** @var Collection|MyParcelConsignmentRepository[] $consignments */
-            $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
-
-            if ($consignments->isEmpty()) {
-                $consignments = $this->getByReferenceId($shipment['reference_identifier']);
-            }
-
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
-
-            $newCollection->addConsignment($consignmentAdapter->getConsignment(), false);
-        }
+        $result = $request->getResult('data.shipments');
+        $newCollection = $this->getNewCollectionFromResult($result);
 
         $this->items = $newCollection->items;
 
@@ -457,8 +436,7 @@ class MyParcelCollection extends CollectionProxy
             throw new \Exception('Unable to connect to MyParcel.');
         }
 
-        if (
-            empty($result['data']['ids'][0]['id']) ||
+        if (empty($result['data']['ids'][0]['id']) ||
             (int) $result['data']['ids'][0]['id'] < 1
         ) {
             throw new \Exception('Can\'t send retour label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
@@ -641,5 +619,51 @@ class MyParcelCollection extends CollectionProxy
         }
 
         return $aConsignments;
+    }
+
+    /**
+     * @param $result
+     * @return MyParcelCollection
+     * @throws \Exception
+     */
+    private function getNewCollectionFromResult($result)
+    {
+        $newCollection = new MyParcelCollection();
+        foreach ($result as $shipment) {
+
+            /** @var Collection|MyParcelConsignmentRepository[] $consignments */
+            $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
+
+            if ($consignments->isEmpty()) {
+                $consignments = $this->getByReferenceId($shipment['reference_identifier']);
+            }
+
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
+
+            $newCollection->addConsignment($consignmentAdapter->getConsignment(), false);
+        }
+
+        return $newCollection;
+    }
+
+    /**
+     * @param $size
+     * @param $consignmentIds
+     * @return string|null
+     */
+    private function getLatestDataParams($size, $consignmentIds)
+    {
+        $params = null;
+
+        if ($consignmentIds !== null) {
+            $params = implode(';', $consignmentIds) . '?size=' . $size;
+        } else {
+            $referenceIds = $this->getConsignmentReferenceIds($key);
+            if ($referenceIds != null) {
+                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
+            }
+        }
+
+        return $params;
     }
 }
