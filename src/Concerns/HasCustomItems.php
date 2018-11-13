@@ -20,17 +20,17 @@ trait HasCustomItems {
      *
      * @throws \Exception
      */
-    public function setCustomItems( $consignmentData, $consignment ) {
-        foreach ( $consignmentData['custom_items'] as $customItem ) {
-            $item = ( new MyParcelCustomsItem() )
-                ->setDescription( $customItem['description'] )
-                ->setAmount( $customItem['amount'] )
-                ->setWeight( $customItem['weight'] )
-                ->setItemValue( $customItem['item_value'] )
-                ->setClassification( $customItem['classification'] )
-                ->setCountry( $customItem['country'] );
+    public function setCustomItems($consignmentData, $consignment) {
+        foreach ($consignmentData['custom_items'] as $customItem) {
+            $item = (new MyParcelCustomsItem())
+                ->setDescription($customItem['description'])
+                ->setAmount($customItem['amount'])
+                ->setWeight($customItem['weight'])
+                ->setItemValue($customItem['item_value'])
+                ->setClassification($customItem['classification'])
+                ->setCountry($customItem['country']);
 
-            $consignment->addItem( $item );
+            $consignment->addItem($item);
         }
     }
 }

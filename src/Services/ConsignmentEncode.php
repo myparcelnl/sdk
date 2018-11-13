@@ -42,9 +42,9 @@ class ConsignmentEncode
     public function apiEncode()
     {
         $this->encodeBaseOptions()
-             ->encodeStreet()
-             ->encodeExtraOptions()
-             ->encodeCdCountry();
+                ->encodeStreet()
+                ->encodeExtraOptions()
+                ->encodeCdCountry();
 
         return $this->consignmentEncoded;
     }
@@ -66,9 +66,9 @@ class ConsignmentEncode
                 'cc' => $consignment->getCountry(),
                 'person' => $consignment->getPerson(),
                 'postal_code' => $consignment->getPostalCode(),
-                'city' => (string)$consignment->getCity(),
-                'email' => (string)$consignment->getEmail(),
-                'phone' => (string)$consignment->getPhone(),
+                'city' => (string) $consignment->getCity(),
+                'email' => (string) $consignment->getEmail(),
+                'phone' => (string) $consignment->getPhone(),
             ],
             'options' => [
                 'package_type' => $packageType,
@@ -120,7 +120,7 @@ class ConsignmentEncode
      */
     private function encodeExtraOptions() {
         $consignment = $this->consignment;
-        if ( $consignment->getCountry() == MyParcelConsignmentRepository::CC_NL || $consignment->getCountry() == MyParcelConsignmentRepository::CC_BE ) {
+        if ($consignment->getCountry() == MyParcelConsignmentRepository::CC_NL || $consignment->getCountry() == MyParcelConsignmentRepository::CC_BE) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
                 [

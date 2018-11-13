@@ -36,7 +36,7 @@ class ConsignmentAdapter
         $this->data      = $data;
         $this->recipient = $data['recipient'];
         $this->options   = $data['options'];
-        $this->consignment   = (new MyParcelConsignment())->setApiKey($apiKey);
+        $this->consignment = (new MyParcelConsignment())->setApiKey($apiKey);
 
         $this
             ->baseOptions()
@@ -189,7 +189,7 @@ class ConsignmentAdapter
      */
     private function setByMethods($data, $methods) {
         foreach ($methods as $method => $value) {
-            if (! empty($data[$value])) {
+            if (!empty($data[$value])) {
                 $this->consignment->{'set' . $method}($data[$value]);
             }
         }
