@@ -85,7 +85,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts()->setLatestData();
+            $myParcelCollection->createConcepts();
             $consignment = $myParcelCollection->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');

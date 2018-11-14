@@ -122,7 +122,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts()->setLatestData();
+            $myParcelCollection->createConcepts();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');

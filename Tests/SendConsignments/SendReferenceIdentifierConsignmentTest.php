@@ -89,7 +89,6 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
              */
             $myParcelCollection->createConcepts();
 
-
             /**
              * @var $savedConsignment MyParcelConsignmentRepository
              */

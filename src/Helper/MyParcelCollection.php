@@ -177,29 +177,31 @@ class MyParcelCollection extends CollectionProxy
     /**
      * Create concepts in MyParcel
      *
-     * @todo    Produce all the items in one time with reference ID.
-     *
      * @return  $this
      * @throws  \Exception
      */
     public function createConcepts()
     {
-        /* @var $consignments MyParcelConsignmentRepository[] */
-        foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
-            foreach ($consignments as $consignment) {
-                if ($consignment->getMyParcelConsignmentId() === null) {
-                    $data = $this->apiEncode([$consignment]);
-                    $request = (new MyParcelRequest())
-                        ->setUserAgent($this->getUserAgent())
-                        ->setRequestParameters(
-                            $key,
-                            $data,
-                            MyParcelRequest::REQUEST_HEADER_SHIPMENT
-                        )
-                        ->sendRequest();
+        $this->addMissingReferenceId();
 
-                    $consignment->setMyParcelConsignmentId($request->getResult('data.ids.0.id'));
-                }
+        /* @var $consignments MyParcelConsignmentRepository[] */
+        foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', null) as $consignments) {
+            $data = $this->apiEncode($consignments);
+            $request = (new MyParcelRequest())
+                ->setUserAgent($this->getUserAgent())
+                ->setRequestParameters(
+                    $consignments->first()->api_key,
+                    $data,
+                    MyParcelRequest::REQUEST_HEADER_SHIPMENT
+                )
+                ->sendRequest();
+
+            if (count($request->getResult('data.ids')) === 1) {
+                // Update passed by reference $consignment
+                $consignments->first()->setMyParcelConsignmentId($request->getResult('data.ids.0.id'));
+                $this->setLatestData(300);
+            } else {
+                $this->setLatestData(300, $request->getResult('data.ids', 'id'), $consignments->first()->api_key);
             }
         }
 
@@ -215,18 +217,16 @@ class MyParcelCollection extends CollectionProxy
     public function deleteConcepts()
     {
         /* @var $consignments MyParcelConsignmentRepository[] */
-        foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
+        foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
-                if ($consignment->getMyParcelConsignmentId() !== null) {
-                    (new MyParcelRequest())
-                        ->setUserAgent($this->getUserAgent())
-                        ->setRequestParameters(
-                            $key,
-                            $consignment->getMyParcelConsignmentId(),
-                            MyParcelRequest::REQUEST_HEADER_DELETE
-                        )
-                        ->sendRequest('DELETE');
-                }
+                (new MyParcelRequest())
+                    ->setUserAgent($this->getUserAgent())
+                    ->setRequestParameters(
+                        $key,
+                        $consignment->getMyParcelConsignmentId(),
+                        MyParcelRequest::REQUEST_HEADER_DELETE
+                    )
+                    ->sendRequest('DELETE');
             }
         }
 
@@ -238,14 +238,33 @@ class MyParcelCollection extends CollectionProxy
      *
      * Set id and run this function to update all the information about this shipment
      *
+     * @deprecated Use refresh(). If you use createConcepts() then you do not need setLatestData() anymore
      * @param int $size
      *
+     * @param array $consignmentIds
+     * @param null $key
      * @return $this
      * @throws \Exception
      */
-    public function setLatestData($size = 300)
+    public function setLatestData($size = 300, $consignmentIds = [], $key = null)
     {
-        $consignmentIds = $this->getConsignmentIds($key);
+        $this->refresh($size, $consignmentIds, $key);
+
+        return $this;
+    }
+
+    /**
+     * @param int $size
+     * @param array $consignmentIds
+     * @param null $key
+     * @throws \Exception
+     */
+    public function refresh($size = 300, $consignmentIds = [], $key = null)
+    {
+        if (empty($consignmentIds)) {
+            $consignmentIds = $this->getConsignmentIds($key);
+        }
+
         $params = $this->getLatestDataParams($size, $consignmentIds, $key);
 
         $request = (new MyParcelRequest())
@@ -265,8 +284,6 @@ class MyParcelCollection extends CollectionProxy
         $newCollection = $this->getNewCollectionFromResult($result);
 
         $this->items = $newCollection->items;
-
-        return $this;
     }
 
     /**
@@ -608,20 +625,6 @@ class MyParcelCollection extends CollectionProxy
     }
 
     /**
-     * @return MyParcelConsignmentRepository[]
-     */
-    private function getConsignmentsSortedByKey()
-    {
-        $aConsignments = [];
-        /** @var $consignment MyParcelConsignment */
-        foreach ($this->getConsignments() as $consignment) {
-            $aConsignments[$consignment->getApiKey()][] = $consignment;
-        }
-
-        return $aConsignments;
-    }
-
-    /**
      * @param $result
      * @return MyParcelCollection
      * @throws \Exception
@@ -666,5 +669,17 @@ class MyParcelCollection extends CollectionProxy
         }
 
         return $params;
+    }
+
+    private function addMissingReferenceId()
+    {
+        $this->transform(function ($consignment) {
+            /** @var MyParcelConsignment $consignment */
+            if (null === $consignment->getReferenceId()) {
+                $consignment->setReferenceId('random_' . uniqid());
+            }
+
+            return $consignment;
+        });
     }
 }

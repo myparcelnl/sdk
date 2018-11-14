@@ -53,11 +53,16 @@ class MyParcelRequest
     /**
      * Get an item from tje result using "dot" notation.
      * @param string $key
+     * @param null $pluk
      * @return null
      */
-    public function getResult($key = null)
+    public function getResult($key = null, $pluk = null)
     {
-        return Arr::get($this->result, $key);
+        $result = Arr::get($this->result, $key);
+        if ($pluk) {
+            $result = Arr::pluck($result, $pluk);
+        }
+        return $result;
     }
 
     /**
