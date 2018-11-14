@@ -246,7 +246,7 @@ class MyParcelCollection extends CollectionProxy
     public function setLatestData($size = 300)
     {
         $consignmentIds = $this->getConsignmentIds($key);
-        $params = $this->getLatestDataParams($size, $consignmentIds);
+        $params = $this->getLatestDataParams($size, $consignmentIds, $key);
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -649,9 +649,10 @@ class MyParcelCollection extends CollectionProxy
     /**
      * @param $size
      * @param $consignmentIds
+     * @param $key
      * @return string|null
      */
-    private function getLatestDataParams($size, $consignmentIds)
+    private function getLatestDataParams($size, $consignmentIds, &$key)
     {
         $params = null;
 
