@@ -17,8 +17,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class ConsignmentAdapter
 {
     private $data;
-    private $recipient;
-    private $options;
 
     /**
      * @var MyParcelConsignment
@@ -34,8 +32,6 @@ class ConsignmentAdapter
     public function __construct($data, $apiKey)
     {
         $this->data      = $data;
-        $this->recipient = $data['recipient'];
-        $this->options   = $data['options'];
         $this->consignment = (new MyParcelConsignment())->setApiKey($apiKey);
 
         $this
@@ -60,21 +56,24 @@ class ConsignmentAdapter
      */
     private function baseOptions()
     {
+        $recipient = $this->data['recipient'];
+        $options = $this->data['options'];
+
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->consignment
             ->setMyParcelConsignmentId($this->data['id'])
             ->setReferenceId($this->data['reference_identifier'])
             ->setBarcode($this->data['barcode'])
             ->setStatus($this->data['status'])
-            ->setCountry($this->recipient['cc'])
-            ->setPerson($this->recipient['person'])
-            ->setPostalCode($this->recipient['postal_code'])
-            ->setStreet($this->recipient['street'])
-            ->setCity($this->recipient['city'])
-            ->setEmail($this->recipient['email'])
-            ->setPhone($this->recipient['phone'])
-            ->setPackageType($this->options['package_type'])
-            ->setLabelDescription(isset($this->options['label_description']) ? $this->options['label_description'] : '')
+            ->setCountry($recipient['cc'])
+            ->setPerson($recipient['person'])
+            ->setPostalCode($recipient['postal_code'])
+            ->setStreet($recipient['street'])
+            ->setCity($recipient['city'])
+            ->setEmail($recipient['email'])
+            ->setPhone($recipient['phone'])
+            ->setPackageType($options['package_type'])
+            ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
         ;
 
         return $this;
@@ -86,6 +85,7 @@ class ConsignmentAdapter
      */
     private function extraOptions()
     {
+        $options = $this->data['options'];
         $fields = [
             'only_recipient' => false,
             'large_format' => false,
@@ -105,15 +105,15 @@ class ConsignmentAdapter
             'DeliveryDate' => 'delivery_date',
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
-        $this->setByMethods($this->options, $methods);
+        $this->setByMethods($options, $methods);
 
-        if (key_exists('insurance', $this->options)) {
-            $insuranceAmount = $this->options['insurance']['amount'];
+        if (key_exists('insurance', $options)) {
+            $insuranceAmount = $options['insurance']['amount'];
             $this->consignment->setInsurance($insuranceAmount / 100);
         }
 
-        if (isset($this->options['delivery_type'])) {
-            $this->consignment->setDeliveryType($this->options['delivery_type'], false);
+        if (isset($options['delivery_type'])) {
+            $this->consignment->setDeliveryType($options['delivery_type'], false);
         }
 
         return $this;
@@ -139,7 +139,7 @@ class ConsignmentAdapter
             'NumberSuffix' => 'number_suffix',
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
-        $this->setByMethods($this->recipient, $methods);
+        $this->setByMethods($this->data['recipient'], $methods);
 
         return $this;
     }
@@ -151,17 +151,18 @@ class ConsignmentAdapter
     {
         // Set pickup
         if (key_exists('pickup', $this->data) && $this->data['pickup'] !== null) {
+
             $methods = [
-                'PickupPostalCode' => 'pickup_postal_code',
-                'PickupStreet' => 'pickup_street',
-                'PickupCity' => 'pickup_city',
-                'PickupNumber' => 'pickup_number',
-                'PickupLocationName' => 'pickup_location_name',
-                'PickupLocationCode' => 'pickup_location_code',
-                'PickupNetworkId' => 'pickup_network_id',
+                'PickupPostalCode' => 'postal_code',
+                'PickupStreet' => 'street',
+                'PickupCity' => 'city',
+                'PickupNumber' => 'number',
+                'PickupLocationName' => 'location_name',
+                'PickupLocationCode' => 'location_code',
+                'PickupNetworkId' => 'network_id',
             ];
             /** @noinspection PhpInternalEntityUsedInspection */
-            $this->setByMethods($this->data['pickup'], $methods);
+            $this->setByMethods($this->data['pickup'], $methods, true);
         } else {
 
             $fields = [
