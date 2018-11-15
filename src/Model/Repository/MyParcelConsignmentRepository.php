@@ -17,9 +17,8 @@ namespace MyParcelNL\Sdk\src\Model\Repository;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 /**
- * The repository of a MyParcel consignment
+ * @deprecated Use MyParcelConsignment instead
  *
- * Class MyParcelConsignmentRepository
  * @package MyParcelNL\Sdk\Model\Repository
  */
 class MyParcelConsignmentRepository extends MyParcelConsignment

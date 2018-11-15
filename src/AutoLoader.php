@@ -11,6 +11,7 @@ require_once ('Helper/SplitStreet.php');
 require_once ('Helper/LabelHelper.php');
 require_once ('Services/CheckApiKeyService.php');
 require_once ('Services/ConsignmentEncode.php');
+require_once ('Services/CollectionEncode.php');
 require_once ('Concerns/HasCheckoutFields.php');
 require_once ('Model/MyParcelRequest.php');
 require_once ('Model/MyParcelConsignment.php');

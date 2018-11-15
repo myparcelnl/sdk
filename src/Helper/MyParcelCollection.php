@@ -18,7 +18,7 @@ use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
+use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\src\Support\CollectionProxy;
 
@@ -186,7 +186,7 @@ class MyParcelCollection extends CollectionProxy
 
         /* @var $consignments MyParcelConsignmentRepository[] */
         foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', null) as $consignments) {
-            $data = $this->apiEncode($consignments);
+            $data = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
@@ -580,26 +580,6 @@ class MyParcelCollection extends CollectionProxy
      */
     public function clearConsignmentsCollection() {
         $this->items = [];
-    }
-
-    /**
-     * Encode multiple shipments so that the data can be sent to MyParcel.
-     *
-     * @param $consignments MyParcelConsignmentRepository[]
-     *
-     * @return string
-     * @throws \Exception
-     */
-    private function apiEncode($consignments)
-    {
-        $data = [];
-
-        foreach ($consignments as $consignment) {
-            $data['data']['shipments'][] = (new ConsignmentEncode($consignment))->apiEncode();
-        }
-
-        // Remove \\n because json_encode encode \\n for \s
-        return str_replace('\\n', " ", json_encode($data));
     }
 
     /**
