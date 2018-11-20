@@ -15,7 +15,7 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
-use MyParcelNL\sdk\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
