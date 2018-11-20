@@ -311,9 +311,9 @@ class MyParcelConsignment
      */
     public function setReferenceId($reference_identifier)
     {
-    	if ($reference_identifier !== null) {
-		    $this->reference_identifier = (string) $reference_identifier;
-	    }
+        if ($reference_identifier !== null) {
+            $this->reference_identifier = (string) $reference_identifier;
+        }
 
         return $this;
     }
@@ -931,17 +931,17 @@ class MyParcelConsignment
         return $this->delivery_type;
     }
 
-	/**
-	 * The delivery type for the package
-	 *
-	 * Required: Yes if delivery_date has been specified
-	 *
-	 * @param int $delivery_type
-	 * @param bool $needDeliveryDate
-	 *
-	 * @return $this
-	 * @throws \Exception
-	 */
+    /**
+     * The delivery type for the package
+     *
+     * Required: Yes if delivery_date has been specified
+     *
+     * @param int $delivery_type
+     * @param bool $needDeliveryDate
+     *
+     * @return $this
+     * @throws \Exception
+     */
     public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
         if ($needDeliveryDate &&
