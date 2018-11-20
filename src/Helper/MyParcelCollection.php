@@ -242,9 +242,7 @@ class MyParcelCollection extends CollectionProxy
      */
     public function setLatestData($size = 300)
     {
-        if (empty($consignmentIds)) {
-            $consignmentIds = $this->getConsignmentIds($key);
-        }
+        $consignmentIds = $this->getConsignmentIds($key);
 
         $params = $this->getLatestDataParams($size, $consignmentIds, $key);
 
