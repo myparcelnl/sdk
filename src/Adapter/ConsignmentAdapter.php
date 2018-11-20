@@ -162,7 +162,7 @@ class ConsignmentAdapter
                 'PickupNetworkId' => 'network_id',
             ];
             /** @noinspection PhpInternalEntityUsedInspection */
-            $this->setByMethods($this->data['pickup'], $methods, true);
+            $this->setByMethods($this->data['pickup'], $methods);
         } else {
 
             $fields = [
