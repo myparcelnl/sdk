@@ -3,7 +3,7 @@
  * @author Reindert Vetter <reindert@myparcel.nl>
  */
 
-namespace MyParcelNL\Sdk\Concerns;
+namespace MyParcelNL\Sdk\src\Concerns;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 

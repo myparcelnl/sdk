@@ -20,7 +20,6 @@ namespace MyParcelNL\Sdk\src\Model;
  * mandatory for non-EU shipments.
  *
  * Class MyParcelCustomsItem
- * @package MyParcelNL\Sdk\Model\Repository
  */
 class MyParcelCustomsItem
 {

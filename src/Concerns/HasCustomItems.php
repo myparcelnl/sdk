@@ -6,7 +6,7 @@
  * Time: 10:10
  */
 
-namespace MyParcelNL\Sdk\Concerns;
+namespace MyParcelNL\Sdk\src\Concerns;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;

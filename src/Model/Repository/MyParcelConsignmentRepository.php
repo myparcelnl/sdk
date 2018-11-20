@@ -18,8 +18,6 @@ use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 /**
  * @deprecated Use MyParcelConsignment instead
- *
- * @package MyParcelNL\Sdk\Model\Repository
  */
 class MyParcelConsignmentRepository extends MyParcelConsignment
 {

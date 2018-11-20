@@ -15,7 +15,7 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
-use MyParcelNL\Sdk\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
@@ -23,8 +23,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * A model of a consignment
  *
  * Class Consignment
- *
- * @package MyParcelNL\Sdk\Model
  */
 class MyParcelConsignment
 {
