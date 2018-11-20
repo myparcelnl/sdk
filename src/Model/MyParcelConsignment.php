@@ -65,7 +65,7 @@ class MyParcelConsignment
      * @internal
      * @var string
      */
-    public $reference_id = null;
+    public $reference_identifier = null;
 
     /**
      * @internal
@@ -303,18 +303,18 @@ class MyParcelConsignment
      */
     public function getReferenceId()
     {
-        return $this->reference_id;
+        return $this->reference_identifier;
     }
 
     /**
-     * @param mixed $reference_id
+     * @param mixed $reference_identifier
      *
      * @return $this
      */
-    public function setReferenceId($reference_id)
+    public function setReferenceId($reference_identifier)
     {
-    	if ($reference_id !== null) {
-		    $this->reference_id = (string) $reference_id;
+    	if ($reference_identifier !== null) {
+		    $this->reference_identifier = (string) $reference_identifier;
 	    }
 
         return $this;

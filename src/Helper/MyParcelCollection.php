@@ -104,7 +104,7 @@ class MyParcelCollection extends CollectionProxy
      */
     public function getByReferenceId($id)
     {
-        return $this->where('reference_id', $id);
+        return $this->where('reference_identifier', $id);
     }
 
     /**
