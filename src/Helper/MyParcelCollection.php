@@ -26,7 +26,6 @@ use MyParcelNL\Sdk\src\Support\CollectionProxy;
  * Stores all data to communicate with the MyParcel API
  *
  * Class MyParcelCollection
- * @package Model
  */
 class MyParcelCollection extends CollectionProxy
 {
@@ -184,7 +183,7 @@ class MyParcelCollection extends CollectionProxy
     {
         $this->addMissingReferenceId();
 
-        /* @var $consignments MyParcelConsignmentRepository[] */
+        /* @var $consignments MyParcelConsignment[] */
         foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', null) as $consignments) {
             $data = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
@@ -196,12 +195,10 @@ class MyParcelCollection extends CollectionProxy
                 )
                 ->sendRequest();
 
-            if (count($request->getResult('data.ids')) === 1) {
-                // Update passed by reference $consignment
-                $consignments->first()->setMyParcelConsignmentId($request->getResult('data.ids.0.id'));
-                $this->setLatestData(300);
-            } else {
-                $this->setLatestData(300, $request->getResult('data.ids', 'id'), $consignments->first()->api_key);
+            foreach ($request->getResult('data.ids') as $responseShipment) {
+                /** @var MyParcelConsignment $consignment */
+                $consignment = $this->where('reference_identifier', $responseShipment['reference_identifier'])->first();
+                $consignment->setMyParcelConsignmentId($responseShipment['id']);
             }
         }
 
@@ -216,7 +213,7 @@ class MyParcelCollection extends CollectionProxy
      */
     public function deleteConcepts()
     {
-        /* @var $consignments MyParcelConsignmentRepository[] */
+        /* @var $consignments MyParcelConsignment[] */
         foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
                 (new MyParcelRequest())
@@ -238,28 +235,12 @@ class MyParcelCollection extends CollectionProxy
      *
      * Set id and run this function to update all the information about this shipment
      *
-     * @deprecated Use refresh(). If you use createConcepts() then you do not need setLatestData() anymore
      * @param int $size
      *
-     * @param array $consignmentIds
-     * @param null $key
      * @return $this
      * @throws \Exception
      */
-    public function setLatestData($size = 300, $consignmentIds = [], $key = null)
-    {
-        $this->refresh($size, $consignmentIds, $key);
-
-        return $this;
-    }
-
-    /**
-     * @param int $size
-     * @param array $consignmentIds
-     * @param null $key
-     * @throws \Exception
-     */
-    public function refresh($size = 300, $consignmentIds = [], $key = null)
+    public function setLatestData($size = 300)
     {
         if (empty($consignmentIds)) {
             $consignmentIds = $this->getConsignmentIds($key);
@@ -284,6 +265,8 @@ class MyParcelCollection extends CollectionProxy
         $newCollection = $this->getNewCollectionFromResult($result);
 
         $this->items = $newCollection->items;
+
+        return $this;
     }
 
     /**

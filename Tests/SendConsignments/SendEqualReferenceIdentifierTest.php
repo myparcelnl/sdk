@@ -69,7 +69,7 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
         /**
          * Create concept
          */
-        $myParcelCollection->createConcepts();
+        $myParcelCollection->createConcepts()->setLatestData()->first();
 
         $savedCollection = new MyParcelCollection();
 
