@@ -14,6 +14,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Helper\RequestError;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
@@ -228,24 +229,47 @@ class MyParcelRequest
 
     /**
      * @param $size
+     * @param MyParcelCollection $consignments
      * @param $consignmentIds
      * @param $key
      * @return string|null
      */
-    public function getLatestDataParams($size, $consignmentIds, &$key)
+    public function getLatestDataParams($size, $consignments, $consignmentIds, &$key)
     {
         $params = null;
 
         if ($consignmentIds !== null) {
             $params = implode(';', $consignmentIds) . '?size=' . $size;
         } else {
-            $referenceIds = $this->getConsignmentReferenceIds($key);
-            if ($referenceIds != null) {
+
+            $referenceIds = $this->getConsignmentReferenceIds($consignments, $key);
+            if (! empty($referenceIds)) {
                 $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
             }
         }
 
         return $params;
+    }
+
+    /**
+     * Get all consignment ids
+     *
+     * @param MyParcelCollection|MyParcelConsignment[] $consignments
+     * @param $key
+     *
+     * @return array
+     */
+    private function getConsignmentReferenceIds($consignments, &$key)
+    {
+        $referenceIds = [];
+        foreach ($consignments as $consignment) {
+            if ($consignment->getReferenceId()) {
+                $referenceIds[] = $consignment->getReferenceId();
+                $key = $consignment->getApiKey();
+            }
+        }
+
+        return $referenceIds;
     }
 
     /**

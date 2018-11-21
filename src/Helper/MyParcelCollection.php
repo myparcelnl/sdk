@@ -234,7 +234,7 @@ class MyParcelCollection extends Collection
         $consignmentIds = $this->getConsignmentIds($key);
 
         $myParcelRequest = new MyParcelRequest();
-        $params = $myParcelRequest->getLatestDataParams($size, $consignmentIds, $key);
+        $params = $myParcelRequest->getLatestDataParams($size, $this, $consignmentIds, $key);
 
         $request = ($myParcelRequest)
             ->setUserAgent($this->getUserAgent())
@@ -456,29 +456,6 @@ class MyParcelCollection extends Collection
         }
 
         return $conceptIds;
-    }
-
-    /**
-     * Get all consignment ids
-     *
-     * @param $key
-     *
-     * @return array
-     */
-    private function getConsignmentReferenceIds(&$key)
-    {
-        $referenceIds = [];
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getReferenceId()) {
-                $referenceIds[] = $consignment->getReferenceId();
-                $key = $consignment->getApiKey();
-            }
-        }
-        if (empty($referenceIds)) {
-            return null;
-        }
-
-        return $referenceIds;
     }
 
     /**
