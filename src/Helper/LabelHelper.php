@@ -34,6 +34,7 @@ class LabelHelper
             /** @noinspection PhpMissingBreakStatementInspection */
             case 3:
                 $aPositions[] = 3;
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 4:
                 $aPositions[] = 4;
                 break;
