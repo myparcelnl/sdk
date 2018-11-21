@@ -190,10 +190,10 @@ class MyParcelCustomsItem
     /**
      * Check if object is fully filled
      *
-     * @return bool
+     * @return void
      * @throws \Exception
      */
-    public function isFullyFilledItem()
+    public function ensureFilled()
     {
         if ($this->getDescription() === null) {
             throw new \Exception('setDescription() must be set');
@@ -218,7 +218,5 @@ class MyParcelCustomsItem
         if ($this->getCountry() === null) {
             throw new \Exception('setCountry() must be set');
         }
-
-        return true;
     }
 }

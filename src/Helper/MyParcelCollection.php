@@ -83,7 +83,7 @@ class MyParcelCollection extends Collection
     /**
      * Get one consignment
      *
-     * @return \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment|null
+     * @return \MyParcelNL\Sdk\src\Model\MyParcelConsignment|null
      * @throws \Exception
      */
     public function getOneConsignment()
@@ -487,7 +487,7 @@ class MyParcelCollection extends Collection
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @param integer $positions
+     * @param integer|array|null $positions
      *
      * @return $this
      */

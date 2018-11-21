@@ -79,7 +79,7 @@ class MyParcelConsignment
 
     /**
      * @internal
-     * @var null
+     * @var string|null
      */
     public $barcode = null;
 
@@ -297,7 +297,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getReferenceId()
     {
@@ -347,7 +347,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getApiKey()
     {
@@ -374,7 +374,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBarcode()
     {
@@ -447,7 +447,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return integer
+     * @return integer|null
      */
     public function getShopId()
     {
@@ -475,7 +475,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCountry()
     {
@@ -511,7 +511,7 @@ class MyParcelConsignment
      */
     public function isCdCountry()
     {
-        return false == $this->isEuCountry();
+        return false === $this->isEuCountry();
     }
 
     /**
@@ -557,7 +557,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCity()
     {
@@ -582,7 +582,7 @@ class MyParcelConsignment
 
     /**
      * @var bool
-     * @return string
+     * @return string|null
      */
     public function getStreet($useStreetAdditionalInfo = false)
     {
@@ -699,7 +699,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getNumber()
     {
@@ -775,7 +775,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPostalCode()
     {
@@ -799,7 +799,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPerson()
     {
@@ -895,7 +895,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPackageType()
     {
@@ -957,7 +957,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDeliveryDate()
     {
@@ -1261,15 +1261,15 @@ class MyParcelConsignment
      */
     public function addItem($item)
     {
-        if ($item->isFullyFilledItem() == true) {
-            $this->items[] = $item;
-        }
+        $item->ensureFilled();
+
+        $this->items[] = $item;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupPostalCode()
     {
@@ -1293,7 +1293,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupStreet()
     {
@@ -1317,7 +1317,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupCity()
     {
@@ -1341,7 +1341,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupNumber()
     {
@@ -1365,7 +1365,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupLocationName()
     {

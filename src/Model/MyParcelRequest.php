@@ -53,8 +53,8 @@ class MyParcelRequest
     /**
      * Get an item from tje result using "dot" notation.
      * @param string $key
-     * @param null $pluk
-     * @return null
+     * @param string $pluk
+     * @return mixed
      */
     public function getResult($key = null, $pluk = null)
     {

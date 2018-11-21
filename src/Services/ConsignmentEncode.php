@@ -159,7 +159,7 @@ class ConsignmentEncode
     {
         $consignment = $this->consignment;
         if (
-            $this->hasOptions() !== null &&
+            $this->hasOptions() !== false &&
             $consignment->getPickupPostalCode() !== null &&
             $consignment->getPickupStreet() !== null &&
             $consignment->getPickupCity() !== null &&
