@@ -113,77 +113,19 @@ class MyParcelRequest
             return false;
         }
 
-        //curl options
-        $options = array(
-            CURLOPT_POST           => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_AUTOREFERER    => true,
-        );
+        $request = $this->instantiateCurl();
 
-        $config = array(
-            'header'  => 0,
-            'timeout' => 60,
-        );
-
-        //instantiate the curl adapter
-        $request = (new MyParcelCurl())->setConfig($config);
-
-        if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
-            $request->setUserAgent($this->getUserAgentFromComposer());
-        } else {
-            $request->setUserAgent($this->getUserAgent());
-        }
-
-        //add the options
-        foreach ($options as $option => $value)
-        {
-            $request->addOption($option, $value);
-        }
+        $this->setUserAgent();
 
         $header = $this->header;
         $url = $this->getRequestUrl($uri);
-
-        //do the curl request
-        if ($method == 'POST') {
-
-            //curl request string
-            $body = $this->body;
-
-            $request->write('POST', $url, '1.1', $header, $body);
-        } else if ($method == 'DELETE') {
-
-            //complete request url
-            if ($this->body) {
-                $url .= '/' . $this->body;
-            }
-
-            $request->write('DELETE', $url, '1.1', $header);
-        } else {
-            
-            //complete request url
-            if ($this->body) {
-                $url .= '/' . $this->body;
-            }
-
-            $request->write('GET', $url, '1.1', $header);
+        if ($method !== 'POST' && $this->body) {
+            $url .= '/' . $this->body;
         }
 
-        //read the response
-        $response = $request->read();
+        $request->write($method, $url, '1.1', $header, $this->body);
 
-        if (preg_match("/^%PDF-1./", $response)) {
-            $this->result = $response;
-        } else {
-            $this->result = json_decode($response, true);
-
-            if ($response === false) {
-                $this->error = $request->getError();
-            }
-            $this
-                ->checkMyParcelErrors();
-        }
-
-        //close the server connection with MyParcel
+        $this->setResult($request);
         $request->close();
 
         if ($this->getError()) {
@@ -196,7 +138,7 @@ class MyParcelRequest
     /**
      * Check if MyParcel gives an error
      *
-     * @return $this
+     * @return $this|void
      */
     private function checkMyParcelErrors()
     {
@@ -276,9 +218,14 @@ class MyParcelRequest
      * @param string $userAgent
      * @return $this
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent($userAgent = null)
     {
-        $this->userAgent = $userAgent;
+        if ($userAgent) {
+            $this->userAgent = $userAgent;
+        }
+        if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
+            $this->userAgent = $this->getUserAgentFromComposer();
+        }
 
         return $this;
     }
@@ -299,5 +246,42 @@ class MyParcelRequest
         }
 
         return null;
+    }
+
+    /**
+     * @param MyParcelCurl $request
+     */
+    private function setResult($request)
+    {
+        $response = $request->read();
+
+        if (preg_match("/^%PDF-1./", $response)) {
+            $this->result = $response;
+        } else {
+            $this->result = json_decode($response, true);
+
+            if ($response === false) {
+                $this->error = $request->getError();
+            }
+            $this
+                ->checkMyParcelErrors();
+        }
+    }
+
+    /**
+     * @return MyParcelCurl
+     */
+    private function instantiateCurl()
+    {
+        return (new MyParcelCurl())
+            ->setConfig([
+                'header' => 0,
+                'timeout' => 60,
+            ])
+            ->addOptions([
+                CURLOPT_POST => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_AUTOREFERER => true,
+            ]);
     }
 }

@@ -95,19 +95,6 @@ class MyParcelCurl
     }
 
     /**
-     * Add additional option to cURL
-     *
-     * @param  int $option      the CURLOPT_* constants
-     * @param  boolean $value
-     * @return MyParcelCurl
-     */
-    public function addOption($option, $value)
-    {
-        $this->_options[$option] = $value;
-        return $this;
-    }
-
-    /**
      * Add additional options list to curl
      *
      * @param array $options
