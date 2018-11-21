@@ -120,7 +120,8 @@ class ConsignmentEncode
      */
     private function encodeExtraOptions() {
         $consignment = $this->consignment;
-        if ($consignment->getCountry() == MyParcelConsignmentRepository::CC_NL || $consignment->getCountry() == MyParcelConsignmentRepository::CC_BE) {
+        $hasOptions = $this->hasOptions();
+        if ($hasOptions) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
                 [
@@ -136,6 +137,8 @@ class ConsignmentEncode
                 ->encodePickup()
                 ->encodeInsurance()
                 ->encodePhysicalProperties();
+        } else {
+            $this->consignmentEncoded['options']['delivery_type'] = MyParcelConsignment::DEFAULT_DELIVERY_TYPE;
         }
 
         if ($consignment->isEuCountry()) {
@@ -157,6 +160,7 @@ class ConsignmentEncode
     {
         $consignment = $this->consignment;
         if (
+            $this->hasOptions() !== null &&
             $consignment->getPickupPostalCode() !== null &&
             $consignment->getPickupStreet() !== null &&
             $consignment->getPickupCity() !== null &&
@@ -276,5 +280,13 @@ class ConsignmentEncode
         ];
 
         return $item;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasOptions()
+    {
+        return $this->getCountry() == MyParcelConsignment::CC_NL || $this->getCountry() == MyParcelConsignment::CC_BE;
     }
 }

@@ -172,7 +172,7 @@ class MyParcelConsignment
      * @internal
      * @var integer
      */
-    public $delivery_type = MyParcelConsignmentRepository::DEFAULT_DELIVERY_TYPE;
+    public $delivery_type = MyParcelConsignment::DEFAULT_DELIVERY_TYPE;
 
     /**
      * @internal
