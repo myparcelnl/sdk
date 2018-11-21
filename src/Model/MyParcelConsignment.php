@@ -620,7 +620,7 @@ class MyParcelConsignment
      */
     public function getStreetAdditionalInfo()
     {
-        $streetParts = SplitStreet::getStreetParts($this, $this->street);
+        $streetParts = SplitStreet::getStreetParts($this->street);
         $result = '';
 
         if (isset($streetParts[1])) {
