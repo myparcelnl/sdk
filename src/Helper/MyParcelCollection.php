@@ -444,11 +444,10 @@ class MyParcelCollection extends Collection
     {
         $conceptIds = [];
 
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getMyParcelConsignmentId()) {
-                $conceptIds[] = $consignment->getMyParcelConsignmentId();
-                $key = $consignment->getApiKey();
-            }
+        /** @var MyParcelConsignment $consignment */
+        foreach ($this->where('myparcel_consignment_id', '!=', null) as $consignment) {
+            $conceptIds[] = $consignment->getMyParcelConsignmentId();
+            $key = $consignment->getApiKey();
         }
 
         if (empty($conceptIds)) {
