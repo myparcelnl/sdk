@@ -228,7 +228,7 @@ class ConsignmentEncode
             throw new \Exception('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
-        if (!$consignment->getPackageType() === 1) {
+        if ($consignment->getPackageType() !== MyParcelConsignment::PACKAGE_TYPE_NORMAL) {
             throw new \Exception('For international shipments, package_type must be 1 (normal package).');
         }
 
