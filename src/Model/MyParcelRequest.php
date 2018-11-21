@@ -14,6 +14,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Helper\RequestError;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 
@@ -142,39 +143,16 @@ class MyParcelRequest
      */
     private function checkMyParcelErrors()
     {
-        if (!is_array($this->result)) {
+        if (!is_array($this->result) || empty($this->result['errors'])) {
             return;
         }
 
-        if (empty($this->result['errors'])) {
-            return;
+        $error = reset($this->result['errors']);
+        if ((int) key($error) > 0) {
+            $error = current($error);
         }
 
-        foreach ($this->result['errors'] as $error) {
-
-            if ((int) key($error) > 0) {
-                $error = current($error);
-            }
-
-            $errorMessage = '';
-            if (key_exists('message', $this->result)) {
-                $message = $this->result['message'];
-            } elseif (key_exists('message', $error)) {
-                $message = $error['message'];
-            } else {
-                $message = 'Unknown error: ' . json_encode($error) . '. Please contact MyParcel.';
-            }
-
-            if (key_exists('code', $error)) {
-                $errorMessage = $error['code'];
-            } elseif (key_exists('fields', $error)) {
-                $errorMessage = $error['fields'][0];
-            }
-
-            $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
-            $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
-            break;
-        }
+        $this->error = RequestError::getTotalMessage($error, $this->result);
     }
 
     /**
