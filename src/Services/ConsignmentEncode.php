@@ -287,6 +287,10 @@ class ConsignmentEncode
      */
     private function hasOptions()
     {
-        return $this->getCountry() == MyParcelConsignment::CC_NL || $this->getCountry() == MyParcelConsignment::CC_BE;
+        if (in_array($this->consignment->getCountry(), [MyParcelConsignment::CC_NL, MyParcelConsignment::CC_BE])) {
+            return true;
+        }
+
+        return false;
     }
 }
