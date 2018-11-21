@@ -524,7 +524,7 @@ class MyParcelConsignment
     public function isEuCountry() {
         return in_array(
             $this->getCountry(),
-            array (
+            array(
                 'NL',
                 'BE',
                 'AT',
@@ -1080,7 +1080,7 @@ class MyParcelConsignment
      */
     public function isLargeFormat()
     {
-        return (bool)$this->large_format;
+        return (bool) $this->large_format;
     }
 
     /**

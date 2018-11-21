@@ -30,7 +30,7 @@ class ConsignmentAdapter
      */
     public function __construct($data, $apiKey)
     {
-        $this->data      = $data;
+        $this->data = $data;
         $this->consignment = (new MyParcelConsignment())->setApiKey($apiKey);
 
         $this
