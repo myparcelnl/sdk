@@ -224,17 +224,7 @@ class ConsignmentEncode
             return $this;
         }
 
-        if (empty($consignment->getItems())) {
-            throw new \Exception('Product data must be set for international MyParcel shipments. Use addItem().');
-        }
-
-        if ($consignment->getPackageType() !== MyParcelConsignment::PACKAGE_TYPE_NORMAL) {
-            throw new \Exception('For international shipments, package_type must be 1 (normal package).');
-        }
-
-        if (empty($consignment->getLabelDescription())) {
-            throw new \Exception('Label description/invoice id is required for international shipments. Use getLabelDescription().');
-        }
+        $this->validateCdConsignment($consignment);
 
         $items = [];
         foreach ($consignment->getItems() as $item) {
@@ -291,5 +281,24 @@ class ConsignmentEncode
         }
 
         return false;
+    }
+
+    /**
+     * @param $consignment
+     * @throws \Exception
+     */
+    private function validateCdConsignment($consignment)
+    {
+        if (empty($consignment->getItems())) {
+            throw new \Exception('Product data must be set for international MyParcel shipments. Use addItem().');
+        }
+
+        if ($consignment->getPackageType() !== MyParcelConsignment::PACKAGE_TYPE_NORMAL) {
+            throw new \Exception('For international shipments, package_type must be 1 (normal package).');
+        }
+
+        if (empty($consignment->getLabelDescription())) {
+            throw new \Exception('Label description/invoice id is required for international shipments. Use getLabelDescription().');
+        }
     }
 }
