@@ -39,7 +39,7 @@ use IteratorAggregate;
 class Collection extends CollectionProxy implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
-     * @var \Helpers
+     * @var Helpers
      */
     private $helper;
 
@@ -70,7 +70,7 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
     public function __construct($items = [])
     {
         $this->items = $this->getArrayableItems($items);
-        $this->helper = new \Helpers();
+        $this->helper = new Helpers();
     }
 
     /**

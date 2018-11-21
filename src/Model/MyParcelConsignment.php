@@ -18,6 +18,7 @@ namespace MyParcelNL\Sdk\src\Model;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 /**
  * A model of a consignment
@@ -287,13 +288,13 @@ class MyParcelConsignment
     private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
-     * @var \Helpers
+     * @var Helpers
      */
     private $helper;
 
     public function __construct()
     {
-        $this->helper = new \Helpers();
+        $this->helper = new Helpers();
     }
 
     /**

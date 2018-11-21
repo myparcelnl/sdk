@@ -1,8 +1,8 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
+namespace MyParcelNL\Sdk\src\Support;
+
 use Illuminate\Support\Arr;
-use MyParcelNL\Sdk\src\Support\CollectionProxy;
-use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * Class Helpers
