@@ -73,7 +73,7 @@ class MyParcelConsignment
 
     /**
      * @internal
-     * @var string
+     * @var string|null
      */
     public $api_key = null;
 
