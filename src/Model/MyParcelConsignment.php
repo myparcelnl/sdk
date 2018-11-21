@@ -1445,7 +1445,7 @@ class MyParcelConsignment
         $weight = 0;
 
         foreach ($this->getItems() as $item) {
-            $weight += ($item->getWeight());
+            $weight += $item->getWeight();
         }
 
         if ($weight == 0) {
