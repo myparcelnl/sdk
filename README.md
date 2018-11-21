@@ -95,16 +95,6 @@ foreach ($yourShipments as $yourShipment) {
         ->addConsignment($consignment);
 }
 ```
-### Get status
-After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can get the status.
-```php
-$status = $consignment->getStatus();
-```
-### Get barcode
-The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
-```php
-$barcode = $consignment->getBarcode();
-```
 
 ### Label format and position
 Choose to output the label as either A4 or A6 when creating a pdf or download link with the argument `$positions` of `setPdfOfLabels($positions)` and `setLinkOfLabels($positions)`.
@@ -179,6 +169,18 @@ echo $consignment->getPerson();
 echo $consignment->getPhone();
 echo $consignment->getStreet();
 // etc...
+```
+
+#### Get status
+After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can get the status.
+```php
+$status = $consignment->getStatus();
+```
+
+#### Get barcode
+The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
+```php
+$barcode = $consignment->getBarcode();
 ```
 
 ### Create and download label(s)
