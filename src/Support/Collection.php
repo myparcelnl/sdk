@@ -176,8 +176,8 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
             return;
         }
 
-        $values = (isset($key) ? $this->pluck($key) : $this)
-            ->sort()->values();
+        $values = (isset($key) ? $this->pluck($key) : $this);
+        $values->sort()->values();
 
         $middle = (int) ($count / 2);
 
