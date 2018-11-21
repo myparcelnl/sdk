@@ -196,28 +196,18 @@ class MyParcelCustomsItem
      */
     public function ensureFilled()
     {
-        if ($this->getDescription() === null) {
-            throw new \Exception('setDescription() must be set');
-        }
-
-        if ($this->getAmount() === null) {
-            throw new \Exception('setAmount() must be set');
-        }
-
-        if ($this->getWeight() === null) {
-            throw new \Exception('setWeight() must be set');
-        }
-
-        if ($this->getItemValue() === null) {
-            throw new \Exception('setItemValue() must be set');
-        }
-
-        if ($this->getClassification() === null) {
-            throw new \Exception('setClassification() must be set');
-        }
-
-        if ($this->getCountry() === null) {
-            throw new \Exception('setCountry() must be set');
+        $required = [
+            'Description',
+            'Amount',
+            'Weight',
+            'ItemValue',
+            'Classification',
+            'Country',
+        ];
+        foreach ($required as $methodAlias) {
+            if ($this->{'get' . $methodAlias}() === null) {
+                throw new \Exception("set$methodAlias() must be set");
+            }
         }
     }
 }
