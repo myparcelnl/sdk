@@ -231,10 +231,8 @@ class MyParcelCollection extends Collection
      */
     public function setLatestData($size = 300)
     {
-        $consignmentIds = $this->getConsignmentIds($key);
-
         $myParcelRequest = new MyParcelRequest();
-        $params = $myParcelRequest->getLatestDataParams($size, $this, $consignmentIds, $key);
+        $params = $myParcelRequest->getLatestDataParams($size, $this, $key);
 
         $request = ($myParcelRequest)
             ->setUserAgent($this->getUserAgent())
@@ -436,11 +434,12 @@ class MyParcelCollection extends Collection
     /**
      * Get all consignment ids
      *
+     * @internal
      * @param $key
      *
      * @return array
      */
-    private function getConsignmentIds(&$key)
+    public function getConsignmentIds(&$key)
     {
         $conceptIds = [];
 

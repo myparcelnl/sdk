@@ -229,20 +229,19 @@ class MyParcelRequest
 
     /**
      * @param $size
-     * @param MyParcelCollection $consignments
-     * @param $consignmentIds
+     * @param MyParcelCollection $collection
      * @param $key
      * @return string|null
      */
-    public function getLatestDataParams($size, $consignments, $consignmentIds, &$key)
+    public function getLatestDataParams($size, $collection, &$key)
     {
         $params = null;
+        $consignmentIds = $collection->getConsignmentIds($key);
 
         if ($consignmentIds !== null) {
             $params = implode(';', $consignmentIds) . '?size=' . $size;
         } else {
-
-            $referenceIds = $this->getConsignmentReferenceIds($consignments, $key);
+            $referenceIds = $this->getConsignmentReferenceIds($collection, $key);
             if (! empty($referenceIds)) {
                 $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
             }
