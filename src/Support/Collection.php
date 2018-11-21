@@ -2,7 +2,6 @@
 
 namespace MyParcelNL\Sdk\src\Support;
 
-use Illuminate\Support\Arr;
 use stdClass;
 use Countable;
 use Exception;

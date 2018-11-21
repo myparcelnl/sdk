@@ -1,11 +1,10 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
-namespace Illuminate\Support;
+namespace MyParcelNL\Sdk\src\Support;
 
 use ArrayAccess;
 use Helpers;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Support\CollectionProxy;
 
 class Arr
 {

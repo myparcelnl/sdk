@@ -2,8 +2,6 @@
 
 namespace MyParcelNL\Sdk\src\Support;
 
-use Illuminate\Support\Arr;
-
 /**
  * Class Helpers
  * @example https://laravel.com/docs/5.7/helpers

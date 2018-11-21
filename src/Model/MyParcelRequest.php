@@ -14,7 +14,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
-use Illuminate\Support\Arr;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 
 class MyParcelRequest

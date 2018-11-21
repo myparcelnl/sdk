@@ -2,8 +2,6 @@
 
 namespace MyParcelNL\Sdk\src\Support;
 
-use Illuminate\Support\Arr;
-
 class Str
 {
     /**
