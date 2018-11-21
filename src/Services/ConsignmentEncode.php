@@ -14,7 +14,6 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 class ConsignmentEncode
 {
@@ -204,10 +203,10 @@ class ConsignmentEncode
     private function encodePhysicalProperties()
     {
         $consignment = $this->consignment;
-        if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != MyParcelConsignmentRepository::PACKAGE_TYPE_DIGITAL_STAMP) {
+        if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != MyParcelConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
             return $this;
         }
-        if ($consignment->getPackageType() == MyParcelConsignmentRepository::PACKAGE_TYPE_DIGITAL_STAMP && !isset($consignment->getPhysicalProperties()['weight'])) {
+        if ($consignment->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_DIGITAL_STAMP && !isset($consignment->getPhysicalProperties()['weight'])) {
             throw new \Exception('Weight in physical properties must be set for digital stamp shipments.');
         }
 

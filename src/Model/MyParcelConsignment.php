@@ -17,7 +17,6 @@ namespace MyParcelNL\Sdk\src\Model;
 
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 use MyParcelNL\Sdk\src\Support\Helpers;
 
 /**
@@ -946,7 +945,7 @@ class MyParcelConsignment
     public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
         if ($needDeliveryDate &&
-            $delivery_type !== MyParcelConsignmentRepository::DELIVERY_TYPE_STANDARD &&
+            $delivery_type !== self::DELIVERY_TYPE_STANDARD &&
             $this->getDeliveryDate() == null
         ) {
             throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);

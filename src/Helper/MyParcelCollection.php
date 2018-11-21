@@ -17,7 +17,6 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Support\Collection;
 
@@ -70,7 +69,7 @@ class MyParcelCollection extends Collection
     /**
      * @param bool $keepKeys
      *
-     * @return MyParcelConsignmentRepository[]
+     * @return MyParcelConsignment[]
      */
     public function getConsignments($keepKeys = true)
     {
@@ -84,7 +83,7 @@ class MyParcelCollection extends Collection
     /**
      * Get one consignment
      *
-     * @return \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository|null
+     * @return \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment|null
      * @throws \Exception
      */
     public function getOneConsignment()
@@ -121,7 +120,7 @@ class MyParcelCollection extends Collection
     /**
      * @param integer $id
      *
-     * @return MyParcelConsignmentRepository
+     * @return MyParcelConsignment
      */
     public function getConsignmentByApiId($id)
     {
@@ -556,7 +555,7 @@ class MyParcelCollection extends Collection
     /**
      * Encode ReturnShipment to send to MyParcel
      *
-     * @param MyParcelConsignmentRepository $consignment
+     * @param MyParcelConsignment $consignment
      *
      * @return string
      */
@@ -585,7 +584,7 @@ class MyParcelCollection extends Collection
         $newCollection = new MyParcelCollection();
         foreach ($result as $shipment) {
 
-            /** @var Collection|MyParcelConsignmentRepository[] $consignments */
+            /** @var Collection|MyParcelConsignment[] $consignments */
             $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
 
             if ($consignments->isEmpty()) {
