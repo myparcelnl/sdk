@@ -623,7 +623,7 @@ class MyParcelCollection extends Collection
 
     private function addMissingReferenceId()
     {
-        $this->transform(function ($consignment) {
+        $this->transform(function($consignment) {
             /** @var MyParcelConsignment $consignment */
             if (null === $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
