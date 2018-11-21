@@ -187,7 +187,7 @@ class MyParcelCollection extends Collection
 
             foreach ($request->getResult('data.ids') as $responseShipment) {
                 /** @var MyParcelConsignment $consignment */
-                $consignment = $this->where('reference_identifier', $responseShipment['reference_identifier'])->first();
+                $consignment = $this->getByReferenceId($responseShipment['reference_identifier'])->first();
                 $consignment->setMyParcelConsignmentId($responseShipment['id']);
             }
         }
