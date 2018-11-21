@@ -124,13 +124,12 @@ class MyParcelCurl
      *
      * @param string               $method
      * @param string               $url
-     * @param string               $http_ver
      * @param array                $headers
      * @param string               $body
      *
      * @return string Request as text
      */
-    public function write($method, $url, $http_ver = '1.1', $headers = array(), $body = '')
+    public function write($method, $url, $headers = [], $body = '')
     {
         if ($url instanceof Zend_Uri_Http) {
             $url = $url->getUri();

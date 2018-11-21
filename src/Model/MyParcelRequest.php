@@ -124,7 +124,7 @@ class MyParcelRequest
             $url .= '/' . $this->body;
         }
 
-        $request->write($method, $url, '1.1', $header, $this->body);
+        $request->write($method, $url, $header, $this->body);
 
         $this->setResult($request);
         $request->close();
