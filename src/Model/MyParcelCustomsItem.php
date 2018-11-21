@@ -54,7 +54,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getAmount()
     {
@@ -77,7 +77,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getWeight()
     {
@@ -91,6 +91,7 @@ class MyParcelCustomsItem
      *
      * @param int $weight
      * @return $this
+     * @throws \Exception
      */
     public function setWeight($weight)
     {
@@ -106,7 +107,7 @@ class MyParcelCustomsItem
     /**
      * Item value.
      *
-     * @return int
+     * @return int|null
      */
     public function getItemValue()
     {
@@ -133,7 +134,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getClassification()
     {
@@ -160,7 +161,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCountry()
     {
