@@ -120,20 +120,6 @@ class MyParcelCurl
     }
 
     /**
-     * Connect to the remote server
-     *
-     * @deprecated since 1.4.0.0-rc1
-     * @param string  $host
-     * @param int     $port
-     * @param boolean $secure
-     * @return MyParcelCurl
-     */
-    public function connect($host, $port = 80, $secure = false)
-    {
-        return $this->_applyConfig();
-    }
-
-    /**
      * Send request to the remote server
      *
      * @param string               $method
