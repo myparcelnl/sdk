@@ -587,7 +587,7 @@ class MyParcelConsignment
     public function getStreet($useStreetAdditionalInfo = false)
     {
         if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
-            $streetParts = $this->getStreetParts();
+            $streetParts = SplitStreet::getStreetParts($this->street);
 
             return $streetParts[0];
         }
@@ -620,7 +620,7 @@ class MyParcelConsignment
      */
     public function getStreetAdditionalInfo()
     {
-        $streetParts = $this->getStreetParts();
+        $streetParts = SplitStreet::getStreetParts($this, $this->street);
         $result = '';
 
         if (isset($streetParts[1])) {
@@ -1458,8 +1458,6 @@ class MyParcelConsignment
     /**
      * Only package type 1 can have extra options
      *
-     * @todo move to helper
-     *
      * @param $option
      *
      * @return bool
@@ -1471,21 +1469,6 @@ class MyParcelConsignment
             throw new \Exception('Set package type before ' . $option);
         }
 
-        return $this->getPackageType() == 1 ? $option : false;
-    }
-
-    /**
-     * Wraps a street to max street lenth
-     *
-     * @todo move to streetHelper
-     *
-     * @return array
-     */
-    private function getStreetParts()
-    {
-        $streetWrap = wordwrap($this->street, self::MAX_STREET_LENGTH, 'BREAK_LINE');
-        $parts      = explode("BREAK_LINE", $streetWrap);
-
-        return $parts;
+        return $this->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_NORMAL ? $option : false;
     }
 }

@@ -12,6 +12,8 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+
 class SplitStreet
 {
     /**
@@ -50,6 +52,20 @@ class SplitStreet
         self::validate($fullStreet, $result, $matches);
 
         return self::getStreetData($matches);
+    }
+
+    /**
+     * Wraps a street to max street length
+     *
+     * @param $street
+     * @return array
+     */
+    public static function getStreetParts($street)
+    {
+        $streetWrap = wordwrap($street, MyParcelConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
+        $parts = explode("BREAK_LINE", $streetWrap);
+
+        return $parts;
     }
 
     /**
