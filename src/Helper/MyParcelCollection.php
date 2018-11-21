@@ -233,9 +233,10 @@ class MyParcelCollection extends Collection
     {
         $consignmentIds = $this->getConsignmentIds($key);
 
-        $params = $this->getLatestDataParams($size, $consignmentIds, $key);
+        $myParcelRequest = new MyParcelRequest();
+        $params = $myParcelRequest->getLatestDataParams($size, $consignmentIds, $key);
 
-        $request = (new MyParcelRequest())
+        $request = ($myParcelRequest)
             ->setUserAgent($this->getUserAgent())
             ->setRequestParameters(
                 $key,
@@ -597,28 +598,6 @@ class MyParcelCollection extends Collection
         }
 
         return $newCollection;
-    }
-
-    /**
-     * @param $size
-     * @param $consignmentIds
-     * @param $key
-     * @return string|null
-     */
-    private function getLatestDataParams($size, $consignmentIds, &$key)
-    {
-        $params = null;
-
-        if ($consignmentIds !== null) {
-            $params = implode(';', $consignmentIds) . '?size=' . $size;
-        } else {
-            $referenceIds = $this->getConsignmentReferenceIds($key);
-            if ($referenceIds != null) {
-                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
-            }
-        }
-
-        return $params;
     }
 
     private function addMissingReferenceId()

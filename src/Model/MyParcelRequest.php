@@ -227,6 +227,28 @@ class MyParcelRequest
     }
 
     /**
+     * @param $size
+     * @param $consignmentIds
+     * @param $key
+     * @return string|null
+     */
+    public function getLatestDataParams($size, $consignmentIds, &$key)
+    {
+        $params = null;
+
+        if ($consignmentIds !== null) {
+            $params = implode(';', $consignmentIds) . '?size=' . $size;
+        } else {
+            $referenceIds = $this->getConsignmentReferenceIds($key);
+            if ($referenceIds != null) {
+                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
+            }
+        }
+
+        return $params;
+    }
+
+    /**
      * @param MyParcelCurl $request
      */
     private function setResult($request)
