@@ -12,7 +12,6 @@
 namespace MyParcelNL\Sdk\src\Adapter;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 class ConsignmentAdapter
 {
@@ -42,8 +41,6 @@ class ConsignmentAdapter
     }
 
     /**
-     * Decode all the data after the request with the API
-     *
      * @return MyParcelConsignment
      */
     public function getConsignment()
@@ -92,7 +89,7 @@ class ConsignmentAdapter
             'signature' => false,
             'return' => false,
             'delivery_date' => null,
-            'delivery_type' => MyParcelConsignmentRepository::DEFAULT_DELIVERY_TYPE,
+            'delivery_type' => MyParcelConsignment::DEFAULT_DELIVERY_TYPE,
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);

@@ -20,14 +20,13 @@ use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\Sdk\src\Support\CollectionProxy;
 
 /**
  * Stores all data to communicate with the MyParcel API
  *
  * Class MyParcelCollection
  */
-class MyParcelCollection extends CollectionProxy
+class MyParcelCollection extends Collection
 {
     const PREFIX_PDF_FILENAME = 'myparcel-label-';
     const DEFAULT_A4_POSITION = 1;
@@ -149,23 +148,14 @@ class MyParcelCollection extends CollectionProxy
 
     /**
      * @param MyParcelConsignment $consignment
-     * @param bool $needReferenceId
      *
      * @return $this
      * @throws \Exception
      */
-    public function addConsignment(MyParcelConsignment $consignment, $needReferenceId = true)
+    public function addConsignment(MyParcelConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
-        }
-
-        if ($needReferenceId && !empty($this->items)) {
-            if ($consignment->getReferenceId() === null) {
-                throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
-            } elseif (key_exists($consignment->getReferenceId(), $this->items)) {
-                throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
-            }
         }
 
         $this->push($consignment);
@@ -183,7 +173,7 @@ class MyParcelCollection extends CollectionProxy
     {
         $this->addMissingReferenceId();
 
-        /* @var $consignments MyParcelConsignment[] */
+        /* @var $consignments MyParcelCollection */
         foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', null) as $consignments) {
             $data = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
@@ -297,7 +287,7 @@ class MyParcelCollection extends CollectionProxy
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
             $consignmentAdapter = new ConsignmentAdapter($shipment, $key);
-            $this->addConsignment($consignmentAdapter->getConsignment(), false);
+            $this->addConsignment($consignmentAdapter->getConsignment());
         }
 
         return $this;
@@ -604,7 +594,7 @@ class MyParcelCollection extends CollectionProxy
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
 
-            $newCollection->addConsignment($consignmentAdapter->getConsignment(), false);
+            $newCollection->addConsignment($consignmentAdapter->getConsignment());
         }
 
         return $newCollection;

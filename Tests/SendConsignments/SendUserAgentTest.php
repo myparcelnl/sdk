@@ -13,7 +13,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments;
+namespace MyParcelNL\Sdk\src\tests\SendConsignments;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
@@ -21,7 +21,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 /**
  * Class SendPickupFromCheckoutDataTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 {

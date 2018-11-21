@@ -15,7 +15,7 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentTest;
 
-use MyParcelNL\Sdk\Concerns\HasCustomItems;
+use MyParcelNL\Sdk\src\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 

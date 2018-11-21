@@ -36,7 +36,7 @@ use IteratorAggregate;
  * Class Collection
  * @example https://laravel.com/docs/5.7/collections
  */
-class Collection implements ArrayAccess, Countable, IteratorAggregate
+class Collection extends CollectionProxy implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @var \Helpers

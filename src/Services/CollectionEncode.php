@@ -20,7 +20,7 @@ class CollectionEncode
 
     /**
      * CollectionEncode constructor.
-     * @param $consignments MyParcelCollection[]
+     * @param $consignments MyParcelCollection
      */
     public function __construct($consignments)
     {
