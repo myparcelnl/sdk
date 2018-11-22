@@ -173,7 +173,8 @@ class MyParcelCollection extends Collection
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
-        foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', null) as $consignments) {
+        foreach ($this->where('myparcel_consignment_id', null)->groupBy('api_key') as $consignments) {
+
             $data = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
