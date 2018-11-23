@@ -45,18 +45,18 @@ You can download the zip on the project's [releases page](https://github.com/myp
 4. You can now use the SDK in your project!
 
 ## Quick start and examples
-Add the following lines to your project to import the SDK classes for creating shipments.
+Add the following line to your project to import the SDK class for creating shipments.
 
 ```php
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment;
 ```
 
 ### Create a consignment
 This example uses only the required methods to create a shipment and download its label.
 
 ```php
-$consignment = (new MyParcelConsignmentRepository())
+$consignment = (new MyParcelConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 146')
     ->setCountry('NL')
@@ -83,7 +83,7 @@ $myParcelCollection = (new MyParcelCollection())
 // Loop through your shipments, adding each to the same MyParcelCollection()
 foreach ($yourShipments as $yourShipment) {
 
-    $consignment = (new MyParcelConsignmentRepository())
+    $consignment = (new MyParcelConsignment())
         ->setApiKey('api_key_from_MyParcel_backoffice')
         ->setReferenceId($yourShipment['reference_id']) // Note: Make sure every shipment gets a unique reference ID
         ->setPerson($yourShipment['name'])
@@ -163,7 +163,7 @@ More information: https://myparcelnl.github.io/api/#6_A_3
 ### Retrieve data from a consignment
 Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#myparcelconsignment) for consignments here. 
 ```php
-$consignment = new MyParcelConsignmentRepository();
+$consignment = new MyParcelConsignment();
 
 echo $consignment->getFullStreet();
 echo $consignment->getPerson();
@@ -196,11 +196,9 @@ This is a list of all the classes in this SDK and their available methods.
 `MyParcelNL/Sdk/src/Model`
 
 #### MyParcelConsignment
-:warning: Access these methods through `\MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository` (which extends `MyParcelConsignment`).
-
 ```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
 ```php
-$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository())
+$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     
@@ -210,7 +208,7 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setPhone('+31 612345678') // Phone number
     ->setCompany('Piet BV')     // Company
     
-    ->setFullStreet('Plein 1945 55b') // Street, number and suffix in one line 
+    ->setFullStreet('Plein 1945 55b') // Street, number and suffix in one line
     // OR send the street data separately:
     ->setStreet('Plein 1945') / Street
     ->setNumber((string)55)   // Number
@@ -256,6 +254,11 @@ $consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepo
     ->setContents()
     ->addItem();
 
+    // Convert pickup data from checkout
+    // You can use these if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+    ->setDeliveryDateFromCheckout()
+    ->setPickupAddressFromCheckout()
+
 // Get attributes from consignment
 $consignment
     ->getApiKey()
@@ -278,9 +281,13 @@ $consignment
     ->getStreetAdditionalInfo()
     ->getNumber()
     ->getNumberSuffix()
+    ->getFullStreet()
     ->getPostalCode()
     ->getCity()
     ->getCountry()
+    ->isCdCountry()
+    ->isCorrectAddress()
+    ->isEuCountry()
         
     // Package type
     ->getPackageType()
@@ -305,11 +312,12 @@ $consignment
     
     // Physical properties (digital stamps or non-EU shipments)
     ->getPhysicalProperties()
-        
+
     // Non-EU attributes
     ->getInvoice()
     ->getContents()
     ->getItems();
+    ->getTotalWeight()
 ```
 
 #### MyParcelCustomsItem
@@ -336,52 +344,13 @@ This object is embedded in the MyParcelConsignment object for global shipments a
   ->isFullyFilledItem()
 ```
 
-#### MyParcelRequest
-This model represents one request
-
-```MyParcelNL/Sdk/src/Model/MyParcelRequest.php```
-```php
-  ->sendRequest()
-  ->setRequestParameters()
-  ->setUserAgent()
-
-  ->getError()
-  ->getResult()
-  ->getUserAgent()
-  ->getUserAgentFromComposer()
 ```
-
-#### Repository\MyParcelConsignmentRepository
-The repository of a MyParcel consignment.
-
-```MyParcelNL/Sdk/src/Model/Repository/MyParcelConsignmentRepository.php```
-```php
-  ->setFullStreet('Street 23b, 1234 AB City')
-  
-  ->apiDecode()
-  ->apiEncode()
-  ->encodeReturnShipment()
-  
-  // Convert pickup data from checkout
-  // You can use these if you use the following code in your checkout: https://github.com/myparcelnl/checkout
-  ->setDeliveryDateFromCheckout()
-  ->setPickupAddressFromCheckout()
-  
-  ->getDeliveryTypeFromCheckout()
-  
-  ->getFullStreet()
-  ->getTotalWeight()
-  
-  ->isCdCountry()
-  ->isCorrectAddress()
-  ->isEuCountry()
-```
-
 ### Helpers
 ```MyParcelNL/Sdk/src/Helper```
 
 #### MyParcelCollection
-Stores all data to communicate with the MyParcel API.
+Stores all consignments to communicate with the MyParcel API.
+MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5.7/collections) from Laravel Collections. If you use Laravel, than it also extends \Illuminate\Support\Collection.
 
 ```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
 ```php
@@ -392,9 +361,11 @@ Stores all data to communicate with the MyParcel API.
     ->getConsignmentByApiId()
     ->getByReferenceId()
 
-    ->clearConsignmentsCollection() // Clear the collection
-    
-    ->createConcepts() // Create concept shipment in the MyParcel Backoffice
+    // Clear the collection
+    ->clearConsignmentsCollection()
+
+    // Create or delete concept shipments in the MyParcel Backoffice
+    ->createConcepts()
     ->deleteConcepts()
     
     ->getOneConsignment()
@@ -402,7 +373,7 @@ Stores all data to communicate with the MyParcel API.
     
     ->sendReturnLabelMails() // Send return label to customer. The customer can pay and download the label
     ->setLatestData() // Set id and run this function to update all the information about this shipment
-    ->setLatestDataWithoutIds()
+    ->setLatestDataWithoutIds() // Receive the last created shipments
     
     ->setLinkOfLabels()
     ->getLinkOfLabels()
@@ -413,31 +384,10 @@ Stores all data to communicate with the MyParcel API.
     
     // To give us insight into which CMS system you're connecting from, you should send a User-Agent. 
     // If you're using a known CMS system it's required. 
-    // You must send the name of the CMS system followed by a version number.
+    // You must send the name of the CMS system (required) followed by a version number (optional).
     ->setUserAgent('name_of_cms', '1.0')
     ->getUserAgent()
 ```
-
-#### MyParcelCurl
-Curl to use in the MyParcel API.
-
-```MyParcelNL/Sdk/src/Helper/MyParcelCurl.php```
-```php
-  ->addOption()
-  ->addOptions()
-  ->close()
-  ->connect()
-  ->getErrno()
-  ->getError()
-  ->getInfo()
-  ->multiRequest()
-  ->read()
-  ->setConfig()
-  ->setOptions()
-  ->setUserAgent()
-  ->write()
-```
-
 
 ## Contribute
 

@@ -257,9 +257,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Get all current data
-     *
-     * Set id and run this function to update all the information about this shipment
+     * Get all the information about the last created shipments
      *
      * @param $key
      * @param int $size
