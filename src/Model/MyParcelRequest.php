@@ -209,27 +209,49 @@ class MyParcelRequest
             $this->userAgent = $userAgent;
         }
         if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
-            $this->userAgent = $this->getUserAgentFromComposer();
+            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
         }
 
         return $this;
     }
 
     /**
-     * Get version of in composer file
+     * Get version of SDK from composer file
      */
     public function getUserAgentFromComposer()
     {
-        $composer = 'vendor/myparcelnl/sdk/composer.json';
-        if (file_exists($composer)) {
-            $composerData = file_get_contents($composer);
-            $jsonComposerData = json_decode($composerData, true);
-            if (!empty($jsonComposerData['version'])) {
-                $version = str_replace('v', '', $jsonComposerData['version']);
-                return 'MyParcelNL-SDK/' . $version;
-            }
+        $composerData = file_get_contents($this->getComposerPath());
+        $jsonComposerData = json_decode($composerData, true);
+
+        if (!empty($jsonComposerData['name'])
+            && $jsonComposerData['name'] == 'myparcelnl/sdk'
+            && !empty($jsonComposerData['version'])
+        ) {
+            $version = str_replace('v', '', $jsonComposerData['version']);
+        } else {
+            $version = 'unknown';
         }
 
+        return 'MyParcelNL-SDK/' . $version;
+    }
+
+    /**
+     * Get composer.json
+     *
+     * @return string|null
+     */
+    private function getComposerPath()
+    {
+        $composer_locations = [
+            'vendor/myparcelnl/sdk/composer.json',
+            './composer.json'
+        ];
+
+        foreach ($composer_locations as $composer_file) {
+            if (file_exists($composer_file)) {
+                return $composer_file;
+            }
+        }
         return null;
     }
 
