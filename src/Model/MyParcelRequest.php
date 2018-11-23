@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpInternalEntityUsedInspection */
 /**
  * This model represents one request
  *

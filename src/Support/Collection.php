@@ -291,6 +291,7 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
     /**
      * Dump the collection and end the script.
      *
+     * @param array $args
      * @return void
      */
     public function dd(...$args)

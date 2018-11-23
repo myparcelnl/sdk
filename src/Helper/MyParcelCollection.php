@@ -375,7 +375,7 @@ class MyParcelCollection extends Collection
      *
      * @param bool $inline_download
      *
-     * @return $this
+     * @return void
      * @throws \Exception
      */
     public function downloadPdfOfLabels($inline_download = false)

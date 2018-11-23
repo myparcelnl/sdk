@@ -284,10 +284,10 @@ class ConsignmentEncode
     }
 
     /**
-     * @param $consignment
+     * @param MyParcelConsignment $consignment
      * @throws \Exception
      */
-    private function validateCdConsignment($consignment)
+    private function validateCdConsignment(MyParcelConsignment $consignment)
     {
         if (empty($consignment->getItems())) {
             throw new \Exception('Product data must be set for international MyParcel shipments. Use addItem().');

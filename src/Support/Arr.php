@@ -569,7 +569,7 @@ class Arr
      */
     public static function sort($array, $callback = null)
     {
-        return CollectionProxy::make($array)->sortBy($callback)->all();
+        return Collection::make($array)->sortBy($callback)->all();
     }
 
     /**
