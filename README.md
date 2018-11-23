@@ -85,7 +85,7 @@ foreach ($yourShipments as $yourShipment) {
 
     $consignment = (new MyParcelConsignment())
         ->setApiKey('api_key_from_MyParcel_backoffice')
-        ->setReferenceId($yourShipment['reference_id']) // Note: Make sure every shipment gets a unique reference ID
+        ->setReferenceId($yourShipment['reference_id'])
         ->setPerson($yourShipment['name'])
         ->setPostalCode($yourShipment['postal_code'])
         ->setFullStreet($yourShipment['full_street']) 
