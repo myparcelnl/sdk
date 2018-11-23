@@ -45,8 +45,7 @@ You can download the zip on the project's [releases page](https://github.com/myp
 4. You can now use the SDK in your project!
 
 ## Quick start and examples
-Add the following line to your project to import the SDK class for creating shipments.
-
+Add the following lines to your project to import the SDK classes for creating shipments.
 ```php
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment;
