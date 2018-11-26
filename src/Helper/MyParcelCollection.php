@@ -45,21 +45,21 @@ class MyParcelCollection extends Collection
      *
      * @var string
      */
-    private $label_position = null;
+    private $label_position;
 
     /**
      * Link to download the PDF
      *
      * @var string
      */
-    private $label_link = null;
+    private $label_link;
 
     /**
      * Label in PDF format
      *
      * @var string
      */
-    private $label_pdf = null;
+    private $label_pdf;
 
     /**
      * @var string

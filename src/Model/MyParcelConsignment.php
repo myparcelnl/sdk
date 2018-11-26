@@ -63,25 +63,25 @@ class MyParcelConsignment
      * @internal
      * @var string
      */
-    public $reference_identifier = null;
+    public $reference_identifier;
 
     /**
      * @internal
      * @var int
      */
-    public $myparcel_consignment_id = null;
+    public $myparcel_consignment_id;
 
     /**
      * @internal
      * @var string|null
      */
-    public $api_key = null;
+    public $api_key;
 
     /**
      * @internal
      * @var string|null
      */
-    public $barcode = null;
+    public $barcode;
 
     /**
      * @internal
@@ -93,37 +93,37 @@ class MyParcelConsignment
      * @internal
      * @var integer
      */
-    public $shop_id = null;
+    public $shop_id;
 
     /**
      * @internal
      * @var string
      */
-    public $cc = null;
+    public $cc;
 
     /**
      * @internal
      * @var string
      */
-    public $city = null;
+    public $city;
 
     /**
      * @internal
      * @var string
      */
-    public $street = null;
+    public $street;
 
     /**
      * @internal
      * @var string
      */
-    public $street_additional_info = null;
+    public $street_additional_info;
 
     /**
      * @internal
      * @var integer
      */
-    public $number = null;
+    public $number;
 
     /**
      * @internal
@@ -135,13 +135,13 @@ class MyParcelConsignment
      * @internal
      * @var string
      */
-    public $postal_code = null;
+    public $postal_code;
 
     /**
      * @internal
      * @var string
      */
-    public $person = null;
+    public $person;
 
     /**
      * @internal
@@ -165,7 +165,7 @@ class MyParcelConsignment
      * @internal
      * @var integer
      */
-    public $package_type = null;
+    public $package_type;
 
     /**
      * @internal
@@ -177,7 +177,7 @@ class MyParcelConsignment
      * @internal
      * @var string
      */
-    public $delivery_date = null;
+    public $delivery_date;
 
     /**
      * @internal
@@ -243,31 +243,31 @@ class MyParcelConsignment
      * @internal
      * @var string
      */
-    public $pickup_postal_code = null;
+    public $pickup_postal_code;
 
     /**
      * @internal
      * @var string
      */
-    public $pickup_street = null;
+    public $pickup_street;
 
     /**
      * @internal
      * @var string
      */
-    public $pickup_city = null;
+    public $pickup_city;
 
     /**
      * @internal
      * @var string
      */
-    public $pickup_number = null;
+    public $pickup_number;
 
     /**
      * @internal
      * @var string
      */
-    public $pickup_location_name = null;
+    public $pickup_location_name;
 
     /**
      * @internal
