@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Create one consignment
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -26,10 +24,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
-    /**
-     * Test one shipment
-     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::createConcepts
-     */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {

@@ -71,7 +71,7 @@ class SendMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase
         );
 
         foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
-            $consignment = $myParcelCollection->getByReferenceId($referenceId)->first();
+            $consignment = $myParcelCollection->getConsignmentsByReferenceId($referenceId)->first();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
         }
     }

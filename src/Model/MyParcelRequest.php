@@ -43,6 +43,16 @@ class MyParcelRequest
     const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
 
     /**
+     * Delivery type
+     */
+    const MORNING       = 'morning';
+    const STANDARD      = 'standard';
+    const NIGHT         = 'night';
+    const AVOND         = 'avond';
+    const RETAIL        = 'retail';
+    const RETAILEXPRESS = 'retailexpress';
+
+    /**
      * @var string
      */
     private $api_key = '';
@@ -208,7 +218,7 @@ class MyParcelRequest
         if ($userAgent) {
             $this->userAgent = $userAgent;
         }
-        if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
+        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
             $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
         }
 

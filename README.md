@@ -357,7 +357,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     // Get consignments from the collection
     ->getConsignments()
     ->getConsignmentByApiId()
-    ->getByReferenceId()
+    ->getConsignmentsByReferenceId()
 
     // Clear the collection
     ->clearConsignmentsCollection()

@@ -6,6 +6,7 @@
 namespace MyParcelNL\Sdk\src\Concerns;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 
 trait HasCheckoutFields
 {
@@ -24,16 +25,16 @@ trait HasCheckoutFields
         $typeFromCheckout = $this->getTypeFromCheckout($aCheckoutData);
 
         switch ($typeFromCheckout) {
-            case 'morning':
+            case MyParcelRequest::MORNING:
                 return MyParcelConsignment::DELIVERY_TYPE_MORNING;
-            case 'standard':
+            case MyParcelRequest::STANDARD:
                 return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
-            case 'night':
-            case 'avond':
+            case MyParcelRequest::NIGHT:
+            case MyParcelRequest::AVOND:
                 return MyParcelConsignment::DELIVERY_TYPE_NIGHT;
-            case 'retail':
+            case MyParcelRequest::RETAIL:
                 return MyParcelConsignment::DELIVERY_TYPE_RETAIL;
-            case 'retailexpress':
+            case MyParcelRequest::RETAILEXPRESS:
                 return MyParcelConsignment::DELIVERY_TYPE_RETAIL_EXPRESS;
             default:
                 return MyParcelConsignment::DELIVERY_TYPE_STANDARD;

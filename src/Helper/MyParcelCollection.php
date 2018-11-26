@@ -100,7 +100,7 @@ class MyParcelCollection extends Collection
      *
      * @return MyParcelCollection
      */
-    public function getByReferenceId($id)
+    public function getConsignmentsByReferenceId($id)
     {
         return $this->where('reference_identifier', $id);
     }
@@ -108,13 +108,13 @@ class MyParcelCollection extends Collection
     /**
      * This is deprecated because there may be multiple consignments with the same reference id
      *
-     * @deprecated Use getByReferenceId instead
+     * @deprecated Use getConsignmentsByReferenceId instead
      * @param $id
      * @return mixed
      */
     public function getConsignmentByReferenceId($id)
     {
-        return $this->getByReferenceId($id)->first();
+        return $this->getConsignmentsByReferenceId($id)->first();
     }
 
     /**
@@ -187,7 +187,7 @@ class MyParcelCollection extends Collection
 
             foreach ($request->getResult('data.ids') as $responseShipment) {
                 /** @var MyParcelConsignment $consignment */
-                $consignment = $this->getByReferenceId($responseShipment['reference_identifier'])->first();
+                $consignment = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier'])->first();
                 $consignment->setMyParcelConsignmentId($responseShipment['id']);
             }
         }
@@ -563,7 +563,7 @@ class MyParcelCollection extends Collection
             $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
 
             if ($consignments->isEmpty()) {
-                $consignments = $this->getByReferenceId($shipment['reference_identifier']);
+                $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
             }
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());

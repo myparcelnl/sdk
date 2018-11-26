@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Create one concept
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -19,10 +17,6 @@ use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
-/**
- * Class SendOneReferenceIdentifierConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
- */
 class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -86,7 +80,7 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
         $savedCollection->setLatestData();
 
         $consignmentTest = $this->additionProvider()[0];
-        $savedConsignments = $savedCollection->getByReferenceId($consignmentTest['reference_identifier']);
+        $savedConsignments = $savedCollection->getConsignmentsByReferenceId($consignmentTest['reference_identifier']);
         $this->assertCount(2, $savedConsignments);
     }
 
