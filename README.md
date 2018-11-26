@@ -23,7 +23,7 @@ This SDK connects to the MyParcel API using PHP.
 ## Installation
 
 ### Requirements
-The MyParcel SDK works with PHP version >= 5.6.5 The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
+The MyParcel SDK works with PHP version >= 5.6.5. The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
 For support for PHP version 5.4 you can use release 1.x.
 
 ### Installation with Composer
@@ -315,7 +315,7 @@ $consignment
     // Non-EU attributes
     ->getInvoice()
     ->getContents()
-    ->getItems();
+    ->getItems()
     ->getTotalWeight()
 ```
 
@@ -343,7 +343,6 @@ This object is embedded in the MyParcelConsignment object for global shipments a
   ->isFullyFilledItem()
 ```
 
-```
 ### Helpers
 ```MyParcelNL/Sdk/src/Helper```
 
