@@ -10,6 +10,7 @@ require_once ('Helper/MyParcelCollection.php');
 require_once ('Helper/MyParcelCurl.php');
 require_once ('Helper/SplitStreet.php');
 require_once ('Helper/LabelHelper.php');
+require_once ('Helper/CheckoutFields.php');
 require_once ('Services/CheckApiKeyService.php');
 require_once ('Services/ConsignmentEncode.php');
 require_once ('Services/CollectionEncode.php');
