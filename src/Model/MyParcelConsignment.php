@@ -31,22 +31,21 @@ class MyParcelConsignment
     /**
      * Consignment types
      */
-    const DELIVERY_TYPE_MORNING             = 1;
-    const DELIVERY_TYPE_STANDARD            = 2;
-    const DELIVERY_TYPE_NIGHT               = 3;
-    const DELIVERY_TYPE_RETAIL              = 4;
-    const DELIVERY_TYPE_RETAIL_EXPRESS      = 5;
+    const DELIVERY_TYPE_MORNING        = 1;
+    const DELIVERY_TYPE_STANDARD       = 2;
+    const DELIVERY_TYPE_EVENING        = 3;
+    const DELIVERY_TYPE_PICKUP         = 4;
+    const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
 
     const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
 
     /**
      * Package types
      */
-    const PACKAGE_TYPE_NORMAL = 1;
+    const PACKAGE_TYPE_PACKAGE       = 1;
     const PACKAGE_TYPE_DIGITAL_STAMP = 4;
 
-    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_NORMAL;
-
+    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
 
     /**
      * Regular expression used to make sure the date is correct.
@@ -58,6 +57,15 @@ class MyParcelConsignment
 
     const CC_NL = 'NL';
     const CC_BE = 'BE';
+
+    /** @deprecated Use MyParcelConsignment::DELIVERY_TYPE_EVENING */
+    const DELIVERY_TYPE_NIGHT = self::DELIVERY_TYPE_EVENING;
+    /** @deprecated Use MyParcelConsignment::DELIVERY_TYPE_PICKUP */
+    const DELIVERY_TYPE_RETAIL = self::DELIVERY_TYPE_PICKUP;
+    /** @deprecated Use MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS */
+    const DELIVERY_TYPE_RETAIL_EXPRESS = self::DELIVERY_TYPE_PICKUP_EXPRESS;
+    /** @deprecated Use MyParcelConsignment::PACKAGE_TYPE_PACKAGE */
+    const PACKAGE_TYPE_NORMAL = self::PACKAGE_TYPE_PACKAGE;
 
     /**
      * @internal
@@ -1469,6 +1477,6 @@ class MyParcelConsignment
             throw new \Exception('Set package type before ' . $option);
         }
 
-        return $this->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_NORMAL ? $option : false;
+        return $this->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_PACKAGE ? $option : false;
     }
 }

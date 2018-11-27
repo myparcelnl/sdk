@@ -9,14 +9,14 @@ use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 class CheckoutFields
 {
     /**
-     * Delivery type
+     * Delivery types from delivery_options endpoint
      */
-    const MORNING       = 'morning';
-    const STANDARD      = 'standard';
-    const NIGHT         = 'night';
-    const AVOND         = 'avond';
-    const RETAIL        = 'retail';
-    const RETAILEXPRESS = 'retailexpress';
+    const MORNING        = 'morning';
+    const STANDARD       = 'standard';
+    const EVENING        = 'night';
+    const EVENING_NL     = 'avond';
+    const PICKUP         = 'retail';
+    const PICKUP_EXPRESS = 'retailexpress';
 
     /**
      * @param $checkoutData
@@ -32,13 +32,13 @@ class CheckoutFields
                 return MyParcelConsignment::DELIVERY_TYPE_MORNING;
             case self::STANDARD:
                 return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
-            case self::NIGHT:
-            case self::AVOND:
-                return MyParcelConsignment::DELIVERY_TYPE_NIGHT;
-            case self::RETAIL:
-                return MyParcelConsignment::DELIVERY_TYPE_RETAIL;
-            case self::RETAILEXPRESS:
-                return MyParcelConsignment::DELIVERY_TYPE_RETAIL_EXPRESS;
+            case self::EVENING:
+            case self::EVENING_NL:
+                return MyParcelConsignment::DELIVERY_TYPE_EVENING;
+            case self::PICKUP:
+                return MyParcelConsignment::DELIVERY_TYPE_PICKUP;
+            case self::PICKUP_EXPRESS:
+                return MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS;
             default:
                 return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
         }
