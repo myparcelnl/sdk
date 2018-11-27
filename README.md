@@ -348,7 +348,7 @@ This object is embedded in the MyParcelConsignment object for global shipments a
 
 #### MyParcelCollection
 Stores all consignments to communicate with the MyParcel API.
-MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5.7/collections) from Laravel Collections. If you use Laravel, than it also extends \Illuminate\Support\Collection.
+MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5.7/collections) from Laravel Collections. If you use Laravel it also extends \Illuminate\Support\Collection.
 
 ```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
 ```php
