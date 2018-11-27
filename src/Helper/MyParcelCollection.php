@@ -235,7 +235,7 @@ class MyParcelCollection extends Collection
         $myParcelRequest = new MyParcelRequest();
         $params = $myParcelRequest->getLatestDataParams($size, $this, $key);
 
-        $request = ($myParcelRequest)
+        $request = $myParcelRequest
             ->setUserAgent($this->getUserAgent())
             ->setRequestParameters(
                 $key,
