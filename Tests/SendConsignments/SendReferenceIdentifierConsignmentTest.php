@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendReferenceIdentifierConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -88,7 +88,6 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
              * Create concept
              */
             $myParcelCollection->createConcepts();
-
 
             /**
              * @var $savedConsignment MyParcelConsignmentRepository
@@ -155,7 +154,7 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp(),
+                'reference_identifier' => 'prefix_' . (string) (new \DateTime())->getTimestamp(),
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',

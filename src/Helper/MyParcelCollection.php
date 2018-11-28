@@ -14,27 +14,21 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
+use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Services\CollectionEncode;
+use MyParcelNL\Sdk\src\Support\Collection;
 
 /**
  * Stores all data to communicate with the MyParcel API
  *
  * Class MyParcelCollection
- * @package Model
  */
-class MyParcelCollection
+class MyParcelCollection extends Collection
 {
-    const PREFIX_REFERENCE_ID = 'REFERENCE_ID_';
     const PREFIX_PDF_FILENAME = 'myparcel-label-';
     const DEFAULT_A4_POSITION = 1;
-
-    /**
-     * @var MyParcelConsignmentRepository[]
-     */
-    private $consignments = [];
 
     /**
      * @var string
@@ -51,21 +45,21 @@ class MyParcelCollection
      *
      * @var string
      */
-    private $label_position = null;
+    private $label_position;
 
     /**
      * Link to download the PDF
      *
      * @var string
      */
-    private $label_link = null;
+    private $label_link;
 
     /**
      * Label in PDF format
      *
      * @var string
      */
-    private $label_pdf = null;
+    private $label_pdf;
 
     /**
      * @var string
@@ -75,68 +69,62 @@ class MyParcelCollection
     /**
      * @param bool $keepKeys
      *
-     * @return MyParcelConsignmentRepository[]
+     * @return MyParcelConsignment[]
      */
     public function getConsignments($keepKeys = true)
     {
         if ($keepKeys) {
-            return $this->consignments;
+            return $this->items;
         }
 
-        return array_values($this->consignments);
+        return array_values($this->items);
     }
 
     /**
      * Get one consignment
      *
-     * @return \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository|null
+     * @return \MyParcelNL\Sdk\src\Model\MyParcelConsignment|null
      * @throws \Exception
      */
     public function getOneConsignment()
     {
-        if (count($this->getConsignments()) > 1) {
+        if ($this->count() > 1) {
             throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
         }
 
-        foreach ($this->getConsignments() as $consignment) {
-            return $consignment;
-        }
-
-        return null;
+        return $this->first();
     }
 
     /**
      * @param string $id
      *
-     * @return MyParcelConsignmentRepository
+     * @return MyParcelCollection
+     */
+    public function getConsignmentsByReferenceId($id)
+    {
+        return $this->where('reference_identifier', $id);
+    }
+
+    /**
+     * This is deprecated because there may be multiple consignments with the same reference id
+     *
+     * @deprecated Use getConsignmentsByReferenceId instead
+     * @param $id
+     * @return mixed
      */
     public function getConsignmentByReferenceId($id)
     {
-        // return if referenceId not is set as a key
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getReferenceId() == $id) {
-                return $consignment;
-            }
-        }
-
-        return null;
+        return $this->getConsignmentsByReferenceId($id)->first();
     }
 
     /**
      * @param integer $id
      *
-     * @return MyParcelConsignmentRepository
+     * @return MyParcelConsignment
      */
     public function getConsignmentByApiId($id)
     {
-        // return if ApiId not is set as a key
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getMyParcelConsignmentId() == $id) {
-                return $consignment;
-            }
-        }
-
-        return null;
+        return $this->where('myparcel_consignment_id', $id)->first();
     }
 
     /**
@@ -158,32 +146,18 @@ class MyParcelCollection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository $consignment
-     *
-     * @param bool $needReferenceId
+     * @param MyParcelConsignment $consignment
      *
      * @return $this
      * @throws \Exception
      */
-    public function addConsignment(MyParcelConsignmentRepository $consignment, $needReferenceId = true)
+    public function addConsignment(MyParcelConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
             throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
         }
 
-        if ($needReferenceId && !empty($this->consignments)) {
-            if ($consignment->getReferenceId() === null) {
-                throw new \Exception('First set the reference id with setReferenceId() before running addConsignment() for multiple shipments');
-            } elseif (key_exists($consignment->getReferenceId(), $this->consignments)) {
-                throw new \Exception('setReferenceId() must be unique. For example, do not use an ID of an order as an order has multiple shipments. In that case, use the shipment ID.');
-            }
-        }
-
-        if ($consignment->getReferenceId()) {
-            $this->consignments[self::PREFIX_REFERENCE_ID . $consignment->getReferenceId()] = $consignment;
-        } else {
-            $this->consignments[] = $consignment;
-        }
+        $this->push($consignment);
 
         return $this;
     }
@@ -191,29 +165,30 @@ class MyParcelCollection
     /**
      * Create concepts in MyParcel
      *
-     * @todo    Produce all the items in one time with reference ID.
-     *
      * @return  $this
      * @throws  \Exception
      */
     public function createConcepts()
     {
-        /* @var $consignments MyParcelConsignmentRepository[] */
-        foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
-            foreach ($consignments as $consignment) {
-                if ($consignment->getMyParcelConsignmentId() === null) {
-                    $data = $this->apiEncode([$consignment]);
-                    $request = (new MyParcelRequest())
-                        ->setUserAgent($this->getUserAgent())
-                        ->setRequestParameters(
-                            $key,
-                            $data,
-                            MyParcelRequest::REQUEST_HEADER_SHIPMENT
-                        )
-                        ->sendRequest();
+        $this->addMissingReferenceId();
 
-                    $consignment->setMyParcelConsignmentId($request->getResult()['data']['ids'][0]['id']);
-                }
+        /* @var $consignments MyParcelCollection */
+        foreach ($this->where('myparcel_consignment_id', null)->groupBy('api_key') as $consignments) {
+
+            $data = (new CollectionEncode($consignments))->encode();
+            $request = (new MyParcelRequest())
+                ->setUserAgent($this->getUserAgent())
+                ->setRequestParameters(
+                    $consignments->first()->api_key,
+                    $data,
+                    MyParcelRequest::REQUEST_HEADER_SHIPMENT
+                )
+                ->sendRequest();
+
+            foreach ($request->getResult('data.ids') as $responseShipment) {
+                /** @var MyParcelConsignment $consignment */
+                $consignment = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier'])->first();
+                $consignment->setMyParcelConsignmentId($responseShipment['id']);
             }
         }
 
@@ -228,19 +203,17 @@ class MyParcelCollection
      */
     public function deleteConcepts()
     {
-        /* @var $consignments MyParcelConsignmentRepository[] */
-        foreach ($this->getConsignmentsSortedByKey() as $key => $consignments) {
+        /* @var $consignments MyParcelConsignment[] */
+        foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
-                if ($consignment->getMyParcelConsignmentId() !== null) {
-                    $request = (new MyParcelRequest())
-                        ->setUserAgent($this->getUserAgent())
-                        ->setRequestParameters(
-                            $key,
-                            $consignment->getMyParcelConsignmentId(),
-                            MyParcelRequest::REQUEST_HEADER_DELETE
-                        )
-                        ->sendRequest('DELETE');
-                }
+                (new MyParcelRequest())
+                    ->setUserAgent($this->getUserAgent())
+                    ->setRequestParameters(
+                        $key,
+                        $consignment->getMyParcelConsignmentId(),
+                        MyParcelRequest::REQUEST_HEADER_DELETE
+                    )
+                    ->sendRequest('DELETE');
             }
         }
 
@@ -259,19 +232,10 @@ class MyParcelCollection
      */
     public function setLatestData($size = 300)
     {
-        $consignmentIds = $this->getConsignmentIds($key);
-        if ($consignmentIds !== null) {
-            $params = implode(';', $consignmentIds) . '?size=' . $size;
-        } else {
-            $referenceIds = $this->getConsignmentReferenceIds($key);
-            if ($referenceIds != null) {
-                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
-            } else {
-                return $this;
-            }
-        }
+        $myParcelRequest = new MyParcelRequest();
+        $params = $myParcelRequest->getLatestDataParams($size, $this, $key);
 
-        $request = (new MyParcelRequest())
+        $request = $myParcelRequest
             ->setUserAgent($this->getUserAgent())
             ->setRequestParameters(
                 $key,
@@ -281,33 +245,19 @@ class MyParcelCollection
             ->sendRequest('GET');
 
         if ($request->getResult() === null) {
-            throw new \Exception('Unable to transport data to MyParcel.');
+            throw new \Exception('Unable to transport data to/from MyParcel');
         }
 
-        $consignmentsToReplace = [];
+        $result = $request->getResult('data.shipments');
+        $newCollection = $this->getNewCollectionFromResult($result);
 
-        foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignment = $this->getConsignmentByApiId($shipment['id']);
-            if ($consignment === null) {
-                $consignment = $this->getConsignmentByReferenceId($shipment['reference_identifier']);
-            }
-
-            $consignmentsToReplace[] = $consignment->apiDecode($shipment);
-        }
-
-        $this->clearConsignmentsCollection();
-
-        foreach ($consignmentsToReplace as $consignmentToReplace) {
-            $this->addConsignment($consignmentToReplace, false);
-        }
+        $this->items = $newCollection->items;
 
         return $this;
     }
 
     /**
-     * Get all current data
-     *
-     * Set id and run this function to update all the information about this shipment
+     * Get all the information about the last created shipments
      *
      * @param $key
      * @param int $size
@@ -333,9 +283,8 @@ class MyParcelCollection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignment = new MyParcelConsignmentRepository();
-            $consignment->setApiKey($key)->apiDecode($shipment);
-            $this->addConsignment($consignment, false);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $key);
+            $this->addConsignment($consignmentAdapter->getConsignment());
         }
 
         return $this;
@@ -344,7 +293,7 @@ class MyParcelCollection
     /**
      * Get link of labels
      *
-     * @param array|int|bool $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
+     * @param integer $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
      *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
      *                                  not specify an array, but specify a number, the following labels will fill the
      *                                  ascending positions. Positioning is only applied on the first page with labels.
@@ -372,11 +321,10 @@ class MyParcelCollection
                 )
                 ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
-            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult()['data']['pdfs']['url'];
+            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
         }
 
-        $this
-            ->setLatestData();
+        $this->setLatestData();
 
         return $this;
     }
@@ -386,7 +334,7 @@ class MyParcelCollection
      *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param array|integer|bool $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param integer $positions The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
@@ -425,7 +373,7 @@ class MyParcelCollection
      *
      * @param bool $inline_download
      *
-     * @return $this
+     * @return void
      * @throws \Exception
      */
     public function downloadPdfOfLabels($inline_download = false)
@@ -456,7 +404,7 @@ class MyParcelCollection
         $parentConsignment = $this->getConsignments(false)[0];
 
         $apiKey = $parentConsignment->getApiKey();
-        $data = $this->apiEncodeReturnShipments($parentConsignment);
+        $data = $this->apiEncodeReturnShipment($parentConsignment);
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -473,8 +421,7 @@ class MyParcelCollection
             throw new \Exception('Unable to connect to MyParcel.');
         }
 
-        if (
-            empty($result['data']['ids'][0]['id']) ||
+        if (empty($result['data']['ids'][0]['id']) ||
             (int) $result['data']['ids'][0]['id'] < 1
         ) {
             throw new \Exception('Can\'t send retour label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
@@ -486,19 +433,19 @@ class MyParcelCollection
     /**
      * Get all consignment ids
      *
+     * @internal
      * @param $key
      *
      * @return array
      */
-    private function getConsignmentIds(&$key)
+    public function getConsignmentIds(&$key)
     {
         $conceptIds = [];
 
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getMyParcelConsignmentId()) {
-                $conceptIds[] = $consignment->getMyParcelConsignmentId();
-                $key = $consignment->getApiKey();
-            }
+        /** @var MyParcelConsignment $consignment */
+        foreach ($this->where('myparcel_consignment_id', '!=', null) as $consignment) {
+            $conceptIds[] = $consignment->getMyParcelConsignmentId();
+            $key = $consignment->getApiKey();
         }
 
         if (empty($conceptIds)) {
@@ -509,36 +456,13 @@ class MyParcelCollection
     }
 
     /**
-     * Get all consignment ids
-     *
-     * @param $key
-     *
-     * @return array
-     */
-    private function getConsignmentReferenceIds(&$key)
-    {
-        $referenceIds = [];
-        foreach ($this->getConsignments() as $consignment) {
-            if ($consignment->getReferenceId()) {
-                $referenceIds[] = $consignment->getReferenceId();
-                $key = $consignment->getApiKey();
-            }
-        }
-        if (empty($referenceIds)) {
-            return null;
-        }
-
-        return $referenceIds;
-    }
-
-    /**
      * Set label format settings        The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @param integer $positions
+     * @param integer|array|null $positions
      *
      * @return $this
      */
@@ -548,7 +472,7 @@ class MyParcelCollection
         if (is_numeric($positions)) {
             /** Generating positions for A4 paper */
             $this->paper_size = 'A4';
-            $this->label_position = $this->getPositions($positions);
+            $this->label_position = LabelHelper::getPositions($positions);
         } elseif (is_array($positions)) {
             /** Set positions for A4 paper */
             $this->paper_size = 'A4';
@@ -600,82 +524,65 @@ class MyParcelCollection
      * Clear this collection
      */
     public function clearConsignmentsCollection() {
-        $this->consignments = [];
+        $this->items = [];
     }
 
     /**
-     * Encode multiple shipments so that the data can be sent to MyParcel.
+     * Encode ReturnShipment to send to MyParcel
      *
-     * @param $consignments MyParcelConsignmentRepository[]
+     * @param MyParcelConsignment $consignment
      *
      * @return string
-     * @throws \Exception
      */
-    private function apiEncode($consignments)
+    private function apiEncodeReturnShipment($consignment)
     {
         $data = [];
+        $shipment = [
+            'parent' => $consignment->getMyParcelConsignmentId(),
+            'carrier' => 1,
+            'email' => $consignment->getEmail(),
+            'name' => $consignment->getPerson(),
+        ];
 
-        foreach ($consignments as $consignment) {
-            $data['data']['shipments'][] = $consignment->apiEncode();
-        }
-
-        // Remove \\n because json_encode encode \\n for \s
-        return str_replace('\\n'," ", json_encode( $data ));
-    }
-
-    /**
-     * Encode multiple ReturnShipment Objects
-     *
-     * @param MyParcelConsignmentRepository $consignment
-     *
-     * @return string
-     */
-    private function apiEncodeReturnShipments($consignment)
-    {
-        $data['data']['return_shipments'][] = $consignment->encodeReturnShipment();
+        $data['data']['return_shipments'][] = $shipment;
 
         return json_encode($data);
     }
 
     /**
-     * Generating positions for A4 paper
-     *
-     * @param int $start
-     *
-     * @return string
+     * @param $result
+     * @return MyParcelCollection
+     * @throws \Exception
      */
-    private function getPositions($start)
+    private function getNewCollectionFromResult($result)
     {
-        $aPositions = [];
-        switch ($start) {
-            case 1:
-                $aPositions[] = 1;
-            // No break
-            case 2:
-                $aPositions[] = 2;
-            // No break
-            case 3:
-                $aPositions[] = 3;
-            // No break
-            case 4:
-                $aPositions[] = 4;
-                break;
+        $newCollection = new MyParcelCollection();
+        foreach ($result as $shipment) {
+
+            /** @var Collection|MyParcelConsignment[] $consignments */
+            $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
+
+            if ($consignments->isEmpty()) {
+                $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
+            }
+
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
+
+            $newCollection->addConsignment($consignmentAdapter->getConsignment());
         }
 
-        return implode(';', $aPositions);
+        return $newCollection;
     }
 
-    /**
-     * @return MyParcelConsignmentRepository[]
-     */
-    private function getConsignmentsSortedByKey()
+    private function addMissingReferenceId()
     {
-        $aConsignments = [];
-        /** @var $consignment MyParcelConsignment */
-        foreach ($this->getConsignments() as $consignment) {
-            $aConsignments[$consignment->getApiKey()][] = $consignment;
-        }
+        $this->transform(function($consignment) {
+            /** @var MyParcelConsignment $consignment */
+            if (null === $consignment->getReferenceId()) {
+                $consignment->setReferenceId('random_' . uniqid());
+            }
 
-        return $aConsignments;
+            return $consignment;
+        });
     }
 }

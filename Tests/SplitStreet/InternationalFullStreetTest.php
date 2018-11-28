@@ -14,7 +14,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\CreateConsignments\InternationalFullStreetTest;
+namespace MyParcelNL\Sdk\src\tests\CreateConsignments\InternationalFullStreetTest;
 
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
@@ -22,9 +22,9 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 /**
  * Class InternationalFullStreetTest
  *
- * @package MyParcelNL\Sdk\tests\InternationalFullStreetTest
+ * @package MyParcelNL\Sdk\src\tests\InternationalFullStreetTest
  */
-class InternationalFullStreetTest extends \PHPUnit_Framework_TestCase
+class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

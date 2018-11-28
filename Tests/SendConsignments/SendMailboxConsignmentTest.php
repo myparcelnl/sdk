@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendMailboxConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendMailboxConsignmentTest
  */
-class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -84,7 +84,7 @@ class SendMailboxConsignmentTest extends \PHPUnit_Framework_TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts()->setLatestData();
+            $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Create one consignment
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -23,13 +21,9 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
-    /**
-     * Test one shipment
-     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::createConcepts
-     */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
@@ -85,7 +79,7 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts()->setLatestData();
+            $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');

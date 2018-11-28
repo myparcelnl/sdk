@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendPickupFromCheckoutDataTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
+class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test one shipment with createConcepts()
@@ -114,7 +114,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit_Framework_TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts()->setLatestData();
+            $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');

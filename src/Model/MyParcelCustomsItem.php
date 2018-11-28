@@ -20,7 +20,6 @@ namespace MyParcelNL\Sdk\src\Model;
  * mandatory for non-EU shipments.
  *
  * Class MyParcelCustomsItem
- * @package MyParcelNL\Sdk\Model\Repository
  */
 class MyParcelCustomsItem
 {
@@ -55,7 +54,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getAmount()
     {
@@ -78,7 +77,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getWeight()
     {
@@ -92,6 +91,7 @@ class MyParcelCustomsItem
      *
      * @param int $weight
      * @return $this
+     * @throws \Exception
      */
     public function setWeight($weight)
     {
@@ -107,7 +107,7 @@ class MyParcelCustomsItem
     /**
      * Item value.
      *
-     * @return int
+     * @return int|null
      */
     public function getItemValue()
     {
@@ -134,7 +134,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getClassification()
     {
@@ -161,7 +161,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCountry()
     {
@@ -191,35 +191,23 @@ class MyParcelCustomsItem
     /**
      * Check if object is fully filled
      *
-     * @return bool
+     * @return void
      * @throws \Exception
      */
-    public function isFullyFilledItem()
+    public function ensureFilled()
     {
-        if ($this->getDescription() === null) {
-            throw new \Exception('setDescription() must be set');
+        $required = [
+            'Description',
+            'Amount',
+            'Weight',
+            'ItemValue',
+            'Classification',
+            'Country',
+        ];
+        foreach ($required as $methodAlias) {
+            if ($this->{'get' . $methodAlias}() === null) {
+                throw new \Exception("set$methodAlias() must be set");
+            }
         }
-
-        if ($this->getAmount() === null) {
-            throw new \Exception('setAmount() must be set');
-        }
-
-        if ($this->getWeight() === null) {
-            throw new \Exception('setWeight() must be set');
-        }
-
-        if ($this->getItemValue() === null) {
-            throw new \Exception('setItemValue() must be set');
-        }
-
-        if ($this->getClassification() === null) {
-            throw new \Exception('setClassification() must be set');
-        }
-
-        if ($this->getCountry() === null) {
-            throw new \Exception('setCountry() must be set');
-        }
-
-        return true;
     }
 }

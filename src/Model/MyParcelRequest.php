@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpInternalEntityUsedInspection */
 /**
  * This model represents one request
  *
@@ -14,6 +14,9 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Helper\RequestError;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 
 class MyParcelRequest
@@ -50,11 +53,24 @@ class MyParcelRequest
     private $userAgent = null;
 
     /**
-     * @return null
+     * Get an item from tje result using "dot" notation.
+     *
+     * @param string $key
+     * @param string $pluck
+     *
+     * @return mixed
      */
-    public function getResult()
+    public function getResult($key = null, $pluck = null)
     {
-        return $this->result;
+        if (null === $key) {
+            return $this->result;
+        }
+
+        $result = Arr::get($this->result, $key);
+        if ($pluck) {
+            $result = Arr::pluck($result, $pluck);
+        }
+        return $result;
     }
 
     /**
@@ -105,77 +121,19 @@ class MyParcelRequest
             return false;
         }
 
-        //curl options
-        $options = array(
-            CURLOPT_POST           => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_AUTOREFERER    => true,
-        );
+        $request = $this->instantiateCurl();
 
-        $config = array(
-            'header'  => 0,
-            'timeout' => 60,
-        );
-
-        //instantiate the curl adapter
-        $request = (new MyParcelCurl())->setConfig($config);
-
-        if ($this->getUserAgent() == false && $this->getUserAgentFromComposer() !== null) {
-            $request->setUserAgent($this->getUserAgentFromComposer());
-        } else {
-            $request->setUserAgent(trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer()));
-        }
-
-        //add the options
-        foreach ($options as $option => $value)
-        {
-            $request->addOption($option, $value);
-        }
+        $this->setUserAgent();
 
         $header = $this->header;
         $url = $this->getRequestUrl($uri);
-
-        //do the curl request
-        if ($method == 'POST') {
-
-            //curl request string
-            $body = $this->body;
-
-            $request->write('POST', $url, '1.1', $header, $body);
-        } else if ($method == 'DELETE') {
-
-            //complete request url
-            if ($this->body) {
-                $url .= '/' . $this->body;
-            }
-
-            $request->write('DELETE', $url, '1.1', $header);
-        } else {
-            
-            //complete request url
-            if ($this->body) {
-                $url .= '/' . $this->body;
-            }
-
-            $request->write('GET', $url, '1.1', $header);
+        if ($method !== 'POST' && $this->body) {
+            $url .= '/' . $this->body;
         }
 
-        //read the response
-        $response = $request->read();
+        $request->write($method, $url, $header, $this->body);
 
-        if (preg_match("/^%PDF-1./", $response)) {
-            $this->result = $response;
-        } else {
-            $this->result = json_decode($response, true);
-
-            if ($response === false) {
-                $this->error = $request->getError();
-            }
-            $this
-                ->checkMyParcelErrors();
-        }
-
-        //close the server connection with MyParcel
+        $this->setResult($request);
         $request->close();
 
         if ($this->getError()) {
@@ -188,43 +146,20 @@ class MyParcelRequest
     /**
      * Check if MyParcel gives an error
      *
-     * @return $this
+     * @return $this|void
      */
     private function checkMyParcelErrors()
     {
-        if (!is_array($this->result)) {
+        if (!is_array($this->result) || empty($this->result['errors'])) {
             return;
         }
 
-        if (empty($this->result['errors'])) {
-            return;
+        $error = reset($this->result['errors']);
+        if ((int) key($error) > 0) {
+            $error = current($error);
         }
 
-        foreach ($this->result['errors'] as $error) {
-
-            if ((int) key($error) > 0) {
-                $error = current($error);
-            }
-
-            $errorMessage = '';
-            if (key_exists('message', $this->result)) {
-                $message = $this->result['message'];
-            } elseif (key_exists('message', $error)) {
-                $message = $error['message'];
-            } else {
-                $message = 'Unknown error: ' . json_encode($error) . '. Please contact MyParcel.';
-            }
-
-            if (key_exists('code', $error)) {
-                $errorMessage = $error['code'];
-            } elseif (key_exists('fields', $error)) {
-                $errorMessage = $error['fields'][0];
-            }
-
-            $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
-            $this->error = $errorMessage . ' - ' . $humanMessage . ' - ' . $message;
-            break;
-        }
+        $this->error = RequestError::getTotalMessage($error, $this->result);
     }
 
     /**
@@ -268,9 +203,14 @@ class MyParcelRequest
      * @param string $userAgent
      * @return $this
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent($userAgent = null)
     {
-        $this->userAgent = $userAgent;
+        if ($userAgent) {
+            $this->userAgent = $userAgent;
+        }
+        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
+            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
+        }
 
         return $this;
     }
@@ -313,5 +253,86 @@ class MyParcelRequest
             }
         }
         return null;
+    }
+
+    /**
+     * @param $size
+     * @param MyParcelCollection $collection
+     * @param $key
+     * @return string|null
+     */
+    public function getLatestDataParams($size, $collection, &$key)
+    {
+        $params = null;
+        $consignmentIds = $collection->getConsignmentIds($key);
+
+        if ($consignmentIds !== null) {
+            $params = implode(';', $consignmentIds) . '?size=' . $size;
+        } else {
+            $referenceIds = $this->getConsignmentReferenceIds($collection, $key);
+            if (! empty($referenceIds)) {
+                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Get all consignment ids
+     *
+     * @param MyParcelCollection|MyParcelConsignment[] $consignments
+     * @param $key
+     *
+     * @return array
+     */
+    private function getConsignmentReferenceIds($consignments, &$key)
+    {
+        $referenceIds = [];
+        foreach ($consignments as $consignment) {
+            if ($consignment->getReferenceId()) {
+                $referenceIds[] = $consignment->getReferenceId();
+                $key = $consignment->getApiKey();
+            }
+        }
+
+        return $referenceIds;
+    }
+
+    /**
+     * @param MyParcelCurl $request
+     */
+    private function setResult($request)
+    {
+        $response = $request->read();
+
+        if (preg_match("/^%PDF-1./", $response)) {
+            $this->result = $response;
+        } else {
+            $this->result = json_decode($response, true);
+
+            if ($response === false) {
+                $this->error = $request->getError();
+            }
+            $this
+                ->checkMyParcelErrors();
+        }
+    }
+
+    /**
+     * @return MyParcelCurl
+     */
+    private function instantiateCurl()
+    {
+        return (new MyParcelCurl())
+            ->setConfig([
+                'header' => 0,
+                'timeout' => 60,
+            ])
+            ->addOptions([
+                CURLOPT_POST => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_AUTOREFERER => true,
+            ]);
     }
 }

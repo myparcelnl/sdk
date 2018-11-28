@@ -1,6 +1,6 @@
 <?php
 
-use MyParcelNL\sdk\Concerns\HasCustomItems;
+use MyParcelNL\Sdk\src\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
@@ -9,7 +9,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendDigitalStampTest
  * @package MyParcelNL\Sdk\tests\SendDigitalStampTest
  */
-class SendDigitalStampTest extends \PHPUnit_Framework_TestCase
+class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {
     use HasCustomItems;
 

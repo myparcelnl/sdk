@@ -14,15 +14,15 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\CreateConsignments\SplitStreetTest;
+namespace MyParcelNL\Sdk\src\tests\CreateConsignments\SplitStreetTest;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
  * Class SplitStreetTest
- * @package MyParcelNL\Sdk\tests\SplitStreetTest
+ * @package MyParcelNL\Sdk\src\tests\SplitStreetTest
  */
-class SplitLongStreetTest extends \PHPUnit_Framework_TestCase
+class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

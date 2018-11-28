@@ -23,11 +23,18 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneReferenceIdentifierConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 {
+
+    private $timestamp;
+
+    public function setUp() {
+        $this->timestamp = (new \DateTime())->getTimestamp();
+    }
 
     /**
      * Test one shipment with createConcepts()
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
@@ -107,7 +114,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_Tes
         $savedCollection->setLatestData();
 
         $consignmentTest = $this->additionProvider()[0];
-        $savedConsignment = $savedCollection->getConsignmentByReferenceId($consignmentTest['reference_identifier']);
+        $savedConsignment = $savedCollection->getConsignmentsByReferenceId($consignmentTest['reference_identifier'])->first();
 
         $this->assertEquals(true, $savedConsignment->getMyParcelConsignmentId() > 1, 'No id found');
         $this->assertEquals($consignmentTest['api_key'], $savedConsignment->getApiKey(), 'getApiKey()');
@@ -162,7 +169,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_Tes
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_test3',
+                'reference_identifier' => (string) $this->timestamp . '_test3',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -177,7 +184,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_Tes
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_test2',
+                'reference_identifier' => (string) $this->timestamp . '_test2',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',

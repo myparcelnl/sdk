@@ -15,17 +15,38 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\src\Helper\SplitStreet;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 /**
  * A model of a consignment
  *
  * Class Consignment
- *
- * @package MyParcelNL\Sdk\Model
  */
 class MyParcelConsignment
 {
+    use HasCheckoutFields;
+
+    /**
+     * Consignment types
+     */
+    const DELIVERY_TYPE_MORNING        = 1;
+    const DELIVERY_TYPE_STANDARD       = 2;
+    const DELIVERY_TYPE_EVENING        = 3;
+    const DELIVERY_TYPE_PICKUP         = 4;
+    const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
+
+    const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
+
+    /**
+     * Package types
+     */
+    const PACKAGE_TYPE_PACKAGE       = 1;
+    const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+
+    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
+
     /**
      * Regular expression used to make sure the date is correct.
      */
@@ -37,216 +58,270 @@ class MyParcelConsignment
     const CC_NL = 'NL';
     const CC_BE = 'BE';
 
+    /** @deprecated Use MyParcelConsignment::DELIVERY_TYPE_EVENING */
+    const DELIVERY_TYPE_NIGHT = self::DELIVERY_TYPE_EVENING;
+    /** @deprecated Use MyParcelConsignment::DELIVERY_TYPE_PICKUP */
+    const DELIVERY_TYPE_RETAIL = self::DELIVERY_TYPE_PICKUP;
+    /** @deprecated Use MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS */
+    const DELIVERY_TYPE_RETAIL_EXPRESS = self::DELIVERY_TYPE_PICKUP_EXPRESS;
+    /** @deprecated Use MyParcelConsignment::PACKAGE_TYPE_PACKAGE */
+    const PACKAGE_TYPE_NORMAL = self::PACKAGE_TYPE_PACKAGE;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $reference_identifier;
+
+    /**
+     * @internal
+     * @var int
+     */
+    public $myparcel_consignment_id;
+
+    /**
+     * @internal
+     * @var string|null
+     */
+    public $api_key;
+
+    /**
+     * @internal
+     * @var string|null
+     */
+    public $barcode;
+
+    /**
+     * @internal
+     * @var int
+     */
+    public $status = null;
+
+    /**
+     * @internal
+     * @var integer
+     */
+    public $shop_id;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $cc;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $city;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $street;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $street_additional_info;
+
+    /**
+     * @internal
+     * @var integer
+     */
+    public $number;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $number_suffix = '';
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $postal_code;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $person;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $company = '';
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $email = '';
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $phone = '';
+
+    /**
+     * @internal
+     * @var integer
+     */
+    public $package_type;
+
+    /**
+     * @internal
+     * @var integer
+     */
+    public $delivery_type = MyParcelConsignment::DEFAULT_DELIVERY_TYPE;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $delivery_date;
+
+    /**
+     * @internal
+     * @var boolean
+     */
+    public $only_recipient;
+
+    /**
+     * @internal
+     * @var boolean
+     */
+    public $signature;
+
+    /**
+     * @internal
+     * @var boolean
+     */
+    public $return;
+
+    /**
+     * @internal
+     * @var boolean
+     */
+    public $large_format;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $label_description = '';
+
+    /**
+     * @internal
+     * @var int
+     */
+    public $insurance = 0;
+
+    /**
+     * @internal
+     * @var array
+     */
+    public $physical_properties = [];
+
+    /**
+     * @internal
+     * @var int
+     */
+    public $contents;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $invoice;
+
+    /**
+     * @internal
+     * @var array
+     */
+    public $items = [];
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_postal_code;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_street;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_city;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_number;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_location_name;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_location_code = '';
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $pickup_network_id = '';
+
+    /**
+     * @var array
+     */
     private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
-     * @var string
+     * @var Helpers
      */
-    private $reference_id = null;
+    private $helper;
 
-    /**
-     * @var int
-     */
-    private $myparcel_consignment_id = null;
-
-    /**
-     * @var string
-     */
-    private $api_key;
-
-    /**
-     * @var null
-     */
-    private $barcode = null;
-
-    /**
-     * @var int
-     */
-    private $status = 0;
-
-    /**
-     * @var integer
-     */
-    private $shop_id;
-
-    /**
-     * @var string
-     */
-    private $cc = null;
-
-    /**
-     * @var string
-     */
-    private $city = null;
-
-    /**
-     * @var string
-     */
-    private $street = null;
-
-    /**
-     * @var string
-     */
-    private $street_additional_info = null;
-
-    /**
-     * @var integer
-     */
-    private $number = null;
-
-    /**
-     * @var string
-     */
-    private $number_suffix = '';
-
-    /**
-     * @var string
-     */
-    private $postal_code = null;
-
-    /**
-     * @var string
-     */
-    private $person = null;
-
-    /**
-     * @var string
-     */
-    private $company = '';
-
-    /**
-     * @var string
-     */
-    private $email = '';
-
-    /**
-     * @var string
-     */
-    private $phone = '';
-
-    /**
-     * @var integer
-     */
-    private $package_type = null;
-
-    /**
-     * @var integer
-     */
-    private $delivery_type = MyParcelConsignmentRepository::DEFAULT_DELIVERY_TYPE;
-
-    /**
-     * @var string
-     */
-    private $delivery_date = null;
-
-    /**
-     * @var string
-     */
-    private $delivery_remark;
-
-    /**
-     * @var boolean
-     */
-    private $only_recipient;
-
-    /**
-     * @var boolean
-     */
-    private $signature;
-
-    /**
-     * @var boolean
-     */
-    private $return;
-
-    /**
-     * @var boolean
-     */
-    private $large_format;
-
-    /**
-     * @var string
-     */
-    private $label_description = '';
-
-    /**
-     * @var int
-     */
-    private $insurance = 0;
-
-    /**
-     * @var array
-     */
-    private $physical_properties = [];
-
-    /**
-     * @var int
-     */
-    private $contents;
-
-    /**
-     * @var string
-     */
-    private $invoice;
-
-    /**
-     * @var array
-     */
-    private $items = [];
-
-    /**
-     * @var string
-     */
-    private $pickup_postal_code = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_street = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_city = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_number = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_location_name = null;
-
-    /**
-     * @var string
-     */
-    private $pickup_location_code = '';
-
-    /**
-     * @var string
-     */
-    private $pickup_network_id = '';
-
-    /**
-     * @return string
-     */
-    public function getReferenceId()
+    public function __construct()
     {
-        return $this->reference_id;
+        $this->helper = new Helpers();
     }
 
     /**
-     * @param mixed $reference_id
+     * @return string|null
+     */
+    public function getReferenceId()
+    {
+        return $this->reference_identifier;
+    }
+
+    /**
+     * @param mixed $reference_identifier
      *
      * @return $this
      */
-    public function setReferenceId($reference_id)
+    public function setReferenceId($reference_identifier)
     {
-    	if ($reference_id !== null) {
-		    $this->reference_id = (string) $reference_id;
-	    }
+        if ($reference_identifier !== null) {
+            $this->reference_identifier = (string) $reference_identifier;
+        }
 
         return $this;
     }
@@ -280,7 +355,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getApiKey()
     {
@@ -307,7 +382,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBarcode()
     {
@@ -365,10 +440,9 @@ class MyParcelConsignment
     }
 
     /**
-     * @internal
-     *
      * Status of the consignment
      *
+     * @internal
      * @param int $status
      *
      * @return $this
@@ -381,7 +455,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return integer
+     * @return integer|null
      */
     public function getShopId()
     {
@@ -396,6 +470,7 @@ class MyParcelConsignment
      * When the store ID is not specified, the API will look at the API key.
      * Required: No
      *
+     * @internal
      * @param mixed $shop_id
      *
      * @return $this
@@ -408,7 +483,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCountry()
     {
@@ -436,7 +511,61 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * Check if the address is outside the EU
+     *
+     * @todo move to hasCountry
+     *
+     * @return bool
+     */
+    public function isCdCountry()
+    {
+        return false === $this->isEuCountry();
+    }
+
+    /**
+     * Check if the address is inside the EU
+     *
+     * @todo move to hasCountry
+     *
+     * @return bool
+     */
+    public function isEuCountry() {
+        return in_array(
+            $this->getCountry(),
+            array(
+                'NL',
+                'BE',
+                'AT',
+                'BG',
+                'CZ',
+                'CY',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GB',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+                'XK',
+            )
+        );
+    }
+
+    /**
+     * @return string|null
      */
     public function getCity()
     {
@@ -461,50 +590,17 @@ class MyParcelConsignment
 
     /**
      * @var bool
-     * @return string
+     * @return string|null
      */
     public function getStreet($useStreetAdditionalInfo = false)
     {
         if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
-            $streetParts = $this->getStreetParts();
+            $streetParts = SplitStreet::getStreetParts($this->street);
 
             return $streetParts[0];
         }
 
         return $this->street;
-    }
-
-    /**
-     * The street additional info
-     * Required: No
-     *
-     * @param string $street_additional_info
-     *
-     * @return $this
-     */
-    public function setStreetAdditionalInfo($street_additional_info)
-    {
-        $this->street_additional_info = $street_additional_info;
-
-        return $this;
-    }
-
-    /**
-     * Get additional information for the street that should not be included in the street field
-     *
-     * @return string
-     */
-    public function getStreetAdditionalInfo()
-    {
-        $streetParts = $this->getStreetParts();
-        $result = '';
-
-        if (isset($streetParts[1])) {
-            $result .= $streetParts[1];
-        }
-
-        $result .= ' ' . (string) $this->street_additional_info;
-        return trim($result);
     }
 
     /**
@@ -524,7 +620,94 @@ class MyParcelConsignment
     }
 
     /**
-     * @return int
+     * Get additional information for the street that should not be included in the street field
+     *
+     * @todo move to hasStreet
+     *
+     * @return string
+     */
+    public function getStreetAdditionalInfo()
+    {
+        $streetParts = SplitStreet::getStreetParts($this->street);
+        $result = '';
+
+        if (isset($streetParts[1])) {
+            $result .= $streetParts[1];
+        }
+
+        $result .= ' ' . (string) $this->street_additional_info;
+
+        return trim($result);
+    }
+
+    /**
+     * The street additional info
+     * Required: No
+     *
+     * @param string $street_additional_info
+     *
+     * @return $this
+     */
+    public function setStreetAdditionalInfo($street_additional_info)
+    {
+        $this->street_additional_info = $street_additional_info;
+
+        return $this;
+    }
+
+    /**
+     * Get entire street
+     *
+     * @todo move to hasCountry
+     *
+     * @var bool
+     *
+     * @return string Entire street
+     */
+    public function getFullStreet($useStreetAdditionalInfo = false)
+    {
+        $fullStreet = $this->getStreet($useStreetAdditionalInfo);
+
+        if ($this->getNumber()) {
+            $fullStreet .= ' ' . $this->getNumber();
+        }
+
+        if ($this->getNumberSuffix()) {
+            $fullStreet .= ' ' . $this->getNumberSuffix();
+        }
+
+        return trim($fullStreet);
+    }
+
+    /**
+     * Splitting a full NL address and save it in this object
+     *
+     * Required: Yes or use setStreet()
+     *
+     * @param $fullStreet
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setFullStreet($fullStreet)
+    {
+        if ($this->getCountry() === null) {
+            throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
+        }
+
+        if ($this->getCountry() == MyParcelConsignment::CC_NL) {
+            $streetData = SplitStreet::splitStreet($fullStreet);
+            $this->setStreet($streetData['street']);
+            $this->setNumber($streetData['number']);
+            $this->setNumberSuffix($streetData['number_suffix']);
+        } else {
+            $this->setStreet($fullStreet);
+        }
+        return $this;
+    }
+
+    /**
+     * @return int|null
      */
     public function getNumber()
     {
@@ -575,7 +758,32 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * Check if address is correct
+     * Only for Dutch addresses
+     *
+     * @param $fullStreet
+     * @return bool
+     */
+    public function isCorrectAddress($fullStreet)
+    {
+        $result = preg_match(SplitStreet::SPLIT_STREET_REGEX, $fullStreet, $matches);
+
+        if (!$result || !is_array($matches)) {
+            // Invalid full street supplied
+            return false;
+        }
+
+        $fullStreet = str_replace('\n', ' ', $fullStreet);
+        if ($fullStreet != $matches[0]) {
+            // Characters are gone by preg_match
+            return false;
+        }
+
+        return (bool) $result;
+    }
+
+    /**
+     * @return string|null
      */
     public function getPostalCode()
     {
@@ -599,7 +807,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPerson()
     {
@@ -695,7 +903,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPackageType()
     {
@@ -731,20 +939,23 @@ class MyParcelConsignment
         return $this->delivery_type;
     }
 
-	/**
-	 * The delivery type for the package
-	 *
-	 * Required: Yes if delivery_date has been specified
-	 *
-	 * @param int $delivery_type
-	 * @param bool $needDeliveryDate
-	 *
-	 * @return $this
-	 * @throws \Exception
-	 */
+    /**
+     * The delivery type for the package
+     *
+     * Required: Yes if delivery_date has been specified
+     *
+     * @param int $delivery_type
+     * @param bool $needDeliveryDate
+     *
+     * @return $this
+     * @throws \Exception
+     */
     public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
-        if ($needDeliveryDate && $delivery_type !== 2 && $this->getDeliveryDate() == null) {
+        if ($needDeliveryDate &&
+            $delivery_type !== self::DELIVERY_TYPE_STANDARD &&
+            $this->getDeliveryDate() == null
+        ) {
             throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
         }
 
@@ -754,7 +965,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDeliveryDate()
     {
@@ -798,63 +1009,6 @@ class MyParcelConsignment
     }
 
     /**
-     * @internal
-     *
-     * @param $fields
-     *
-     * @return $this
-     */
-    public function clearFields($fields) {
-        foreach ($fields as $field => $default) {
-            $this->{$field} = $default;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @internal
-     *
-     * @param array $data
-     * @param array $methods
-     *
-     * @return $this
-     */
-    public function setByMethods($data, $methods) {
-        foreach ($methods as $method => $value) {
-            if (isset($data[$value])) {
-                $this->{'set' . $method}($data[$value]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryRemark()
-    {
-        return $this->delivery_remark;
-    }
-
-    /**
-     * The delivery remark.
-     *
-     * Required: No
-     *
-     * @param string $delivery_remark
-     *
-     * @return $this
-     */
-    public function setDeliveryRemark($delivery_remark)
-    {
-        $this->delivery_remark = $delivery_remark;
-
-        return $this;
-    }
-
-    /**
      * @return boolean
      */
     public function isOnlyRecipient()
@@ -870,6 +1024,7 @@ class MyParcelConsignment
      * @param boolean $only_recipient
      *
      * @return $this
+     * @throws \Exception
      */
     public function setOnlyRecipient($only_recipient)
     {
@@ -894,6 +1049,7 @@ class MyParcelConsignment
      * @param boolean $signature
      *
      * @return $this
+     * @throws \Exception
      */
     public function setSignature($signature)
     {
@@ -918,6 +1074,7 @@ class MyParcelConsignment
      * @param boolean $return
      *
      * @return $this
+     * @throws \Exception
      */
     public function setReturn($return)
     {
@@ -931,7 +1088,7 @@ class MyParcelConsignment
      */
     public function isLargeFormat()
     {
-        return $this->large_format;
+        return (bool) $this->large_format;
     }
 
     /**
@@ -942,6 +1099,7 @@ class MyParcelConsignment
      * @param boolean $large_format
      *
      * @return $this
+     * @throws \Exception
      */
     public function setLargeFormat($large_format)
     {
@@ -1107,18 +1265,19 @@ class MyParcelConsignment
      * @param MyParcelCustomsItem $item
      *
      * @return $this
+     * @throws \Exception
      */
     public function addItem($item)
     {
-        if ($item->isFullyFilledItem() == true) {
-            $this->items[] = $item;
-        }
+        $item->ensureFilled();
+
+        $this->items[] = $item;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupPostalCode()
     {
@@ -1142,7 +1301,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupStreet()
     {
@@ -1166,7 +1325,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupCity()
     {
@@ -1190,7 +1349,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupNumber()
     {
@@ -1214,7 +1373,7 @@ class MyParcelConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupLocationName()
     {
@@ -1284,6 +1443,25 @@ class MyParcelConsignment
 
         return $this;
     }
+    /**
+     * The total weight for all items in whole grams
+     *
+     * @return int
+     */
+    public function getTotalWeight()
+    {
+        $weight = 0;
+
+        foreach ($this->getItems() as $item) {
+            $weight += $item->getWeight();
+        }
+
+        if ($weight == 0) {
+            $weight = 1;
+        }
+
+        return $weight;
+    }
 
     /**
      * Only package type 1 can have extra options
@@ -1299,19 +1477,6 @@ class MyParcelConsignment
             throw new \Exception('Set package type before ' . $option);
         }
 
-        return $this->getPackageType() == 1 ? $option : false;
-    }
-
-    /**
-     * Wraps a street to max street lenth
-     *
-     * @return array
-     */
-    private function getStreetParts()
-    {
-        $streetWrap = wordwrap($this->street, self::MAX_STREET_LENGTH, 'BREAK_LINE');
-        $parts      = explode("BREAK_LINE", $streetWrap);
-
-        return $parts;
+        return $this->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_PACKAGE ? $option : false;
     }
 }
