@@ -169,7 +169,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string)$this->timestamp . '_test3',
+                'reference_identifier' => (string) $this->timestamp . '_test3',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -184,7 +184,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string)$this->timestamp . '_test2',
+                'reference_identifier' => (string) $this->timestamp . '_test2',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
