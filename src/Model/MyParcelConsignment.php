@@ -95,7 +95,7 @@ class MyParcelConsignment
      * @internal
      * @var int
      */
-    public $status = 0;
+    public $status = null;
 
     /**
      * @internal
