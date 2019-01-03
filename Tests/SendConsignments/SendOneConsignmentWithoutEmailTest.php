@@ -22,7 +22,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneConsignmentWithoutEmailTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentWithoutEmailTest
  */
-class SendOneConsignmentWithoutEmailTest extends \PHPUnit_Framework_TestCase
+class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

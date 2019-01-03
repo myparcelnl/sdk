@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneReferenceIdentifierConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit_Framework_TestCase
+class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
