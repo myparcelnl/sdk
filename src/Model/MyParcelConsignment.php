@@ -37,7 +37,7 @@ class MyParcelConsignment
     const CC_NL = 'NL';
     const CC_BE = 'BE';
 
-    private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
+    private $insurance_possibilities = [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
      * @var string
@@ -989,7 +989,7 @@ class MyParcelConsignment
      *
      * Composite type containing integer and currency. The amount is without decimal
      * separators.
-     * Pattern: [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
+     * Pattern: [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
      * Required: No
      *
      * @param int $insurance
@@ -1000,7 +1000,7 @@ class MyParcelConsignment
     public function setInsurance($insurance)
     {
         if (!in_array($insurance, $this->insurance_possibilities) && $this->getCountry() == self::CC_NL) {
-            throw new \Exception('Insurance must be one of [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
+            throw new \Exception('Insurance must be one of [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
         if (!$this->canHaveOption()) {

@@ -126,7 +126,14 @@ class SendOneConsignmentTest extends \PHPUnit_Framework_TestCase
             }
 
             if (key_exists('insurance', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
+                // Since 1-1-2019 it is not possible to get an insurance with 50 euros from MyParcel, instead the insurance 100 euros has been added.
+                $insurance = $consignmentTest['insurance'];
+
+                if ($insurance == 50) {
+                    $insurance = 100;
+                }
+
+                $this->assertEquals($insurance, $consignment->getInsurance(), 'getInsurance()');
             }
 
             /**
