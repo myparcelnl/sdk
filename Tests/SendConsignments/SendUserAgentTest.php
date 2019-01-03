@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendPickupFromCheckoutDataTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendUserAgentTest extends \PHPUnit_Framework_TestCase
+class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test one shipment with createConcepts()
