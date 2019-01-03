@@ -24,7 +24,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendOneInternationalConsignmentTest
  * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
-class SendLargeFormatTest extends \PHPUnit_Framework_TestCase
+class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 {
     use HasCustomItems;
 

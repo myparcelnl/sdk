@@ -24,7 +24,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  * Class SendMultipleConsignmentsTest
  * @package MyParcelNL\Sdk\tests\SendConsignmentsTest
  */
-class SendMultipleConsignmentsTest extends \PHPUnit_Framework_TestCase
+class SendMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
