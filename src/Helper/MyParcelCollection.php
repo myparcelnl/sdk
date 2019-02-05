@@ -102,6 +102,10 @@ class MyParcelCollection extends Collection
      */
     public function getConsignmentsByReferenceId($id)
     {
+        if ($this->count() === 1) {
+            return $this;
+        }
+
         return $this->where('reference_identifier', $id);
     }
 
