@@ -144,6 +144,12 @@ class ConsignmentEncode
             $this->consignmentEncoded['options']['large_format'] = $consignment->isLargeFormat() ? 1 : 0;
         }
 
+        if ($consignment->getCountry() == "NL" && $consignment->isAgeCheck()) {
+            $this->consignmentEncoded['options']['age_check'] = 1;
+            $this->consignmentEncoded['options']['only_recipient'] = 1;
+            $this->consignmentEncoded['options']['signature'] = 1;
+        }
+
         if ($consignment->getDeliveryDate()) {
             $this->consignmentEncoded['options']['delivery_date'] = $consignment->getDeliveryDate();
         }

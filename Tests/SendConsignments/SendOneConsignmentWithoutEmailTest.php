@@ -100,6 +100,7 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => false,
+                'age_check' => false,
                 'only_recipient' => false,
                 'signature' => false,
                 'return' => false,

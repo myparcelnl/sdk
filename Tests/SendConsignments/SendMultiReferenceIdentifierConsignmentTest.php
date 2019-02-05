@@ -71,6 +71,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
                 $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
+            }
+
             if (key_exists('only_recipient', $consignmentTest)) {
                 $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }
@@ -135,6 +139,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
         if (key_exists('large_format', $consignmentTest)) {
             $this->assertEquals($consignmentTest['large_format'], $savedConsignment->isLargeFormat(), 'isLargeFormat()');
+        }
+
+        if (key_exists('age_check', $consignmentTest)) {
+            $this->assertEquals($consignmentTest['age_check'], $savedConsignment->isAgeCheck(), 'isAgeCheck()');
         }
 
         if (key_exists('only_recipient', $consignmentTest)) {

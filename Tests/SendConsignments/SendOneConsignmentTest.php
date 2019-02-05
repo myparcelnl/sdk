@@ -54,6 +54,10 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
+            }
+
             if (key_exists('only_recipient', $consignmentTest)) {
                 $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }
@@ -101,6 +105,10 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 
             if (key_exists('large_format', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
+            }
+
+            if (key_exists('age_check', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['age_check'], $consignment->isAgeCheck(), 'isAgeCheck()');
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -176,6 +184,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => false,
+                'age_check' => false,
                 'only_recipient' => false,
                 'signature' => false,
                 'return' => false,
@@ -197,6 +206,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => false,
+                'age_check' => false,
                 'only_recipient' => false,
                 'signature' => false,
                 'return' => false,
@@ -217,6 +227,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => true,
+                'age_check' => false,
                 'only_recipient' => true,
                 'signature' => true,
                 'return' => true,
@@ -238,6 +249,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => true,
+                'age_check' => false,
                 'only_recipient' => true,
                 'signature' => true,
                 'return' => true,
@@ -259,6 +271,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => true,
+                'age_check' => false,
                 'only_recipient' => true,
                 'signature' => true,
                 'return' => true,
@@ -280,6 +293,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
                 'large_format' => false,
+                'age_check' => false,
                 'only_recipient' => false,
                 'signature' => false,
                 'return' => false,

@@ -62,6 +62,10 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
+            }
+
             if (key_exists('only_recipient', $consignmentTest)) {
                 $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }

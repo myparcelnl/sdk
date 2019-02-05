@@ -213,6 +213,12 @@ class MyParcelConsignment
 
     /**
      * @internal
+     * @var boolean
+     */
+    public $age_check;
+
+    /**
+     * @internal
      * @var string
      */
     public $label_description = '';
@@ -1092,6 +1098,14 @@ class MyParcelConsignment
     }
 
     /**
+     * @return boolean
+     */
+    public function isAgeCheck()
+    {
+        return (bool) $this->age_check;
+    }
+
+    /**
      * Large format package
      *
      * Required: No
@@ -1104,6 +1118,23 @@ class MyParcelConsignment
     public function setLargeFormat($large_format)
     {
         $this->large_format = $this->canHaveOption($large_format);
+
+        return $this;
+    }
+
+    /**
+     * Age check
+     *
+     * Required: No
+     *
+     * @param boolean $age_check
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setAgeCheck($age_check)
+    {
+        $this->age_check = $this->canHaveOption($age_check);
 
         return $this;
     }

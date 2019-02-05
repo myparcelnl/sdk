@@ -150,9 +150,12 @@ Available options:
 - return: Return the package to the sender when the recipient is not home.
   - Set: `setReturn(true)`
   - Get: `isReturn()`
-- large_format: This option must be specified if the dimensions of the package are between 100 x 70 x 50 and 175 x 78 x 58 cm. If the scanned dimensions from the carrier indicate that this package is large format and it has not been specified then it will be added to the shipment in the billing process. This option is also available for EU shipments. 
+- large_format: This option must be specified if the dimensions of the package are between 100 x 70 x 50 and 175 x 78 x 58 cm. If the scanned dimensions from the carrier indicate that this package is large format and it has not been specified then it will be added to the shipment in the billing process. This option is also available for EU shipments.  
   - Set: `setLargeFormat(true)`
   - Get: `isLargeFormat()`
+- age_check: The Customer/Consumer must sign for the package and only receive it when he is at least 18 years.
+    - Set: `setAgeCheck(true)`
+    - Get: `isAgeCheck()`
 - insurance: This option allows a shipment to be insured up to certain amount. NL shipments can be insured for 5000,- euros. EU shipments must be insured for 500,- euros. Global shipments must be insured for 200,- euros. The following shipment options are mandatory when insuring an NL shipment: only_recipient and signature.
   - Set: `setInsurance(250)` (amount in EUR)
   - Get: `getInsurance()`
