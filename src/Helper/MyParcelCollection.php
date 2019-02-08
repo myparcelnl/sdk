@@ -102,7 +102,7 @@ class MyParcelCollection extends Collection
      */
     public function getConsignmentsByReferenceId($id)
     {
-        if ($this->count() === 1) {
+        if ($this->count() === 1 && $id === null) {
             return $this;
         }
 
