@@ -155,7 +155,7 @@ Available options:
   - Get: `isLargeFormat()`
 - age_check: The Customer/Consumer must sign for the package and only receive it when he is at least 18 years.
     - Set: `setAgeCheck(true)`
-    - Get: `isAgeCheck()`
+    - Get: `hasAgeCheck()`
 - insurance: This option allows a shipment to be insured up to certain amount. NL shipments can be insured for 5000,- euros. EU shipments must be insured for 500,- euros. Global shipments must be insured for 200,- euros. The following shipment options are mandatory when insuring an NL shipment: only_recipient and signature.
   - Set: `setInsurance(250)` (amount in EUR)
   - Get: `getInsurance()`

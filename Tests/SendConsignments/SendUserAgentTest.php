@@ -42,7 +42,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_test'])
+                ->setFullStreet($consignmentTest['full_street_input'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
@@ -148,7 +148,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
             }
 
             if (key_exists('age_check', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['age_check'], $consignment->isAgeCheck(), 'isAgeCheck()');
+                $this->assertEquals($consignmentTest['age_check'], $consignment->hasAgeCheck(), 'hasAgeCheck()');
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -236,7 +236,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,
@@ -251,7 +251,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,

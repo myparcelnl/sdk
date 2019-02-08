@@ -129,7 +129,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'CA',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,

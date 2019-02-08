@@ -1100,7 +1100,7 @@ class MyParcelConsignment
     /**
      * @return boolean
      */
-    public function isAgeCheck()
+    public function hasAgeCheck()
     {
         return (bool) $this->age_check;
     }

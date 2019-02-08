@@ -90,7 +90,7 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,

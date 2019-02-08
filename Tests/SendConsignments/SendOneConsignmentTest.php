@@ -40,7 +40,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_test'])
+                ->setFullStreet($consignmentTest['full_street_input'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
@@ -108,7 +108,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             }
 
             if (key_exists('age_check', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['age_check'], $consignment->isAgeCheck(), 'isAgeCheck()');
+                $this->assertEquals($consignmentTest['age_check'], $consignment->hasAgeCheck(), 'hasAgeCheck()');
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -160,7 +160,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -174,7 +174,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,
@@ -195,7 +195,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
+                'full_street_input' => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
                 'full_street' => 'Wethouder Fierman Eduard Meerburg senior 14 t',
                 'street' => 'Wethouder Fierman Eduard Meerburg senior',
                 'street_additional_info' => 'kade',
@@ -217,7 +217,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'The insurance man',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,
@@ -239,7 +239,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'The insurance man',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat\n55',
+                'full_street_input' => 'Koestraat\n55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,
@@ -261,7 +261,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'The insurance man',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Runstraat 14 3',
+                'full_street_input' => 'Runstraat 14 3',
                 'full_street' => 'Runstraat 14 3',
                 'street' => 'Runstraat 14',
                 'number' => 3,
@@ -283,7 +283,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'BE',
                 'person' => 'Richard',
                 'company' => 'MyParcelNL',
-                'full_street_test' => 'Berghelaan\n34\n2',
+                'full_street_input' => 'Berghelaan\n34\n2',
                 'full_street' => 'Berghelaan 34 2',
                 'street' => 'Berghelaan',
                 'number' => null,

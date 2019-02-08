@@ -142,7 +142,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         }
 
         if (key_exists('age_check', $consignmentTest)) {
-            $this->assertEquals($consignmentTest['age_check'], $savedConsignment->isAgeCheck(), 'isAgeCheck()');
+            $this->assertEquals($consignmentTest['age_check'], $savedConsignment->hasAgeCheck(), 'hasAgeCheck()');
         }
 
         if (key_exists('only_recipient', $consignmentTest)) {
@@ -177,11 +177,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) $this->timestamp . '_test3',
+                'reference_identifier' => (string) $this->timestamp . '_input3',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -192,11 +192,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) $this->timestamp . '_test2',
+                'reference_identifier' => (string) $this->timestamp . '_input2',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
