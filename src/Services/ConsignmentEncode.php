@@ -145,11 +145,11 @@ class ConsignmentEncode
         }
 
         if ($consignment->getCountry() == MyParcelConsignment::CC_NL && $consignment->hasAgeCheck()) {
-
-//            var_dump('hier kom ik in');
             $this->consignmentEncoded['options']['age_check'] = 1;
             $this->consignmentEncoded['options']['only_recipient'] = 1;
             $this->consignmentEncoded['options']['signature'] = 1;
+        } elseif ($consignment->hasAgeCheck()){
+            throw new \Exception('The age check is not possible with an EU shipment or world shipment');
         }
 
         if ($consignment->getDeliveryDate()) {

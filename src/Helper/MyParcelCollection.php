@@ -96,7 +96,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param string $id
+     * @param string|null $id
      *
      * @return MyParcelCollection
      */
@@ -582,7 +582,7 @@ class MyParcelCollection extends Collection
     {
         $this->transform(function($consignment) {
             /** @var MyParcelConsignment $consignment */
-            if (null === $consignment->getReferenceId()) {
+            if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
 

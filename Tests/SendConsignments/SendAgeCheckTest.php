@@ -36,7 +36,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 
 
             if (isset($consignmentTest['exception'])) {
-                $this->expectException($consignmentTest['exception']);
+                $this->expectExceptionMessage($consignmentTest['exception']);
             }
 
             $myParcelCollection = new MyParcelCollection();
