@@ -124,6 +124,27 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
     public function additionProvider()
     {
         return [
+            'Normal check' => [
+                'api_key' => getenv('API_KEY'),
+                'cc' => 'NL',
+                'person' => 'Piet',
+                'company' => 'Mega Store',
+                'full_street_input' => 'Koestraat 55',
+                'full_street' => 'Koestraat 55',
+                'street' => 'Koestraat',
+                'number' => 55,
+                'number_suffix' => '',
+                'postal_code' => '2231JE',
+                'city' => 'Katwijk',
+                'phone' => '123-45-235-435',
+                'package_type' => 1,
+                'large_format' => false,
+                'age_check' => false,
+                'only_recipient' => false,
+                'signature' => false,
+                'return' => false,
+                'label_description' => '18+ check',
+            ],
             'Normal 18+ check' => [
                 'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
