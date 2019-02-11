@@ -61,6 +61,9 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
             if (key_exists('large_format', $consignmentTest)) {
                 $consignment->setLargeFormat($consignmentTest['large_format']);
             }
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
+            }
 
             if (key_exists('only_recipient', $consignmentTest)) {
                 $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
@@ -126,7 +129,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'CA',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,

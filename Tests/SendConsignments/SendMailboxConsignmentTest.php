@@ -45,7 +45,7 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_test'])
+                ->setFullStreet($consignmentTest['full_street_input'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
@@ -135,7 +135,7 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'The insurance man',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,

@@ -62,6 +62,10 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
+            }
+
             if (key_exists('only_recipient', $consignmentTest)) {
                 $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }
@@ -122,6 +126,10 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['large_format'], $savedConsignment->isLargeFormat(), 'isLargeFormat()');
             }
 
+            if (key_exists('age_check', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['age_check'], $savedConsignment->hasAgeCheck(), 'hasAgeCheck()');
+            }
+
             if (key_exists('only_recipient', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['only_recipient'], $savedConsignment->isOnlyRecipient(), 'isOnlyRecipient()');
             }
@@ -158,7 +166,7 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,

@@ -94,11 +94,11 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string)$this->timestamp . '_test',
+                'reference_identifier' => (string)$this->timestamp . '_input',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -109,11 +109,11 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string)$this->timestamp . '_test',
+                'reference_identifier' => (string)$this->timestamp . '_input',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,

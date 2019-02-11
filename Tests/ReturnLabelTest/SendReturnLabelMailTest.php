@@ -50,7 +50,7 @@ class SendReturnLabelMailTest extends \PHPUnit\Framework\TestCase
             ->setCountry($consignmentTest['cc'])
             ->setPerson($consignmentTest['person'])
             ->setCompany($consignmentTest['company'])
-            ->setFullStreet($consignmentTest['full_street_test'])
+            ->setFullStreet($consignmentTest['full_street_input'])
             ->setPostalCode($consignmentTest['postal_code'])
             ->setCity($consignmentTest['city'])
             ->setEmail($consignmentTest['email'])
@@ -77,7 +77,7 @@ class SendReturnLabelMailTest extends \PHPUnit\Framework\TestCase
             'person' => 'Piet',
             'email' => 'your_email@test.nl',
             'company' => 'Mega Store',
-            'full_street_test' => 'Koestraat 55',
+            'full_street_input' => 'Koestraat 55',
             'number_suffix' => '',
             'postal_code' => '2231JE',
             'city' => 'Katwijk',

@@ -54,7 +54,8 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone'])
-                ->setLargeFormat($consignmentTest['large_format']);
+                ->setLargeFormat($consignmentTest['large_format'])
+                ->setAgeCheck($consignmentTest['age_check']);
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
@@ -124,7 +125,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'CA',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -136,6 +137,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'label_description' => 112345,
                 'large_format' => true,
                 'large_format_after_request' => false,
+                'age_check' => false,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
@@ -152,7 +154,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'BE',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -164,6 +166,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'label_description' => 112345,
                 'large_format' => true,
                 'large_format_after_request' => true,
+                'age_check' => false,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
@@ -180,7 +183,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -192,6 +195,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'label_description' => 112345,
                 'large_format' => true,
                 'large_format_after_request' => true,
+                'age_check' => false,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',

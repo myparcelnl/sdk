@@ -86,6 +86,7 @@ class ConsignmentAdapter
         $fields = [
             'only_recipient' => false,
             'large_format' => false,
+            'age_check' => false,
             'signature' => false,
             'return' => false,
             'delivery_date' => null,
@@ -97,6 +98,7 @@ class ConsignmentAdapter
         $methods = [
             'OnlyRecipient' => 'only_recipient',
             'LargeFormat' => 'large_format',
+            'AgeCheck' => 'age_check',
             'Signature' => 'signature',
             'Return' => 'return',
             'DeliveryDate' => 'delivery_date',

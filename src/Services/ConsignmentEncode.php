@@ -144,6 +144,14 @@ class ConsignmentEncode
             $this->consignmentEncoded['options']['large_format'] = $consignment->isLargeFormat() ? 1 : 0;
         }
 
+        if ($consignment->getCountry() == MyParcelConsignment::CC_NL && $consignment->hasAgeCheck()) {
+            $this->consignmentEncoded['options']['age_check'] = 1;
+            $this->consignmentEncoded['options']['only_recipient'] = 1;
+            $this->consignmentEncoded['options']['signature'] = 1;
+        } elseif ($consignment->hasAgeCheck()){
+            throw new \Exception('The age check is not possible with an EU shipment or world shipment');
+        }
+
         if ($consignment->getDeliveryDate()) {
             $this->consignmentEncoded['options']['delivery_date'] = $consignment->getDeliveryDate();
         }

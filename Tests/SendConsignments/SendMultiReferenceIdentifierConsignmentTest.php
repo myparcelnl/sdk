@@ -71,6 +71,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
                 $consignment->setLargeFormat($consignmentTest['large_format']);
             }
 
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
+            }
+
             if (key_exists('only_recipient', $consignmentTest)) {
                 $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
             }
@@ -137,6 +141,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             $this->assertEquals($consignmentTest['large_format'], $savedConsignment->isLargeFormat(), 'isLargeFormat()');
         }
 
+        if (key_exists('age_check', $consignmentTest)) {
+            $this->assertEquals($consignmentTest['age_check'], $savedConsignment->hasAgeCheck(), 'hasAgeCheck()');
+        }
+
         if (key_exists('only_recipient', $consignmentTest)) {
             $this->assertEquals($consignmentTest['only_recipient'], $savedConsignment->isOnlyRecipient(), 'isOnlyRecipient()');
         }
@@ -169,11 +177,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) $this->timestamp . '_test3',
+                'reference_identifier' => (string) $this->timestamp . '_input3',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -184,11 +192,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) $this->timestamp . '_test2',
+                'reference_identifier' => (string) $this->timestamp . '_input2',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
