@@ -24,6 +24,10 @@ class CheckoutFields
      */
     public function getDeliveryType($checkoutData)
     {
+        if (empty($checkoutData)) {
+            return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
+        }
+
         $aCheckoutData    = json_decode($checkoutData, true);
         $typeFromCheckout = $this->getTypeFromCheckout($aCheckoutData);
 
