@@ -104,7 +104,7 @@ class MyParcelCollection extends Collection
     public function getConsignmentsByReferenceId($id)
     {
         if ($id === null) {
-            throw new \Exception('Can\'t run getConsignmentsByReferenceId(): id can\'t be null');
+            throw new \Exception('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
         if ($this->count() === 1) {
