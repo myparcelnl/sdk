@@ -99,10 +99,15 @@ class MyParcelCollection extends Collection
      * @param string|null $id
      *
      * @return MyParcelCollection
+     * @throws \Exception
      */
     public function getConsignmentsByReferenceId($id)
     {
-        if ($this->count() === 1 && $id === null) {
+        if ($id === null) {
+            throw new \Exception('Can\'t run getConsignmentsByReferenceId(): id can\'t be null');
+        }
+
+        if ($this->count() === 1) {
             return $this;
         }
 
@@ -113,8 +118,11 @@ class MyParcelCollection extends Collection
      * This is deprecated because there may be multiple consignments with the same reference id
      *
      * @deprecated Use getConsignmentsByReferenceId instead
+     *
      * @param $id
+     *
      * @return mixed
+     * @throws \Exception
      */
     public function getConsignmentByReferenceId($id)
     {
