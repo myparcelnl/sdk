@@ -239,6 +239,10 @@ class ConsignmentEncode
             $items[] = $this->encodeCdCountryItem($item);
         }
 
+        if (empty($consignment->getPhysicalProperties())) {
+            $consignment->setPhysicalProperties(['weight' => $consignment->getTotalWeight()]);
+        }
+
         $this->consignmentEncoded = array_merge_recursive(
             $this->consignmentEncoded, [
                 'customs_declaration' => [
@@ -247,7 +251,7 @@ class ConsignmentEncode
                     'items' => $items,
                     'invoice' => $consignment->getLabelDescription(),
                 ],
-                'physical_properties' => $consignment->getPhysicalProperties() + ['weight' => $consignment->getTotalWeight()],
+                'physical_properties' => $consignment->getPhysicalProperties(),
             ]
         );
 
