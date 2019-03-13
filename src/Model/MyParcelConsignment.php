@@ -550,7 +550,6 @@ class MyParcelConsignment
                 'FI',
                 'FR',
                 'DE',
-                'GB',
                 'GR',
                 'HU',
                 'IE',
