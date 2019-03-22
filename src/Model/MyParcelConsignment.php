@@ -501,7 +501,7 @@ class MyParcelConsignment
      *
      * ISO3166-1 alpha2 country code<br>
      * <br>
-     * Pattern: [A-Z]{2,2}<br>
+     * Pattern: [A-Z]{2}<br>
      * Example: NL, BE, CW<br>
      * Required: Yes
      *
@@ -511,6 +511,9 @@ class MyParcelConsignment
      */
     public function setCountry($cc)
     {
+        /**
+         * todo validation [A-Z]{2}
+         */
         $this->cc = $cc;
 
         return $this;
