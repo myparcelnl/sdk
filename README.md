@@ -174,6 +174,18 @@ echo $consignment->getStreet();
 // etc...
 ```
 
+#### Get status
+After ```setPdfOfLabels()```, ```setLinkOfLabels()``` and ```createConcepts()``` you can get the status.
+```php
+$status = $consignment->getStatus();
+```
+
+#### Get barcode
+The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
+```php
+$barcode = $consignment->getBarcode();
+```
+
 ### Create and download label(s)
 Create and directly download PDF with `setPdfOfLabels($position)` where `$positions` is the [label position](#label-format-and-position) value. 
 ```php
