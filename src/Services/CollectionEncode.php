@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Services;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class CollectionEncode
 {
@@ -37,11 +38,27 @@ class CollectionEncode
     {
         $data = [];
 
-        foreach ($this->consignments as $consignment) {
-            $data['data']['shipments'][] = (new ConsignmentEncode($consignment))->apiEncode();
+        $groupedConsignments = $this->groupMultiColloConsignments();
+
+        foreach ($groupedConsignments as $consignments) {
+            $data['data']['shipments'][] = (new ConsignmentEncode($consignments))->apiEncode();
         }
 
         // Remove \\n because json_encode encode \\n for \s
         return str_replace('\\n', " ", json_encode($data));
+    }
+
+    /**
+     * @return array
+     */
+    private function groupMultiColloConsignments(): array
+    {
+        return $this->consignments->groupBy(function (MyParcelConsignment $consignment) {
+            if ($consignment->isPartOfMultiCollo()) {
+                return $consignment->getReferenceId();
+            }
+
+            return 'random_to_prevent_multi_collo_' . uniqid();
+        })->toArray();
     }
 }

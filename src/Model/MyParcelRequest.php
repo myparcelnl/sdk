@@ -35,10 +35,10 @@ class MyParcelRequest
     /**
      * API headers
      */
-    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json; charset=utf-8';
+    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
     const REQUEST_HEADER_RETRIEVE_SHIPMENT = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
-    const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf';
+    const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf;charset=utf-8';
     const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
     const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
 
@@ -97,7 +97,7 @@ class MyParcelRequest
         $this->api_key = $apiKey;
         $this->body = $body;
 
-        $header[] = $requestHeader . 'charset=utf-8';
+        $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
 
         $this->header = $header;

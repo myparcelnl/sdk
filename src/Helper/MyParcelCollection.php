@@ -175,6 +175,30 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * @param MyParcelConsignment $consignment
+     * @param $amount
+     *
+     * @return MyParcelCollection
+     */
+    public function addMultiCollo(MyParcelConsignment $consignment, $amount): self
+    {
+        $i = 1;
+
+        $consignment->setMultiCollo();
+
+        if (null == $consignment->getReferenceId()) {
+            $consignment->setReferenceId('random_multi_collo_' . uniqid());
+        }
+
+        while ($i <= $amount) {
+            $this->push($consignment);
+            $i ++;
+        }
+
+        return $this;
+    }
+
+    /**
      * Create concepts in MyParcel
      *
      * @return  $this

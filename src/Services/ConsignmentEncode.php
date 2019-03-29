@@ -14,6 +14,7 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Support\Arr;
 
 class ConsignmentEncode
 {
@@ -23,13 +24,13 @@ class ConsignmentEncode
     private $consignmentEncoded = [];
 
     /**
-     * @var MyParcelConsignment
+     * @var MyParcelConsignment[] grouped by multi collo
      */
-    private $consignment;
+    private $consignments;
 
-    public function __construct($consignment)
+    public function __construct($consignments)
     {
-        $this->consignment = $consignment;
+        $this->consignments = $consignments;
     }
 
     /**
@@ -41,9 +42,10 @@ class ConsignmentEncode
     public function apiEncode()
     {
         $this->encodeBaseOptions()
-                ->encodeStreet()
-                ->encodeExtraOptions()
-                ->encodeCdCountry();
+             ->encodeStreet()
+             ->encodeExtraOptions()
+             ->encodeCdCountry()
+             ->encodeMultiCollo();
 
         return $this->consignmentEncoded;
     }
@@ -53,7 +55,7 @@ class ConsignmentEncode
      */
     private function encodeBaseOptions()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         $packageType = $consignment->getPackageType();
 
         if ($packageType == null) {
@@ -92,7 +94,7 @@ class ConsignmentEncode
      */
     private function encodeStreet()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if ($consignment->getCountry() == MyParcelConsignment::CC_NL) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
@@ -118,7 +120,7 @@ class ConsignmentEncode
      * @throws \Exception
      */
     private function encodeExtraOptions() {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         $hasOptions = $this->hasOptions();
         if ($hasOptions) {
             $this->consignmentEncoded = array_merge_recursive(
@@ -165,7 +167,7 @@ class ConsignmentEncode
      */
     private function encodePickup()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if (
             $this->hasOptions() !== false &&
             $consignment->getPickupPostalCode() !== null &&
@@ -193,10 +195,12 @@ class ConsignmentEncode
      */
     private function encodeInsurance()
     {
+        $consignment = Arr::first($this->consignments);
+
         // Set insurance
-        if ($this->consignment->getInsurance() > 1) {
+        if ($consignment->getInsurance() > 1) {
             $this->consignmentEncoded['options']['insurance'] = [
-                'amount' => (int) $this->consignment->getInsurance() * 100,
+                'amount' => (int) $consignment->getInsurance() * 100,
                 'currency' => 'EUR',
             ];
         }
@@ -210,7 +214,7 @@ class ConsignmentEncode
      */
     private function encodePhysicalProperties()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != MyParcelConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
             return $this;
         }
@@ -227,7 +231,7 @@ class ConsignmentEncode
      */
     private function encodeCdCountry()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if ($consignment->isEuCountry()) {
             return $this;
         }
@@ -288,7 +292,9 @@ class ConsignmentEncode
      */
     private function hasOptions()
     {
-        if (in_array($this->consignment->getCountry(), [MyParcelConsignment::CC_NL, MyParcelConsignment::CC_BE])) {
+        $consignment = Arr::first($this->consignments);
+
+        if (in_array($consignment->getCountry(), [MyParcelConsignment::CC_NL, MyParcelConsignment::CC_BE])) {
             return true;
         }
 
@@ -312,5 +318,26 @@ class ConsignmentEncode
         if (empty($consignment->getLabelDescription())) {
             throw new \Exception('Label description/invoice id is required for international shipments. Use getLabelDescription().');
         }
+    }
+
+    /**
+     * @return ConsignmentEncode
+     * @throws \Exception
+     */
+    private function encodeMultiCollo(): self
+    {
+        /** @var MyParcelConsignment $first */
+        $first = Arr::first($this->consignments);
+        if (count($this->consignments) > 1 && ! $first->isPartOfMultiCollo()) {
+            throw new \Exception("Can not encode multi collo with this consignment.");
+        }
+
+        $secondaryShipments = $this->consignments;
+        Arr::forget($secondaryShipments, 0);
+        foreach ($secondaryShipments as $secondaryShipment) {
+            $this->consignmentEncoded['secondary_shipments'][] = (object)['reference_identifier' => $secondaryShipment->getReferenceId()];
+        }
+
+        return $this;
     }
 }

@@ -88,6 +88,11 @@ class MyParcelConsignment
     public $api_key;
 
     /**
+     * @var bool
+     */
+    private $partOfMultiCollo = false;
+
+    /**
      * @internal
      * @var string|null
      */
@@ -388,6 +393,25 @@ class MyParcelConsignment
 
         return $this;
     }
+
+    /**
+     * @return MyParcelConsignment
+     */
+    public function setMultiCollo(): self
+    {
+        $this->partOfMultiCollo = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartOfMultiCollo(): bool
+    {
+        return $this->partOfMultiCollo;
+    }
+
 
     /**
      * @return string|null
@@ -1224,6 +1248,7 @@ class MyParcelConsignment
         return $this->physical_properties;
     }
 
+
     /**
      * @return integer
      */
@@ -1255,7 +1280,6 @@ class MyParcelConsignment
 
         return $this;
     }
-
 
     /**
      * @return string
@@ -1451,7 +1475,6 @@ class MyParcelConsignment
 
         return $this;
     }
-
     /**
      * @return string
      */
@@ -1475,6 +1498,7 @@ class MyParcelConsignment
 
         return $this;
     }
+
     /**
      * The total weight for all items in whole grams
      *
