@@ -14,6 +14,7 @@
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -85,7 +86,7 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
-            $myParcelCollection = $myParcelCollection->addMultiCollo($consignment, $consignmentTest['multi_collo_amount']);
+            $myParcelCollection->addMultiCollo($consignment, $consignmentTest['multi_collo_amount']);
 
 
             $this->assertCount($consignmentTest['multi_collo_amount'], $myParcelCollection);
@@ -97,11 +98,11 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            /** @var MyParcelConsignmentRepository $consignment */
-            $consignment = $myParcelCollection->getConsignments()[0];
-            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+            /** @var MyParcelConsignment[] $consignments */
+            $consignments = $myParcelCollection->getConsignments();
 
-            /** @todo; clear consignment in MyParcelCollection */
+            $this->assertNotEquals($consignments[0]->getMyParcelConsignmentId(), $consignments[1]->getMyParcelConsignmentId());
+            $this->assertNotEquals($consignments[0]->getBarcode(), $consignments[1]->getBarcode());
         }
     }
 

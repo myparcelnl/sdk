@@ -53,7 +53,7 @@ class CollectionEncode
      */
     private function groupMultiColloConsignments()
     {
-        return $this->consignments->groupBy(function (MyParcelConsignment $consignment) {
+        return $this->consignments->groupBy(function(MyParcelConsignment $consignment) {
             if ($consignment->isPartOfMultiCollo()) {
                 return $consignment->getReferenceId();
             }

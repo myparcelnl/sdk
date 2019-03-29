@@ -593,7 +593,7 @@ class MyParcelCollection extends Collection
      */
     private function getNewCollectionFromResult($result)
     {
-        $newCollection = new MyParcelCollection();
+        $newCollection = new static;
         foreach ($result as $shipment) {
 
             /** @var Collection|MyParcelConsignment[] $consignments */
