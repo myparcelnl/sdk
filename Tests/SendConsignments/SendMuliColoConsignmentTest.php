@@ -98,7 +98,7 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
             /** @var MyParcelConsignmentRepository $consignment */
-            $consignment = $myParcelCollection->getOneConsignment();
+            $consignment = $myParcelCollection->getConsignments()[0];
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
 
             /** @todo; clear consignment in MyParcelCollection */
