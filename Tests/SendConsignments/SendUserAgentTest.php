@@ -13,7 +13,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments;
+namespace MyParcelNL\Sdk\src\tests\SendConsignments;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
@@ -21,7 +21,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 /**
  * Class SendPickupFromCheckoutDataTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,7 +42,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_test'])
+                ->setFullStreet($consignmentTest['full_street_input'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
@@ -67,6 +66,10 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 
             if (key_exists('large_format', $consignmentTest)) {
                 $consignment->setLargeFormat($consignmentTest['large_format']);
+            }
+
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -122,7 +125,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
             /**
              * Create concept
              */
-            $myParcelCollection->createConcepts()->setLatestData();
+            $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
@@ -142,6 +145,10 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 
             if (key_exists('large_format', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
+            }
+
+            if (key_exists('age_check', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['age_check'], $consignment->hasAgeCheck(), 'hasAgeCheck()');
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -229,7 +236,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,
@@ -244,7 +251,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
-                'full_street_test' => 'Koestraat 55',
+                'full_street_input' => 'Koestraat 55',
                 'full_street' => 'Koestraat 55',
                 'street' => 'Koestraat',
                 'number' => 55,

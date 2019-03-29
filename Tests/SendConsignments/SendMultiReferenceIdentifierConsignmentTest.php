@@ -26,8 +26,15 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
+    private $timestamp;
+
+    public function setUp() {
+        $this->timestamp = (new \DateTime())->getTimestamp();
+    }
+
     /**
      * Test one shipment with createConcepts()
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
@@ -62,6 +69,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
             if (key_exists('large_format', $consignmentTest)) {
                 $consignment->setLargeFormat($consignmentTest['large_format']);
+            }
+
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -107,7 +118,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         $savedCollection->setLatestData();
 
         $consignmentTest = $this->additionProvider()[0];
-        $savedConsignment = $savedCollection->getConsignmentByReferenceId($consignmentTest['reference_identifier']);
+        $savedConsignment = $savedCollection->getConsignmentsByReferenceId($consignmentTest['reference_identifier'])->first();
 
         $this->assertEquals(true, $savedConsignment->getMyParcelConsignmentId() > 1, 'No id found');
         $this->assertEquals($consignmentTest['api_key'], $savedConsignment->getApiKey(), 'getApiKey()');
@@ -128,6 +139,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
         if (key_exists('large_format', $consignmentTest)) {
             $this->assertEquals($consignmentTest['large_format'], $savedConsignment->isLargeFormat(), 'isLargeFormat()');
+        }
+
+        if (key_exists('age_check', $consignmentTest)) {
+            $this->assertEquals($consignmentTest['age_check'], $savedConsignment->hasAgeCheck(), 'hasAgeCheck()');
         }
 
         if (key_exists('only_recipient', $consignmentTest)) {
@@ -162,11 +177,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         return [
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_test3',
+                'reference_identifier' => (string) $this->timestamp . '_input3',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -177,11 +192,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'api_key' => getenv('API_KEY'),
-                'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_test2',
+                'reference_identifier' => (string) $this->timestamp . '_input2',
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,

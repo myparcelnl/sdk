@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Create one concept
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -13,21 +11,19 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendAgeCheckTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
- * Class SendNightShipmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
+ * Class SendAgeCheckTest
+ * @package MyParcelNL\Sdk\tests\SendAgeCheckTest
  */
-class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
+class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Test one shipment with createConcepts()
-     */
+
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
@@ -35,7 +31,13 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
             return $this;
         }
 
+
         foreach ($this->additionProvider() as $consignmentTest) {
+
+
+            if (isset($consignmentTest['exception'])) {
+                $this->expectExceptionMessage($consignmentTest['exception']);
+            }
 
             $myParcelCollection = new MyParcelCollection();
 
@@ -50,44 +52,20 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone']);
 
-            if (key_exists('delivery_date', $consignmentTest)) {
-                $consignment->setDeliveryDate($consignmentTest['delivery_date']);
-            }
-
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
+            if (key_exists('only_recipient_input', $consignmentTest)) {
+                $consignment->setOnlyRecipient($consignmentTest['only_recipient_input']);
             }
 
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
+            if (key_exists('signature_input', $consignmentTest)) {
+                $consignment->setSignature($consignmentTest['signature_input']);
             }
 
-            if (key_exists('signature', $consignmentTest)) {
-                $consignment->setSignature($consignmentTest['signature']);
-            }
-
-            if (key_exists('return', $consignmentTest)) {
-                $consignment->setReturn($consignmentTest['return']);
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $consignment->setInsurance($consignmentTest['insurance']);
-            }
-
-            if (key_exists('label_description', $consignmentTest)) {
-                $consignment->setLabelDescription($consignmentTest['label_description']);
-            }
-
-            if (key_exists('checkout_data', $consignmentTest)) {
-                $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
-            }
-
-            if (key_exists('delivery_type', $consignmentTest)) {
-                $consignment->setDeliveryType($consignmentTest['delivery_type']);
+            if (key_exists('age_check', $consignmentTest)) {
+                $consignment->setAgeCheck($consignmentTest['age_check']);
             }
 
             $myParcelCollection->addConsignment($consignment);
@@ -100,51 +78,28 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
             $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
-            $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
-            $this->assertEquals($consignmentTest['company'], $consignment->getCompany(), 'getCompany()');
-            $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'getFullStreet()');
-            $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'getNumber()');
-            $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
-            $this->assertEquals($consignmentTest['postal_code'], $consignment->getPostalCode(), 'getPostalCode()');
-            $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
-            $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
-
-            if (key_exists('delivery_date', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['delivery_date'] . ' 00:00:00', $consignment->getDeliveryDate(), 'getDeliveryDate()');
-            }
 
             if (key_exists('package_type', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
-            }
-
-            if (key_exists('large_format', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
+            } else {
+                $this->assertEquals(1, $consignment->getPackageType(), 'getPackageType()');
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
+                $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient() test' . $consignmentTest['label_description']);
+            } else {
+                $this->assertEquals(true, $consignment->isOnlyRecipient(), 'isOnlyRecipient() with ageCheck true');
             }
 
             if (key_exists('signature', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature()');
+                $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature() test' . $consignmentTest['label_description']);
+            } else {
+                $this->assertEquals(true, $consignment->isSignature(), 'isSignature() with ageCheck true');
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['return'], $consignment->isReturn(), 'isReturn()');
+            if (key_exists('age_check', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['age_check'], $consignment->hasAgeCheck(), 'hasAgeCheck()');
             }
-
-            if (key_exists('label_description', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
-            }
-
-            if (key_exists('delivery_type', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
-            }
-
             /**
              * Get label
              */
@@ -152,10 +107,6 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 ->setLinkOfLabels();
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
-
-            echo "\033[32mGenerated night shipment label: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
@@ -173,7 +124,7 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
     public function additionProvider()
     {
         return [
-            [
+            'Normal check' => [
                 'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
@@ -187,11 +138,14 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 'city' => 'Katwijk',
                 'phone' => '123-45-235-435',
                 'package_type' => 1,
-                'delivery_type' => 3,
-                'label_description' => 'Label description',
-                'delivery_date' => '2019-07-28'
+                'large_format' => false,
+                'age_check' => false,
+                'only_recipient' => false,
+                'signature' => false,
+                'return' => false,
+                'label_description' => '18+ check',
             ],
-            [
+            'Normal 18+ check' => [
                 'api_key' => getenv('API_KEY'),
                 'cc' => 'NL',
                 'person' => 'Piet',
@@ -204,12 +158,58 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code' => '2231JE',
                 'city' => 'Katwijk',
                 'phone' => '123-45-235-435',
-                'signature' => 1,
                 'package_type' => 1,
-                'delivery_type' => 3,
-                'label_description' => 'Label description',
-                'delivery_date' => '2019-07-28'
-            ]
+                'large_format' => false,
+                'age_check' => true,
+                'only_recipient' => true,
+                'signature' => true,
+                'return' => false,
+                'label_description' => '18+ check',
+            ],
+            '18+ check no signature' => [
+                'api_key' => getenv('API_KEY'),
+                'cc' => 'NL',
+                'person' => 'Piet',
+                'company' => 'Mega Store',
+                'full_street_input' => 'Koestraat 55',
+                'full_street' => 'Koestraat 55',
+                'street' => 'Koestraat',
+                'number' => 55,
+                'number_suffix' => '',
+                'postal_code' => '2231JE',
+                'city' => 'Katwijk',
+                'phone' => '123-45-235-435',
+                'package_type' => 1,
+                'age_check' => true,
+                'only_recipient_input' => false,
+                'only_recipient' => true,
+                'signature_input' => false,
+                'signature' => true,
+                'label_description' => '18+ check no signature',
+            ],
+            '18+ check EU shipment' => [
+                'api_key' => getenv('API_KEY'),
+                'cc' => 'BE',
+                'person' => 'BETest',
+                'company' => 'Mega Store',
+                'full_street_input' => 'hoofdstraat 16',
+                'full_street' => 'hoofdstraat 16',
+                'street' => 'hoofdstraat',
+                'number' => 16,
+                'number_suffix' => '',
+                'postal_code' => '2000',
+                'city' => 'Antwerpen',
+                'phone' => '123-45-235-435',
+                'package_type' => 1,
+                'large_format' => false,
+                'age_check' => true,
+                'only_recipient' => false,
+                'signature_input' => false,
+                'signature' => false,
+                'return' => false,
+                'label_description' => '18+ check no signature',
+                'exception' => 'The age check is not possible with an EU shipment or world shipment',
+            ],
         ];
     }
 }

@@ -15,8 +15,8 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentTest;
 
-use MyParcelNL\sdk\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -26,8 +26,6 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  */
 class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 {
-    use HasCustomItems;
-
     /**
      * Test one shipment with createConcepts()
      * @throws \Exception
@@ -56,7 +54,8 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone'])
-                ->setLargeFormat($consignmentTest['large_format']);
+                ->setLargeFormat($consignmentTest['large_format'])
+                ->setAgeCheck($consignmentTest['age_check']);
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
@@ -82,7 +81,18 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
-            $this->setCustomItems( $consignmentTest, $consignment );
+            // Add items for international shipments
+            foreach ($consignmentTest['custom_items'] as $customItem) {
+                $item = (new MyParcelCustomsItem())
+                    ->setDescription($customItem['description'])
+                    ->setAmount($customItem['amount'])
+                    ->setWeight($customItem['weight'])
+                    ->setItemValue($customItem['item_value'])
+                    ->setClassification($customItem['classification'])
+                    ->setCountry($customItem['country']);
+
+                $consignment->addItem($item);
+            }
 
             $myParcelCollection
                 ->addConsignment($consignment)
@@ -115,7 +125,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'CA',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -127,6 +137,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'label_description' => 112345,
                 'large_format' => true,
                 'large_format_after_request' => false,
+                'age_check' => false,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
@@ -143,7 +154,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'BE',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -155,6 +166,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'label_description' => 112345,
                 'large_format' => true,
                 'large_format_after_request' => true,
+                'age_check' => false,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
@@ -171,7 +183,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
-                'full_street_test' => 'Plein 1940-45 3b',
+                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street' => 'Plein 1940-45 3 b',
                 'street' => 'Plein 1940-45',
                 'number' => 3,
@@ -183,6 +195,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
                 'label_description' => 112345,
                 'large_format' => true,
                 'large_format_after_request' => true,
+                'age_check' => false,
                 'custom_items' => [
                     [
                         'description' => 'Cool Mobile',
