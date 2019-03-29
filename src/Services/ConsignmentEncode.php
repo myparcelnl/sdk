@@ -324,7 +324,7 @@ class ConsignmentEncode
      * @return ConsignmentEncode
      * @throws \Exception
      */
-    private function encodeMultiCollo(): self
+    private function encodeMultiCollo()
     {
         /** @var MyParcelConsignment $first */
         $first = Arr::first($this->consignments);

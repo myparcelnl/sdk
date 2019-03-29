@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 /**
@@ -603,8 +604,15 @@ class MyParcelCollection extends Collection
             }
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
-
             $newCollection->addConsignment($consignmentAdapter->getConsignment());
+
+            foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
+
+                $secondaryShipment = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
+                $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier']));
+                $newCollection->addConsignment($consignmentAdapter->getConsignment());
+
+            }
         }
 
         return $newCollection;

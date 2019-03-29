@@ -30,6 +30,9 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testMultiColo()
     {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
             return $this;
@@ -82,16 +85,15 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
-            $myParcelCollection->addMultiCollo($consignment, 3);
+            $myParcelCollection = $myParcelCollection->addMultiCollo($consignment, $consignmentTest['multi_collo_amount']);
 
 
-            $this->assertCount(3, $myParcelCollection);
+            $this->assertCount($consignmentTest['multi_collo_amount'], $myParcelCollection);
 
             /**
              * Get label
              */
-            $myParcelCollection
-                ->setLinkOfLabels();
+            $myParcelCollection->setLinkOfLabels();
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
@@ -124,6 +126,7 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code' => '2231JE',
                 'city' => 'Rijnsburg',
                 'phone' => '123456',
+                'multi_collo_amount' => 3,
             ],
         ];
     }

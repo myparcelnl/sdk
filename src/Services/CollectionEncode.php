@@ -51,7 +51,7 @@ class CollectionEncode
     /**
      * @return array
      */
-    private function groupMultiColloConsignments(): array
+    private function groupMultiColloConsignments()
     {
         return $this->consignments->groupBy(function (MyParcelConsignment $consignment) {
             if ($consignment->isPartOfMultiCollo()) {
