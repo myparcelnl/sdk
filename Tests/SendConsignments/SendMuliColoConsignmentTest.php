@@ -103,6 +103,8 @@ class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertNotEquals($consignments[0]->getMyParcelConsignmentId(), $consignments[1]->getMyParcelConsignmentId());
             $this->assertNotEquals($consignments[0]->getBarcode(), $consignments[1]->getBarcode());
+            $this->assertTrue($consignments[0]->isPartOfMultiCollo());
+            $this->assertTrue($consignments[1]->isPartOfMultiCollo());
         }
     }
 

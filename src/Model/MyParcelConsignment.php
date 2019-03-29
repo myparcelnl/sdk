@@ -390,11 +390,13 @@ class MyParcelConsignment
     }
 
     /**
+     * @param bool $value
+     *
      * @return MyParcelConsignment
      */
-    public function setMultiCollo()
+    public function setMultiCollo($value = true)
     {
-        $this->partOfMultiCollo = true;
+        $this->partOfMultiCollo = $value;
 
         return $this;
     }

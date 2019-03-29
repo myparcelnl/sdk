@@ -604,13 +604,14 @@ class MyParcelCollection extends Collection
             }
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
-            $newCollection->addConsignment($consignmentAdapter->getConsignment());
+            $isMultiCollo       = ! empty($shipment['secondary_shipments']);
+            $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
 
-                $secondaryShipment = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
+                $secondaryShipment  = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
                 $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier']));
-                $newCollection->addConsignment($consignmentAdapter->getConsignment());
+                $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             }
         }
