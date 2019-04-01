@@ -69,8 +69,8 @@ class ConsignmentAdapter
             ->setPostalCode($recipient['postal_code'])
             ->setStreet($recipient['street'])
             ->setCity($recipient['city'])
-            ->setEmail( isset($recipient['email']) ? $recipient['email'] : '')
-            ->setPhone( isset($recipient['phone']) ? $recipient['phone'] : '')
+            ->setEmail(isset($recipient['email']) ? $recipient['email'] : '')
+            ->setPhone(isset($recipient['phone']) ? $recipient['phone'] : '')
             ->setPackageType($options['package_type'])
             ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
         ;
