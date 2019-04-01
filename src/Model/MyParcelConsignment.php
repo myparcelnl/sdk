@@ -381,9 +381,14 @@ class MyParcelConsignment
      * @param string $apiKey
      *
      * @return $this
+     * @throws \Exception
      */
     public function setApiKey($apiKey)
     {
+        if (! is_string($apiKey)) {
+            throw new \Exception('Api key need to be a type of sting');
+        }
+
         $this->api_key = $apiKey;
 
         return $this;

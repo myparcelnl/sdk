@@ -176,6 +176,46 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * @param int[] $ids
+     * @param sting $apiKey
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function addConsignmentByConsignmentIds($ids, $apiKey)
+    {
+        foreach ($ids as $consignmentId) {
+            $consignment = (new MyParcelConsignment())
+                ->setApiKey($apiKey)
+                ->setMyParcelConsignmentId($consignmentId);
+
+            $this->addConsignment($consignment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $ids
+     * @param string $apiKey
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function addConsignmentByReferenceIds($ids, $apiKey)
+    {
+        foreach ($ids as $referenceId) {
+            $consignment = (new MyParcelConsignment())
+                ->setApiKey($apiKey)
+                ->setReferenceId($referenceId);
+
+            $this->addConsignment($consignment);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param MyParcelConsignment $consignment
      * @param $amount
      *
@@ -185,9 +225,11 @@ class MyParcelCollection extends Collection
     {
         $i = 1;
 
-        $consignment->setMultiCollo();
+        if ($amount > 1) {
+            $consignment->setMultiCollo();
+        }
 
-        if (null == $consignment->getReferenceId()) {
+        if ($consignment->isPartOfMultiCollo() && null == $consignment->getReferenceId()) {
             $consignment->setReferenceId('random_multi_collo_' . uniqid());
         }
 
@@ -320,7 +362,7 @@ class MyParcelCollection extends Collection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $key);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (new MyParcelConsignment())->setApiKey($key));
             $this->addConsignment($consignmentAdapter->getConsignment());
         }
 
@@ -545,7 +587,7 @@ class MyParcelCollection extends Collection
      * @param string $platform
      * @param string $version
      * @internal param string $user_agent
-     * @return $this
+     * @return self
      */
     public function setUserAgent($platform, $version = null)
     {
@@ -603,14 +645,14 @@ class MyParcelCollection extends Collection
                 $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
             }
 
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first());
             $isMultiCollo       = ! empty($shipment['secondary_shipments']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
 
                 $secondaryShipment  = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
-                $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier']));
+                $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier'])->first());
                 $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             }

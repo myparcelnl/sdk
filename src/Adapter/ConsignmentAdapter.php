@@ -24,14 +24,16 @@ class ConsignmentAdapter
 
     /**
      * ConsignmentDecode constructor.
+     *
      * @param array $data
-     * @param string $apiKey
+     * @param MyParcelConsignment $consignment
+     *
      * @throws \Exception
      */
-    public function __construct($data, $apiKey)
+    public function __construct($data, $consignment)
     {
         $this->data = $data;
-        $this->consignment = (new MyParcelConsignment())->setApiKey($apiKey);
+        $this->consignment = $consignment;
 
         $this
             ->baseOptions()
@@ -67,8 +69,8 @@ class ConsignmentAdapter
             ->setPostalCode($recipient['postal_code'])
             ->setStreet($recipient['street'])
             ->setCity($recipient['city'])
-            ->setEmail($recipient['email'])
-            ->setPhone($recipient['phone'])
+            ->setEmail( isset($recipient['email']) ? $recipient['email'] : '')
+            ->setPhone( isset($recipient['phone']) ? $recipient['phone'] : '')
             ->setPackageType($options['package_type'])
             ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
         ;
