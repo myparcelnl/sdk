@@ -17,6 +17,7 @@ namespace MyParcelNL\Sdk\src\Model;
 
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
+use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use MyParcelNL\Sdk\src\Support\Helpers;
 
 /**
@@ -712,6 +713,14 @@ class MyParcelConsignment
             $this->setStreet($fullStreet);
         }
         return $this;
+    }
+
+    public function getBarcodeUrl($barcode, $postalCode, $countryCode)
+    {
+        $barcodeUrl = (new TrackTraceUrl())
+            ->create($barcode, $postalCode, $countryCode);
+
+        return $barcodeUrl;
     }
 
     /**

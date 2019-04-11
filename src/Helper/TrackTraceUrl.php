@@ -8,12 +8,12 @@
 
 namespace MyparcelNL\Sdk\src\Helper;
 
-
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class TrackTraceUrl
 {
-    const CONSUMER_PORTAL_URL = 'https://myparcel.me/track-trace/%barcode%/%postal_code%/%CC%';
+
+    const CONSUMER_PORTAL_BASE_URL = "https://myparcel.me/track-trace/";
 
     /**
      * @param string $barcode
@@ -23,10 +23,7 @@ class TrackTraceUrl
      * @return string
      */
     public static function create($barcode, $postalCode, $countryCode) {
-
-        return sprintf(self::CONSUMER_PORTAL_URL, $barcode, $postalCode, $countryCode);
-
-            // maak unit test
+        return self::CONSUMER_PORTAL_BASE_URL . "$barcode/$postalCode/$countryCode";
             // in documentatie aan passen en is slack chan
     }
 }
