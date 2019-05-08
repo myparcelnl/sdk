@@ -515,7 +515,7 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
      * @param  mixed  $value
      * @return static
      */
-    public function where($key, $operator, $value = null)
+    public function where($key, $operator = null, $value = null)
     {
         return $this->filter($this->operatorForWhere(...func_get_args()));
     }
@@ -528,7 +528,7 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
      * @param  mixed  $value
      * @return \Closure
      */
-    protected function operatorForWhere($key, $operator, $value = null)
+    protected function operatorForWhere($key, $operator = null, $value = null)
     {
         if (func_num_args() === 2) {
             $value = $operator;

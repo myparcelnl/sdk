@@ -298,11 +298,6 @@ class MyParcelConsignment
     public $pickup_network_id = '';
 
     /**
-     * @var array
-     */
-    private $insurance_possibilities = [0, 50, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
-
-    /**
      * @var Helpers
      */
     private $helper;
