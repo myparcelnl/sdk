@@ -67,8 +67,6 @@ class MyParcelConsignment
     /** @deprecated Use MyParcelConsignment::PACKAGE_TYPE_PACKAGE */
     const PACKAGE_TYPE_NORMAL = self::PACKAGE_TYPE_PACKAGE;
 
-    private $insurance_possibilities = [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
-
     /**
      * @internal
      * @var string
@@ -296,6 +294,11 @@ class MyParcelConsignment
      * @var string
      */
     public $pickup_network_id = '';
+
+    /**
+     * @var array
+     */
+    private $insurance_possibilities = [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
      * @var Helpers
