@@ -1320,7 +1320,7 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
      * @param  callable|mixed  $callback
      * @return static
      */
-    public function reject($callback)
+    public function reject($callback = null)
     {
         if ($this->useAsCallable($callback)) {
             return $this->filter(function ($value, $key) use ($callback) {
