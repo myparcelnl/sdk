@@ -23,8 +23,9 @@ This SDK connects to the MyParcel API using PHP.
 ## Installation
 
 ### Requirements
-The MyParcel SDK works with PHP version >= 5.6.5. The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
-For support for PHP version 5.4 you can use release 1.x.
+The MyParcel SDK works with PHP version >= 7.1.0. The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
+
+If you have a php version lower than 7.1.0 then we would like to advise you to update your php version to a [supported versions](https://www.php.net/supported-versions.php).
 
 ### Installation with Composer
 This SDK uses Composer. Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. For more information on how to use/install composer, please visit https://getcomposer.org/
