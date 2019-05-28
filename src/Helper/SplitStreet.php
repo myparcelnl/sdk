@@ -23,10 +23,10 @@ class SplitStreet
      * Contains php keys to store the data in an array
      */
     const SPLIT_STREET_REGEX =
-        '~(?P<street>.*?)' .                  // The rest belongs to the street
-        '\s?' .                               // Separator between street and number
-        '(?P<number>\d{1,4})' .               // Number can contain a maximum of 4 numbers
-        '[/\s\-]{0,2}' .                      // Separators between number and addition
+        '~(?P<street>.*?)' .              // The rest belongs to the street
+        '\s?' .                           // Separator between street and number
+        '(?P<number>\d{1,4})' .           // Number can contain a maximum of 4 numbers
+        '[/\s\-]{0,2}' .                  // Separators between number and addition
         '(?P<number_suffix>' .
         '[a-zA-Z]{1}\d{1,3}|' .           // Numbers suffix starts with a letter followed by numbers or
         '-\d{1,4}|' .                     // starts with - and has up to 4 numbers or
