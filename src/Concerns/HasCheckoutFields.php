@@ -16,12 +16,14 @@ trait HasCheckoutFields
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
+     *
      * @return int
      * @throws \Exception
      */
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
         $helper = new CheckoutFields();
+
         return $helper->getDeliveryType($checkoutData);
     }
 
@@ -31,6 +33,7 @@ trait HasCheckoutFields
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
+     *
      * @return $this
      * @throws \Exception
      */
@@ -39,8 +42,8 @@ trait HasCheckoutFields
         $aCheckoutData = json_decode($checkoutData, true);
 
         if (
-            !is_array($aCheckoutData) ||
-            !key_exists('date', $aCheckoutData)
+            ! is_array($aCheckoutData) ||
+            ! key_exists('date', $aCheckoutData)
         ) {
             return $this;
         }
@@ -58,6 +61,7 @@ trait HasCheckoutFields
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
+     *
      * @return $this
      * @throws \Exception
      */
@@ -69,8 +73,8 @@ trait HasCheckoutFields
 
         $aCheckoutData = json_decode($checkoutData, true);
 
-        if (!is_array($aCheckoutData) ||
-            !key_exists('location', $aCheckoutData)
+        if (! is_array($aCheckoutData) ||
+            ! key_exists('location', $aCheckoutData)
         ) {
             return $this;
         }
