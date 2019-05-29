@@ -57,9 +57,11 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated digital stamp shipment: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            if (!getenv('CI')) {
+                echo "\033[32mGenerated digital stamp shipment: \033[0m";
+                print_r($myParcelCollection->getLinkOfLabels());
+                echo "\n\033[0m";
+            }
         }
     }
 
