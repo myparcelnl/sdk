@@ -415,7 +415,7 @@ Class: `MyParcelNL\Sdk\src\Exception\AddressException`
 HTTP status: 412
 
 ##### ApiException
-Exception to be returned by a Task when a call to MyParcel services has failed.
+Exception to be returned when a call to MyParcel services has failed.
 
 Class: `MyParcelNL\Sdk\src\Exception\ApiException`
 
