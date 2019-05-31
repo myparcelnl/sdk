@@ -404,7 +404,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
 
 ## Exceptions
 
-MyParcel uses several types of Exceptions to make the errors clear. 
+MyParcel uses several types of Exceptions to make the errors clear. It is your responsibility to provide the correct status in a response.
 These are the Exceptions that we currently use:
 
 ##### AddressException
