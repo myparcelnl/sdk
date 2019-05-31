@@ -404,7 +404,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
 
 ## Exceptions
 
-MyParcel uses several types of Exceptions to make the errors clear. 
+MyParcel uses several types of Exceptions to make the errors clear. It is your responsibility to provide the correct status in a response.
 These are the Exceptions that we currently use:
 
 ##### AddressException
@@ -415,7 +415,7 @@ Class: `MyParcelNL\Sdk\src\Exception\AddressException`
 HTTP status: 412
 
 ##### ApiException
-Exception to be returned by a Task when a call to MyParcel services has failed.
+Exception to be returned when a call to MyParcel services has failed.
 
 Class: `MyParcelNL\Sdk\src\Exception\ApiException`
 
@@ -426,7 +426,7 @@ Exception thrown when there is an attempt to dynamically access a field that doe
 
 Class: `MyParcelNL\Sdk\src\Exception\MissingFieldException`
 
-HTTP status:500
+HTTP status: 500
 
 ##### InvalidArgumentException
 Exception thrown if an argument is not the expected type.
