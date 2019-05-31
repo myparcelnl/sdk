@@ -12,8 +12,10 @@
 
 namespace MyParcelNL\Sdk\src\Services;
 
+use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 class ConsignmentEncode
 {
@@ -36,7 +38,7 @@ class ConsignmentEncode
      * Encode all the data before sending it to MyParcel
      *
      * @return array
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     public function apiEncode()
     {
@@ -115,7 +117,7 @@ class ConsignmentEncode
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     private function encodeExtraOptions()
     {
@@ -150,7 +152,7 @@ class ConsignmentEncode
             $this->consignmentEncoded['options']['only_recipient'] = 1;
             $this->consignmentEncoded['options']['signature']      = 1;
         } elseif ($consignment->hasAgeCheck()) {
-            throw new \Exception('The age check is not possible with an EU shipment or world shipment');
+            throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
         }
 
         if ($consignment->getDeliveryDate()) {
@@ -207,7 +209,7 @@ class ConsignmentEncode
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     private function encodePhysicalProperties()
     {
@@ -216,15 +218,17 @@ class ConsignmentEncode
             return $this;
         }
         if ($consignment->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_DIGITAL_STAMP && ! isset($consignment->getPhysicalProperties()['weight'])) {
-            throw new \Exception('Weight in physical properties must be set for digital stamp shipments.');
+            throw new MissingFieldException('Weight in physical properties must be set for digital stamp shipments.');
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
+
+        return $this;
     }
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     private function encodeCdCountry()
     {
@@ -299,20 +303,20 @@ class ConsignmentEncode
     /**
      * @param MyParcelConsignment $consignment
      *
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     private function validateCdConsignment(MyParcelConsignment $consignment)
     {
         if (empty($consignment->getItems())) {
-            throw new \Exception('Product data must be set for international MyParcel shipments. Use addItem().');
+            throw new MissingFieldException('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
         if ($consignment->getPackageType() !== MyParcelConsignment::PACKAGE_TYPE_PACKAGE) {
-            throw new \Exception('For international shipments, package_type must be 1 (normal package).');
+            throw new MissingFieldException('For international shipments, package_type must be 1 (normal package).');
         }
 
         if (empty($consignment->getLabelDescription())) {
-            throw new \Exception('Label description/invoice id is required for international shipments. Use getLabelDescription().');
+            throw new MissingFieldException('Label description/invoice id is required for international shipments. Use getLabelDescription().');
         }
     }
 }

@@ -19,6 +19,8 @@ use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Helper\RequestError;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\src\Exception\ApiException;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 class MyParcelRequest
 {
@@ -115,7 +117,8 @@ class MyParcelRequest
      * @param string $uri
      *
      * @return MyParcelRequest|array|false|string
-     * @throws \Exception
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_SHIPMENTS)
     {
@@ -139,7 +142,7 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            throw new \Exception('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+            throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
         }
 
         return $this;
@@ -250,12 +253,12 @@ class MyParcelRequest
      * Checks if all the requirements are set to send a request to MyParcel
      *
      * @return bool
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     private function checkConfigForRequest()
     {
         if (empty($this->api_key)) {
-            throw new \Exception('api_key not found');
+            throw new MissingFieldException('api_key not found');
         }
 
         return true;

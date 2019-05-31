@@ -402,6 +402,46 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     ->getUserAgent()
 ```
 
+## Exceptions
+
+MyParcel uses several types of Exceptions to make the errors clear. 
+These are the Exceptions that we currently use:
+
+##### AddressException
+Exception to be returned when an address is incorrect or not usable.
+
+Class: `MyParcelNL\Sdk\src\Exception\AddressException`
+
+HTTP status: 412
+
+##### ApiException
+Exception to be returned by a Task when a call to MyParcel services has failed.
+
+Class: `MyParcelNL\Sdk\src\Exception\ApiException`
+
+HTTP status: 502
+
+##### MissingFieldException
+Exception thrown when there is an attempt to dynamically access a field that does not exist.
+
+Class: `MyParcelNL\Sdk\src\Exception\MissingFieldException`
+
+HTTP status:500
+
+##### InvalidArgumentException
+Exception thrown if an argument is not the expected type.
+
+Class: `\InvalidArgumentException`
+
+HTTP status: 500
+
+##### BadMethodCallException
+Exception thrown if a callback refers to an undefined method or if some arguments are missing.
+
+Class: `\BadMethodCallException:`
+
+HTTP status: 500
+
 ## Contribute
 
 1. Check for open issues or open a new issue to start a discussion around a bug or feature.

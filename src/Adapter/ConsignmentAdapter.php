@@ -29,7 +29,7 @@ class ConsignmentAdapter
      * @param array $data
      * @param string $apiKey
      *
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function __construct($data, $apiKey)
     {
@@ -80,7 +80,7 @@ class ConsignmentAdapter
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function extraOptions()
     {

@@ -2,6 +2,8 @@
 
 namespace MyParcelNL\Sdk\src\Support;
 
+use Exception;
+
 /**
  * Class Helpers
  * @example https://laravel.com/docs/5.7/helpers
@@ -121,7 +123,7 @@ class Helpers {
      */
     public function array_forget()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**
@@ -669,7 +671,7 @@ class Helpers {
      * @param  int  $sleep
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function retry($times, callable $callback, $sleep = 0)
     {
@@ -799,7 +801,7 @@ class Helpers {
      */
     public function str_plural()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**
@@ -864,7 +866,7 @@ class Helpers {
      */
     public function str_singular()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**

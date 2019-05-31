@@ -14,6 +14,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
@@ -90,13 +91,14 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param int $weight
+     *
      * @return $this
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     public function setWeight($weight)
     {
         if ($weight == 0) {
-            throw new \Exception('Weight must be set for a MyParcel product');
+            throw new MissingFieldException('Weight must be set for a MyParcel product');
         }
 
         $this->weight = (int) $weight;
@@ -192,7 +194,7 @@ class MyParcelCustomsItem
      * Check if object is fully filled
      *
      * @return void
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     public function ensureFilled()
     {
@@ -206,7 +208,7 @@ class MyParcelCustomsItem
         ];
         foreach ($required as $methodAlias) {
             if ($this->{'get' . $methodAlias}() === null) {
-                throw new \Exception("set$methodAlias() must be set");
+                throw new MissingFieldException("set$methodAlias() must be set");
             }
         }
     }

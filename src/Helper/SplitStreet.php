@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Helper;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Exception\AddressException;
 
 class SplitStreet
 {
@@ -42,7 +43,7 @@ class SplitStreet
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws AddressException
      */
     public static function splitStreet($fullStreet)
     {
@@ -106,18 +107,18 @@ class SplitStreet
      * @param $result
      * @param $matches
      *
-     * @throws \Exception
+     * @throws AddressException
      */
     private static function validate($fullStreet, $result, $matches)
     {
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
-            throw new \Exception('Invalid full street supplied: ' . $fullStreet);
+            throw new AddressException('Invalid full street supplied: ' . $fullStreet);
         }
 
         if ($fullStreet != $matches[0]) {
             // Characters are gone by preg_match
-            throw new \Exception('Something went wrong with splitting up address ' . $fullStreet);
+            throw new AddressException('Something went wrong with splitting up address ' . $fullStreet);
         }
     }
 }

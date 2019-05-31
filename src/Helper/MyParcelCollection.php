@@ -14,7 +14,13 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
+use Exception;
+use http\Exception\BadMethodCallException;
+use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
+use MyParcelNL\Sdk\src\Exception\ApiException;
+use MyParcelNL\Sdk\src\Exception\ConsignmentException;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
@@ -84,12 +90,12 @@ class MyParcelCollection extends Collection
      * Get one consignment
      *
      * @return \MyParcelNL\Sdk\src\Model\MyParcelConsignment|null
-     * @throws \Exception
+     * @throws BadMethodCallException
      */
     public function getOneConsignment()
     {
         if ($this->count() > 1) {
-            throw new \Exception('Can\'t run getOneConsignment(): Multiple items found');
+            throw new BadMethodCallException('Can\'t run getOneConsignment(): Multiple items found');
         }
 
         return $this->first();
@@ -99,12 +105,12 @@ class MyParcelCollection extends Collection
      * @param string|null $id
      *
      * @return MyParcelCollection
-     * @throws \Exception
+     * @throws InvalidArgumentException
      */
     public function getConsignmentsByReferenceId($id)
     {
         if ($id === null) {
-            throw new \Exception('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
+            throw new InvalidArgumentException ('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
         if ($this->count() === 1) {
@@ -122,7 +128,7 @@ class MyParcelCollection extends Collection
      * @param $id
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getConsignmentByReferenceId($id)
     {
@@ -161,12 +167,12 @@ class MyParcelCollection extends Collection
      * @param MyParcelConsignment $consignment
      *
      * @return $this
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     public function addConsignment(MyParcelConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
-            throw new \Exception('First set the API key with setApiKey() before running addConsignment()');
+            throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
 
         $this->push($consignment);
@@ -178,7 +184,8 @@ class MyParcelCollection extends Collection
      * Create concepts in MyParcel
      *
      * @return  $this
-     * @throws  \Exception
+     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function createConcepts()
     {
@@ -211,7 +218,7 @@ class MyParcelCollection extends Collection
      * Delete concepts in MyParcel
      *
      * @return  $this
-     * @throws  \Exception
+     * @throws  Exception
      */
     public function deleteConcepts()
     {
@@ -240,7 +247,7 @@ class MyParcelCollection extends Collection
      * @param int $size
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function setLatestData($size = 300)
     {
@@ -257,7 +264,7 @@ class MyParcelCollection extends Collection
             ->sendRequest('GET');
 
         if ($request->getResult() === null) {
-            throw new \Exception('Unable to transport data to/from MyParcel');
+            throw new ApiException('Unknown Error in MyParcel API response');
         }
 
         $result        = $request->getResult('data.shipments');
@@ -275,7 +282,8 @@ class MyParcelCollection extends Collection
      * @param int $size
      *
      * @return $this
-     * @throws \Exception
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
@@ -291,7 +299,7 @@ class MyParcelCollection extends Collection
             ->sendRequest('GET');
 
         if ($request->getResult() === null) {
-            throw new \Exception('Unable to transport data to MyParcel.');
+            throw new ApiException('Unknown Error in MyParcel API response');
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
@@ -312,7 +320,7 @@ class MyParcelCollection extends Collection
      *                                  All subsequent pages will use the default positioning [1,2,3,4].
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
@@ -353,7 +361,7 @@ class MyParcelCollection extends Collection
      *                                  default positioning [1,2,3,4].
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
@@ -386,12 +394,12 @@ class MyParcelCollection extends Collection
      * @param bool $inline_download
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function downloadPdfOfLabels($inline_download = false)
     {
         if ($this->label_pdf == null) {
-            throw new \Exception('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
+            throw new MissingFieldException('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
         }
 
         header('Content-Type: application/pdf');
@@ -408,8 +416,9 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @throws \Exception
      * @return $this
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function sendReturnLabelMails()
     {
@@ -430,13 +439,13 @@ class MyParcelCollection extends Collection
         $result = $request->getResult();
 
         if ($result === null) {
-            throw new \Exception('Unable to connect to MyParcel.');
+            throw new ApiException('Unknown Error in MyParcel API response');
         }
 
         if (empty($result['data']['ids'][0]['id']) ||
             (int) $result['data']['ids'][0]['id'] < 1
         ) {
-            throw new \Exception('Can\'t send retour label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
+            throw new InvalidArgumentException('Can\'t send retour label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
 
         return $this;
@@ -568,7 +577,7 @@ class MyParcelCollection extends Collection
      * @param $result
      *
      * @return MyParcelCollection
-     * @throws \Exception
+     * @throws Exception
      */
     private function getNewCollectionFromResult($result)
     {
