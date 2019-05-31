@@ -23,7 +23,7 @@ This SDK connects to the MyParcel API using PHP.
 ## Installation
 
 ### Requirements
-The MyParcel SDK works with PHP version >= 7.1.0. The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
+The MyParcel SDK works with PHP version >= 7.1.0.
 
 If you have a php version lower than 7.1.0 then we would like to advise you to update your php version to a [supported versions](https://www.php.net/supported-versions.php).
 
