@@ -697,7 +697,7 @@ class MyParcelConsignment
      * @param $fullStreet
      *
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setFullStreet($fullStreet)
     {
@@ -961,7 +961,7 @@ class MyParcelConsignment
      * @param bool $needDeliveryDate
      *
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
@@ -1193,7 +1193,7 @@ class MyParcelConsignment
      *
      * @return $this
      * @throws InvalidArgumentException
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setInsurance($insurance)
     {
@@ -1510,7 +1510,7 @@ class MyParcelConsignment
      * @param $option
      *
      * @return bool
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function canHaveOption($option = true)
     {

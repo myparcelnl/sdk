@@ -166,7 +166,7 @@ class MyParcelCollection extends Collection
      * @param MyParcelConsignment $consignment
      *
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function addConsignment(MyParcelConsignment $consignment)
     {
@@ -183,7 +183,7 @@ class MyParcelCollection extends Collection
      * Create concepts in MyParcel
      *
      * @return  $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function createConcepts()
@@ -281,8 +281,8 @@ class MyParcelCollection extends Collection
      * @param int $size
      *
      * @return $this
-     * @throws ApiException
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
@@ -416,8 +416,8 @@ class MyParcelCollection extends Collection
      * Send return label to customer. The customer can pay and download the label.
      *
      * @return $this
-     * @throws ApiException
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function sendReturnLabelMails()
     {

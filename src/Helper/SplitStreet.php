@@ -43,7 +43,7 @@ class SplitStreet
      *
      * @return array
      *
-     * @throws AddressException
+     * @throws \MyParcelNL\Sdk\src\Exception\AddressException
      */
     public static function splitStreet($fullStreet)
     {
@@ -107,7 +107,7 @@ class SplitStreet
      * @param $result
      * @param $matches
      *
-     * @throws AddressException
+     * @throws \MyParcelNL\Sdk\src\Exception\AddressException
      */
     private static function validate($fullStreet, $result, $matches)
     {

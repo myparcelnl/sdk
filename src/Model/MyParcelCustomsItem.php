@@ -93,7 +93,7 @@ class MyParcelCustomsItem
      * @param int $weight
      *
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setWeight($weight)
     {
@@ -194,7 +194,7 @@ class MyParcelCustomsItem
      * Check if object is fully filled
      *
      * @return void
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function ensureFilled()
     {

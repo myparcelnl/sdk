@@ -38,7 +38,7 @@ class ConsignmentEncode
      * Encode all the data before sending it to MyParcel
      *
      * @return array
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function apiEncode()
     {
@@ -117,7 +117,7 @@ class ConsignmentEncode
 
     /**
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function encodeExtraOptions()
     {
@@ -209,7 +209,7 @@ class ConsignmentEncode
 
     /**
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function encodePhysicalProperties()
     {
@@ -228,7 +228,7 @@ class ConsignmentEncode
 
     /**
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function encodeCdCountry()
     {
@@ -303,7 +303,7 @@ class ConsignmentEncode
     /**
      * @param MyParcelConsignment $consignment
      *
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function validateCdConsignment(MyParcelConsignment $consignment)
     {

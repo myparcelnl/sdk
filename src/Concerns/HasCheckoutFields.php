@@ -64,7 +64,7 @@ trait HasCheckoutFields
      * @param string $checkoutData
      *
      * @return $this
-     * @throws MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
