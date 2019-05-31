@@ -426,7 +426,7 @@ Exception thrown when there is an attempt to dynamically access a field that doe
 
 Class: `MyParcelNL\Sdk\src\Exception\MissingFieldException`
 
-HTTP status:500
+HTTP status: 500
 
 ##### InvalidArgumentException
 Exception thrown if an argument is not the expected type.
