@@ -298,7 +298,7 @@ class MyParcelCollection extends Collection
             ->sendRequest('GET');
 
         if ($request->getResult() === null) {
-            throw new ApiException('Unknown Error in MyParcel API response');
+            throw new ApiException('Unknown error in MyParcel API response');
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
