@@ -39,8 +39,6 @@ class FindManyConsignmentTest extends \PHPUnit\Framework\TestCase
         }
 
         $collection = MyParcelCollection::findMany($consignmentIds, getenv('API_KEY'));
-
-        $consignmentIds = explode(",", $consignmentIds);
         $this->checkCollection($collection, $consignmentIds);
     }
 

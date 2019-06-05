@@ -519,26 +519,25 @@ class MyParcelCollection extends Collection
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
-        $collection = self::findMany($id, $apiKey);
+        $collection = self::findMany([$id], $apiKey);
 
         return $collection;
     }
 
     /**
-     * @param string $ids
+     * @param array $consignmentId
      * @param string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
      */
-    public static function findMany(string $ids, string $apiKey): MyParcelCollection
+    public static function findMany(array $consignmentId, string $apiKey): MyParcelCollection
     {
-        $consignmentIds = explode(",", $ids);
-        $collection     = new static();
+        $collection = new static();
 
-        foreach ($consignmentIds as $consignmentId) {
+        foreach ($consignmentId as $id) {
 
             $consignment = new MyParcelConsignment();
-            $consignment->setMyParcelConsignmentId((int) $consignmentId);
+            $consignment->setMyParcelConsignmentId($id);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
@@ -563,20 +562,20 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param string $ids
+     * @param array $referenceIds
      * @param string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
      */
-    public static function findManyByReferenceId(string $ids, string $apiKey): MyParcelCollection
+    public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {
-        $referenceIds = explode(",", $ids);
+
         $collection = new static();
 
-        foreach ($referenceIds as $referenceId) {
+        foreach ($referenceIds as $id) {
 
             $consignment = new MyParcelConsignment();
-            $consignment->setReferenceId($referenceId);
+            $consignment->setReferenceId($id);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
@@ -586,6 +585,7 @@ class MyParcelCollection extends Collection
 
         return $collection;
     }
+
     /**
      * Set label format settings        The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
