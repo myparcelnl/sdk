@@ -566,7 +566,7 @@ class MyParcelCollection extends Collection
         foreach ($consignmentIds as $consignmentId) {
 
             $consignment = new MyParcelConsignment();
-            $consignment->setMyParcelConsignmentId($consignmentId);
+            $consignment->setMyParcelConsignmentId((int)$consignmentId);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
