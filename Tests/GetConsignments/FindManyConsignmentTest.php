@@ -31,15 +31,17 @@ class FindManyConsignmentTest extends \PHPUnit\Framework\TestCase
             return;
         }
 
-        $consignmentIds = getenv('CONSIGNMENT_IDS');
-        if ($consignmentIds == null) {
+        $consignmentIdsRaw = getenv('CONSIGNMENT_IDS');
+        if ($consignmentIdsRaw == null) {
             echo "\033[31m Set consignment_id in 'Environment variables' before running UnitTest. Example: CONSIGNMENT_ID=47964049,47964050,47964051. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
             return;
         }
-        $consignmentIds = explode(",", preg_replace('/\s*\[|]\s*/','',$consignmentIds));
+        $consignmentIds = explode(",", $consignmentIdsRaw);
+
         $collection = MyParcelCollection::findMany($consignmentIds, getenv('API_KEY'));
         $this->checkCollection($collection, $consignmentIds);
+
     }
 
     /**

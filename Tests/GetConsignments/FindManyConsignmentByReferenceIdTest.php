@@ -30,15 +30,16 @@ class FindManyConsignmentByReferenceIdTest extends \PHPUnit\Framework\TestCase
             return;
         }
 
-        $referenceId = getenv('REFERENCE_ID');
-        if ($referenceId == null) {
-            echo "\033[31m Set reference_id in 'Environment variables' before running UnitTest. Example: REFERENCE_ID=[10952019-05-16,1077]. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+        $referenceIdsRaw = getenv('REFERENCE_IDS');
+        if ($referenceIdsRaw == null) {
+            echo "\033[31m Set reference_id in 'Environment variables' before running UnitTest. Example: REFERENCE_IDS=10952019-05-16,1077. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
             return;
         }
-        $referenceId = explode(",", preg_replace('/\s*\[|]\s*/','',$referenceId));
-        $collection = MyParcelCollection::findManyByReferenceId($referenceId, getenv('API_KEY'));
-        $this->checkCollection($collection, $referenceId);
+        $referenceIds = explode(',', $referenceIdsRaw);
+
+        $collection = MyParcelCollection::findManyByReferenceId($referenceIds, getenv('API_KEY'));
+        $this->checkCollection($collection, $referenceIds);
     }
 
     /**
