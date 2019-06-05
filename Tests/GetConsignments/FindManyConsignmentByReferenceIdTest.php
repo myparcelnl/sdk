@@ -15,7 +15,6 @@ namespace MyParcelNL\Sdk\tests\GetConsignments\FindManyConsignmentByReferenceIdT
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class FindManyConsignmentByReferenceIdTest extends \PHPUnit\Framework\TestCase
 {

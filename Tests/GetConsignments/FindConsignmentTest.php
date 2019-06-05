@@ -14,7 +14,6 @@
 namespace MyParcelNL\Sdk\tests\GetConsignments\FindConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class FindConsignmentTest extends \PHPUnit\Framework\TestCase
 {
