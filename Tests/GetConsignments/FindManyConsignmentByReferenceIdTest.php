@@ -36,7 +36,7 @@ class FindManyConsignmentByReferenceIdTest extends \PHPUnit\Framework\TestCase
 
             return;
         }
-
+        $referenceId = explode(",", preg_replace('/\s*\[|]\s*/','',$referenceId));
         $collection = MyParcelCollection::findManyByReferenceId($referenceId, getenv('API_KEY'));
         $this->checkCollection($collection, $referenceId);
     }
