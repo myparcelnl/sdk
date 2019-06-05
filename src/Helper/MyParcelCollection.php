@@ -533,12 +533,12 @@ class MyParcelCollection extends Collection
     public static function findMany(string $ids, string $apiKey): MyParcelCollection
     {
         $consignmentIds = explode(",", $ids);
-        $collection = new static();
+        $collection     = new static();
 
         foreach ($consignmentIds as $consignmentId) {
 
             $consignment = new MyParcelConsignment();
-            $consignment->setMyParcelConsignmentId((int)$consignmentId);
+            $consignment->setMyParcelConsignmentId((int) $consignmentId);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
