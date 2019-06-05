@@ -32,7 +32,7 @@ class FindConsignmentTest extends \PHPUnit\Framework\TestCase
 
         $consignmentId = getenv('CONSIGNMENT_ID');
         if ($consignmentId == null) {
-            echo "\033[31m Set consignment_id in 'Environment variables' before running UnitTest. Example: CONSIGNMENT_ID=17. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+            echo "\033[31m Set consignment_id in 'Environment variables' before running UnitTest. Example: CONSIGNMENT_ID=1734535. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
             return;
         }
