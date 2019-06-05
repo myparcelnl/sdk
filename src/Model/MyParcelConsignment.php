@@ -15,9 +15,11 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 
+use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 /**
  * A model of a consignment
@@ -50,9 +52,9 @@ class MyParcelConsignment
     /**
      * Regular expression used to make sure the date is correct.
      */
-    const DATE_REGEX = '~(\d{4}-\d{2}-\d{2})$~';
-    const DATE_TIME_REGEX = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
-    const STATUS_CONCEPT = 1;
+    const DATE_REGEX        = '~(\d{4}-\d{2}-\d{2})$~';
+    const DATE_TIME_REGEX   = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
+    const STATUS_CONCEPT    = 1;
     const MAX_STREET_LENGTH = 40;
 
     const CC_NL = 'NL';
@@ -449,6 +451,7 @@ class MyParcelConsignment
      * Status of the consignment
      *
      * @internal
+     *
      * @param int $status
      *
      * @return $this
@@ -477,6 +480,7 @@ class MyParcelConsignment
      * Required: No
      *
      * @internal
+     *
      * @param mixed $shop_id
      *
      * @return $this
@@ -535,7 +539,8 @@ class MyParcelConsignment
      *
      * @return bool
      */
-    public function isEuCountry() {
+    public function isEuCountry()
+    {
         return in_array(
             $this->getCountry(),
             array(
@@ -634,7 +639,7 @@ class MyParcelConsignment
     public function getStreetAdditionalInfo()
     {
         $streetParts = SplitStreet::getStreetParts($this->street);
-        $result = '';
+        $result      = '';
 
         if (isset($streetParts[1])) {
             $result .= $streetParts[1];
@@ -692,12 +697,12 @@ class MyParcelConsignment
      * @param $fullStreet
      *
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setFullStreet($fullStreet)
     {
         if ($this->getCountry() === null) {
-            throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
+            throw new MissingFieldException('First set the country code with setCountry() before running setFullStreet()');
         }
 
         if ($this->getCountry() == MyParcelConsignment::CC_NL) {
@@ -708,6 +713,7 @@ class MyParcelConsignment
         } else {
             $this->setStreet($fullStreet);
         }
+
         return $this;
     }
 
@@ -767,13 +773,14 @@ class MyParcelConsignment
      * Only for Dutch addresses
      *
      * @param $fullStreet
+     *
      * @return bool
      */
     public function isCorrectAddress($fullStreet)
     {
         $result = preg_match(SplitStreet::SPLIT_STREET_REGEX, $fullStreet, $matches);
 
-        if (!$result || !is_array($matches)) {
+        if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
             return false;
         }
@@ -927,6 +934,7 @@ class MyParcelConsignment
      * Required: Yes
      *
      * @param int $package_type
+     *
      * @return $this
      */
     public function setPackageType($package_type)
@@ -953,7 +961,7 @@ class MyParcelConsignment
      * @param bool $needDeliveryDate
      *
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setDeliveryType($delivery_type, $needDeliveryDate = true)
     {
@@ -961,7 +969,7 @@ class MyParcelConsignment
             $delivery_type !== self::DELIVERY_TYPE_STANDARD &&
             $this->getDeliveryDate() == null
         ) {
-            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
+            throw new MissingFieldException('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
         }
 
         $this->delivery_type = $delivery_type;
@@ -984,6 +992,7 @@ class MyParcelConsignment
      * Required: Yes if delivery type has been specified
      *
      * @param string $delivery_date
+     *
      * @return $this
      * @throws \Exception
      */
@@ -997,8 +1006,8 @@ class MyParcelConsignment
         } else {
             $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
 
-            if (!$result) {
-                throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
+            if (! $result) {
+                throw new InvalidArgumentException('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
             }
         }
 
@@ -1183,15 +1192,16 @@ class MyParcelConsignment
      * @param int $insurance
      *
      * @return $this
-     * @throws \Exception
+     * @throws InvalidArgumentException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setInsurance($insurance)
     {
-        if (!in_array($insurance, $this->insurance_possibilities) && $this->getCountry() == self::CC_NL) {
-            throw new \Exception('Insurance must be one of [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
+        if (! in_array($insurance, $this->insurance_possibilities) && $this->getCountry() == self::CC_NL) {
+            throw new InvalidArgumentException('Insurance must be one of [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]');
         }
 
-        if (!$this->canHaveOption()) {
+        if (! $this->canHaveOption()) {
             $insurance = 0;
         }
 
@@ -1473,6 +1483,7 @@ class MyParcelConsignment
 
         return $this;
     }
+
     /**
      * The total weight for all items in whole grams
      *
@@ -1499,12 +1510,12 @@ class MyParcelConsignment
      * @param $option
      *
      * @return bool
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function canHaveOption($option = true)
     {
         if ($this->getPackageType() === null) {
-            throw new \Exception('Set package type before ' . $option);
+            throw new MissingFieldException('Set package type before ' . $option);
         }
 
         return $this->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_PACKAGE ? $option : false;

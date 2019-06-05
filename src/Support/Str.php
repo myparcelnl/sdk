@@ -2,6 +2,8 @@
 
 namespace MyParcelNL\Sdk\src\Support;
 
+use Exception;
+
 class Str
 {
     /**
@@ -265,11 +267,11 @@ class Str
      *
      * @deprecated Not implemented
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public static function plural()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**
@@ -277,7 +279,7 @@ class Str
      *
      * @param  int $length
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public static function random($length = 16)
     {
@@ -394,11 +396,11 @@ class Str
      *
      * @deprecated Not implemented
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public static function singular()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**
@@ -519,22 +521,22 @@ class Str
      * Generate a UUID (version 4).
      *
      * @deprecated Not implemented
-     * @throws \Exception
+     * @throws Exception
      */
     public static function uuid()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**
      * Generate a time-ordered UUID (version 4).
      *
      * @deprecated Not implemented
-     * @throws \Exception
+     * @throws Exception
      */
     public static function orderedUuid()
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     /**

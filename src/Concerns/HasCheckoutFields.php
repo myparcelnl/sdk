@@ -5,6 +5,7 @@
 
 namespace MyParcelNL\Sdk\src\Concerns;
 
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\CheckoutFields;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
@@ -16,12 +17,14 @@ trait HasCheckoutFields
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
+     *
      * @return int
      * @throws \Exception
      */
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
         $helper = new CheckoutFields();
+
         return $helper->getDeliveryType($checkoutData);
     }
 
@@ -31,6 +34,7 @@ trait HasCheckoutFields
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
+     *
      * @return $this
      * @throws \Exception
      */
@@ -39,8 +43,8 @@ trait HasCheckoutFields
         $aCheckoutData = json_decode($checkoutData, true);
 
         if (
-            !is_array($aCheckoutData) ||
-            !key_exists('date', $aCheckoutData)
+            ! is_array($aCheckoutData) ||
+            ! key_exists('date', $aCheckoutData)
         ) {
             return $this;
         }
@@ -58,8 +62,9 @@ trait HasCheckoutFields
      * You can use this if you use the following code in your checkout: https://github.com/myparcelnl/checkout
      *
      * @param string $checkoutData
+     *
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
@@ -69,8 +74,8 @@ trait HasCheckoutFields
 
         $aCheckoutData = json_decode($checkoutData, true);
 
-        if (!is_array($aCheckoutData) ||
-            !key_exists('location', $aCheckoutData)
+        if (! is_array($aCheckoutData) ||
+            ! key_exists('location', $aCheckoutData)
         ) {
             return $this;
         }
@@ -84,7 +89,7 @@ trait HasCheckoutFields
         } else if ($aCheckoutData['price_comment'] == 'retailexpress') {
             $this->setDeliveryType(MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS);
         } else {
-            throw new \Exception('No PostNL location found in checkout data: ' . $checkoutData);
+            throw new MissingFieldException('No PostNL location found in checkout data: ' . $checkoutData);
         }
 
         $this
