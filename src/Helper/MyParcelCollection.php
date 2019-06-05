@@ -187,7 +187,7 @@ class MyParcelCollection extends Collection
         /* @var $consignments MyParcelCollection */
         foreach ($this->where('myparcel_consignment_id', null)->groupBy('api_key') as $consignments) {
 
-            $data = (new CollectionEncode($consignments))->encode();
+            $data    = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
@@ -245,7 +245,7 @@ class MyParcelCollection extends Collection
     public function setLatestData($size = 300)
     {
         $myParcelRequest = new MyParcelRequest();
-        $params = $myParcelRequest->getLatestDataParams($size, $this, $key);
+        $params          = $myParcelRequest->getLatestDataParams($size, $this, $key);
 
         $request = $myParcelRequest
             ->setUserAgent($this->getUserAgent())
@@ -260,7 +260,7 @@ class MyParcelCollection extends Collection
             throw new \Exception('Unable to transport data to/from MyParcel');
         }
 
-        $result = $request->getResult('data.shipments');
+        $result        = $request->getResult('data.shipments');
         $newCollection = $this->getNewCollectionFromResult($result);
 
         $this->items = $newCollection->items;
@@ -416,7 +416,7 @@ class MyParcelCollection extends Collection
         $parentConsignment = $this->getConsignments(false)[0];
 
         $apiKey = $parentConsignment->getApiKey();
-        $data = $this->apiEncodeReturnShipment($parentConsignment);
+        $data   = $this->apiEncodeReturnShipment($parentConsignment);
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -446,6 +446,7 @@ class MyParcelCollection extends Collection
      * Get all consignment ids
      *
      * @internal
+     *
      * @param $key
      *
      * @return array
@@ -457,7 +458,7 @@ class MyParcelCollection extends Collection
         /** @var MyParcelConsignment $consignment */
         foreach ($this->where('myparcel_consignment_id', '!=', null) as $consignment) {
             $conceptIds[] = $consignment->getMyParcelConsignmentId();
-            $key = $consignment->getApiKey();
+            $key          = $consignment->getApiKey();
         }
 
         if (empty($conceptIds)) {
@@ -465,37 +466,6 @@ class MyParcelCollection extends Collection
         }
 
         return $conceptIds;
-    }
-
-    /**
-     * Set label format settings        The position of the label on an A4 sheet. You can specify multiple positions by
-     *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
-     *                                  number, the following labels will fill the ascending positions. Positioning is
-     *                                  only applied on the first page with labels. All subsequent pages will use the
-     *                                  default positioning [1,2,3,4].
-     *
-     * @param integer|array|null $positions
-     *
-     * @return $this
-     */
-    private function setLabelFormat($positions)
-    {
-        /** If $positions is not false, set paper size to A4 */
-        if (is_numeric($positions)) {
-            /** Generating positions for A4 paper */
-            $this->paper_size = 'A4';
-            $this->label_position = LabelHelper::getPositions($positions);
-        } elseif (is_array($positions)) {
-            /** Set positions for A4 paper */
-            $this->paper_size = 'A4';
-            $this->label_position = implode(';', $positions);
-        } else {
-            /** Set paper size to A6 */
-            $this->paper_size = 'A6';
-            $this->label_position = null;
-        }
-
-        return $this;
     }
 
     /**
@@ -519,6 +489,7 @@ class MyParcelCollection extends Collection
     /**
      * @param string $platform
      * @param string $version
+     *
      * @internal param string $user_agent
      * @return $this
      */
@@ -535,7 +506,8 @@ class MyParcelCollection extends Collection
     /**
      * Clear this collection
      */
-    public function clearConsignmentsCollection() {
+    public function clearConsignmentsCollection()
+    {
         $this->items = [];
     }
 
@@ -615,6 +587,35 @@ class MyParcelCollection extends Collection
         return $collection;
     }
 
+     * Set label format settings        The position of the label on an A4 sheet. You can specify multiple positions by
+     *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
+     *                                  number, the following labels will fill the ascending positions. Positioning is
+     *                                  only applied on the first page with labels. All subsequent pages will use the
+     *                                  default positioning [1,2,3,4].
+     *
+     * @param integer|array|null $positions
+     *
+     * @return $this
+     */
+    private function setLabelFormat($positions)
+    {
+        /** If $positions is not false, set paper size to A4 */
+        if (is_numeric($positions)) {
+            /** Generating positions for A4 paper */
+            $this->paper_size     = 'A4';
+            $this->label_position = LabelHelper::getPositions($positions);
+        } elseif (is_array($positions)) {
+            /** Set positions for A4 paper */
+            $this->paper_size     = 'A4';
+            $this->label_position = implode(';', $positions);
+        } else {
+            /** Set paper size to A6 */
+            $this->paper_size     = 'A6';
+            $this->label_position = null;
+        }
+
+        return $this;
+    }
 
     /**
      * Encode ReturnShipment to send to MyParcel
@@ -625,12 +626,12 @@ class MyParcelCollection extends Collection
      */
     private function apiEncodeReturnShipment($consignment)
     {
-        $data = [];
+        $data     = [];
         $shipment = [
-            'parent' => $consignment->getMyParcelConsignmentId(),
+            'parent'  => $consignment->getMyParcelConsignmentId(),
             'carrier' => 1,
-            'email' => $consignment->getEmail(),
-            'name' => $consignment->getPerson(),
+            'email'   => $consignment->getEmail(),
+            'name'    => $consignment->getPerson(),
         ];
 
         $data['data']['return_shipments'][] = $shipment;
@@ -640,6 +641,7 @@ class MyParcelCollection extends Collection
 
     /**
      * @param $result
+     *
      * @return MyParcelCollection
      * @throws \Exception
      */
