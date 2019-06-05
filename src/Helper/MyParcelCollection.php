@@ -83,7 +83,7 @@ class MyParcelCollection extends Collection
     /**
      * Get one consignment
      *
-     * @return \MyParcelNL\Sdk\src\Model\MyParcelConsignment|null
+     * @return MyParcelConsignment|null
      * @throws \Exception
      */
     public function getOneConsignment()
@@ -538,6 +538,83 @@ class MyParcelCollection extends Collection
     public function clearConsignmentsCollection() {
         $this->items = [];
     }
+
+    /**
+     * @param int $id
+     * @param string $apiKey
+     *
+     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     */
+    public static function find(int $id, string $apiKey): MyParcelCollection
+    {
+        $collection = self::findMany($id, $apiKey);
+
+        return $collection;
+    }
+
+    /**
+     * @param string $ids
+     * @param string $apiKey
+     *
+     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     */
+    public static function findMany(string $ids, string $apiKey): MyParcelCollection
+    {
+        $consignmentIds = explode(",", $ids);
+        $collection = new static();
+
+        foreach ($consignmentIds as $consignmentId) {
+
+            $consignment = new MyParcelConsignment();
+            $consignment->setMyParcelConsignmentId($consignmentId);
+            $consignment->setApiKey($apiKey);
+
+            $collection->addConsignment($consignment);
+        }
+
+        $collection->setLatestData();
+
+        return $collection;
+    }
+
+    /**
+     * @param $id
+     * @param $apiKey
+     *
+     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     */
+    public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
+    {
+        $collection = self::findManyByReferenceId($id, $apiKey);
+
+        return $collection;
+    }
+
+    /**
+     * @param string $ids
+     * @param string $apiKey
+     *
+     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     */
+    public static function findManyByReferenceId(string $ids, string $apiKey): MyParcelCollection
+    {
+        $referenceIds = explode(",", $ids);
+        $collection = new static();
+
+        foreach ($referenceIds as $referenceId) {
+
+            $consignment = new MyParcelConsignment();
+            $consignment->setReferenceId($referenceId);
+            $consignment->setApiKey($apiKey);
+
+            $collection->addConsignment($consignment);
+        }
+
+        $collection->setLatestData();
+
+        return $collection;
+    }
+
 
     /**
      * Encode ReturnShipment to send to MyParcel
