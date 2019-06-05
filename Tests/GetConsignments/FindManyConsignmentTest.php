@@ -23,7 +23,7 @@ class FindManyConsignmentTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Exception
      */
-    public function testFindManyConsignment()
+    public function testFindManyConsignment(): void
     {
         $apiKey = getenv('API_KEY');
         if ($apiKey == null) {

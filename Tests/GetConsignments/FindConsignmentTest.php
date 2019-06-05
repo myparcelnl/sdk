@@ -19,23 +19,23 @@ use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 class FindConsignmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @return $this
+     * @return void
      * @throws \Exception
      */
-    public function testFindConsignment()
+    public function testFindConsignment(): void
     {
         $apiKey = getenv('API_KEY');
         if ($apiKey== null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
-            return $this;
+            return;
         }
 
         $consignmentId = getenv('CONSIGNMENT_ID');
         if ($consignmentId == null) {
             echo "\033[31m Set consignment_id in 'Environment variables' before running UnitTest. Example: CONSIGNMENT_ID=17. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
-            return $this;
+            return;
         }
 
         $collection = MyParcelCollection::find($consignmentId, getenv('API_KEY'));
