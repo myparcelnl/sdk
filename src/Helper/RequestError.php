@@ -17,6 +17,7 @@ class RequestError
     /**
      * @param $error
      * @param array $result
+     *
      * @return string
      */
     public static function getTotalMessage($error, $result)
@@ -29,6 +30,7 @@ class RequestError
 
     /**
      * @param $error
+     *
      * @return string
      */
     private static function getErrorCode($error)
@@ -39,22 +41,26 @@ class RequestError
         } elseif (key_exists('fields', $error)) {
             $code = $error['fields'][0];
         }
+
         return $code;
     }
 
     /**
      * @param $error
+     *
      * @return string
      */
     private static function getErrorHumanMessage($error)
     {
         $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
+
         return $humanMessage;
     }
 
     /**
      * @param $error
      * @param array $result
+     *
      * @return string
      */
     private static function getErrorMessage($error, $result)
@@ -66,6 +72,7 @@ class RequestError
         } else {
             $message = 'Unknown error: ' . json_encode($error) . '. Please contact MyParcel.';
         }
+
         return $message;
     }
 }
