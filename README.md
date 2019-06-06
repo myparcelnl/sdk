@@ -214,7 +214,7 @@ This is a list of all the classes in this SDK and their available methods.
 #### MyParcelConsignment
 ```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
 ```php
-$consignment = (new \MyParcelNL\Sdk\src\Model\MyParcelConsignment())
+    $consignment = (new \MyParcelNL\Sdk\src\Model\MyParcelConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     
