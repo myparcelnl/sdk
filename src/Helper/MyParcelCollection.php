@@ -271,7 +271,7 @@ class MyParcelCollection extends Collection
     /**
      * Get all the information about the last created shipments
      *
-     * @param $key
+     * @param     $key
      * @param int $size
      *
      * @return $this
@@ -512,29 +512,27 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
-        $collection = self::findMany([$id], $apiKey);
-
-        return $collection;
+        return self::findMany([$id], $apiKey);
     }
 
     /**
-     * @param array $consignmentId
+     * @param array  $consignmentIds
      * @param string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
      */
-    public static function findMany(array $consignmentId, string $apiKey): MyParcelCollection
+    public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
     {
         $collection = new static();
 
-        foreach ($consignmentId as $id) {
+        foreach ($consignmentIds as $id) {
 
             $consignment = new MyParcelConsignment();
             $consignment->setMyParcelConsignmentId($id);
@@ -549,20 +547,18 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param $id
-     * @param $apiKey
+     * @param string $id
+     * @param string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
-        $collection = self::findManyByReferenceId($id, $apiKey);
-
-        return $collection;
+        return self::findManyByReferenceId($id, $apiKey);
     }
 
     /**
-     * @param array $referenceIds
+     * @param array  $referenceIds
      * @param string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
