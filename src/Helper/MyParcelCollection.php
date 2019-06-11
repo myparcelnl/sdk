@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Stores all data to communicate with the MyParcel API
  *

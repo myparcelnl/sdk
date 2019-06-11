@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * If you want to add improvements, please create a fork in our GitHub:
