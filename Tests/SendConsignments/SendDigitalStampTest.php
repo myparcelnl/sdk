@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use MyParcelNL\Sdk\src\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;

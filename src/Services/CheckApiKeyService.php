@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * A services to check if the API-key is correct
  *

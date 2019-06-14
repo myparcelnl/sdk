@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
  *
