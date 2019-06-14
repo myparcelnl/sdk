@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * For Dutch consignments the street should be divided into name, number and addition. This code tests whether the

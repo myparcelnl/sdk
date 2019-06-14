@@ -23,8 +23,10 @@ This SDK connects to the MyParcel API using PHP.
 ## Installation
 
 ### Requirements
-The MyParcel SDK works with PHP version >= 5.6.5. The [PHP cURL extension](http://php.net/manual/en/book.curl.php) needs to be installed.
-For support for PHP version 5.4 you can use release 1.x.
+The MyParcel SDK works with PHP version >= 7.1.0.
+
+If you have a php version lower than 7.1.0 then we would like to advise you to update your PHP version to a [supported versions](https://www.php.net/supported-versions.php).
+For support for PHP version 5.6 you can use release [2.x.](https://github.com/myparcelnl/sdk/releases).
 
 ### Installation with Composer
 This SDK uses Composer. Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. For more information on how to use/install composer, please visit https://getcomposer.org/
@@ -48,7 +50,7 @@ You can download the zip on the project's [releases page](https://github.com/myp
 Add the following lines to your project to import the SDK classes for creating shipments.
 ```php
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 ```
 
 ### Create a consignment
@@ -212,7 +214,7 @@ This is a list of all the classes in this SDK and their available methods.
 #### MyParcelConsignment
 ```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
 ```php
-$consignment = (new \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignment())
+    $consignment = (new \MyParcelNL\Sdk\src\Model\MyParcelConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     

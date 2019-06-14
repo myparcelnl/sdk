@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test to check if a consignment without E-mail address is being submitted
  *
