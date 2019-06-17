@@ -18,6 +18,31 @@ class PostNLConsignment extends AbstractConsignment
     protected $local_cc = self::CC_NL;
 
     /**
+     * @return bool
+     */
+    public function isOnlyRecipient(): bool
+    {
+        return (bool) $this->only_recipient;
+    }
+
+    /**
+     * Deliver the package to the recipient only
+     *
+     * Required: No
+     *
+     * @param boolean $only_recipient
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setOnlyRecipient(bool $only_recipient): AbstractConsignment
+    {
+        $this->only_recipient = $this->canHaveOption($only_recipient);
+
+        return $this;
+    }
+
+    /**
      * @return boolean
      */
     public function isLargeFormat(): bool

@@ -1008,11 +1008,11 @@ class AbstractConsignment
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isOnlyRecipient()
+    public function isOnlyRecipient(): bool
     {
-        return $this->only_recipient;
+        return false;
     }
 
     /**
@@ -1025,9 +1025,11 @@ class AbstractConsignment
      * @return $this
      * @throws \Exception
      */
-    public function setOnlyRecipient($only_recipient)
+    public function setOnlyRecipient(bool $only_recipient): self
     {
-        $this->only_recipient = $this->canHaveOption($only_recipient);
+        if ($only_recipient) {
+            throw new \BadMethodCallException('Only recipient has to be false in ' . static::class);
+        }
 
         return $this;
     }
