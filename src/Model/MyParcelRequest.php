@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpInternalEntityUsedInspection */
+<?php declare(strict_types=1); /** @noinspection PhpInternalEntityUsedInspection */
 
 /**
  * This model represents one request
@@ -143,6 +143,31 @@ class MyParcelRequest
 
         if ($this->getError()) {
             throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * @param string $userAgent
+     *
+     * @return $this
+     */
+    public function setUserAgent($userAgent = null)
+    {
+        if ($userAgent) {
+            $this->userAgent = $userAgent;
+        }
+        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
+            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
         }
 
         return $this;

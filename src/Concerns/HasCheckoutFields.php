@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author Reindert Vetter <reindert@myparcel.nl>
  */
