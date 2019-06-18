@@ -14,6 +14,7 @@
 
 namespace MyParcelNL\Sdk\src\Services;
 
+use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 
 class CheckApiKeyService
@@ -55,7 +56,7 @@ class CheckApiKeyService
                 ->sendRequest('GET');
 
             if ($request->getResult() === null) {
-                throw new \Exception('Unable to connect to MyParcel.');
+                throw new ApiException('Unable to connect to MyParcel.');
             }
         } catch (\Exception $exception) {
             if (strpos($exception, 'Access Denied') > 1) {
