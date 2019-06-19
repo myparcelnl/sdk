@@ -3,6 +3,8 @@
 namespace MyparcelNL\Sdk\src\Model;
 
 
+use MyParcelNL\Sdk\src\Helper\SplitStreet;
+
 class PostNLConsignment extends AbstractConsignment
 {
     public const CARRIER_ID = 1;
@@ -18,6 +20,59 @@ class PostNLConsignment extends AbstractConsignment
     protected $local_cc = self::CC_NL;
 
     /**
+     * The package type
+     *
+     * For international shipment only package type 1 is allowed
+     * Pattern: [1 – 3]<br>
+     * Example:
+     *          1. package
+     *          2. mailbox package
+     *          3. letter
+     * Required: Yes
+     *
+     * @param int $package_type
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setPackageType(int $package_type): AbstractConsignment
+    {
+        if ($package_type != self::PACKAGE_TYPE_PACKAGE &&
+            $package_type != self::PACKAGE_TYPE_MAILBOX &&
+            $package_type != self::PACKAGE_TYPE_LETTER
+        ) {
+            throw new \Exception('Use the correct package type for shipment:' . $this->myparcel_consignment_id);
+        }
+
+        return parent::setPackageType($package_type);
+    }
+
+
+    /**
+     * The delivery type for the package
+     *
+     * Required: Yes if delivery_date has been specified
+     *
+     * @param int  $deliveryType
+     * @param bool $needDeliveryDate
+     *
+     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @throws \Exception
+     */
+    public function setDeliveryType($deliveryType, $needDeliveryDate = true)
+    {
+        if ($needDeliveryDate &&
+            $deliveryType !== self::DELIVERY_TYPE_STANDARD &&
+            $this->getDeliveryDate() == null
+        ) {
+            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
+        }
+
+        return parent::setDeliveryType($deliveryType);
+    }
+
+
+    /**
      * @return bool
      */
     public function isOnlyRecipient(): bool
@@ -30,7 +85,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * Required: No
      *
-     * @param boolean $only_recipient
+     * @param bool $only_recipient
      *
      * @return $this
      * @throws \Exception
@@ -38,6 +93,31 @@ class PostNLConsignment extends AbstractConsignment
     public function setOnlyRecipient(bool $only_recipient): AbstractConsignment
     {
         $this->only_recipient = $this->canHaveOption($only_recipient);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSignature(): bool
+    {
+        return (bool) $this->signature;
+    }
+
+    /**
+     * Package must be signed for
+     *
+     * Required: No
+     *
+     * @param bool $signature
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setSignature(bool $signature): AbstractConsignment
+    {
+        $this->signature = $this->canHaveOption($signature);
 
         return $this;
     }
