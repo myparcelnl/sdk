@@ -59,7 +59,7 @@ class PostNLConsignment extends AbstractConsignment
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws \Exception
      */
-    public function setDeliveryType($deliveryType, $needDeliveryDate = true)
+    public function setDeliveryType(int $deliveryType, $needDeliveryDate = true): AbstractConsignment
     {
         if ($needDeliveryDate &&
             $deliveryType !== self::DELIVERY_TYPE_STANDARD &&

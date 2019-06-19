@@ -372,7 +372,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setApiKey($apiKey): AbstractConsignment
+    public function setApiKey($apiKey): self
     {
         $this->api_key = $apiKey;
 
@@ -446,7 +446,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setStatus($status): AbstractConsignment
+    public function setStatus($status): self
     {
         $this->status = $status;
 
@@ -475,7 +475,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setShopId($shop_id): AbstractConsignment
+    public function setShopId($shop_id): self
     {
         $this->shop_id = $shop_id;
 
@@ -874,7 +874,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setEmail(string $email): AbstractConsignment
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -898,7 +898,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setPhone(string $phone): AbstractConsignment
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
@@ -952,7 +952,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setDeliveryType(int $deliveryType): AbstractConsignment
+    public function setDeliveryType(int $deliveryType): self
     {
         $this->delivery_type = $deliveryType;
 
@@ -978,7 +978,7 @@ class AbstractConsignment
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws \Exception
      */
-    public function setDeliveryDate(string $delivery_date): AbstractConsignment
+    public function setDeliveryDate(string $delivery_date): self
     {
 
         $result = preg_match(self::DATE_REGEX, $delivery_date, $matches);
@@ -1076,7 +1076,7 @@ class AbstractConsignment
      * @return $this
      * @throws \Exception
      */
-    public function setReturn($return): AbstractConsignment
+    public function setReturn($return): self
     {
         $this->return = $this->canHaveOption($return);
 
@@ -1126,7 +1126,7 @@ class AbstractConsignment
      *
      * @return AbstractConsignment
      */
-    public function setAgeCheck(bool $ageCheck): AbstractConsignment
+    public function setAgeCheck(bool $ageCheck): self
     {
         if ($ageCheck) {
             throw new \BadMethodCallException('Age check has to be false in ' . static::class);
@@ -1154,7 +1154,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setLabelDescription(string $label_description): AbstractConsignment
+    public function setLabelDescription(string $label_description): self
     {
         $this->label_description = (string) $label_description;
 
@@ -1181,7 +1181,7 @@ class AbstractConsignment
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws \Exception
      */
-    public function setInsurance(int $insurance): AbstractConsignment
+    public function setInsurance(int $insurance): self
     {
         if (empty($this->insurance_possibilities_local)) {
             throw new \BadMethodCallException('Property insurance_possibilities_local not found in ' . static::class);
@@ -1211,7 +1211,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPhysicalProperties(array $physical_properties): AbstractConsignment
+    public function setPhysicalProperties(array $physical_properties): self
     {
         $this->physical_properties = $physical_properties;
 
@@ -1251,7 +1251,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setContents($contents): AbstractConsignment
+    public function setContents($contents): self
     {
         $this->contents = $contents;
 
@@ -1276,7 +1276,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setInvoice(string $invoice): AbstractConsignment
+    public function setInvoice(string $invoice): self
     {
         $this->invoice = $invoice;
 
@@ -1301,7 +1301,7 @@ class AbstractConsignment
      * @return $this
      * @throws \Exception
      */
-    public function addItem($item): AbstractConsignment
+    public function addItem($item): self
     {
         $item->ensureFilled();
 
@@ -1327,7 +1327,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupPostalCode(string $pickup_postal_code): AbstractConsignment
+    public function setPickupPostalCode(string $pickup_postal_code): self
     {
         $this->pickup_postal_code = $pickup_postal_code;
 
@@ -1351,7 +1351,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupStreet(string $pickup_street): AbstractConsignment
+    public function setPickupStreet(string $pickup_street): self
     {
         $this->pickup_street = $pickup_street;
 
@@ -1375,7 +1375,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupCity(string $pickup_city): AbstractConsignment
+    public function setPickupCity(string $pickup_city): self
     {
         $this->pickup_city = $pickup_city;
 
@@ -1399,7 +1399,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupNumber(string $pickup_number): AbstractConsignment
+    public function setPickupNumber(string $pickup_number): self
     {
         $this->pickup_number = (string) $pickup_number;
 
@@ -1423,7 +1423,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupLocationName(string $pickup_location_name): AbstractConsignment
+    public function setPickupLocationName(string $pickup_location_name): self
     {
         $this->pickup_location_name = $pickup_location_name;
 
@@ -1447,7 +1447,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupLocationCode($pickup_location_code): AbstractConsignment
+    public function setPickupLocationCode($pickup_location_code): self
     {
         $this->pickup_location_code = $pickup_location_code;
 
@@ -1471,7 +1471,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
+    public function setPickupNetworkId($pickupNetworkId): self
     {
         if (! empty($pickupNetworkId)) {
             throw new \BadMethodCallException('Pickup network id has to be empty in ' . static::class);
