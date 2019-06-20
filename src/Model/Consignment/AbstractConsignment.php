@@ -331,6 +331,7 @@ class AbstractConsignment
      * Save this id in your database
      *
      * @return int
+     * @todo de get en set deprecaten / hier hernoemen en in de PostNLconsigment linken hiernaar
      */
     public function getMyParcelConsignmentId(): int
     {
@@ -514,7 +515,7 @@ class AbstractConsignment
     /**
      * Check if the address is outside the EU
      *
-     * @todo move to hasCountry
+     * @todo move to hasCountry trait maken
      *
      * @return bool
      */
@@ -627,7 +628,7 @@ class AbstractConsignment
      *
      * @return string
      */
-    public function getStreetAdditionalInfo()
+    public function getStreetAdditionalInfo(): string
     {
         $streetParts = SplitStreet::getStreetParts($this->street);
         $result      = '';
@@ -649,7 +650,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setStreetAdditionalInfo($street_additional_info)
+    public function setStreetAdditionalInfo(string $street_additional_info): self
     {
         $this->street_additional_info = $street_additional_info;
 
@@ -665,7 +666,7 @@ class AbstractConsignment
      *
      * @return string Entire street
      */
-    public function getFullStreet($useStreetAdditionalInfo = false)
+    public function getFullStreet(bool $useStreetAdditionalInfo = false): string
     {
         $fullStreet = $this->getStreet($useStreetAdditionalInfo);
 
@@ -730,7 +731,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setNumber($number)
+    public function setNumber(int $number): self
     {
         $this->number = $number;
 
@@ -740,7 +741,7 @@ class AbstractConsignment
     /**
      * @return string
      */
-    public function getNumberSuffix()
+    public function getNumberSuffix(): string
     {
         return $this->number_suffix;
     }
@@ -754,7 +755,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setNumberSuffix($number_suffix)
+    public function setNumberSuffix(string $number_suffix): self
     {
         $this->number_suffix = $number_suffix;
 
@@ -804,7 +805,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setPostalCode($postal_code)
+    public function setPostalCode(string $postal_code): self
     {
         $this->postal_code = $postal_code;
 
@@ -814,7 +815,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPerson()
+    public function getPerson(): string
     {
         return $this->person;
     }
@@ -828,7 +829,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setPerson($person)
+    public function setPerson(string $person): self
     {
         $this->person = $person;
 
@@ -838,7 +839,7 @@ class AbstractConsignment
     /**
      * @return string
      */
-    public function getCompany()
+    public function getCompany(): string
     {
         return $this->company;
     }
@@ -852,7 +853,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setCompany($company)
+    public function setCompany(string $company): self
     {
         $this->company = $company;
 
@@ -950,11 +951,13 @@ class AbstractConsignment
      *
      * Required: Yes if delivery_date has been specified
      *
-     * @param int $deliveryType
+     * @param int  $deliveryType
+     *
+     * @param bool $needDeliveryDate
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
-    public function setDeliveryType(int $deliveryType): self
+    public function setDeliveryType(int $deliveryType, bool $needDeliveryDate = false): self
     {
         $this->delivery_type = $deliveryType;
 
@@ -975,13 +978,17 @@ class AbstractConsignment
      * Example: 2017-01-01 | 2017-01-01 00:00:00
      * Required: Yes if delivery type has been specified
      *
-     * @param string $delivery_date
+     * @param string|null $delivery_date
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws \Exception
      */
-    public function setDeliveryDate(string $delivery_date): self
+    public function setDeliveryDate(?string $delivery_date): self
     {
+        if (! $delivery_date){
+            $this->delivery_date = null;
+            return $this;
+        }
 
         $result = preg_match(self::DATE_REGEX, $delivery_date, $matches);
 
@@ -993,12 +1000,6 @@ class AbstractConsignment
             if (! $result) {
                 throw new \BadMethodCallException('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
             }
-        }
-
-        if (new \DateTime() > new \DateTime($delivery_date)) {
-            $datetime = new \DateTime();
-            $datetime->modify('+1 day');
-            $delivery_date = $datetime->format('Y\-m\-d\ h:i:s');
         }
 
         $this->delivery_date = (string) $delivery_date;
@@ -1073,12 +1074,12 @@ class AbstractConsignment
      *
      * Required: No
      *
-     * @param boolean $return
+     * @param bool $return
      *
      * @return $this
      * @throws \Exception
      */
-    public function setReturn($return): self
+    public function setReturn(bool $return): self
     {
         $this->return = $this->canHaveOption($return);
 
@@ -1175,16 +1176,20 @@ class AbstractConsignment
      * Insurance price for the package.
      *
      * Composite type containing integer and currency. The amount is without decimal separators.
-     * Pattern: [0, 50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
      * Required: No
      *
-     * @param int $insurance
+     * @param int|null $insurance
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws \Exception
      */
-    public function setInsurance(int $insurance): self
+    public function setInsurance(?int $insurance): self
     {
+        if (! $insurance){
+            $this->insurance = null;
+            return $this;
+        }
+
         if (empty($this->insurance_possibilities_local)) {
             throw new \BadMethodCallException('Property insurance_possibilities_local not found in ' . static::class);
         }
@@ -1194,7 +1199,7 @@ class AbstractConsignment
         }
 
         if (! in_array($insurance, $this->insurance_possibilities_local) && $this->getCountry() == $this->local_cc) {
-            throw new \Exception('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
+            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
         }
 
         if (! $this->canHaveOption()) {
@@ -1229,6 +1234,7 @@ class AbstractConsignment
     }
 
     /**
+     *
      * @return integer
      */
     public function getContents(): int
@@ -1411,7 +1417,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupLocationName(): string
+    public function getPickupLocationName(): ?string
     {
         return $this->pickup_location_name;
     }
@@ -1510,7 +1516,7 @@ class AbstractConsignment
      * @return bool
      * @throws MissingFieldException
      */
-    protected function canHaveOption($option = true): bool
+    protected function canHaveOption(bool $option = true): bool
     {
         if ($this->getPackageType() === null) {
             throw new MissingFieldException('Set package type before ' . $option);

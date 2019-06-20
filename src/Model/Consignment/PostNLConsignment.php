@@ -44,7 +44,6 @@ class PostNLConsignment extends AbstractConsignment
         return parent::setPackageType($package_type);
     }
 
-
     /**
      * The delivery type for the package
      *
@@ -56,7 +55,7 @@ class PostNLConsignment extends AbstractConsignment
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws \Exception
      */
-    public function setDeliveryType(int $deliveryType, $needDeliveryDate = true): AbstractConsignment
+    public function setDeliveryType(int $deliveryType, bool $needDeliveryDate = true): AbstractConsignment
     {
         if ($needDeliveryDate &&
             $deliveryType !== self::DELIVERY_TYPE_STANDARD &&
@@ -65,9 +64,48 @@ class PostNLConsignment extends AbstractConsignment
             throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
         }
 
-        return parent::setDeliveryType($deliveryType);
+        return parent::setDeliveryType($deliveryType, $needDeliveryDate);
     }
 
+    /**
+     * The delivery date time for this shipment
+     * Pattern: YYYY-MM-DD | YYYY-MM-DD HH:MM:SS
+     * Example: 2017-01-01 | 2017-01-01 00:00:00
+     * Required: Yes if delivery type has been specified
+     *
+     * @param string $delivery_date
+     *
+     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @throws \Exception
+     */
+    public function setDeliveryDate(?string $delivery_date): AbstractConsignment
+    {
+        if (! $delivery_date){
+            throw new \BadMethodCallException('First set delivery date before running setDeliveryDate() for shipment: ' . $this->myparcel_consignment_id);
+        }
+
+        return parent::setDeliveryDate($delivery_date);
+    }
+
+    /**
+     * Insurance price for the package.
+     *
+     * Composite type containing integer and currency. The amount is without decimal separators.
+     * Required: No
+     *
+     * @param int|null $insurance
+     *
+     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @throws \Exception
+     */
+    public function setInsurance(?int $insurance): AbstractConsignment
+    {
+        if (! $insurance) {
+            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
+        }
+
+        return parent::setDeliveryDate($insurance);
+    }
 
     /**
      * @return bool
@@ -184,5 +222,4 @@ class PostNLConsignment extends AbstractConsignment
 
         return $this;
     }
-
 }
