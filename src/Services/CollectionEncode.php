@@ -31,7 +31,7 @@ class CollectionEncode
      * Encode multiple shipments so that the data can be sent to MyParcel.
      *
      * @return string
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function encode()
     {

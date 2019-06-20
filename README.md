@@ -18,6 +18,7 @@ This SDK connects to the MyParcel API using PHP.
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
     - [Helpers](#helpers)
+- [Tips](#tips)
 - [Contribute](#contribute)
 
 ## Installation
@@ -403,6 +404,59 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     ->setUserAgent('name_of_cms', '1.0')
     ->getUserAgent()
 ```
+
+## Exceptions
+
+MyParcel uses several types of Exceptions to make the errors clear. It is your responsibility to provide the correct status in a response.
+These are the Exceptions that we currently use:
+
+#### AddressException
+Exception to be returned when an address is incorrect or not usable.
+
+Class: `MyParcelNL\Sdk\src\Exception\AddressException`
+
+HTTP status: 412
+
+#### ApiException
+Exception to be returned when a call to MyParcel services has failed.
+
+Class: `MyParcelNL\Sdk\src\Exception\ApiException`
+
+HTTP status: 502
+
+#### MissingFieldException
+Exception thrown when there is an attempt to dynamically access a field that does not exist.
+
+Class: `MyParcelNL\Sdk\src\Exception\MissingFieldException`
+
+HTTP status: 500
+
+#### InvalidArgumentException
+Exception thrown if an argument is not the expected type.
+
+Class: `\InvalidArgumentException`
+
+HTTP status: 500
+
+#### BadMethodCallException
+Exception thrown if a callback refers to an undefined method or if some arguments are missing.
+
+Class: `\BadMethodCallException:`
+
+HTTP status: 500
+
+## Tips
+This SDK is not only useful for communicating with MyParcel. This package also contains code that you can take advantage of yourself:
+
+### Collections
+If you use arrays a lot, Collections are usually better to work with. ([documentation](https://laravel.com/docs/5.7/collections))
+\MyParcelNL\Sdk\src\Support\Collection()
+
+### Helpers
+\MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
+\MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
+`\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
+
 
 ## Contribute
 
