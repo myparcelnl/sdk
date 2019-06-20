@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Helper;
 
@@ -18,6 +18,7 @@ class CheckoutFields
 
     /**
      * @param $checkoutData
+     *
      * @return int
      */
     public function getDeliveryType($checkoutData)
@@ -48,15 +49,16 @@ class CheckoutFields
 
     /**
      * @param $aCheckoutData
+     *
      * @return array
      */
     private function getTypeFromCheckout($aCheckoutData)
     {
         $typeFromCheckout = null;
 
-        if (!empty($aCheckoutData['time'][0]['price_comment'])) {
+        if (! empty($aCheckoutData['time'][0]['price_comment'])) {
             $typeFromCheckout = $aCheckoutData['time'][0]['price_comment'];
-        } elseif (!empty($aCheckoutData['price_comment'])) {
+        } elseif (! empty($aCheckoutData['price_comment'])) {
             $typeFromCheckout = $aCheckoutData['price_comment'];
         }
 

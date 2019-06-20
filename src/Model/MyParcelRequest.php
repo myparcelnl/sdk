@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpInternalEntityUsedInspection */
+<?php declare(strict_types=1); /** @noinspection PhpInternalEntityUsedInspection */
+
 /**
  * This model represents one request
  *
@@ -18,6 +19,8 @@ use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Helper\RequestError;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\src\Exception\ApiException;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 class MyParcelRequest
 {
@@ -29,18 +32,18 @@ class MyParcelRequest
     /**
      * Supported request types.
      */
-    const REQUEST_TYPE_SHIPMENTS = 'shipments';
+    const REQUEST_TYPE_SHIPMENTS      = 'shipments';
     const REQUEST_TYPE_RETRIEVE_LABEL = 'shipment_labels';
 
     /**
      * API headers
      */
-    const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
-    const REQUEST_HEADER_RETRIEVE_SHIPMENT = 'Accept: application/json; charset=utf8';
+    const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json; charset=utf-8';
+    const REQUEST_HEADER_RETRIEVE_SHIPMENT   = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
-    const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf;charset=utf-8';
-    const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
-    const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
+    const REQUEST_HEADER_RETRIEVE_LABEL_PDF  = 'Accept: application/pdf';
+    const REQUEST_HEADER_RETURN              = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
+    const REQUEST_HEADER_DELETE              = 'Accept: application/json; charset=utf8';
 
     /**
      * @var string
@@ -70,6 +73,7 @@ class MyParcelRequest
         if ($pluck) {
             $result = Arr::pluck($result, $pluck);
         }
+
         return $result;
     }
 
@@ -95,7 +99,7 @@ class MyParcelRequest
     public function setRequestParameters($apiKey, $body = '', $requestHeader = '')
     {
         $this->api_key = $apiKey;
-        $this->body = $body;
+        $this->body    = $body;
 
         $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
@@ -113,11 +117,12 @@ class MyParcelRequest
      * @param string $uri
      *
      * @return MyParcelRequest|array|false|string
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_SHIPMENTS)
     {
-        if (!$this->checkConfigForRequest()) {
+        if (! $this->checkConfigForRequest()) {
             return false;
         }
 
@@ -126,7 +131,7 @@ class MyParcelRequest
         $this->setUserAgent();
 
         $header = $this->header;
-        $url = $this->getRequestUrl($uri);
+        $url    = $this->getRequestUrl($uri);
         if ($method !== 'POST' && $this->body) {
             $url .= '/' . $this->body;
         }
@@ -137,10 +142,103 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            throw new \Exception('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+            throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * @param string $userAgent
+     *
+     * @return $this
+     */
+    public function setUserAgent($userAgent = null)
+    {
+        if ($userAgent) {
+            $this->userAgent = $userAgent;
+        }
+        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
+            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * @param string $userAgent
+     *
+     * @return $this
+     */
+    public function setUserAgent($userAgent = null)
+    {
+        if ($userAgent) {
+            $this->userAgent = $userAgent;
+        }
+        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
+            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get version of SDK from composer file
+     */
+    public function getUserAgentFromComposer()
+    {
+        $composerData = $this->getComposerContents();
+
+        if ($composerData && ! empty($composerData['name'])
+            && $composerData['name'] == 'myparcelnl/sdk'
+            && ! empty($composerData['version'])
+        ) {
+            $version = str_replace('v', '', $composerData['version']);
+        } else {
+            $version = 'unknown';
+        }
+
+        return 'MyParcelNL-SDK/' . $version;
+    }
+
+    /**
+     * @param $size
+     * @param MyParcelCollection $collection
+     * @param $key
+     *
+     * @return string|null
+     */
+    public function getLatestDataParams($size, $collection, &$key)
+    {
+        $params         = null;
+        $consignmentIds = $collection->getConsignmentIds($key);
+
+        if ($consignmentIds !== null) {
+            $params = implode(';', $consignmentIds) . '?size=' . $size;
+        } else {
+            $referenceIds = $this->getConsignmentReferenceIds($collection, $key);
+            if (! empty($referenceIds)) {
+                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -150,7 +248,7 @@ class MyParcelRequest
      */
     private function checkMyParcelErrors()
     {
-        if (!is_array($this->result) || empty($this->result['errors'])) {
+        if (! is_array($this->result) || empty($this->result['errors'])) {
             return;
         }
 
@@ -180,58 +278,15 @@ class MyParcelRequest
      * Checks if all the requirements are set to send a request to MyParcel
      *
      * @return bool
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function checkConfigForRequest()
     {
         if (empty($this->api_key)) {
-            throw new \Exception('api_key not found');
+            throw new MissingFieldException('api_key not found');
         }
 
         return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return $this->userAgent;
-    }
-
-    /**
-     * @param string $userAgent
-     * @return $this
-     */
-    public function setUserAgent($userAgent = null)
-    {
-        if ($userAgent) {
-            $this->userAgent = $userAgent;
-        }
-        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
-            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get version of SDK from composer file
-     */
-    public function getUserAgentFromComposer()
-    {
-        $composerData    = $this->getComposerContents();
-
-        if ($composerData && !empty($composerData['name'])
-            && $composerData['name'] == 'myparcelnl/sdk'
-            && !empty($composerData['version'])
-        ) {
-            $version = str_replace('v', '', $composerData['version']);
-        } else {
-            $version = 'unknown';
-        }
-
-        return 'MyParcelNL-SDK/' . $version;
     }
 
     /**
@@ -256,29 +311,6 @@ class MyParcelRequest
     }
 
     /**
-     * @param $size
-     * @param MyParcelCollection $collection
-     * @param $key
-     * @return string|null
-     */
-    public function getLatestDataParams($size, $collection, &$key)
-    {
-        $params = null;
-        $consignmentIds = $collection->getConsignmentIds($key);
-
-        if ($consignmentIds !== null) {
-            $params = implode(';', $consignmentIds) . '?size=' . $size;
-        } else {
-            $referenceIds = $this->getConsignmentReferenceIds($collection, $key);
-            if (! empty($referenceIds)) {
-                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
-            }
-        }
-
-        return $params;
-    }
-
-    /**
      * Get all consignment ids
      *
      * @param MyParcelCollection|MyParcelConsignment[] $consignments
@@ -292,7 +324,7 @@ class MyParcelRequest
         foreach ($consignments as $consignment) {
             if ($consignment->getReferenceId()) {
                 $referenceIds[] = $consignment->getReferenceId();
-                $key = $consignment->getApiKey();
+                $key            = $consignment->getApiKey();
             }
         }
 
@@ -326,13 +358,13 @@ class MyParcelRequest
     {
         return (new MyParcelCurl())
             ->setConfig([
-                'header' => 0,
+                'header'  => 0,
                 'timeout' => 60,
             ])
             ->addOptions([
-                CURLOPT_POST => true,
+                CURLOPT_POST           => true,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_AUTOREFERER => true,
+                CURLOPT_AUTOREFERER    => true,
             ]);
     }
 }

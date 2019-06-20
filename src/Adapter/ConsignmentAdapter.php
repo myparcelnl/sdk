@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
@@ -9,6 +9,7 @@
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release v2.0.0
  */
+
 namespace MyParcelNL\Sdk\src\Adapter;
 
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
@@ -27,8 +28,9 @@ class ConsignmentAdapter
      *
      * @param array $data
      * @param MyParcelConsignment $consignment
+     * @param string $apiKey
      *
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function __construct($data, $consignment)
     {
@@ -56,7 +58,7 @@ class ConsignmentAdapter
     private function baseOptions()
     {
         $recipient = $this->data['recipient'];
-        $options = $this->data['options'];
+        $options   = $this->data['options'];
 
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->consignment
@@ -72,38 +74,37 @@ class ConsignmentAdapter
             ->setEmail(isset($recipient['email']) ? $recipient['email'] : '')
             ->setPhone(isset($recipient['phone']) ? $recipient['phone'] : '')
             ->setPackageType($options['package_type'])
-            ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '')
-        ;
+            ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '');
 
         return $this;
     }
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     private function extraOptions()
     {
         $options = $this->data['options'];
-        $fields = [
+        $fields  = [
             'only_recipient' => false,
-            'large_format' => false,
-            'age_check' => false,
-            'signature' => false,
-            'return' => false,
-            'delivery_date' => null,
-            'delivery_type' => MyParcelConsignment::DEFAULT_DELIVERY_TYPE,
+            'large_format'   => false,
+            'age_check'      => false,
+            'signature'      => false,
+            'return'         => false,
+            'delivery_date'  => null,
+            'delivery_type'  => MyParcelConsignment::DEFAULT_DELIVERY_TYPE,
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);
 
         $methods = [
             'OnlyRecipient' => 'only_recipient',
-            'LargeFormat' => 'large_format',
-            'AgeCheck' => 'age_check',
-            'Signature' => 'signature',
-            'Return' => 'return',
-            'DeliveryDate' => 'delivery_date',
+            'LargeFormat'   => 'large_format',
+            'AgeCheck'      => 'age_check',
+            'Signature'     => 'signature',
+            'Return'        => 'return',
+            'DeliveryDate'  => 'delivery_date',
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->setByMethods($options, $methods);
@@ -126,8 +127,8 @@ class ConsignmentAdapter
     private function recipient()
     {
         $fields = [
-            'company' => '',
-            'number' => null,
+            'company'       => '',
+            'number'        => null,
             'number_suffix' => '',
 
         ];
@@ -135,8 +136,8 @@ class ConsignmentAdapter
         $this->clearFields($fields);
 
         $methods = [
-            'Company' => 'company',
-            'Number' => 'number',
+            'Company'      => 'company',
+            'Number'       => 'number',
             'NumberSuffix' => 'number_suffix',
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
@@ -154,26 +155,26 @@ class ConsignmentAdapter
         if (key_exists('pickup', $this->data) && $this->data['pickup'] !== null) {
 
             $methods = [
-                'PickupPostalCode' => 'postal_code',
-                'PickupStreet' => 'street',
-                'PickupCity' => 'city',
-                'PickupNumber' => 'number',
+                'PickupPostalCode'   => 'postal_code',
+                'PickupStreet'       => 'street',
+                'PickupCity'         => 'city',
+                'PickupNumber'       => 'number',
                 'PickupLocationName' => 'location_name',
                 'PickupLocationCode' => 'location_code',
-                'PickupNetworkId' => 'network_id',
+                'PickupNetworkId'    => 'network_id',
             ];
             /** @noinspection PhpInternalEntityUsedInspection */
             $this->setByMethods($this->data['pickup'], $methods);
         } else {
 
             $fields = [
-                'pickup_postal_code' => null,
-                'pickup_street' => null,
-                'pickup_city' => null,
-                'pickup_number' => null,
+                'pickup_postal_code'   => null,
+                'pickup_street'        => null,
+                'pickup_city'          => null,
+                'pickup_number'        => null,
                 'pickup_location_name' => null,
                 'pickup_location_code' => '',
-                'pickup_network_id' => '',
+                'pickup_network_id'    => '',
 
             ];
             /** @noinspection PhpInternalEntityUsedInspection */
@@ -189,9 +190,10 @@ class ConsignmentAdapter
      *
      * @return $this
      */
-    private function setByMethods($data, $methods) {
+    private function setByMethods($data, $methods)
+    {
         foreach ($methods as $method => $value) {
-            if (!empty($data[$value])) {
+            if (! empty($data[$value])) {
                 $this->consignment->{'set' . $method}($data[$value]);
             }
         }
@@ -204,7 +206,8 @@ class ConsignmentAdapter
      *
      * @return $this
      */
-    private function clearFields($fields) {
+    private function clearFields($fields)
+    {
         foreach ($fields as $field => $default) {
             $this->consignment->{$field} = $default;
         }

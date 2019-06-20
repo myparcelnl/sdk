@@ -1,0 +1,34 @@
+language: php
+
+dist: xenial
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+  include:
+    - php: 7.1
+    - php: 7.2
+    - php: 7.3
+    - php: nightly
+
+sudo: false
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+
+env:
+  - COMPOSER_NO_INTERACTION=1
+
+install:
+  - |
+    if [[ "${TRAVIS_PHP_VERSION}" = "nightly" ]]; then
+      travis_retry composer install --no-scripts --no-suggest --ignore-platform-reqs
+    else
+      travis_retry composer install --no-scripts --no-suggest
+    fi
+script:
+  - composer validate --strict
+  - find src Tests -name '*.php' | xargs -n 1 -P4 php -l
+  - vendor/bin/phpunit Tests

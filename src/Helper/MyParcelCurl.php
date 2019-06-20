@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Curl to use in the api
  *
@@ -41,11 +41,11 @@ class MyParcelCurl
      * @var array
      */
     protected $_allowedParams = array(
-        'timeout'       => CURLOPT_TIMEOUT,
-        'maxredirects'  => CURLOPT_MAXREDIRS,
-        'proxy'         => CURLOPT_PROXY,
-        'ssl_cert'      => CURLOPT_SSLCERT,
-        'userpwd'       => CURLOPT_USERPWD
+        'timeout'      => CURLOPT_TIMEOUT,
+        'maxredirects' => CURLOPT_MAXREDIRS,
+        'proxy'        => CURLOPT_PROXY,
+        'ssl_cert'     => CURLOPT_SSLCERT,
+        'userpwd'      => CURLOPT_USERPWD
     );
 
     /**
@@ -56,41 +56,16 @@ class MyParcelCurl
     protected $_options = array();
 
     /**
-     * Apply current configuration array to transport resource
-     *
-     * @return MyParcelCurl
-     */
-    protected function _applyConfig()
-    {
-        curl_setopt_array($this->_getResource(), $this->_options);
-
-        if (empty($this->_config)) {
-            return $this;
-        }
-
-        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : 0;
-        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
-
-        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 0;
-        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
-
-        foreach ($this->_config as $param => $curlOption) {
-            if (array_key_exists($param, $this->_allowedParams)) {
-                curl_setopt($this->_getResource(), $this->_allowedParams[$param], $this->_config[$param]);
-            }
-        }
-        return $this;
-    }
-
-    /**
      * Set array of additional cURL options
      *
      * @param array $options
+     *
      * @return MyParcelCurl
      */
     public function setOptions(array $options = array())
     {
         $this->_options = $options;
+
         return $this;
     }
 
@@ -104,6 +79,7 @@ class MyParcelCurl
     public function addOptions(array $options)
     {
         $this->_options = $options + $this->_options;
+
         return $this;
     }
 
@@ -111,21 +87,23 @@ class MyParcelCurl
      * Set the configuration array for the adapter
      *
      * @param array $config
+     *
      * @return MyParcelCurl
      */
     public function setConfig($config = array())
     {
         $this->_config = $config;
+
         return $this;
     }
 
     /**
      * Send request to the remote server
      *
-     * @param string               $method
-     * @param string               $url
-     * @param array                $headers
-     * @param string               $body
+     * @param string $method
+     * @param string $url
+     * @param array $headers
+     * @param string $body
      *
      * @return string Request as text
      */
@@ -136,20 +114,20 @@ class MyParcelCurl
         }
         $this->_applyConfig();
 
-        $header = isset($this->_config['header']) ? $this->_config['header'] : true;
+        $header  = isset($this->_config['header']) ? $this->_config['header'] : true;
         $options = array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER          => true,
-            CURLOPT_HEADER                  => $header
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => $header
         );
         if ($method == 'POST') {
-            $options[CURLOPT_POST]          = true;
-            $options[CURLOPT_POSTFIELDS]    = $body;
+            $options[CURLOPT_POST]       = true;
+            $options[CURLOPT_POSTFIELDS] = $body;
         } elseif ($method == 'GET') {
-            $options[CURLOPT_HTTPGET]       = true;
+            $options[CURLOPT_HTTPGET] = true;
         }
         if (is_array($headers)) {
-            $options[CURLOPT_HTTPHEADER]    = $headers;
+            $options[CURLOPT_HTTPHEADER] = $headers;
         }
 
         curl_setopt_array($this->_getResource(), $options);
@@ -186,20 +164,8 @@ class MyParcelCurl
     {
         curl_close($this->_getResource());
         $this->_resource = null;
-        return $this;
-    }
 
-    /**
-     * Returns a cURL handle on success
-     *
-     * @return resource
-     */
-    protected function _getResource()
-    {
-        if (is_null($this->_resource)) {
-            $this->_resource = curl_init();
-        }
-        return $this->_resource;
+        return $this;
     }
 
     /**
@@ -226,11 +192,12 @@ class MyParcelCurl
      * Get information regarding a specific transfer
      *
      * @param int $opt CURLINFO option
+     *
      * @return mixed
      */
     public function getInfo($opt = 0)
     {
-        if (!$opt) {
+        if (! $opt) {
             return curl_getinfo($this->_getResource());
         }
 
@@ -239,7 +206,9 @@ class MyParcelCurl
 
     /**
      * Set User Agent
+     *
      * @param string $agent
+     *
      * @return bool
      */
     public function setUserAgent($agent)
@@ -252,6 +221,7 @@ class MyParcelCurl
      *
      * @param array $urls
      * @param array $options
+     *
      * @return array
      */
     public function multiRequest($urls, $options = array())
@@ -266,7 +236,7 @@ class MyParcelCurl
             curl_setopt($handles[$key], CURLOPT_URL, $url);
             curl_setopt($handles[$key], CURLOPT_HEADER, 0);
             curl_setopt($handles[$key], CURLOPT_RETURNTRANSFER, 1);
-            if (!empty($options)) {
+            if (! empty($options)) {
                 curl_setopt_array($handles[$key], $options);
             }
             curl_multi_add_handle($multihandle, $handles[$key]);
@@ -282,12 +252,57 @@ class MyParcelCurl
             curl_multi_remove_handle($multihandle, $handle);
         }
         curl_multi_close($multihandle);
+
         return $result;
     }
+
+    /**
+     * Apply current configuration array to transport resource
+     *
+     * @return MyParcelCurl
+     */
+    protected function _applyConfig()
+    {
+        curl_setopt_array($this->_getResource(), $this->_options);
+
+        if (empty($this->_config)) {
+            return $this;
+        }
+
+        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : 0;
+        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
+
+        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 0;
+        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
+
+        foreach ($this->_config as $param => $curlOption) {
+            if (array_key_exists($param, $this->_allowedParams)) {
+                curl_setopt($this->_getResource(), $this->_allowedParams[$param], $this->_config[$param]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns a cURL handle on success
+     *
+     * @return resource
+     */
+    protected function _getResource()
+    {
+        if (is_null($this->_resource)) {
+            $this->_resource = curl_init();
+        }
+
+        return $this->_resource;
+    }
+
     /**
      * Extract the response code from a response string
      *
      * @param string $response_str
+     *
      * @return int
      */
     private static function extractCode($response_str)

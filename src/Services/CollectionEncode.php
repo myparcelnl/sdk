@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
@@ -32,7 +32,7 @@ class CollectionEncode
      * Encode multiple shipments so that the data can be sent to MyParcel.
      *
      * @return string
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function encode()
     {
