@@ -35,7 +35,7 @@ class BpostConsignment extends AbstractConsignment
     public function setPackageType(int $package_type): AbstractConsignment
     {
         if ($package_type != self::PACKAGE_TYPE_PACKAGE) {
-            throw new \Exception('Use the correct package type for shipment:' . $this->myparcel_consignment_id);
+            throw new \Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
         return parent::setPackageType($package_type);

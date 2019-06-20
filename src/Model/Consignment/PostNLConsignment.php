@@ -16,6 +16,42 @@ class PostNLConsignment extends AbstractConsignment
      */
     protected $local_cc = self::CC_NL;
 
+
+    /**
+     * The id of the consignment
+     *
+     * Save this id in your database
+     *
+     * @return int
+     */
+    public function getMyParcelConsignmentId(): int
+    {
+        return $this->getMyParcelConsignmentId();
+    }
+
+    /**
+     * @internal
+     *
+     * The id of the consignment
+     *
+     * @param int $id
+     *
+     * @return \MyparcelNL\Sdk\src\Model\AbstractConsignment
+     */
+    public function setMyParcelConsignmentId(int $id): AbstractConsignment
+    {
+        return $this->setConsignmentId($id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey(): string
+    {
+        return $this->api_key;
+    }
+
+
     /**
      * The package type
      *
@@ -38,7 +74,7 @@ class PostNLConsignment extends AbstractConsignment
             $package_type != self::PACKAGE_TYPE_MAILBOX &&
             $package_type != self::PACKAGE_TYPE_LETTER
         ) {
-            throw new \Exception('Use the correct package type for shipment:' . $this->myparcel_consignment_id);
+            throw new \Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
         return parent::setPackageType($package_type);
@@ -61,7 +97,7 @@ class PostNLConsignment extends AbstractConsignment
             $deliveryType !== self::DELIVERY_TYPE_STANDARD &&
             $this->getDeliveryDate() == null
         ) {
-            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->myparcel_consignment_id);
+            throw new \Exception('If delivery type !== 2, first set delivery date with setDeliveryDate() before running setDeliveryType() for shipment: ' . $this->consignment_id);
         }
 
         return parent::setDeliveryType($deliveryType, $needDeliveryDate);
@@ -80,8 +116,8 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function setDeliveryDate(?string $delivery_date): AbstractConsignment
     {
-        if (! $delivery_date){
-            throw new \BadMethodCallException('First set delivery date before running setDeliveryDate() for shipment: ' . $this->myparcel_consignment_id);
+        if (! $delivery_date) {
+            throw new \BadMethodCallException('First set delivery date before running setDeliveryDate() for shipment: ' . $this->consignment_id);
         }
 
         return parent::setDeliveryDate($delivery_date);
@@ -181,7 +217,7 @@ class PostNLConsignment extends AbstractConsignment
 
         return $this;
     }
-    
+
     /**
      * @return bool
      */

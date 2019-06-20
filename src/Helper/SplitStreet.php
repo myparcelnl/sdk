@@ -40,8 +40,18 @@ class SplitStreet
         '[a-zA-Z]{1}[a-zA-Z\s]{0,3}' .    // has up to 4 letters with a space
         ')?$~';
 
-    /* @todo: split the SPLIT_STREET_REGEX_BE and use command*/
-    const SPLIT_STREET_REGEX_BE = '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[^\s]{1,8})\s?(?P<box_separator>' . self::BOX_NL . '?)?\s?(?P<box_number>\d{0,8}$))$~';
+    /* @todo: check if this is correct */
+    const SPLIT_STREET_REGEX_BE =
+        '~(?P<street>.*?)' .
+        '\s' .                              // Separator between street and street_suffix
+        '(?P<street_suffix>' .
+        '(?P<number>[^\s]{1,8})' .          // Number can contain a maximum of 8 numbers
+        '.\s' .                             // Separator between number and box_separator
+        '?(?P<box_separator>'
+        . self::BOX_NL .
+        '?)?\s' .
+        '?(?P<box_number>\d{0,8}$)' .       // Box_number can contain a maximum of 8 numbers
+        ')$~';
 
     /**
      * Splits street data into separate parts for street name, house number and extension.

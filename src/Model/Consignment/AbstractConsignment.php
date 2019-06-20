@@ -75,7 +75,7 @@ class AbstractConsignment
      * @internal
      * @var int
      */
-    public $myparcel_consignment_id;
+    public $consignment_id;
 
     /**
      * @internal
@@ -331,11 +331,10 @@ class AbstractConsignment
      * Save this id in your database
      *
      * @return int
-     * @todo de get en set deprecaten / hier hernoemen en in de PostNLconsigment linken hiernaar
      */
-    public function getMyParcelConsignmentId(): int
+    public function getConsignmentId(): int
     {
-        return $this->myparcel_consignment_id;
+        return $this->consignment_id;
     }
 
     /**
@@ -347,9 +346,9 @@ class AbstractConsignment
      *
      * @param int $id
      */
-    public function setMyParcelConsignmentId(int $id): self
+    public function setConsignmentId(int $id): self
     {
-        $this->myparcel_consignment_id = $id;
+        $this->consignment_id = $id;
 
         return $this;
     }
@@ -772,7 +771,7 @@ class AbstractConsignment
      */
     public function isCorrectAddress(string $fullStreet): bool
     {
-        $result = preg_match( SplitStreet::getRegexByCountry(static::$local_cc, $this->getCountry()), $fullStreet, $matches);
+        $result = preg_match(SplitStreet::getRegexByCountry(static::$local_cc, $this->getCountry()), $fullStreet, $matches);
 
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
@@ -985,8 +984,9 @@ class AbstractConsignment
      */
     public function setDeliveryDate(?string $delivery_date): self
     {
-        if (! $delivery_date){
+        if (! $delivery_date) {
             $this->delivery_date = null;
+
             return $this;
         }
 
@@ -1185,8 +1185,9 @@ class AbstractConsignment
      */
     public function setInsurance(?int $insurance): self
     {
-        if (! $insurance){
+        if (! $insurance) {
             $this->insurance = null;
+
             return $this;
         }
 
