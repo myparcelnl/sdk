@@ -690,6 +690,7 @@ class AbstractConsignment
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      * @throws MissingFieldException
      * @throws BadMethodCallException
+     * @throws \Exception
      */
     public function setFullStreet(string $fullStreet): self
     {
