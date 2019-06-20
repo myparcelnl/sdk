@@ -88,6 +88,11 @@ class MyParcelConsignment
     public $api_key;
 
     /**
+     * @var bool
+     */
+    private $partOfMultiCollo = false;
+
+    /**
      * @internal
      * @var string|null
      */
@@ -381,13 +386,39 @@ class MyParcelConsignment
      * @param string $apiKey
      *
      * @return $this
+     * @throws \Exception
      */
     public function setApiKey($apiKey)
     {
+        if (! is_string($apiKey)) {
+            throw new \Exception('Api key need to be a type of sting');
+        }
+
         $this->api_key = $apiKey;
 
         return $this;
     }
+
+    /**
+     * @param bool $value
+     *
+     * @return MyParcelConsignment
+     */
+    public function setMultiCollo($value = true)
+    {
+        $this->partOfMultiCollo = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartOfMultiCollo()
+    {
+        return $this->partOfMultiCollo;
+    }
+
 
     /**
      * @return string|null
@@ -1232,6 +1263,7 @@ class MyParcelConsignment
         return $this->physical_properties;
     }
 
+
     /**
      * @return integer
      */
@@ -1263,7 +1295,6 @@ class MyParcelConsignment
 
         return $this;
     }
-
 
     /**
      * @return string
@@ -1459,7 +1490,6 @@ class MyParcelConsignment
 
         return $this;
     }
-
     /**
      * @return string
      */

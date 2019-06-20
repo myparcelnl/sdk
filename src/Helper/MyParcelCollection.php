@@ -23,6 +23,7 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 /**
@@ -180,6 +181,72 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * @param int[] $ids
+     * @param sting $apiKey
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function addConsignmentByConsignmentIds($ids, $apiKey)
+    {
+        foreach ($ids as $consignmentId) {
+            $consignment = (new MyParcelConsignment())
+                ->setApiKey($apiKey)
+                ->setMyParcelConsignmentId($consignmentId);
+
+            $this->addConsignment($consignment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $ids
+     * @param string $apiKey
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function addConsignmentByReferenceIds($ids, $apiKey)
+    {
+        foreach ($ids as $referenceId) {
+            $consignment = (new MyParcelConsignment())
+                ->setApiKey($apiKey)
+                ->setReferenceId($referenceId);
+
+            $this->addConsignment($consignment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param MyParcelConsignment $consignment
+     * @param $amount
+     *
+     * @return MyParcelCollection
+     */
+    public function addMultiCollo(MyParcelConsignment $consignment, $amount): self
+    {
+        $i = 1;
+
+        if ($amount > 1) {
+            $consignment->setMultiCollo();
+        }
+
+        if ($consignment->isPartOfMultiCollo() && null == $consignment->getReferenceId()) {
+            $consignment->setReferenceId('random_multi_collo_' . uniqid());
+        }
+
+        while ($i <= $amount) {
+            $this->push($consignment);
+            $i ++;
+        }
+
+        return $this;
+    }
+
+    /**
      * Create concepts in MyParcel
      *
      * @return  $this
@@ -302,7 +369,7 @@ class MyParcelCollection extends Collection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $key);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (new MyParcelConsignment())->setApiKey($key));
             $this->addConsignment($consignmentAdapter->getConsignment());
         }
 
@@ -499,7 +566,7 @@ class MyParcelCollection extends Collection
      * @param string $version
      *
      * @internal param string $user_agent
-     * @return $this
+     * @return self
      */
     public function setUserAgent($platform, $version = null)
     {
@@ -651,7 +718,7 @@ class MyParcelCollection extends Collection
      */
     private function getNewCollectionFromResult($result)
     {
-        $newCollection = new MyParcelCollection();
+        $newCollection = new static;
         foreach ($result as $shipment) {
 
             /** @var Collection|MyParcelConsignment[] $consignments */
@@ -661,9 +728,17 @@ class MyParcelCollection extends Collection
                 $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
             }
 
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first()->getApiKey());
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first());
+            $isMultiCollo       = ! empty($shipment['secondary_shipments']);
+            $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
-            $newCollection->addConsignment($consignmentAdapter->getConsignment());
+            foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
+
+                $secondaryShipment  = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
+                $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier'])->first());
+                $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
+
+            }
         }
 
         return $newCollection;

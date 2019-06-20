@@ -27,14 +27,15 @@ class ConsignmentAdapter
      * ConsignmentDecode constructor.
      *
      * @param array $data
+     * @param MyParcelConsignment $consignment
      * @param string $apiKey
      *
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function __construct($data, $apiKey)
+    public function __construct($data, $consignment)
     {
-        $this->data        = $data;
-        $this->consignment = (new MyParcelConsignment())->setApiKey($apiKey);
+        $this->data = $data;
+        $this->consignment = $consignment;
 
         $this
             ->baseOptions()

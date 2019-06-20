@@ -101,7 +101,7 @@ class MyParcelRequest
         $this->api_key = $apiKey;
         $this->body    = $body;
 
-        $header[] = $requestHeader . 'charset=utf-8';
+        $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
 
         $this->header = $header;
