@@ -16,6 +16,7 @@ namespace MyParcelNL\Sdk\src\Model;
 
 
 use http\Exception\BadMethodCallException;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Support\Helpers;
@@ -687,12 +688,13 @@ class AbstractConsignment
      * @param string $fullStreet
      *
      * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
-     * @throws \Exception
+     * @throws MissingFieldException
+     * @throws BadMethodCallException
      */
     public function setFullStreet(string $fullStreet): self
     {
         if ($this->getCountry() === null) {
-            throw new \Exception('First set the country code with setCountry() before running setFullStreet()');
+            throw new MissingFieldException('First set the country code with setCountry() before running setFullStreet()');
         }
 
         if (empty(static::$local_cc)) {
@@ -988,7 +990,7 @@ class AbstractConsignment
             $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
 
             if (! $result) {
-                throw new \Exception('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
+                throw new \BadMethodCallException('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
             }
         }
 
@@ -1505,12 +1507,12 @@ class AbstractConsignment
      * @param $option
      *
      * @return bool
-     * @throws \Exception
+     * @throws MissingFieldException
      */
     protected function canHaveOption($option = true): bool
     {
         if ($this->getPackageType() === null) {
-            throw new \Exception('Set package type before ' . $option);
+            throw new MissingFieldException('Set package type before ' . $option);
         }
 
         return $this->getPackageType() == self::PACKAGE_TYPE_PACKAGE ? $option : false;

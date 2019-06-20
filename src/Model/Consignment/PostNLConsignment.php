@@ -2,9 +2,6 @@
 
 namespace MyparcelNL\Sdk\src\Model;
 
-
-use MyParcelNL\Sdk\src\Helper\SplitStreet;
-
 class PostNLConsignment extends AbstractConsignment
 {
     public const CARRIER_ID = 1;
