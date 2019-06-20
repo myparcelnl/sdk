@@ -768,8 +768,7 @@ class AbstractConsignment
      */
     public function isCorrectAddress(string $fullStreet): bool
     {
-        //@todo use splitstreet by country
-        $result = preg_match(SplitStreet::SPLIT_STREET_REGEX, $fullStreet, $matches);
+        $result = preg_match( SplitStreet::getRegexByCountry(static::$local_cc, $this->getCountry()), $fullStreet, $matches);
 
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied

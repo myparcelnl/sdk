@@ -113,7 +113,7 @@ class SplitStreet
      *
      * @return string
      */
-    private static function getRegexByCountry(string $local, string $destination): ?string
+    public static function getRegexByCountry(string $local, string $destination): ?string
     {
         if ($local === AbstractConsignment::CC_NL && $destination === AbstractConsignment::CC_NL) {
             return self::SPLIT_STREET_REGEX_NL;
