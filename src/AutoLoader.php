@@ -21,6 +21,7 @@ require_once ('Adapter/ConsignmentAdapter.php');
 require_once ('Model/MyParcelConsignment.php');
 require_once ('Model/Consignment/AbstractConsignment.php');
 require_once ('Model/Consignment/BpostConsignment.php');
+require_once ('Model/Consignment/DPDConsignment.php');
 require_once ('Model/Consignment/PostNLConsignment.php');
 require_once ('Model/MyParcelCustomsItem.php');
 require_once ('Model/FullStreet.php');
