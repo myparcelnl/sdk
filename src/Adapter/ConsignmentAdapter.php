@@ -12,6 +12,7 @@
 
 namespace MyParcelNL\Sdk\src\Adapter;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class ConsignmentAdapter
@@ -34,7 +35,7 @@ class ConsignmentAdapter
     public function __construct($data, $apiKey)
     {
         $this->data        = $data;
-        $this->consignment = (new MyParcelConsignment())->setApiKey($apiKey);
+        $this->consignment = ConsignmentFactory::createByCarrierId($data['carrier_id'])->setApiKey($apiKey);
 
         $this
             ->baseOptions()

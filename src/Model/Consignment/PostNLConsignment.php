@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace MyparcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model;
 
 class PostNLConsignment extends AbstractConsignment
 {
@@ -36,7 +36,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * @param int $id
      *
-     * @return \MyparcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
      */
     public function setMyParcelConsignmentId(int $id): AbstractConsignment
     {
@@ -208,7 +208,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * @param boolean $largeFormat
      *
-     * @return \MyparcelNL\Sdk\src\Model\PostNLConsignment
+     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
      * @throws \Exception
      */
     public function setLargeFormat(bool $largeFormat): AbstractConsignment
@@ -250,7 +250,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * @param string $pickupNetworkId
      *
-     * @return \MyparcelNL\Sdk\src\Model\PostNLConsignment
+     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
      */
     public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
     {

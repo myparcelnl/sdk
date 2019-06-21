@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace MyparcelNL\Sdk\src\Model;
-
+namespace MyParcelNL\Sdk\src\Model;
 
 class BpostConsignment extends AbstractConsignment
 {
     public const CARRIER_ID = 2;
+
     /**
      * @var array
      */
-    protected $insurance_possibilities_local = [500];
+    protected $insurance_possibilities_local = [0, 500];
 
     /**
      * @var string
@@ -117,7 +117,7 @@ class BpostConsignment extends AbstractConsignment
      *
      * @param string $pickupNetworkId
      *
-     * @return \MyparcelNL\Sdk\src\Model\PostNLConsignment
+     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
      */
     public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
     {

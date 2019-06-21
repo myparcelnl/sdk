@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: richardperdaan
@@ -6,7 +6,7 @@
  * Time: 15:49
  */
 
-namespace MyparcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model;
 
 
 class FullStreet

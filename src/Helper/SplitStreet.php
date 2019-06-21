@@ -15,7 +15,7 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Model\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Exception\AddressException;
-use MyparcelNL\Sdk\src\Model\FullStreet;
+use MyParcelNL\Sdk\src\Model\FullStreet;
 use PHP_CodeSniffer\Reports\Full;
 
 class SplitStreet
@@ -62,7 +62,7 @@ class SplitStreet
      * @param string $local
      * @param string $destination
      *
-     * @return \MyparcelNL\Sdk\src\Model\FullStreet
+     * @return \MyParcelNL\Sdk\src\Model\FullStreet
      *
      * @throws \Exception
      */
