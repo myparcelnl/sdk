@@ -699,7 +699,7 @@ class AbstractConsignment
         }
 
         if (empty(static::$local_cc)) {
-            throw new BadMethodCallException('cant..');
+            throw new BadMethodCallException('Can not create a shipment when the local country code is empty.');
         }
 
         $fullStreet = SplitStreet::splitStreet($fullStreet, static::$local_cc, $this->getCountry());
