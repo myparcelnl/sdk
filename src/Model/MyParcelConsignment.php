@@ -10,6 +10,6 @@ class MyParcelConsignment
     /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct()
     {
-        throw new \BadMethodCallException('The class MyParcelConsignment is deprecated use PostNLConsignment or BpostConsignment instead.');
+        throw new \BadMethodCallException('The class MyParcelConsignment is deprecated use PostNLConsignment, BpostConsignment or DPDConsignment instead.');
     }
 }
