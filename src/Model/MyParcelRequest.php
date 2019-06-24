@@ -174,31 +174,6 @@ class MyParcelRequest
     }
 
     /**
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return $this->userAgent;
-    }
-
-    /**
-     * @param string $userAgent
-     *
-     * @return $this
-     */
-    public function setUserAgent($userAgent = null)
-    {
-        if ($userAgent) {
-            $this->userAgent = $userAgent;
-        }
-        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
-            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
-        }
-
-        return $this;
-    }
-
-    /**
      * Get version of SDK from composer file
      */
     public function getUserAgentFromComposer()
