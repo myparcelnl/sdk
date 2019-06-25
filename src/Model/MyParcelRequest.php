@@ -288,7 +288,7 @@ class MyParcelRequest
     /**
      * Get all consignment ids
      *
-     * @param MyParcelCollection|MyParcelConsignment[] $consignments
+     * @param MyParcelCollection|AbstractConsignment[] $consignments
      * @param $key
      *
      * @return array
