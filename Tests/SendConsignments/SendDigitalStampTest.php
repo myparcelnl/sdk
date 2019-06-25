@@ -3,23 +3,13 @@
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
-trait debugLabels {
-    public function debugLinkOfLabels($myParcelCollection) {
-        if (!getenv('CI')) {
-            echo "\033[32mGenerated digital stamp shipment: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
-        }
-    }
-}
-
 /**
  * Class SendDigitalStampTest
  * @package MyParcelNL\Sdk\tests\SendDigitalStampTest
  */
 class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {
-    use debugLabels;
+    use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
     /**
      * Test one shipment with createConcepts()
@@ -67,7 +57,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            $this->debugLinkOfLabels($myParcelCollection);
+            $this->debugLinkOfLabels($myParcelCollection, 'digital stamp shipment');
         }
     }
     /**
