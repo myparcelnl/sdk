@@ -63,7 +63,7 @@ class AbstractConsignment
     const CC_NL = 'NL';
     const CC_BE = 'BE';
 
-    protected static $local_cc = null;
+    protected static $local_cc = '';
 
     /**
      * @internal
@@ -395,7 +395,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setBarcode($barcode): string
+    public function setBarcode($barcode): self
     {
         $this->barcode = $barcode;
 
