@@ -1,7 +1,10 @@
 <?php
 
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendDigitalStampTest;
+
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
 /**
  * Class SendDigitalStampTest
@@ -9,7 +12,7 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  */
 class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {
-    use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
+    use HasDebugLabels;
 
     /**
      * Test one shipment with createConcepts()
