@@ -15,7 +15,63 @@ class DPDConsignment extends AbstractConsignment
      * @var string
      */
     protected $local_cc = self::CC_BE;
+    /**
+     * @param array $consignmentEncoded
+     *
+     * @return array
+     */
+    public function encodeStreet(array $consignmentEncoded): array
+    {
+        if ($this->getCountry() == $this->local_cc) {
+            $consignmentEncoded = array_merge_recursive(
+                $consignmentEncoded,
+                [
+                    'recipient' => [
+                        'street'                 => $this->getStreet(true),
+                        'street_additional_info' => $this->getStreetAdditionalInfo(),
+                        'number'                 => $this->getNumber(),
+                        'box_number'             => (string) $this->getBoxNumber(),
+                    ],
+                ]
+            );
 
+            return $consignmentEncoded;
+        }
+
+        if ($this->getCountry() == self::CC_NL) {
+            $consignmentEncoded = array_merge_recursive(
+                $consignmentEncoded,
+                [
+                    'recipient' => [
+                        'street'                 => $this->getStreet(true),
+                        'street_additional_info' => $this->getStreetAdditionalInfo(),
+                        'number'                 => $this->getNumber(),
+                        'number_suffix'          => (string) $this->getNumberSuffix(),
+                    ],
+                ]
+            );
+
+            return $consignmentEncoded;
+        }
+
+        return parent::encodeStreet($consignmentEncoded);
+    }
+
+    /**
+     * Street number suffix.
+     *
+     * Required: no
+     *
+     * @param string $boxNumber
+     *
+     * @return $this
+     */
+    public function setBoxNumber(?string $boxNumber): AbstractConsignment
+    {
+        $this->box_number = $boxNumber;
+
+        return $this;
+    }
     /**
      * The package type
      *

@@ -35,7 +35,7 @@ class AbstractConsignment
      */
     const CARRIER_POSTNL = 1;
     const CARRIER_BPOST  = 2;
-    const CARRIER_DPD    = 3;
+    const CARRIER_DPD    = 4;
     /**
      * Consignment types
      */

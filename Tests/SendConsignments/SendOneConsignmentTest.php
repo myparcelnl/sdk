@@ -176,6 +176,21 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_DPD,
+                'cc'                => 'BE',
+                'person'            => 'Richard',
+                'company'           => 'Big Sale BV',
+                'full_street_input' => 'Hoofdweg 16',
+                'full_street'       => 'Hoofdweg 16',
+                'street'            => 'Hoofdweg',
+                'number'            => 16,
+                'box_number'        => '',
+                'postal_code'       => '2000',
+                'city'              => 'Antwerpen',
+                'phone'             => '123456',
+            ],
+            [
+                'api_key'           => getenv('API_KEY'),
                 'carrier_id'        => AbstractConsignment::CARRIER_BPOST,
                 'cc'                => 'BE',
                 'person'            => 'Richard',
