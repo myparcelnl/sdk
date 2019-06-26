@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-use MyParcelNL\Sdk\src\Concerns\HasCustomItems;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendDigitalStampTest;
+
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
 /**
  * Class SendDigitalStampTest
@@ -11,19 +12,21 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  */
 class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {
-    use HasCustomItems;
+    use HasDebugLabels;
 
     /**
      * Test one shipment with createConcepts()
      * @throws \Exception
+     *
+     * @return void
      */
-    public function testSendOneConsignment()
+    public function testSendOneConsignment(): void
     {
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
-            return $this;
+            return;
         }
 
         foreach ($this->additionProvider() as $consignmentTest) {
@@ -57,12 +60,9 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated digital stamp shipment: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            $this->debugLinkOfLabels($myParcelCollection, 'digital stamp shipment');
         }
     }
-
     /**
      * Data for the test
      *
