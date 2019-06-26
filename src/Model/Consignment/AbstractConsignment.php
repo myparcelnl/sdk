@@ -12,7 +12,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\Consignment;
 
 
 use http\Exception\BadMethodCallException;
@@ -20,7 +20,6 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Support\Helpers;
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * A model of a consignment
@@ -63,7 +62,7 @@ class AbstractConsignment
     const CC_NL = 'NL';
     const CC_BE = 'BE';
 
-    protected static $local_cc = '';
+    protected $local_cc = '';
 
     /**
      * @internal
@@ -127,7 +126,7 @@ class AbstractConsignment
 
     /**
      * @internal
-     * @var integer
+     * @var string|null
      */
     public $number;
 
@@ -330,9 +329,9 @@ class AbstractConsignment
      *
      * Save this id in your database
      *
-     * @return int
+     * @return int|null
      */
-    public function getConsignmentId(): int
+    public function getConsignmentId(): ?int
     {
         return $this->consignment_id;
     }
@@ -445,7 +444,7 @@ class AbstractConsignment
      *
      * @param int $status
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setStatus($status): self
     {
@@ -474,7 +473,7 @@ class AbstractConsignment
      *
      * @param mixed $shop_id
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setShopId($shop_id): self
     {
@@ -687,7 +686,7 @@ class AbstractConsignment
      *
      * @param string $fullStreet
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws MissingFieldException
      * @throws BadMethodCallException
      * @throws \Exception
@@ -698,11 +697,12 @@ class AbstractConsignment
             throw new MissingFieldException('First set the country code with setCountry() before running setFullStreet()');
         }
 
-        if (empty(static::$local_cc)) {
+        if (empty($this->local_cc)) {
             throw new BadMethodCallException('Can not create a shipment when the local country code is empty.');
         }
 
-        $fullStreet = SplitStreet::splitStreet($fullStreet, static::$local_cc, $this->getCountry());
+        $fullStreet = SplitStreet::splitStreet($fullStreet, $this->local_cc, $this->getCountry());
+
         $this->setStreet($fullStreet->getStreet());
         $this->setNumber($fullStreet->getNumber());
         $this->setNumberSuffix($fullStreet->getNumberSuffix());
@@ -711,9 +711,9 @@ class AbstractConsignment
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getNumber()
+    public function getNumber(): ?string
     {
         return $this->number;
     }
@@ -726,21 +726,21 @@ class AbstractConsignment
      * Example: 10. 20. NOT 2,3
      * Required: Yes for NL
      *
-     * @param int $number
+     * @param mixed $number
      *
      * @return $this
      */
-    public function setNumber(int $number): self
+    public function setNumber($number): self
     {
-        $this->number = $number;
+        $this->number = (string) $number;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getNumberSuffix(): string
+    public function getNumberSuffix(): ?string
     {
         return $this->number_suffix;
     }
@@ -754,7 +754,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setNumberSuffix(string $number_suffix): self
+    public function setNumberSuffix(?string $number_suffix): self
     {
         $this->number_suffix = $number_suffix;
 
@@ -771,7 +771,7 @@ class AbstractConsignment
      */
     public function isCorrectAddress(string $fullStreet): bool
     {
-        $result = preg_match(SplitStreet::getRegexByCountry(static::$local_cc, $this->getCountry()), $fullStreet, $matches);
+        $result = preg_match(SplitStreet::getRegexByCountry($this->local_cc, $this->getCountry()), $fullStreet, $matches);
 
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
@@ -910,9 +910,9 @@ class AbstractConsignment
     /**
      * @return int|null
      */
-    public function getPackageType(): int
+    public function getPackageType($default = null): ?int
     {
-        return $this->package_type;
+        return $this->package_type ?? $default;
     }
 
     /**
@@ -954,7 +954,7 @@ class AbstractConsignment
      *
      * @param bool $needDeliveryDate
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setDeliveryType(int $deliveryType, bool $needDeliveryDate = false): self
     {
@@ -966,7 +966,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getDeliveryDate(): string
+    public function getDeliveryDate(): ?string
     {
         return $this->delivery_date;
     }
@@ -979,7 +979,7 @@ class AbstractConsignment
      *
      * @param string|null $delivery_date
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setDeliveryDate(?string $delivery_date): self
@@ -1048,7 +1048,7 @@ class AbstractConsignment
      *
      * @param $signature
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setSignature(bool $signature): self
     {
@@ -1153,11 +1153,11 @@ class AbstractConsignment
      *
      * Required: No
      *
-     * @param string $label_description
+     * @param mixed $label_description
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
-    public function setLabelDescription(string $label_description): self
+    public function setLabelDescription($label_description): self
     {
         $this->label_description = (string) $label_description;
 
@@ -1180,7 +1180,7 @@ class AbstractConsignment
      *
      * @param int|null $insurance
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setInsurance(?int $insurance): self
@@ -1217,7 +1217,7 @@ class AbstractConsignment
      *
      * @param array $physical_properties
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPhysicalProperties(array $physical_properties): self
     {
@@ -1322,7 +1322,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupPostalCode(): string
+    public function getPickupPostalCode(): ?string
     {
         return $this->pickup_postal_code;
     }
@@ -1334,7 +1334,7 @@ class AbstractConsignment
      *
      * @param string $pickup_postal_code
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupPostalCode(string $pickup_postal_code): self
     {
@@ -1358,7 +1358,7 @@ class AbstractConsignment
      *
      * @param string $pickup_street
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupStreet(string $pickup_street): self
     {
@@ -1382,7 +1382,7 @@ class AbstractConsignment
      *
      * @param string $pickup_city
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupCity(string $pickup_city): self
     {
@@ -1406,7 +1406,7 @@ class AbstractConsignment
      *
      * @param string $pickup_number
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupNumber(string $pickup_number): self
     {
@@ -1430,7 +1430,7 @@ class AbstractConsignment
      *
      * @param string $pickup_location_name
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupLocationName(string $pickup_location_name): self
     {
@@ -1454,7 +1454,7 @@ class AbstractConsignment
      *
      * @param string $pickup_location_code
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupLocationCode($pickup_location_code): self
     {
@@ -1478,7 +1478,7 @@ class AbstractConsignment
      *
      * @param string $pickupNetworkId
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupNetworkId($pickupNetworkId): self
     {

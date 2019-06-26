@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\Consignment;
 
 class PostNLConsignment extends AbstractConsignment
 {
@@ -22,11 +22,13 @@ class PostNLConsignment extends AbstractConsignment
      *
      * Save this id in your database
      *
+     * @deprecated Use getConsignmentId instead
+     *
      * @return int
      */
     public function getMyParcelConsignmentId(): int
     {
-        return $this->getMyParcelConsignmentId();
+        return $this->getConsignmentId();
     }
 
     /**
@@ -34,9 +36,11 @@ class PostNLConsignment extends AbstractConsignment
      *
      * The id of the consignment
      *
+     * @deprecated Use getConsignmentId instead
+     *
      * @param int $id
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setMyParcelConsignmentId(int $id): AbstractConsignment
     {
@@ -88,7 +92,7 @@ class PostNLConsignment extends AbstractConsignment
      * @param int  $deliveryType
      * @param bool $needDeliveryDate
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setDeliveryType(int $deliveryType, bool $needDeliveryDate = true): AbstractConsignment
@@ -111,7 +115,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * @param string $delivery_date
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setDeliveryDate(?string $delivery_date): AbstractConsignment
@@ -131,7 +135,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * @param int|null $insurance
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setInsurance(?int $insurance): AbstractConsignment
@@ -140,7 +144,7 @@ class PostNLConsignment extends AbstractConsignment
             throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
         }
 
-        return parent::setDeliveryDate($insurance);
+        return parent::setInsurance($insurance);
     }
 
     /**

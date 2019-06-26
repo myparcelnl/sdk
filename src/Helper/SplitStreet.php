@@ -12,7 +12,7 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use MyParcelNL\Sdk\src\Model\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Exception\AddressException;
 use MyParcelNL\Sdk\src\Model\FullStreet;
@@ -40,18 +40,9 @@ class SplitStreet
         '[a-zA-Z]{1}[a-zA-Z\s]{0,3}' .    // has up to 4 letters with a space
         ')?$~';
 
-    /* @todo: check if this is correct */
+    /* @todo: use commands */
     const SPLIT_STREET_REGEX_BE =
-        '~(?P<street>.*?)' .
-        '\s' .                              // Separator between street and street_suffix
-        '(?P<street_suffix>' .
-        '(?P<number>[^\s]{1,8})' .          // Number can contain a maximum of 8 numbers
-        '.\s' .                             // Separator between number and box_separator
-        '?(?P<box_separator>'
-        . self::BOX_NL .
-        '?)?\s' .
-        '?(?P<box_number>\d{0,8}$)' .       // Box_number can contain a maximum of 8 numbers
-        ')$~';
+        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[^\s]{1,8})\s?(?P<box_separator>' . self::BOX_NL . '?)?\s?(?P<box_number>\d{0,8}$))$~';
 
     /**
      * Splits street data into separate parts for street name, house number and extension.
@@ -70,17 +61,20 @@ class SplitStreet
     {
         $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         $regex      = self::getRegexByCountry($local, $destination);
+
+        if (! $regex) {
+            return new FullStreet($fullStreet, null, null, null);
+        }
+
         $result     = preg_match($regex, $fullStreet, $matches);
-
         self::validate($fullStreet, $result, $matches);
-        $fullStreet = new FullStreet(
-            $matches['street'],
-            $matches['number '] ?? null,
-            $matches['number_suffix '] ?? null,
-            $matches['boxNumber '] ?? null
-        );
 
-        return $fullStreet;
+        return new FullStreet(
+            $matches['street'] ?? $fullStreet,
+            (int) $matches['number'] ?? null,
+            $matches['number_suffix'] ?? null,
+            $matches['box_number'] ?? null
+        );
     }
 
     /**
@@ -92,7 +86,7 @@ class SplitStreet
      */
     public static function getStreetParts($street)
     {
-        $streetWrap = wordwrap($street, MyParcelConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
+        $streetWrap = wordwrap($street, AbstractConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
         $parts      = explode("BREAK_LINE", $streetWrap);
 
         return $parts;
@@ -134,7 +128,6 @@ class SplitStreet
             return self::SPLIT_STREET_REGEX_BE;
         }
 
-        //
         return null;
     }
 }

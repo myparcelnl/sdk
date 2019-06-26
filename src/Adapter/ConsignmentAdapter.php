@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Adapter;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class ConsignmentAdapter
@@ -27,7 +28,7 @@ class ConsignmentAdapter
     /**
      * ConsignmentDecode constructor.
      *
-     * @param array $data
+     * @param array  $data
      * @param string $apiKey
      *
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -81,7 +82,7 @@ class ConsignmentAdapter
 
     /**
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     private function extraOptions()
     {
@@ -93,21 +94,34 @@ class ConsignmentAdapter
             'signature'      => false,
             'return'         => false,
             'delivery_date'  => null,
-            'delivery_type'  => MyParcelConsignment::DEFAULT_DELIVERY_TYPE,
+            'delivery_type'  => AbstractConsignment::DEFAULT_DELIVERY_TYPE,
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);
 
-        $methods = [
-            'OnlyRecipient' => 'only_recipient',
-            'LargeFormat'   => 'large_format',
-            'AgeCheck'      => 'age_check',
-            'Signature'     => 'signature',
-            'Return'        => 'return',
-            'DeliveryDate'  => 'delivery_date',
-        ];
-        /** @noinspection PhpInternalEntityUsedInspection */
-        $this->setByMethods($options, $methods);
+        if (! empty($options['only_recipient'])) {
+            $this->consignment->setOnlyRecipient((bool) $options['only_recipient']);
+        }
+
+        if (! empty($options['large_format'])) {
+            $this->consignment->setLargeFormat((bool) $options['large_format']);
+        }
+
+        if (! empty($options['age_check'])) {
+            $this->consignment->setAgeCheck((bool) $options['age_check']);
+        }
+
+        if (! empty($options['signature'])) {
+            $this->consignment->setSignature((bool) $options['signature']);
+        }
+
+        if (! empty($options['return'])) {
+            $this->consignment->setReturn((bool) $options['return']);
+        }
+
+        if (! empty($options['delivery_date'])) {
+            $this->consignment->setDeliveryDate($options['delivery_date']);
+        }
 
         if (key_exists('insurance', $options)) {
             $insuranceAmount = $options['insurance']['amount'];

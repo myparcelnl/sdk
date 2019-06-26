@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\Consignment;
 
 class DPDConsignment extends AbstractConsignment
 {
@@ -49,7 +49,7 @@ class DPDConsignment extends AbstractConsignment
      *
      * @param string $delivery_date
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setDeliveryDate(?string $delivery_date): AbstractConsignment
@@ -65,7 +65,7 @@ class DPDConsignment extends AbstractConsignment
      *
      * @param int|null $insurance
      *
-     * @return \MyParcelNL\Sdk\src\Model\AbstractConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public function setInsurance(?int $insurance): AbstractConsignment

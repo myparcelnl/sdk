@@ -8,7 +8,7 @@ namespace MyParcelNL\Sdk\src\Concerns;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\CheckoutFields;
-use MyParcelNL\Sdk\src\Model\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 trait HasCheckoutFields

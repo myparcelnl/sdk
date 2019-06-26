@@ -20,7 +20,7 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Support\Collection;
@@ -141,7 +141,7 @@ class MyParcelCollection extends Collection
      */
     public function getConsignmentByApiId($id)
     {
-        return $this->where('myparcel_consignment_id', $id)->first();
+        return $this->where('consignment_id', $id)->first();
     }
 
     /**
@@ -163,12 +163,12 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param MyParcelConsignment $consignment
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignment(MyParcelConsignment $consignment)
+    public function addConsignment(AbstractConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
@@ -191,7 +191,7 @@ class MyParcelCollection extends Collection
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
-        foreach ($this->where('myparcel_consignment_id', null)->groupBy('api_key') as $consignments) {
+        foreach ($this->where('consignment_id', null)->groupBy('api_key') as $consignments) {
 
             $data    = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
@@ -204,9 +204,8 @@ class MyParcelCollection extends Collection
                 ->sendRequest();
 
             foreach ($request->getResult('data.ids') as $responseShipment) {
-                /** @var MyParcelConsignment $consignment */
                 $consignment = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier'])->first();
-                $consignment->setMyParcelConsignmentId($responseShipment['id']);
+                $consignment->getConsignmentId($responseShipment['id']);
             }
         }
 
@@ -222,7 +221,7 @@ class MyParcelCollection extends Collection
     public function deleteConcepts()
     {
         /* @var $consignments MyParcelConsignment[] */
-        foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', '!=', null) as $key => $consignments) {
+        foreach ($this->groupBy('api_key')->where('consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
                 (new MyParcelRequest())
                     ->setUserAgent($this->getUserAgent())
@@ -329,7 +328,6 @@ class MyParcelCollection extends Collection
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
-
         if ($key) {
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
@@ -462,9 +460,8 @@ class MyParcelCollection extends Collection
     public function getConsignmentIds(&$key)
     {
         $conceptIds = [];
-
         /** @var MyParcelConsignment $consignment */
-        foreach ($this->where('myparcel_consignment_id', '!=', null) as $consignment) {
+        foreach ($this->where('consignment_id', '!=', null) as $consignment) {
             $conceptIds[] = $consignment->getMyParcelConsignmentId();
             $key          = $consignment->getApiKey();
         }
@@ -655,7 +652,7 @@ class MyParcelCollection extends Collection
         foreach ($result as $shipment) {
 
             /** @var Collection|MyParcelConsignment[] $consignments */
-            $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
+            $consignments = $this->where('consignment_id', $shipment['id']);
 
             if ($consignments->isEmpty()) {
                 $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);

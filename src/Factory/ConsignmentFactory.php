@@ -12,14 +12,14 @@
 
 namespace MyParcelNL\Sdk\src\Factory;
 
-use MyParcelNL\Sdk\src\Model\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\PostNLConsignment;
-use MyParcelNL\Sdk\src\Model\BpostConsignment;
-use MyParcelNL\Sdk\src\Model\DPDConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 
 class ConsignmentFactory
 {
-    public static function createByCarrierId(string $carrierId): AbstractConsignment
+    public static function createByCarrierId(int $carrierId): AbstractConsignment
     {
         switch ($carrierId) {
             case PostNLConsignment::CARRIER_ID:
