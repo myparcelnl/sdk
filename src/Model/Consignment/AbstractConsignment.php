@@ -31,6 +31,12 @@ class AbstractConsignment
     use HasCheckoutFields;
 
     /**
+     * Carrier types
+     */
+    const CARRIER_POSTNL = 1;
+    const CARRIER_BPOST  = 2;
+    const CARRIER_DPD    = 3;
+    /**
      * Consignment types
      */
     const DELIVERY_TYPE_MORNING        = 1;

@@ -15,6 +15,7 @@ namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 /**
  * Class SendOneConsignmentTest
@@ -38,8 +39,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
-
-            $consignment = (ConsignmentFactory::createByCarrierId(1))
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -167,21 +167,23 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
+                'cc'                => 'NL',
+                'person'            => 'Reindert',
+                'company'           => 'Big Sale BV',
                 'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
+                'full_street'       => 'Plein 1940-45 3 b',
+                'street'            => 'Plein 1940-45',
+                'number'            => 3,
+                'number_suffix'     => 'b',
+                'postal_code'       => '2231JE',
+                'city'              => 'Rijnsburg',
+                'phone'             => '123456',
             ],
             [
                 'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc'                => 'NL',
                 'person'            => 'Piet',
                 'company'           => 'Mega Store',
@@ -203,6 +205,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key'                => getenv('API_KEY'),
+                'carrier_id'             => 1,
                 'cc'                     => 'NL',
                 'person'                 => 'Piet',
                 'company'                => 'Mega Store',
@@ -225,6 +228,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc'                => 'NL',
                 'person'            => 'The insurance man',
                 'company'           => 'Mega Store',
@@ -247,6 +251,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc'                => 'NL',
                 'person'            => 'The insurance man',
                 'company'           => 'Mega Store',
@@ -269,6 +274,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc'                => 'NL',
                 'person'            => 'The insurance man',
                 'company'           => 'Mega Store',
@@ -291,6 +297,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc'                => 'BE',
                 'person'            => 'Richard',
                 'company'           => 'MyParcelNL',
