@@ -46,7 +46,7 @@ class ConsignmentAdapter
     }
 
     /**
-     * @return MyParcelConsignment
+     * @return AbstractConsignment
      */
     public function getConsignment()
     {

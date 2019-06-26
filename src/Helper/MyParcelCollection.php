@@ -651,7 +651,7 @@ class MyParcelCollection extends Collection
         $newCollection = new MyParcelCollection();
         foreach ($result as $shipment) {
 
-            /** @var Collection|MyParcelConsignment[] $consignments */
+            /** @var Collection|AbstractConsignment[] $consignments */
             $consignments = $this->where('consignment_id', $shipment['id']);
 
             if ($consignments->isEmpty()) {

@@ -48,13 +48,46 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
-     * @return string
+     * @param array $consignmentEncoded
+     *
+     * @return array
      */
-    public function getApiKey(): string
+    public function encodeStreet(array $consignmentEncoded): array
     {
-        return $this->api_key;
+        if ($this->getCountry() == $this->local_cc) {
+            $consignmentEncoded = array_merge_recursive(
+                $consignmentEncoded,
+                [
+                    'recipient' => [
+                        'street'                 => $this->getStreet(true),
+                        'street_additional_info' => $this->getStreetAdditionalInfo(),
+                        'number'                 => $this->getNumber(),
+                        'number_suffix'          => (string) $this->getNumberSuffix(),
+                    ],
+                ]
+            );
+
+            return $consignmentEncoded;
+        }
+
+        return parent::encodeStreet($consignmentEncoded);
     }
 
+    /**
+     * Street number suffix.
+     *
+     * Required: no
+     *
+     * @param string $numberSuffix
+     *
+     * @return $this
+     */
+    public function setNumberSuffix(?string $numberSuffix): AbstractConsignment
+    {
+        $this->number_suffix = $numberSuffix;
+
+        return $this;
+    }
 
     /**
      * The package type

@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -90,23 +91,7 @@ class ConsignmentEncode
      */
     private function encodeStreet()
     {
-        $consignment = $this->consignment;
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL) {
-            $this->consignmentEncoded = array_merge_recursive(
-                $this->consignmentEncoded,
-                [
-                    'recipient' => [
-                        'street'                 => $consignment->getStreet(true),
-                        'street_additional_info' => $consignment->getStreetAdditionalInfo(),
-                        'number'                 => $consignment->getNumber(),
-                        'number_suffix'          => (string) $consignment->getNumberSuffix(),
-                    ],
-                ]
-            );
-        } else {
-            $this->consignmentEncoded['recipient']['street']                 = $consignment->getFullStreet(true);
-            $this->consignmentEncoded['recipient']['street_additional_info'] = $consignment->getStreetAdditionalInfo();
-        }
+        $this->consignmentEncoded = $this->consignment->encodeStreet($this->consignmentEncoded);
 
         return $this;
     }

@@ -28,6 +28,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
@@ -96,10 +97,17 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($consignmentTest['company'], $consignment->getCompany(), 'getCompany()');
             $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'getFullStreet()');
             $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'getNumber()');
-            $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
             $this->assertEquals($consignmentTest['postal_code'], $consignment->getPostalCode(), 'getPostalCode()');
             $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
+
+            if (key_exists('number_suffix', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
+            }
+
+            if (key_exists('box_number', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['box_number'], $consignment->getBoxNumber(), 'getBoxNumber()');
+            }
 
             if (key_exists('package_type', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
@@ -150,7 +158,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
 
@@ -166,6 +174,35 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
     public function additionProvider()
     {
         return [
+            [
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_BPOST,
+                'cc'                => 'BE',
+                'person'            => 'Richard',
+                'company'           => 'Big Sale BV',
+                'full_street_input' => 'Hoofdweg 16',
+                'full_street'       => 'Hoofdweg 16',
+                'street'            => 'Hoofdweg',
+                'number'            => 16,
+                'box_number'        => '',
+                'postal_code'       => '2000',
+                'city'              => 'Antwerpen',
+                'phone'             => '123456',
+            ],
+            [
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_BPOST,
+                'cc'                => 'FR',
+                'person'            => 'Richard',
+                'company'           => 'Big Sale BV',
+                'full_street_input' => 'Hoofdweg 16',
+                'full_street'       => 'Hoofdweg 16',
+                'street'            => '',
+                'number'            => null,
+                'postal_code'       => '2000',
+                'city'              => 'Antwerpen',
+                'phone'             => '123456',
+            ],
             [
                 'api_key'           => getenv('API_KEY'),
                 'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,

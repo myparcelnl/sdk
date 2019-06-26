@@ -146,6 +146,12 @@ class AbstractConsignment
      * @internal
      * @var string
      */
+    public $box_number = '';
+
+    /**
+     * @internal
+     * @var string
+     */
     public $postal_code;
 
     /**
@@ -708,7 +714,6 @@ class AbstractConsignment
         }
 
         $fullStreet = SplitStreet::splitStreet($fullStreet, $this->local_cc, $this->getCountry());
-
         $this->setStreet($fullStreet->getStreet());
         $this->setNumber($fullStreet->getNumber());
         $this->setNumberSuffix($fullStreet->getNumberSuffix());
@@ -756,15 +761,56 @@ class AbstractConsignment
      *
      * Required: no
      *
-     * @param string $number_suffix
+     * @param string $numberSuffix
      *
      * @return $this
      */
-    public function setNumberSuffix(?string $number_suffix): self
+    public function setNumberSuffix(?string $numberSuffix): self
     {
-        $this->number_suffix = $number_suffix;
+        if ($numberSuffix) {
+            throw new \BadMethodCallException('Number suffix has to be empty in ' . static::class);
+        }
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBoxNumber(): ?string
+    {
+        return $this->box_number;
+    }
+
+    /**
+     * Street number suffix.
+     *
+     * Required: no
+     *
+     * @param string $boxNumber
+     *
+     * @return $this
+     */
+    public function setBoxNumber(?string $boxNumber): self
+    {
+        if ($boxNumber) {
+            throw new \BadMethodCallException('Box number has to be empty in ' . static::class);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $consignmentEncoded
+     *
+     * @return array
+     */
+    public function encodeStreet(array $consignmentEncoded): array
+    {
+        $consignmentEncoded['recipient']['street']                 = $this->getFullStreet(true);
+        $consignmentEncoded['recipient']['street_additional_info'] = $this->getStreetAdditionalInfo();
+
+        return $consignmentEncoded;
     }
 
     /**

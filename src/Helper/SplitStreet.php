@@ -13,10 +13,8 @@
 namespace MyParcelNL\Sdk\src\Helper;
 
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Exception\AddressException;
 use MyParcelNL\Sdk\src\Model\FullStreet;
-use PHP_CodeSniffer\Reports\Full;
 
 class SplitStreet
 {
@@ -66,7 +64,7 @@ class SplitStreet
             return new FullStreet($fullStreet, null, null, null);
         }
 
-        $result     = preg_match($regex, $fullStreet, $matches);
+        $result = preg_match($regex, $fullStreet, $matches);
         self::validate($fullStreet, $result, $matches);
 
         return new FullStreet(
@@ -121,6 +119,10 @@ class SplitStreet
     public static function getRegexByCountry(string $local, string $destination): ?string
     {
         if ($local === AbstractConsignment::CC_NL && $destination === AbstractConsignment::CC_NL) {
+            return self::SPLIT_STREET_REGEX_NL;
+        }
+
+        if ($local === AbstractConsignment::CC_BE && $destination === AbstractConsignment::CC_NL) {
             return self::SPLIT_STREET_REGEX_NL;
         }
 
