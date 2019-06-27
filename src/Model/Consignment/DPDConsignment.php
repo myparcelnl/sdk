@@ -4,7 +4,10 @@ namespace MyParcelNL\Sdk\src\Model\Consignment;
 
 class DPDConsignment extends AbstractConsignment
 {
-    public const CARRIER_ID = 4;
+    /**
+     * @var int
+     */
+    public const CARRIER_ID  = 4;
 
     /**
      * @var array
@@ -130,7 +133,7 @@ class DPDConsignment extends AbstractConsignment
             throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
         }
 
-        return parent::setDeliveryDate($insurance);
+        return parent::setInsurance($insurance);
     }
 
     /**

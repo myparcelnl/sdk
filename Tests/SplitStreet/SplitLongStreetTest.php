@@ -15,6 +15,7 @@
  */
 
 namespace MyParcelNL\Sdk\src\tests\CreateConsignments\SplitStreetTest;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -26,7 +27,7 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::setFullStreet
+     * @covers \MyParcelNL\Sdk\src\Model\ConsignmentFactory::setFullStreet
      * @dataProvider additionProvider()
      */
     public function testSplitStreet($country, $fullStreetTest, $street, $streetAdditionalInfo)

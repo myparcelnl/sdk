@@ -27,15 +27,15 @@ class ConsignmentAdapter
     /**
      * ConsignmentDecode constructor.
      *
-     * @param array  $data
-     * @param string $apiKey
+     * @param array                                                     $data
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
      *
      * @throws \Exception
      */
-    public function __construct($data, $apiKey)
+    public function __construct(array $data, AbstractConsignment $consignment)
     {
-        $this->data        = $data;
-        $this->consignment = ConsignmentFactory::createByCarrierId($data['carrier_id'])->setApiKey($apiKey);
+        $this->data = $data;
+        $this->consignment = $consignment;
 
         $this
             ->baseOptions()

@@ -14,7 +14,6 @@
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use http\Exception\BadMethodCallException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
@@ -30,12 +29,6 @@ class AbstractConsignment
 {
     use HasCheckoutFields;
 
-    /**
-     * Carrier types
-     */
-    const CARRIER_POSTNL = 1;
-    const CARRIER_BPOST  = 2;
-    const CARRIER_DPD    = 4;
     /**
      * Consignment types
      */
@@ -68,7 +61,15 @@ class AbstractConsignment
     const CC_NL = 'NL';
     const CC_BE = 'BE';
 
+    /**
+     * @var string
+     */
     protected $local_cc = '';
+
+    /**
+     * @var array
+     */
+    protected $insurance_possibilities_local = [];
 
     /**
      * @internal
@@ -87,6 +88,11 @@ class AbstractConsignment
      * @var string|null
      */
     public $api_key;
+
+    /**
+     * @var bool
+     */
+    private $partOfMultiCollo = false;
 
     /**
      * @internal
@@ -391,6 +397,34 @@ class AbstractConsignment
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getCarrierId(): int
+    {
+        /** @noinspection PhpUndefinedClassConstantInspection */
+        return static::CARRIER_ID;
+    }
+
+    /**
+     * @param bool $value
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setMultiCollo(bool $value = true): self
+    {
+        $this->partOfMultiCollo = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartOfMultiCollo(): bool
+    {
+        return $this->partOfMultiCollo;
+    }
 
     /**
      * @return string|null
@@ -1299,6 +1333,7 @@ class AbstractConsignment
         return $this->contents;
     }
 
+
     /**
      * The type of contents in the package.
      *
@@ -1322,7 +1357,6 @@ class AbstractConsignment
 
         return $this;
     }
-
 
     /**
      * @return string

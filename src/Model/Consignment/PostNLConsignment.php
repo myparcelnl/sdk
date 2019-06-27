@@ -4,6 +4,10 @@ namespace MyParcelNL\Sdk\src\Model\Consignment;
 
 class PostNLConsignment extends AbstractConsignment
 {
+    /**
+     * Carrier types
+     * @var int
+     */
     public const CARRIER_ID = 1;
 
     /**

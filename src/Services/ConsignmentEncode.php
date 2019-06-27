@@ -13,9 +13,9 @@
 namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 class ConsignmentEncode
@@ -26,13 +26,13 @@ class ConsignmentEncode
     private $consignmentEncoded = [];
 
     /**
-     * @var AbstractConsignment
+     * @var AbstractConsignment[]
      */
-    private $consignment;
+    private $consignments;
 
-    public function __construct($consignment)
+    public function __construct($consignments)
     {
-        $this->consignment = $consignment;
+        $this->consignments = $consignments;
     }
 
     /**
@@ -40,13 +40,15 @@ class ConsignmentEncode
      *
      * @return array
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function apiEncode()
     {
         $this->encodeBaseOptions()
              ->encodeStreet()
              ->encodeExtraOptions()
-             ->encodeCdCountry();
+             ->encodeCdCountry()
+             ->encodeMultiCollo();
 
         return $this->consignmentEncoded;
     }
@@ -56,7 +58,8 @@ class ConsignmentEncode
      */
     private function encodeBaseOptions()
     {
-        $consignment = $this->consignment;
+        /** @var AbstractConsignment $consignment */
+        $consignment = Arr::first($this->consignments);
         $packageType = $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE);
 
         $this->consignmentEncoded = [
@@ -72,7 +75,7 @@ class ConsignmentEncode
                 'package_type'      => $packageType,
                 'label_description' => $consignment->getLabelDescription(),
             ],
-            'carrier'   => 1,
+            'carrier'   => $consignment->getCarrierId(),
         ];
 
         if ($consignment->getReferenceId()) {
@@ -91,7 +94,8 @@ class ConsignmentEncode
      */
     private function encodeStreet()
     {
-        $this->consignmentEncoded = $this->consignment->encodeStreet($this->consignmentEncoded);
+        $consignment = Arr::first($this->consignments);
+        $this->consignmentEncoded = $consignment->encodeStreet($this->consignmentEncoded);
 
         return $this;
     }
@@ -100,10 +104,9 @@ class ConsignmentEncode
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function encodeExtraOptions()
-    {
-        $consignment = $this->consignment;
-        $hasOptions  = $this->hasOptions();
+    private function encodeExtraOptions() {
+        $consignment = Arr::first($this->consignments);
+        $hasOptions = $this->hasOptions();
         if ($hasOptions) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
@@ -149,7 +152,7 @@ class ConsignmentEncode
      */
     private function encodePickup()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if (
             $this->hasOptions() !== false &&
             $consignment->getPickupPostalCode() !== null &&
@@ -177,10 +180,12 @@ class ConsignmentEncode
      */
     private function encodeInsurance()
     {
+        $consignment = Arr::first($this->consignments);
+
         // Set insurance
-        if ($this->consignment->getInsurance() > 1) {
+        if ($consignment->getInsurance() > 1) {
             $this->consignmentEncoded['options']['insurance'] = [
-                'amount'   => (int) $this->consignment->getInsurance() * 100,
+                'amount' => (int) $consignment->getInsurance() * 100,
                 'currency' => 'EUR',
             ];
         }
@@ -194,7 +199,7 @@ class ConsignmentEncode
      */
     private function encodePhysicalProperties()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
             return $this;
         }
@@ -203,7 +208,6 @@ class ConsignmentEncode
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
-
         return $this;
     }
 
@@ -213,7 +217,7 @@ class ConsignmentEncode
      */
     private function encodeCdCountry()
     {
-        $consignment = $this->consignment;
+        $consignment = Arr::first($this->consignments);
         if ($consignment->isEuCountry()) {
             return $this;
         }
@@ -274,7 +278,8 @@ class ConsignmentEncode
      */
     private function hasOptions()
     {
-        if (in_array($this->consignment->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
+        $first = Arr::first($this->consignments);
+        if (in_array($first->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
             return true;
         }
 
@@ -299,5 +304,26 @@ class ConsignmentEncode
         if (empty($consignment->getLabelDescription())) {
             throw new MissingFieldException('Label description/invoice id is required for international shipments. Use getLabelDescription().');
         }
+    }
+
+    /**
+     * @return ConsignmentEncode
+     * @throws \Exception
+     */
+    private function encodeMultiCollo()
+    {
+        /** @var AbstractConsignment $first */
+        $first = Arr::first($this->consignments);
+        if (count($this->consignments) > 1 && ! $first->isPartOfMultiCollo()) {
+            throw new \Exception("Can not encode multi collo with this consignment.");
+        }
+
+        $secondaryShipments = $this->consignments;
+        Arr::forget($secondaryShipments, 0);
+        foreach ($secondaryShipments as $secondaryShipment) {
+            $this->consignmentEncoded['secondary_shipments'][] = (object)['reference_identifier' => $secondaryShipment->getReferenceId()];
+        }
+
+        return $this;
     }
 }

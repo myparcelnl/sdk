@@ -16,6 +16,7 @@ namespace MyParcelNL\Sdk\tests\SendConsignments\SendAgeCheckTest;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 
 /**
@@ -132,7 +133,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
         return [
             'Normal check' => [
                 'api_key' => getenv('API_KEY'),
-                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -154,7 +155,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             ],
             'Normal 18+ check' => [
                 'api_key' => getenv('API_KEY'),
-                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -176,7 +177,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             ],
             '18+ check no signature' => [
                 'api_key' => getenv('API_KEY'),
-                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -198,7 +199,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             ],
             '18+ check EU shipment' => [
                 'api_key' => getenv('API_KEY'),
-                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'BE',
                 'person' => 'BETest',
                 'company' => 'Mega Store',

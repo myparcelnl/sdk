@@ -21,6 +21,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class MyParcelRequest
 {
@@ -101,7 +102,7 @@ class MyParcelRequest
         $this->api_key = $apiKey;
         $this->body    = $body;
 
-        $header[] = $requestHeader . 'charset=utf-8';
+        $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
 
         $this->header = $header;
@@ -137,7 +138,6 @@ class MyParcelRequest
         }
 
         $request->write($method, $url, $header, $this->body);
-
         $this->setResult($request);
         $request->close();
 
@@ -172,7 +172,7 @@ class MyParcelRequest
 
         return $this;
     }
-    
+
     /**
      * Get version of SDK from composer file
      */
@@ -312,7 +312,6 @@ class MyParcelRequest
     private function setResult($request)
     {
         $response = $request->read();
-
         if (preg_match("/^%PDF-1./", $response)) {
             $this->result = $response;
         } else {
