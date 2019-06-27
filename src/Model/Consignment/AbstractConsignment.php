@@ -14,7 +14,6 @@
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-
 use http\Exception\BadMethodCallException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
