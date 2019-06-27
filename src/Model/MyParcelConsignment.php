@@ -3,7 +3,7 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 /**
- * @deprecated Use \MyParcelNL\Sdk\src\Model\PostNLConsignment instead
+ * @deprecated Use \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment instead
  */
 class MyParcelConsignment
 {

@@ -148,7 +148,7 @@ class DPDConsignment extends AbstractConsignment
      *
      * @param string $pickupNetworkId
      *
-     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
     {

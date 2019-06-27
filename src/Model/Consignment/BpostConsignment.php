@@ -128,7 +128,7 @@ class BpostConsignment extends AbstractConsignment
      */
     public function setInsurance(?int $insurance): AbstractConsignment
     {
-        if (! $insurance) {
+        if (null === $insurance) {
             throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
         }
 
@@ -175,7 +175,7 @@ class BpostConsignment extends AbstractConsignment
      *
      * @param string $pickupNetworkId
      *
-     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
     {

@@ -173,7 +173,7 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function setInsurance(?int $insurance): AbstractConsignment
     {
-        if (! $insurance) {
+        if (null === $insurance) {
             throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
         }
 
@@ -239,14 +239,14 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
-     * Large format package
+     *  * Large format package
      *
      * Required: No
      *
-     * @param boolean $largeFormat
+     * @param bool $largeFormat
      *
-     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
-     * @throws \Exception
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setLargeFormat(bool $largeFormat): AbstractConsignment
     {
@@ -287,7 +287,7 @@ class PostNLConsignment extends AbstractConsignment
      *
      * @param string $pickupNetworkId
      *
-     * @return \MyParcelNL\Sdk\src\Model\PostNLConsignment
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
     {
