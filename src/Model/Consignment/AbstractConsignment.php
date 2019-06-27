@@ -701,7 +701,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws MissingFieldException
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
      * @throws \Exception
      */
     public function setFullStreet(string $fullStreet): self
@@ -711,7 +711,7 @@ class AbstractConsignment
         }
 
         if (empty($this->local_cc)) {
-            throw new BadMethodCallException('Can not create a shipment when the local country code is empty.');
+            throw new \BadMethodCallException('Can not create a shipment when the local country code is empty.');
         }
 
         $fullStreet = SplitStreet::splitStreet($fullStreet, $this->local_cc, $this->getCountry());
