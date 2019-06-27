@@ -328,7 +328,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setReferenceId(string $reference_identifier): self
+    public function setReferenceId(?string $reference_identifier): self
     {
         if ($reference_identifier !== null) {
             $this->reference_identifier = (string) $reference_identifier;
@@ -385,12 +385,8 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setApiKey($apiKey): self
+    public function setApiKey(string $apiKey): self
     {
-        if (null === $apiKey) {
-            throw new BadMethodCallException('Can not create a shipment when the api key is empty.');
-        }
-
         $this->api_key = $apiKey;
 
         return $this;
@@ -408,11 +404,11 @@ class AbstractConsignment
     /**
      * @internal
      *
-     * @param null $barcode
+     * @param string|null $barcode
      *
      * @return $this
      */
-    public function setBarcode($barcode): self
+    public function setBarcode(?string $barcode): self
     {
         $this->barcode = $barcode;
 
@@ -1003,7 +999,8 @@ class AbstractConsignment
     public function getDeliveryType(): int
     {
         return $this->delivery_type;
-    }
+    }/** @noinspection PhpUnusedParameterInspection */
+    /** @noinspection PhpUnusedParameterInspection */
 
     /**
      * The delivery type for the package
@@ -1245,7 +1242,7 @@ class AbstractConsignment
      */
     public function setInsurance(?int $insurance): self
     {
-        if (! $insurance) {
+        if (null === $insurance) {
             $this->insurance = null;
 
             return $this;
