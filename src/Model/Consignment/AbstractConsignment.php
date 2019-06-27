@@ -387,15 +387,20 @@ class AbstractConsignment
      */
     public function setApiKey($apiKey): self
     {
+        if (null === $apiKey) {
+            throw new BadMethodCallException('Can not create a shipment when the api key is empty.');
+        }
+
         $this->api_key = $apiKey;
 
         return $this;
     }
 
+
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBarcode(): string
+    public function getBarcode(): ?string
     {
         return $this->barcode;
     }
