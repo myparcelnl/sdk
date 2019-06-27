@@ -14,14 +14,13 @@ namespace MyParcelNL\Sdk\src\Adapter;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class ConsignmentAdapter
 {
     private $data;
 
     /**
-     * @var MyParcelConsignment
+     * @var AbstractConsignment
      */
     private $consignment;
 
@@ -31,7 +30,7 @@ class ConsignmentAdapter
      * @param array  $data
      * @param string $apiKey
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function __construct($data, $apiKey)
     {
@@ -63,7 +62,7 @@ class ConsignmentAdapter
 
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->consignment
-            ->setMyParcelConsignmentId($this->data['id'])
+            ->setConsignmentId($this->data['id'])
             ->setReferenceId($this->data['reference_identifier'])
             ->setBarcode($this->data['barcode'])
             ->setStatus($this->data['status'])

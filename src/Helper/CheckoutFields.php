@@ -2,7 +2,7 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class CheckoutFields
 {
@@ -24,7 +24,7 @@ class CheckoutFields
     public function getDeliveryType($checkoutData)
     {
         if (empty($checkoutData)) {
-            return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
+            return AbstractConsignment::DELIVERY_TYPE_STANDARD;
         }
 
         $aCheckoutData    = json_decode($checkoutData, true);
@@ -32,18 +32,18 @@ class CheckoutFields
 
         switch ($typeFromCheckout) {
             case self::MORNING:
-                return MyParcelConsignment::DELIVERY_TYPE_MORNING;
+                return AbstractConsignment::DELIVERY_TYPE_MORNING;
             case self::STANDARD:
-                return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
+                return AbstractConsignment::DELIVERY_TYPE_STANDARD;
             case self::EVENING:
             case self::EVENING_NL:
-                return MyParcelConsignment::DELIVERY_TYPE_EVENING;
+                return AbstractConsignment::DELIVERY_TYPE_EVENING;
             case self::PICKUP:
-                return MyParcelConsignment::DELIVERY_TYPE_PICKUP;
+                return AbstractConsignment::DELIVERY_TYPE_PICKUP;
             case self::PICKUP_EXPRESS:
-                return MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS;
+                return AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS;
             default:
-                return MyParcelConsignment::DELIVERY_TYPE_STANDARD;
+                return AbstractConsignment::DELIVERY_TYPE_STANDARD;
         }
     }
 
