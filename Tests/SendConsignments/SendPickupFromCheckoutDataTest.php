@@ -38,7 +38,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])

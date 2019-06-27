@@ -43,7 +43,7 @@ class SendMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase
 
         foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setReferenceId($referenceId)
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])

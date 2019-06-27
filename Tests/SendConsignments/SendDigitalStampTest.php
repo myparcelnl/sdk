@@ -2,9 +2,8 @@
 
 use MyParcelNL\Sdk\src\Concerns\HasCustomItems;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
-
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 /**
  * Class SendDigitalStampTest
  * @package MyParcelNL\Sdk\tests\SendDigitalStampTest
@@ -30,7 +29,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setPackageType(4)
                 ->setCountry($consignmentTest['cc'])
@@ -73,6 +72,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -92,6 +92,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -111,6 +112,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => AbstractConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',

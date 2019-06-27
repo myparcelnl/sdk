@@ -49,7 +49,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
         $myParcelCollection = new MyParcelCollection();
 
         foreach ($this->additionProvider() as $consignmentTest) {
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setReferenceId($consignmentTest['reference_identifier'])
                 ->setCountry($consignmentTest['cc'])

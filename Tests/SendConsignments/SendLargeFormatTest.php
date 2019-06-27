@@ -43,7 +43,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setPackageType(1)
                 ->setCountry($consignmentTest['cc'])

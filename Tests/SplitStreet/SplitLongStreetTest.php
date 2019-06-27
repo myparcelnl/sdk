@@ -31,7 +31,7 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
      */
     public function testSplitStreet($country, $fullStreetTest, $street, $streetAdditionalInfo)
     {
-        $consignment = (new MyParcelConsignmentRepository())
+        $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
             ->setCountry($country)
             ->setFullStreet($fullStreetTest);
 

@@ -40,7 +40,7 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
