@@ -13,7 +13,7 @@
 namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -26,7 +26,7 @@ class ConsignmentEncode
     private $consignmentEncoded = [];
 
     /**
-     * @var MyParcelConsignment[] grouped by multi collo
+     * @var AbstractConsignment[]
      */
     private $consignments;
 
@@ -40,6 +40,7 @@ class ConsignmentEncode
      *
      * @return array
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function apiEncode()
     {
@@ -57,12 +58,9 @@ class ConsignmentEncode
      */
     private function encodeBaseOptions()
     {
+        /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
-        $packageType = $consignment->getPackageType();
-
-        if ($packageType == null) {
-            $packageType = MyParcelConsignment::DEFAULT_PACKAGE_TYPE;
-        }
+        $packageType = $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE);
 
         $this->consignmentEncoded = [
             'recipient' => [
@@ -77,7 +75,7 @@ class ConsignmentEncode
                 'package_type'      => $packageType,
                 'label_description' => $consignment->getLabelDescription(),
             ],
-            'carrier'   => 1,
+            'carrier'   => $consignment->getCarrierId(),
         ];
 
         if ($consignment->getReferenceId()) {
@@ -97,22 +95,7 @@ class ConsignmentEncode
     private function encodeStreet()
     {
         $consignment = Arr::first($this->consignments);
-        if ($consignment->getCountry() == MyParcelConsignment::CC_NL) {
-            $this->consignmentEncoded = array_merge_recursive(
-                $this->consignmentEncoded,
-                [
-                    'recipient' => [
-                        'street'                 => $consignment->getStreet(true),
-                        'street_additional_info' => $consignment->getStreetAdditionalInfo(),
-                        'number'                 => $consignment->getNumber(),
-                        'number_suffix'          => $consignment->getNumberSuffix(),
-                    ],
-                ]
-            );
-        } else {
-            $this->consignmentEncoded['recipient']['street']                 = $consignment->getFullStreet(true);
-            $this->consignmentEncoded['recipient']['street_additional_info'] = $consignment->getStreetAdditionalInfo();
-        }
+        $this->consignmentEncoded = $consignment->encodeStreet($this->consignmentEncoded);
 
         return $this;
     }
@@ -141,14 +124,14 @@ class ConsignmentEncode
                 ->encodeInsurance()
                 ->encodePhysicalProperties();
         } else {
-            $this->consignmentEncoded['options']['delivery_type'] = MyParcelConsignment::DEFAULT_DELIVERY_TYPE;
+            $this->consignmentEncoded['options']['delivery_type'] = AbstractConsignment::DEFAULT_DELIVERY_TYPE;
         }
 
         if ($consignment->isEuCountry()) {
             $this->consignmentEncoded['options']['large_format'] = $consignment->isLargeFormat() ? 1 : 0;
         }
 
-        if ($consignment->getCountry() == MyParcelConsignment::CC_NL && $consignment->hasAgeCheck()) {
+        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
             $this->consignmentEncoded['options']['age_check']      = 1;
             $this->consignmentEncoded['options']['only_recipient'] = 1;
             $this->consignmentEncoded['options']['signature']      = 1;
@@ -217,15 +200,14 @@ class ConsignmentEncode
     private function encodePhysicalProperties()
     {
         $consignment = Arr::first($this->consignments);
-        if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != MyParcelConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
+        if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
             return $this;
         }
-        if ($consignment->getPackageType() == MyParcelConsignment::PACKAGE_TYPE_DIGITAL_STAMP && ! isset($consignment->getPhysicalProperties()['weight'])) {
+        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP && ! isset($consignment->getPhysicalProperties()['weight'])) {
             throw new MissingFieldException('Weight in physical properties must be set for digital stamp shipments.');
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
-
         return $this;
     }
 
@@ -296,9 +278,8 @@ class ConsignmentEncode
      */
     private function hasOptions()
     {
-        $consignment = Arr::first($this->consignments);
-
-        if (in_array($consignment->getCountry(), [MyParcelConsignment::CC_NL, MyParcelConsignment::CC_BE])) {
+        $first = Arr::first($this->consignments);
+        if (in_array($first->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
             return true;
         }
 
@@ -306,17 +287,17 @@ class ConsignmentEncode
     }
 
     /**
-     * @param MyParcelConsignment $consignment
+     * @param AbstractConsignment $consignment
      *
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function validateCdConsignment(MyParcelConsignment $consignment)
+    private function validateCdConsignment(AbstractConsignment $consignment)
     {
         if (empty($consignment->getItems())) {
             throw new MissingFieldException('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
-        if ($consignment->getPackageType() !== MyParcelConsignment::PACKAGE_TYPE_PACKAGE) {
+        if ($consignment->getPackageType() !== AbstractConsignment::PACKAGE_TYPE_PACKAGE) {
             throw new MissingFieldException('For international shipments, package_type must be 1 (normal package).');
         }
 
@@ -331,7 +312,7 @@ class ConsignmentEncode
      */
     private function encodeMultiCollo()
     {
-        /** @var MyParcelConsignment $first */
+        /** @var AbstractConsignment $first */
         $first = Arr::first($this->consignments);
         if (count($this->consignments) > 1 && ! $first->isPartOfMultiCollo()) {
             throw new \Exception("Can not encode multi collo with this consignment.");

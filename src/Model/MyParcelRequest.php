@@ -21,6 +21,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class MyParcelRequest
 {
@@ -137,7 +138,6 @@ class MyParcelRequest
         }
 
         $request->write($method, $url, $header, $this->body);
-
         $this->setResult($request);
         $request->close();
 
@@ -288,7 +288,7 @@ class MyParcelRequest
     /**
      * Get all consignment ids
      *
-     * @param MyParcelCollection|MyParcelConsignment[] $consignments
+     * @param MyParcelCollection|AbstractConsignment[] $consignments
      * @param $key
      *
      * @return array
@@ -312,7 +312,6 @@ class MyParcelRequest
     private function setResult($request)
     {
         $response = $request->read();
-
         if (preg_match("/^%PDF-1./", $response)) {
             $this->result = $response;
         } else {

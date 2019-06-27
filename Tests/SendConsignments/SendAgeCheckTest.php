@@ -13,8 +13,10 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendAgeCheckTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 
 /**
@@ -24,6 +26,11 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 {
 
+    /**
+     * @return $this
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
@@ -41,7 +48,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -126,6 +133,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
         return [
             'Normal check' => [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -147,6 +155,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             ],
             'Normal 18+ check' => [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -168,6 +177,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             ],
             '18+ check no signature' => [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Piet',
                 'company' => 'Mega Store',
@@ -189,6 +199,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             ],
             '18+ check EU shipment' => [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'BE',
                 'person' => 'BETest',
                 'company' => 'Mega Store',

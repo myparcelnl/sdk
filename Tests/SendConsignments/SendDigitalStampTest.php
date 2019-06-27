@@ -33,7 +33,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setPackageType(4)
                 ->setCountry($consignmentTest['cc'])
@@ -73,6 +73,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -92,6 +93,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',
@@ -111,6 +113,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key' => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
                 'cc' => 'NL',
                 'person' => 'Reindert',
                 'company' => 'Big Sale BV',

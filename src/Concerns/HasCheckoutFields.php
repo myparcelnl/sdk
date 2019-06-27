@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\src\Concerns;
 
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\CheckoutFields;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 trait HasCheckoutFields
 {
@@ -68,7 +68,7 @@ trait HasCheckoutFields
      */
     public function setPickupAddressFromCheckout($checkoutData)
     {
-        if ($this->getCountry() !== MyParcelConsignment::CC_NL && $this->getCountry() !== MyParcelConsignment::CC_BE) {
+        if ($this->getCountry() !== AbstractConsignment::CC_NL && $this->getCountry() !== AbstractConsignment::CC_BE) {
             return $this;
         }
 
@@ -85,9 +85,9 @@ trait HasCheckoutFields
         }
 
         if ($aCheckoutData['price_comment'] == 'retail') {
-            $this->setDeliveryType(MyParcelConsignment::DELIVERY_TYPE_PICKUP);
+            $this->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP);
         } else if ($aCheckoutData['price_comment'] == 'retailexpress') {
-            $this->setDeliveryType(MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS);
+            $this->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS);
         } else {
             throw new MissingFieldException('No PostNL location found in checkout data: ' . $checkoutData);
         }

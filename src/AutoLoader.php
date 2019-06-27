@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 require_once ('Support/CollectionProxy.php');
 require_once ('Support/Arr.php');
 require_once ('Support/Collection.php');
@@ -16,7 +16,16 @@ require_once ('Services/ConsignmentEncode.php');
 require_once ('Services/CollectionEncode.php');
 require_once ('Concerns/HasCheckoutFields.php');
 require_once ('Model/MyParcelRequest.php');
-require_once ('Model/MyParcelConsignment.php');
+require_once ('Model/AbstractConsignment.php');
 require_once ('Adapter/ConsignmentAdapter.php');
-require_once ('Model/Repository/MyParcelConsignmentRepository.php');
+require_once ('Model/MyParcelConsignment.php');
+require_once ('Model/Consignment/AbstractConsignment.php');
+require_once ('Model/Consignment/BpostConsignment.php');
+require_once ('Model/Consignment/DPDConsignment.php');
+require_once ('Model/Consignment/PostNLConsignment.php');
 require_once ('Model/MyParcelCustomsItem.php');
+require_once ('Model/FullStreet.php');
+require_once ('Factory/ConsignmentFactory.php');
+require_once ('Exception/AddressException.php');
+require_once ('Exception/ApiException.php');
+require_once ('Exception/MissingFieldException.php');

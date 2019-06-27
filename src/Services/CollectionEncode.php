@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Services;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class CollectionEncode
@@ -53,7 +54,7 @@ class CollectionEncode
      */
     private function groupMultiColloConsignments()
     {
-        return $this->consignments->groupBy(function(MyParcelConsignment $consignment) {
+        return $this->consignments->groupBy(function(AbstractConsignment $consignment) {
             if ($consignment->isPartOfMultiCollo()) {
                 return $consignment->getReferenceId();
             }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * This object is embedded in the MyParcelConsignment object for global shipments and is
+ * This object is embedded in the AbstractConsignment object for global shipments and is
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl

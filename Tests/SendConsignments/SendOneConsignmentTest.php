@@ -13,9 +13,12 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendOneConsignmentTest
@@ -24,6 +27,12 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
+    /**
+     * @return $this
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
+     */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
@@ -34,8 +43,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
-
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -84,18 +92,24 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
              * Create concept
              */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
-
-            $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
+            $this->assertEquals(true, $consignment->getConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
             $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
             $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
             $this->assertEquals($consignmentTest['company'], $consignment->getCompany(), 'getCompany()');
             $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'getFullStreet()');
             $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'getNumber()');
-            $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
             $this->assertEquals($consignmentTest['postal_code'], $consignment->getPostalCode(), 'getPostalCode()');
             $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
+
+            if (key_exists('number_suffix', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
+            }
+
+            if (key_exists('box_number', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['box_number'], $consignment->getBoxNumber(), 'getBoxNumber()');
+            }
 
             if (key_exists('package_type', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
@@ -146,9 +160,9 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+            $this->assertEquals(true, preg_match("#^3SMYPA|\d{24}#", $consignment->getBarcode()), 'Barcode is not set');
 
             /** @todo; clear consignment in MyParcelCollection */
         }
@@ -163,150 +177,201 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
+                'api_key'           => getenv('API_KEY_BE'),
+                'carrier_id'        => DPDConsignment::CARRIER_ID,
+                'cc'                => 'BE',
+                'person'            => 'Richard',
+                'company'           => 'Big Sale BV',
+                'full_street_input' => 'Hoofdweg 16',
+                'full_street'       => 'Hoofdweg 16',
+                'street'            => 'Hoofdweg',
+                'number'            => 16,
+                'box_number'        => '',
+                'postal_code'       => '2000',
+                'city'              => 'Antwerpen',
+                'phone'             => '123456',
             ],
-            [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => false,
-                'age_check' => false,
-                'only_recipient' => false,
-                'signature' => false,
-                'return' => false,
-                'label_description' => 'Label description',
-            ],
-            [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
-                'full_street' => 'Wethouder Fierman Eduard Meerburg senior 14 t',
-                'street' => 'Wethouder Fierman Eduard Meerburg senior',
-                'street_additional_info' => 'kade',
-                'number' => 14,
-                'number_suffix' => 't',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => false,
-                'age_check' => false,
-                'only_recipient' => false,
-                'signature' => false,
-                'return' => false,
-                'label_description' => 'Label description',
-            ],
-            [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'The insurance man',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => true,
-                'age_check' => false,
-                'only_recipient' => true,
-                'signature' => true,
-                'return' => true,
-                'label_description' => 1234,
-                'insurance' => 250,
-            ],
-            [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'The insurance man',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Koestraat\n55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => true,
-                'age_check' => false,
-                'only_recipient' => true,
-                'signature' => true,
-                'return' => true,
-                'label_description' => 1234,
-                'insurance' => 250,
-            ],
-            [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'The insurance man',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Runstraat 14 3',
-                'full_street' => 'Runstraat 14 3',
-                'street' => 'Runstraat 14',
-                'number' => 3,
-                'number_suffix' => '',
-                'postal_code' => '1016GK',
-                'city' => 'Amsterdam',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => true,
-                'age_check' => false,
-                'only_recipient' => true,
-                'signature' => true,
-                'return' => true,
-                'label_description' => 1234,
-                'insurance' => 250,
-            ],
-            [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'BE',
-                'person' => 'Richard',
-                'company' => 'MyParcelNL',
-                'full_street_input' => 'Berghelaan\n34\n2',
-                'full_street' => 'Berghelaan 34 2',
-                'street' => 'Berghelaan',
-                'number' => null,
-                'number_suffix' => '',
-                'postal_code' => '2630',
-                'city' => 'Aartselaar',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => false,
-                'age_check' => false,
-                'only_recipient' => false,
-                'signature' => false,
-                'return' => false,
-                'label_description' => 1234,
-                'insurance' => 500,
-            ],
+//            [
+//                'api_key'           => getenv('API_KEY_BE'),
+//                'carrier_id'        => BpostConsignment::CARRIER_ID,
+//                'cc'                => 'BE',
+//                'person'            => 'Richard',
+//                'company'           => 'Big Sale BV',
+//                'full_street_input' => 'Hoofdweg 16',
+//                'full_street'       => 'Hoofdweg 16',
+//                'street'            => 'Hoofdweg',
+//                'number'            => 16,
+//                'box_number'        => '',
+//                'postal_code'       => '2000',
+//                'city'              => 'Antwerpen',
+//                'phone'             => '123456',
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'FR',
+//                'person'            => 'Richard',
+//                'company'           => 'Big Sale BV',
+//                'full_street_input' => 'Hoofdweg 16',
+//                'full_street'       => 'Hoofdweg 16',
+//                'street'            => '',
+//                'number'            => null,
+//                'postal_code'       => '2000',
+//                'city'              => 'Antwerpen',
+//                'phone'             => '123456',
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'NL',
+//                'person'            => 'Reindert',
+//                'company'           => 'Big Sale BV',
+//                'full_street_input' => 'Plein 1940-45 3b',
+//                'full_street'       => 'Plein 1940-45 3 b',
+//                'street'            => 'Plein 1940-45',
+//                'number'            => 3,
+//                'number_suffix'     => 'b',
+//                'postal_code'       => '2231JE',
+//                'city'              => 'Rijnsburg',
+//                'phone'             => '123456',
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'NL',
+//                'person'            => 'Piet',
+//                'company'           => 'Mega Store',
+//                'full_street_input' => 'Koestraat 55',
+//                'full_street'       => 'Koestraat 55',
+//                'street'            => 'Koestraat',
+//                'number'            => 55,
+//                'number_suffix'     => '',
+//                'postal_code'       => '2231JE',
+//                'city'              => 'Katwijk',
+//                'phone'             => '123-45-235-435',
+//                'package_type'      => 1,
+//                'large_format'      => false,
+//                'age_check'         => false,
+//                'only_recipient'    => false,
+//                'signature'         => false,
+//                'return'            => false,
+//                'label_description' => 'Label description',
+//            ],
+//            [
+//                'api_key'                => getenv('API_KEY'),
+//                'carrier_id'             => 1,
+//                'cc'                     => 'NL',
+//                'person'                 => 'Piet',
+//                'company'                => 'Mega Store',
+//                'full_street_input'      => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
+//                'full_street'            => 'Wethouder Fierman Eduard Meerburg senior 14 t',
+//                'street'                 => 'Wethouder Fierman Eduard Meerburg senior',
+//                'street_additional_info' => 'kade',
+//                'number'                 => 14,
+//                'number_suffix'          => 't',
+//                'postal_code'            => '2231JE',
+//                'city'                   => 'Katwijk',
+//                'phone'                  => '123-45-235-435',
+//                'package_type'           => 1,
+//                'large_format'           => false,
+//                'age_check'              => false,
+//                'only_recipient'         => false,
+//                'signature'              => false,
+//                'return'                 => false,
+//                'label_description'      => 'Label description',
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'NL',
+//                'person'            => 'The insurance man',
+//                'company'           => 'Mega Store',
+//                'full_street_input' => 'Koestraat 55',
+//                'full_street'       => 'Koestraat 55',
+//                'street'            => 'Koestraat',
+//                'number'            => 55,
+//                'number_suffix'     => '',
+//                'postal_code'       => '2231JE',
+//                'city'              => 'Katwijk',
+//                'phone'             => '123-45-235-435',
+//                'package_type'      => 1,
+//                'large_format'      => true,
+//                'age_check'         => false,
+//                'only_recipient'    => true,
+//                'signature'         => true,
+//                'return'            => true,
+//                'label_description' => 1234,
+//                'insurance'         => 250,
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'NL',
+//                'person'            => 'The insurance man',
+//                'company'           => 'Mega Store',
+//                'full_street_input' => 'Koestraat\n55',
+//                'full_street'       => 'Koestraat 55',
+//                'street'            => 'Koestraat',
+//                'number'            => 55,
+//                'number_suffix'     => '',
+//                'postal_code'       => '2231JE',
+//                'city'              => 'Katwijk',
+//                'phone'             => '123-45-235-435',
+//                'package_type'      => 1,
+//                'large_format'      => true,
+//                'age_check'         => false,
+//                'only_recipient'    => true,
+//                'signature'         => true,
+//                'return'            => true,
+//                'label_description' => 1234,
+//                'insurance'         => 250,
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'NL',
+//                'person'            => 'The insurance man',
+//                'company'           => 'Mega Store',
+//                'full_street_input' => 'Runstraat 14 3',
+//                'full_street'       => 'Runstraat 14 3',
+//                'street'            => 'Runstraat 14',
+//                'number'            => 3,
+//                'number_suffix'     => '',
+//                'postal_code'       => '1016GK',
+//                'city'              => 'Amsterdam',
+//                'phone'             => '123-45-235-435',
+//                'package_type'      => 1,
+//                'large_format'      => true,
+//                'age_check'         => false,
+//                'only_recipient'    => true,
+//                'signature'         => true,
+//                'return'            => true,
+//                'label_description' => 1234,
+//                'insurance'         => 250,
+//            ],
+//            [
+//                'api_key'           => getenv('API_KEY'),
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'cc'                => 'BE',
+//                'person'            => 'Richard',
+//                'company'           => 'MyParcelNL',
+//                'full_street_input' => 'Berghelaan\n34\n2',
+//                'full_street'       => 'Berghelaan 34 2',
+//                'street'            => 'Berghelaan',
+//                'number'            => null,
+//                'number_suffix'     => '',
+//                'postal_code'       => '2630',
+//                'city'              => 'Aartselaar',
+//                'phone'             => '123-45-235-435',
+//                'package_type'      => 1,
+//                'large_format'      => false,
+//                'age_check'         => false,
+//                'only_recipient'    => false,
+//                'signature'         => false,
+//                'return'            => false,
+//                'label_description' => 1234,
+//                'insurance'         => 500,
+//            ],
         ];
     }
 }
