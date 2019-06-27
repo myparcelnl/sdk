@@ -42,7 +42,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone'])
-                ->setPhysicalProperties($consignmentTest['physical_properties']);
+                ->setTotalWeight($consignmentTest['physical_properties']);
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);

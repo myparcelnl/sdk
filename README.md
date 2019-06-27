@@ -410,10 +410,10 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
 MyParcel uses several types of Exceptions to make the errors clear. It is your responsibility to provide the correct status in a response.
 These are the Exceptions that we currently use:
 
-#### AddressException
+#### InvalidConsignmentException
 Exception to be returned when an address is incorrect or not usable.
 
-Class: `MyParcelNL\Sdk\src\Exception\AddressException`
+Class: `MyParcelNL\Sdk\src\Exception\InvalidConsignmentException`
 
 HTTP status: 412
 

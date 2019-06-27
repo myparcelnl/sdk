@@ -2,6 +2,8 @@
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
+
 class DPDConsignment extends AbstractConsignment
 {
     /**
@@ -158,5 +160,18 @@ class DPDConsignment extends AbstractConsignment
         $this->pickup_network_id = $pickupNetworkId;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     */
+    public function validate(): bool
+    {
+        if ($this->getTotalWeight() < 10) {
+                throw new InvalidConsignmentException('It is necessary to at a minimum weight of 10 grams');
+        }
+
+        return true;
     }
 }

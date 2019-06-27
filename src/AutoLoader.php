@@ -26,6 +26,6 @@ require_once ('Model/Consignment/PostNLConsignment.php');
 require_once ('Model/MyParcelCustomsItem.php');
 require_once ('Model/FullStreet.php');
 require_once ('Factory/ConsignmentFactory.php');
-require_once ('Exception/AddressException.php');
+require_once('Exception/InvalidConsignmentException.php');
 require_once ('Exception/ApiException.php');
 require_once ('Exception/MissingFieldException.php');

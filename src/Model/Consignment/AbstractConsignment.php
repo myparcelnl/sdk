@@ -1586,6 +1586,11 @@ class AbstractConsignment
      */
     public function getTotalWeight(): int
     {
+        $weight = (int) $this->getPhysicalProperties()['weight'] ?? null;
+        if ($weight) {
+            return $weight;
+        }
+
         $weight = 0;
 
         foreach ($this->getItems() as $item) {
@@ -1597,6 +1602,18 @@ class AbstractConsignment
         }
 
         return $weight;
+    }
+
+    /**
+     * @param int $weight @todo add comment gram
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setTotalWeight(int $weight): self
+    {
+        $this->setPhysicalProperties(['weight' => $weight]);
+
+        return $this;
     }
 
     /**
@@ -1614,5 +1631,13 @@ class AbstractConsignment
         }
 
         return $this->getPackageType() == self::PACKAGE_TYPE_PACKAGE ? $option : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function validate(): bool
+    {
+        return true;
     }
 }

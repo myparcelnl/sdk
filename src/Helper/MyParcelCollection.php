@@ -175,6 +175,8 @@ class MyParcelCollection extends Collection
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
 
+        $consignment->validate();
+
         $this->push($consignment);
 
         return $this;
@@ -182,7 +184,7 @@ class MyParcelCollection extends Collection
 
     /**
      * @param int[] $ids
-     * @param sting $apiKey
+     * @param string $apiKey
      *
      * @return self
      * @throws \Exception
@@ -190,9 +192,9 @@ class MyParcelCollection extends Collection
     public function addConsignmentByConsignmentIds($ids, $apiKey)
     {
         foreach ($ids as $consignmentId) {
-            $consignment = (new MyParcelConsignment())
+            $consignment = (new AbstractConsignment())
                 ->setApiKey($apiKey)
-                ->setMyParcelConsignmentId($consignmentId);
+                ->setConsignmentId($consignmentId);
 
             $this->addConsignment($consignment);
         }
@@ -210,7 +212,7 @@ class MyParcelCollection extends Collection
     public function addConsignmentByReferenceIds($ids, $apiKey)
     {
         foreach ($ids as $referenceId) {
-            $consignment = (new MyParcelConsignment())
+            $consignment = (new AbstractConsignment())
                 ->setApiKey($apiKey)
                 ->setReferenceId($referenceId);
 
@@ -221,12 +223,12 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param MyParcelConsignment $consignment
+     * @param AbstractConsignment $consignment
      * @param $amount
      *
      * @return MyParcelCollection
      */
-    public function addMultiCollo(MyParcelConsignment $consignment, $amount): self
+    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
     {
         $i = 1;
 
@@ -367,7 +369,7 @@ class MyParcelCollection extends Collection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, (new MyParcelConsignment())->setApiKey($key));
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (new AbstractConsignment())->setApiKey($key));
             $this->addConsignment($consignmentAdapter->getConsignment());
         }
 

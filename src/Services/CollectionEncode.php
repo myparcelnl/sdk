@@ -14,7 +14,6 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 
 class CollectionEncode
 {
