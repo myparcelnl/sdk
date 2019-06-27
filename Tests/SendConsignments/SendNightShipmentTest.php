@@ -17,7 +17,7 @@ namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
 /**
  * Class SendNightShipmentTest
@@ -25,6 +25,8 @@ use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
  */
 class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
 {
+    use HasDebugLabels;
+
     /**
      * Test one shipment with createConcepts()
      */
@@ -153,9 +155,7 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated night shipment label: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            $this->debugLinkOfLabels($myParcelCollection, 'night shipment label');
 
             /** @var MyParcelConsignmentRepository $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
