@@ -20,6 +20,7 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 
 /**
  * A model of a consignment
@@ -960,6 +961,8 @@ class AbstractConsignment
     }
 
     /**
+     * @param int|null $default
+     *
      * @return int|null
      */
     public function getPackageType($default = null): ?int
@@ -1357,7 +1360,7 @@ class AbstractConsignment
      *
      * Required: Yes for international shipments
      *
-     * @param MyParcelCustomsItem $item
+     * @param $item
      *
      * @return $this
      * @throws \Exception
