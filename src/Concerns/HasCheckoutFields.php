@@ -42,6 +42,10 @@ trait HasCheckoutFields
     {
         $aCheckoutData = json_decode($checkoutData, true);
 
+        if (empty($checkoutData)) {
+            return $this;
+        }
+
         if (
             ! is_array($aCheckoutData) ||
             ! key_exists('date', $aCheckoutData)
