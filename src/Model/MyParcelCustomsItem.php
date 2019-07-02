@@ -15,6 +15,7 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
@@ -24,6 +25,8 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
  */
 class MyParcelCustomsItem
 {
+    const DESCRIPTION_MAX_LENGTH = 47;
+
     private $description;
     private $amount;
     private $weight;
@@ -49,7 +52,11 @@ class MyParcelCustomsItem
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        /**
+         * Description cut after 47 chars
+         */
+
+        $this->description = Str::limit($description, self::DESCRIPTION_MAX_LENGTH);
 
         return $this;
     }
