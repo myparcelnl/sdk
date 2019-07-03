@@ -55,7 +55,6 @@ class MyParcelCustomsItem
         /**
          * Description cut after 47 chars
          */
-
         $this->description = Str::limit($description, self::DESCRIPTION_MAX_LENGTH);
 
         return $this;
