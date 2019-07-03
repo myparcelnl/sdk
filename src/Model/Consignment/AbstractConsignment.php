@@ -1136,7 +1136,7 @@ class AbstractConsignment
      *
      * Required: No
      *
-     * @param $signature
+     * @param bool $signature
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
@@ -1586,9 +1586,11 @@ class AbstractConsignment
      */
     public function getTotalWeight(): int
     {
-        $weight = (int) $this->getPhysicalProperties()['weight'] ?? null;
-        if ($weight) {
-            return $weight;
+        if (!empty($this->getPhysicalProperties()['weight'])){
+            $weight = (int) $this->getPhysicalProperties()['weight'] ?? null;
+            if ($weight) {
+                return $weight;
+            }
         }
 
         $weight = 0;
