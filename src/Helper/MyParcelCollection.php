@@ -272,8 +272,9 @@ class MyParcelCollection extends Collection
                 ->sendRequest();
 
             foreach ($request->getResult('data.ids') as $responseShipment) {
+                /** @var AbstractConsignment $consignment */
                 $consignment = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier'])->first();
-                $consignment->getConsignmentId($responseShipment['id']);
+                $consignment->setConsignmentId($responseShipment['id']);
             }
         }
 
@@ -627,7 +628,7 @@ class MyParcelCollection extends Collection
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
-        return self::findManyByReferenceId($id, $apiKey);
+        return self::findManyByReferenceId([$id], $apiKey);
     }
 
     /**

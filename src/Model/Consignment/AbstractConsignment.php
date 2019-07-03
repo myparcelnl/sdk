@@ -796,7 +796,7 @@ class AbstractConsignment
      *
      * Required: no
      *
-     * @param string $numberSuffix
+     * @param string|null $numberSuffix
      *
      * @return $this
      */

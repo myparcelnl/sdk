@@ -113,7 +113,8 @@ class PostNLConsignment extends AbstractConsignment
     {
         if ($package_type != self::PACKAGE_TYPE_PACKAGE &&
             $package_type != self::PACKAGE_TYPE_MAILBOX &&
-            $package_type != self::PACKAGE_TYPE_LETTER
+            $package_type != self::PACKAGE_TYPE_LETTER &&
+            $package_type != self::PACKAGE_TYPE_DIGITAL_STAMP
         ) {
             throw new \Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
