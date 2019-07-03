@@ -28,10 +28,10 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers       \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::setFullStreet
+     * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::setFullStreet
      * @dataProvider additionProvider()
      *
-     * @param $carrier_id
+     * @param $carrierId
      * @param $country
      * @param $fullStreetTest
      * @param $fullStreet
@@ -41,9 +41,9 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
      *
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function testSplitStreet($carrier_id, $country, $fullStreetTest, $fullStreet, $street, $number, $numberSuffix)
+    public function testSplitStreet($carrierId, $country, $fullStreetTest, $fullStreet, $street, $number, $numberSuffix)
     {
-        $consignment = (ConsignmentFactory::createByCarrierId($carrier_id))
+        $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
             ->setCountry($country)
             ->setFullStreet($fullStreetTest);
 
