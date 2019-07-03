@@ -113,9 +113,10 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
             /**
              * @var $savedConsignment AbstractConsignment
              */
-            $savedConsignment = (new AbstractConsignment())
+            $savedConsignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setReferenceId($consignmentTest['reference_identifier']);
+
             $savedCollection->addConsignment($savedConsignment);
         }
 
