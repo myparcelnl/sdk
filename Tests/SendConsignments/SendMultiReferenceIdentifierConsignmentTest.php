@@ -15,8 +15,10 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendMultiReferenceIdentifierConsignmentTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 
 /**
@@ -28,7 +30,8 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
     private $timestamp;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->timestamp = (new \DateTime())->getTimestamp();
     }
 
@@ -39,10 +42,11 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
     public function testSendOneConsignment()
     {
         error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+        ini_set('display_errors', '1');
 
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
@@ -107,9 +111,9 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
         foreach ($this->additionProvider() as $consignmentTest) {
             /**
-             * @var $savedConsignment MyParcelConsignmentRepository
+             * @var $savedConsignment AbstractConsignment
              */
-            $savedConsignment = (new MyParcelConsignmentRepository())
+            $savedConsignment = (new AbstractConsignment())
                 ->setApiKey($consignmentTest['api_key'])
                 ->setReferenceId($consignmentTest['reference_identifier']);
             $savedCollection->addConsignment($savedConsignment);
@@ -117,7 +121,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
 
         $savedCollection->setLatestData();
 
-        $consignmentTest = $this->additionProvider()[0];
+        $consignmentTest  = $this->additionProvider()[0];
         $savedConsignment = $savedCollection->getConsignmentsByReferenceId($consignmentTest['reference_identifier'])->first();
 
         $this->assertEquals(true, $savedConsignment->getMyParcelConsignmentId() > 1, 'No id found');
@@ -176,34 +180,36 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
+                'api_key'              => getenv('API_KEY'),
                 'reference_identifier' => (string) $this->timestamp . '_input3',
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
+                'carrier_id'           => PostNLConsignment::CARRIER_ID,
+                'cc'                   => 'NL',
+                'person'               => 'Reindert',
+                'company'              => 'Big Sale BV',
+                'full_street_input'    => 'Plein 1940-45 3b',
+                'full_street'          => 'Plein 1940-45 3 b',
+                'street'               => 'Plein 1940-45',
+                'number'               => 3,
+                'number_suffix'        => 'b',
+                'postal_code'          => '2231JE',
+                'city'                 => 'Rijnsburg',
+                'phone'                => '123456',
             ],
             [
-                'api_key' => getenv('API_KEY'),
+                'api_key'              => getenv('API_KEY'),
                 'reference_identifier' => (string) $this->timestamp . '_input2',
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
+                'carrier_id'           => PostNLConsignment::CARRIER_ID,
+                'cc'                   => 'NL',
+                'person'               => 'Reindert',
+                'company'              => 'Big Sale BV',
+                'full_street_input'    => 'Plein 1940-45 3b',
+                'full_street'          => 'Plein 1940-45 3 b',
+                'street'               => 'Plein 1940-45',
+                'number'               => 3,
+                'number_suffix'        => 'b',
+                'postal_code'          => '2231JE',
+                'city'                 => 'Rijnsburg',
+                'phone'                => '123456',
             ],
         ];
     }
