@@ -39,7 +39,7 @@ class MyParcelRequest
     /**
      * API headers
      */
-    const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json; charset=utf-8';
+    const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
     const REQUEST_HEADER_RETRIEVE_SHIPMENT   = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_PDF  = 'Accept: application/pdf';
