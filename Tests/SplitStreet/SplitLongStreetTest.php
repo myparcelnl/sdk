@@ -15,7 +15,9 @@
  */
 
 namespace MyParcelNL\Sdk\src\tests\CreateConsignments\SplitStreetTest;
+
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
@@ -27,12 +29,20 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers \MyParcelNL\Sdk\src\Model\ConsignmentFactory::setFullStreet
+     * @covers       \MyParcelNL\Sdk\src\Model\ConsignmentFactory::setFullStreet
      * @dataProvider additionProvider()
+     *
+     * @param $carrierId
+     * @param $country
+     * @param $fullStreetTest
+     * @param $street
+     * @param $streetAdditionalInfo
+     *
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function testSplitStreet($country, $fullStreetTest, $street, $streetAdditionalInfo)
+    public function testSplitStreet($carrierId, $country, $fullStreetTest, $street, $streetAdditionalInfo)
     {
-        $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
+        $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
             ->setCountry($country)
             ->setFullStreet($fullStreetTest);
 
@@ -58,39 +68,45 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'BE',
-                'full_street_input' => 'Ir. Mr. Dr. van Waterschoot van der Grachtstraat in Heerlen 14 t',
-                'street' => 'Ir. Mr. Dr. van Waterschoot van der',
+                'full_street_input'      => 'Ir. Mr. Dr. van Waterschoot van der Grachtstraat in Heerlen 14 t',
+                'street'                 => 'Ir. Mr. Dr. van Waterschoot van der',
                 'street_additional_info' => 'Grachtstraat in Heerlen 14 t',
             ],
             [
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'NZ',
-                'full_street_input' => 'Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu',
-                'street' => 'Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu',
+                'full_street_input'      => 'Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu',
+                'street'                 => 'Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu',
                 'street_additional_info' => '',
             ],
             [
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'BE',
-                'full_street_input' => 'testtienpp testtienpp',
-                'street' => 'testtienpp testtienpp',
+                'full_street_input'      => 'testtienpp testtienpp',
+                'street'                 => 'testtienpp testtienpp',
                 'street_additional_info' => '',
             ],
             [
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'BE',
-                'full_street_input' => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
-                'street' => 'Wethouder Fierman Eduard Meerburg senior',
+                'full_street_input'      => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
+                'street'                 => 'Wethouder Fierman Eduard Meerburg senior',
                 'street_additional_info' => 'kade 14 t',
             ],
             [
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'NL',
-                'full_street_input' => 'Ir. Mr. Dr. van Waterschoot van der Grachtstraat 14 t',
-                'street' => 'Ir. Mr. Dr. van Waterschoot van der 14 t',
+                'full_street_input'      => 'Ir. Mr. Dr. van Waterschoot van der Grachtstraat 14 t',
+                'street'                 => 'Ir. Mr. Dr. van Waterschoot van der 14 t',
                 'street_additional_info' => 'Grachtstraat',
             ],
             [
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'NL',
-                'full_street_input' => 'Koestraat 554 t',
-                'street' => 'Koestraat 554 t',
+                'full_street_input'      => 'Koestraat 554 t',
+                'street'                 => 'Koestraat 554 t',
                 'street_additional_info' => '',
             ],
         ];

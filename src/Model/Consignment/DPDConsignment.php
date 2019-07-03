@@ -9,7 +9,7 @@ class DPDConsignment extends AbstractConsignment
     /**
      * @var int
      */
-    public const CARRIER_ID  = 4;
+    public const CARRIER_ID = 4;
 
     /**
      * @var array
@@ -20,6 +20,7 @@ class DPDConsignment extends AbstractConsignment
      * @var string
      */
     protected $local_cc = self::CC_BE;
+
     /**
      * @param array $consignmentEncoded
      *
@@ -77,6 +78,7 @@ class DPDConsignment extends AbstractConsignment
 
         return $this;
     }
+
     /**
      * The package type
      *
@@ -169,7 +171,7 @@ class DPDConsignment extends AbstractConsignment
     public function validate(): bool
     {
         if ($this->getTotalWeight() < 10) {
-                throw new InvalidConsignmentException('It is necessary to at a minimum weight of 10 grams');
+            throw new InvalidConsignmentException('It is necessary to at a minimum weight of 10 grams');
         }
 
         return true;
