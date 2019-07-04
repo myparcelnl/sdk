@@ -51,14 +51,14 @@ You can download the zip on the project's [releases page](https://github.com/myp
 Add the following lines to your project to import the SDK classes for creating shipments.
 ```php
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\AbstractConsignment;
 ```
 
 ### Create a consignment
 This example uses only the required methods to create a shipment and download its label.
 
 ```php
-$consignment = (new MyParcelConsignment())
+$consignment = (ConsignmentFactory::createByCarrierId(your_carrier_id))
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 146')
     ->setCountry('NL')
@@ -85,7 +85,7 @@ $myParcelCollection = (new MyParcelCollection())
 // Loop through your shipments, adding each to the same MyParcelCollection()
 foreach ($yourShipments as $yourShipment) {
 
-    $consignment = (new MyParcelConsignment())
+    $consignment = ((ConsignmentFactory::createByCarrierId(your_carrier_id))
         ->setApiKey('api_key_from_MyParcel_backoffice')
         ->setReferenceId($yourShipment['reference_id'])
         ->setPerson($yourShipment['name'])
