@@ -351,6 +351,7 @@ class MyParcelCollection extends Collection
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {

@@ -18,7 +18,6 @@ namespace MyParcelNL\Sdk\src\tests\CreateConsignments\InternationalFullStreetTes
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
 
 
 /**
@@ -30,7 +29,7 @@ class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers       \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::getFullStreet
+     * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::getFullStreet
      * @dataProvider additionProvider()
      *
      * @param $carrierId

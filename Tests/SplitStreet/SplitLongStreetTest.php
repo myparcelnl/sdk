@@ -18,8 +18,6 @@ namespace MyParcelNL\Sdk\src\tests\CreateConsignments\SplitStreetTest;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
 
 /**
  * Class SplitStreetTest
