@@ -35,12 +35,15 @@ trait HasCheckoutFields
      *
      * @param string $checkoutData
      *
+     * @param string $aCheckoutData
+     *
      * @return $this
-     * @throws \Exception
      */
-    public function setDeliveryDateFromCheckout($checkoutData)
+    public function setDeliveryDateFromCheckout($checkoutData, $aCheckoutData = null)
     {
-        $aCheckoutData = json_decode($checkoutData, true);
+        if (null !== $checkoutData) {
+            $aCheckoutData = json_decode($checkoutData, true);
+        }
 
         if (
             ! is_array($aCheckoutData) ||
@@ -63,16 +66,20 @@ trait HasCheckoutFields
      *
      * @param string $checkoutData
      *
+     * @param string $aCheckoutData
+     *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setPickupAddressFromCheckout($checkoutData)
+    public function setPickupAddressFromCheckout($checkoutData, $aCheckoutData = null)
     {
         if ($this->getCountry() !== MyParcelConsignment::CC_NL && $this->getCountry() !== MyParcelConsignment::CC_BE) {
             return $this;
         }
 
-        $aCheckoutData = json_decode($checkoutData, true);
+        if (null !== $checkoutData) {
+            $aCheckoutData = json_decode($checkoutData, true);
+        }
 
         if (! is_array($aCheckoutData) ||
             ! key_exists('location', $aCheckoutData)
