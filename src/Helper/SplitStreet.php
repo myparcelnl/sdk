@@ -106,7 +106,7 @@ class SplitStreet
 
         if ($fullStreet != $matches[0]) {
             // Characters are gone by preg_match
-            throw new InvalidConsignmentException('Something went wrong with splitting up address ' . $fullStreet);
+            throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
         }
     }
 
