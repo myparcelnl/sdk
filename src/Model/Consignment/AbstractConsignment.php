@@ -1607,7 +1607,8 @@ class AbstractConsignment
     }
 
     /**
-     * @param int $weight @todo add comment gram
+     * The weight has to be entered in grams
+     * @param int $weight
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
