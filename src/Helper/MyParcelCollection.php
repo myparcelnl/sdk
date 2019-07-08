@@ -20,6 +20,7 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
@@ -371,7 +372,7 @@ class MyParcelCollection extends Collection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, (new AbstractConsignment())->setApiKey($key));
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($key)));
             $this->addConsignment($consignmentAdapter->getConsignment());
         }
 
@@ -610,7 +611,7 @@ class MyParcelCollection extends Collection
         foreach ($consignmentIds as $id) {
 
             $consignment = new AbstractConsignment();
-            $consignment->setConsignmentId($id);
+            $consignment->setConsignmentId((int) $id);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
@@ -719,16 +720,31 @@ class MyParcelCollection extends Collection
     private function getNewCollectionFromResult($result)
     {
         $newCollection = new static;
+        /** @var AbstractConsignment $consignment */
+        $consignment = $this->first();
+        $apiKey = $consignment->getApiKey();
+
         foreach ($result as $shipment) {
-
+//            $this->items = $this->reject(function(AbstractConsignment $consignment) use ($shipment) {
+//                if ($consignment->getConsignmentId() == $shipment['id']) {
+//                    return true;
+//                }
+//                if ($consignment->getReferenceId() == $shipment['reference_identifier']) {
+//                    return true;
+//                }
+//
+//                return false;
+//            })->items;
             /** @var Collection|AbstractConsignment[] $consignments */
-            $consignments = $this->where('consignment_id', $shipment['id']);
+//            $consignments = $this->where('consignment_id', $shipment['id']);
+//
+//            if ($consignments->isEmpty()) {
+//                $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
+//            }
 
-            if ($consignments->isEmpty()) {
-                $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
-            }
-
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first());
+//            $consignment        = $consignments->first();
+            $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
             $isMultiCollo       = ! empty($shipment['secondary_shipments']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
