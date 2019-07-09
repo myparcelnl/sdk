@@ -37,7 +37,7 @@ class FindConsignmentTest extends \PHPUnit\Framework\TestCase
             return;
         }
 
-        $collection = MyParcelCollection::find((int)$consignmentId, getenv('API_KEY'));
+        $collection = MyParcelCollection::find((int) $consignmentId, getenv('API_KEY'));
 
         $this->assertCount(1, $collection);
         $this->assertInternalType('string', $collection->getOneConsignment()->getStreet());
