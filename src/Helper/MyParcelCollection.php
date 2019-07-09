@@ -722,10 +722,10 @@ class MyParcelCollection extends Collection
         $newCollection = new static;
         /** @var AbstractConsignment $consignment */
         $consignment = $this->first();
-        $apiKey = $consignment->getApiKey();
+        $apiKey      = $consignment->getApiKey();
 
         foreach ($result as $shipment) {
-            $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
+            $consignment        = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
             $isMultiCollo       = ! empty($shipment['secondary_shipments']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
