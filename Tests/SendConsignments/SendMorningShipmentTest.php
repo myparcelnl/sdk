@@ -195,8 +195,8 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Katwijk',
                 'phone'             => '123-45-235-435',
-                'package_type'      => 1,
-                'delivery_type'     => 1,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_MORNING,
                 'label_description' => 'Label description',
                 'delivery_date'     => date('Y-m-d', strtotime("+1 day"))
             ],
@@ -215,8 +215,8 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 'city'              => 'Katwijk',
                 'phone'             => '123-45-235-435',
                 'signature'         => true,
-                'package_type'      => 1,
-                'delivery_type'     => 1,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_MORNING,
                 'label_description' => 'Label description',
                 'delivery_date'     => date('Y-m-d', strtotime("+1 day"))
             ]

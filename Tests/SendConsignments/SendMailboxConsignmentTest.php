@@ -149,7 +149,7 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Katwijk',
                 'phone'             => '123-45-235-435',
-                'package_type'      => 2,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
                 'large_format'      => true,
                 'only_recipient'    => true,
                 'signature'         => true,

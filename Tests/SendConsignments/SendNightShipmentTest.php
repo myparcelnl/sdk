@@ -192,8 +192,8 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Katwijk',
                 'phone'             => '123-45-235-435',
-                'package_type'      => 1,
-                'delivery_type'     => 3,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_EVENING,
                 'label_description' => 'Label description',
                 'delivery_date'     => '2019-07-28'
             ],
@@ -212,8 +212,8 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 'city'              => 'Katwijk',
                 'phone'             => '123-45-235-435',
                 'signature'         => true,
-                'package_type'      => 1,
-                'delivery_type'     => 3,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_EVENING,
                 'label_description' => 'Label description',
                 'delivery_date'     => '2019-07-28'
             ]

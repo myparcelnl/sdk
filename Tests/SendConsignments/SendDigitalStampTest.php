@@ -86,7 +86,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Rijnsburg',
                 'phone'             => '123456',
-                'package_type'      => 4,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
                 'label_description' => 112345,
                 'weight'            => 76
             ],
@@ -104,7 +104,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Rijnsburg',
                 'phone'             => '123456',
-                'package_type'      => 4,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
                 'label_description' => 112345,
                 'weight'            => 1999
             ],
@@ -122,7 +122,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Rijnsburg',
                 'phone'             => '123456',
-                'package_type'      => 4,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
                 'label_description' => 112345,
                 'weight'            => 0
 

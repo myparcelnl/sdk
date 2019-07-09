@@ -141,7 +141,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Rijnsburg',
                 'phone'             => '123456',
-                'package_type'      => 1,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 112345,
                 'custom_items'      => [
                     [

@@ -17,6 +17,7 @@ namespace myparcelnl\sdk\Tests\SendConsignments;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
@@ -102,7 +103,7 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2231JE',
                 'city'              => 'Katwijk',
                 'phone'             => '123-45-235-435',
-                'package_type'      => 1,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'large_format'      => false,
                 'age_check'         => false,
                 'only_recipient'    => false,
