@@ -101,7 +101,7 @@ class MyParcelRequest
         $this->api_key = $apiKey;
         $this->body    = $body;
 
-        $header[] = $requestHeader . 'charset=utf-8';
+        $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
 
         $this->header = $header;
@@ -143,31 +143,6 @@ class MyParcelRequest
 
         if ($this->getError()) {
             throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return $this->userAgent;
-    }
-
-    /**
-     * @param string $userAgent
-     *
-     * @return $this
-     */
-    public function setUserAgent($userAgent = null)
-    {
-        if ($userAgent) {
-            $this->userAgent = $userAgent;
-        }
-        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
-            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
         }
 
         return $this;
