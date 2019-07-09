@@ -725,24 +725,6 @@ class MyParcelCollection extends Collection
         $apiKey = $consignment->getApiKey();
 
         foreach ($result as $shipment) {
-//            $this->items = $this->reject(function(AbstractConsignment $consignment) use ($shipment) {
-//                if ($consignment->getConsignmentId() == $shipment['id']) {
-//                    return true;
-//                }
-//                if ($consignment->getReferenceId() == $shipment['reference_identifier']) {
-//                    return true;
-//                }
-//
-//                return false;
-//            })->items;
-            /** @var Collection|AbstractConsignment[] $consignments */
-//            $consignments = $this->where('consignment_id', $shipment['id']);
-//
-//            if ($consignments->isEmpty()) {
-//                $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
-//            }
-
-//            $consignment        = $consignments->first();
             $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
             $isMultiCollo       = ! empty($shipment['secondary_shipments']);
