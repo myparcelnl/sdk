@@ -13,6 +13,16 @@ class PostNLConsignment extends AbstractConsignment
     /**
      * @var array
      */
+    private const VALID_PACKAGE_TYPES = [
+        self::PACKAGE_TYPE_PACKAGE,
+        self::PACKAGE_TYPE_MAILBOX,
+        self::PACKAGE_TYPE_LETTER,
+        self::PACKAGE_TYPE_DIGITAL_STAMP
+    ];
+
+    /**
+     * @var array
+     */
     protected $insurance_possibilities_local = [0, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
 
     /**
@@ -104,22 +114,18 @@ class PostNLConsignment extends AbstractConsignment
      *          3. letter
      * Required: Yes
      *
-     * @param int $package_type
+     * @param int $packageType
      *
      * @return $this
      * @throws \Exception
      */
-    public function setPackageType(int $package_type): AbstractConsignment
+    public function setPackageType(int $packageType): AbstractConsignment
     {
-        if ($package_type != self::PACKAGE_TYPE_PACKAGE &&
-            $package_type != self::PACKAGE_TYPE_MAILBOX &&
-            $package_type != self::PACKAGE_TYPE_LETTER &&
-            $package_type != self::PACKAGE_TYPE_DIGITAL_STAMP
-        ) {
+        if (! in_array($packageType, self::VALID_PACKAGE_TYPES)) {
             throw new \Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
-        return parent::setPackageType($package_type);
+        return parent::setPackageType($packageType);
     }
 
     /**

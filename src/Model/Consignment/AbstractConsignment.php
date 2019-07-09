@@ -1015,13 +1015,13 @@ class AbstractConsignment
      *          3. letter
      * Required: Yes
      *
-     * @param int $package_type
+     * @param int $packageType
      *
      * @return $this
      */
-    public function setPackageType(int $package_type): self
+    public function setPackageType(int $packageType): self
     {
-        $this->package_type = $package_type;
+        $this->package_type = $packageType;
 
         return $this;
     }
@@ -1586,7 +1586,7 @@ class AbstractConsignment
      */
     public function getTotalWeight(): int
     {
-        if (!empty($this->getPhysicalProperties()['weight'])){
+        if (! empty($this->getPhysicalProperties()['weight'])) {
             $weight = (int) $this->getPhysicalProperties()['weight'] ?? null;
             if ($weight) {
                 return $weight;
@@ -1608,6 +1608,7 @@ class AbstractConsignment
 
     /**
      * The weight has to be entered in grams
+     *
      * @param int $weight
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment

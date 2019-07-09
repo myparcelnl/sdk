@@ -8,6 +8,12 @@ class BpostConsignment extends AbstractConsignment
      * @var int
      */
     public const CARRIER_ID = 2;
+    /**
+     * @var array
+     */
+    private const VALID_PACKAGE_TYPES = [
+        self::PACKAGE_TYPE_PACKAGE
+    ];
 
     /**
      * @var array
@@ -88,18 +94,18 @@ class BpostConsignment extends AbstractConsignment
      *          3. letter
      * Required: Yes
      *
-     * @param int $package_type
+     * @param int $packageType
      *
      * @return $this
      * @throws \Exception
      */
-    public function setPackageType(int $package_type): AbstractConsignment
+    public function setPackageType(int $packageType): AbstractConsignment
     {
-        if ($package_type != self::PACKAGE_TYPE_PACKAGE) {
+        if (! in_array($packageType, self::VALID_PACKAGE_TYPES)) {
             throw new \Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
-        return parent::setPackageType($package_type);
+        return parent::setPackageType($packageType);
     }
 
     /**
