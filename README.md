@@ -51,14 +51,15 @@ You can download the zip on the project's [releases page](https://github.com/myp
 Add the following lines to your project to import the SDK classes for creating shipments.
 ```php
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\AbstractConsignment;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 ```
 
 ### Create a consignment
 This example uses only the required methods to create a shipment and download its label.
 
 ```php
-$consignment = (ConsignmentFactory::createByCarrierId(your_carrier_id))
+$consignment = (ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 146')
     ->setCountry('NL')
@@ -85,7 +86,7 @@ $myParcelCollection = (new MyParcelCollection())
 // Loop through your shipments, adding each to the same MyParcelCollection()
 foreach ($yourShipments as $yourShipment) {
 
-    $consignment = ((ConsignmentFactory::createByCarrierId(your_carrier_id))
+    $consignment = ((ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
         ->setApiKey('api_key_from_MyParcel_backoffice')
         ->setReferenceId($yourShipment['reference_id'])
         ->setPerson($yourShipment['name'])
@@ -98,6 +99,20 @@ foreach ($yourShipments as $yourShipment) {
         ->addConsignment($consignment);
 }
 ```
+
+### Different carriers
+It is possible to use multiple carriers, for this you need to use:
+`((ConsignmentFactory::createByCarrierId (PostNLConsignment::CARRIER_ID))`.
+
+The following carriers are supported:
+- PostNL: `PostNLConsignment::CARRIER_ID`
+- bpost: `BpostConsignment::CARRIER_ID`
+- DPD: `DPDConsignment::CARRIER_ID`
+
+For this, you need to add the following lines to your project:
+- PostNL: `use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;`
+- bpost: `use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;`
+- DPD: `use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;`
 
 ### Label format and position
 Choose to output the label as either A4 or A6 when creating a pdf or download link with the argument `$positions` of `setPdfOfLabels($positions)` and `setLinkOfLabels($positions)`.
