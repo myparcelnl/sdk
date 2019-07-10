@@ -8,6 +8,7 @@ class BpostConsignment extends AbstractConsignment
      * @var int
      */
     public const CARRIER_ID = 2;
+
     /**
      * @var array
      */
