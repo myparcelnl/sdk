@@ -10,6 +10,7 @@ class DPDConsignment extends AbstractConsignment
      * @var int
      */
     public const CARRIER_ID = 4;
+
     /**
      * @var array
      */
