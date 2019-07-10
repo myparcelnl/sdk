@@ -102,7 +102,7 @@ foreach ($yourShipments as $yourShipment) {
 
 ### Different carriers
 It is possible to use multiple carriers, for this you need to use:\
-`((ConsignmentFactory::createByCarrierId (PostNLConsignment::CARRIER_ID))`.
+`((ConsignmentFactory::createByCarrierId (PostNLConsignment::CARRIER_ID))`
 
 The following carriers are supported:
 - PostNL: `PostNLConsignment::CARRIER_ID`
