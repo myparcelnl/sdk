@@ -858,20 +858,10 @@ class AbstractConsignment
      */
     public function isCorrectAddress(string $fullStreet): bool
     {
-        $result = preg_match(SplitStreet::getRegexByCountry($this->local_cc, $this->getCountry()), $fullStreet, $matches);
+        $localCountry = $this->local_cc;
+        $destinationCountry = $this->getCountry();
 
-        if (! $result || ! is_array($matches)) {
-            // Invalid full street supplied
-            return false;
-        }
-
-        $fullStreet = str_replace('\n', ' ', $fullStreet);
-        if ($fullStreet != $matches[0]) {
-            // Characters are gone by preg_match
-            return false;
-        }
-
-        return (bool) $result;
+        return SplitStreet::isCorrectStreet($fullStreet, $localCountry, $destinationCountry);
     }
 
     /**

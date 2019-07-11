@@ -91,23 +91,28 @@ class SplitStreet
     }
 
     /**
-     * @param $fullStreet
-     * @param $result
-     * @param $matches
+     * @param string      $fullStreet
+     * @param string      $localCountry
+     * @param string|null $destinationCountry
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     * @return bool
      */
-    private static function validate($fullStreet, $result, $matches)
+    public static function isCorrectStreet(string $fullStreet, string $localCountry, ?string $destinationCountry): bool
     {
+        $result = preg_match(SplitStreet::getRegexByCountry($localCountry, $destinationCountry), $fullStreet, $matches);
+
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
-            throw new InvalidConsignmentException('Invalid full street supplied: ' . $fullStreet);
+            return false;
         }
 
+        $fullStreet = str_replace('\n', ' ', $fullStreet);
         if ($fullStreet != $matches[0]) {
             // Characters are gone by preg_match
-            throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
+            return false;
         }
+
+        return (bool) $result;
     }
 
     /**
@@ -130,5 +135,25 @@ class SplitStreet
         }
 
         return null;
+    }
+
+    /**
+     * @param $fullStreet
+     * @param $result
+     * @param $matches
+     *
+     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     */
+    private static function validate($fullStreet, $result, $matches)
+    {
+        if (! $result || ! is_array($matches)) {
+            // Invalid full street supplied
+            throw new InvalidConsignmentException('Invalid full street supplied: ' . $fullStreet);
+        }
+
+        if ($fullStreet != $matches[0]) {
+            // Characters are gone by preg_match
+            throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
+        }
     }
 }
