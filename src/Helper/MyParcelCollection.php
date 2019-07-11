@@ -177,13 +177,8 @@ class MyParcelCollection extends Collection
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
 
-<<<<<<< Updated upstream
-        $consignment->validate();
-
-        $this->push($consignment);
-=======
+        $trackTraceHolder->consignment->validate();
         $this->push($trackTraceHolder);
->>>>>>> Stashed changes
 
         return $this;
     }
