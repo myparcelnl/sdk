@@ -1395,12 +1395,12 @@ class AbstractConsignment
      *
      * Required: Yes for international shipments
      *
-     * @param $item
+     * @param \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item
      *
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addItem($item): self
+    public function addItem(MyParcelCustomsItem $item): self
     {
         $item->ensureFilled();
 

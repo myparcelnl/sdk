@@ -17,6 +17,7 @@ namespace MyParcelNL\Sdk\src\Helper;
 use Exception;
 use http\Exception\BadMethodCallException;
 use InvalidArgumentException;
+use MyParcelNL\Magento\Model\Sales\TrackTraceHolder;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -124,7 +125,7 @@ class MyParcelCollection extends Collection
     /**
      * This is deprecated because there may be multiple consignments with the same reference id
      *
-     * @deprecated Use getConsignmentsByReferenceId instead
+     * @deprecated Use getConsignmentsByReferenceId()->first() instead
      *
      * @param $id
      *
@@ -165,20 +166,24 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Magento\Model\Sales\TrackTraceHolder $trackTraceHolder
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignment(AbstractConsignment $consignment)
+    public function addConsignment(TrackTraceHolder $trackTraceHolder)
     {
-        if ($consignment->getApiKey() === null) {
+        if ($trackTraceHolder->consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
 
+<<<<<<< Updated upstream
         $consignment->validate();
 
         $this->push($consignment);
+=======
+        $this->push($trackTraceHolder);
+>>>>>>> Stashed changes
 
         return $this;
     }
@@ -528,7 +533,7 @@ class MyParcelCollection extends Collection
      *
      * @return array
      */
-    public function getConsignmentIds(&$key)
+    public function getConsignmentIds(&$key = null): array
     {
         $conceptIds = [];
         /** @var AbstractConsignment $consignment */
