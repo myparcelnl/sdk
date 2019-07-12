@@ -359,11 +359,11 @@ class AbstractConsignment
      *
      * The id of the consignment
      *
-     * @return $this
+     * @param int|null $id
      *
-     * @param int $id
+     * @return $this
      */
-    public function setConsignmentId(int $id): self
+    public function setConsignmentId(?int $id): self
     {
         $this->consignment_id = $id;
 
