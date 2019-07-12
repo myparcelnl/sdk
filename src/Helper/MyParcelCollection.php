@@ -17,7 +17,6 @@ namespace MyParcelNL\Sdk\src\Helper;
 use Exception;
 use http\Exception\BadMethodCallException;
 use InvalidArgumentException;
-use MyParcelNL\Magento\Model\Sales\TrackTraceHolder;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -166,19 +165,18 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Magento\Model\Sales\TrackTraceHolder $trackTraceHolder
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignment(TrackTraceHolder $trackTraceHolder)
+    public function addConsignment(AbstractConsignment $consignment)
     {
-        if ($trackTraceHolder->consignment->getApiKey() === null) {
+        if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
 
-        $trackTraceHolder->consignment->validate();
-        $this->push($trackTraceHolder);
+        $this->push($consignment);
 
         return $this;
     }
@@ -742,10 +740,12 @@ class MyParcelCollection extends Collection
         return $newCollection;
     }
 
-    private function addMissingReferenceId()
+    /**
+     * @return void
+     */
+    private function addMissingReferenceId(): void
     {
-        $this->transform(function($consignment) {
-            /** @var AbstractConsignment $consignment */
+        $this->transform(function(AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
