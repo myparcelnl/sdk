@@ -40,6 +40,10 @@ trait HasCheckoutFields
      */
     public function setDeliveryDateFromCheckout($checkoutData)
     {
+        if (empty($checkoutData)) {
+            return $this;
+        }
+
         $aCheckoutData = json_decode($checkoutData, true);
 
         if (
