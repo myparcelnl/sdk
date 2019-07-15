@@ -913,9 +913,9 @@ class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
         return $this->company;
     }
@@ -925,11 +925,11 @@ class AbstractConsignment
      *
      * Required: no
      *
-     * @param string $company
+     * @param string|null $company
      *
      * @return $this
      */
-    public function setCompany(string $company): self
+    public function setCompany(?string $company): self
     {
         $this->company = $company;
 
