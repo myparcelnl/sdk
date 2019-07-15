@@ -165,12 +165,12 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment|null $consignment
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignment(AbstractConsignment $consignment)
+    public function addConsignment(?AbstractConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
