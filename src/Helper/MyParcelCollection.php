@@ -524,9 +524,9 @@ class MyParcelCollection extends Collection
      *
      * @param $key
      *
-     * @return array
+     * @return array|null
      */
-    public function getConsignmentIds(&$key = null): array
+    public function getConsignmentIds(&$key = null): ?array
     {
         $conceptIds = [];
         /** @var AbstractConsignment $consignment */
