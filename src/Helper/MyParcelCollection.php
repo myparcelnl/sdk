@@ -522,11 +522,11 @@ class MyParcelCollection extends Collection
      *
      * @internal
      *
-     * @param $key
+     * @param string|null $key
      *
      * @return array|null
      */
-    public function getConsignmentIds(&$key = null): ?array
+    public function getConsignmentIds(string &$key = null): ?array
     {
         $conceptIds = [];
         /** @var AbstractConsignment $consignment */
