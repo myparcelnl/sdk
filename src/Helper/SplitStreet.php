@@ -137,14 +137,16 @@ class SplitStreet
         return null;
     }
 
+
     /**
-     * @param $fullStreet
-     * @param $result
-     * @param $matches
+     * @param string $fullStreet
+     * @param string $result
+     * @param array  $matches
      *
+     * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
      */
-    private static function validate($fullStreet, $result, $matches)
+    private static function validate(string $fullStreet, string $result, array $matches): void
     {
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
@@ -155,5 +157,6 @@ class SplitStreet
             // Characters are gone by preg_match
             throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
         }
+        return;
     }
 }
