@@ -2,12 +2,21 @@
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
+
 class DPDConsignment extends AbstractConsignment
 {
     /**
      * @var int
      */
-    public const CARRIER_ID  = 4;
+    public const CARRIER_ID = 4;
+
+    /**
+     * @var array
+     */
+    private const VALID_PACKAGE_TYPES = [
+        self::PACKAGE_TYPE_PACKAGE
+    ];
 
     /**
      * @var array
@@ -18,6 +27,7 @@ class DPDConsignment extends AbstractConsignment
      * @var string
      */
     protected $local_cc = self::CC_BE;
+
     /**
      * @param array $consignmentEncoded
      *
@@ -75,6 +85,7 @@ class DPDConsignment extends AbstractConsignment
 
         return $this;
     }
+
     /**
      * The package type
      *
@@ -86,18 +97,18 @@ class DPDConsignment extends AbstractConsignment
      *          3. letter
      * Required: Yes
      *
-     * @param int $package_type
+     * @param int $packageType
      *
      * @return $this
      * @throws \Exception
      */
-    public function setPackageType(int $package_type): AbstractConsignment
+    public function setPackageType(int $packageType): AbstractConsignment
     {
-        if ($package_type != self::PACKAGE_TYPE_PACKAGE) {
+        if (! in_array($packageType, self::VALID_PACKAGE_TYPES)) {
             throw new \Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
-        return parent::setPackageType($package_type);
+        return parent::setPackageType($packageType);
     }
 
     /**
@@ -158,5 +169,18 @@ class DPDConsignment extends AbstractConsignment
         $this->pickup_network_id = $pickupNetworkId;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     */
+    public function validate(): bool
+    {
+        if ($this->getTotalWeight() < 10) {
+            throw new InvalidConsignmentException('It is necessary to at a minimum weight of 10 grams');
+        }
+
+        return true;
     }
 }

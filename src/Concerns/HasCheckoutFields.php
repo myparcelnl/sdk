@@ -38,8 +38,12 @@ trait HasCheckoutFields
      * @return $this
      * @throws \Exception
      */
-    public function setDeliveryDateFromCheckout($checkoutData)
+    public function setDeliveryDateFromCheckout(?string $checkoutData)
     {
+        if (! $checkoutData) {
+            return $this;
+        }
+
         $aCheckoutData = json_decode($checkoutData, true);
 
         if (
@@ -66,9 +70,13 @@ trait HasCheckoutFields
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setPickupAddressFromCheckout($checkoutData)
+    public function setPickupAddressFromCheckout(?string $checkoutData)
     {
         if ($this->getCountry() !== AbstractConsignment::CC_NL && $this->getCountry() !== AbstractConsignment::CC_BE) {
+            return $this;
+        }
+
+        if (! $checkoutData) {
             return $this;
         }
 

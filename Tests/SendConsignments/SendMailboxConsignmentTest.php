@@ -16,8 +16,9 @@
 namespace MyParcelNL\Sdk\tests\SendConsignments;
 
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendMailboxConsignmentTest
@@ -28,11 +29,15 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test one shipment with createConcepts()
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
@@ -114,7 +119,7 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
 
@@ -131,25 +136,26 @@ class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'The insurance man',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'The insurance man',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 2,
-                'large_format' => true,
-                'only_recipient' => true,
-                'signature' => true,
-                'return' => true,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
+                'large_format'      => true,
+                'only_recipient'    => true,
+                'signature'         => true,
+                'return'            => true,
                 'label_description' => 1234,
-                'insurance' => 250,
+                'insurance'         => 250,
             ]
         ];
     }

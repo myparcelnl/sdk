@@ -12,7 +12,6 @@
 
 namespace MyParcelNL\Sdk\src\Adapter;
 
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class ConsignmentAdapter

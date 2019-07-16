@@ -157,7 +157,7 @@ class MyParcelCustomsItem
      */
     public function setClassification($classification)
     {
-        $this->classification = substr($classification, 0, 4);
+        $this->classification = substr("$classification", 0, 4);
 
         return $this;
     }

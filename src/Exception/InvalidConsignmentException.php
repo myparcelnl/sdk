@@ -2,6 +2,6 @@
 
 namespace MyParcelNL\Sdk\src\Exception;
 
-class AddressException extends \Exception
+class InvalidConsignmentException extends \Exception
 {
 }

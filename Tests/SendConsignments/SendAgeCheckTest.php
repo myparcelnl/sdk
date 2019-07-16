@@ -15,8 +15,8 @@ namespace MyParcelNL\Sdk\tests\SendConsignments\SendAgeCheckTest;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 
 /**
@@ -30,6 +30,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
@@ -38,9 +39,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             return $this;
         }
 
-
         foreach ($this->additionProvider() as $consignmentTest) {
-
 
             if (isset($consignmentTest['exception'])) {
                 $this->expectExceptionMessage($consignmentTest['exception']);
@@ -115,11 +114,9 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
-
-            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 
@@ -131,95 +128,95 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
     public function additionProvider()
     {
         return [
-            'Normal check' => [
-                'api_key' => getenv('API_KEY'),
-                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+            'Normal check'          => [
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => false,
-                'age_check' => false,
-                'only_recipient' => false,
-                'signature' => false,
-                'return' => false,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'package_type'      => 1,
+                'large_format'      => false,
+                'age_check'         => false,
+                'only_recipient'    => false,
+                'signature'         => false,
+                'return'            => false,
                 'label_description' => '18+ check',
             ],
-            'Normal 18+ check' => [
-                'api_key' => getenv('API_KEY'),
-                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+            'Normal 18+ check'       => [
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => false,
-                'age_check' => true,
-                'only_recipient' => true,
-                'signature' => true,
-                'return' => false,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'package_type'      => 1,
+                'large_format'      => false,
+                'age_check'         => true,
+                'only_recipient'    => true,
+                'signature'         => true,
+                'return'            => false,
                 'label_description' => '18+ check',
             ],
             '18+ check no signature' => [
-                'api_key' => getenv('API_KEY'),
-                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'age_check' => true,
+                'api_key'              => getenv('API_KEY'),
+                'carrier_id'           => PostNLConsignment::CARRIER_ID,
+                'cc'                   => 'NL',
+                'person'               => 'Piet',
+                'company'              => 'Mega Store',
+                'full_street_input'    => 'Koestraat 55',
+                'full_street'          => 'Koestraat 55',
+                'street'               => 'Koestraat',
+                'number'               => 55,
+                'number_suffix'        => '',
+                'postal_code'          => '2231JE',
+                'city'                 => 'Katwijk',
+                'phone'                => '123-45-235-435',
+                'package_type'         => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'age_check'            => true,
                 'only_recipient_input' => false,
-                'only_recipient' => true,
-                'signature_input' => false,
-                'signature' => true,
-                'label_description' => '18+ check no signature',
+                'only_recipient'       => true,
+                'signature_input'      => false,
+                'signature'            => true,
+                'label_description'    => '18+ check no signature',
             ],
             '18+ check EU shipment' => [
-                'api_key' => getenv('API_KEY'),
-                'carrier_id'        => PostNLConsignment::CARRIER_POSTNL,
-                'cc' => 'BE',
-                'person' => 'BETest',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'BE',
+                'person'            => 'BETest',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'hoofdstraat 16',
-                'full_street' => 'hoofdstraat 16',
-                'street' => 'hoofdstraat',
-                'number' => 16,
-                'number_suffix' => '',
-                'postal_code' => '2000',
-                'city' => 'Antwerpen',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'large_format' => false,
-                'age_check' => true,
-                'only_recipient' => false,
-                'signature_input' => false,
-                'signature' => false,
-                'return' => false,
+                'full_street'       => 'hoofdstraat 16',
+                'street'            => 'hoofdstraat',
+                'number'            => 16,
+                'number_suffix'     => '',
+                'postal_code'       => '2000',
+                'city'              => 'Antwerpen',
+                'phone'             => '123-45-235-435',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'large_format'      => false,
+                'age_check'         => true,
+                'only_recipient'    => false,
+                'signature_input'   => false,
+                'signature'         => false,
+                'return'            => false,
                 'label_description' => '18+ check no signature',
-                'exception' => 'The age check is not possible with an EU shipment or world shipment',
+                'exception'         => 'The age check is not possible with an EU shipment or world shipment',
             ],
         ];
     }

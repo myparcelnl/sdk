@@ -359,11 +359,11 @@ class AbstractConsignment
      *
      * The id of the consignment
      *
-     * @return $this
+     * @param int|null $id
      *
-     * @param int $id
+     * @return $this
      */
-    public function setConsignmentId(int $id): self
+    public function setConsignmentId(?int $id): self
     {
         $this->consignment_id = $id;
 
@@ -796,7 +796,7 @@ class AbstractConsignment
      *
      * Required: no
      *
-     * @param string $numberSuffix
+     * @param string|null $numberSuffix
      *
      * @return $this
      */
@@ -858,20 +858,10 @@ class AbstractConsignment
      */
     public function isCorrectAddress(string $fullStreet): bool
     {
-        $result = preg_match(SplitStreet::getRegexByCountry($this->local_cc, $this->getCountry()), $fullStreet, $matches);
+        $localCountry = $this->local_cc;
+        $destinationCountry = $this->getCountry();
 
-        if (! $result || ! is_array($matches)) {
-            // Invalid full street supplied
-            return false;
-        }
-
-        $fullStreet = str_replace('\n', ' ', $fullStreet);
-        if ($fullStreet != $matches[0]) {
-            // Characters are gone by preg_match
-            return false;
-        }
-
-        return (bool) $result;
+        return SplitStreet::isCorrectStreet($fullStreet, $localCountry, $destinationCountry);
     }
 
     /**
@@ -923,9 +913,9 @@ class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
         return $this->company;
     }
@@ -935,11 +925,11 @@ class AbstractConsignment
      *
      * Required: no
      *
-     * @param string $company
+     * @param string|null $company
      *
      * @return $this
      */
-    public function setCompany(string $company): self
+    public function setCompany(?string $company): self
     {
         $this->company = $company;
 
@@ -1015,13 +1005,13 @@ class AbstractConsignment
      *          3. letter
      * Required: Yes
      *
-     * @param int $package_type
+     * @param int $packageType
      *
      * @return $this
      */
-    public function setPackageType(int $package_type): self
+    public function setPackageType(int $packageType): self
     {
-        $this->package_type = $package_type;
+        $this->package_type = $packageType;
 
         return $this;
     }
@@ -1136,7 +1126,7 @@ class AbstractConsignment
      *
      * Required: No
      *
-     * @param $signature
+     * @param bool $signature
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
@@ -1395,12 +1385,12 @@ class AbstractConsignment
      *
      * Required: Yes for international shipments
      *
-     * @param $item
+     * @param \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item
      *
      * @return $this
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addItem($item): self
+    public function addItem(MyParcelCustomsItem $item): self
     {
         $item->ensureFilled();
 
@@ -1586,6 +1576,13 @@ class AbstractConsignment
      */
     public function getTotalWeight(): int
     {
+        if (! empty($this->getPhysicalProperties()['weight'])) {
+            $weight = (int) $this->getPhysicalProperties()['weight'] ?? null;
+            if ($weight) {
+                return $weight;
+            }
+        }
+
         $weight = 0;
 
         foreach ($this->getItems() as $item) {
@@ -1597,6 +1594,20 @@ class AbstractConsignment
         }
 
         return $weight;
+    }
+
+    /**
+     * The weight has to be entered in grams
+     *
+     * @param int $weight
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setTotalWeight(int $weight): self
+    {
+        $this->setPhysicalProperties(['weight' => $weight]);
+
+        return $this;
     }
 
     /**
@@ -1614,5 +1625,13 @@ class AbstractConsignment
         }
 
         return $this->getPackageType() == self::PACKAGE_TYPE_PACKAGE ? $option : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function validate(): bool
+    {
+        return true;
     }
 }
