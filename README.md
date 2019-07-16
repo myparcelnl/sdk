@@ -105,9 +105,9 @@ It is possible to use multiple carriers, for this you need to use:\
 `((ConsignmentFactory::createByCarrierId (PostNLConsignment::CARRIER_ID))`
 
 The following carriers are supported:
-- PostNL: `PostNLConsignment::CARRIER_ID`
-- bpost: `BpostConsignment::CARRIER_ID`
-- DPD: `DPDConsignment::CARRIER_ID`
+- PostNL: `\MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment::CARRIER_ID`
+- bpost: `\MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment::CARRIER_ID`
+- DPD: `\MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment::CARRIER_ID`
 
 For this, you need to add the following lines to your project:
 - PostNL: `use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;`
