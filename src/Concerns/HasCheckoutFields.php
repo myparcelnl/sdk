@@ -36,21 +36,24 @@ trait HasCheckoutFields
      * @param string $checkoutData
      *
      * @return $this
-     * @throws \Exception
      */
-    public function setDeliveryDateFromCheckout($checkoutData)
+    public function setDeliveryDateFromCheckout($checkoutData = null)
     {
-        $aCheckoutData = json_decode($checkoutData, true);
+        if (! $checkoutData) {
+            return $this;
+        }
 
+        $checkoutData = json_decode($checkoutData, true);
+      
         if (
-            ! is_array($aCheckoutData) ||
-            ! key_exists('date', $aCheckoutData)
+            ! is_array($checkoutData) ||
+            ! key_exists('date', $checkoutData)
         ) {
             return $this;
         }
 
         if ($this->getDeliveryDate() == null) {
-            $this->setDeliveryDate($aCheckoutData['date']);
+            $this->setDeliveryDate($checkoutData['date']);
         }
 
         return $this;
@@ -66,42 +69,46 @@ trait HasCheckoutFields
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setPickupAddressFromCheckout($checkoutData)
+    public function setPickupAddressFromCheckout($checkoutData = null)
     {
         if ($this->getCountry() !== MyParcelConsignment::CC_NL && $this->getCountry() !== MyParcelConsignment::CC_BE) {
             return $this;
         }
 
-        $aCheckoutData = json_decode($checkoutData, true);
+        if (! $checkoutData) {
+            return $this;
+        }
 
-        if (! is_array($aCheckoutData) ||
-            ! key_exists('location', $aCheckoutData)
+        $checkoutData = json_decode($checkoutData, true);
+
+        if (! is_array($checkoutData) ||
+            ! key_exists('location', $checkoutData)
         ) {
             return $this;
         }
 
         if ($this->getDeliveryDate() == null) {
-            $this->setDeliveryDate($aCheckoutData['date']);
+            $this->setDeliveryDate($checkoutData['date']);
         }
 
-        if ($aCheckoutData['price_comment'] == 'retail') {
+        if ($checkoutData['price_comment'] == 'retail') {
             $this->setDeliveryType(MyParcelConsignment::DELIVERY_TYPE_PICKUP);
-        } else if ($aCheckoutData['price_comment'] == 'retailexpress') {
+        } else if ($checkoutData['price_comment'] == 'retailexpress') {
             $this->setDeliveryType(MyParcelConsignment::DELIVERY_TYPE_PICKUP_EXPRESS);
         } else {
             throw new MissingFieldException('No PostNL location found in checkout data: ' . $checkoutData);
         }
 
         $this
-            ->setPickupPostalCode($aCheckoutData['postal_code'])
-            ->setPickupStreet($aCheckoutData['street'])
-            ->setPickupCity($aCheckoutData['city'])
-            ->setPickupNumber($aCheckoutData['number'])
-            ->setPickupLocationName($aCheckoutData['location'])
-            ->setPickupLocationCode($aCheckoutData['location_code']);
+            ->setPickupPostalCode($checkoutData['postal_code'])
+            ->setPickupStreet($checkoutData['street'])
+            ->setPickupCity($checkoutData['city'])
+            ->setPickupNumber($checkoutData['number'])
+            ->setPickupLocationName($checkoutData['location'])
+            ->setPickupLocationCode($checkoutData['location_code']);
 
-        if (isset($aCheckoutData['retail_network_id'])) {
-            $this->setPickupNetworkId($aCheckoutData['retail_network_id']);
+        if (isset($checkoutData['retail_network_id'])) {
+            $this->setPickupNetworkId($checkoutData['retail_network_id']);
         }
 
         return $this;
