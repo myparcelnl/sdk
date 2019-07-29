@@ -18,5 +18,8 @@ require_once ('Concerns/HasCheckoutFields.php');
 require_once ('Model/MyParcelRequest.php');
 require_once ('Model/MyParcelConsignment.php');
 require_once ('Adapter/ConsignmentAdapter.php');
+require_once ('Exception/AddressException.php');
+require_once ('Exception/ApiException.php');
+require_once ('Exception/MissingFieldException.php');
 require_once ('Model/Repository/MyParcelConsignmentRepository.php');
 require_once ('Model/MyParcelCustomsItem.php');
