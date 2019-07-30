@@ -16,7 +16,6 @@ require_once ('Services/ConsignmentEncode.php');
 require_once ('Services/CollectionEncode.php');
 require_once ('Concerns/HasCheckoutFields.php');
 require_once ('Model/MyParcelRequest.php');
-require_once ('Model/AbstractConsignment.php');
 require_once ('Adapter/ConsignmentAdapter.php');
 require_once ('Model/MyParcelConsignment.php');
 require_once ('Model/Consignment/AbstractConsignment.php');
