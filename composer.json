@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/sdk",
-    "version": "v3.0.0-alpha.1",
+    "version": "v3.0.0-alpha.2",
     "description": "This package is designed to send and receive data from MyParcel by means of an API.",
     "homepage": "https://www.myparcel.nl",
     "tags": ["MyParcel", "My Parcel", "Flespakket", "Post NL", "PostNL"],
