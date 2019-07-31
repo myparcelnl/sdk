@@ -19,6 +19,7 @@ use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Support\Helpers;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 
 /**
  * A model of a consignment
@@ -542,7 +543,7 @@ class AbstractConsignment
      *
      * ISO3166-1 alpha2 country code<br>
      * <br>
-     * Pattern: [A-Z]{2,2}<br>
+     * Pattern: [A-Z]{2}<br>
      * Example: NL, BE, CW<br>
      * Required: Yes
      *
@@ -754,6 +755,21 @@ class AbstractConsignment
         $this->setNumberSuffix($fullStreet->getNumberSuffix());
 
         return $this;
+    }
+
+    /**
+     *
+     * @param string $barcode
+     * @param string $postalCode
+     * @param string $countryCode
+     *
+     * @return string
+     */
+    public function getBarcodeUrl(string $barcode, string $postalCode, string $countryCode): string
+    {
+        $barcodeUrl = TrackTraceUrl::create($barcode, $postalCode, $countryCode);
+
+        return $barcodeUrl;
     }
 
     /**

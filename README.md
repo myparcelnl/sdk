@@ -181,9 +181,9 @@ Available options:
 More information: https://myparcelnl.github.io/api/#6_A_3
 
 ### Retrieve data from a consignment
-Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#myparcelconsignment) for consignments here. 
+Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#PostNLConsignment) for consignments here. 
 ```php
-$consignment = new MyParcelConsignment();
+$consignment = new PostNLConsignment();
 
 echo $consignment->getFullStreet();
 echo $consignment->getPerson();
@@ -202,6 +202,13 @@ $status = $consignment->getStatus();
 The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
 ```php
 $barcode = $consignment->getBarcode();
+```
+
+#### Get Track & Trace url
+The Track & Trace url is available after `downloadPdfOfLabels()` and `getLinkOfLabels()`
+```php
+$consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment());
+echo $consignment->getBarcodeUrl(3SMYPA123456789, '2231JE', 'NL'); // Barcode , Postal code, Country
 ```
 
 ### Create and download label(s)
@@ -227,10 +234,10 @@ This is a list of all the classes in this SDK and their available methods.
 ### Models
 `MyParcelNL/Sdk/src/Model`
 
-#### MyParcelConsignment
-```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
+#### PostNLConsignment
+```MyparcelNL/Sdk/src/Model/Consignment/PostNLConsignment.php```
 ```php
-    $consignment = (new \MyParcelNL\Sdk\src\Model\MyParcelConsignment())
+    $consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     
@@ -353,7 +360,7 @@ $consignment
 ```
 
 #### MyParcelCustomsItem
-This object is embedded in the MyParcelConsignment object for global shipments and is mandatory for non-EU shipments.
+This object is embedded in the PostNLConsignment object for global shipments and is mandatory for non-EU shipments.
 
 ```MyParcelNL/Sdk/src/Model/MyParcelCustomsItem.php```
 ```php
