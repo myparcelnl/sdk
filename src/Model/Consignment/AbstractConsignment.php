@@ -767,8 +767,7 @@ class AbstractConsignment
      */
     public function getBarcodeUrl(string $barcode, string $postalCode, string $countryCode): string
     {
-        $barcodeUrl = (new TrackTraceUrl())
-            ->create($barcode, $postalCode, $countryCode);
+        $barcodeUrl = TrackTraceUrl::create($barcode, $postalCode, $countryCode);
 
         return $barcodeUrl;
     }
