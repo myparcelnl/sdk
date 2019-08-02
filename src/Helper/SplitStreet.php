@@ -146,7 +146,7 @@ class SplitStreet
      * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
      */
-    private static function validate(string $fullStreet, string $result, array $matches): void
+    private static function validate(string $fullStreet, int $result, array $matches): void
     {
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
