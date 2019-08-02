@@ -10,6 +10,11 @@ class BpostConsignment extends AbstractConsignment
     public const CARRIER_ID = 2;
 
     /**
+     * @var string
+     */
+    public const CARRIER_NAME = 'bpost';
+
+    /**
      * @var array
      */
     private const VALID_PACKAGE_TYPES = [

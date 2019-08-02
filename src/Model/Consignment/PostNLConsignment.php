@@ -11,6 +11,11 @@ class PostNLConsignment extends AbstractConsignment
     public const CARRIER_ID = 1;
 
     /**
+     * @var string
+     */
+    public const CARRIER_NAME = 'postnl';
+
+    /**
      * @var array
      */
     private const VALID_PACKAGE_TYPES = [

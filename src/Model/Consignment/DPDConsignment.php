@@ -12,6 +12,11 @@ class DPDConsignment extends AbstractConsignment
     public const CARRIER_ID = 4;
 
     /**
+     * @var string
+     */
+    public const CARRIER_NAME = 'dpd';
+
+    /**
      * @var array
      */
     private const VALID_PACKAGE_TYPES = [
