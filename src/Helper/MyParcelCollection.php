@@ -668,7 +668,7 @@ class MyParcelCollection extends Collection
      *
      * @return $this
      */
-    private function setLabelFormat($positions)
+    public function setLabelFormat($positions)
     {
         /** If $positions is not false, set paper size to A4 */
         if (is_numeric($positions)) {
