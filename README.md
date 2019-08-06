@@ -350,7 +350,7 @@ This object is embedded in the MyParcelConsignment object for global shipments a
   ->setClassification(0111) // Example: 0111 = "Growing of cereals (except rice), leguminous crops and oil seeds"  
   ->setCountry('NL') // Country of origin
   ->setDescription('Cereal grains')
-  ->setItemValue(["amount" => 200, "currency" => "EUR"]) // Must be array with amount and currency like in the example
+  ->setItemValue(40000) // Price of item in cents
   ->setWeight() // The total weight for these items in whole grams. Between 0 and 20000 grams.
   
   ->getAmount()

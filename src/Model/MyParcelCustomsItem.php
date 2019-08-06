@@ -127,11 +127,10 @@ class MyParcelCustomsItem
      *
      * Composite type containing integer and currency. The amount is without decimal
      * separators (in cents).
-     * Pattern: {"amount": integer, "currency": currency }
-     * Example {"amount": 5000, "currency": "EUR"}
      * Required: Yes
      *
      * @param int $item_value
+     *
      * @return $this
      */
     public function setItemValue($item_value)
