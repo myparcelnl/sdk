@@ -2,6 +2,8 @@
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
+
 class BpostConsignment extends AbstractConsignment
 {
     /**
@@ -197,5 +199,27 @@ class BpostConsignment extends AbstractConsignment
         $this->pickup_network_id = $pickupNetworkId;
 
         return $this;
+    }
+    /**
+     * @return bool
+     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     */
+    public function validate(): bool
+    {
+        if ($this->getTotalWeight() < 50) {
+            throw new InvalidConsignmentException('It is necessary to at a minimum weight of 50 grams');
+        }
+
+        /** @var \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item */
+        $amount = 0;
+        foreach ((array) $this->items as $item) {
+            $amount += $item->getAmount();
+        }
+
+        if (! empty($amount) && $amount < 100) {
+            throw new InvalidConsignmentException('It is necessary to use cents and the a minimum price is 1 euro');
+        }
+
+        return true;
     }
 }

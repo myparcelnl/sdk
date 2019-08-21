@@ -131,7 +131,6 @@ class MyParcelCustomsItem
     public function setItemValue($item_value)
     {
         $this->item_value = (int) $item_value;
-
         return $this;
     }
 

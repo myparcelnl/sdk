@@ -111,7 +111,7 @@ class MyParcelCollection extends Collection
     public function getConsignmentsByReferenceId($id)
     {
         if ($id === null) {
-            throw new InvalidArgumentException ('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
+            throw new InvalidArgumentException('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
         if ($this->count() === 1) {
@@ -607,7 +607,6 @@ class MyParcelCollection extends Collection
         $collection = new static();
 
         foreach ($consignmentIds as $id) {
-
             $consignment = new AbstractConsignment();
             $consignment->setConsignmentId((int) $id);
             $consignment->setApiKey($apiKey);
@@ -639,11 +638,9 @@ class MyParcelCollection extends Collection
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {
-
         $collection = new static();
 
         foreach ($referenceIds as $id) {
-
             $consignment = new AbstractConsignment();
             $consignment->setReferenceId($id);
             $consignment->setApiKey($apiKey);
@@ -717,7 +714,7 @@ class MyParcelCollection extends Collection
      */
     private function getNewCollectionFromResult($result)
     {
-        $newCollection = new static;
+        $newCollection = new static();
         /** @var AbstractConsignment $consignment */
         $consignment = $this->first();
         $apiKey      = $consignment->getApiKey();
@@ -729,11 +726,9 @@ class MyParcelCollection extends Collection
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
-
                 $secondaryShipment  = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
                 $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier'])->first());
                 $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
-
             }
         }
 
@@ -745,7 +740,7 @@ class MyParcelCollection extends Collection
      */
     private function addMissingReferenceId(): void
     {
-        $this->transform(function(AbstractConsignment $consignment) {
+        $this->transform(function (AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }

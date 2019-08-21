@@ -14,12 +14,12 @@
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
-use MyParcelNL\Sdk\src\Support\Helpers;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 /**
  * A model of a consignment
@@ -581,7 +581,7 @@ class AbstractConsignment
     {
         return in_array(
             $this->getCountry(),
-            array(
+            [
                 'NL',
                 'BE',
                 'AT',
@@ -608,7 +608,7 @@ class AbstractConsignment
                 'ES',
                 'SE',
                 'XK',
-            )
+            ]
         );
     }
 
@@ -1338,7 +1338,6 @@ class AbstractConsignment
     {
         return $this->contents;
     }
-
 
     /**
      * The type of contents in the package.
