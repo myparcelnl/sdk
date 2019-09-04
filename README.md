@@ -455,9 +455,9 @@ If you use arrays a lot, Collections are usually better to work with. ([document
 \MyParcelNL\Sdk\src\Support\Collection()
 
 ### Helpers
-\MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
-\MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
-`\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
+* \MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
+* \MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
+* `\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
 
 
 ## Contribute
