@@ -32,4 +32,18 @@ class ConsignmentFactory
 
         throw new \BadMethodCallException("Carrier id $carrierId not found");
     }
+
+    public static function createByCarrierName(string $carrierName): AbstractConsignment
+    {
+        switch ($carrierName) {
+            case PostNLConsignment::CARRIER_NAME:
+                return new PostNLConsignment();
+            case BpostConsignment::CARRIER_NAME:
+                return new BpostConsignment();
+            case DPDConsignment::CARRIER_NAME:
+                return new DPDConsignment();
+        }
+
+        throw new \BadMethodCallException("Carrier name $carrierName not found");
+    }
 }
