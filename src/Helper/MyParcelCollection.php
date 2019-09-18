@@ -520,8 +520,6 @@ class MyParcelCollection extends Collection
     /**
      * Get all consignment ids
      *
-     * @internal
-     *
      * @param string|null $key
      *
      * @return array|null
