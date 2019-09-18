@@ -17,11 +17,23 @@ class DPDConsignment extends AbstractConsignment
     public const CARRIER_NAME = 'dpd';
 
     /**
+     * @var int
+     */
+    public const DEFAULT_WEIGHT = 3000;
+
+    /**
      * @var array
      */
     private const VALID_PACKAGE_TYPES = [
         self::PACKAGE_TYPE_PACKAGE
     ];
+
+    /**
+     * @internal
+     *
+     * @var int
+     */
+    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
      * @var array
