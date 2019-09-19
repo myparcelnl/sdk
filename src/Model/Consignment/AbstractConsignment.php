@@ -1,29 +1,27 @@
 <?php declare(strict_types=1);
 /**
  * A model of a consignment
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
  * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
  * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
  * @link        https://github.com/myparcelnl/sdk
+ * @copyright   2010-2017 MyParcel
  * @since       File available since Release v0.1.0
  */
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
-use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 
 /**
  * A model of a consignment
- *
  * Class Consignment
  */
 class AbstractConsignment
@@ -33,34 +31,77 @@ class AbstractConsignment
     /**
      * Consignment types
      */
-    const DELIVERY_TYPE_MORNING        = 1;
-    const DELIVERY_TYPE_STANDARD       = 2;
-    const DELIVERY_TYPE_EVENING        = 3;
-    const DELIVERY_TYPE_PICKUP         = 4;
-    const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
+    public const DELIVERY_TYPE_MORNING        = 1;
+    public const DELIVERY_TYPE_STANDARD       = 2;
+    public const DELIVERY_TYPE_EVENING        = 3;
+    public const DELIVERY_TYPE_PICKUP         = 4;
+    public const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
 
-    const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
+    public const DELIVERY_TYPE_MORNING_NAME        = "morning";
+    public const DELIVERY_TYPE_STANDARD_NAME       = "standard";
+    public const DELIVERY_TYPE_EVENING_NAME        = "evening";
+    public const DELIVERY_TYPE_PICKUP_NAME         = "pickup";
+    public const DELIVERY_TYPE_PICKUP_EXPRESS_NAME = "pickup_express";
+
+    public const DELIVERY_TYPES_IDS = [
+        self::DELIVERY_TYPE_MORNING,
+        self::DELIVERY_TYPE_STANDARD,
+        self::DELIVERY_TYPE_EVENING,
+        self::DELIVERY_TYPE_PICKUP,
+        self::DELIVERY_TYPE_PICKUP_EXPRESS,
+    ];
+
+    public const DELIVERY_TYPES_NAMES = [
+        self::DELIVERY_TYPE_MORNING_NAME,
+        self::DELIVERY_TYPE_STANDARD_NAME,
+        self::DELIVERY_TYPE_EVENING_NAME,
+        self::DELIVERY_TYPE_PICKUP_NAME,
+        self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
+    ];
+
+    public const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
+    public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
 
     /**
      * Package types
      */
-    const PACKAGE_TYPE_PACKAGE       = 1;
-    const PACKAGE_TYPE_MAILBOX       = 2;
-    const PACKAGE_TYPE_LETTER        = 3;
-    const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+    public const PACKAGE_TYPE_PACKAGE       = 1;
+    public const PACKAGE_TYPE_MAILBOX       = 2;
+    public const PACKAGE_TYPE_LETTER        = 3;
+    public const PACKAGE_TYPE_DIGITAL_STAMP = 4;
 
-    const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
+    public const PACKAGE_TYPE_PACKAGE_NAME       = "package";
+    public const PACKAGE_TYPE_MAILBOX_NAME       = "mailbox";
+    public const PACKAGE_TYPE_LETTER_NAME        = "letter";
+    public const PACKAGE_TYPE_DIGITAL_STAMP_NAME = "digital_stamp";
+
+    public const PACKAGE_TYPES_IDS = [
+        self::PACKAGE_TYPE_PACKAGE,
+        self::PACKAGE_TYPE_MAILBOX,
+        self::PACKAGE_TYPE_LETTER,
+        self::PACKAGE_TYPE_DIGITAL_STAMP,
+    ];
+
+    public const PACKAGE_TYPES_NAMES = [
+        self::PACKAGE_TYPE_PACKAGE_NAME,
+        self::PACKAGE_TYPE_MAILBOX_NAME,
+        self::PACKAGE_TYPE_LETTER_NAME,
+        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+    ];
+
+    public const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
+    public const DEFAULT_PACKAGE_TYPE_NAME = self::PACKAGE_TYPE_PACKAGE_NAME;
 
     /**
      * Regular expression used to make sure the date is correct.
      */
-    const DATE_REGEX        = '~(\d{4}-\d{2}-\d{2})$~';
-    const DATE_TIME_REGEX   = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
-    const STATUS_CONCEPT    = 1;
-    const MAX_STREET_LENGTH = 40;
+    public const DATE_REGEX        = '~(\d{4}-\d{2}-\d{2})$~';
+    public const DATE_TIME_REGEX   = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
+    public const STATUS_CONCEPT    = 1;
+    public const MAX_STREET_LENGTH = 40;
 
-    const CC_NL = 'NL';
-    const CC_BE = 'BE';
+    public const CC_NL = 'NL';
+    public const CC_BE = 'BE';
 
     /**
      * @var string
@@ -273,6 +314,12 @@ class AbstractConsignment
      * @internal
      * @var string
      */
+    public $pickup_cc;
+
+    /**
+     * @internal
+     * @var string
+     */
     public $pickup_postal_code;
 
     /**
@@ -345,7 +392,6 @@ class AbstractConsignment
 
     /**
      * The id of the consignment
-     *
      * Save this id in your database
      *
      * @return int|null
@@ -356,13 +402,11 @@ class AbstractConsignment
     }
 
     /**
-     * @internal
-     *
-     * The id of the consignment
-     *
      * @param int|null $id
      *
      * @return $this
+     * @internal
+     * The id of the consignment
      */
     public function setConsignmentId(?int $id): self
     {
@@ -381,7 +425,6 @@ class AbstractConsignment
 
     /**
      * Set the api key for each shipment.
-     *
      * The key must be given to each shipment. So you can create multiple shipments
      * in one time for different shops. This way you will not have to ask for the
      * shop ID. The field shop ID is therefore not necessary.
@@ -436,11 +479,10 @@ class AbstractConsignment
     }
 
     /**
-     * @internal
-     *
      * @param string|null $barcode
      *
      * @return $this
+     * @internal
      */
     public function setBarcode(?string $barcode): self
     {
@@ -451,7 +493,6 @@ class AbstractConsignment
 
     /**
      * Get the status of the consignment
-     *
      * Pattern: [1 – 99]<br>
      * Example:
      *          1 pending - concept
@@ -488,11 +529,10 @@ class AbstractConsignment
     /**
      * Status of the consignment
      *
-     * @internal
-     *
      * @param int $status
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @internal
      */
     public function setStatus($status): self
     {
@@ -510,18 +550,14 @@ class AbstractConsignment
     }
 
     /**
-     * @internal
-     *
-     * The shop id to which this shipment belongs
-     *
-     * When the store ID is not specified, the API will look at the API key.
-     * Required: No
-     *
-     * @internal
-     *
      * @param mixed $shop_id
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @internal
+     * The shop id to which this shipment belongs
+     * When the store ID is not specified, the API will look at the API key.
+     * Required: No
+     * @internal
      */
     public function setShopId($shop_id): self
     {
@@ -540,7 +576,6 @@ class AbstractConsignment
 
     /**
      * The address country code
-     *
      * ISO3166-1 alpha2 country code<br>
      * <br>
      * Pattern: [A-Z]{2}<br>
@@ -561,9 +596,8 @@ class AbstractConsignment
     /**
      * Check if the address is outside the EU
      *
-     * @todo move to hasCountry trait maken
-     *
      * @return bool
+     * @todo move to hasCountry trait maken
      */
     public function isCdCountry()
     {
@@ -573,9 +607,8 @@ class AbstractConsignment
     /**
      * Check if the address is inside the EU
      *
-     * @todo move to hasCountry
-     *
      * @return bool
+     * @todo move to hasCountry
      */
     public function isEuCountry()
     {
@@ -622,7 +655,6 @@ class AbstractConsignment
 
     /**
      * The address city
-     *
      * Required: Yes
      *
      * @param string $city
@@ -637,8 +669,8 @@ class AbstractConsignment
     }
 
     /**
-     * @var bool
      * @return string|null
+     * @var bool
      */
     public function getStreet($useStreetAdditionalInfo = false)
     {
@@ -653,7 +685,6 @@ class AbstractConsignment
 
     /**
      * The address street name
-     *
      * Required: Yes or use setFullStreet()
      *
      * @param string $street
@@ -670,9 +701,8 @@ class AbstractConsignment
     /**
      * Get additional information for the street that should not be included in the street field
      *
-     * @todo move to hasStreet
-     *
      * @return string
+     * @todo move to hasStreet
      */
     public function getStreetAdditionalInfo(): string
     {
@@ -706,11 +736,9 @@ class AbstractConsignment
     /**
      * Get entire street
      *
-     * @todo move to hasCountry
-     *
-     * @var bool
-     *
      * @return string Entire street
+     * @var bool
+     * @todo move to hasCountry
      */
     public function getFullStreet(bool $useStreetAdditionalInfo = false): string
     {
@@ -729,7 +757,6 @@ class AbstractConsignment
 
     /**
      * Splitting a full NL address and save it in this object
-     *
      * Required: Yes or use setStreet()
      *
      * @param string $fullStreet
@@ -742,7 +769,9 @@ class AbstractConsignment
     public function setFullStreet(string $fullStreet): self
     {
         if ($this->getCountry() === null) {
-            throw new MissingFieldException('First set the country code with setCountry() before running setFullStreet()');
+            throw new MissingFieldException(
+                'First set the country code with setCountry() before running setFullStreet()'
+            );
         }
 
         if (empty($this->local_cc)) {
@@ -758,7 +787,6 @@ class AbstractConsignment
     }
 
     /**
-     *
      * @param string $barcode
      * @param string $postalCode
      * @param string $countryCode
@@ -782,7 +810,6 @@ class AbstractConsignment
 
     /**
      * Street number
-     *
      * Whole numeric value
      * Pattern: [0-9]+
      * Example: 10. 20. NOT 2,3
@@ -809,7 +836,6 @@ class AbstractConsignment
 
     /**
      * Street number suffix.
-     *
      * Required: no
      *
      * @param string|null $numberSuffix
@@ -835,7 +861,6 @@ class AbstractConsignment
 
     /**
      * Street number suffix.
-     *
      * Required: no
      *
      * @param string $boxNumber
@@ -874,7 +899,7 @@ class AbstractConsignment
      */
     public function isCorrectAddress(string $fullStreet): bool
     {
-        $localCountry = $this->local_cc;
+        $localCountry       = $this->local_cc;
         $destinationCountry = $this->getCountry();
 
         return SplitStreet::isCorrectStreet($fullStreet, $localCountry, $destinationCountry);
@@ -890,7 +915,6 @@ class AbstractConsignment
 
     /**
      * The address postal code
-     *
      * Required: Yes for NL and EU destinations except for IE
      *
      * @param string $postal_code
@@ -914,7 +938,6 @@ class AbstractConsignment
 
     /**
      * The person at this address
-     *
      * Required: Yes
      *
      * @param string $person
@@ -938,7 +961,6 @@ class AbstractConsignment
 
     /**
      * Company name
-     *
      * Required: no
      *
      * @param string|null $company
@@ -962,7 +984,6 @@ class AbstractConsignment
 
     /**
      * The address email
-     *
      * Required: no
      *
      * @param string $email
@@ -986,7 +1007,6 @@ class AbstractConsignment
 
     /**
      * The address phone
-     *
      * Required: no
      *
      * @param string $phone
@@ -1012,7 +1032,6 @@ class AbstractConsignment
 
     /**
      * The package type
-     *
      * For international shipment only package type 1 is allowed
      * Pattern: [1 – 3]<br>
      * Example:
@@ -1043,11 +1062,9 @@ class AbstractConsignment
 
     /**
      * The delivery type for the package
-     *
      * Required: Yes if delivery_date has been specified
      *
      * @param int  $deliveryType
-     *
      * @param bool $needDeliveryDate
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
@@ -1094,7 +1111,12 @@ class AbstractConsignment
             $result = preg_match(self::DATE_TIME_REGEX, $delivery_date, $matches);
 
             if (! $result) {
-                throw new \BadMethodCallException('Make sure the date (' . $delivery_date . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS' . json_encode($matches));
+                throw new \BadMethodCallException(
+                    'Make sure the date ('
+                    . $delivery_date
+                    . ') is correct, like pattern: YYYY-MM-DD HH:MM:SS'
+                    . json_encode($matches)
+                );
             }
         }
 
@@ -1113,7 +1135,6 @@ class AbstractConsignment
 
     /**
      * Deliver the package to the recipient only
-     *
      * Required: No
      *
      * @param bool $only_recipient
@@ -1139,7 +1160,6 @@ class AbstractConsignment
 
     /**
      * * Package must be signed for
-     *
      * Required: No
      *
      * @param bool $signature
@@ -1167,7 +1187,6 @@ class AbstractConsignment
 
     /**
      * Return the package if the recipient is not home
-     *
      * Required: No
      *
      * @param bool $return
@@ -1192,7 +1211,6 @@ class AbstractConsignment
 
     /**
      * Large format package
-     *
      * Required: No
      *
      * @param bool $largeFormat
@@ -1218,7 +1236,6 @@ class AbstractConsignment
 
     /**
      * Age check
-     *
      * Required: No
      *
      * @param bool $ageCheck
@@ -1244,9 +1261,7 @@ class AbstractConsignment
 
     /**
      * This description will appear on the shipment label
-     *
      * Note: This will be overridden for return shipment by the following: Retour – 3SMYPAMYPAXXXXXX
-     *
      * Required: No
      *
      * @param mixed $label_description
@@ -1270,7 +1285,6 @@ class AbstractConsignment
 
     /**
      * Insurance price for the package.
-     *
      * Composite type containing integer and currency. The amount is without decimal separators.
      * Required: No
      *
@@ -1296,7 +1310,9 @@ class AbstractConsignment
         }
 
         if (! in_array($insurance, $this->insurance_possibilities_local) && $this->getCountry() == $this->local_cc) {
-            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
+            throw new \BadMethodCallException(
+                'Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local)
+            );
         }
 
         if (! $this->canHaveOption()) {
@@ -1331,7 +1347,6 @@ class AbstractConsignment
     }
 
     /**
-     *
      * @return integer
      */
     public function getContents(): int
@@ -1341,7 +1356,6 @@ class AbstractConsignment
 
     /**
      * The type of contents in the package.
-     *
      * The package contents are only needed in case of shipping outside EU,
      * this is mandatory info for customs form.
      * Pattern: [1 - 5]
@@ -1373,7 +1387,6 @@ class AbstractConsignment
 
     /**
      * The invoice number for the commercial goods or samples of package contents.
-     *
      * Required: Yes for international shipments
      *
      * @param string $invoice
@@ -1397,7 +1410,6 @@ class AbstractConsignment
 
     /**
      * A CustomsItem objects with description in the package.
-     *
      * Required: Yes for international shipments
      *
      * @param \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item
@@ -1410,6 +1422,26 @@ class AbstractConsignment
         $item->ensureFilled();
 
         $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPickupCountry(): string
+    {
+        return $this->pickup_cc;
+    }
+
+    /**
+     * @param string $pickupCountry
+     *
+     * @return AbstractConsignment
+     */
+    public function setPickupCountry(string $pickupCountry): self
+    {
+        $this->pickup_cc = $pickupCountry;
 
         return $this;
     }
