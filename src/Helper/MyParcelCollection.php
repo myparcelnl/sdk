@@ -20,6 +20,7 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Exception\NoConsignmentFoundException;
 use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
@@ -397,6 +398,10 @@ class MyParcelCollection extends Collection
 
         $conceptIds = $this->getConsignmentIds($key);
 
+        if (null === $conceptIds) {
+            throw new NoConsignmentFoundException('No consignment found. The collection must contain at least one consignment.');
+        }
+
         if ($key) {
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
@@ -436,6 +441,10 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
         $conceptIds = $this->getConsignmentIds($key);
+
+        if (null === $conceptIds) {
+            throw new NoConsignmentFoundException('No consignment found. The collection must contain at least one consignment.');
+        }
 
         if ($key) {
             $request = (new MyParcelRequest())
@@ -629,7 +638,7 @@ class MyParcelCollection extends Collection
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
-        return self::findManyByReferenceId($id, $apiKey);
+        return self::findManyByReferenceId([$id], $apiKey);
     }
 
     /**

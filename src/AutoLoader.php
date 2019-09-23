@@ -8,6 +8,7 @@ require_once ('Support/Str.php');
 require_once ('Exception/AddressException.php');
 require_once ('Exception/ApiException.php');
 require_once ('Exception/MissingFieldException.php');
+require_once ('Exception/NoConsignmentFoundException.php');
 require_once ('Helper/RequestError.php');
 require_once ('Helper/MyParcelCollection.php');
 require_once ('Helper/MyParcelCurl.php');
