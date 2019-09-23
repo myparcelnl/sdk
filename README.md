@@ -206,6 +206,15 @@ echo $myParcelCollection
     ->getLinkOfLabels();
 ```
 
+If you want to download a label at a later time, you can also use the following to fill the collection:
+```
+$collection = MyParcelCollection::findByReferenceId('999999', 'xxxxxx');
+$collection
+    ->setPdfOfLabels()
+    ->downloadPdfOfLabels();
+```
+Instead of `findByReferenceId()` you can also use `findManyByReferenceId()`, `find()` or `findMany()`.
+
 More information: https://myparcelnl.github.io/api/#6_F
 
 ## List of classes and their methods
