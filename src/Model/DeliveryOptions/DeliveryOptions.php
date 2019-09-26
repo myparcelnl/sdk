@@ -1,20 +1,10 @@
-<?php declare(strict_types=1); /** @noinspection PhpInternalEntityUsedInspection */
-
-/**
- * This model represents one request
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v3.0.0
- */
+<?php declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model;
 
 use Exception;
+use MyParcelNL\Sdk\src\Model\DeliveryOptions\PickupLocation;
+use MyParcelNL\Sdk\src\Model\DeliveryOptions\ShipmentOptions;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
 class DeliveryOptions
@@ -33,6 +23,11 @@ class DeliveryOptions
      * @var object|null
      */
     private $shipmentOptions;
+
+    /**
+     * @var bool
+     */
+    private $isPickup;
 
     /**
      * @var string
@@ -59,7 +54,8 @@ class DeliveryOptions
 
         $this->deliveryType    = $deliveryOptions["deliveryType"];
         $this->date            = $deliveryOptions["deliveryDate"];
-        $this->shipmentOptions = $deliveryOptions["shipmentOptions"] ?? null;
+        $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"]);
+        $this->isPickup        = $deliveryOptions["isPickup"];
         $this->carrier         = $carrier ?? BpostConsignment::CARRIER_NAME;
 
         if ($this->isPickup()) {
@@ -84,9 +80,9 @@ class DeliveryOptions
     }
 
     /**
-     * @return object|null
+     * @return ShipmentOptions
      */
-    public function getShipmentOptions()
+    public function getShipmentOptions(): ShipmentOptions
     {
         return $this->shipmentOptions;
     }
@@ -110,8 +106,8 @@ class DeliveryOptions
     /**
      * @return bool
      */
-    public function isPickup(): ?bool
+    public function isPickup(): bool
     {
-        return $this->deliveryType === "pickup";
+        return $this->isPickup;
     }
 }

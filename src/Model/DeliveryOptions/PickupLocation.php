@@ -1,18 +1,6 @@
-<?php declare(strict_types=1); /** @noinspection PhpInternalEntityUsedInspection */
+<?php declare(strict_types=1);
 
-/**
- * This model represents one request
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v3.0.0
- */
-
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
 
 use stdClass;
 
@@ -64,7 +52,7 @@ class PickupLocation
         $this->number        = $data->number;
         $this->postal_code   = $data->postal_code;
         $this->city          = $data->city;
-        $this->cc          = $data->cc;
+        $this->cc            = $data->cc;
     }
 
     /**
