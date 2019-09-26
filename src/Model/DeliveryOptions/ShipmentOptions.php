@@ -5,6 +5,11 @@ namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
 class ShipmentOptions
 {
     /**
+     * @var array
+     */
+    private $input;
+
+    /**
      * @var bool
      */
     private $signature;
@@ -13,29 +18,38 @@ class ShipmentOptions
      * @var bool
      */
     private $only_recipient;
+    private $insurance;
 
     public function __construct(array $shipmentOptions)
     {
-        $this->input = $shipmentOptions;
-
+        $this->input          = $shipmentOptions;
         $this->signature      = $this->getOption("signature");
         $this->only_recipient = $this->getOption("only_recipient");
+        $this->insurance      = $this->getOption("insurance");
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function hasSignature(): bool
+    public function hasSignature()
     {
         return $this->signature;
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function hasOnlyRecipient(): bool
+    public function hasOnlyRecipient()
     {
         return $this->only_recipient;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasInsurance()
+    {
+        return $this->insurance;
     }
 
     /**
@@ -49,6 +63,6 @@ class ShipmentOptions
             return (bool) $this->input[$string];
         }
 
-        return false;
+        return null;
     }
 }
