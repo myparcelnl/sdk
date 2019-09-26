@@ -55,9 +55,9 @@ class ShipmentOptions
     /**
      * @param string $string
      *
-     * @return bool
+     * @return bool|null
      */
-    private function getOption(string $string): bool
+    private function getOption(string $string)
     {
         if (array_key_exists($string, $this->input)) {
             return (bool) $this->input[$string];
