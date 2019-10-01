@@ -1,10 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
 
 use Exception;
-use MyParcelNL\Sdk\src\Model\DeliveryOptions\PickupLocation;
-use MyParcelNL\Sdk\src\Model\DeliveryOptions\ShipmentOptions;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
 class DeliveryOptions
@@ -53,7 +51,7 @@ class DeliveryOptions
         }
 
         $this->deliveryType    = $deliveryOptions["deliveryType"];
-        $this->date            = $deliveryOptions["deliveryDate"];
+        $this->date            = $deliveryOptions["date"];
         $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"]);
         $this->isPickup        = $deliveryOptions["isPickup"];
         $this->carrier         = $carrier ?? BpostConsignment::CARRIER_NAME;

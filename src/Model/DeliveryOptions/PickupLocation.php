@@ -44,15 +44,20 @@ class PickupLocation
      */
     private $cc;
 
-    public function __construct(stdClass $data)
+    /**
+     * PickupLocation constructor.
+     *
+     * @param array $data
+     */
+    public function __construct(array $data)
     {
-        $this->location_name = $data->location_name;
-        $this->location_code = $data->location_code;
-        $this->street        = $data->street;
-        $this->number        = $data->number;
-        $this->postal_code   = $data->postal_code;
-        $this->city          = $data->city;
-        $this->cc            = $data->cc;
+        $this->location_name = $data["location_name"];
+        $this->location_code = $data["location_code"];
+        $this->street        = $data["street"];
+        $this->number        = $data["number"];
+        $this->postal_code   = $data["postal_code"];
+        $this->city          = $data["city"];
+        $this->cc            = $data["cc"];
     }
 
     /**
