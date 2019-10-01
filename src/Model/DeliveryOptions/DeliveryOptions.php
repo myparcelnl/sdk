@@ -13,6 +13,16 @@ use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 class DeliveryOptions
 {
     /**
+     * Default values to use if there is no input.
+     */
+    public const DEFAULTS = [
+        "deliveryType"    => "standard",
+        "date"            => "",
+        "shipmentOptions" => [],
+        "isPickup"        => false,
+    ];
+
+    /**
      * @var string
      */
     private $date;
@@ -49,8 +59,12 @@ class DeliveryOptions
      *
      * @throws Exception
      */
-    public function __construct(array $deliveryOptions)
+    public function __construct($deliveryOptions = [])
     {
+        if (!count($deliveryOptions)) {
+            $deliveryOptions = self::DEFAULTS;
+        }
+
         if (array_key_exists("carrier", $deliveryOptions)) {
             $carrier = $deliveryOptions["carrier"];
         }
