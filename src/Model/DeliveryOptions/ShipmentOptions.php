@@ -2,6 +2,11 @@
 
 namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
 
+/**
+ * Class ShipmentOptions
+ *
+ * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
+ */
 class ShipmentOptions
 {
     /**
@@ -18,8 +23,17 @@ class ShipmentOptions
      * @var bool
      */
     private $only_recipient;
+
+    /**
+     * @var bool|null
+     */
     private $insurance;
 
+    /**
+     * ShipmentOptions constructor.
+     *
+     * @param array $shipmentOptions
+     */
     public function __construct(array $shipmentOptions)
     {
         $this->input          = $shipmentOptions;
@@ -53,6 +67,8 @@ class ShipmentOptions
     }
 
     /**
+     * Sets a value to a boolean if set, otherwise it's null.
+     *
      * @param string $string
      *
      * @return bool|null
