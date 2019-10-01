@@ -2,10 +2,10 @@
 
 namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
 
-use stdClass;
-
 /**
  * Class PickupLocation
+ *
+ * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
  */
 class PickupLocation
 {

@@ -5,6 +5,11 @@ namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
 use Exception;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
+/**
+ * Class DeliveryOptions
+ *
+ * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
+ */
 class DeliveryOptions
 {
     /**
