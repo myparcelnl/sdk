@@ -70,12 +70,11 @@ class DeliveryOptions
             $carrier = $deliveryOptions["carrier"];
         }
 
-        $this->deliveryType = $deliveryOptions["deliveryType"];
-        $this->date         = $deliveryOptions["date"];
-
-        $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"] ?? []);
-        $this->isPickup        = $deliveryOptions["isPickup"] ?? false;
         $this->carrier         = $carrier ?? BpostConsignment::CARRIER_NAME;
+        $this->date            = $deliveryOptions["date"];
+        $this->deliveryType    = $deliveryOptions["deliveryType"];
+        $this->isPickup        = $deliveryOptions["isPickup"] ?? false;
+        $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"] ?? []);
 
         if ($this->isPickup()) {
             $this->pickupLocation = new PickupLocation($deliveryOptions["pickupLocation"]);
