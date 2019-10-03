@@ -81,4 +81,16 @@ class ShipmentOptions
 
         return null;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'signature'      => $this->hasSignature(),
+            'insurance'      => $this->hasInsurance(),
+            'only_recipient' => $this->hasOnlyRecipient(),
+        ];
+    }
 }

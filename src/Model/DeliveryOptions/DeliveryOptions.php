@@ -16,6 +16,7 @@ class DeliveryOptions
      * Default values to use if there is no input.
      */
     public const DEFAULTS = [
+        "carrier"         => BpostConsignment::CARRIER_NAME,
         "deliveryType"    => "standard",
         "date"            => "",
         "shipmentOptions" => [],
@@ -61,7 +62,7 @@ class DeliveryOptions
      */
     public function __construct($deliveryOptions = [])
     {
-        if (!count($deliveryOptions)) {
+        if (! count($deliveryOptions)) {
             $deliveryOptions = self::DEFAULTS;
         }
 
@@ -69,10 +70,11 @@ class DeliveryOptions
             $carrier = $deliveryOptions["carrier"];
         }
 
-        $this->deliveryType    = $deliveryOptions["deliveryType"];
-        $this->date            = $deliveryOptions["date"];
-        $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"]);
-        $this->isPickup        = $deliveryOptions["isPickup"];
+        $this->deliveryType = $deliveryOptions["deliveryType"];
+        $this->date         = $deliveryOptions["date"];
+
+        $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"] ?? []);
+        $this->isPickup        = $deliveryOptions["isPickup"] ?? false;
         $this->carrier         = $carrier ?? BpostConsignment::CARRIER_NAME;
 
         if ($this->isPickup()) {
@@ -126,5 +128,20 @@ class DeliveryOptions
     public function isPickup(): bool
     {
         return $this->isPickup;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            "carrier"         => $this->getCarrier(),
+            "date"            => $this->getDate(),
+            "deliveryType"    => $this->getDeliveryType(),
+            "isPickup"        => $this->isPickup(),
+            "pickupLocation"  => $this->getPickupLocation(),
+            "shipmentOptions" => $this->getShipmentOptions()->toArray(),
+        ];
     }
 }
