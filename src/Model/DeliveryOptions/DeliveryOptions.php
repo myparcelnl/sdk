@@ -72,7 +72,7 @@ class DeliveryOptions
         $this->deliveryType    = $deliveryOptions["deliveryType"];
         $this->date            = $deliveryOptions["date"];
         $this->shipmentOptions = new ShipmentOptions($deliveryOptions["shipmentOptions"] ?? []);
-        $this->isPickup        = $deliveryOptions["isPickup"];
+        $this->isPickup        = $deliveryOptions["isPickup"] ?? false;
         $this->carrier         = $carrier ?? BpostConsignment::CARRIER_NAME;
 
         if ($this->isPickup()) {
