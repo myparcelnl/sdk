@@ -1,36 +1,27 @@
 <?php declare(strict_types=1);
 
-/**
- * Create multiple consignments
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+namespace MyParcelNL\Sdk\tests\SendConsignments;
 
-namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
-
+use Exception;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SendMultipleConsignmentsTest
+ *
  * @package MyParcelNL\Sdk\tests\SendConsignmentsTest
  */
-class SendMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase
+class SendMultipleConsignmentsTest extends TestCase
 {
 
     /**
      * Create multiple shipments with createConcepts()
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function testSendMultipleConsignments()
     {
@@ -44,26 +35,36 @@ class SendMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase
         $myParcelCollection = new MyParcelCollection();
 
         foreach ($this->additionProvider() as $referenceId => $consignmentTest) {
-
-            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
-                ->setReferenceId($referenceId)
-                ->setApiKey($consignmentTest['api_key'])
-                ->setCountry($consignmentTest['cc'])
-                ->setPerson($consignmentTest['person'])
-                ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_input'])
-                ->setPostalCode($consignmentTest['postal_code'])
-                ->setPackageType(1)
-                ->setCity($consignmentTest['city'])
-                ->setEmail('your_email@test.nl');
+            $consignment =
+                (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))->setReferenceId($referenceId)
+                    ->setApiKey($consignmentTest['api_key'])
+                    ->setCountry($consignmentTest['cc'])
+                    ->setPerson($consignmentTest['person'])
+                    ->setCompany($consignmentTest['company'])
+                    ->setFullStreet($consignmentTest['full_street_input'])
+                    ->setPostalCode($consignmentTest['postal_code'])
+                    ->setPackageType(1)
+                    ->setCity($consignmentTest['city'])
+                    ->setEmail('your_email@test.nl');
             $myParcelCollection->addConsignment($consignment);
+        }
+
+        $myParcelCollection->createConcepts();
+
+        $prevConsignmentId = null;
+
+        /**
+         * Check if each shipment gets a unique consignment id
+         */
+        foreach ($myParcelCollection->getConsignments() as $consignment) {
+            $this->assertNotEquals($prevConsignmentId, $consignment->getConsignmentId());
+            $prevConsignmentId = $consignment->getConsignmentId();
         }
 
         /**
          * Get label
          */
-        $myParcelCollection
-            ->setLinkOfLabels();
+        $myParcelCollection->setLinkOfLabels();
 
         $this->assertEquals(
             true,
@@ -84,7 +85,6 @@ class SendMultipleConsignmentsTest extends \PHPUnit\Framework\TestCase
      */
     public function additionProvider()
     {
-
         return [
             'prefix_101' => [
                 'api_key'           => getenv('API_KEY'),
