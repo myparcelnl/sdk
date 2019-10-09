@@ -730,7 +730,7 @@ class MyParcelCollection extends Collection
      */
     private function getNewCollectionFromResult($result)
     {
-        $newCollection = new static;
+        $newCollection = new static();
         /** @var AbstractConsignment $consignment */
         $consignment = $this->first();
         $apiKey      = $consignment->getApiKey();
