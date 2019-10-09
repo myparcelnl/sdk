@@ -26,6 +26,7 @@ use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -108,7 +109,7 @@ class MyParcelCollection extends Collection
      * @return MyParcelCollection
      * @throws InvalidArgumentException
      */
-    public function getConsignmentsByReferenceId($id)
+    public function getConsignmentsByReferenceId($id): MyParcelCollection
     {
         if ($id === null) {
             throw new InvalidArgumentException ('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
@@ -256,6 +257,7 @@ class MyParcelCollection extends Collection
      */
     public function createConcepts()
     {
+        $newConsignments = [];
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
@@ -270,12 +272,15 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest();
 
+            /**
+             * Loop through the returned ids and add each consignment id to a consignment.
+             */
             foreach ($request->getResult('data.ids') as $responseShipment) {
-                /** @var AbstractConsignment $consignment */
-                $consignment = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier'])->first();
-                $consignment->setConsignmentId($responseShipment['id']);
+                $consignments = clone $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
+                $newConsignments[] = $consignments->pop()->setConsignmentId($responseShipment['id']);
             }
         }
+        $this->items = $newConsignments;
 
         return $this;
     }
