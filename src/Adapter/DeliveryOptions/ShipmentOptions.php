@@ -1,6 +1,6 @@
 <?php
 
-namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
+namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 /**
  * Class ShipmentOptions

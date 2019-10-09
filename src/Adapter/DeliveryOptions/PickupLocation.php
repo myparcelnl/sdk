@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\DeliveryOptions;
+namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 /**
  * Class PickupLocation
