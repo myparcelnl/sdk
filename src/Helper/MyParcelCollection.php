@@ -148,7 +148,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return AbstractConsignment
      */
@@ -176,10 +176,10 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment|null $consignment
+     * @param AbstractConsignment|null $consignment
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
     public function addConsignment(?AbstractConsignment $consignment)
     {
@@ -197,7 +197,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public function addConsignmentByConsignmentIds($ids, $apiKey)
     {
@@ -217,7 +217,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public function addConsignmentByReferenceIds($ids, $apiKey)
     {
@@ -259,20 +259,20 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Create concepts in MyParcel
+     * Create concepts in MyParcel.
      *
      * @return  $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws MissingFieldException
+     * @throws ApiException
      */
-    public function createConcepts()
+    public function createConcepts(): self
     {
         $newConsignments = [];
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
         foreach ($this->where('consignment_id', null)->groupBy('api_key') as $consignments) {
-            $data    = (new CollectionEncode($consignments))->encode();
+            $data = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
@@ -286,7 +286,7 @@ class MyParcelCollection extends Collection
              * Loop through the returned ids and add each consignment id to a consignment.
              */
             foreach ($request->getResult('data.ids') as $responseShipment) {
-                $consignments = clone $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
+                $consignments      = clone $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
                 $newConsignments[] = $consignments->pop()->setConsignmentId($responseShipment['id']);
             }
         }
@@ -363,9 +363,9 @@ class MyParcelCollection extends Collection
      * @param int $size
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \Exception
+     * @throws ApiException
+     * @throws MissingFieldException
+     * @throws Exception
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
@@ -395,7 +395,7 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param integer $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
+     * @param int $positions            The position of the label on an A4 sheet. Set to false to create an A6 sheet.
      *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
      *                                  not specify an array, but specify a number, the following labels will fill the
      *                                  ascending positions. Positioning is only applied on the first page with labels.
@@ -435,7 +435,7 @@ class MyParcelCollection extends Collection
      *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param integer $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param int $positions            The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
@@ -498,8 +498,8 @@ class MyParcelCollection extends Collection
      * Send return label to customer. The customer can pay and download the label.
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function sendReturnLabelMails()
     {
@@ -602,7 +602,7 @@ class MyParcelCollection extends Collection
      * @param int    $id
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
@@ -613,7 +613,7 @@ class MyParcelCollection extends Collection
      * @param array  $consignmentIds
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
     {
@@ -637,7 +637,7 @@ class MyParcelCollection extends Collection
      * @param string $id
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
@@ -648,7 +648,7 @@ class MyParcelCollection extends Collection
      * @param array  $referenceIds
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {
@@ -676,7 +676,7 @@ class MyParcelCollection extends Collection
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @param integer|array|null $positions
+     * @param int|array|null $positions
      *
      * @return $this
      */
