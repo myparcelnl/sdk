@@ -123,6 +123,16 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * @param $groupId
+     *
+     * @return MyParcelCollection
+     */
+    public function getConsignmentsByReferenceIdGroup($groupId): MyParcelCollection
+    {
+        return $this->findByReferenceIdGroup($groupId);
+    }
+
+    /**
      * This is deprecated because there may be multiple consignments with the same reference id
      *
      * @deprecated Use getConsignmentsByReferenceId()->first() instead
@@ -754,6 +764,21 @@ class MyParcelCollection extends Collection
             }
 
             return $consignment;
+        });
+    }
+
+    /**
+     * @param mixed $id
+     *
+     * @return MyParcelCollection
+     */
+    private function findByReferenceIdGroup($id): MyParcelCollection
+    {
+        return $this->filter(function ($consignment) use ($id) {
+            /**
+             * @var AbstractConsignment $consignment
+             */
+            return Str::startsWith($consignment->getReferenceId(), $id);
         });
     }
 }
