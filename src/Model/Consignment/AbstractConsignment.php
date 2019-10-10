@@ -97,6 +97,13 @@ class AbstractConsignment
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
     ];
 
+    public const PACKAGE_TYPES_NAMES_IDS_MAP = [
+        self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE,
+        self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
+        self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
+        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
+    ];
+
     public const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
     public const DEFAULT_PACKAGE_TYPE_NAME = self::PACKAGE_TYPE_PACKAGE_NAME;
 
