@@ -170,7 +170,7 @@ class BpostConsignment extends AbstractConsignment
      * @return $this
      * @throws \Exception
      */
-    public function setSignature(?bool $signature): AbstractConsignment
+    public function setSignature(bool $signature): AbstractConsignment
     {
         $this->signature = $this->canHaveOption($signature);
 

@@ -234,12 +234,12 @@ class PostNLConsignment extends AbstractConsignment
      *
      * Required: No
      *
-     * @param bool|null $signature
+     * @param bool $signature
      *
      * @return $this
      * @throws \Exception
      */
-    public function setSignature(?bool $signature): AbstractConsignment
+    public function setSignature(bool $signature): AbstractConsignment
     {
         $this->signature = $this->canHaveOption($signature);
 
