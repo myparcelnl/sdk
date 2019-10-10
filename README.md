@@ -72,8 +72,11 @@ $consignment = (new MyParcelConsignment())
     
 $myParcelCollection = (new MyParcelCollection())
     ->addConsignment($consignment)
-    ->setPdfOfLabels()
-    ->downloadPdfOfLabels();
+    ->setPdfOfLabels();
+
+$consignmentId = $myParcelCollection->first()->getMyParcelConsignmentId();
+
+$myParcelCollection->downloadPdfOfLabels();
 ```
 
 ### Create multiple consignments
