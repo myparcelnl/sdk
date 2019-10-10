@@ -1,46 +1,28 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
-/**
- * Class ShipmentOptions
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
- */
-class ShipmentOptions
+abstract class AbstractShipmentOptionsAdapter
 {
     /**
      * @var array
      */
-    private $input;
+    protected $input;
 
     /**
      * @var bool
      */
-    private $signature;
+    protected $signature;
 
     /**
      * @var bool
      */
-    private $only_recipient;
+    protected $only_recipient;
 
     /**
      * @var int|null
      */
-    private $insurance;
-
-    /**
-     * ShipmentOptions constructor.
-     *
-     * @param array $shipmentOptions
-     */
-    public function __construct(array $shipmentOptions)
-    {
-        $this->input          = $shipmentOptions;
-        $this->signature      = $this->getOption("signature");
-        $this->only_recipient = $this->getOption("only_recipient");
-        $this->insurance      = $this->input["insurance"] ?? null;
-    }
+    protected $insurance;
 
     /**
      * @return bool|null
@@ -73,7 +55,7 @@ class ShipmentOptions
      *
      * @return bool|null
      */
-    private function getOption(string $string)
+    protected function getOption(string $string): ?bool
     {
         if (array_key_exists($string, $this->input)) {
             return (bool) $this->input[$string];

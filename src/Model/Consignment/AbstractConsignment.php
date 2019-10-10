@@ -374,6 +374,12 @@ class AbstractConsignment
     public $pickup_network_id = '';
 
     /**
+     * @internal
+     * @var null|string
+     */
+    private $retail_network_id;
+
+    /**
      * @var Helpers
      */
     private $helper;
