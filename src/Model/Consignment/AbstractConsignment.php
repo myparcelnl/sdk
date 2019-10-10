@@ -1176,11 +1176,11 @@ class AbstractConsignment
      * * Package must be signed for
      * Required: No
      *
-     * @param bool $signature
+     * @param bool|null $signature
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
-    public function setSignature(bool $signature): self
+    public function setSignature(?bool $signature): self
     {
         if ($signature) {
             throw new \BadMethodCallException('Signature has to be false in ' . static::class);
