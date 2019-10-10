@@ -9,6 +9,9 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\CheckoutFields;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
+/**
+ * @deprecated
+ */
 trait HasCheckoutFields
 {
     /**
@@ -20,6 +23,8 @@ trait HasCheckoutFields
      *
      * @return int
      * @throws \Exception
+     * @deprecated
+     *
      */
     public function getDeliveryTypeFromCheckout($checkoutData)
     {
@@ -37,6 +42,8 @@ trait HasCheckoutFields
      *
      * @return $this
      * @throws \Exception
+     * @deprecated
+     *
      */
     public function setDeliveryDateFromCheckout(?string $checkoutData)
     {
@@ -69,6 +76,8 @@ trait HasCheckoutFields
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @deprecated
+     *
      */
     public function setPickupAddressFromCheckout(?string $checkoutData)
     {
@@ -94,6 +103,7 @@ trait HasCheckoutFields
 
         if ($aCheckoutData['price_comment'] == 'retail') {
             $this->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP);
+
         } else if ($aCheckoutData['price_comment'] == 'retailexpress') {
             $this->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS);
         } else {

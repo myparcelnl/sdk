@@ -2,63 +2,47 @@
 
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
-/**
- * Class PickupLocation
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
- */
-class PickupLocation
+class AbstractPickupLocationAdapter
 {
     /**
      * @var string
      */
-    private $location_name;
+    protected $location_name;
 
     /**
      * @var string
      */
-    private $location_code;
+    protected $location_code;
+
+    /**
+     * @var string|null
+     */
+    protected $pickup_network_id;
 
     /**
      * @var string
      */
-    private $street;
+    protected $street;
 
     /**
      * @var string
      */
-    private $number;
+    protected $number;
 
     /**
      * @var string
      */
-    private $postal_code;
+    protected $postal_code;
 
     /**
      * @var string
      */
-    private $city;
+    protected $city;
 
     /**
      * @var string
      */
-    private $cc;
-
-    /**
-     * PickupLocation constructor.
-     *
-     * @param array $data
-     */
-    public function __construct(array $data)
-    {
-        $this->location_name = $data["location_name"];
-        $this->location_code = $data["location_code"];
-        $this->street        = $data["street"];
-        $this->number        = $data["number"];
-        $this->postal_code   = $data["postal_code"];
-        $this->city          = $data["city"];
-        $this->cc            = $data["cc"];
-    }
+    protected $cc;
 
     /**
      * @return string
@@ -74,6 +58,14 @@ class PickupLocation
     public function getLocationCode(): string
     {
         return $this->location_code;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPickupNetworkId(): ?string
+    {
+        return $this->pickup_network_id;
     }
 
     /**

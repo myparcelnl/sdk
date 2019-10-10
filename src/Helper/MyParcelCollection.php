@@ -267,7 +267,8 @@ class MyParcelCollection extends Collection
      */
     public function createConcepts(): self
     {
-        $newConsignments = [];
+        $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
+
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
@@ -290,6 +291,7 @@ class MyParcelCollection extends Collection
                 $newConsignments[] = $consignments->pop()->setConsignmentId($responseShipment['id']);
             }
         }
+
         $this->items = $newConsignments;
 
         return $this;

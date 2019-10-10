@@ -18,7 +18,7 @@ class CheckoutFields
 
     /**
      * @param $checkoutData
-     *
+     * @deprecated
      * @return int
      */
     public function getDeliveryType($checkoutData)
