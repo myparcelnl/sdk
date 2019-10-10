@@ -4,7 +4,6 @@ namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 use Exception;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
-use MyParcelNL\Sdk\src\Support\Arr;
 
 /**
  * Class DeliveryOptions
