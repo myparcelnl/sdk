@@ -101,7 +101,7 @@ abstract class AbstractDeliveryOptionsAdapter
      *
      * @return self
      */
-    public function setCarrier(string $carrier): self
+    public function setCarrier(string $carrier): AbstractDeliveryOptionsAdapter
     {
         $this->carrier = $carrier;
         return $this;
@@ -112,7 +112,7 @@ abstract class AbstractDeliveryOptionsAdapter
      *
      * @return self
      */
-    public function setShipmentOptions(AbstractShipmentOptionsAdapter $shipmentOptions): self
+    public function setShipmentOptions(AbstractShipmentOptionsAdapter $shipmentOptions): AbstractDeliveryOptionsAdapter
     {
         $this->shipmentOptions = $shipmentOptions;
         return $this;
@@ -123,7 +123,7 @@ abstract class AbstractDeliveryOptionsAdapter
      *
      * @return AbstractDeliveryOptionsAdapter
      */
-    public function setDate(string $date): self
+    public function setDate(string $date): AbstractDeliveryOptionsAdapter
     {
         $this->date = $date;
         return $this;
@@ -134,7 +134,7 @@ abstract class AbstractDeliveryOptionsAdapter
      *
      * @return AbstractDeliveryOptionsAdapter
      */
-    public function setDeliveryType(string $deliveryType): self
+    public function setDeliveryType(string $deliveryType): AbstractDeliveryOptionsAdapter
     {
         $this->deliveryType = $deliveryType;
         return $this;
@@ -145,7 +145,7 @@ abstract class AbstractDeliveryOptionsAdapter
      *
      * @return AbstractDeliveryOptionsAdapter
      */
-    public function setPickup(bool $pickup): self
+    public function setPickup(bool $pickup): AbstractDeliveryOptionsAdapter
     {
         $this->pickup = $pickup;
         return $this;
@@ -156,7 +156,7 @@ abstract class AbstractDeliveryOptionsAdapter
      *
      * @return AbstractDeliveryOptionsAdapter
      */
-    public function setPickupLocation(AbstractPickupLocationAdapter $pickupLocation): self
+    public function setPickupLocation(AbstractPickupLocationAdapter $pickupLocation): AbstractDeliveryOptionsAdapter
     {
         $this->pickupLocation = $pickupLocation;
         return $this;

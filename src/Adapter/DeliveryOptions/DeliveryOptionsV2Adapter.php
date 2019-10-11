@@ -68,7 +68,7 @@ class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
         );
     }
 
-    public function setDeliveryType(string $deliveryType): self
+    public function setDeliveryType(string $deliveryType): AbstractDeliveryOptionsAdapter
     {
         switch ($deliveryType) {
             case "retail" :
@@ -89,7 +89,7 @@ class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
      * @return DeliveryOptionsV2Adapter
      * @throws Exception
      */
-    public function setDate(string $date): self
+    public function setDate(string $date): AbstractDeliveryOptionsAdapter
     {
         $date = new DateTime($date);
 
