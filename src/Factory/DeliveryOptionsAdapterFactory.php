@@ -19,7 +19,7 @@ class DeliveryOptionsAdapterFactory
      */
     public static function create(string $deliveryOptionsData): AbstractDeliveryOptionsAdapter
     {
-        $deliveryOptionsData = json_decode($deliveryOptionsData);
+        $deliveryOptionsData = json_decode($deliveryOptionsData, true);
 
         if (! is_array($deliveryOptionsData) && ! is_object($deliveryOptionsData)) {
             throw new BadMethodCallException("Invalid data to create DeliveryOptions");
