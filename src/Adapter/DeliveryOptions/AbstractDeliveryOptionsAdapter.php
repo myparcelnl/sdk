@@ -17,7 +17,7 @@ abstract class AbstractDeliveryOptionsAdapter
     protected $deliveryType;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractShipmentOptionsAdapter|null
+     * @var AbstractShipmentOptionsAdapter|null
      */
     protected $shipmentOptions;
 
@@ -27,7 +27,7 @@ abstract class AbstractDeliveryOptionsAdapter
     protected $carrier;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter
+     * @var AbstractPickupLocationAdapter
      */
     protected $pickupLocation;
 
@@ -76,7 +76,7 @@ abstract class AbstractDeliveryOptionsAdapter
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter|null
+     * @return AbstractPickupLocationAdapter|null
      */
     public function getPickupLocation(): ?AbstractPickupLocationAdapter
     {
