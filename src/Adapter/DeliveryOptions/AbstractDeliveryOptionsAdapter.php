@@ -27,6 +27,11 @@ abstract class AbstractDeliveryOptionsAdapter
     protected $carrier;
 
     /**
+     * @var bool
+     */
+    protected $pickup;
+
+    /**
      * @var AbstractPickupLocationAdapter
      */
     protected $pickupLocation;
@@ -88,13 +93,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function isPickup(): bool
     {
-        return in_array(
-            $this->deliveryType,
-            [
-                AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
-                AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
-            ]
-        );
+        return $this->pickup;
     }
 
     /**
@@ -118,6 +117,50 @@ abstract class AbstractDeliveryOptionsAdapter
         $this->shipmentOptions = $shipmentOptions;
         return $this;
     }
+
+    /**
+     * @param string $date
+     *
+     * @return AbstractDeliveryOptionsAdapter
+     */
+    public function setDate(string $date): self
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @param string $deliveryType
+     *
+     * @return AbstractDeliveryOptionsAdapter
+     */
+    public function setDeliveryType(string $deliveryType): self
+    {
+        $this->deliveryType = $deliveryType;
+        return $this;
+    }
+
+    /**
+     * @param bool $pickup
+     *
+     * @return AbstractDeliveryOptionsAdapter
+     */
+    public function setPickup(bool $pickup): self
+    {
+        $this->pickup = $pickup;
+        return $this;
+    }
+
+    /**
+     * @param AbstractPickupLocationAdapter $pickupLocation
+     *
+     * @return AbstractDeliveryOptionsAdapter
+     */
+    public function setPickupLocation(AbstractPickupLocationAdapter $pickupLocation): self
+    {
+        $this->pickupLocation = $pickupLocation;
+        return $this;
+}
 
     /**
      * @return array

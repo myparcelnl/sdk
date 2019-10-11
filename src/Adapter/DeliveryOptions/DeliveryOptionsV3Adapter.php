@@ -22,6 +22,7 @@ class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
         "shipmentOptions" => [],
         "isPickup"        => false,
     ];
+
     /**
      * DeliveryOptions constructor.
      *
@@ -31,17 +32,22 @@ class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
      */
     public function __construct(array $deliveryOptions = [])
     {
-        if (! count($deliveryOptions)) {
-            $deliveryOptions = self::DEFAULTS;
-        }
+        $deliveryOptions = array_merge(self::DEFAULTS, $deliveryOptions);
 
-        $this->carrier         = $deliveryOptions["carrier"] ?? BpostConsignment::CARRIER_NAME;
-        $this->date            = $deliveryOptions["date"];
-        $this->deliveryType    = $deliveryOptions["deliveryType"];
-        $this->shipmentOptions = new ShipmentOptionsV3Adapter($deliveryOptions["shipmentOptions"] ?? []);
+        $this->setCarrier($deliveryOptions["carrier"]);
+        $this->setDate($deliveryOptions["date"]);
+        $this->setDeliveryType($deliveryOptions["deliveryType"]);
+        $this->setPickup($deliveryOptions["isPickup"]);
+        $this->setShipmentOptions(
+            new ShipmentOptionsV3Adapter($deliveryOptions["shipmentOptions"])
+        );
 
         if ($this->isPickup()) {
-            $this->pickupLocation = new PickupLocationV3Adapter($deliveryOptions["pickupLocation"]);
+            $this->setPickupLocation(
+                new PickupLocationV3Adapter(
+                    $deliveryOptions["pickupLocation"]
+                )
+            );
         }
     }
 }

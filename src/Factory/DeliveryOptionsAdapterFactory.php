@@ -27,9 +27,9 @@ class DeliveryOptionsAdapterFactory
 
         $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
 
-        if (key_exists('price_comment', $deliveryOptionsData)) {
+        if (key_exists("time", $deliveryOptionsData)) {
             return new DeliveryOptionsV2Adapter($deliveryOptionsData);
-        } elseif (key_exists('carrier', $deliveryOptionsData)) {
+        } elseif (key_exists("carrier", $deliveryOptionsData)) {
             return new DeliveryOptionsV3Adapter($deliveryOptionsData);
         }
 

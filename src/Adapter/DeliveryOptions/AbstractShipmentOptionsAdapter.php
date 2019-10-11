@@ -12,17 +12,17 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @var bool
      */
-    protected $signature;
+    protected $signature = null;
 
     /**
      * @var bool
      */
-    protected $only_recipient;
+    protected $only_recipient = null;
 
     /**
      * @var int|null
      */
-    protected $insurance;
+    protected $insurance = null;
 
     /**
      * @return bool|null
@@ -70,9 +70,9 @@ abstract class AbstractShipmentOptionsAdapter
     public function toArray(): array
     {
         return [
-            'signature'      => $this->hasSignature(),
-            'insurance'      => $this->getInsurance(),
-            'only_recipient' => $this->hasOnlyRecipient(),
+            "signature"      => $this->hasSignature(),
+            "insurance"      => $this->getInsurance(),
+            "only_recipient" => $this->hasOnlyRecipient(),
         ];
     }
 }
