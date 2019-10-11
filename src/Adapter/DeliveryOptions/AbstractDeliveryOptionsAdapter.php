@@ -88,10 +88,35 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function isPickup(): bool
     {
-        return in_array($this->deliveryType, [
-            AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
-            AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
-        ]);
+        return in_array(
+            $this->deliveryType,
+            [
+                AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+                AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
+            ]
+        );
+    }
+
+    /**
+     * @param string $carrier
+     *
+     * @return self
+     */
+    public function setCarrier(string $carrier): self
+    {
+        $this->carrier = $carrier;
+        return $this;
+    }
+
+    /**
+     * @param AbstractShipmentOptionsAdapter $shipmentOptions
+     *
+     * @return self
+     */
+    public function setShipmentOptions(AbstractShipmentOptionsAdapter $shipmentOptions): self
+    {
+        $this->shipmentOptions = $shipmentOptions;
+        return $this;
     }
 
     /**
