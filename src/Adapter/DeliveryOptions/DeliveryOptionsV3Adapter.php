@@ -35,8 +35,8 @@ class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
         }
 
         $this->carrier         = $deliveryOptions["carrier"] ?? null;
-        $this->date            = $deliveryOptions["date"];
-        $this->deliveryType    = $deliveryOptions["deliveryType"];
+        $this->date            = $deliveryOptions["date"] ?? null;
+        $this->deliveryType    = $deliveryOptions["deliveryType"] ?? null;
         $this->shipmentOptions = new ShipmentOptionsV3Adapter($deliveryOptions["shipmentOptions"] ?? []);
 
         if ($this->isPickup()) {

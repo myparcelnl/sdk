@@ -6,19 +6,11 @@ use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 
 class BpostConsignment extends AbstractConsignment
 {
-    /**
-     * @var int
-     */
-    public const CARRIER_ID = 2;
+    public const INSURANCE_500 = 500;
+    public const INSURANCE_0   = 0;
+    public const CARRIER_ID    = 2;
+    public const CARRIER_NAME  = 'bpost';
 
-    /**
-     * @var string
-     */
-    public const CARRIER_NAME = 'bpost';
-
-    /**
-     * @var array
-     */
     private const VALID_PACKAGE_TYPES = [
         self::PACKAGE_TYPE_PACKAGE
     ];
@@ -26,7 +18,7 @@ class BpostConsignment extends AbstractConsignment
     /**
      * @var array
      */
-    protected $insurance_possibilities_local = [0, 500];
+    protected $insurance_possibilities_local = [self::INSURANCE_0, self::INSURANCE_500];
 
     /**
      * @var string

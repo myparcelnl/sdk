@@ -9,9 +9,8 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
      */
     public function __construct(array $shipmentOptions)
     {
-        $this->input          = $shipmentOptions;
-        $this->signature      = $this->getOption("signature");
-        $this->only_recipient = $this->getOption("only_recipient");
-        $this->insurance      = $this->input["insurance"] ?? null;
+        $this->signature      = $shipmentOptions["signature"] ?? null;
+        $this->only_recipient = $shipmentOptions["only_recipient"] ?? null;
+        $this->insurance      = $shipmentOptions["insurance"] ?? null;
     }
 }

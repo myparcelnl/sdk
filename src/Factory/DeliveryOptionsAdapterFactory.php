@@ -28,10 +28,6 @@ class DeliveryOptionsAdapterFactory
      */
     public static function create(array $deliveryOptionsData): AbstractDeliveryOptionsAdapter
     {
-        if (! is_array($deliveryOptionsData) && ! is_object($deliveryOptionsData)) {
-            throw new BadMethodCallException("Invalid checkout data to create DeliveryOptions");
-        }
-
         $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
 
         if (key_exists('price_comment', $deliveryOptionsData)) {

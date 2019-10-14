@@ -5,11 +5,6 @@ namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 abstract class AbstractShipmentOptionsAdapter
 {
     /**
-     * @var array
-     */
-    protected $input;
-
-    /**
      * @var bool
      */
     protected $signature;
@@ -46,22 +41,6 @@ abstract class AbstractShipmentOptionsAdapter
     public function getInsurance()
     {
         return $this->insurance;
-    }
-
-    /**
-     * Sets a value to a boolean if set, otherwise it's null.
-     *
-     * @param string $string
-     *
-     * @return bool|null
-     */
-    protected function getOption(string $string): ?bool
-    {
-        if (array_key_exists($string, $this->input)) {
-            return (bool) $this->input[$string];
-        }
-
-        return null;
     }
 
     /**
