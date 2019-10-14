@@ -35,8 +35,6 @@ require_once('Model/MyParcelCustomsItem.php');
 require_once('Model/FullStreet.php');
 require_once('Factory/ConsignmentFactory.php');
 require_once('Factory/DeliveryOptionsAdapterFactory.php');
-require_once('Factory/PickupLocationAdapterFactory.php');
-require_once('Factory/ShipmentOptionsAdapterFactory.php');
 require_once('Exception/InvalidConsignmentException.php');
 require_once('Exception/ApiException.php');
 require_once('Exception/MissingFieldException.php');

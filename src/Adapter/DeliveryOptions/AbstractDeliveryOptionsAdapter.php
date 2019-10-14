@@ -22,7 +22,7 @@ abstract class AbstractDeliveryOptionsAdapter
     protected $shipmentOptions;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $carrier;
 

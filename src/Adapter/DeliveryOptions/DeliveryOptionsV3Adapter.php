@@ -16,7 +16,6 @@ class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
      * Default values to use if there is no input.
      */
     public const DEFAULTS = [
-        "carrier"         => BpostConsignment::CARRIER_NAME,
         "deliveryType"    => "standard",
         "date"            => "",
         "shipmentOptions" => [],
@@ -35,7 +34,7 @@ class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
             $deliveryOptions = self::DEFAULTS;
         }
 
-        $this->carrier         = $deliveryOptions["carrier"] ?? BpostConsignment::CARRIER_NAME;
+        $this->carrier         = $deliveryOptions["carrier"] ?? null;
         $this->date            = $deliveryOptions["date"];
         $this->deliveryType    = $deliveryOptions["deliveryType"];
         $this->shipmentOptions = new ShipmentOptionsV3Adapter($deliveryOptions["shipmentOptions"] ?? []);
