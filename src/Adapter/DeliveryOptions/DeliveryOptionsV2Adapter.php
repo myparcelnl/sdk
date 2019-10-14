@@ -20,7 +20,6 @@ class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
         "deliveryType"    => "standard",
         "date"            => "",
         "shipmentOptions" => [],
-        "isPickup"        => false,
     ];
 
     /**
