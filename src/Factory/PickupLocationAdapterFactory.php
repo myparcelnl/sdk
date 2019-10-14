@@ -12,6 +12,7 @@
 
 namespace MyParcelNL\Sdk\src\Factory;
 
+use BadMethodCallException;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\PickupLocationV2Adapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\PickupLocationV3Adapter;
@@ -19,24 +20,22 @@ use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\PickupLocationV3Adapter;
 class PickupLocationAdapterFactory
 {
     /**
-     * @param string $checkoutData
+     * @param array $deliveryOptionsData
      *
      * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter
-     * @throws \Exception
      */
-    public static function create(string $checkoutData): AbstractPickupLocationAdapter
+    public static function create(array $deliveryOptionsData): AbstractPickupLocationAdapter
     {
-        $checkoutData = json_decode($checkoutData);
-        if (! is_array($checkoutData)) {
-            throw new \BadMethodCallException("Invalid checkout data to create PickupLocation");
+        if (! is_array($deliveryOptionsData)) {
+            throw new BadMethodCallException("Invalid checkout data to create PickupLocation");
         }
 
-        if (key_exists('location', $checkoutData)) {
-            return new PickupLocationV2Adapter($checkoutData);
-        } elseif (key_exists('pickupLocation', $checkoutData)) {
-            return new PickupLocationV3Adapter($checkoutData);
+        if (key_exists('location', $deliveryOptionsData)) {
+            return new PickupLocationV2Adapter($deliveryOptionsData);
+        } elseif (key_exists('pickupLocation', $deliveryOptionsData)) {
+            return new PickupLocationV3Adapter($deliveryOptionsData);
         }
 
-        throw new \BadMethodCallException("Can't create a PickupLocationAdapter not found");
+        throw new BadMethodCallException("Can't create PickupLocation. No suitable adapter found");
     }
 }

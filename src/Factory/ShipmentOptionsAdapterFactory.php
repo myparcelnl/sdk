@@ -12,7 +12,7 @@
 
 namespace MyParcelNL\Sdk\src\Factory;
 
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter;
+use BadMethodCallException;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractShipmentOptionsAdapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\ShipmentOptionsV2Adapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\ShipmentOptionsV3Adapter;
@@ -20,24 +20,22 @@ use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\ShipmentOptionsV3Adapter;
 class ShipmentOptionsAdapterFactory
 {
     /**
-     * @param string $checkoutData
+     * @param array $shipmentOptionsData
      *
      * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractShipmentOptionsAdapter
-     * @throws \Exception
      */
-    public static function create(string $checkoutData): AbstractShipmentOptionsAdapter
+    public static function create(array $shipmentOptionsData): AbstractShipmentOptionsAdapter
     {
-        $checkoutData = json_decode($checkoutData);
-        if (! is_array($checkoutData)) {
-            throw new \BadMethodCallException("Invalid checkout data to create ShipmentOptions");
+        if (! is_array($shipmentOptionsData)) {
+            throw new BadMethodCallException("Invalid checkout data to create ShipmentOptions");
         }
 
-        if (key_exists('price_comment', $checkoutData)) {
-            return new ShipmentOptionsV2Adapter($checkoutData);
-        } elseif (key_exists('deliveryType', $checkoutData)) {
-            return new ShipmentOptionsV3Adapter($checkoutData);
+        if (key_exists('price_comment', $shipmentOptionsData)) {
+            return new ShipmentOptionsV2Adapter($shipmentOptionsData);
+        } elseif (key_exists('deliveryType', $shipmentOptionsData)) {
+            return new ShipmentOptionsV3Adapter($shipmentOptionsData);
         }
 
-        throw new \BadMethodCallException("Can't create a PickupLocationAdapter not found");
+        throw new BadMethodCallException("Can't create a new ShipmentOptions. No suitable adapter found");
     }
 }

@@ -12,6 +12,7 @@
 
 namespace MyParcelNL\Sdk\src\Factory;
 
+use BadMethodCallException;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV2Adapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV3Adapter;
@@ -20,27 +21,25 @@ use MyParcelNL\Sdk\src\Support\Arr;
 class DeliveryOptionsAdapterFactory
 {
     /**
-     * @param string $checkoutData
+     * @param array $deliveryOptionsData
      *
      * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
      * @throws \Exception
      */
-    public static function create(string $checkoutData): AbstractDeliveryOptionsAdapter
+    public static function create(array $deliveryOptionsData): AbstractDeliveryOptionsAdapter
     {
-        $checkoutData = json_decode($checkoutData);
-
-        if (! is_array($checkoutData) && ! is_object($checkoutData)) {
-            throw new \BadMethodCallException("Invalid checkout data to create DeliveryOptions");
+        if (! is_array($deliveryOptionsData) && ! is_object($deliveryOptionsData)) {
+            throw new BadMethodCallException("Invalid checkout data to create DeliveryOptions");
         }
 
-        $checkoutData = Arr::fromObject($checkoutData);
+        $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
 
-        if (key_exists('price_comment', $checkoutData)) {
-            return new DeliveryOptionsV2Adapter($checkoutData);
-        } elseif (key_exists('deliveryType', $checkoutData)) {
-            return new DeliveryOptionsV3Adapter($checkoutData);
+        if (key_exists('price_comment', $deliveryOptionsData)) {
+            return new DeliveryOptionsV2Adapter($deliveryOptionsData);
+        } elseif (key_exists('deliveryType', $deliveryOptionsData)) {
+            return new DeliveryOptionsV3Adapter($deliveryOptionsData);
         }
 
-        throw new \BadMethodCallException("Can't create a DeliveryOptionsAdapter not found");
+        throw new BadMethodCallException("Can't create DeliveryOptions. No suitable adapter found");
     }
 }
