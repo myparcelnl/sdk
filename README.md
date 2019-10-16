@@ -423,6 +423,23 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     ->getUserAgent()
 ```
 
+### Delivery options from the checkout with adapters
+
+You can use DeliveryOptionsAdapterFactory if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+You can use these adapters to receive the options anywhere in your code in a consistent way. If you also have the options in a different format (for example $order['signature']), you can also make your own adapter.
+
+```
+try {
+	// Create new instance from known json
+	$deliveryOptions = MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory::create(json_decode($dataFromCheckout));
+} catch (BadMethodCallException $e) {
+	// Create new instance from your own data
+	$deliveryOptions = new DeliveryOptionsFromOrderAdapter(null, (array) $meta);
+}
+```
+Adapters are independent of consignments. It is therefore your responsibility to transform an adapter into a consignment.
+
+
 ## Exceptions
 
 MyParcel uses several types of Exceptions to make the errors clear. It is your responsibility to provide the correct status in a response.
@@ -474,23 +491,6 @@ If you use arrays a lot, Collections are usually better to work with. ([document
 \MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
 \MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
 `\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
-
-### Delivery options from the checkout with adapters
-
-You can use DeliveryOptionsAdapterFactory if you use the following code in your checkout: https://github.com/myparcelnl/checkout
-You can use these adapters to receive the options anywhere in your code in a consistent way. If you also have the options in a different format (for example $order['signature']), you can also make your own adapter.
-
-```
-try {
-	// Create new instance from known json
-	$deliveryOptions = MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory::create(json_decode($dataFromCheckout));
-} catch (BadMethodCallException $e) {
-	// Create new instance from your own data
-	$deliveryOptions = new DeliveryOptionsFromOrderAdapter(null, (array) $meta);
-}
-```
-Adapters are independent of consignments. It is therefore your responsibility to transform an adapter into a consignment.
-
 
 ## Contribute
 
