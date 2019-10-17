@@ -5,12 +5,12 @@ namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 abstract class AbstractShipmentOptionsAdapter
 {
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $signature;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $only_recipient;
 
@@ -22,7 +22,7 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @return bool|null
      */
-    public function hasSignature()
+    public function hasSignature(): ?bool
     {
         return $this->signature;
     }
@@ -30,7 +30,7 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @return bool|null
      */
-    public function hasOnlyRecipient()
+    public function hasOnlyRecipient(): ?bool
     {
         return $this->only_recipient;
     }
@@ -38,7 +38,7 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @return int|null
      */
-    public function getInsurance()
+    public function getInsurance(): ?int
     {
         return $this->insurance;
     }

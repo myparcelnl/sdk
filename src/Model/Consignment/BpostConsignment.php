@@ -174,7 +174,7 @@ class BpostConsignment extends AbstractConsignment
      */
     public function getPickupNetworkId(): string
     {
-        return $this->pickup_network_id;
+        return "";
     }
 
     /**
