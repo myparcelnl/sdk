@@ -17,7 +17,7 @@ function getPhpFiles(string $dir = '.'): array
     $root = scandir($dir);
 
     // Loop in all folders and select the PHP files
-    foreach($root as $value)
+    foreach ($root as $value)
     {
         if ($value === '.' || $value === '..') {
             continue;
@@ -30,9 +30,9 @@ function getPhpFiles(string $dir = '.'): array
             }
             continue;
         }
-        
+
         // find PHP files in sub-folders  with a recursive foreach
-        foreach(getPhpFiles("$dir/$value") as $path)
+        foreach (getPhpFiles("$dir/$value") as $path)
         {
             $result[] = $path;
         }
