@@ -16,7 +16,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
     - [Label format and position](#label-format-and-position)
     - [Package type and options](#package-type-and-options)
     - [Retrieve data from a consignment](#retrieve-data-from-a-consignment)
-    - [Create and download label(s)](#create-and-download-label-s-)
+    - [Create and download label(s)](#create-and-download-labels)
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
     - [Helpers](#helpers)
