@@ -287,8 +287,9 @@ class MyParcelCollection extends Collection
              * Loop through the returned ids and add each consignment id to a consignment.
              */
             foreach ($request->getResult('data.ids') as $responseShipment) {
-                $consignments      = clone $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
-                $newConsignments[] = $consignments->pop()->setConsignmentId($responseShipment['id']);
+                $consignments      = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
+                $consignment       = clone $consignments->pop();
+                $newConsignments[] = $consignment->setConsignmentId($responseShipment['id']);
             }
         }
 
