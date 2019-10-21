@@ -1,6 +1,8 @@
 # MyParcel SDK
 This SDK connects to the MyParcel API using PHP.
 
+Do you want to be kept informed of new functionalities or do you just need help? You can contact us via our [Slack channel](https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM).
+
 ## Contents
 
 - [Contents](#contents)
@@ -14,7 +16,7 @@ This SDK connects to the MyParcel API using PHP.
     - [Label format and position](#label-format-and-position)
     - [Package type and options](#package-type-and-options)
     - [Retrieve data from a consignment](#retrieve-data-from-a-consignment)
-    - [Create and download label(s)](#create-and-download-label-s-)
+    - [Create and download label(s)](#create-and-download-labels)
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
     - [Helpers](#helpers)
@@ -70,8 +72,11 @@ $consignment = (new MyParcelConsignment())
     
 $myParcelCollection = (new MyParcelCollection())
     ->addConsignment($consignment)
-    ->setPdfOfLabels()
-    ->downloadPdfOfLabels();
+    ->setPdfOfLabels();
+
+$consignmentId = $myParcelCollection->first()->getMyParcelConsignmentId();
+
+$myParcelCollection->downloadPdfOfLabels();
 ```
 
 ### Create multiple consignments
@@ -203,6 +208,15 @@ echo $myParcelCollection
     ->setLinkOfLabels($positions)
     ->getLinkOfLabels();
 ```
+
+If you want to download a label at a later time, you can also use the following to fill the collection:
+```
+$collection = MyParcelCollection::findByReferenceId('999999', 'xxxxxx');
+$collection
+    ->setPdfOfLabels()
+    ->downloadPdfOfLabels();
+```
+Instead of `findByReferenceId()` you can also use `findManyByReferenceId()`, `find()` or `findMany()`.
 
 More information: https://myparcelnl.github.io/api/#6_F
 
@@ -348,7 +362,7 @@ This object is embedded in the MyParcelConsignment object for global shipments a
   ->setClassification(0111) // Example: 0111 = "Growing of cereals (except rice), leguminous crops and oil seeds"  
   ->setCountry('NL') // Country of origin
   ->setDescription('Cereal grains')
-  ->setItemValue(["amount" => 200, "currency" => "EUR"]) // Must be array with amount and currency like in the example
+  ->setItemValue(40000) // Price of item in cents
   ->setWeight() // The total weight for these items in whole grams. Between 0 and 20000 grams.
   
   ->getAmount()
@@ -453,9 +467,9 @@ If you use arrays a lot, Collections are usually better to work with. ([document
 \MyParcelNL\Sdk\src\Support\Collection()
 
 ### Helpers
-\MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
-\MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
-`\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
+* \MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
+* \MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
+* `\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
 
 
 ## Contribute

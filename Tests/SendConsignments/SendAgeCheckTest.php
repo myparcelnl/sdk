@@ -31,7 +31,6 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
             return $this;
         }
 
-
         foreach ($this->additionProvider() as $consignmentTest) {
 
 
