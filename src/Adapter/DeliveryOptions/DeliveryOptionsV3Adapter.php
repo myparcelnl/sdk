@@ -3,12 +3,9 @@
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 use Exception;
-use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
 /**
- * Class DeliveryOptions
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
+ * Class DeliveryOptionsV3Adapter
  */
 class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
 {

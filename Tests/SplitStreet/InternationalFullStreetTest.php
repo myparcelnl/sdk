@@ -22,8 +22,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class InternationalFullStreetTest
- *
- * @package MyParcelNL\Sdk\src\tests\InternationalFullStreetTest
  */
 class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
 {

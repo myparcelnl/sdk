@@ -3,9 +3,7 @@
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 /**
- * Class ShipmentOptions
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
+ * Class ShipmentOptionsV2Adapter
  */
 class ShipmentOptionsV2Adapter extends AbstractShipmentOptionsAdapter
 {

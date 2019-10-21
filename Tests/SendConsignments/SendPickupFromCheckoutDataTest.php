@@ -23,7 +23,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendPickupFromCheckoutDataTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
 {

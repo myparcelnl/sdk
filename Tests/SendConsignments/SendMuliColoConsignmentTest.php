@@ -21,7 +21,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendOneConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendMuliColoConsignmentTest extends \PHPUnit\Framework\TestCase
 {

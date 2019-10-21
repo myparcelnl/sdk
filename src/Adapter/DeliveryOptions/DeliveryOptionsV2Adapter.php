@@ -6,9 +6,7 @@ use Exception;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
 /**
- * Class DeliveryOptions
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
+ * Class DeliveryOptionsV2Adapter
  */
 class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
 {

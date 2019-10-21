@@ -3,9 +3,7 @@
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 /**
- * Class PickupLocation
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
+ * Class PickupLocationV2Adapter
  */
 class PickupLocationV2Adapter extends AbstractPickupLocationAdapter
 {

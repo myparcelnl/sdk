@@ -21,7 +21,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 /**
  * Class SendAgeCheckTest
- * @package MyParcelNL\Sdk\tests\SendAgeCheckTest
  */
 class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 {

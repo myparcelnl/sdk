@@ -12,8 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class SendMultipleConsignmentsTest
- *
- * @package MyParcelNL\Sdk\tests\SendConsignmentsTest
  */
 class SendMultipleConsignmentsTest extends TestCase
 {
