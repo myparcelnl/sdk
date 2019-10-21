@@ -22,8 +22,6 @@ class DeliveryOptionsV3Adapter extends AbstractDeliveryOptionsAdapter
      * DeliveryOptions constructor.
      *
      * @param array $deliveryOptions
-     *
-     * @throws Exception
      */
     public function __construct(array $deliveryOptions = [])
     {
