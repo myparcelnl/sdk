@@ -4,13 +4,7 @@ namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 use Exception;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
-/**
- * Class DeliveryOptions
- *
- * @package MyParcelNL\Sdk\src\Model\DeliveryOptions
- */
 class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
 {
     /**
