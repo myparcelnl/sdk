@@ -3,11 +3,8 @@
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 use Exception;
-use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
-/**
- * Class DeliveryOptionsV2Adapter
- */
 class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
 {
     /**
@@ -33,11 +30,21 @@ class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
 
         $this->carrier         = $deliveryOptions["carrier"] ?? null;
         $this->date            = $deliveryOptions["date"];
-        $this->deliveryType    = $deliveryOptions["deliveryType"];
+        $this->deliveryType    = $this->normalizeDeliveryType($deliveryOptions["time"][0]["type"]);
         $this->shipmentOptions = new ShipmentOptionsV2Adapter($deliveryOptions["options"] ?? []);
 
         if ($this->isPickup()) {
-            $this->pickupLocation = new PickupLocationV2Adapter($deliveryOptions["location"]);
+            $this->pickupLocation = new PickupLocationV2Adapter($deliveryOptions);
         }
+    }
+
+    /**
+     * @param $deliveryType
+     *
+     * @return string
+     */
+    private function normalizeDeliveryType(int $deliveryType): string
+    {
+        return array_flip(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP)[$deliveryType];
     }
 }
