@@ -30,7 +30,7 @@ class DeliveryOptionsAdapterFactory
     {
         $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
 
-        if (key_exists('price_comment', $deliveryOptionsData)) {
+        if (key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData["time"])) {
             return new DeliveryOptionsV2Adapter($deliveryOptionsData);
         } elseif (key_exists('deliveryType', $deliveryOptionsData)) {
             return new DeliveryOptionsV3Adapter($deliveryOptionsData);
