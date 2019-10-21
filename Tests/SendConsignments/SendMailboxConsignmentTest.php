@@ -22,7 +22,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendMailboxConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendMailboxConsignmentTest
  */
 class SendMailboxConsignmentTest extends \PHPUnit\Framework\TestCase
 {

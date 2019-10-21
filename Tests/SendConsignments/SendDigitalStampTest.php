@@ -10,7 +10,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendDigitalStampTest
- * @package MyParcelNL\Sdk\tests\SendDigitalStampTest
  */
 class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {

@@ -663,4 +663,21 @@ class Arr
 
         return ! is_array($value) ? [$value] : $value;
     }
+
+    /**
+     * @param array|object $object
+     *
+     * @return array
+     */
+    public static function fromObject($object): array
+    {
+        $array = (array) $object;
+        foreach ($array as &$var) {
+            if (is_object($var)) {
+                $var = self::fromObject($var);
+            }
+        }
+
+        return $array;
+    }
 }

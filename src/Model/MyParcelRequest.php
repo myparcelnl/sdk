@@ -114,12 +114,11 @@ class MyParcelRequest
      * send the created request to MyParcel
      *
      * @param string $method
-     *
      * @param string $uri
      *
      * @return MyParcelRequest|array|false|string
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_SHIPMENTS)
     {
@@ -253,7 +252,7 @@ class MyParcelRequest
      * Checks if all the requirements are set to send a request to MyParcel
      *
      * @return bool
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
     private function checkConfigForRequest()
     {

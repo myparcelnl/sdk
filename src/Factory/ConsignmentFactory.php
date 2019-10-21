@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl

@@ -21,7 +21,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SplitStreetTest
- * @package MyParcelNL\Sdk\src\tests\SplitStreetTest
  */
 class SplitStreetTest extends \PHPUnit\Framework\TestCase
 {

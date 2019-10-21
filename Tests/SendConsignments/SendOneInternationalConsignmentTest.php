@@ -24,7 +24,6 @@ use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
 /**
  * Class SendOneInternationalConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
 {

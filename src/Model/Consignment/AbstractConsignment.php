@@ -59,6 +59,14 @@ class AbstractConsignment
         self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
     ];
 
+    public const DELIVERY_TYPES_NAMES_IDS_MAP = [
+        self::DELIVERY_TYPE_MORNING_NAME        => self::DELIVERY_TYPE_MORNING,
+        self::DELIVERY_TYPE_STANDARD_NAME       => self::DELIVERY_TYPE_STANDARD,
+        self::DELIVERY_TYPE_EVENING_NAME        => self::DELIVERY_TYPE_EVENING,
+        self::DELIVERY_TYPE_PICKUP_NAME         => self::DELIVERY_TYPE_PICKUP,
+        self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME => self::DELIVERY_TYPE_PICKUP_EXPRESS,
+    ];
+
     public const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
 
@@ -87,6 +95,13 @@ class AbstractConsignment
         self::PACKAGE_TYPE_MAILBOX_NAME,
         self::PACKAGE_TYPE_LETTER_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+    ];
+
+    public const PACKAGE_TYPES_NAMES_IDS_MAP = [
+        self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE,
+        self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
+        self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
+        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
     ];
 
     public const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
@@ -357,6 +372,12 @@ class AbstractConsignment
      * @var string
      */
     public $pickup_network_id = '';
+
+    /**
+     * @internal
+     * @var null|string
+     */
+    private $retail_network_id;
 
     /**
      * @var Helpers

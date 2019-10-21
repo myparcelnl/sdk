@@ -16,8 +16,7 @@ namespace MyParcelNL\Sdk\src\Helper;
 
 
 /**
- * Class Curl
- * @package MyParcelNL\Sdk\src\Helper
+ * Class MyParcelCurl
  */
 class MyParcelCurl
 {

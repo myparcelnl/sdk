@@ -23,7 +23,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendNightShipmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
 {

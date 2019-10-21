@@ -23,8 +23,7 @@ use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
 /**
- * Class SendOneInternationalConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
+ * Class SendLargeFormatTest
  */
 class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 {

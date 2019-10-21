@@ -16,8 +16,7 @@ namespace MyParcelNL\Sdk\src\tests\CreateConsignments\TrackTraceUrlTest;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
- * Class SplitStreetTest
- * @package MyParcelNL\Sdk\src\tests\TrackTraceUrlTest
+ * Class TrackTraceUrlTest
  */
 class TrackTraceUrlTest extends \PHPUnit\Framework\TestCase
 {

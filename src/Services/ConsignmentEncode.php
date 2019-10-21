@@ -13,10 +13,10 @@
 namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 
 class ConsignmentEncode
 {
@@ -104,8 +104,7 @@ class ConsignmentEncode
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function encodeExtraOptions()
-    {
+    private function encodeExtraOptions() {
         $consignment = Arr::first($this->consignments);
         $hasOptions = $this->hasOptions();
         if ($hasOptions) {
@@ -153,6 +152,7 @@ class ConsignmentEncode
      */
     private function encodePickup()
     {
+        /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
         if (
             $this->hasOptions() !== false &&
@@ -163,6 +163,7 @@ class ConsignmentEncode
             $consignment->getPickupLocationName() !== null
         ) {
             $this->consignmentEncoded['pickup'] = [
+                'cc'                => $consignment->getPickupCountry(),
                 'postal_code'       => $consignment->getPickupPostalCode(),
                 'street'            => $consignment->getPickupStreet(),
                 'city'              => $consignment->getPickupCity(),
@@ -235,8 +236,7 @@ class ConsignmentEncode
         }
 
         $this->consignmentEncoded = array_merge_recursive(
-            $this->consignmentEncoded,
-            [
+            $this->consignmentEncoded, [
                 'customs_declaration' => [
                     'contents' => 1,
                     'weight'   => $consignment->getTotalWeight(),
@@ -265,7 +265,8 @@ class ConsignmentEncode
             'weight'         => $customsItem->getWeight(),
             'classification' => $customsItem->getClassification(),
             'country'        => $customsItem->getCountry(),
-            'item_value'     => [
+            'item_value'     =>
+                [
                     'amount'   => $customsItem->getItemValue(),
                     'currency' => $currency,
                 ],
