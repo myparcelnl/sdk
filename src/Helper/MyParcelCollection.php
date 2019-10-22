@@ -415,6 +415,7 @@ class MyParcelCollection extends Collection
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
+
         if ($key) {
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
