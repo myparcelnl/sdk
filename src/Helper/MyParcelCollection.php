@@ -20,12 +20,13 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Exception\NoConsignmentFoundException;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -76,7 +77,7 @@ class MyParcelCollection extends Collection
     /**
      * @param bool $keepKeys
      *
-     * @return MyParcelConsignment[]
+     * @return AbstractConsignment[]
      */
     public function getConsignments($keepKeys = true)
     {
@@ -89,8 +90,8 @@ class MyParcelCollection extends Collection
 
     /**
      * Get one consignment
+     * @return mixed
      *
-     * @return \MyParcelNL\Sdk\src\Model\MyParcelConsignment|null
      * @throws BadMethodCallException
      */
     public function getOneConsignment()
@@ -108,7 +109,7 @@ class MyParcelCollection extends Collection
      * @return MyParcelCollection
      * @throws InvalidArgumentException
      */
-    public function getConsignmentsByReferenceId($id)
+    public function getConsignmentsByReferenceId($id): MyParcelCollection
     {
         if ($id === null) {
             throw new InvalidArgumentException ('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
@@ -122,9 +123,19 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * @param $groupId
+     *
+     * @return MyParcelCollection
+     */
+    public function getConsignmentsByReferenceIdGroup($groupId): MyParcelCollection
+    {
+        return $this->findByReferenceIdGroup($groupId);
+    }
+
+    /**
      * This is deprecated because there may be multiple consignments with the same reference id
      *
-     * @deprecated Use getConsignmentsByReferenceId instead
+     * @deprecated Use getConsignmentsByReferenceId()->first() instead
      *
      * @param $id
      *
@@ -137,13 +148,13 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
-     * @return MyParcelConsignment
+     * @return AbstractConsignment
      */
     public function getConsignmentByApiId($id)
     {
-        return $this->where('myparcel_consignment_id', $id)->first();
+        return $this->where('consignment_id', $id)->first();
     }
 
     /**
@@ -165,12 +176,12 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param MyParcelConsignment $consignment
+     * @param AbstractConsignment|null $consignment
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
-    public function addConsignment(MyParcelConsignment $consignment)
+    public function addConsignment(?AbstractConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
@@ -183,17 +194,17 @@ class MyParcelCollection extends Collection
 
     /**
      * @param int[] $ids
-     * @param sting $apiKey
+     * @param string $apiKey
      *
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public function addConsignmentByConsignmentIds($ids, $apiKey)
     {
         foreach ($ids as $consignmentId) {
-            $consignment = (new MyParcelConsignment())
+            $consignment = (new AbstractConsignment())
                 ->setApiKey($apiKey)
-                ->setMyParcelConsignmentId($consignmentId);
+                ->setConsignmentId($consignmentId);
 
             $this->addConsignment($consignment);
         }
@@ -206,12 +217,12 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public function addConsignmentByReferenceIds($ids, $apiKey)
     {
         foreach ($ids as $referenceId) {
-            $consignment = (new MyParcelConsignment())
+            $consignment = (new AbstractConsignment())
                 ->setApiKey($apiKey)
                 ->setReferenceId($referenceId);
 
@@ -222,12 +233,12 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param MyParcelConsignment $consignment
+     * @param AbstractConsignment $consignment
      * @param $amount
      *
      * @return MyParcelCollection
      */
-    public function addMultiCollo(MyParcelConsignment $consignment, $amount): self
+    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
     {
         $i = 1;
 
@@ -248,20 +259,21 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Create concepts in MyParcel
+     * Create concepts in MyParcel.
      *
      * @return  $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws MissingFieldException
+     * @throws ApiException
      */
-    public function createConcepts()
+    public function createConcepts(): self
     {
+        $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
+
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
-        foreach ($this->where('myparcel_consignment_id', null)->groupBy('api_key') as $consignments) {
-
-            $data    = (new CollectionEncode($consignments))->encode();
+        foreach ($this->where('consignment_id', null)->groupBy('api_key') as $consignments) {
+            $data = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
@@ -271,12 +283,17 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest();
 
+            /**
+             * Loop through the returned ids and add each consignment id to a consignment.
+             */
             foreach ($request->getResult('data.ids') as $responseShipment) {
-                /** @var MyParcelConsignment $consignment */
-                $consignment = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier'])->first();
-                $consignment->setMyParcelConsignmentId($responseShipment['id']);
+                $consignments      = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
+                $consignment       = clone $consignments->pop();
+                $newConsignments[] = $consignment->setConsignmentId($responseShipment['id']);
             }
         }
+
+        $this->items = $newConsignments;
 
         return $this;
     }
@@ -289,14 +306,14 @@ class MyParcelCollection extends Collection
      */
     public function deleteConcepts()
     {
-        /* @var $consignments MyParcelConsignment[] */
-        foreach ($this->groupBy('api_key')->where('myparcel_consignment_id', '!=', null) as $key => $consignments) {
+        /* @var $consignments AbstractConsignment[] */
+        foreach ($this->groupBy('api_key')->where('consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
                 (new MyParcelRequest())
                     ->setUserAgent($this->getUserAgent())
                     ->setRequestParameters(
                         $key,
-                        $consignment->getMyParcelConsignmentId(),
+                        $consignment->getConsignmentId(),
                         MyParcelRequest::REQUEST_HEADER_DELETE
                     )
                     ->sendRequest('DELETE');
@@ -349,8 +366,9 @@ class MyParcelCollection extends Collection
      * @param int $size
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws ApiException
+     * @throws MissingFieldException
+     * @throws Exception
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
@@ -370,7 +388,7 @@ class MyParcelCollection extends Collection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, (new MyParcelConsignment())->setApiKey($key));
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($key)));
             $this->addConsignment($consignmentAdapter->getConsignment());
         }
 
@@ -380,7 +398,7 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param integer $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
+     * @param int $positions            The position of the label on an A4 sheet. Set to false to create an A6 sheet.
      *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
      *                                  not specify an array, but specify a number, the following labels will fill the
      *                                  ascending positions. Positioning is only applied on the first page with labels.
@@ -397,10 +415,6 @@ class MyParcelCollection extends Collection
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
-
-        if (null === $conceptIds) {
-            throw new NoConsignmentFoundException('No consignment found. The collection must contain at least one consignment.');
-        }
 
         if ($key) {
             $request = (new MyParcelRequest())
@@ -425,7 +439,7 @@ class MyParcelCollection extends Collection
      *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param integer $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param int $positions            The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
@@ -441,10 +455,6 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
         $conceptIds = $this->getConsignmentIds($key);
-
-        if (null === $conceptIds) {
-            throw new NoConsignmentFoundException('No consignment found. The collection must contain at least one consignment.');
-        }
 
         if ($key) {
             $request = (new MyParcelRequest())
@@ -492,8 +502,8 @@ class MyParcelCollection extends Collection
      * Send return label to customer. The customer can pay and download the label.
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function sendReturnLabelMails()
     {
@@ -529,19 +539,16 @@ class MyParcelCollection extends Collection
     /**
      * Get all consignment ids
      *
-     * @internal
+     * @param string|null $key
      *
-     * @param $key
-     *
-     * @return array
+     * @return array|null
      */
-    public function getConsignmentIds(&$key)
+    public function getConsignmentIds(string &$key = null): ?array
     {
         $conceptIds = [];
-
-        /** @var MyParcelConsignment $consignment */
-        foreach ($this->where('myparcel_consignment_id', '!=', null) as $consignment) {
-            $conceptIds[] = $consignment->getMyParcelConsignmentId();
+        /** @var AbstractConsignment $consignment */
+        foreach ($this->where('consignment_id', '!=', null) as $consignment) {
+            $conceptIds[] = $consignment->getConsignmentId();
             $key          = $consignment->getApiKey();
         }
 
@@ -599,7 +606,7 @@ class MyParcelCollection extends Collection
      * @param int    $id
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
@@ -610,7 +617,7 @@ class MyParcelCollection extends Collection
      * @param array  $consignmentIds
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
     {
@@ -618,8 +625,8 @@ class MyParcelCollection extends Collection
 
         foreach ($consignmentIds as $id) {
 
-            $consignment = new MyParcelConsignment();
-            $consignment->setMyParcelConsignmentId($id);
+            $consignment = new AbstractConsignment();
+            $consignment->setConsignmentId((int) $id);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
@@ -634,7 +641,7 @@ class MyParcelCollection extends Collection
      * @param string $id
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
@@ -645,7 +652,7 @@ class MyParcelCollection extends Collection
      * @param array  $referenceIds
      * @param string $apiKey
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return MyParcelCollection
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {
@@ -654,7 +661,7 @@ class MyParcelCollection extends Collection
 
         foreach ($referenceIds as $id) {
 
-            $consignment = new MyParcelConsignment();
+            $consignment = new AbstractConsignment();
             $consignment->setReferenceId($id);
             $consignment->setApiKey($apiKey);
 
@@ -673,11 +680,11 @@ class MyParcelCollection extends Collection
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @param integer|array|null $positions
+     * @param int|array|null $positions
      *
      * @return $this
      */
-    public function setLabelFormat($positions)
+    private function setLabelFormat($positions)
     {
         /** If $positions is not false, set paper size to A4 */
         if (is_numeric($positions)) {
@@ -700,7 +707,7 @@ class MyParcelCollection extends Collection
     /**
      * Encode ReturnShipment to send to MyParcel
      *
-     * @param MyParcelConsignment $consignment
+     * @param AbstractConsignment $consignment
      *
      * @return string
      */
@@ -708,7 +715,7 @@ class MyParcelCollection extends Collection
     {
         $data     = [];
         $shipment = [
-            'parent'  => $consignment->getMyParcelConsignmentId(),
+            'parent'  => $consignment->getConsignmentId(),
             'carrier' => 1,
             'email'   => $consignment->getEmail(),
             'name'    => $consignment->getPerson(),
@@ -727,17 +734,14 @@ class MyParcelCollection extends Collection
      */
     private function getNewCollectionFromResult($result)
     {
-        $newCollection = new static;
+        $newCollection = new static();
+        /** @var AbstractConsignment $consignment */
+        $consignment = $this->first();
+        $apiKey      = $consignment->getApiKey();
+
         foreach ($result as $shipment) {
-
-            /** @var Collection|MyParcelConsignment[] $consignments */
-            $consignments = $this->where('myparcel_consignment_id', $shipment['id']);
-
-            if ($consignments->isEmpty()) {
-                $consignments = $this->getConsignmentsByReferenceId($shipment['reference_identifier']);
-            }
-
-            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignments->first());
+            $consignment        = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
+            $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
             $isMultiCollo       = ! empty($shipment['secondary_shipments']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
@@ -753,15 +757,32 @@ class MyParcelCollection extends Collection
         return $newCollection;
     }
 
-    private function addMissingReferenceId()
+    /**
+     * @return void
+     */
+    private function addMissingReferenceId(): void
     {
-        $this->transform(function($consignment) {
-            /** @var MyParcelConsignment $consignment */
+        $this->transform(function(AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
 
             return $consignment;
+        });
+    }
+
+    /**
+     * @param mixed $id
+     *
+     * @return MyParcelCollection
+     */
+    private function findByReferenceIdGroup($id): MyParcelCollection
+    {
+        return $this->filter(function ($consignment) use ($id) {
+            /**
+             * @var AbstractConsignment $consignment
+             */
+            return Str::startsWith($consignment->getReferenceId(), $id);
         });
     }
 }

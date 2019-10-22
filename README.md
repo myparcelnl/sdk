@@ -20,6 +20,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
     - [Helpers](#helpers)
+    - [Delivery options from the checkout with adapters](#delivery-options-from-the-checkout-with-adapters)
 - [Tips](#tips)
 - [Contribute](#contribute)
 
@@ -53,14 +54,15 @@ You can download the zip on the project's [releases page](https://github.com/myp
 Add the following lines to your project to import the SDK classes for creating shipments.
 ```php
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 ```
 
 ### Create a consignment
 This example uses only the required methods to create a shipment and download its label.
 
 ```php
-$consignment = (new MyParcelConsignment())
+$consignment = (ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 146')
     ->setCountry('NL')
@@ -90,7 +92,7 @@ $myParcelCollection = (new MyParcelCollection())
 // Loop through your shipments, adding each to the same MyParcelCollection()
 foreach ($yourShipments as $yourShipment) {
 
-    $consignment = (new MyParcelConsignment())
+    $consignment = ((ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
         ->setApiKey('api_key_from_MyParcel_backoffice')
         ->setReferenceId($yourShipment['reference_id'])
         ->setPerson($yourShipment['name'])
@@ -103,6 +105,20 @@ foreach ($yourShipments as $yourShipment) {
         ->addConsignment($consignment);
 }
 ```
+
+### Different carriers
+It is possible to use multiple carriers, for this you need to use:\
+`((ConsignmentFactory::createByCarrierId (PostNLConsignment::CARRIER_ID))`
+
+The following carriers are supported:
+- PostNL: `\MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment::CARRIER_ID`
+- bpost: `\MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment::CARRIER_ID`
+- DPD: `\MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment::CARRIER_ID`
+
+For this, you need to add the following lines to your project:
+- PostNL: `use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;`
+- bpost: `use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;`
+- DPD: `use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;`
 
 ### Label format and position
 Choose to output the label as either A4 or A6 when creating a pdf or download link with the argument `$positions` of `setPdfOfLabels($positions)` and `setLinkOfLabels($positions)`.
@@ -171,9 +187,9 @@ Available options:
 More information: https://myparcelnl.github.io/api/#6_A_3
 
 ### Retrieve data from a consignment
-Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#myparcelconsignment) for consignments here. 
+Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#PostNLConsignment) for consignments here. 
 ```php
-$consignment = new MyParcelConsignment();
+$consignment = new PostNLConsignment();
 
 echo $consignment->getFullStreet();
 echo $consignment->getPerson();
@@ -192,6 +208,13 @@ $status = $consignment->getStatus();
 The barcode is available after ```setPdfOfLabels()``` and ```setLinkOfLabels()```
 ```php
 $barcode = $consignment->getBarcode();
+```
+
+#### Get Track & Trace url
+The Track & Trace url is available after `downloadPdfOfLabels()` and `getLinkOfLabels()`
+```php
+$consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment());
+echo $consignment->getBarcodeUrl(3SMYPA123456789, '2231JE', 'NL'); // Barcode , Postal code, Country
 ```
 
 ### Create and download label(s)
@@ -226,10 +249,10 @@ This is a list of all the classes in this SDK and their available methods.
 ### Models
 `MyParcelNL/Sdk/src/Model`
 
-#### MyParcelConsignment
-```MyParcelNL/Sdk/src/Model/MyParcelConsignment.php```
+#### PostNLConsignment
+```MyparcelNL/Sdk/src/Model/Consignment/PostNLConsignment.php```
 ```php
-    $consignment = (new \MyParcelNL\Sdk\src\Model\MyParcelConsignment())
+    $consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
     ->setReferenceId('Order 1203')
     
@@ -284,11 +307,6 @@ This is a list of all the classes in this SDK and their available methods.
     ->setInvoice()
     ->setContents()
     ->addItem();
-
-    // Convert pickup data from checkout
-    // You can use these if you use the following code in your checkout: https://github.com/myparcelnl/checkout
-    ->setDeliveryDateFromCheckout()
-    ->setPickupAddressFromCheckout()
 
 // Get attributes from consignment
 $consignment
@@ -352,7 +370,7 @@ $consignment
 ```
 
 #### MyParcelCustomsItem
-This object is embedded in the MyParcelConsignment object for global shipments and is mandatory for non-EU shipments.
+This object is embedded in the PostNLConsignment object for global shipments and is mandatory for non-EU shipments.
 
 ```MyParcelNL/Sdk/src/Model/MyParcelCustomsItem.php```
 ```php
@@ -419,15 +437,32 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     ->getUserAgent()
 ```
 
+### Delivery options from the checkout with adapters
+
+You can use DeliveryOptionsAdapterFactory if you use the following code in your checkout: https://github.com/myparcelnl/checkout
+You can use these adapters to receive the options anywhere in your code in a consistent way. If you also have the options in a different format (for example $order['signature']), you can also make your own adapter.
+
+```
+try {
+	// Create new instance from known json
+	$deliveryOptions = MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory::create(json_decode($dataFromCheckout));
+} catch (BadMethodCallException $e) {
+	// Create new instance from your own data
+	$deliveryOptions = new DeliveryOptionsFromOrderAdapter(null, (array) $meta);
+}
+```
+Adapters are independent of consignments. It is therefore your responsibility to transform an adapter into a consignment.
+
+
 ## Exceptions
 
 MyParcel uses several types of Exceptions to make the errors clear. It is your responsibility to provide the correct status in a response.
 These are the Exceptions that we currently use:
 
-#### AddressException
+#### InvalidConsignmentException
 Exception to be returned when an address is incorrect or not usable.
 
-Class: `MyParcelNL\Sdk\src\Exception\AddressException`
+Class: `MyParcelNL\Sdk\src\Exception\InvalidConsignmentException`
 
 HTTP status: 412
 
@@ -470,7 +505,6 @@ If you use arrays a lot, Collections are usually better to work with. ([document
 * \MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
 * \MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
 * `\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
-
 
 ## Contribute
 

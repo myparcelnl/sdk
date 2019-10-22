@@ -15,9 +15,10 @@
 
 namespace MyParcelNL\Sdk\src\tests\SendConsignments;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendPickupFromCheckoutDataTest
@@ -26,18 +27,23 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test one shipment with createConcepts()
+     * @return \MyParcelNL\Sdk\src\tests\SendConsignments\SendUserAgentTest
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment        = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -175,35 +181,35 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
             }
 
-            if (!empty($consignmentTest['delivery_date'])) {
+            if (! empty($consignmentTest['delivery_date'])) {
                 $this->assertEquals($consignmentTest['delivery_date'], $consignment->getDeliveryDate(), 'getDeliveryDate()');
             }
 
-            if (!empty($consignmentTest['pickup_postal_code'])) {
+            if (! empty($consignmentTest['pickup_postal_code'])) {
                 $this->assertEquals($consignmentTest['pickup_postal_code'], $consignment->getPickupPostalCode(), 'getPickupPostalCode()');
             }
 
-            if (!empty($consignmentTest['pickup_street'])) {
+            if (! empty($consignmentTest['pickup_street'])) {
                 $this->assertEquals($consignmentTest['pickup_street'], $consignment->getPickupStreet(), 'getPickupStreet()');
             }
 
-            if (!empty($consignmentTest['pickup_city'])) {
+            if (! empty($consignmentTest['pickup_city'])) {
                 $this->assertEquals($consignmentTest['pickup_city'], $consignment->getPickupCity(), 'getPickupCity()');
             }
 
-            if (!empty($consignmentTest['pickup_number'])) {
+            if (! empty($consignmentTest['pickup_number'])) {
                 $this->assertEquals($consignmentTest['pickup_number'], $consignment->getPickupNumber(), 'getPickupNumber()');
             }
 
-            if (!empty($consignmentTest['pickup_location_name'])) {
+            if (! empty($consignmentTest['pickup_location_name'])) {
                 $this->assertEquals($consignmentTest['pickup_location_name'], $consignment->getPickupLocationName(), 'getPickupLocationName()');
             }
 
-            if (!empty($consignmentTest['pickup_location_code'])) {
+            if (! empty($consignmentTest['pickup_location_code'])) {
                 $this->assertEquals($consignmentTest['pickup_location_code'], $consignment->getPickupLocationCode(), 'getPickupLocationCode()');
             }
 
-            if (!empty($consignmentTest['pickup_network_id'])) {
+            if (! empty($consignmentTest['pickup_network_id'])) {
                 $this->assertEquals($consignmentTest['pickup_network_id'], $consignment->getPickupNetworkId(), 'getPickupNetworkId()');
             }
 
@@ -215,11 +221,9 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
-
-            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 
@@ -232,39 +236,41 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
                 'label_description' => 'Label description',
             ],
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 'Label description',
-                'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
-                'user_agent' => [
+                'checkout_data'     => '{"date":"'.date('Y-m-d', strtotime("+1 day")).'","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
+                'user_agent'        => [
                     'platform' => 'SDK_UNIT_TEST',
-                    'version' => 'v1.2.0',
+                    'version'  => 'v1.2.0',
                 ],
             ]
         ];

@@ -21,6 +21,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class MyParcelRequest
 {
@@ -38,7 +39,7 @@ class MyParcelRequest
     /**
      * API headers
      */
-    const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json; charset=utf-8';
+    const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
     const REQUEST_HEADER_RETRIEVE_SHIPMENT   = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
     const REQUEST_HEADER_RETRIEVE_LABEL_PDF  = 'Accept: application/pdf';
@@ -113,12 +114,11 @@ class MyParcelRequest
      * send the created request to MyParcel
      *
      * @param string $method
-     *
      * @param string $uri
      *
      * @return MyParcelRequest|array|false|string
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws ApiException
+     * @throws MissingFieldException
      */
     public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_SHIPMENTS)
     {
@@ -137,7 +137,6 @@ class MyParcelRequest
         }
 
         $request->write($method, $url, $header, $this->body);
-
         $this->setResult($request);
         $request->close();
 
@@ -253,7 +252,7 @@ class MyParcelRequest
      * Checks if all the requirements are set to send a request to MyParcel
      *
      * @return bool
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
     private function checkConfigForRequest()
     {
@@ -288,7 +287,7 @@ class MyParcelRequest
     /**
      * Get all consignment ids
      *
-     * @param MyParcelCollection|MyParcelConsignment[] $consignments
+     * @param MyParcelCollection|AbstractConsignment[] $consignments
      * @param $key
      *
      * @return array
@@ -312,7 +311,6 @@ class MyParcelRequest
     private function setResult($request)
     {
         $response = $request->read();
-
         if (preg_match("/^%PDF-1./", $response)) {
             $this->result = $response;
         } else {

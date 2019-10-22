@@ -15,23 +15,29 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendMorningShipmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
 {
+    use HasDebugLabels;
+
     /**
      * Test one shipment with createConcepts()
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
@@ -39,7 +45,7 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -157,15 +163,12 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated morning shipment label: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            $this->debugLinkOfLabels($myParcelCollection, 'morning shipment label');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
 
-            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 
@@ -178,41 +181,43 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'delivery_type' => 1,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_MORNING,
                 'label_description' => 'Label description',
-                'delivery_date' => '2019-06-28'
+                'delivery_date'     => date('Y-m-d', strtotime("+1 day"))
             ],
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'signature' => 1,
-                'package_type' => 1,
-                'delivery_type' => 1,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'signature'         => true,
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_MORNING,
                 'label_description' => 'Label description',
-                'delivery_date' => '2019-06-28'
+                'delivery_date'     => date('Y-m-d', strtotime("+1 day"))
             ]
         ];
     }

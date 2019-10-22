@@ -1,38 +1,40 @@
 <?php declare(strict_types=1);
 
-use MyParcelNL\Sdk\src\Concerns\HasCustomItems;
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+namespace MyParcelNL\Sdk\tests\SendConsignments\SendDigitalStampTest;
 
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendDigitalStampTest
- * @package MyParcelNL\Sdk\tests\SendDigitalStampTest
  */
 class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {
-    use HasCustomItems;
+    use HasDebugLabels;
 
     /**
      * Test one shipment with createConcepts()
      * @throws \Exception
+     *
+     * @return void
      */
-    public function testSendOneConsignment()
+    public function testSendOneConsignment(): void
     {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
-            return $this;
+            return;
         }
 
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
-                ->setPackageType(4)
+                ->setPackageType(AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP)
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
@@ -41,7 +43,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone'])
-                ->setPhysicalProperties($consignmentTest['physical_properties']);
+                ->setTotalWeight($consignmentTest['weight']);
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
@@ -57,9 +59,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated digital stamp shipment: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            $this->debugLinkOfLabels($myParcelCollection, 'digital stamp shipment');
         }
     }
 
@@ -72,61 +72,59 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Reindert',
+                'company'           => 'Big Sale BV',
                 'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-                'package_type' => 4,
+                'full_street'       => 'Plein 1940-45 3 b',
+                'street'            => 'Plein 1940-45',
+                'number'            => 3,
+                'number_suffix'     => 'b',
+                'postal_code'       => '2231JE',
+                'city'              => 'Rijnsburg',
+                'phone'             => '123456',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
                 'label_description' => 112345,
-                'physical_properties' => [
-                    'weight' => 76
-                ]
+                'weight'            => 76
             ],
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Reindert',
+                'company'           => 'Big Sale BV',
                 'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-                'package_type' => 4,
+                'full_street'       => 'Plein 1940-45 3 b',
+                'street'            => 'Plein 1940-45',
+                'number'            => 3,
+                'number_suffix'     => 'b',
+                'postal_code'       => '2231JE',
+                'city'              => 'Rijnsburg',
+                'phone'             => '123456',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
                 'label_description' => 112345,
-                'physical_properties' => [
-                    'weight' => 1999
-                ]
+                'weight'            => 1999
             ],
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Reindert',
+                'company'           => 'Big Sale BV',
                 'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-                'package_type' => 4,
+                'full_street'       => 'Plein 1940-45 3 b',
+                'street'            => 'Plein 1940-45',
+                'number'            => 3,
+                'number_suffix'     => 'b',
+                'postal_code'       => '2231JE',
+                'city'              => 'Rijnsburg',
+                'phone'             => '123456',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
                 'label_description' => 112345,
-                'physical_properties' => [
-                    'weight' => 0
-                ]
+                'weight'            => 0
+
             ],
         ];
     }

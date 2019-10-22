@@ -15,27 +15,29 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 
 /**
- * Class SendOneInternationalConsignmentTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
+ * Class SendLargeFormatTest
  */
 class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 {
+    use HasDebugLabels;
+
     /**
      * Test one shipment with createConcepts()
      * @throws \Exception
      */
     public function testSendOneConsignment()
     {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
@@ -43,7 +45,7 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection = new MyParcelCollection();
 
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setPackageType(1)
                 ->setCountry($consignmentTest['cc'])
@@ -100,11 +102,9 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated international shipment label: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            $this->debugLinkOfLabels($myParcelCollection, 'international shipment');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals($consignmentTest['large_format_after_request'], $consignment->isLargeFormat(), 'error Large Format');
 
@@ -121,89 +121,92 @@ class SendLargeFormatTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'CA',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-                'package_type' => 1,
-                'label_description' => 112345,
-                'large_format' => true,
+                'api_key'                    => getenv('API_KEY'),
+                'carrier_id'                 => PostNLConsignment::CARRIER_ID,
+                'cc'                         => 'CA',
+                'person'                     => 'Reindert',
+                'company'                    => 'Big Sale BV',
+                'full_street_input'          => 'Plein 1940-45 3b',
+                'full_street'                => 'Plein 1940-45 3 b',
+                'street'                     => 'Plein 1940-45',
+                'number'                     => 3,
+                'number_suffix'              => 'b',
+                'postal_code'                => '2231JE',
+                'city'                       => 'Rijnsburg',
+                'phone'                      => '123456',
+                'package_type'               => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'label_description'          => 112345,
+                'large_format'               => true,
                 'large_format_after_request' => false,
-                'age_check' => false,
-                'custom_items' => [
+                'age_check'                  => false,
+                'custom_items'               => [
                     [
-                        'description' => 'Cool Mobile',
-                        'amount' => 2,
-                        'weight' => 2000,
-                        'item_value' => 40000,
+                        'description'    => 'Cool Mobile',
+                        'amount'         => 2,
+                        'weight'         => 2000,
+                        'item_value'     => 40000,
                         'classification' => 2008,
-                        'country' => 'DE',
-                    ]
-                ],
-            ],
-           [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'BE',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-                'package_type' => 1,
-                'label_description' => 112345,
-                'large_format' => true,
-                'large_format_after_request' => true,
-                'age_check' => false,
-                'custom_items' => [
-                    [
-                        'description' => 'Cool Mobile',
-                        'amount' => 2,
-                        'weight' => 2000,
-                        'item_value' => 40000,
-                        'classification' => 2008,
-                        'country' => 'DE',
+                        'country'        => 'DE',
                     ]
                 ],
             ],
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Reindert',
-                'company' => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
-                'full_street' => 'Plein 1940-45 3 b',
-                'street' => 'Plein 1940-45',
-                'number' => 3,
-                'number_suffix' => 'b',
-                'postal_code' => '2231JE',
-                'city' => 'Rijnsburg',
-                'phone' => '123456',
-                'package_type' => 1,
-                'label_description' => 112345,
-                'large_format' => true,
+                'api_key'                    => getenv('API_KEY'),
+                'carrier_id'                 => PostNLConsignment::CARRIER_ID,
+                'cc'                         => 'BE',
+                'person'                     => 'Reindert',
+                'company'                    => 'Big Sale BV',
+                'full_street_input'          => 'Plein 1940-45 3b',
+                'full_street'                => 'Plein 1940-45 3 b',
+                'street'                     => 'Plein 1940-45',
+                'number'                     => 3,
+                'number_suffix'              => 'b',
+                'postal_code'                => '2231JE',
+                'city'                       => 'Rijnsburg',
+                'phone'                      => '123456',
+                'package_type'               => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'label_description'          => 112345,
+                'large_format'               => true,
                 'large_format_after_request' => true,
-                'age_check' => false,
-                'custom_items' => [
+                'age_check'                  => false,
+                'custom_items'               => [
                     [
-                        'description' => 'Cool Mobile',
-                        'amount' => 2,
-                        'weight' => 2000,
-                        'item_value' => 40000,
+                        'description'    => 'Cool Mobile',
+                        'amount'         => 2,
+                        'weight'         => 2000,
+                        'item_value'     => 40000,
                         'classification' => 2008,
-                        'country' => 'DE',
+                        'country'        => 'DE',
+                    ]
+                ],
+            ],
+            [
+                'api_key'                    => getenv('API_KEY'),
+                'carrier_id'                 => PostNLConsignment::CARRIER_ID,
+                'cc'                         => 'NL',
+                'person'                     => 'Reindert',
+                'company'                    => 'Big Sale BV',
+                'full_street_input'          => 'Plein 1940-45 3b',
+                'full_street'                => 'Plein 1940-45 3 b',
+                'street'                     => 'Plein 1940-45',
+                'number'                     => 3,
+                'number_suffix'              => 'b',
+                'postal_code'                => '2231JE',
+                'city'                       => 'Rijnsburg',
+                'phone'                      => '123456',
+                'package_type'               => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'label_description'          => 112345,
+                'large_format'               => true,
+                'large_format_after_request' => true,
+                'age_check'                  => false,
+                'custom_items'               => [
+                    [
+                        'description'    => 'Cool Mobile',
+                        'amount'         => 2,
+                        'weight'         => 2000,
+                        'item_value'     => 40000,
+                        'classification' => 2008,
+                        'country'        => 'DE',
                     ]
                 ],
             ],

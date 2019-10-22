@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * This object is embedded in the MyParcelConsignment object for global shipments and is
+ * This object is embedded in the AbstractConsignment object for global shipments and is
  *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
@@ -136,7 +136,6 @@ class MyParcelCustomsItem
     public function setItemValue($item_value)
     {
         $this->item_value = (int) $item_value;
-
         return $this;
     }
 
@@ -162,7 +161,7 @@ class MyParcelCustomsItem
      */
     public function setClassification($classification)
     {
-        $this->classification = substr($classification, 0, 4);
+        $this->classification = substr("$classification", 0, 4);
 
         return $this;
     }

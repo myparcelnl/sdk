@@ -18,11 +18,17 @@
 
 namespace MyParcelNL\Sdk\Tests\ReturnLabelTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 class SendReturnLabelMailTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @return $this
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     */
     public function testSendReturnLabelMail()
     {
         if (getenv('API_KEY') == null) {
@@ -38,6 +44,8 @@ class SendReturnLabelMailTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     private function getCollectionWithParentConsignment()
     {
@@ -45,7 +53,7 @@ class SendReturnLabelMailTest extends \PHPUnit\Framework\TestCase
 
         $myParcelCollection = new MyParcelCollection();
 
-        $consignment = (new MyParcelConsignmentRepository())
+        $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
             ->setApiKey($consignmentTest['api_key'])
             ->setCountry($consignmentTest['cc'])
             ->setPerson($consignmentTest['person'])
@@ -73,6 +81,7 @@ class SendReturnLabelMailTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'api_key' => getenv('API_KEY'),
+            'carrier_id' => PostNLConsignment::CARRIER_ID,
             'cc' => 'NL',
             'person' => 'Piet',
             'email' => 'your_email@test.nl',

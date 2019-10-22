@@ -16,24 +16,29 @@
 
 namespace MyParcelNL\Sdk\src\tests\CreateConsignments\InternationalFullStreetTest;
 
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 
 /**
  * Class InternationalFullStreetTest
- *
- * @package MyParcelNL\Sdk\src\tests\InternationalFullStreetTest
  */
 class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers \MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository::getFullStreet
+     * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::getFullStreet
      * @dataProvider additionProvider()
+     *
+     * @param $carrierId
+     * @param $cc
+     * @param $fullStreet
+     *
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function testSplitStreet($cc, $fullStreet)
+    public function testSplitStreet($carrierId, $cc, $fullStreet)
     {
-        $consignment = (new MyParcelConsignmentRepository())
+        $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
             ->setCountry($cc)
             ->setFullStreet($fullStreet);
 
@@ -49,7 +54,8 @@ class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'cc' => 'FR',
+                'carrier_id'  => PostNLConsignment::CARRIER_ID,
+                'cc'          => 'FR',
                 'full_street' => 'No. 7 street',
             ],
         ];

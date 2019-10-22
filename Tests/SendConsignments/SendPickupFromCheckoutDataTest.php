@@ -15,30 +15,38 @@
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Repository\MyParcelConsignmentRepository;
-
+use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
  * Class SendPickupFromCheckoutDataTest
- * @package MyParcelNL\Sdk\tests\SendOneConsignmentTest
  */
 class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
 {
+    use HasDebugLabels;
+
     /**
      * Test one shipment with createConcepts()
+     * @return \MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest\SendPickupFromCheckoutDataTest
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function testSendOneConsignment()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
-            $consignment = (new MyParcelConsignmentRepository())
+            $consignment        = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -164,27 +172,27 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
             }
 
-            if (!empty($consignmentTest['delivery_date'])) {
+            if (! empty($consignmentTest['delivery_date'])) {
                 $this->assertEquals($consignmentTest['delivery_date'], $consignment->getDeliveryDate(), 'getDeliveryDate()');
             }
 
-            if (!empty($consignmentTest['pickup_postal_code'])) {
+            if (! empty($consignmentTest['pickup_postal_code'])) {
                 $this->assertEquals($consignmentTest['pickup_postal_code'], $consignment->getPickupPostalCode(), 'getPickupPostalCode()');
             }
 
-            if (!empty($consignmentTest['pickup_street'])) {
+            if (! empty($consignmentTest['pickup_street'])) {
                 $this->assertEquals($consignmentTest['pickup_street'], $consignment->getPickupStreet(), 'getPickupStreet()');
             }
 
-            if (!empty($consignmentTest['pickup_city'])) {
+            if (! empty($consignmentTest['pickup_city'])) {
                 $this->assertEquals($consignmentTest['pickup_city'], $consignment->getPickupCity(), 'getPickupCity()');
             }
 
-            if (!empty($consignmentTest['pickup_number'])) {
+            if (! empty($consignmentTest['pickup_number'])) {
                 $this->assertEquals($consignmentTest['pickup_number'], $consignment->getPickupNumber(), 'getPickupNumber()');
             }
 
-            if (!empty($consignmentTest['pickup_location_name'])) {
+            if (! empty($consignmentTest['pickup_location_name'])) {
                 $this->assertEquals($consignmentTest['pickup_location_name'], $consignment->getPickupLocationName(), 'getPickupLocationName()');
             }
 
@@ -196,15 +204,11 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals(true, preg_match("#^https://api.myparcel.nl/pdfs#", $myParcelCollection->getLinkOfLabels()), 'Can\'t get link of PDF');
 
-            echo "\033[32mGenerated pickup label from checkout label: \033[0m";
-            print_r($myParcelCollection->getLinkOfLabels());
-            echo "\n\033[0m";
+            $this->debugLinkOfLabels($myParcelCollection, 'pickup label from checkout label');
 
-            /** @var MyParcelConsignmentRepository $consignment */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
-
-            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 
@@ -212,6 +216,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
      * Data for the test
      *
      * @return array
+     * @throws \Exception
      */
     public function additionProvider()
     {
@@ -222,43 +227,45 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
 
         return [
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
+                'api_key'           => getenv('API_KEY'),
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'cc'                => 'NL',
+                'person'            => 'Piet',
+                'company'           => 'Mega Store',
                 'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
+                'full_street'       => 'Koestraat 55',
+                'street'            => 'Koestraat',
+                'number'            => 55,
+                'number_suffix'     => '',
+                'postal_code'       => '2231JE',
+                'city'              => 'Katwijk',
+                'phone'             => '123-45-235-435',
+                'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 'Label description',
-                'checkout_data' => '{"date":"2019-05-31","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
+                'checkout_data'     => '{"date":"' . $delivery_date . '","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
             ],
             [
-                'api_key' => getenv('API_KEY'),
-                'cc' => 'NL',
-                'person' => 'Piet',
-                'company' => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
-                'full_street' => 'Koestraat 55',
-                'street' => 'Koestraat',
-                'number' => 55,
-                'number_suffix' => '',
-                'postal_code' => '2231JE',
-                'city' => 'Katwijk',
-                'phone' => '123-45-235-435',
-                'package_type' => 1,
-                'delivery_type' => 5,
-                'delivery_date' => $delivery_date,
-                'label_description' => 'Label description',
-                'pickup_postal_code' => '2222AB',
-                'pickup_street' => 'Scheepmakerstraat',
-                'pickup_city' => 'Katwijk',
-                'pickup_number' => '63',
+                'api_key'              => getenv('API_KEY'),
+                'carrier_id'           => PostNLConsignment::CARRIER_ID,
+                'cc'                   => 'NL',
+                'person'               => 'Piet',
+                'company'              => 'Mega Store',
+                'full_street_input'    => 'Koestraat 55',
+                'full_street'          => 'Koestraat 55',
+                'street'               => 'Koestraat',
+                'number'               => 55,
+                'number_suffix'        => '',
+                'postal_code'          => '2231JE',
+                'city'                 => 'Katwijk',
+                'phone'                => '123-45-235-435',
+                'package_type'         => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type'        => AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS,
+                'delivery_date'        => $delivery_date,
+                'label_description'    => 'Label description',
+                'pickup_postal_code'   => '2222AB',
+                'pickup_street'        => 'Scheepmakerstraat',
+                'pickup_city'          => 'Katwijk',
+                'pickup_number'        => '63',
                 'pickup_location_name' => 'KantoorExpert Katwijk',
             ]
         ];

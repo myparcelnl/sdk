@@ -12,18 +12,21 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
-use MyParcelNL\Sdk\src\Exception\AddressException;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
+use MyParcelNL\Sdk\src\Model\FullStreet;
 
 class SplitStreet
 {
+    const BOX_NL = 'bus';
+
     /**
-     * Regular expression used to split street name from house number.
+     * Regular expression used to split street name from house number for the Netherlands.
      *
      * This regex goes from right to left
      * Contains php keys to store the data in an array
      */
-    const SPLIT_STREET_REGEX =
+    const SPLIT_STREET_REGEX_NL =
         '~(?P<street>.*?)' .              // The rest belongs to the street
         '\s?' .                           // Separator between street and number
         '(?P<number>\d{1,4})' .           // Number can contain a maximum of 4 numbers
@@ -35,24 +38,41 @@ class SplitStreet
         '[a-zA-Z]{1}[a-zA-Z\s]{0,3}' .    // has up to 4 letters with a space
         ')?$~';
 
+    /* @todo: use commands */
+    const SPLIT_STREET_REGEX_BE =
+        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[^\s]{1,8})\s?(?P<box_separator>' . self::BOX_NL . '?)?\s?(?P<box_number>\d{0,8}$))$~';
+
     /**
      * Splits street data into separate parts for street name, house number and extension.
      * Only for Dutch addresses
      *
      * @param string $fullStreet The full street name including all parts
      *
-     * @return array
+     * @param string $local
+     * @param string $destination
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AddressException
+     * @return \MyParcelNL\Sdk\src\Model\FullStreet
+     *
+     * @throws \Exception
      */
-    public static function splitStreet($fullStreet)
+    public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
         $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
-        $result     = preg_match(self::SPLIT_STREET_REGEX, $fullStreet, $matches);
+        $regex      = self::getRegexByCountry($local, $destination);
 
+        if (! $regex) {
+            return new FullStreet($fullStreet, null, null, null);
+        }
+
+        $result = preg_match($regex, $fullStreet, $matches);
         self::validate($fullStreet, $result, $matches);
 
-        return self::getStreetData($matches);
+        return new FullStreet(
+            $matches['street'] ?? $fullStreet,
+            (int) $matches['number'] ?? null,
+            $matches['number_suffix'] ?? null,
+            $matches['box_number'] ?? null
+        );
     }
 
     /**
@@ -64,61 +84,79 @@ class SplitStreet
      */
     public static function getStreetParts($street)
     {
-        $streetWrap = wordwrap($street, MyParcelConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
+        $streetWrap = wordwrap($street, AbstractConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
         $parts      = explode("BREAK_LINE", $streetWrap);
 
         return $parts;
     }
 
     /**
-     * @param $matches
+     * @param string      $fullStreet
+     * @param string      $localCountry
+     * @param string|null $destinationCountry
      *
-     * @return array
+     * @return bool
      */
-    private static function getStreetData($matches)
+    public static function isCorrectStreet(string $fullStreet, string $localCountry, ?string $destinationCountry): bool
     {
-        $street        = '';
-        $number        = '';
-        $number_suffix = '';
+        $result = preg_match(SplitStreet::getRegexByCountry($localCountry, $destinationCountry), $fullStreet, $matches);
 
-        if (isset($matches['street'])) {
-            $street = $matches['street'];
+        if (! $result || ! is_array($matches)) {
+            // Invalid full street supplied
+            return false;
         }
 
-        if (isset($matches['number'])) {
-            $number = $matches['number'];
+        $fullStreet = str_replace('\n', ' ', $fullStreet);
+        if ($fullStreet != $matches[0]) {
+            // Characters are gone by preg_match
+            return false;
         }
 
-        if (isset($matches['number_suffix'])) {
-            $number_suffix = trim($matches['number_suffix'], '-');
-        }
-
-        $streetData = array(
-            'street'        => $street,
-            'number'        => $number,
-            'number_suffix' => $number_suffix,
-        );
-
-        return $streetData;
+        return (bool) $result;
     }
 
     /**
-     * @param $fullStreet
-     * @param $result
-     * @param $matches
+     * @param string $local
+     * @param string $destination
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AddressException
+     * @return string
      */
-    private static function validate($fullStreet, $result, $matches)
+    public static function getRegexByCountry(string $local, string $destination): ?string
+    {
+        if (
+            ($local === AbstractConsignment::CC_NL && $destination === AbstractConsignment::CC_NL) ||
+            (AbstractConsignment::CC_BE && $destination === AbstractConsignment::CC_NL)
+        ) {
+            return self::SPLIT_STREET_REGEX_NL;
+        }
+
+        if ($local === AbstractConsignment::CC_BE && $destination === AbstractConsignment::CC_BE) {
+            return self::SPLIT_STREET_REGEX_BE;
+        }
+
+        return null;
+    }
+
+
+    /**
+     * @param string $fullStreet
+     * @param string $result
+     * @param array  $matches
+     *
+     * @return void
+     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     */
+    private static function validate(string $fullStreet, int $result, array $matches): void
     {
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
-            throw new AddressException('Invalid full street supplied: ' . $fullStreet);
+            throw new InvalidConsignmentException('Invalid full street supplied: ' . $fullStreet);
         }
 
         if ($fullStreet != $matches[0]) {
             // Characters are gone by preg_match
-            throw new AddressException('Something went wrong with splitting up address ' . $fullStreet);
+            throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
         }
+        return;
     }
 }

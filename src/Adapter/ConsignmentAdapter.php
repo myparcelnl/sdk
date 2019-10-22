@@ -12,27 +12,26 @@
 
 namespace MyParcelNL\Sdk\src\Adapter;
 
-use MyParcelNL\Sdk\src\Model\MyParcelConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class ConsignmentAdapter
 {
     private $data;
 
     /**
-     * @var MyParcelConsignment
+     * @var AbstractConsignment
      */
     private $consignment;
 
     /**
      * ConsignmentDecode constructor.
      *
-     * @param array $data
-     * @param MyParcelConsignment $consignment
-     * @param string $apiKey
+     * @param array                                                     $data
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
-    public function __construct($data, $consignment)
+    public function __construct(array $data, AbstractConsignment $consignment)
     {
         $this->data = $data;
         $this->consignment = $consignment;
@@ -45,7 +44,7 @@ class ConsignmentAdapter
     }
 
     /**
-     * @return MyParcelConsignment
+     * @return AbstractConsignment
      */
     public function getConsignment()
     {
@@ -62,7 +61,7 @@ class ConsignmentAdapter
 
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->consignment
-            ->setMyParcelConsignmentId($this->data['id'])
+            ->setConsignmentId($this->data['id'])
             ->setReferenceId($this->data['reference_identifier'])
             ->setBarcode($this->data['barcode'])
             ->setStatus($this->data['status'])
@@ -81,7 +80,7 @@ class ConsignmentAdapter
 
     /**
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     private function extraOptions()
     {
@@ -93,21 +92,34 @@ class ConsignmentAdapter
             'signature'      => false,
             'return'         => false,
             'delivery_date'  => null,
-            'delivery_type'  => MyParcelConsignment::DEFAULT_DELIVERY_TYPE,
+            'delivery_type'  => AbstractConsignment::DEFAULT_DELIVERY_TYPE,
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);
 
-        $methods = [
-            'OnlyRecipient' => 'only_recipient',
-            'LargeFormat'   => 'large_format',
-            'AgeCheck'      => 'age_check',
-            'Signature'     => 'signature',
-            'Return'        => 'return',
-            'DeliveryDate'  => 'delivery_date',
-        ];
-        /** @noinspection PhpInternalEntityUsedInspection */
-        $this->setByMethods($options, $methods);
+        if (! empty($options['only_recipient'])) {
+            $this->consignment->setOnlyRecipient((bool) $options['only_recipient']);
+        }
+
+        if (! empty($options['large_format'])) {
+            $this->consignment->setLargeFormat((bool) $options['large_format']);
+        }
+
+        if (! empty($options['age_check'])) {
+            $this->consignment->setAgeCheck((bool) $options['age_check']);
+        }
+
+        if (! empty($options['signature'])) {
+            $this->consignment->setSignature((bool) $options['signature']);
+        }
+
+        if (! empty($options['return'])) {
+            $this->consignment->setReturn((bool) $options['return']);
+        }
+
+        if (! empty($options['delivery_date'])) {
+            $this->consignment->setDeliveryDate($options['delivery_date']);
+        }
 
         if (key_exists('insurance', $options)) {
             $insuranceAmount = $options['insurance']['amount'];
