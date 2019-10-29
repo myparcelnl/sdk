@@ -241,7 +241,7 @@ class ConsignmentEncode
                     'contents' => 1,
                     'weight'   => $consignment->getTotalWeight(),
                     'items'    => $items,
-                    'invoice'  => $consignment->getLabelDescription(),
+                    'invoice'  => $consignment->getInvoice(),
                 ],
                 'physical_properties' => $consignment->getPhysicalProperties(),
             ]
