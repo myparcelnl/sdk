@@ -116,7 +116,7 @@ class MyParcelCollection extends Collection
         }
 
         if ($this->count() === 1) {
-            return $this;
+            return new static($this->items);
         }
 
         return $this->where('reference_identifier', $id);
