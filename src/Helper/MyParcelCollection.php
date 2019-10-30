@@ -116,7 +116,7 @@ class MyParcelCollection extends Collection
         }
 
         if ($this->count() === 1) {
-            return $this;
+            return new static($this->items);
         }
 
         return $this->where('reference_identifier', $id);
@@ -746,11 +746,10 @@ class MyParcelCollection extends Collection
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
-
                 $secondaryShipment  = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
-                $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $this->getConsignmentsByReferenceId($secondaryShipment['reference_identifier'])->first());
+                $consignment        = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
+                $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $consignment);
                 $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
-
             }
         }
 
