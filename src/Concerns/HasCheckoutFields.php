@@ -109,7 +109,6 @@ trait HasCheckoutFields
         } else {
             throw new MissingFieldException('No PostNL location found in checkout data: ' . $checkoutData);
         }
-
         $this
             ->setPickupPostalCode($aCheckoutData['postal_code'])
             ->setPickupStreet($aCheckoutData['street'])
@@ -124,5 +123,5 @@ trait HasCheckoutFields
         }
 
         return $this;
-    }
+    } 
 }
