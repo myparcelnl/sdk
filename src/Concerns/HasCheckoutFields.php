@@ -115,6 +115,7 @@ trait HasCheckoutFields
             ->setPickupStreet($aCheckoutData['street'])
             ->setPickupCity($aCheckoutData['city'])
             ->setPickupNumber($aCheckoutData['number'])
+            ->setPickupCountry($aCheckoutData['cc'])
             ->setPickupLocationName($aCheckoutData['location'])
             ->setPickupLocationCode($aCheckoutData['location_code']);
 
