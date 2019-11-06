@@ -9,9 +9,6 @@ use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-/**
- * Class SendOneConsignmentTest
- */
 class SendOneConsignmentPickupAutoDetectTest extends \PHPUnit\Framework\TestCase
 {
 
