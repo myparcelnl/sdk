@@ -34,7 +34,7 @@ class SendOneConsignmentPickupAutoDetectTest extends \PHPUnit\Framework\TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_input'])
+                ->setFullStreet($consignmentTest['full_street'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail($consignmentTest['email'])
@@ -66,7 +66,6 @@ class SendOneConsignmentPickupAutoDetectTest extends \PHPUnit\Framework\TestCase
                 'cc'                     => 'NL',
                 'person'                 => 'Richard',
                 'company'                => 'Big Sale BV',
-                'full_street_input'      => 'Hoofdweg 3',
                 'full_street'            => 'Hoofdweg 3',
                 'street'                 => '',
                 'number'                 => '3',
@@ -83,7 +82,6 @@ class SendOneConsignmentPickupAutoDetectTest extends \PHPUnit\Framework\TestCase
                 'cc'                     => 'NL',
                 'person'                 => 'Richard',
                 'company'                => 'Big Sale BV',
-                'full_street_input'      => 'Hoofdweg 3',
                 'full_street'            => 'Hoofdweg 3',
                 'street'                 => '',
                 'number'                 => '3',
