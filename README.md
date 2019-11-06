@@ -304,7 +304,7 @@ This is a list of all the classes in this SDK and their available methods.
     ->setPhysicalProperties(['weight' => 73]) // Array with physical properties of the shipment. Currently only used to set the weight in grams for digital stamps (which is required)
     
     // Auto detect pickup
-    ->setAutoDetectPickup(true) // When this setting is false MyParcel do not auto detect an PostNL pickup addresses.
+    ->setAutoDetectPickup(true) // When this setting is false MyParcel do not auto detect a PostNL pickup addresses.
 
     // Non-EU shipment attributes: see https://myparcelnl.github.io/api/#7_E
     ->setInvoice()
