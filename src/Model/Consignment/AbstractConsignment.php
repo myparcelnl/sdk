@@ -67,7 +67,7 @@ class AbstractConsignment
         self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME => self::DELIVERY_TYPE_PICKUP_EXPRESS,
     ];
 
-    public const DEFAULT_DELIVERY_TYPE = self::DELIVERY_TYPE_STANDARD;
+    public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
 
     /**
@@ -104,7 +104,7 @@ class AbstractConsignment
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
     ];
 
-    public const DEFAULT_PACKAGE_TYPE = self::PACKAGE_TYPE_PACKAGE;
+    public const DEFAULT_PACKAGE_TYPE      = self::PACKAGE_TYPE_PACKAGE;
     public const DEFAULT_PACKAGE_TYPE_NAME = self::PACKAGE_TYPE_PACKAGE_NAME;
 
     /**
@@ -145,11 +145,6 @@ class AbstractConsignment
      * @var string|null
      */
     public $api_key;
-
-    /**
-     * @var bool
-     */
-    private $partOfMultiCollo = false;
 
     /**
      * @internal
@@ -372,6 +367,16 @@ class AbstractConsignment
      * @var string
      */
     public $pickup_network_id = '';
+
+    /**
+     * @var bool
+     */
+    private $partOfMultiCollo = false;
+
+    /**
+     * @var bool
+     */
+    private $auto_detect_pickup = true;
 
     /**
      * @internal
@@ -1095,6 +1100,26 @@ class AbstractConsignment
         $this->delivery_type = $deliveryType;
 
         return $this;
+    }
+
+    /**
+     * @param bool $value
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setAutoDetectPickup(bool $value): self
+    {
+        $this->auto_detect_pickup = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoDetectPickup(): bool
+    {
+        return $this->auto_detect_pickup;
     }
 
     /**
