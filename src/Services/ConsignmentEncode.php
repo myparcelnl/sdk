@@ -94,7 +94,7 @@ class ConsignmentEncode
      */
     private function encodeStreet()
     {
-        $consignment = Arr::first($this->consignments);
+        $consignment              = Arr::first($this->consignments);
         $this->consignmentEncoded = $consignment->encodeStreet($this->consignmentEncoded);
 
         return $this;
@@ -104,9 +104,10 @@ class ConsignmentEncode
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function encodeExtraOptions() {
+    private function encodeExtraOptions()
+    {
         $consignment = Arr::first($this->consignments);
-        $hasOptions = $this->hasOptions();
+        $hasOptions  = $this->hasOptions();
         if ($hasOptions) {
             $this->consignmentEncoded = array_merge_recursive(
                 $this->consignmentEncoded,
@@ -174,6 +175,8 @@ class ConsignmentEncode
             ];
         }
 
+        $this->consignmentEncoded['general_settings']['disable_auto_detect_pickup'] = $this->normalizeAutoDetectPickup($consignment);
+
         return $this;
     }
 
@@ -187,7 +190,7 @@ class ConsignmentEncode
         // Set insurance
         if ($consignment->getInsurance() > 1) {
             $this->consignmentEncoded['options']['insurance'] = [
-                'amount' => (int) $consignment->getInsurance() * 100,
+                'amount'   => (int) $consignment->getInsurance() * 100,
                 'currency' => 'EUR',
             ];
         }
@@ -210,6 +213,7 @@ class ConsignmentEncode
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
+
         return $this;
     }
 
@@ -253,9 +257,9 @@ class ConsignmentEncode
     /**
      * Encode product for the request
      *
-     * @var MyParcelCustomsItem $customsItem
-     * @var string $currency
      * @return array
+     * @var string              $currency
+     * @var MyParcelCustomsItem $customsItem
      */
     private function encodeCdCountryItem($customsItem, $currency = 'EUR')
     {
@@ -323,9 +327,19 @@ class ConsignmentEncode
         $secondaryShipments = $this->consignments;
         Arr::forget($secondaryShipments, 0);
         foreach ($secondaryShipments as $secondaryShipment) {
-            $this->consignmentEncoded['secondary_shipments'][] = (object)['reference_identifier' => $secondaryShipment->getReferenceId()];
+            $this->consignmentEncoded['secondary_shipments'][] = (object) ['reference_identifier' => $secondaryShipment->getReferenceId()];
         }
 
         return $this;
+    }
+
+    /**
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     *
+     * @return int
+     */
+    private function normalizeAutoDetectPickup(AbstractConsignment $consignment): int
+    {
+        return $consignment->isAutoDetectPickup() ? 0 : 1;
     }
 }
