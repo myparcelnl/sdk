@@ -1,17 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * Create one concept
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendReferenceIdentifierConsignmentTest;
 
@@ -19,7 +8,6 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-
 
 /**
  * Class SendReferenceIdentifierConsignmentTest
@@ -31,7 +19,7 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
      * Test one shipment with createConcepts()
      * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendReferenceIdentifierConsignment()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
@@ -59,30 +47,6 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
-            }
-
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
-            }
-
-            if (key_exists('age_check', $consignmentTest)) {
-                $consignment->setAgeCheck($consignmentTest['age_check']);
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
-            }
-
-            if (key_exists('signature', $consignmentTest)) {
-                $consignment->setSignature($consignmentTest['signature']);
-            }
-
-            if (key_exists('return', $consignmentTest)) {
-                $consignment->setReturn($consignmentTest['return']);
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $consignment->setInsurance($consignmentTest['insurance']);
             }
 
             if (key_exists('label_description', $consignmentTest)) {
@@ -125,32 +89,8 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['package_type'], $savedConsignment->getPackageType(), 'getPackageType()');
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['large_format'], $savedConsignment->isLargeFormat(), 'isLargeFormat()');
-            }
-
-            if (key_exists('age_check', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['age_check'], $savedConsignment->hasAgeCheck(), 'hasAgeCheck()');
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['only_recipient'], $savedConsignment->isOnlyRecipient(), 'isOnlyRecipient()');
-            }
-
-            if (key_exists('signature', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['signature'], $savedConsignment->isSignature(), 'isSignature()');
-            }
-
-            if (key_exists('return', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['return'], $savedConsignment->isReturn(), 'isReturn()');
-            }
-
             if (key_exists('label_description', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['label_description'], $savedConsignment->getLabelDescription(), 'getLabelDescription()');
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['insurance'], $savedConsignment->getInsurance(), 'getInsurance()');
             }
         }
     }

@@ -932,6 +932,14 @@ class AbstractConsignment
     }
 
     /**
+     * @return bool
+     */
+    public function isPickUp()
+    {
+        return (bool) $this->delivery_type === AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME;
+    }
+
+    /**
      * @return string|null
      */
     public function getPostalCode()
@@ -1722,9 +1730,14 @@ class AbstractConsignment
 
     /**
      * @return bool
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function validate(): bool
     {
+        if ($this->isPickUp()){
+            throw new MissingFieldException('pickup country');
+        }
+
         return true;
     }
 }

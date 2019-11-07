@@ -1,15 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
@@ -36,13 +27,14 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
         foreach ($this->additionProvider() as $consignmentTest) {
 
             $myParcelCollection = new MyParcelCollection();
-            $consignment = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
+            $consignment        = (ConsignmentFactory::createByCarrierId($consignmentTest['carrier_id']))
                 ->setApiKey($consignmentTest['api_key'])
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
@@ -91,9 +83,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection->addConsignment($consignment);
 
-            /**
-             * Create concept
-             */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
             $this->assertEquals(true, $consignment->getConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
@@ -105,6 +95,10 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($consignmentTest['postal_code'], $consignment->getPostalCode(), 'getPostalCode()');
             $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
+
+//            if (key_exists('weight', $consignmentTest)) {
+//                $this->assertEquals($consignmentTest['weight'], $consignment->getTotalWeight(), 'weight()');
+//            }
 
             if (key_exists('number_suffix', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
@@ -197,7 +191,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'api_key'           => getenv('API_KEY_BE'),
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'cc'                => 'BE',
-                'person'            => 'Richard',
+                'person'            => 'RichardTest',
                 'company'           => 'Big Sale BV',
                 'full_street_input' => 'Hoofdweg 16',
                 'full_street'       => 'Hoofdweg 16',
@@ -207,6 +201,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
                 'postal_code'       => '2000',
                 'city'              => 'Antwerpen',
                 'phone'             => '123456',
+                'weight'            => 1500,
             ],
             [
                 'api_key'           => getenv('API_KEY'),
@@ -261,7 +256,7 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'api_key'                => getenv('API_KEY'),
-                'carrier_id'             => 1,
+                'carrier_id'             => PostNLConsignment::CARRIER_ID,
                 'cc'                     => 'NL',
                 'person'                 => 'Piet',
                 'company'                => 'Mega Store',

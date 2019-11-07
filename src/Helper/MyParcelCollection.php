@@ -176,16 +176,18 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param AbstractConsignment|null $consignment
+     * @param AbstractConsignment $consignment
      *
      * @return $this
      * @throws MissingFieldException
      */
-    public function addConsignment(?AbstractConsignment $consignment)
+    public function addConsignment(AbstractConsignment $consignment)
     {
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
+
+        $consignment->validate();
 
         $this->push($consignment);
 

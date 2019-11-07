@@ -11,14 +11,13 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 class SendOneConsignmentPickupAutoDetectTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @return \MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentPickupAutoDetectTest\SendOneConsignmentPickupAutoDetectTest
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function testAutoDetectPickup()
+    public function testSendOneConsignmentPickupAutoDetect()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";

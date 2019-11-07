@@ -1,17 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * Create one concept
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendMultiReferenceIdentifierConsignmentTest;
 
@@ -20,10 +9,6 @@ use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-
-/**
- * Class SendOneReferenceIdentifierConsignmentTest
- */
 class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -38,7 +23,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
      * Test one shipment with createConcepts()
      * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendMultiReferenceIdentifierConsignment()
     {
         error_reporting(E_ALL);
         ini_set('display_errors', '1');
@@ -63,7 +48,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
                 ->setNumberSuffix($consignmentTest['number_suffix'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
-                ->setEmail('your_email@test.nl')
+                ->setEmail($consignmentTest['email'])
                 ->setPhone($consignmentTest['phone']);
 
             if (key_exists('package_type', $consignmentTest)) {
@@ -194,6 +179,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
                 'postal_code'          => '2231JE',
                 'city'                 => 'Rijnsburg',
                 'phone'                => '123456',
+                'email'                => 'your_email@test.nl',
             ],
             [
                 'api_key'              => getenv('API_KEY'),
@@ -210,6 +196,7 @@ class SendMultiReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\Tes
                 'postal_code'          => '2231JE',
                 'city'                 => 'Rijnsburg',
                 'phone'                => '123456',
+                'email'                => 'your_email@test.nl',
             ],
         ];
     }

@@ -123,5 +123,5 @@ trait HasCheckoutFields
         }
 
         return $this;
-    } 
+    }
 }

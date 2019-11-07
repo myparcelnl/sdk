@@ -191,13 +191,15 @@ class DPDConsignment extends AbstractConsignment
     /**
      * @return bool
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function validate(): bool
     {
+        var_dump($this->getTotalWeight());
         if ($this->getTotalWeight() < 10) {
             throw new InvalidConsignmentException('It is necessary to at a minimum weight of 10 grams');
         }
 
-        return true;
+        return parent::validate();
     }
 }

@@ -1,17 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * Create one concept
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
@@ -21,9 +10,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-/**
- * Class SendMorningShipmentTest
- */
 class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
 {
     use HasDebugLabels;
@@ -50,7 +36,7 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_input'])
+                ->setFullStreet($consignmentTest['full_street'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
@@ -64,36 +50,12 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setPackageType($consignmentTest['package_type']);
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
-            }
-
-            if (key_exists('age_check', $consignmentTest)) {
-                $consignment->setAgeCheck($consignmentTest['age_check']);
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
-            }
-
             if (key_exists('signature', $consignmentTest)) {
                 $consignment->setSignature($consignmentTest['signature']);
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $consignment->setReturn($consignmentTest['return']);
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $consignment->setInsurance($consignmentTest['insurance']);
-            }
-
             if (key_exists('label_description', $consignmentTest)) {
                 $consignment->setLabelDescription($consignmentTest['label_description']);
-            }
-
-            if (key_exists('checkout_data', $consignmentTest)) {
-                $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
             }
 
             if (key_exists('delivery_type', $consignmentTest)) {
@@ -102,9 +64,7 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection->addConsignment($consignment);
 
-            /**
-             * Create concept
-             */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
@@ -127,28 +87,12 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
-            }
-
             if (key_exists('signature', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature()');
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['return'], $consignment->isReturn(), 'isReturn()');
-            }
-
             if (key_exists('label_description', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
             }
 
             if (key_exists('delivery_type', $consignmentTest)) {
@@ -186,7 +130,6 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 'cc'                => 'NL',
                 'person'            => 'Piet',
                 'company'           => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
                 'full_street'       => 'Koestraat 55',
                 'street'            => 'Koestraat',
                 'number'            => 55,
@@ -205,7 +148,6 @@ class SendMorningShipmentTest extends \PHPUnit\Framework\TestCase
                 'cc'                => 'NL',
                 'person'            => 'Piet',
                 'company'           => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
                 'full_street'       => 'Koestraat 55',
                 'street'            => 'Koestraat',
                 'number'            => 55,

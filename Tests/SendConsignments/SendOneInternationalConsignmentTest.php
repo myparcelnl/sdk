@@ -1,17 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * Create international consignment
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneInternationalConsignmentTest;
 
@@ -33,10 +22,11 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
      * Test one shipment with createConcepts()
      * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendOneInternationalConsignment()
     {
         error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+        ini_set('display_errors', '1');
+
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
@@ -56,33 +46,11 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
-                ->setPhone($consignmentTest['phone']);
+                ->setPhone($consignmentTest['phone'])
+                ->setInvoice($consignmentTest['invoice']);
 
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
-            }
-
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
-            }
-            if (key_exists('age_check', $consignmentTest)) {
-                $consignment->setAgeCheck($consignmentTest['age_check']);
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
-            }
-
-            if (key_exists('signature', $consignmentTest)) {
-                $consignment->setSignature($consignmentTest['signature']);
-            }
-
-            if (key_exists('return', $consignmentTest)) {
-                $consignment->setReturn($consignmentTest['return']);
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $consignment->setInsurance($consignmentTest['insurance']);
             }
 
             if (key_exists('label_description', $consignmentTest)) {
@@ -113,8 +81,6 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
             /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^C#", $consignment->getBarcode()), 'Barcode is not set');
-
-            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 
@@ -142,6 +108,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 'phone'             => '123456',
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 112345,
+                'invoice'           => '1231235345345',
                 'custom_items'      => [
                     [
                         'description'    => 'Cool Mobile',

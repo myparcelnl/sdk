@@ -1,17 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * Create one concept
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
@@ -101,6 +90,10 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
+            if (key_exists('pickup_cc', $consignmentTest)) {
+                $consignment->setPickupCountry($consignmentTest['pickup_cc']);
+            }
+
             if (key_exists('pickup_postal_code', $consignmentTest)) {
                 $consignment->setPickupPostalCode($consignmentTest['pickup_postal_code']);
             }
@@ -123,9 +116,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection->addConsignment($consignment);
 
-            /**
-             * Create concept
-             */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
@@ -242,7 +233,7 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
                 'phone'             => '123-45-235-435',
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 'Label description',
-                'checkout_data'     => '{"date":"' . $delivery_date . '","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
+                'checkout_data'     => '{"date":"'.date('Y-m-d', strtotime("+1 day")).'","time":[{"start":"16:00:00","type":4,"price":{"currency":"EUR","amount":0}}],"location":"Primera Sanders","street":"Polderplein","number":"3","postal_code":"2132BA","city":"Hoofddorp","cc":"NL","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.","phone_number":"","opening_hours":{"monday":["11:00-18:00"],"tuesday":["09:00-18:00"],"wednesday":["09:00-18:00"],"thursday":["09:00-18:00"],"friday":["09:00-21:00"],"saturday":["09:00-18:00"],"sunday":["12:00-17:00"]},"distance":"312","latitude":"52.30329367","longitude":"4.69476214","location_code":"176227","retail_network_id":"PNPNL-01","holiday":[]}',
             ],
             [
                 'api_key'              => getenv('API_KEY'),
@@ -259,9 +250,10 @@ class SendPickupFromCheckoutDataTest extends \PHPUnit\Framework\TestCase
                 'city'                 => 'Katwijk',
                 'phone'                => '123-45-235-435',
                 'package_type'         => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
-                'delivery_type'        => AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS,
+                'delivery_type'        => AbstractConsignment::DELIVERY_TYPE_PICKUP,
                 'delivery_date'        => $delivery_date,
                 'label_description'    => 'Label description',
+                'pickup_cc'            => 'NL',
                 'pickup_postal_code'   => '2222AB',
                 'pickup_street'        => 'Scheepmakerstraat',
                 'pickup_city'          => 'Katwijk',
