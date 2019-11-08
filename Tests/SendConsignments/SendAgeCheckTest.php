@@ -22,6 +22,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
+
             return $this;
         }
 
@@ -112,7 +113,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
     public function additionProvider()
     {
         return [
-            'Normal check'          => [
+            'Normal check'           => [
                 'api_key'           => getenv('API_KEY'),
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'cc'                => 'NL',
@@ -175,13 +176,13 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
                 'signature'            => true,
                 'label_description'    => '18+ check no signature',
             ],
-            '18+ check EU shipment' => [
+            '18+ check EU shipment'  => [
                 'api_key'           => getenv('API_KEY'),
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'cc'                => 'BE',
                 'person'            => 'BETest',
                 'company'           => 'Mega Store',
-                'full_street' => 'hoofdstraat 16',
+                'full_street'       => 'hoofdstraat 16',
                 'full_street'       => 'hoofdstraat 16',
                 'street'            => 'hoofdstraat',
                 'number'            => 16,
