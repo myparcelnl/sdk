@@ -191,7 +191,6 @@ class DPDConsignment extends AbstractConsignment
     /**
      * @return bool
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function validate(): bool
     {
