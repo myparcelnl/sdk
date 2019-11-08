@@ -96,9 +96,9 @@ class SendOneConsignmentTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
             $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
 
-//            if (key_exists('weight', $consignmentTest)) {
-//                $this->assertEquals($consignmentTest['weight'], $consignment->getTotalWeight(), 'weight()');
-//            }
+            if (key_exists('weight', $consignmentTest)) {
+                $this->assertEquals($consignmentTest['weight'], $consignment->getTotalWeight(), 'weight()');
+            }
 
             if (key_exists('number_suffix', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
