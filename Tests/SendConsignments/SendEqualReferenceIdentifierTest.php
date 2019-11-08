@@ -57,20 +57,20 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
         /**
          * Create concept
          */
-        $myParcelCollection->createConcepts()->setLatestData()->first();
+        $myParcelCollection->createConcepts();
 
         $savedCollection = MyParcelCollection::findByReferenceId($consignmentTest['reference_identifier'], $consignmentTest['api_key']);
 
         $savedCollection->setLatestData();
-        $consignmentTest   = $this->additionProvider()['normal_consignment'][0];
         $savedConsignments = $savedCollection->getConsignmentsByReferenceId($consignmentTest['reference_identifier']);
-        $this->assertCount(0, $savedConsignments);
+        $this->assertCount(1, $savedConsignments);
     }
 
     /**
      * Data for the test
      *
      * @return array
+     * @throws \Exception
      */
     public function additionProvider()
     {
@@ -79,7 +79,7 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
                 [
                     'api_key'              => getenv('API_KEY'),
                     'carrier_id'           => PostNLConsignment::CARRIER_ID,
-                    'reference_identifier' => (string) $this->timestamp . '_input',
+                    'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_input',
                     'cc'                   => 'NL',
                     'person'               => 'Reindert',
                     'company'              => 'Big Sale BV',
