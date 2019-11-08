@@ -183,7 +183,6 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
                 'person'            => 'BETest',
                 'company'           => 'Mega Store',
                 'full_street'       => 'hoofdstraat 16',
-                'full_street'       => 'hoofdstraat 16',
                 'street'            => 'hoofdstraat',
                 'number'            => 16,
                 'number_suffix'     => '',
