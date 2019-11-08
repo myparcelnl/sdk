@@ -1424,9 +1424,9 @@ class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getInvoice(): string
+    public function getInvoice(): ?string
     {
         return $this->invoice;
     }
