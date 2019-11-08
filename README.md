@@ -53,8 +53,8 @@ You can download the zip on the project's [releases page](https://github.com/myp
 ## Quick start and examples
 Add the following lines to your project to import the SDK classes for creating shipments.
 ```php
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 ```
 
