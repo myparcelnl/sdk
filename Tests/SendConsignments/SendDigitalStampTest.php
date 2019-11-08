@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendDigitalStampTest;
 
@@ -8,9 +10,6 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-/**
- * Class SendDigitalStampTest
- */
 class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
 {
     use HasDebugLabels;
@@ -21,7 +20,7 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testSendOneConsignment(): void
+    public function testSendDigitalStamp(): void
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
@@ -77,7 +76,6 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 'cc'                => 'NL',
                 'person'            => 'Reindert',
                 'company'           => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street'       => 'Plein 1940-45 3 b',
                 'street'            => 'Plein 1940-45',
                 'number'            => 3,
@@ -95,7 +93,6 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 'cc'                => 'NL',
                 'person'            => 'Reindert',
                 'company'           => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street'       => 'Plein 1940-45 3 b',
                 'street'            => 'Plein 1940-45',
                 'number'            => 3,
@@ -113,7 +110,6 @@ class SendDigitalStampTest extends \PHPUnit\Framework\TestCase
                 'cc'                => 'NL',
                 'person'            => 'Reindert',
                 'company'           => 'Big Sale BV',
-                'full_street_input' => 'Plein 1940-45 3b',
                 'full_street'       => 'Plein 1940-45 3 b',
                 'street'            => 'Plein 1940-45',
                 'number'            => 3,

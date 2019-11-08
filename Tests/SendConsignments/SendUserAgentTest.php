@@ -32,7 +32,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendUserAgent()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
@@ -58,24 +58,8 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
             }
 
-            if (key_exists('delivery_date', $consignmentTest)) {
-                $consignment->setDeliveryDate($consignmentTest['delivery_date']);
-            }
-
-            if (key_exists('delivery_type', $consignmentTest)) {
-                $consignment->setDeliveryType($consignmentTest['delivery_type']);
-            }
-
             if (key_exists('package_type', $consignmentTest)) {
                 $consignment->setPackageType($consignmentTest['package_type']);
-            }
-
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
-            }
-
-            if (key_exists('age_check', $consignmentTest)) {
-                $consignment->setAgeCheck($consignmentTest['age_check']);
             }
 
             if (key_exists('only_recipient', $consignmentTest)) {
@@ -86,10 +70,6 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setSignature($consignmentTest['signature']);
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $consignment->setReturn($consignmentTest['return']);
-            }
-
             if (key_exists('insurance', $consignmentTest)) {
                 $consignment->setInsurance($consignmentTest['insurance']);
             }
@@ -98,39 +78,13 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setLabelDescription($consignmentTest['label_description']);
             }
 
-            if (key_exists('pickup_postal_code', $consignmentTest)) {
-                $consignment->setPickupPostalCode($consignmentTest['pickup_postal_code']);
-            }
-
-            if (key_exists('pickup_street', $consignmentTest)) {
-                $consignment->setPickupStreet($consignmentTest['pickup_street']);
-            }
-
-            if (key_exists('pickup_city', $consignmentTest)) {
-                $consignment->setPickupCity($consignmentTest['pickup_city']);
-            }
-
-            if (key_exists('pickup_number', $consignmentTest)) {
-                $consignment->setPickupNumber($consignmentTest['pickup_number']);
-            }
-
-            if (key_exists('pickup_location_name', $consignmentTest)) {
-                $consignment->setPickupLocationName($consignmentTest['pickup_location_name']);
-            }
-
-            if (key_exists('pickup_location_code', $consignmentTest)) {
-                $consignment->setPickupLocationCode($consignmentTest['pickup_location_code']);
-            }
-
             if (key_exists('user_agent', $consignmentTest)) {
                 $myParcelCollection->setUserAgent($consignmentTest['user_agent']['platform'], $consignmentTest['user_agent']['version']);
             }
 
             $myParcelCollection->addConsignment($consignment);
 
-            /**
-             * Create concept
-             */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
@@ -149,14 +103,6 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
-            }
-
-            if (key_exists('age_check', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['age_check'], $consignment->hasAgeCheck(), 'hasAgeCheck()');
-            }
-
             if (key_exists('only_recipient', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
             }
@@ -165,52 +111,12 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature()');
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['return'], $consignment->isReturn(), 'isReturn()');
-            }
-
             if (key_exists('label_description', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
             }
 
             if (key_exists('insurance', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
-            }
-
-            if (key_exists('delivery_type', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['delivery_type'], $consignment->getDeliveryType(), 'getDeliveryType()');
-            }
-
-            if (! empty($consignmentTest['delivery_date'])) {
-                $this->assertEquals($consignmentTest['delivery_date'], $consignment->getDeliveryDate(), 'getDeliveryDate()');
-            }
-
-            if (! empty($consignmentTest['pickup_postal_code'])) {
-                $this->assertEquals($consignmentTest['pickup_postal_code'], $consignment->getPickupPostalCode(), 'getPickupPostalCode()');
-            }
-
-            if (! empty($consignmentTest['pickup_street'])) {
-                $this->assertEquals($consignmentTest['pickup_street'], $consignment->getPickupStreet(), 'getPickupStreet()');
-            }
-
-            if (! empty($consignmentTest['pickup_city'])) {
-                $this->assertEquals($consignmentTest['pickup_city'], $consignment->getPickupCity(), 'getPickupCity()');
-            }
-
-            if (! empty($consignmentTest['pickup_number'])) {
-                $this->assertEquals($consignmentTest['pickup_number'], $consignment->getPickupNumber(), 'getPickupNumber()');
-            }
-
-            if (! empty($consignmentTest['pickup_location_name'])) {
-                $this->assertEquals($consignmentTest['pickup_location_name'], $consignment->getPickupLocationName(), 'getPickupLocationName()');
-            }
-
-            if (! empty($consignmentTest['pickup_location_code'])) {
-                $this->assertEquals($consignmentTest['pickup_location_code'], $consignment->getPickupLocationCode(), 'getPickupLocationCode()');
-            }
-
-            if (! empty($consignmentTest['pickup_network_id'])) {
-                $this->assertEquals($consignmentTest['pickup_network_id'], $consignment->getPickupNetworkId(), 'getPickupNetworkId()');
             }
 
             /**
@@ -267,7 +173,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 'phone'             => '123-45-235-435',
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 'Label description',
-                'checkout_data'     => '{"date":"'.date('Y-m-d', strtotime("+1 day")).'","time":[{"start":"16:00:00","type":4,"price":{"amount":0,"currency":"EUR"}}],"location":"The Read Shop","street":"Anjelierenstraat","number":"43","postal_code":"2231GT","city":"Rijnsburg","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.","phone_number":"071-4023063","opening_hours":{"monday":["08:00-18:00"],"tuesday":["08:00-18:00"],"wednesday":["08:00-18:00"],"thursday":["08:00-18:00"],"friday":["08:00-19:00"],"saturday":["08:00-18:00"],"sunday":[]},"distance":"253","location_code":"163463","options":{"signature":false,"only_recipient":false}}',
+                'checkout_data'     => '{"date":"'.date('Y-m-d', strtotime("+1 day")).'","time":[{"start":"16:00:00","type":4,"price":{"currency":"EUR","amount":0}}],"location":"Primera Sanders","street":"Polderplein","number":"3","postal_code":"2132BA","city":"Hoofddorp","cc":"NL","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.","phone_number":"","opening_hours":{"monday":["11:00-18:00"],"tuesday":["09:00-18:00"],"wednesday":["09:00-18:00"],"thursday":["09:00-18:00"],"friday":["09:00-21:00"],"saturday":["09:00-18:00"],"sunday":["12:00-17:00"]},"distance":"312","latitude":"52.30329367","longitude":"4.69476214","location_code":"176227","retail_network_id":"PNPNL-01","holiday":[]}',
                 'user_agent'        => [
                     'platform' => 'SDK_UNIT_TEST',
                     'version'  => 'v1.2.0',

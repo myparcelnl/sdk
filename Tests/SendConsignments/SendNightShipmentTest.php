@@ -1,17 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * Create one concept
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendOneConsignmentTest;
 
@@ -21,9 +10,6 @@ use MyParcelNL\Sdk\src\Concerns\HasDebugLabels;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-/**
- * Class SendNightShipmentTest
- */
 class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
 {
     use HasDebugLabels;
@@ -33,7 +19,7 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendNightShipment()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
@@ -64,32 +50,12 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 $consignment->setPackageType($consignmentTest['package_type']);
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $consignment->setLargeFormat($consignmentTest['large_format']);
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $consignment->setOnlyRecipient($consignmentTest['only_recipient']);
-            }
-
             if (key_exists('signature', $consignmentTest)) {
                 $consignment->setSignature($consignmentTest['signature']);
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $consignment->setReturn($consignmentTest['return']);
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $consignment->setInsurance($consignmentTest['insurance']);
-            }
-
             if (key_exists('label_description', $consignmentTest)) {
                 $consignment->setLabelDescription($consignmentTest['label_description']);
-            }
-
-            if (key_exists('checkout_data', $consignmentTest)) {
-                $consignment->setPickupAddressFromCheckout($consignmentTest['checkout_data']);
             }
 
             if (key_exists('delivery_type', $consignmentTest)) {
@@ -98,9 +64,7 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection->addConsignment($consignment);
 
-            /**
-             * Create concept
-             */
+            /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getMyParcelConsignmentId() > 1, 'No id found');
@@ -123,28 +87,12 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
             }
 
-            if (key_exists('large_format', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['large_format'], $consignment->isLargeFormat(), 'isLargeFormat()');
-            }
-
-            if (key_exists('only_recipient', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['only_recipient'], $consignment->isOnlyRecipient(), 'isOnlyRecipient()');
-            }
-
             if (key_exists('signature', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['signature'], $consignment->isSignature(), 'isSignature()');
             }
 
-            if (key_exists('return', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['return'], $consignment->isReturn(), 'isReturn()');
-            }
-
             if (key_exists('label_description', $consignmentTest)) {
                 $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
-            }
-
-            if (key_exists('insurance', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['insurance'], $consignment->getInsurance(), 'getInsurance()');
             }
 
             if (key_exists('delivery_type', $consignmentTest)) {
@@ -164,8 +112,6 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
             /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
             $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
-
-            /** @todo; clear consignment in MyParcelCollection */
         }
     }
 
@@ -194,7 +140,7 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_EVENING,
                 'label_description' => 'Label description',
-                'delivery_date'     => '2019-07-28'
+                'delivery_date'     => date("Y-m-d", strtotime("+ 1 day"))
             ],
             [
                 'api_key'           => getenv('API_KEY'),
@@ -214,7 +160,7 @@ class SendNightShipmentTest extends \PHPUnit\Framework\TestCase
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'delivery_type'     => AbstractConsignment::DELIVERY_TYPE_EVENING,
                 'label_description' => 'Label description',
-                'delivery_date'     => '2019-07-28'
+                'delivery_date'     => date("Y-m-d", strtotime("+ 1 day"))
             ]
         ];
     }

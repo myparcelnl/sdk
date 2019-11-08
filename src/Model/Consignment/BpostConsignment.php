@@ -6,6 +6,7 @@ use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 
 class BpostConsignment extends AbstractConsignment
 {
+    public const DEFAULT_WEIGHT = 50;
     public const INSURANCE_500 = 500;
     public const INSURANCE_0   = 0;
     public const CARRIER_ID    = 2;
@@ -14,6 +15,13 @@ class BpostConsignment extends AbstractConsignment
     private const VALID_PACKAGE_TYPES = [
         self::PACKAGE_TYPE_PACKAGE
     ];
+
+    /**
+     * @internal
+     *
+     * @var int
+     */
+    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
      * @var array
@@ -192,6 +200,7 @@ class BpostConsignment extends AbstractConsignment
 
         return $this;
     }
+
     /**
      * @return bool
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
@@ -212,6 +221,6 @@ class BpostConsignment extends AbstractConsignment
             throw new InvalidConsignmentException('It is necessary to use cents and the a minimum price is 1 euro');
         }
 
-        return true;
+        return parent::validate();
     }
 }

@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Adapter;
 
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Support\Arr;
 
 class ConsignmentAdapter
 {
@@ -33,7 +34,7 @@ class ConsignmentAdapter
      */
     public function __construct(array $data, AbstractConsignment $consignment)
     {
-        $this->data = $data;
+        $this->data        = $data;
         $this->consignment = $consignment;
 
         $this
@@ -74,6 +75,10 @@ class ConsignmentAdapter
             ->setPhone(isset($recipient['phone']) ? $recipient['phone'] : '')
             ->setPackageType($options['package_type'])
             ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '');
+
+        if (Arr::get($this->data, 'physical_properties.weight')) {
+            $this->consignment->setTotalWeight($this->data['physical_properties']['weight']);
+        }
 
         return $this;
     }

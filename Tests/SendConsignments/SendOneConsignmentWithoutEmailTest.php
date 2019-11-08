@@ -1,28 +1,14 @@
-<?php declare(strict_types=1);
-/**
- * Test to check if a consignment without E-mail address is being submitted
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+<?php
+
+declare(strict_types=1);
 
 namespace myparcelnl\sdk\Tests\SendConsignments;
-
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-/**
- * Class SendOneConsignmentWithoutEmailTest
- */
 class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -30,8 +16,9 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
      * Test one shipment with createConcepts()
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \Exception
      */
-    public function testSendOneConsignment()
+    public function testSendOneConsignmentWithoutEmail()
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
@@ -60,10 +47,8 @@ class SendOneConsignmentWithoutEmailTest extends \PHPUnit\Framework\TestCase
 
             $myParcelCollection->addConsignment($consignment);
 
-            /**
-             * Create concept
-             */
-            $myParcelCollection->createConcepts();
+            /** @var AbstractConsignment $consignment */
+            $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
 
             $this->assertEquals(true, $consignment->getConsignmentId() > 1, 'No id found');
             $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');

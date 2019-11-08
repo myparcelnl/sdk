@@ -1,15 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\tests\SendConsignments\SendMultiReferenceIdentifierConsignmentTest;
 
@@ -39,7 +30,7 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider additionProvider()
      */
-    public function testSendOneConsignment(array $consignmentTest): void
+    public function testSendEqualReferenceIdentifier(array $consignmentTest): void
     {
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
@@ -66,21 +57,20 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
         /**
          * Create concept
          */
-        $myParcelCollection->createConcepts()->setLatestData()->first();
+        $myParcelCollection->createConcepts();
 
         $savedCollection = MyParcelCollection::findByReferenceId($consignmentTest['reference_identifier'], $consignmentTest['api_key']);
 
         $savedCollection->setLatestData();
-
-        $consignmentTest   = $this->additionProvider()[0];
         $savedConsignments = $savedCollection->getConsignmentsByReferenceId($consignmentTest['reference_identifier']);
-        $this->assertCount(2, $savedConsignments);
+        $this->assertCount(1, $savedConsignments);
     }
 
     /**
      * Data for the test
      *
      * @return array
+     * @throws \Exception
      */
     public function additionProvider()
     {
@@ -89,11 +79,10 @@ class SendEqualReferenceIdentifierTest extends \PHPUnit\Framework\TestCase
                 [
                     'api_key'              => getenv('API_KEY'),
                     'carrier_id'           => PostNLConsignment::CARRIER_ID,
-                    'reference_identifier' => (string) $this->timestamp . '_input',
+                    'reference_identifier' => (string) (new \DateTime())->getTimestamp() . '_input',
                     'cc'                   => 'NL',
                     'person'               => 'Reindert',
                     'company'              => 'Big Sale BV',
-                    'full_street_input'    => 'Plein 1940-45 3b',
                     'full_street'          => 'Plein 1940-45 3 b',
                     'street'               => 'Plein 1940-45',
                     'number'               => 3,
