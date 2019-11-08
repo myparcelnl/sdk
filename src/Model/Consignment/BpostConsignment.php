@@ -6,7 +6,6 @@ use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 
 class BpostConsignment extends AbstractConsignment
 {
-
     public const DEFAULT_WEIGHT = 50;
     public const INSURANCE_500 = 500;
     public const INSURANCE_0   = 0;
