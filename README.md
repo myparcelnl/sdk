@@ -76,7 +76,7 @@ $myParcelCollection = (new MyParcelCollection())
     ->addConsignment($consignment)
     ->setPdfOfLabels();
 
-$consignmentId = $myParcelCollection->first()->getMyParcelConsignmentId();
+$consignmentId = $myParcelCollection->first()->getConsignmentId();
 
 $myParcelCollection->downloadPdfOfLabels();
 ```
@@ -315,7 +315,7 @@ $consignment
     ->getBarcode() // Barcode is available after using setLinkOfLabels() or setPdfOfLabels() on the MyParcelCollection the consignment has been added to
     
     ->getLabelDescription()
-    ->getMyParcelConsignmentId()
+    ->getConsignmentId()
     ->getShopId()
     ->getStatus()
     
