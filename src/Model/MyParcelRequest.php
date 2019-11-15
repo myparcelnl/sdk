@@ -1,4 +1,5 @@
-<?php declare(strict_types=1); /** @noinspection PhpInternalEntityUsedInspection */
+<?php declare(strict_types=1);
+/** @noinspection PhpInternalEntityUsedInspection */
 
 /**
  * This model represents one request
@@ -97,7 +98,7 @@ class MyParcelRequest
      *
      * @return $this
      */
-    public function setRequestParameters($apiKey, $body = '', $requestHeader = '')
+    public function setRequestParameters($apiKey, $body, $requestHeader): MyParcelRequest
     {
         $this->api_key = $apiKey;
         $this->body    = $body;
@@ -192,9 +193,9 @@ class MyParcelRequest
     }
 
     /**
-     * @param $size
+     * @param                    $size
      * @param MyParcelCollection $collection
-     * @param $key
+     * @param                    $key
      *
      * @return string|null
      */
@@ -288,7 +289,7 @@ class MyParcelRequest
      * Get all consignment ids
      *
      * @param MyParcelCollection|AbstractConsignment[] $consignments
-     * @param $key
+     * @param                                          $key
      *
      * @return array
      */
