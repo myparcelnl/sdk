@@ -135,12 +135,12 @@ class MyParcelCollection extends Collection
     /**
      * This is deprecated because there may be multiple consignments with the same reference id
      *
-     * @deprecated Use getConsignmentsByReferenceId()->first() instead
-     *
      * @param $id
      *
      * @return mixed
      * @throws Exception
+     * @deprecated Use getConsignmentsByReferenceId()->first() instead
+     *
      */
     public function getConsignmentByReferenceId($id)
     {
@@ -195,7 +195,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param int[] $ids
+     * @param int[]  $ids
      * @param string $apiKey
      *
      * @return self
@@ -216,7 +216,7 @@ class MyParcelCollection extends Collection
 
     /**
      * @param string[] $ids
-     * @param string $apiKey
+     * @param string   $apiKey
      *
      * @return self
      * @throws Exception
@@ -236,7 +236,7 @@ class MyParcelCollection extends Collection
 
     /**
      * @param AbstractConsignment $consignment
-     * @param $amount
+     * @param                     $amount
      *
      * @return MyParcelCollection
      */
@@ -275,7 +275,7 @@ class MyParcelCollection extends Collection
 
         /* @var $consignments MyParcelCollection */
         foreach ($this->where('consignment_id', null)->groupBy('api_key') as $consignments) {
-            $data = (new CollectionEncode($consignments))->encode();
+            $data    = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
                 ->setRequestParameters(
@@ -400,7 +400,7 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param int $positions            The position of the label on an A4 sheet. Set to false to create an A6 sheet.
+     * @param int $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
      *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
      *                                  not specify an array, but specify a number, the following labels will fill the
      *                                  ascending positions. Positioning is only applied on the first page with labels.
@@ -441,7 +441,7 @@ class MyParcelCollection extends Collection
      *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param int $positions            The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param int $positions The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
@@ -509,6 +509,7 @@ class MyParcelCollection extends Collection
      */
     public function sendReturnLabelMails()
     {
+
         $parentConsignment = $this->getConsignments(false)[0];
 
         $apiKey = $parentConsignment->getApiKey();
@@ -583,8 +584,8 @@ class MyParcelCollection extends Collection
      * @param string $platform
      * @param string $version
      *
-     * @internal param string $user_agent
      * @return self
+     * @internal param string $user_agent
      */
     public function setUserAgent($platform, $version = null)
     {
@@ -718,7 +719,7 @@ class MyParcelCollection extends Collection
         $data     = [];
         $shipment = [
             'parent'  => $consignment->getConsignmentId(),
-            'carrier' => 1,
+            'carrier' => $consignment->getCarrierId(),
             'email'   => $consignment->getEmail(),
             'name'    => $consignment->getPerson(),
         ];
@@ -779,7 +780,7 @@ class MyParcelCollection extends Collection
      */
     private function findByReferenceIdGroup($id): MyParcelCollection
     {
-        return $this->filter(function ($consignment) use ($id) {
+        return $this->filter(function($consignment) use ($id) {
             /**
              * @var AbstractConsignment $consignment
              */
