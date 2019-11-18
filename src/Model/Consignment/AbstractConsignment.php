@@ -778,6 +778,10 @@ class AbstractConsignment
             $fullStreet .= ' ' . $this->getNumberSuffix();
         }
 
+        if ($this->getBoxNumber()) {
+            $fullStreet .= ' ' . splitstreet::BOX_NL . ' ' . $this->getBoxNumber();
+        }
+
         return trim($fullStreet);
     }
 
@@ -803,11 +807,11 @@ class AbstractConsignment
         if (empty($this->local_cc)) {
             throw new \BadMethodCallException('Can not create a shipment when the local country code is empty.');
         }
-
         $fullStreet = SplitStreet::splitStreet($fullStreet, $this->local_cc, $this->getCountry());
         $this->setStreet($fullStreet->getStreet());
         $this->setNumber($fullStreet->getNumber());
         $this->setNumberSuffix($fullStreet->getNumberSuffix());
+        $this->setBoxNumber($fullStreet->getBoxNumber());
 
         return $this;
     }
