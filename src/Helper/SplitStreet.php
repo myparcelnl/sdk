@@ -18,7 +18,8 @@ use MyParcelNL\Sdk\src\Model\FullStreet;
 
 class SplitStreet
 {
-    const BOX_NL = 'bus';
+    const BOX_NL                        = 'bus';
+    const BOX_TRANSLATION_POSSIBILITIES = [' boîte', ' box', ' bte', ' Bus'];
 
     /**
      * Regular expression used to split street name from house number for the Netherlands.
@@ -38,13 +39,12 @@ class SplitStreet
         '[a-zA-Z]{1}[a-zA-Z\s]{0,3}' .    // has up to 4 letters with a space
         ')?$~';
 
-    /* @todo: use commands */
     const SPLIT_STREET_REGEX_BE =
         '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[^\s]{1,8})\s?(?P<box_separator>' . self::BOX_NL . '?)?\s?(?P<box_number>\d{0,8}$))$~';
 
     /**
      * Splits street data into separate parts for street name, house number and extension.
-     * Only for Dutch addresses
+     * Only for Dutch and Belgium addresses
      *
      * @param string $fullStreet The full street name including all parts
      *
@@ -57,8 +57,9 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
-        $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
-        $regex      = self::getRegexByCountry($local, $destination);
+        $translateBoxSeparator = str_ireplace(self::BOX_TRANSLATION_POSSIBILITIES, ' ' . self::BOX_NL, $fullStreet);
+        $fullStreet            = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $translateBoxSeparator));
+        $regex                 = self::getRegexByCountry($local, $destination);
 
         if (! $regex) {
             return new FullStreet($fullStreet, null, null, null);
@@ -157,6 +158,7 @@ class SplitStreet
             // Characters are gone by preg_match
             throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
         }
+
         return;
     }
 }
