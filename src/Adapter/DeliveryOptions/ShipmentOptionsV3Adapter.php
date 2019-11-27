@@ -4,6 +4,8 @@ namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
 {
+    private const DEFAULT_INSURANCE = 0;
+    
     /**
      * @param array $shipmentOptions
      */
@@ -11,6 +13,6 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
     {
         $this->signature      = $shipmentOptions["signature"] ?? null;
         $this->only_recipient = $shipmentOptions["only_recipient"] ?? null;
-        $this->insurance      = $shipmentOptions["insurance"] ?? null;
+        $this->insurance      = $shipmentOptions["insurance"] ?? self::DEFAULT_INSURANCE;
     }
 }
