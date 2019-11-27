@@ -4,7 +4,8 @@ namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
 class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
 {
-    const DEFAULT_INSURANCE = 0;
+    private const DEFAULT_INSURANCE = 0;
+    
     /**
      * @param array $shipmentOptions
      */
