@@ -407,6 +407,16 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'number_suffix'     => null,
                 'box_number'        => 'B',
             ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Groenstraat 16 C',
+                'full_street'       => 'Groenstraat 16 bus C',
+                'street'            => 'Groenstraat',
+                'number'            => '16',
+                'number_suffix'     => '',
+                'box_number'        => 'C',
+            ],
         ];
     }
 }
