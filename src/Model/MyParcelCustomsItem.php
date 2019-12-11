@@ -163,7 +163,7 @@ class MyParcelCustomsItem
      */
     public function setClassification(int $classification): self
     {
-        if (!$classification) {
+        if (! $classification) {
             throw new MissingFieldException('Classification must be set for a MyParcel product');
         }
 
