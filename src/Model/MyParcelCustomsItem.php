@@ -156,12 +156,12 @@ class MyParcelCustomsItem
      *
      * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/lopend/internationale-handel-in-goederen/idep-codelijsten
      *
-     * @param int $classification
+     * @param null|int $classification
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setClassification(int $classification): self
+    public function setClassification(?int $classification): self
     {
         if (! $classification) {
             throw new MissingFieldException('Classification must be set for a MyParcel product');
