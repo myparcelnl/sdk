@@ -161,7 +161,7 @@ class MyParcelCustomsItem
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setClassification($classification)
+    public function setClassification(int $classification): self
     {
         if (!$classification) {
             throw new MissingFieldException('Classification must be set for a MyParcel product');
