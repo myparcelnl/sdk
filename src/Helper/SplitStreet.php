@@ -40,7 +40,7 @@ class SplitStreet
         ')?$~';
 
     const SPLIT_STREET_REGEX_BE =
-        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>\d{1,4})\s?(?P<box_separator>' . self::BOX_NL . '?)?\s?(?P<box_number>\w{0,8}$))$~';
+        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>\d{1,4})\s?(?P<box_separator>' . self::BOX_NL . '?)?\s?-?(?P<box_number>[\d\w]{0,8}$))$~';
 
     /**
      * Splits street data into separate parts for street name, house number and extension.
