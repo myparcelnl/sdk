@@ -33,7 +33,7 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
                 ->setCountry($consignmentTest['cc'])
                 ->setPerson($consignmentTest['person'])
                 ->setCompany($consignmentTest['company'])
-                ->setFullStreet($consignmentTest['full_street_input'])
+                ->setFullStreet($consignmentTest['full_street'])
                 ->setPostalCode($consignmentTest['postal_code'])
                 ->setCity($consignmentTest['city'])
                 ->setEmail($consignmentTest['email'])
@@ -44,12 +44,9 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
             }
 
             if (key_exists('save_recipient_address', $consignmentTest)) {
-                $consignment->setAutoSaveRecipientAddress($consignmentTest['save_recipient_address']);
+                $consignment->setSaveRecipientAddress($consignmentTest['save_recipient_address']);
             }
 
-            if (key_exists('label_description', $consignmentTest)) {
-                $consignment->setLabelDescription($consignmentTest['label_description']);
-            }
             $myParcelCollection->addConsignment($consignment);
 
             /** @var AbstractConsignment $consignment */
@@ -75,12 +72,8 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
                 $this->assertEquals(1, $consignment->getPackageType(), 'getPackageType()');
             }
 
-            if (key_exists('label_description', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['label_description'], $consignment->getLabelDescription(), 'getLabelDescription()');
-            }
-
             if (key_exists('save_recipient_address', $consignmentTest)) {
-                $consignment->setAutoSaveRecipientAddress($consignmentTest['save_recipient_address']);
+                $consignment->setSaveRecipientAddress($consignmentTest['save_recipient_address']);
             }
 
             /**
@@ -111,7 +104,6 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
                 'cc'                     => 'NL',
                 'person'                 => 'Richard',
                 'company'                => 'MyParcel',
-                'full_street_input'      => 'Hoofdweg 679',
                 'full_street'            => 'Hoofdweg 679',
                 'street'                 => 'Hoofdweg',
                 'number'                 => 679,
@@ -121,7 +113,6 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
                 'phone'                  => '123-45-235-435',
                 'email'                  => 'your_email@test.nl',
                 'package_type'           => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
-                'label_description'      => 1234,
                 'save_recipient_address' => true,
             ],
             [
@@ -130,7 +121,6 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
                 'cc'                     => 'NL',
                 'person'                 => 'Richard',
                 'company'                => 'MyParcel',
-                'full_street_input'      => 'Hoofdweg 677',
                 'full_street'            => 'Hoofdweg 677',
                 'street'                 => 'Hoofdweg',
                 'number'                 => 677,
@@ -140,7 +130,6 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
                 'phone'                  => '123-45-235-435',
                 'email'                  => 'your_email@test.nl',
                 'package_type'           => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
-                'label_description'      => 1234,
                 'save_recipient_address' => false,
             ],
         ];

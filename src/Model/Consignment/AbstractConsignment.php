@@ -826,7 +826,7 @@ class AbstractConsignment
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
-    public function setAutoSaveRecipientAddress(bool $value): self
+    public function setSaveRecipientAddress(bool $value): self
     {
         $this->save_recipient_address = $value;
         return $this;
@@ -835,7 +835,7 @@ class AbstractConsignment
     /**
      * @return bool
      */
-    public function isAutoSaveRecipientAddress(): bool
+    public function isSaveRecipientAddress(): bool
     {
         return $this->save_recipient_address;
     }
