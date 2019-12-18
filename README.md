@@ -307,7 +307,7 @@ This is a list of all the classes in this SDK and their available methods.
     ->setAutoDetectPickup(true) // When this setting is false MyParcel do not auto detect a PostNL pickup addresses.
     
     // Save recipient address
-    ->setAutoSaveRecipientAddress(true) // When this setting is true the recipient address will be saved in the Address book.
+    ->setAutoSaveRecipientAddress(true) // When this setting is true the recipient address will be saved in the address book.
 
     // Non-EU shipment attributes: see https://myparcelnl.github.io/api/#7_E
     ->setInvoice()
