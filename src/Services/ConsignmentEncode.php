@@ -107,26 +107,23 @@ class ConsignmentEncode
     private function encodeExtraOptions()
     {
         $consignment = Arr::first($this->consignments);
-        $hasOptions  = $this->hasOptions();
-        if ($hasOptions) {
-            $this->consignmentEncoded = array_merge_recursive(
-                $this->consignmentEncoded,
-                [
-                    'options' => [
-                        'only_recipient' => $consignment->isOnlyRecipient() ? 1 : 0,
-                        'signature'      => $consignment->isSignature() ? 1 : 0,
-                        'return'         => $consignment->isReturn() ? 1 : 0,
-                        'delivery_type'  => $consignment->getDeliveryType(),
-                    ],
-                ]
-            );
-            $this
-                ->encodePickup()
-                ->encodeInsurance()
-                ->encodePhysicalProperties();
-        } else {
-            $this->consignmentEncoded['options']['delivery_type'] = AbstractConsignment::DEFAULT_DELIVERY_TYPE;
-        }
+
+        /** @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment */
+        $this->consignmentEncoded = array_merge_recursive(
+            $this->consignmentEncoded,
+            [
+                'options' => [
+                    'only_recipient' => $consignment->isOnlyRecipient() ? 1 : 0,
+                    'signature'      => $consignment->isSignature() ? 1 : 0,
+                    'return'         => $consignment->isReturn() ? 1 : 0,
+                    'delivery_type'  => $consignment->getDeliveryType(),
+                ],
+            ]
+        );
+        $this
+            ->encodePickup()
+            ->encodeInsurance()
+            ->encodePhysicalProperties();
 
         if ($consignment->isEuCountry()) {
             $this->consignmentEncoded['options']['large_format'] = $consignment->isLargeFormat() ? 1 : 0;
@@ -156,7 +153,6 @@ class ConsignmentEncode
         /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
         if (
-            $this->hasOptions() !== false &&
             $consignment->getPickupPostalCode() !== null &&
             $consignment->getPickupStreet() !== null &&
             $consignment->getPickupCity() !== null &&
@@ -278,19 +274,6 @@ class ConsignmentEncode
         ];
 
         return $item;
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasOptions()
-    {
-        $first = Arr::first($this->consignments);
-        if (in_array($first->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
