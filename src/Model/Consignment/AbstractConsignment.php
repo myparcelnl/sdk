@@ -379,6 +379,11 @@ class AbstractConsignment
     private $auto_detect_pickup = true;
 
     /**
+     * @var bool
+     */
+    private $save_recipient_address = true;
+
+    /**
      * @internal
      * @var null|string
      */
@@ -814,6 +819,25 @@ class AbstractConsignment
         $this->setBoxNumber($fullStreet->getBoxNumber());
 
         return $this;
+    }
+
+    /**
+     * @param bool $value
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setSaveRecipientAddress(bool $value): self
+    {
+        $this->save_recipient_address = $value;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSaveRecipientAddress(): bool
+    {
+        return $this->save_recipient_address;
     }
 
     /**
