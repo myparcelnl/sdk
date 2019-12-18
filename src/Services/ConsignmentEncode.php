@@ -171,6 +171,7 @@ class ConsignmentEncode
             ];
         }
 
+        $this->consignmentEncoded['general_settings']['save_recipient_address'] = $this->normalizeAutoSaveRecipientAddress($consignment);
         $this->consignmentEncoded['general_settings']['disable_auto_detect_pickup'] = $this->normalizeAutoDetectPickup($consignment);
 
         return $this;
@@ -324,5 +325,15 @@ class ConsignmentEncode
     private function normalizeAutoDetectPickup(AbstractConsignment $consignment): int
     {
         return $consignment->isAutoDetectPickup() ? 0 : 1;
+    }
+
+    /**
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     *
+     * @return int
+     */
+    private function normalizeAutoSaveRecipientAddress(AbstractConsignment $consignment): int
+    {
+        return $consignment->isSaveRecipientAddress() ? 1 : 0;
     }
 }
