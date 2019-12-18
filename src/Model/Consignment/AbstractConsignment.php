@@ -1087,8 +1087,7 @@ class AbstractConsignment
     public function getDeliveryType(): int
     {
         return $this->delivery_type;
-    }/** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedParameterInspection */
+    }
 
     /**
      * The delivery type for the package
