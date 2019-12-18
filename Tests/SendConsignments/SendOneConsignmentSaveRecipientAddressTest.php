@@ -51,26 +51,6 @@ class SendOneConsignmentSaveRecipientAddressTest extends \PHPUnit\Framework\Test
 
             /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->createConcepts()->setLatestData()->first();
-            $this->assertEquals(true, $consignment->getConsignmentId() > 1, 'No id found');
-            $this->assertEquals($consignmentTest['api_key'], $consignment->getApiKey(), 'getApiKey()');
-            $this->assertEquals($consignmentTest['cc'], $consignment->getCountry(), 'getCountry()');
-            $this->assertEquals($consignmentTest['person'], $consignment->getPerson(), 'getPerson()');
-            $this->assertEquals($consignmentTest['company'], $consignment->getCompany(), 'getCompany()');
-            $this->assertEquals($consignmentTest['full_street'], $consignment->getFullStreet(), 'getFullStreet()');
-            $this->assertEquals($consignmentTest['number'], $consignment->getNumber(), 'getNumber()');
-            $this->assertEquals($consignmentTest['postal_code'], $consignment->getPostalCode(), 'getPostalCode()');
-            $this->assertEquals($consignmentTest['city'], $consignment->getCity(), 'getCity()');
-            $this->assertEquals($consignmentTest['phone'], $consignment->getPhone(), 'getPhone()');
-
-            if (key_exists('number_suffix', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['number_suffix'], $consignment->getNumberSuffix(), 'getNumberSuffix()');
-            }
-
-            if (key_exists('package_type', $consignmentTest)) {
-                $this->assertEquals($consignmentTest['package_type'], $consignment->getPackageType(), 'getPackageType()');
-            } else {
-                $this->assertEquals(1, $consignment->getPackageType(), 'getPackageType()');
-            }
 
             if (key_exists('save_recipient_address', $consignmentTest)) {
                 $consignment->setSaveRecipientAddress($consignmentTest['save_recipient_address']);
