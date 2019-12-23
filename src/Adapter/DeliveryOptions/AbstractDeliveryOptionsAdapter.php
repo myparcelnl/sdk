@@ -91,6 +91,7 @@ abstract class AbstractDeliveryOptionsAdapter
         return in_array(
             $this->deliveryType, [
                 AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+                AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
             ]
         );
     }
