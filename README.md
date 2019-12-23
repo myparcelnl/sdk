@@ -168,7 +168,7 @@ Available options:
 - only_recipient: Deliver the package only at address of the intended recipient. This option is required for Morning and Evening delivery types.
   - Set: `setOnlyRecipient(true)`
   - Get: `isOnlyRecipient()`
-- signature: Recipient must sign for the package. This option is required for Pickup and Pickup express delivery types.
+- signature: Recipient must sign for the package. This option is required for Pickup delivery type.
   - Set: `setSignature(true)`
   - Get: `isSignature()`
 - return: Return the package to the sender when the recipient is not home.
