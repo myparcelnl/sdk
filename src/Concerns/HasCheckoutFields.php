@@ -103,9 +103,6 @@ trait HasCheckoutFields
 
         if ($aCheckoutData['price_comment'] == 'retail') {
             $this->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP);
-
-        } else if ($aCheckoutData['price_comment'] == 'retailexpress') {
-            $this->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS);
         } else {
             throw new MissingFieldException('No PostNL location found in checkout data: ' . $checkoutData);
         }

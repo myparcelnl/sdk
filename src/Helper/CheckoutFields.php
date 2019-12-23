@@ -14,7 +14,6 @@ class CheckoutFields
     const EVENING        = 'night';
     const EVENING_NL     = 'avond';
     const PICKUP         = 'retail';
-    const PICKUP_EXPRESS = 'retailexpress';
 
     /**
      * @param $checkoutData
@@ -40,8 +39,6 @@ class CheckoutFields
                 return AbstractConsignment::DELIVERY_TYPE_EVENING;
             case self::PICKUP:
                 return AbstractConsignment::DELIVERY_TYPE_PICKUP;
-            case self::PICKUP_EXPRESS:
-                return AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS;
             default:
                 return AbstractConsignment::DELIVERY_TYPE_STANDARD;
         }
