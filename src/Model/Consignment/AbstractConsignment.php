@@ -35,12 +35,20 @@ class AbstractConsignment
     public const DELIVERY_TYPE_STANDARD       = 2;
     public const DELIVERY_TYPE_EVENING        = 3;
     public const DELIVERY_TYPE_PICKUP         = 4;
+
+    /**
+     * @deprecated Since November 2019 is it no longer possible to use pickup express.
+     */
     public const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
 
     public const DELIVERY_TYPE_MORNING_NAME        = "morning";
     public const DELIVERY_TYPE_STANDARD_NAME       = "standard";
     public const DELIVERY_TYPE_EVENING_NAME        = "evening";
     public const DELIVERY_TYPE_PICKUP_NAME         = "pickup";
+
+    /**
+     * @deprecated Since November 2019 is it no longer possible to use pickup express.
+     */
     public const DELIVERY_TYPE_PICKUP_EXPRESS_NAME = "pickup_express";
 
     public const DELIVERY_TYPES_IDS = [
