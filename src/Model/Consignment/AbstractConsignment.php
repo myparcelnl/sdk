@@ -695,6 +695,9 @@ class AbstractConsignment
      */
     public function getStreet($useStreetAdditionalInfo = false)
     {
+        if (null === $this->street) {
+            $this->street = '';
+        }
         if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
             $streetParts = SplitStreet::getStreetParts($this->street);
 
