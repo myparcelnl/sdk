@@ -15,6 +15,11 @@ abstract class AbstractShipmentOptionsAdapter
     protected $only_recipient;
 
     /**
+     * @var bool|null
+     */
+    protected $age_check;
+
+    /**
      * @var int|null
      */
     protected $insurance;
@@ -33,6 +38,14 @@ abstract class AbstractShipmentOptionsAdapter
     public function hasOnlyRecipient(): ?bool
     {
         return $this->only_recipient;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasAgeCheck(): ?bool
+    {
+        return $this->age_check;
     }
 
     /**
