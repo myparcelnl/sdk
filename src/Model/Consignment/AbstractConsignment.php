@@ -35,12 +35,20 @@ class AbstractConsignment
     public const DELIVERY_TYPE_STANDARD       = 2;
     public const DELIVERY_TYPE_EVENING        = 3;
     public const DELIVERY_TYPE_PICKUP         = 4;
+
+    /**
+     * @deprecated Since November 2019 is it no longer possible to use pickup express.
+     */
     public const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
 
     public const DELIVERY_TYPE_MORNING_NAME        = "morning";
     public const DELIVERY_TYPE_STANDARD_NAME       = "standard";
     public const DELIVERY_TYPE_EVENING_NAME        = "evening";
     public const DELIVERY_TYPE_PICKUP_NAME         = "pickup";
+
+    /**
+     * @deprecated Since November 2019 is it no longer possible to use pickup express.
+     */
     public const DELIVERY_TYPE_PICKUP_EXPRESS_NAME = "pickup_express";
 
     public const DELIVERY_TYPES_IDS = [
@@ -377,6 +385,11 @@ class AbstractConsignment
      * @var bool
      */
     private $auto_detect_pickup = true;
+
+    /**
+     * @var bool
+     */
+    private $save_recipient_address = true;
 
     /**
      * @internal
@@ -825,6 +838,25 @@ class AbstractConsignment
     }
 
     /**
+     * @param bool $value
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setSaveRecipientAddress(bool $value): self
+    {
+        $this->save_recipient_address = $value;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSaveRecipientAddress(): bool
+    {
+        return $this->save_recipient_address;
+    }
+
+    /**
      * @param string $barcode
      * @param string $postalCode
      * @param string $countryCode
@@ -1095,8 +1127,7 @@ class AbstractConsignment
     public function getDeliveryType(): int
     {
         return $this->delivery_type;
-    }/** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedParameterInspection */
+    }
 
     /**
      * The delivery type for the package
