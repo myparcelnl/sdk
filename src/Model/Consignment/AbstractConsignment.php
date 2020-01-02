@@ -395,6 +395,14 @@ class AbstractConsignment
     }
 
     /**
+     * @return array
+     */
+    public function getInsurancePossibilities()
+    {
+        return $this->insurance_possibilities_local;
+    }
+
+    /**
      * @return string|null
      */
     public function getReferenceId()
