@@ -63,8 +63,9 @@ abstract class AbstractShipmentOptionsAdapter
     {
         return [
             'signature'      => $this->hasSignature(),
-            'insurance'      => $this->getInsurance(),
             'only_recipient' => $this->hasOnlyRecipient(),
+            'age_check'      => $this->hasAgeCheck(),
+            'insurance'      => $this->getInsurance(),
         ];
     }
 }
