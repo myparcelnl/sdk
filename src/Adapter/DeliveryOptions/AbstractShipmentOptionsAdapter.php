@@ -27,7 +27,7 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @var bool|null
      */
-    protected $return_shipments;
+    protected $return;
 
     /**
      * @var int|null
@@ -67,11 +67,13 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
+     * Return the package if the recipient is not home
+     *
      * @return bool|null
      */
-    public function hasReturnShipments(): ?bool
+    public function isReturn(): ?bool
     {
-        return $this->return_shipments;
+        return $this->return;
     }
 
     /**
@@ -88,11 +90,11 @@ abstract class AbstractShipmentOptionsAdapter
     public function toArray(): array
     {
         return [
-            'signature'        => $this->hasSignature(),
-            'insurance'        => $this->getInsurance(),
-            'age_check'        => $this->hasAgeCheck(),
-            'only_recipient'   => $this->hasOnlyRecipient(),
-            'return_shipments' => $this->hasReturnShipments(),
+            'signature'      => $this->hasSignature(),
+            'insurance'      => $this->getInsurance(),
+            'age_check'      => $this->hasAgeCheck(),
+            'only_recipient' => $this->hasOnlyRecipient(),
+            'return'         => $this->isReturn(),
         ];
     }
 }
