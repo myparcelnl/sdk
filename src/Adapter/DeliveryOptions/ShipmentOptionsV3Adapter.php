@@ -16,5 +16,6 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
         $this->insurance      = $shipmentOptions["insurance"] ?? self::DEFAULT_INSURANCE;
         $this->age_check      = $shipmentOptions["age_check"] ?? false;
         $this->large_format   = $shipmentOptions["large_format"] ?? false;
+        $this->return         = $shipmentOptions["return"] ?? false;
     }
 }

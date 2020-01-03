@@ -25,6 +25,11 @@ abstract class AbstractShipmentOptionsAdapter
     protected $large_format;
 
     /**
+     * @var bool|null
+     */
+    protected $return;
+
+    /**
      * @var int|null
      */
     protected $insurance;
@@ -62,6 +67,16 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
+     * Return the package if the recipient is not home
+     *
+     * @return bool|null
+     */
+    public function isReturn(): ?bool
+    {
+        return $this->return;
+    }
+
+    /**
      * @return int|null
      */
     public function getInsurance(): ?int
@@ -79,6 +94,7 @@ abstract class AbstractShipmentOptionsAdapter
             'insurance'      => $this->getInsurance(),
             'age_check'      => $this->hasAgeCheck(),
             'only_recipient' => $this->hasOnlyRecipient(),
+            'return'         => $this->isReturn(),
         ];
     }
 }
