@@ -144,7 +144,7 @@ class SplitStreet
 
     /**
      * @param string $fullStreet
-     * @param string $result
+     * @param int    $result
      * @param array  $matches
      *
      * @return void

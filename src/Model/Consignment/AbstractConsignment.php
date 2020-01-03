@@ -1,15 +1,6 @@
-<?php declare(strict_types=1);
-/**
- * A model of a consignment
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @copyright   2010-2017 MyParcel
- * @since       File available since Release v0.1.0
- */
+<?php
+
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
@@ -719,8 +710,12 @@ class AbstractConsignment
      * @return string|null
      * @var bool
      */
-    public function getStreet($useStreetAdditionalInfo = false)
+    public function getStreet($useStreetAdditionalInfo = false): ?string
     {
+        if (null === $this->street) {
+            return null;
+        }
+
         if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
             $streetParts = SplitStreet::getStreetParts($this->street);
 
@@ -748,11 +743,15 @@ class AbstractConsignment
     /**
      * Get additional information for the street that should not be included in the street field
      *
-     * @return string
+     * @return string|null
      * @todo move to hasStreet
      */
-    public function getStreetAdditionalInfo(): string
+    public function getStreetAdditionalInfo(): ?string
     {
+        if ($this->street === null) {
+            return null;
+        }
+
         $streetParts = SplitStreet::getStreetParts($this->street);
         $result      = '';
 
