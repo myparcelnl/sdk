@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
-use MyParcelNL\Sdk\src\Support\Helpers;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 /**
  * A model of a consignment
@@ -22,20 +22,20 @@ class AbstractConsignment
     /**
      * Consignment types
      */
-    public const DELIVERY_TYPE_MORNING        = 1;
-    public const DELIVERY_TYPE_STANDARD       = 2;
-    public const DELIVERY_TYPE_EVENING        = 3;
-    public const DELIVERY_TYPE_PICKUP         = 4;
+    public const DELIVERY_TYPE_MORNING  = 1;
+    public const DELIVERY_TYPE_STANDARD = 2;
+    public const DELIVERY_TYPE_EVENING  = 3;
+    public const DELIVERY_TYPE_PICKUP   = 4;
 
     /**
      * @deprecated Since November 2019 is it no longer possible to use pickup express.
      */
     public const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
 
-    public const DELIVERY_TYPE_MORNING_NAME        = "morning";
-    public const DELIVERY_TYPE_STANDARD_NAME       = "standard";
-    public const DELIVERY_TYPE_EVENING_NAME        = "evening";
-    public const DELIVERY_TYPE_PICKUP_NAME         = "pickup";
+    public const DELIVERY_TYPE_MORNING_NAME  = "morning";
+    public const DELIVERY_TYPE_STANDARD_NAME = "standard";
+    public const DELIVERY_TYPE_EVENING_NAME  = "evening";
+    public const DELIVERY_TYPE_PICKUP_NAME   = "pickup";
 
     /**
      * @deprecated Since November 2019 is it no longer possible to use pickup express.
@@ -844,6 +844,7 @@ class AbstractConsignment
     public function setSaveRecipientAddress(bool $value): self
     {
         $this->save_recipient_address = $value;
+
         return $this;
     }
 
@@ -1067,9 +1068,9 @@ class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -1078,11 +1079,11 @@ class AbstractConsignment
      * The address phone
      * Required: no
      *
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return $this
      */
-    public function setPhone(string $phone): self
+    public function setPhone(?string $phone): ?self
     {
         $this->phone = $phone;
 
