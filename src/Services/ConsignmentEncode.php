@@ -239,7 +239,7 @@ class ConsignmentEncode
         $this->consignmentEncoded = array_merge_recursive(
             $this->consignmentEncoded, [
                 'customs_declaration' => [
-                    'contents' => 1,
+                    'contents' => $consignment->getContents() ?? 1,
                     'weight'   => $consignment->getTotalWeight(),
                     'items'    => $items,
                     'invoice'  => $consignment->getInvoice() ?? '',
