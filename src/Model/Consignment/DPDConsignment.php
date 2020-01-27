@@ -198,6 +198,6 @@ class DPDConsignment extends AbstractConsignment
             throw new InvalidConsignmentException('It is necessary to at a minimum weight of 10 grams');
         }
 
-        return true;
+        return parent::validate();
     }
 }
