@@ -212,12 +212,12 @@ class BpostConsignment extends AbstractConsignment
         }
 
         /** @var \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item */
-        $amount = 0;
+        $totalValue = 0;
         foreach ((array) $this->items as $item) {
-            $amount += $item->getAmount();
+            $totalValue += $item->getItemValue();
         }
 
-        if (! empty($amount) && $amount < 100) {
+        if (! empty($totalValue) && $totalValue < 100) {
             throw new InvalidConsignmentException('It is necessary to use cents and the a minimum price is 1 euro');
         }
 
