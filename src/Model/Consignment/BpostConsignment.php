@@ -214,7 +214,7 @@ class BpostConsignment extends AbstractConsignment
         /** @var \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item */
         $amount = 0;
         foreach ((array) $this->items as $item) {
-            $amount += $item->getAmount();
+            $amount += $item->getItemValue();
         }
 
         if (! empty($amount) && $amount < 100) {
