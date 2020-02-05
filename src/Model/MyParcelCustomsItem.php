@@ -32,7 +32,6 @@ class MyParcelCustomsItem
     private $weight;
     private $item_value;
     private $classification;
-    private $contents;
     private $country;
 
     /**
@@ -169,31 +168,6 @@ class MyParcelCustomsItem
         }
 
         $this->classification = substr("$classification", 0, 4);
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getContents(): int
-    {
-        return $this->contents;
-    }
-
-    /**
-     * @param int|null $contents
-     *
-     * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     */
-    public function setContents(?int $contents): self
-    {
-        if (! $contents) {
-            throw new MissingFieldException('Contents must be set for a MyParcel product');
-        }
-
-        $this->contents = (int) $contents;
 
         return $this;
     }
