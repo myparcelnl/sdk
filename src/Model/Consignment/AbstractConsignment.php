@@ -1436,9 +1436,9 @@ class AbstractConsignment
     }
 
     /**
-     * @return integer
+     * @return integer|null
      */
-    public function getContents(): int
+    public function getContents(): ?int
     {
         return $this->contents;
     }
@@ -1459,7 +1459,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setContents($contents): self
+    public function setContents(int $contents): self
     {
         $this->contents = $contents;
 
