@@ -88,6 +88,10 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function isPickup(): bool
     {
+        if ($this->deliveryType === null) {
+            return false;
+        }
+
         return in_array(
             $this->deliveryType, [
                 AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
