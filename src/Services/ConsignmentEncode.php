@@ -220,6 +220,9 @@ class ConsignmentEncode
      */
     private function encodeCdCountry()
     {
+        /**
+         * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+         */
         $consignment = Arr::first($this->consignments);
         if ($consignment->isEuCountry()) {
             return $this;
@@ -236,16 +239,18 @@ class ConsignmentEncode
             $consignment->setPhysicalProperties(['weight' => $consignment->getTotalWeight()]);
         }
 
-        $this->consignmentEncoded = array_merge_recursive(
-            $this->consignmentEncoded, [
-                'customs_declaration' => [
-                    'contents' => 1,
-                    'weight'   => $consignment->getTotalWeight(),
-                    'items'    => $items,
-                    'invoice'  => $consignment->getInvoice() ?? '',
-                ],
-                'physical_properties' => $consignment->getPhysicalProperties(),
-            ]
+        $customsDeclaration = [
+            'customs_declaration' => [
+                'contents' => $consignment->getContents() ?? 1,
+                'weight'   => $consignment->getTotalWeight(),
+                'items'    => $items,
+                'invoice'  => $consignment->getInvoice() ?? '',
+            ],
+            'physical_properties' => $consignment->getPhysicalProperties(),
+        ];
+
+        $this->consignmentEncoded = Arr::arrayMergeRecursiveDistinct(
+            $this->consignmentEncoded, $customsDeclaration
         );
 
         return $this;
