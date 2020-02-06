@@ -29,6 +29,20 @@ class DPDConsignment extends AbstractConsignment
     ];
 
     /**
+     * @var array
+     */
+    public const ADDITIONAL_COUNTRY_COSTS = [
+        'BA',
+        'IS',
+        'HR',
+        'MC',
+        'NO',
+        'UA',
+        'RS',
+        'CH'
+    ];
+
+    /**
      * @internal
      *
      * @var int
