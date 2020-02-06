@@ -47,6 +47,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 ->setCity($consignmentTest['city'])
                 ->setEmail('your_email@test.nl')
                 ->setPhone($consignmentTest['phone'])
+                ->setContents($consignmentTest['contents'])
                 ->setInvoice($consignmentTest['invoice']);
 
             if (key_exists('package_type', $consignmentTest)) {
@@ -107,6 +108,7 @@ class SendOneInternationalConsignmentTest extends \PHPUnit\Framework\TestCase
                 'city'              => 'Rijnsburg',
                 'phone'             => '123456',
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'contents'          => 1,
                 'label_description' => 112345,
                 'invoice'           => '1231235345345',
                 'custom_items'      => [

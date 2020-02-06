@@ -69,6 +69,16 @@ class AbstractConsignment
     public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
 
+
+    /**
+     * Customs declaration types
+     */
+    public const PACKAGE_CONTENTS_COMMERCIAL_GOODS   = 1;
+    public const PACKAGE_CONTENTS_COMMERCIAL_SAMPLES = 2;
+    public const PACKAGE_CONTENTS_DOCUMENTS          = 3;
+    public const PACKAGE_CONTENTS_GIFTS              = 4;
+    public const PACKAGE_CONTENTS_RETRUN_SHIPMENT    = 5;
+
     /**
      * Package types
      */
@@ -305,7 +315,7 @@ class AbstractConsignment
      * @internal
      * @var int
      */
-    public $contents;
+    public $contents = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
 
     /**
      * @internal
@@ -1459,7 +1469,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setContents($contents): self
+    public function setContents(int $contents): self
     {
         $this->contents = $contents;
 
