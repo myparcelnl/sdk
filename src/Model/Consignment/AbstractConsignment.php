@@ -409,14 +409,6 @@ class AbstractConsignment
     }
 
     /**
-     * @return array
-     */
-    public function getInsurancePossibilities()
-    {
-        return $this->insurance_possibilities_local;
-    }
-
-    /**
      * @return string|null
      */
     public function getReferenceId()
@@ -718,12 +710,15 @@ class AbstractConsignment
 
     /**
      * @return string|null
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @var bool
      */
-    public function getStreet($useStreetAdditionalInfo = false): ?string
+    public function getStreet($useStreetAdditionalInfo = false): string
     {
         if (null === $this->street) {
-            return null;
+            throw new MissingFieldException(
+                'First set the street with setStreet() before running getStreet()'
+            );
         }
 
         if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {

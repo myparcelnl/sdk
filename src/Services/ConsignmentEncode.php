@@ -339,6 +339,6 @@ class ConsignmentEncode
      */
     private function normalizeAutoSaveRecipientAddress(AbstractConsignment $consignment): int
     {
-        return $consignment->isSaveRecipientAddress() ? 1 : 0;
+        return (int) $consignment->isSaveRecipientAddress();
     }
 }
