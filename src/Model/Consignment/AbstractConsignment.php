@@ -717,7 +717,7 @@ class AbstractConsignment
     {
         if (null === $this->street) {
             throw new MissingFieldException(
-                'First set the street code with setStreet() before running getStreet()'
+                'First set the street with setStreet() before running getStreet()'
             );
         }
 
