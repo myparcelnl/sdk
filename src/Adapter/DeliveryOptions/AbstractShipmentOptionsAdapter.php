@@ -95,6 +95,7 @@ abstract class AbstractShipmentOptionsAdapter
             'age_check'      => $this->hasAgeCheck(),
             'only_recipient' => $this->hasOnlyRecipient(),
             'return'         => $this->isReturn(),
+            'large_format'   => $this->hasLargeFormat(),
         ];
     }
 }
