@@ -127,6 +127,9 @@ class AbstractConsignment
     public const CC_NL = 'NL';
     public const CC_BE = 'BE';
 
+    /**
+     * @var array
+     */
     public const INSURANCE_POSSIBILITIES_LOCAL = [];
 
     /**
