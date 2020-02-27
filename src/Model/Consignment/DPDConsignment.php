@@ -173,7 +173,7 @@ class DPDConsignment extends AbstractConsignment
     public function setInsurance(?int $insurance): AbstractConsignment
     {
         if (null === $insurance) {
-            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
+            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', self::INSURANCE_POSSIBILITIES_LOCAL));
         }
 
         return parent::setInsurance($insurance);
