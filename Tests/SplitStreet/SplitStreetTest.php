@@ -88,6 +88,16 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'country'           => 'NL',
+                'full_street_input' => 'Laan 1940-1945 103',
+                'full_street'       => 'Laan 1940-1945 103',
+                'street'            => 'Laan 1940-1945',
+                'number'            => 103,
+                'number_suffix'     => '',
+                'box_number'        => null
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => '300 laan 3',
                 'full_street'       => '300 laan 3',
                 'street'            => '300 laan',
@@ -118,7 +128,6 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
             [
                 'carrier_id' => PostNLConsignment::CARRIER_ID,
                 'country'    => 'NL',
-
                 'full_street_input' => 'Abeelstreet H 10',
                 'full_street'       => 'Abeelstreet H 10',
                 'street'            => 'Abeelstreet H',
@@ -159,7 +168,6 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
             [
                 'carrier_id' => PostNLConsignment::CARRIER_ID,
                 'country'    => 'NL',
-
                 'full_street_input' => 'street 12',
                 'full_street'       => 'street 12',
                 'street'            => 'street',
