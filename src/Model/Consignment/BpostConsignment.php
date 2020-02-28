@@ -24,7 +24,7 @@ class BpostConsignment extends AbstractConsignment
     /**
      * @var array
      */
-    public const INSURANCE_POSSIBILITIES_LOCAL = [0, 500];
+    public const INSURANCE_POSSIBILITIES_LOCAL = [0, 500, 1000, 1500, 2000];
 
     /**
      * @var array
