@@ -1395,7 +1395,7 @@ class AbstractConsignment
             return $this;
         }
 
-        if (empty(self::INSURANCE_POSSIBILITIES_LOCAL)) {
+        if (empty(static::INSURANCE_POSSIBILITIES_LOCAL)) {
             throw new \BadMethodCallException('Property insurance_possibilities_local not found in ' . static::class);
         }
 
