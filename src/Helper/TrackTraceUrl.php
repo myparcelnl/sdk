@@ -7,14 +7,23 @@ class TrackTraceUrl
     const CONSUMER_PORTAL_BASE_URL = "https://myparcel.me/track-trace/";
 
     /**
-     * @param string $barcode
-     * @param string $postalCode
-     * @param string $countryCode
+     * @param string      $barcode
+     * @param string      $postalCode
+     * @param string|null $countryCode
      *
      * @return string
      */
-    public static function create(string $barcode, string $postalCode, string $countryCode): string
-    {
-        return self::CONSUMER_PORTAL_BASE_URL . "$barcode/$postalCode/$countryCode";
+    public static function create(
+        string $barcode,
+        string $postalCode,
+        ?string $countryCode = null
+    ): string {
+        $url = self::CONSUMER_PORTAL_BASE_URL . "$barcode/$postalCode";
+
+        if ($countryCode) {
+            $url .= "/$countryCode";
+        }
+
+        return $url;
     }
 }
