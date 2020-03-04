@@ -128,14 +128,14 @@ class AbstractConsignment
     public const CC_BE = 'BE';
 
     /**
+     * @var array
+     */
+    public const INSURANCE_POSSIBILITIES_LOCAL = [];
+
+    /**
      * @var string
      */
     protected $local_cc = '';
-
-    /**
-     * @var array
-     */
-    protected $insurance_possibilities_local = [];
 
     /**
      * @internal
@@ -1395,7 +1395,7 @@ class AbstractConsignment
             return $this;
         }
 
-        if (empty($this->insurance_possibilities_local)) {
+        if (empty(self::INSURANCE_POSSIBILITIES_LOCAL)) {
             throw new \BadMethodCallException('Property insurance_possibilities_local not found in ' . static::class);
         }
 
@@ -1403,9 +1403,9 @@ class AbstractConsignment
             throw new \BadMethodCallException('Property local_cc not found in ' . static::class);
         }
 
-        if (! in_array($insurance, $this->insurance_possibilities_local) && $this->getCountry() == $this->local_cc) {
+        if (! in_array($insurance, self::INSURANCE_POSSIBILITIES_LOCAL) && $this->getCountry() == $this->local_cc) {
             throw new \BadMethodCallException(
-                'Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local)
+                'Insurance must be one of ' . implode(', ', self::INSURANCE_POSSIBILITIES_LOCAL)
             );
         }
 

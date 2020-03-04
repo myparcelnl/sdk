@@ -6,12 +6,29 @@ use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 
 class BpostConsignment extends AbstractConsignment
 {
-    public const DEFAULT_WEIGHT = 50;
-    public const INSURANCE_500 = 500;
-    public const INSURANCE_0   = 0;
-    public const CARRIER_ID    = 2;
-    public const CARRIER_NAME  = 'bpost';
+    /**
+     * @var int
+     */
+    public const CARRIER_ID = 2;
 
+    /**
+     * @var string
+     */
+    public const CARRIER_NAME = 'bpost';
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_WEIGHT = 50;
+
+    /**
+     * @var array
+     */
+    public const INSURANCE_POSSIBILITIES_LOCAL = [0, 500, 1000, 1500, 2000];
+
+    /**
+     * @var array
+     */
     private const VALID_PACKAGE_TYPES = [
         self::PACKAGE_TYPE_PACKAGE
     ];
@@ -24,11 +41,6 @@ class BpostConsignment extends AbstractConsignment
     public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
-     * @var array
-     */
-    protected $insurance_possibilities_local = [self::INSURANCE_0, self::INSURANCE_500];
-
-    /**
      * @var string
      */
     protected $local_cc = self::CC_BE;
@@ -37,6 +49,7 @@ class BpostConsignment extends AbstractConsignment
      * @param array $consignmentEncoded
      *
      * @return array
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
@@ -146,7 +159,7 @@ class BpostConsignment extends AbstractConsignment
     public function setInsurance(?int $insurance): AbstractConsignment
     {
         if (null === $insurance) {
-            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
+            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', self::INSURANCE_POSSIBILITIES_LOCAL));
         }
 
         return parent::setInsurance($insurance);
