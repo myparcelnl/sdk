@@ -69,6 +69,16 @@ class AbstractConsignment
     public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
 
+
+    /**
+     * Customs declaration types
+     */
+    public const PACKAGE_CONTENTS_COMMERCIAL_GOODS   = 1;
+    public const PACKAGE_CONTENTS_COMMERCIAL_SAMPLES = 2;
+    public const PACKAGE_CONTENTS_DOCUMENTS          = 3;
+    public const PACKAGE_CONTENTS_GIFTS              = 4;
+    public const PACKAGE_CONTENTS_RETRUN_SHIPMENT    = 5;
+
     /**
      * Package types
      */
@@ -118,14 +128,14 @@ class AbstractConsignment
     public const CC_BE = 'BE';
 
     /**
+     * @var array
+     */
+    public const INSURANCE_POSSIBILITIES_LOCAL = [];
+
+    /**
      * @var string
      */
     protected $local_cc = '';
-
-    /**
-     * @var array
-     */
-    protected $insurance_possibilities_local = [];
 
     /**
      * @internal
@@ -305,7 +315,7 @@ class AbstractConsignment
      * @internal
      * @var int
      */
-    public $contents;
+    public $contents = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
 
     /**
      * @internal
@@ -401,9 +411,9 @@ class AbstractConsignment
     /**
      * @return array
      */
-    public function getInsurancePossibilities()
+    public function getInsurancePossibilities(): array
     {
-        return $this->insurance_possibilities_local;
+        return static::INSURANCE_POSSIBILITIES_LOCAL;
     }
 
     /**
@@ -708,12 +718,15 @@ class AbstractConsignment
 
     /**
      * @return string|null
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @var bool
      */
-    public function getStreet($useStreetAdditionalInfo = false): ?string
+    public function getStreet($useStreetAdditionalInfo = false): string
     {
         if (null === $this->street) {
-            return null;
+            throw new MissingFieldException(
+                'First set the street with setStreet() before running getStreet()'
+            );
         }
 
         if ($useStreetAdditionalInfo && strlen($this->street) >= self::MAX_STREET_LENGTH) {
@@ -1390,7 +1403,7 @@ class AbstractConsignment
             return $this;
         }
 
-        if (empty($this->insurance_possibilities_local)) {
+        if (empty(static::INSURANCE_POSSIBILITIES_LOCAL)) {
             throw new \BadMethodCallException('Property insurance_possibilities_local not found in ' . static::class);
         }
 
@@ -1398,9 +1411,9 @@ class AbstractConsignment
             throw new \BadMethodCallException('Property local_cc not found in ' . static::class);
         }
 
-        if (! in_array($insurance, $this->insurance_possibilities_local) && $this->getCountry() == $this->local_cc) {
+        if (! in_array($insurance, static::INSURANCE_POSSIBILITIES_LOCAL) && $this->getCountry() == $this->local_cc) {
             throw new \BadMethodCallException(
-                'Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local)
+                'Insurance must be one of ' . implode(', ', static::INSURANCE_POSSIBILITIES_LOCAL)
             );
         }
 
@@ -1459,7 +1472,7 @@ class AbstractConsignment
      *
      * @return $this
      */
-    public function setContents($contents): self
+    public function setContents(int $contents): self
     {
         $this->contents = $contents;
 
