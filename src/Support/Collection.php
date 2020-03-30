@@ -1232,12 +1232,14 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
     /**
      * Push an item onto the end of the collection.
      *
-     * @param  mixed  $value
+     * @param  mixed  $values [optional]
      * @return $this
      */
-    public function push($value)
+    public function push(...$values)
     {
-        $this->offsetSet(null, $value);
+        foreach ($values as $value) {
+            $this->items[] = $value;
+        }
 
         return $this;
     }
@@ -1442,7 +1444,7 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
      * @param  callable|null  $callback
      * @return static
      */
-    public function sort(callable $callback = null)
+    public function sort($callback = null)
     {
         $items = $this->items;
 
