@@ -1,0 +1,11 @@
+admin_productmyparcel_save:
+    path: myparcel/{productId}/save
+    methods: [POST]
+    defaults:
+        _controller: Gett\Myparcel\Controllers\Admin\ProductCombinatorController::saveProduct
+        _legacy_controller: AdminMyparcelController
+        _legacy_link: AdminMyparcelProduct:saveProduct
+        _legacy_parameters:
+            id_product: productId
+    requirements:
+        id: \d+

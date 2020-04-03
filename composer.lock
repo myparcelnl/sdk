@@ -1,0 +1,79 @@
+{
+  "_readme": [
+    "This file locks the dependencies of your project to a known state",
+    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+    "This file is @generated automatically"
+  ],
+  "content-hash": "93ce8e04e2c2638b7a4bf16a47077cbf",
+  "packages": [
+    {
+      "name": "myparcelnl/sdk",
+      "version": "v3.1.7",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/myparcelnl/sdk.git",
+        "reference": "bca3a9571e2ecfff74f964b659fc0f9136c09e64"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/myparcelnl/sdk/zipball/bca3a9571e2ecfff74f964b659fc0f9136c09e64",
+        "reference": "bca3a9571e2ecfff74f964b659fc0f9136c09e64",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=7.1.0"
+      },
+      "require-dev": {
+        "phpunit/phpunit": "^5.5"
+      },
+      "type": "library",
+      "autoload": {
+        "files": [
+          "src/AutoLoader.php"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "GPL-3.0-or-later"
+      ],
+      "authors": [
+        {
+          "name": "Reindert Vetter",
+          "email": "support@myparcel.nl",
+          "homepage": "https://www.myparcel.nl",
+          "role": "Developer"
+        },
+        {
+          "name": "Richard Perdaan",
+          "email": "support@myparcel.nl",
+          "homepage": "https://www.myparcel.nl",
+          "role": "Developer"
+        },
+        {
+          "name": "Edie Lemoine",
+          "email": "support@myparcel.nl",
+          "homepage": "https://www.myparcel.nl",
+          "role": "Developer"
+        }
+      ],
+      "description": "This package is designed to send and receive data from MyParcel by means of an API.",
+      "homepage": "https://www.myparcel.nl",
+      "keywords": [
+        "Flespakket",
+        "My Parcel",
+        "Post NL",
+        "myparcel",
+        "postnl"
+      ],
+      "time": "2020-03-06T10:18:42+00:00"
+    }
+  ],
+  "packages-dev": [],
+  "aliases": [],
+  "minimum-stability": "stable",
+  "stability-flags": [],
+  "prefer-stable": false,
+  "prefer-lowest": false,
+  "platform": [],
+  "platform-dev": []
+}

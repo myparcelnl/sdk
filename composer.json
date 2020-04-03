@@ -1,0 +1,23 @@
+{
+  "name": "gett/MyParcel",
+  "description": "PrestaShop module to intergratie with MyParcel NL and\nMyParcel BE",
+  "require": {
+    "php": ">=7.2.0",
+    "myparcelnl/sdk": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Gett\\MyParcel\\": "src/"
+    },
+    "classmap": [
+      "MyParcel.php"
+    ],
+    "exclude-from-classmap": []
+  },
+  "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false
+  },
+  "type": "prestashop-module",
+  "license": "General terms and conditions <https://www.gettonline.com/en/algemene-voorwaarden/>"
+}
