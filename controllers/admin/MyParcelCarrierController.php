@@ -19,310 +19,310 @@ class MyParcelCarrierController extends AdminController
 
         parent::__construct();
 
-        $this->bulk_actions = array(
-            'delete' => array(
-                'text' => $this->trans('Delete selected', array(), 'Admin.Notifications.Info'),
-                'confirm' => $this->trans('Delete selected items?', array(), 'Admin.Notifications.Info'),
+        $this->bulk_actions = [
+            'delete' => [
+                'text' => $this->trans('Delete selected', [], 'Admin.Notifications.Info'),
+                'confirm' => $this->trans('Delete selected items?', [], 'Admin.Notifications.Info'),
                 'icon' => 'icon-trash',
-            ),
-        );
+            ],
+        ];
 
-        $this->fieldImageSettings = array(
+        $this->fieldImageSettings = [
             'name' => 'logo',
             'dir' => 's',
-        );
+        ];
 
-        $this->fields_list = array(
-            'id_carrier' => array(
-                'title' => $this->trans('ID', array(), 'Admin.Global'),
+        $this->fields_list = [
+            'id_carrier' => [
+                'title' => $this->trans('ID', [], 'Admin.Global'),
                 'align' => 'center',
                 'class' => 'fixed-width-xs',
-            ),
-            'name' => array(
-                'title' => $this->trans('Name', array(), 'Admin.Global'),
-            ),
-            'image' => array(
-                'title' => $this->trans('Logo', array(), 'Admin.Global'),
+            ],
+            'name' => [
+                'title' => $this->trans('Name', [], 'Admin.Global'),
+            ],
+            'image' => [
+                'title' => $this->trans('Logo', [], 'Admin.Global'),
                 'align' => 'center',
                 'image' => 's',
                 'class' => 'fixed-width-xs',
                 'orderby' => false,
                 'search' => false,
-            ),
-            'delay' => array(
-                'title' => $this->trans('Delay', array(), 'Admin.Shipping.Feature'),
+            ],
+            'delay' => [
+                'title' => $this->trans('Delay', [], 'Admin.Shipping.Feature'),
                 'orderby' => false,
-            ),
-            'active' => array(
-                'title' => $this->trans('Status', array(), 'Admin.Global'),
+            ],
+            'active' => [
+                'title' => $this->trans('Status', [], 'Admin.Global'),
                 'align' => 'center',
                 'active' => 'status',
                 'type' => 'bool',
                 'class' => 'fixed-width-sm',
                 'orderby' => false,
-            ),
-            'is_free' => array(
-                'title' => $this->trans('Free Shipping', array(), 'Admin.Shipping.Feature'),
+            ],
+            'is_free' => [
+                'title' => $this->trans('Free Shipping', [], 'Admin.Shipping.Feature'),
                 'align' => 'center',
                 'active' => 'isFree',
                 'type' => 'bool',
                 'class' => 'fixed-width-sm',
                 'orderby' => false,
-            ),
-            'position' => array(
-                'title' => $this->trans('Position', array(), 'Admin.Global'),
+            ],
+            'position' => [
+                'title' => $this->trans('Position', [], 'Admin.Global'),
                 'filter_key' => 'a!position',
                 'align' => 'center',
                 'class' => 'fixed-width-sm',
                 'position' => 'position',
-            ),
-        );
+            ],
+        ];
     }
 
     public function renderForm()
     {
-        $this->fields_form = array(
-            'legend' => array(
-                'title' => $this->trans('Carriers', array(), 'Admin.Shipping.Feature'),
+        $this->fields_form = [
+            'legend' => [
+                'title' => $this->trans('Carriers', [], 'Admin.Shipping.Feature'),
                 'icon' => 'icon-truck',
-            ),
-            'input' => array(
-                array(
+            ],
+            'input' => [
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Company', array(), 'Admin.Global'),
+                    'label' => $this->trans('Company', [], 'Admin.Global'),
                     'name' => 'name',
                     'required' => true,
-                    'hint' => array(
-                        $this->trans('Allowed characters: letters, spaces and "%special_chars%".', array('%special_chars%' => '().-'), 'Admin.Shipping.Help'),
-                        $this->trans('Carrier name displayed during checkout', array(), 'Admin.Shipping.Help'),
-                        $this->trans('For in-store pickup, enter 0 to replace the carrier name with your shop name.', array(), 'Admin.Shipping.Help'),
-                    ),
-                ),
-                array(
+                    'hint' => [
+                        $this->trans('Allowed characters: letters, spaces and "%special_chars%".', ['%special_chars%' => '().-'], 'Admin.Shipping.Help'),
+                        $this->trans('Carrier name displayed during checkout', [], 'Admin.Shipping.Help'),
+                        $this->trans('For in-store pickup, enter 0 to replace the carrier name with your shop name.', [], 'Admin.Shipping.Help'),
+                    ],
+                ],
+                [
                     'type' => 'file',
-                    'label' => $this->trans('Logo', array(), 'Admin.Global'),
+                    'label' => $this->trans('Logo', [], 'Admin.Global'),
                     'name' => 'logo',
-                    'hint' => $this->trans('Upload a logo from your computer.', array(), 'Admin.Shipping.Help') . ' (.gif, .jpg, .jpeg ' . $this->trans('or', array(), 'Admin.Shipping.Help') . ' .png)',
-                ),
-                array(
+                    'hint' => $this->trans('Upload a logo from your computer.', [], 'Admin.Shipping.Help') . ' (.gif, .jpg, .jpeg ' . $this->trans('or', [], 'Admin.Shipping.Help') . ' .png)',
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Transit time', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Transit time', [], 'Admin.Shipping.Feature'),
                     'name' => 'delay',
                     'lang' => true,
                     'required' => true,
                     'maxlength' => 512,
-                    'hint' => $this->trans('Estimated delivery time will be displayed during checkout.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Estimated delivery time will be displayed during checkout.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Speed grade', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Speed grade', [], 'Admin.Shipping.Feature'),
                     'name' => 'grade',
                     'required' => false,
-                    'hint' => $this->trans('Enter "0" for a longest shipping delay, or "9" for the shortest shipping delay.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Enter "0" for a longest shipping delay, or "9" for the shortest shipping delay.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('URL', array(), 'Admin.Global'),
+                    'label' => $this->trans('URL', [], 'Admin.Global'),
                     'name' => 'url',
-                    'hint' => $this->trans('Delivery tracking URL: Type \'@\' where the tracking number should appear. It will then be automatically replaced by the tracking number.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Delivery tracking URL: Type \'@\' where the tracking number should appear. It will then be automatically replaced by the tracking number.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'checkbox',
-                    'label' => $this->trans('Zone', array(), 'Admin.Global'),
+                    'label' => $this->trans('Zone', [], 'Admin.Global'),
                     'name' => 'zone',
-                    'values' => array(
+                    'values' => [
                         'query' => Zone::getZones(false),
                         'id' => 'id_zone',
                         'name' => 'name',
-                    ),
-                    'hint' => $this->trans('The zones in which this carrier will be used.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    ],
+                    'hint' => $this->trans('The zones in which this carrier will be used.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'group',
-                    'label' => $this->trans('Group access', array(), 'Admin.Shipping.Help'),
+                    'label' => $this->trans('Group access', [], 'Admin.Shipping.Help'),
                     'name' => 'groupBox',
                     'values' => Group::getGroups(Context::getContext()->language->id),
-                    'hint' => $this->trans('Mark the groups that are allowed access to this carrier.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Mark the groups that are allowed access to this carrier.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'switch',
-                    'label' => $this->trans('Status', array(), 'Admin.Global'),
+                    'label' => $this->trans('Status', [], 'Admin.Global'),
                     'name' => 'active',
                     'required' => false,
                     'class' => 't',
                     'is_bool' => true,
-                    'values' => array(
-                        array(
+                    'values' => [
+                        [
                             'id' => 'active_on',
                             'value' => 1,
-                            'label' => $this->trans('Enabled', array(), 'Admin.Global'),
-                        ),
-                        array(
+                            'label' => $this->trans('Enabled', [], 'Admin.Global'),
+                        ],
+                        [
                             'id' => 'active_off',
                             'value' => 0,
-                            'label' => $this->trans('Disabled', array(), 'Admin.Global'),
-                        ),
-                    ),
-                    'hint' => $this->trans('Enable the carrier in the front office.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                            'label' => $this->trans('Disabled', [], 'Admin.Global'),
+                        ],
+                    ],
+                    'hint' => $this->trans('Enable the carrier in the front office.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'switch',
-                    'label' => $this->trans('Apply shipping cost', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Apply shipping cost', [], 'Admin.Shipping.Feature'),
                     'name' => 'is_free',
                     'required' => false,
                     'class' => 't',
-                    'values' => array(
-                        array(
+                    'values' => [
+                        [
                             'id' => 'is_free_on',
                             'value' => 0,
-                            'label' => '<img src="../img/admin/enabled.gif" alt="' . $this->trans('Yes', array(), 'Admin.Global') . '" title="' . $this->trans('Yes', array(), 'Admin.Global') . '" />',
-                        ),
-                        array(
+                            'label' => '<img src="../img/admin/enabled.gif" alt="' . $this->trans('Yes', [], 'Admin.Global') . '" title="' . $this->trans('Yes', [], 'Admin.Global') . '" />',
+                        ],
+                        [
                             'id' => 'is_free_off',
                             'value' => 1,
-                            'label' => '<img src="../img/admin/disabled.gif" alt="' . $this->trans('No', array(), 'Admin.Global') . '" title="' . $this->trans('No', array(), 'Admin.Global') . '" />',
-                        ),
-                    ),
-                    'hint' => $this->trans('Apply both regular shipping cost and product-specific shipping costs.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                            'label' => '<img src="../img/admin/disabled.gif" alt="' . $this->trans('No', [], 'Admin.Global') . '" title="' . $this->trans('No', [], 'Admin.Global') . '" />',
+                        ],
+                    ],
+                    'hint' => $this->trans('Apply both regular shipping cost and product-specific shipping costs.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'select',
-                    'label' => $this->trans('Tax', array(), 'Admin.Global'),
+                    'label' => $this->trans('Tax', [], 'Admin.Global'),
                     'name' => 'id_tax_rules_group',
-                    'options' => array(
+                    'options' => [
                         'query' => TaxRulesGroup::getTaxRulesGroups(true),
                         'id' => 'id_tax_rules_group',
                         'name' => 'name',
-                        'default' => array(
-                            'label' => $this->trans('No Tax', array(), 'Admin.Global'),
+                        'default' => [
+                            'label' => $this->trans('No Tax', [], 'Admin.Global'),
                             'value' => 0,
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'type' => 'switch',
-                    'label' => $this->trans('Shipping and handling', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Shipping and handling', [], 'Admin.Shipping.Feature'),
                     'name' => 'shipping_handling',
                     'required' => false,
                     'class' => 't',
                     'is_bool' => true,
-                    'values' => array(
-                        array(
+                    'values' => [
+                        [
                             'id' => 'shipping_handling_on',
                             'value' => 1,
-                            'label' => $this->trans('Enabled', array(), 'Admin.Global'),
-                        ),
-                        array(
+                            'label' => $this->trans('Enabled', [], 'Admin.Global'),
+                        ],
+                        [
                             'id' => 'shipping_handling_off',
                             'value' => 0,
-                            'label' => $this->trans('Disabled', array(), 'Admin.Global'),
-                        ),
-                    ),
-                    'hint' => $this->trans('Include the shipping and handling costs in the carrier price.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                            'label' => $this->trans('Disabled', [], 'Admin.Global'),
+                        ],
+                    ],
+                    'hint' => $this->trans('Include the shipping and handling costs in the carrier price.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'radio',
-                    'label' => $this->trans('Billing', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Billing', [], 'Admin.Shipping.Feature'),
                     'name' => 'shipping_method',
                     'required' => false,
                     'class' => 't',
                     'br' => true,
-                    'values' => array(
-                        array(
+                    'values' => [
+                        [
                             'id' => 'billing_default',
                             'value' => Carrier::SHIPPING_METHOD_DEFAULT,
-                            'label' => $this->trans('Default behavior', array(), 'Admin.Shipping.Feature'),
-                        ),
-                        array(
+                            'label' => $this->trans('Default behavior', [], 'Admin.Shipping.Feature'),
+                        ],
+                        [
                             'id' => 'billing_price',
                             'value' => Carrier::SHIPPING_METHOD_PRICE,
-                            'label' => $this->trans('According to total price', array(), 'Admin.Shipping.Feature'),
-                        ),
-                        array(
+                            'label' => $this->trans('According to total price', [], 'Admin.Shipping.Feature'),
+                        ],
+                        [
                             'id' => 'billing_weight',
                             'value' => Carrier::SHIPPING_METHOD_WEIGHT,
-                            'label' => $this->trans('According to total weight', array(), 'Admin.Shipping.Feature'),
-                        ),
-                    ),
-                ),
-                array(
+                            'label' => $this->trans('According to total weight', [], 'Admin.Shipping.Feature'),
+                        ],
+                    ],
+                ],
+                [
                     'type' => 'select',
-                    'label' => $this->trans('Out-of-range behavior', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Out-of-range behavior', [], 'Admin.Shipping.Feature'),
                     'name' => 'range_behavior',
-                    'options' => array(
-                        'query' => array(
-                            array(
+                    'options' => [
+                        'query' => [
+                            [
                                 'id' => 0,
-                                'name' => $this->trans('Apply the cost of the highest defined range', array(), 'Admin.Shipping.Help'),
-                            ),
-                            array(
+                                'name' => $this->trans('Apply the cost of the highest defined range', [], 'Admin.Shipping.Help'),
+                            ],
+                            [
                                 'id' => 1,
-                                'name' => $this->trans('Disable carrier', array(), 'Admin.Shipping.Feature'),
-                            ),
-                        ),
+                                'name' => $this->trans('Disable carrier', [], 'Admin.Shipping.Feature'),
+                            ],
+                        ],
                         'id' => 'id',
                         'name' => 'name',
-                    ),
-                    'hint' => $this->trans('Out-of-range behavior occurs when none is defined (e.g. when a customer\'s cart weight is greater than the highest range limit).', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    ],
+                    'hint' => $this->trans('Out-of-range behavior occurs when none is defined (e.g. when a customer\'s cart weight is greater than the highest range limit).', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Maximum package height', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Maximum package height', [], 'Admin.Shipping.Feature'),
                     'name' => 'max_height',
                     'required' => false,
-                    'hint' => $this->trans('Maximum height managed by this carrier. Set the value to "0," or leave this field blank to ignore.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Maximum height managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Maximum package width', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Maximum package width', [], 'Admin.Shipping.Feature'),
                     'name' => 'max_width',
                     'required' => false,
-                    'hint' => $this->trans('Maximum width managed by this carrier. Set the value to "0," or leave this field blank to ignore.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Maximum width managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Maximum package depth', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Maximum package depth', [], 'Admin.Shipping.Feature'),
                     'name' => 'max_depth',
                     'required' => false,
-                    'hint' => $this->trans('Maximum depth managed by this carrier. Set the value to "0," or leave this field blank to ignore.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Maximum depth managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'text',
-                    'label' => $this->trans('Maximum package weight', array(), 'Admin.Shipping.Feature'),
+                    'label' => $this->trans('Maximum package weight', [], 'Admin.Shipping.Feature'),
                     'name' => 'max_weight',
                     'required' => false,
-                    'hint' => $this->trans('Maximum weight managed by this carrier. Set the value to "0," or leave this field blank to ignore.', array(), 'Admin.Shipping.Help'),
-                ),
-                array(
+                    'hint' => $this->trans('Maximum weight managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                ],
+                [
                     'type' => 'hidden',
                     'name' => 'is_module',
-                ),
-                array(
+                ],
+                [
                     'type' => 'hidden',
                     'name' => 'external_module_name',
-                ),
-                array(
+                ],
+                [
                     'type' => 'hidden',
                     'name' => 'shipping_external',
-                ),
-                array(
+                ],
+                [
                     'type' => 'hidden',
                     'name' => 'need_range',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         if (Shop::isFeatureActive()) {
-            $this->fields_form['input'][] = array(
+            $this->fields_form['input'][] = [
                 'type' => 'shop',
-                'label' => $this->trans('Shop association', array(), 'Admin.Global'),
+                'label' => $this->trans('Shop association', [], 'Admin.Global'),
                 'name' => 'checkBoxShopAsso',
-            );
+            ];
         }
 
-        $this->fields_form['submit'] = array(
-            'title' => $this->trans('Save', array(), 'Admin.Actions'),
-        );
+        $this->fields_form['submit'] = [
+            'title' => $this->trans('Save', [], 'Admin.Actions'),
+        ];
 
         if (!($obj = $this->loadObject(true))) {
             return;
@@ -345,12 +345,12 @@ class MyParcelCarrierController extends AdminController
             if (isset($pos[2]) && (int) $pos[2] === $id_carrier) {
                 if ($carrier = new Carrier((int) $pos[2])) {
                     if (isset($position) && $carrier->updatePosition($way, $position)) {
-                        echo 'ok position ' . (int) $position . ' for carrier ' . (int) $pos[1] . '\r\n';
+                        echo json_encode(['status' => 'ok', 'position' => $position, 'carrier' => $id_carrier]);
                     } else {
-                        echo '{"hasError" : true, "errors" : "Can not update carrier ' . (int) $id_carrier . ' to position ' . (int) $position . ' "}';
+                        echo json_encode(['status' => 'error',  'position' => $position, 'carrier' => $id_carrier]);
                     }
                 } else {
-                    echo '{"hasError" : true, "errors" : "This carrier (' . (int) $id_carrier . ') can t be loaded"}';
+                    echo json_encode(['status' => 'error',  'message' => 'Carrier can not be loaded', 'carrier' => $id_carrier]);
                 }
 
                 break;

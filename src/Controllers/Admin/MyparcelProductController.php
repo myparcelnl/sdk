@@ -6,6 +6,7 @@ class MyparcelProductController
 {
     public function saveProduct()
     {
-        var_dump($_POST);die();
+        var_dump($_POST);
+        die();
     }
 }

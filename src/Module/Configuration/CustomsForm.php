@@ -4,7 +4,6 @@ namespace Gett\MyParcel\Module\Configuration;
 
 use Context;
 use Country;
-use HelperForm;
 
 class CustomsForm extends AbstractForm
 {
@@ -18,11 +17,11 @@ class CustomsForm extends AbstractForm
     protected function getFields(): array
     {
         return [
-            "MY_PARCEL_CUSTOMS_FORM" => [
+            'MY_PARCEL_CUSTOMS_FORM' => [
                 'type' => 'select',
                 'label' => $this->module->l('Default customs form'),
                 'name' => 'MY_PARCEL_CUSTOMS_FORM',
-                'options' => array(
+                'options' => [
                     'query' => [
                         ['id' => 'No', 'name' => 'No'],
                         ['id' => 'Add', 'name' => 'ADD'],
@@ -30,26 +29,26 @@ class CustomsForm extends AbstractForm
                     ],
                     'id' => 'id',
                     'name' => 'name',
-                )
+                ],
             ],
-            "MY_PARCEL_DEFAULT_CUSTOMS_CODE" => [
+            'MY_PARCEL_DEFAULT_CUSTOMS_CODE' => [
                 'type' => 'text',
-                'label' => $this->module->l("Default customs code"),
+                'label' => $this->module->l('Default customs code'),
                 'name' => 'MY_PARCEL_DEFAULT_CUSTOMS_CODE',
             ],
-            "MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN" => [
+            'MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN' => [
                 'type' => 'select',
                 'label' => $this->module->l('Default customs origin'),
                 'name' => 'MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN',
-                'options' => array(
+                'options' => [
                     'query' => Country::getCountries(Context::getContext()->language->id),
                     'id' => 'id_country',
                     'name' => 'name',
-                ),
+                ],
             ],
-            "MY_PARCEL_DEFAULT_CUSTOMS_AGE_CHECK" => [
+            'MY_PARCEL_DEFAULT_CUSTOMS_AGE_CHECK' => [
                 'type' => 'text',
-                'label' => $this->module->l("Default customs age check"),
+                'label' => $this->module->l('Default customs age check'),
                 'name' => 'MY_PARCEL_DEFAULT_CUSTOMS_AGE_CHECK',
             ],
         ];

@@ -5,7 +5,7 @@ namespace Gett\MyParcel\Sdk\src\Model;
 class MyParcelRequest extends \MyParcelNL\Sdk\src\Model\MyParcelRequest
 {
     /**
-     * API headers
+     * API headers.
      */
     const REQUEST_HEADER_WEBHOOK = 'Content-type: application/json; charset=utf-8';
 

@@ -2,8 +2,8 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
-use Gett\MyParcel\Constant;
 use Module;
+use Gett\MyParcel\Constant;
 
 class Configure
 {
@@ -26,10 +26,91 @@ class Configure
 
     public function __invoke(int $id_form): string
     {
-        $output = (new $this->forms[$id_form]($this->module))();
-
-
-        return $output;
+        return (new $this->forms[$id_form]($this->module))();
     }
 
+    public function initNavigation()
+    {
+        $menu = [
+            'main' => [
+                'short' => $this->module->l('API'),
+                'desc' => $this->module->l('API settings'),
+                'href' => $this->module->appendQueryToUrl(
+                    $this->module->baseUrl,
+                    ['menu' => Constant::MENU_API_SETTINGS]
+                ),
+                'active' => false,
+                'icon' => 'icon-gears',
+            ],
+            'defaultsettings' => [
+                'short' => $this->module->l('General settings'),
+                'desc' => $this->module->l('General module settings'),
+                'href' => $this->module->appendQueryToUrl(
+                    $this->module->baseUrl,
+                    ['menu' => (string) Constant::MENU_GENERAL_SETTINGS]
+                ),
+                'active' => false,
+                'icon' => 'icon-truck',
+            ],
+            'labeloptions' => [
+                'short' => $this->module->l('Label options'),
+                'desc' => $this->module->l('Label options'),
+                'href' => $this->module->appendQueryToUrl(
+                    $this->module->baseUrl,
+                    ['menu' => (string) Constant::MENU_LABEL_SETTINGS]
+                ),
+                'active' => false,
+                'icon' => 'icon-shopping-cart',
+            ],
+            'orderoptions' => [
+                'short' => $this->module->l('Order options'),
+                'desc' => $this->module->l('Order options'),
+                'href' => $this->module->appendQueryToUrl(
+                    $this->module->baseUrl,
+                    ['menu' => (string) Constant::MENU_ORDER_SETTINGS]
+                ),
+                'active' => false,
+                'icon' => 'icon-shopping-cart',
+            ],
+            'customsoptions' => [
+                'short' => $this->module->l('Customs options'),
+                'desc' => $this->module->l('Customs options'),
+                'href' => $this->module->appendQueryToUrl(
+                    $this->module->baseUrl,
+                    ['menu' => (string) Constant::MENU_CUSTOMS_SETTINGS]
+                ),
+                'active' => false,
+                'icon' => 'icon-shopping-cart',
+            ],
+        ];
+
+        switch (\Tools::getValue('menu')) {
+            case Constant::MENU_API_SETTINGS:
+                $menu['main']['active'] = true;
+
+                break;
+            case Constant::MENU_GENERAL_SETTINGS:
+                $menu['defaultsettings']['active'] = true;
+
+                break;
+            case Constant::MENU_LABEL_SETTINGS:
+                $menu['labeloptions']['active'] = true;
+
+                break;
+            case Constant::MENU_ORDER_SETTINGS:
+                $menu['orderoptions']['active'] = true;
+
+                break;
+            case Constant::MENU_CUSTOMS_SETTINGS:
+                $menu['customsoptions']['active'] = true;
+
+                break;
+            default:
+                $menu['main']['active'] = true;
+
+                break;
+        }
+
+        return $menu;
+    }
 }

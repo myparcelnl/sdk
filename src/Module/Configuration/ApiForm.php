@@ -2,10 +2,11 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Tools;
 use Configuration;
 use Gett\MyParcel\Constant;
 use Gett\MyParcel\Sdk\src\Services\WebhookService;
-use Tools;
+use Gett\MyParcel\Sdk\src\Model\Webhook\Subscription;
 
 class ApiForm extends AbstractForm
 {
@@ -21,7 +22,7 @@ class ApiForm extends AbstractForm
         return [
             Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME => [
                 'type' => 'text',
-                'label' => $this->module->l("Your API key"),
+                'label' => $this->module->l('Your API key'),
                 'name' => Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME,
                 'required' => false,
             ],
@@ -31,19 +32,19 @@ class ApiForm extends AbstractForm
                 'name' => Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'active_on',
                         'value' => 1,
                         'label' => $this->module->l('Enabled'),
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 'active_off',
                         'value' => 0,
                         'label' => $this->module->l('Disabled'),
-                    ),
-                ),
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -52,24 +53,29 @@ class ApiForm extends AbstractForm
         $parent = parent::update();
 
         if (!$parent) {
-            if ((Tools::isSubmit("MY_PARCEL_API_KEY") && Tools::getValue("MY_PARCEL_API_KEY") != Configuration::get("MY_PARCEL_API_KEY")) || Tools::isSubmit("resetHook")) {
-                $service = new WebhookService(Tools::getValue("MY_PARCEL_API_KEY"));
+            if ((Tools::isSubmit('MY_PARCEL_API_KEY') && Tools::getValue('MY_PARCEL_API_KEY') != Configuration::get('MY_PARCEL_API_KEY')) || Tools::isSubmit('resetHook')) {
+                $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
                 $result = $service->addSubscription(
                     new Subscription(
                         Subscription::SHIPMENT_STATUS_CHANGE_HOOK_NAME,
-                        rtrim((Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://') . Tools::getShopDomainSsl() . __PS_BASE_URI__,
-                            '/') . "/index.php?fc=module&module={$this->module->name}&controller=hook"
-                    ));
+                        rtrim(
+                            (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://') . Tools::getShopDomainSsl() . __PS_BASE_URI__,
+                            '/'
+                        ) . "/index.php?fc=module&module={$this->module->name}&controller=hook"
+                    )
+                );
 
                 if (isset($result['data']['ids'][0]['id'])) {
-                    Configuration::updateValue("MY_PARCEL_WEBHOOK_ID",
-                        Tools::getValue($result['data']['ids'][0]['id']));
+                    Configuration::updateValue(
+                        'MY_PARCEL_WEBHOOK_ID',
+                        Tools::getValue($result['data']['ids'][0]['id'])
+                    );
                 }
             }
-            if (Tools::isSubmit("deleteHook")) {
-                $service = new WebhookService(Tools::getValue("MY_PARCEL_API_KEY"));
-                $service->deleteSubscription(Tools::getValue("MY_PARCEL_WEBHOOK_ID"));
-                Configuration::updateValue("MY_PARCEL_WEBHOOK_ID", "");
+            if (Tools::isSubmit('deleteHook')) {
+                $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
+                $service->deleteSubscription(Tools::getValue('MY_PARCEL_WEBHOOK_ID'));
+                Configuration::updateValue('MY_PARCEL_WEBHOOK_ID', '');
             }
 
             return true;
@@ -77,5 +83,4 @@ class ApiForm extends AbstractForm
 
         return $parent;
     }
-
 }

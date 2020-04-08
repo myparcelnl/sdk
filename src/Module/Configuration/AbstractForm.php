@@ -2,11 +2,11 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
-use AdminController;
-use Configuration;
-use HelperForm;
-use Module;
 use Tools;
+use Module;
+use HelperForm;
+use Configuration;
+use AdminController;
 
 abstract class AbstractForm
 {
@@ -39,11 +39,13 @@ abstract class AbstractForm
         $helper->module = $this->module;
         $helper->name_controller = $this->module->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . Tools::getValue('menu',
-                0);
+        $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . Tools::getValue(
+            'menu',
+            0
+        );
 
         // Language
-        $helper->default_form_language = (int)Configuration::get('PS_LANG_DEFAULT');
+        $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ?: 0;
 
         // Field values
@@ -58,25 +60,6 @@ abstract class AbstractForm
         return $resultProcess . $helper->generateForm($this->form());
     }
 
-    private function process(): string
-    {
-        if (!Tools::isSubmit($this->name . 'Submit')) {
-            return '';
-        }
-        return $this->update();
-        if ($this->validate()) {
-
-        }
-
-        $text = implode(' ', [
-            $this->trans('Form field values doesn\'t meet the validation criteria.', [],
-                'Modules.Productcombinator.Module'),
-            $this->trans('Are you sure all values are correct?', [], 'Modules.Productcombinator.Module'),
-        ]);
-
-        return $this->module->displayError($text);
-    }
-
     protected function update(): string
     {
         $result = true;
@@ -88,21 +71,16 @@ abstract class AbstractForm
 
         if (!$result) {
             return $this->module->displayError(
-                $this->trans('Could not update configuration!', [], 'Modules.Productcombinator.Module')
+                $this->module->l('Could not update configuration!', 'Modules.Myparcel.Configuration')
             );
         }
 
         return $this->module->displayConfirmation(
-            $this->trans('Configuration was successfully updated!', [], 'Modules.Productcombinator.Module')
+            $this->module->l('Configuration was successfully updated!', 'Modules.Myparcel.Configuration')
         );
     }
 
     abstract protected function getFields(): array;
-
-    protected function trans(string $key, array $parameters = [], $domain = null, $locale = null): string
-    {
-        return $this->module->getTranslator()->trans($key, $parameters, $domain, $locale);
-    }
 
     protected function validate(): bool
     {
@@ -140,6 +118,30 @@ abstract class AbstractForm
         return $values;
     }
 
+    abstract protected function getLegend(): string;
+
+    private function process(): string
+    {
+        if (!Tools::isSubmit($this->name . 'Submit')) {
+            return '';
+        }
+
+        return $this->update();
+        if ($this->validate()) {
+        }
+
+        $text = implode(' ', [
+            $this->module->l(
+                'Form field values doesn\'t meet the validation criteria.',
+                [],
+                'Modules.Myparcel.Configuration'
+            ),
+            $this->module->l('Are you sure all values are correct?', 'Modules.Myparcel.Configuration'),
+        ]);
+
+        return $this->module->displayError($text);
+    }
+
     private function form(): array
     {
         $form = [
@@ -151,20 +153,18 @@ abstract class AbstractForm
                 ],
                 'input' => [],
                 'submit' => [
-                    'title' => $this->trans('Save', [], 'Modules.Productcombinator.Module'),
+                    'title' => $this->module->l('Save', 'Modules.Myparcel.Configuration'),
                 ],
             ],
         ];
 
         foreach ($this->getFields() as $name => $field) {
             $field['name'] = $name;
-            $field['desc'] = isset($field['desc']) ? implode(' ', (array)$field['desc']) : null;
+            $field['desc'] = isset($field['desc']) ? implode(' ', (array) $field['desc']) : null;
 
             $form['form']['input'][] = $field;
         }
 
         return ['form' => $form];
     }
-
-    abstract protected function getLegend(): string;
 }

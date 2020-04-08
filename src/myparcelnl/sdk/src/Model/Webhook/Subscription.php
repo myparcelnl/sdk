@@ -23,24 +23,6 @@ class Subscription
         $this->shop_id = $shop_id;
     }
 
-    private function validateHookParam(string $hook): string
-    {
-        if ($hook !== self::SHIPMENT_LABEL_CREATED_HOOK_NAME && $hook !== self::SHIPMENT_STATUS_CHANGE_HOOK_NAME) {
-            throw new Exception("Unsupported hook name");
-        }
-
-        return $hook;
-    }
-
-    private function validateUrlParam(string $url): string
-    {
-        if (strpos($url, 'https://') !== 0) {
-            throw new Exception("Webhook url should be https");
-        }
-
-        return $url;
-    }
-
     public function encode(): string
     {
         $array['data']['webhook_subscriptions'][] = array_filter([
@@ -51,7 +33,24 @@ class Subscription
             'shop_id' => $this->shop_id,
         ]);
 
-        return str_replace('\\n', " ", json_encode($array));
+        return str_replace('\\n', ' ', json_encode($array));
     }
 
+    private function validateHookParam(string $hook): string
+    {
+        if ($hook !== self::SHIPMENT_LABEL_CREATED_HOOK_NAME && $hook !== self::SHIPMENT_STATUS_CHANGE_HOOK_NAME) {
+            throw new Exception('Unsupported hook name');
+        }
+
+        return $hook;
+    }
+
+    private function validateUrlParam(string $url): string
+    {
+        if (strpos($url, 'https://') !== 0) {
+            throw new Exception('Webhook url should be https');
+        }
+
+        return $url;
+    }
 }

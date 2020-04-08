@@ -2,9 +2,9 @@
 
 namespace Gett\MyParcel\Sdk\src\Services;
 
-use Gett\MyParcel\Sdk\src\Model\MyParcelRequest as Request;
-use Gett\MyParcel\Sdk\src\Model\Webhook\Subscription;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use Gett\MyParcel\Sdk\src\Model\Webhook\Subscription;
+use Gett\MyParcel\Sdk\src\Model\MyParcelRequest as Request;
 
 class WebhookService
 {
@@ -24,7 +24,8 @@ class WebhookService
                 $subscription->encode(),
                 Request::REQUEST_HEADER_WEBHOOK
             )
-            ->sendRequest('POST', Request::REQUEST_TYPE_WEBHOOK);
+            ->sendRequest('POST', Request::REQUEST_TYPE_WEBHOOK)
+        ;
 
         return json_decode($request->getResult(), true);
     }
@@ -38,6 +39,7 @@ class WebhookService
                 null,
                 Request::REQUEST_HEADER_WEBHOOK
             )
-            ->sendRequest('DELETE', Request::REQUEST_TYPE_WEBHOOK . "/$id");
+            ->sendRequest('DELETE', Request::REQUEST_TYPE_WEBHOOK . "/{$id}")
+        ;
     }
 }

@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/../../MyParcel.php';
 class MyParcelHookModuleFrontController extends ModuleFrontController
 {
     /**
-     * Initialize content and block unauthorized calls
+     * Initialize content and block unauthorized calls.
      *
      * @throws Adapter_Exception
      * @throws PrestaShopDatabaseException
@@ -25,7 +25,6 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
 
     protected function processWebhook()
     {
-
     }
 
     protected function displayMaintenancePage()
