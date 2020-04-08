@@ -55,7 +55,7 @@
                         <option value="1">Package</option>
                         <option value="2">Mailbox package</option>
                         <option value="3">Letter</option>
-                        <option value="3">Digital stamp</option>
+                        <option value="4">Digital stamp</option>
                     </select>
                 </div>
             </div>

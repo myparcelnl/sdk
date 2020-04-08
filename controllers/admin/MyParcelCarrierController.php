@@ -86,251 +86,316 @@ class MyParcelCarrierController extends AdminController
                 'title' => $this->trans('Carriers', [], 'Admin.Shipping.Feature'),
                 'icon' => 'icon-truck',
             ],
+            'tabs' => array(
+                'delivery' => $this->l("Checkout delivery form"),
+                'return' => $this->l("Return")
+            ),
             'input' => [
                 [
                     'type' => 'text',
-                    'label' => $this->trans('Company', [], 'Admin.Global'),
-                    'name' => 'name',
-                    'required' => true,
+                    'label' => $this->l('Delivery Title'),
+                    'name' => 'deliveryTitle',
+                    'tab' => 'delivery',
                     'hint' => [
-                        $this->trans('Allowed characters: letters, spaces and "%special_chars%".', ['%special_chars%' => '().-'], 'Admin.Shipping.Help'),
-                        $this->trans('Carrier name displayed during checkout', [], 'Admin.Shipping.Help'),
-                        $this->trans('For in-store pickup, enter 0 to replace the carrier name with your shop name.', [], 'Admin.Shipping.Help'),
+                        $this->l('General delivery title'),
                     ],
-                ],
-                [
-                    'type' => 'file',
-                    'label' => $this->trans('Logo', [], 'Admin.Global'),
-                    'name' => 'logo',
-                    'hint' => $this->trans('Upload a logo from your computer.', [], 'Admin.Shipping.Help') . ' (.gif, .jpg, .jpeg ' . $this->trans('or', [], 'Admin.Shipping.Help') . ' .png)',
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->trans('Transit time', [], 'Admin.Shipping.Feature'),
-                    'name' => 'delay',
-                    'lang' => true,
-                    'required' => true,
-                    'maxlength' => 512,
-                    'hint' => $this->trans('Estimated delivery time will be displayed during checkout.', [], 'Admin.Shipping.Help'),
+                    'label' => $this->l('Drop off days'),
+                    'name' => 'dropOffDays',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.'),
+                    ],
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->trans('Speed grade', [], 'Admin.Shipping.Feature'),
-                    'name' => 'grade',
-                    'required' => false,
-                    'hint' => $this->trans('Enter "0" for a longest shipping delay, or "9" for the shortest shipping delay.', [], 'Admin.Shipping.Help'),
+                    'label' => $this->l('Cutoff Time'),
+                    'name' => 'cutoffTime',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.'),
+                    ],
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->trans('URL', [], 'Admin.Global'),
-                    'name' => 'url',
-                    'hint' => $this->trans('Delivery tracking URL: Type \'@\' where the tracking number should appear. It will then be automatically replaced by the tracking number.', [], 'Admin.Shipping.Help'),
-                ],
-                [
-                    'type' => 'checkbox',
-                    'label' => $this->trans('Zone', [], 'Admin.Global'),
-                    'name' => 'zone',
-                    'values' => [
-                        'query' => Zone::getZones(false),
-                        'id' => 'id_zone',
-                        'name' => 'name',
-                    ],
-                    'hint' => $this->trans('The zones in which this carrier will be used.', [], 'Admin.Shipping.Help'),
-                ],
-                [
-                    'type' => 'group',
-                    'label' => $this->trans('Group access', [], 'Admin.Shipping.Help'),
-                    'name' => 'groupBox',
-                    'values' => Group::getGroups(Context::getContext()->language->id),
-                    'hint' => $this->trans('Mark the groups that are allowed access to this carrier.', [], 'Admin.Shipping.Help'),
-                ],
-                [
-                    'type' => 'switch',
-                    'label' => $this->trans('Status', [], 'Admin.Global'),
-                    'name' => 'active',
-                    'required' => false,
-                    'class' => 't',
-                    'is_bool' => true,
-                    'values' => [
-                        [
-                            'id' => 'active_on',
-                            'value' => 1,
-                            'label' => $this->trans('Enabled', [], 'Admin.Global'),
-                        ],
-                        [
-                            'id' => 'active_off',
-                            'value' => 0,
-                            'label' => $this->trans('Disabled', [], 'Admin.Global'),
-                        ],
-                    ],
-                    'hint' => $this->trans('Enable the carrier in the front office.', [], 'Admin.Shipping.Help'),
-                ],
-                [
-                    'type' => 'switch',
-                    'label' => $this->trans('Apply shipping cost', [], 'Admin.Shipping.Feature'),
-                    'name' => 'is_free',
-                    'required' => false,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'is_free_on',
-                            'value' => 0,
-                            'label' => '<img src="../img/admin/enabled.gif" alt="' . $this->trans('Yes', [], 'Admin.Global') . '" title="' . $this->trans('Yes', [], 'Admin.Global') . '" />',
-                        ],
-                        [
-                            'id' => 'is_free_off',
-                            'value' => 1,
-                            'label' => '<img src="../img/admin/disabled.gif" alt="' . $this->trans('No', [], 'Admin.Global') . '" title="' . $this->trans('No', [], 'Admin.Global') . '" />',
-                        ],
-                    ],
-                    'hint' => $this->trans('Apply both regular shipping cost and product-specific shipping costs.', [], 'Admin.Shipping.Help'),
-                ],
-                [
-                    'type' => 'select',
-                    'label' => $this->trans('Tax', [], 'Admin.Global'),
-                    'name' => 'id_tax_rules_group',
-                    'options' => [
-                        'query' => TaxRulesGroup::getTaxRulesGroups(true),
-                        'id' => 'id_tax_rules_group',
-                        'name' => 'name',
-                        'default' => [
-                            'label' => $this->trans('No Tax', [], 'Admin.Global'),
-                            'value' => 0,
-                        ],
+                    'label' => $this->l('Delivery days window'),
+                    'name' => 'deliverydaysWindow',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.'),
                     ],
                 ],
                 [
-                    'type' => 'switch',
-                    'label' => $this->trans('Shipping and handling', [], 'Admin.Shipping.Feature'),
-                    'name' => 'shipping_handling',
-                    'required' => false,
-                    'class' => 't',
-                    'is_bool' => true,
-                    'values' => [
-                        [
-                            'id' => 'shipping_handling_on',
-                            'value' => 1,
-                            'label' => $this->trans('Enabled', [], 'Admin.Global'),
-                        ],
-                        [
-                            'id' => 'shipping_handling_off',
-                            'value' => 0,
-                            'label' => $this->trans('Disabled', [], 'Admin.Global'),
-                        ],
+                    'type' => 'text',
+                    'label' => $this->l('Drop off delay'),
+                    'name' => 'dropoffDelay',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.'),
                     ],
-                    'hint' => $this->trans('Include the shipping and handling costs in the carrier price.', [], 'Admin.Shipping.Help'),
                 ],
                 [
                     'type' => 'radio',
-                    'label' => $this->trans('Billing', [], 'Admin.Shipping.Feature'),
-                    'name' => 'shipping_method',
-                    'required' => false,
-                    'class' => 't',
-                    'br' => true,
-                    'values' => [
-                        [
-                            'id' => 'billing_default',
-                            'value' => Carrier::SHIPPING_METHOD_DEFAULT,
-                            'label' => $this->trans('Default behavior', [], 'Admin.Shipping.Feature'),
-                        ],
-                        [
-                            'id' => 'billing_price',
-                            'value' => Carrier::SHIPPING_METHOD_PRICE,
-                            'label' => $this->trans('According to total price', [], 'Admin.Shipping.Feature'),
-                        ],
-                        [
-                            'id' => 'billing_weight',
-                            'value' => Carrier::SHIPPING_METHOD_WEIGHT,
-                            'label' => $this->trans('According to total weight', [], 'Admin.Shipping.Feature'),
-                        ],
+                    'label' => $this->l('Allow monday delivery'),
+                    'name' => 'allowMondayDelivery',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                    ],
+                    'values'    => array(
+                        array(
+                            'id'    => 'active_on',
+                            'value' => 1,
+                            'label' => $this->l('Enabled')
+                        ),
+                        array(
+                            'id'    => 'active_off',
+                            'value' => 0,
+                            'label' => $this->l('Disabled')
+                        )
+                    ),
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Saturday cutoff time'),
+                    'name' => 'saturdayCutoffTime',
+                    'tab' => 'delivery'
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Allow monday delivery'),
+                    'name' => 'allowMondayDelivery',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
                     ],
                 ],
                 [
+                    'type' => 'checkbox',
+                    'label' => $this->l('Allow morning delivery'),
+                    'name' => 'allowMorningDelivery',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Delivery morning title'),
+                    'name' => 'deliveryMorningTitle',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('When there is no title, the delivery time will automatically be visible.'),
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Delivery morning price'),
+                    'name' => 'priceMorningDelivery',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Delivery standart title'),
+                    'name' => 'deliveryStandardTitle',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('When there is no title, the delivery time will automatically be visible.'),
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Delivery standart price'),
+                    'name' => 'priceStandardDelivery',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'checkbox',
+                    'label' => $this->l('Allow evening delivery'),
+                    'name' => 'allowEveningDelivery',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Delivery evening title'),
+                    'name' => 'deliveryEveningTitle',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('When there is no title, the delivery time will automatically be visible.'),
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Price evening delivery'),
+                    'name' => 'priceEveningDelivery',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'checkbox',
+                    'label' => $this->l('Allow signature'),
+                    'name' => 'allowSignature',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Signature title'),
+                    'name' => 'signatureTitle',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Price signature'),
+                    'name' => 'priceSignature',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'checkbox',
+                    'label' => $this->l('Allow only recipient'),
+                    'name' => 'allowOnlyRecipient',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Only recipient title'),
+                    'name' => 'onlyRecipientTitle',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Price Only recipient'),
+                    'name' => 'priceOnlyRecipient',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'checkbox',
+                    'label' => $this->l('Allow pickup points'),
+                    'name' => 'allowPickupPoints',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Pickup title'),
+                    'name' => 'pickupTitle',
+                    'tab' => 'delivery',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Pickup price'),
+                    'name' => 'pricePickup',
+                    'tab' => 'delivery',
+                    'hint' => [
+                        $this->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.'),
+                    ],
+                ],
+                [
+                    'type' => 'checkbox',
+                    'label' => $this->l('Allow pickup express'),
+                    'name' => 'allowPickupExpress',
+                    'tab' => 'delivery'
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Price pickup express'),
+                    'name' => 'pricePickupExpress',
+                    'tab' => 'delivery'
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->l('BE delivery title'),
+                    'name' => 'BEdeliveryTitle',
+                    'tab' => 'delivery'
+                ],
+                [
+                    'tab' => 'return',
                     'type' => 'select',
-                    'label' => $this->trans('Out-of-range behavior', [], 'Admin.Shipping.Feature'),
-                    'name' => 'range_behavior',
+                    'label' => $this->l('Default package type'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                     'options' => [
                         'query' => [
-                            [
-                                'id' => 0,
-                                'name' => $this->trans('Apply the cost of the highest defined range', [], 'Admin.Shipping.Help'),
-                            ],
-                            [
-                                'id' => 1,
-                                'name' => $this->trans('Disable carrier', [], 'Admin.Shipping.Feature'),
-                            ],
+                            ['id' =>1, 'name' => "Package"],
+                            ['id' =>2, 'name' => "Mailbox package"],
+                            ['id' =>3, 'name' => "Letter"],
+                            ['id' =>4, 'name' => "Digital stamp"]
                         ],
                         'id' => 'id',
                         'name' => 'name',
+                        'default' => [
+                            'label' => $this->l('Select'),
+                            'value' => 0,
+                        ],
                     ],
-                    'hint' => $this->trans('Out-of-range behavior occurs when none is defined (e.g. when a customer\'s cart weight is greater than the highest range limit).', [], 'Admin.Shipping.Help'),
                 ],
                 [
-                    'type' => 'text',
-                    'label' => $this->trans('Maximum package height', [], 'Admin.Shipping.Feature'),
-                    'name' => 'max_height',
-                    'required' => false,
-                    'hint' => $this->trans('Maximum height managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                    'type' => 'checkbox',
+                    'label' => $this->l('Deliver only to recipient'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+                    'tab' => 'return'
                 ],
                 [
-                    'type' => 'text',
-                    'label' => $this->trans('Maximum package width', [], 'Admin.Shipping.Feature'),
-                    'name' => 'max_width',
-                    'required' => false,
-                    'hint' => $this->trans('Maximum width managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                    'type' => 'checkbox',
+                    'label' => $this->l('Age check'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+                    'tab' => 'return'
                 ],
                 [
-                    'type' => 'text',
-                    'label' => $this->trans('Maximum package depth', [], 'Admin.Shipping.Feature'),
-                    'name' => 'max_depth',
-                    'required' => false,
-                    'hint' => $this->trans('Maximum depth managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                    'tab' => 'return',
+                    'type' => 'select',
+                    'label' => $this->l('Default package type'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+                    'options' => [
+                        'query' => [
+                            ['id' =>1, 'name' => "Normal"],
+                            ['id' =>2, 'name' => "Large"],
+                            ['id' =>3, 'name' => "Automatic"]
+                        ],
+                        'id' => 'id',
+                        'name' => 'name',
+                        'default' => [
+                            'label' => $this->l('Select'),
+                            'value' => 0,
+                        ],
+                    ],
                 ],
                 [
-                    'type' => 'text',
-                    'label' => $this->trans('Maximum package weight', [], 'Admin.Shipping.Feature'),
-                    'name' => 'max_weight',
-                    'required' => false,
-                    'hint' => $this->trans('Maximum weight managed by this carrier. Set the value to "0," or leave this field blank to ignore.', [], 'Admin.Shipping.Help'),
+                    'type' => 'checkbox',
+                    'label' => $this->l('Return package when recipient is not home'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+                    'tab' => 'return'
                 ],
                 [
-                    'type' => 'hidden',
-                    'name' => 'is_module',
+                    'type' => 'checkbox',
+                    'label' => $this->l('Recipient need to sign'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                    'tab' => 'return'
                 ],
                 [
-                    'type' => 'hidden',
-                    'name' => 'external_module_name',
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'shipping_external',
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'need_range',
+                    'type' => 'checkbox',
+                    'label' => $this->l('Package with insurance'),
+                    'name' => \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+                    'tab' => 'return'
                 ],
             ],
         ];
 
-        if (Shop::isFeatureActive()) {
-            $this->fields_form['input'][] = [
-                'type' => 'shop',
-                'label' => $this->trans('Shop association', [], 'Admin.Global'),
-                'name' => 'checkBoxShopAsso',
-            ];
-        }
-
         $this->fields_form['submit'] = [
-            'title' => $this->trans('Save', [], 'Admin.Actions'),
+            'title' => $this->l('Save'),
         ];
 
-        if (!($obj = $this->loadObject(true))) {
-            return;
+        return parent::renderForm();
+    }
+    public function postProcess()
+    {
+        if (Tools::isSubmit('submitAddcarrier')) {
+            DB::getInstance()->execute("DELETE FROM " . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '".Tools::getValue('id_carrier')."' ");
+
+            foreach (Tools::getAllValues() as $key => $value) {
+                DB::getInstance()->insert('myparcel_carrier_configuration', ['id_carrier' => Tools::getValue('id_carrier'), 'name' => pSQL($key), 'value' => pSQL($value)]);
+            }
         }
 
-        $this->getFieldsValues($obj);
-
-        return parent::renderForm();
+        return true;
     }
 
     public function ajaxProcessUpdatePositions()

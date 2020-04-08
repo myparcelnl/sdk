@@ -97,12 +97,14 @@ class Installer
 
     public function getAdminTabsDefinition()
     {
+        $languages = [];
+        foreach (\Language::getLanguages(true) as $lang) {
+            $languages[$lang['id_lang']] = 'test';
+        }
         return [
             'MyParcelCarrier' => [
                 'class_name' => 'MyParcelCarrier',
-                'name' => [
-                    1 => 'Carrier Controller',
-                ],
+                'name' => $languages,
                 'parent_class' => 'AdminCarriers',
             ],
         ];
