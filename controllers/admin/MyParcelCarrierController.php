@@ -86,10 +86,10 @@ class MyParcelCarrierController extends AdminController
                 'title' => $this->trans('Carriers', [], 'Admin.Shipping.Feature'),
                 'icon' => 'icon-truck',
             ],
-            'tabs' => array(
-                'delivery' => $this->l("Checkout delivery form"),
-                'return' => $this->l("Return")
-            ),
+            'tabs' => [
+                'delivery' => $this->l('Checkout delivery form'),
+                'return' => $this->l('Return'),
+            ],
             'input' => [
                 [
                     'type' => 'text',
@@ -144,24 +144,24 @@ class MyParcelCarrierController extends AdminController
                     'hint' => [
                         $this->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
                     ],
-                    'values'    => array(
-                        array(
-                            'id'    => 'active_on',
+                    'values' => [
+                        [
+                            'id' => 'active_on',
                             'value' => 1,
-                            'label' => $this->l('Enabled')
-                        ),
-                        array(
-                            'id'    => 'active_off',
+                            'label' => $this->l('Enabled'),
+                        ],
+                        [
+                            'id' => 'active_off',
                             'value' => 0,
-                            'label' => $this->l('Disabled')
-                        )
-                    ),
+                            'label' => $this->l('Disabled'),
+                        ],
+                    ],
                 ],
                 [
                     'type' => 'text',
                     'label' => $this->l('Saturday cutoff time'),
                     'name' => 'saturdayCutoffTime',
-                    'tab' => 'delivery'
+                    'tab' => 'delivery',
                 ],
                 [
                     'type' => 'text',
@@ -293,19 +293,19 @@ class MyParcelCarrierController extends AdminController
                     'type' => 'checkbox',
                     'label' => $this->l('Allow pickup express'),
                     'name' => 'allowPickupExpress',
-                    'tab' => 'delivery'
+                    'tab' => 'delivery',
                 ],
                 [
                     'type' => 'text',
                     'label' => $this->l('Price pickup express'),
                     'name' => 'pricePickupExpress',
-                    'tab' => 'delivery'
+                    'tab' => 'delivery',
                 ],
                 [
                     'type' => 'text',
                     'label' => $this->l('BE delivery title'),
                     'name' => 'BEdeliveryTitle',
-                    'tab' => 'delivery'
+                    'tab' => 'delivery',
                 ],
                 [
                     'tab' => 'return',
@@ -314,10 +314,10 @@ class MyParcelCarrierController extends AdminController
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                     'options' => [
                         'query' => [
-                            ['id' =>1, 'name' => "Package"],
-                            ['id' =>2, 'name' => "Mailbox package"],
-                            ['id' =>3, 'name' => "Letter"],
-                            ['id' =>4, 'name' => "Digital stamp"]
+                            ['id' => 1, 'name' => 'Package'],
+                            ['id' => 2, 'name' => 'Mailbox package'],
+                            ['id' => 3, 'name' => 'Letter'],
+                            ['id' => 4, 'name' => 'Digital stamp'],
                         ],
                         'id' => 'id',
                         'name' => 'name',
@@ -331,13 +331,13 @@ class MyParcelCarrierController extends AdminController
                     'type' => 'checkbox',
                     'label' => $this->l('Deliver only to recipient'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
-                    'tab' => 'return'
+                    'tab' => 'return',
                 ],
                 [
                     'type' => 'checkbox',
                     'label' => $this->l('Age check'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
-                    'tab' => 'return'
+                    'tab' => 'return',
                 ],
                 [
                     'tab' => 'return',
@@ -346,9 +346,9 @@ class MyParcelCarrierController extends AdminController
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                     'options' => [
                         'query' => [
-                            ['id' =>1, 'name' => "Normal"],
-                            ['id' =>2, 'name' => "Large"],
-                            ['id' =>3, 'name' => "Automatic"]
+                            ['id' => 1, 'name' => 'Normal'],
+                            ['id' => 2, 'name' => 'Large'],
+                            ['id' => 3, 'name' => 'Automatic'],
                         ],
                         'id' => 'id',
                         'name' => 'name',
@@ -362,19 +362,19 @@ class MyParcelCarrierController extends AdminController
                     'type' => 'checkbox',
                     'label' => $this->l('Return package when recipient is not home'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
-                    'tab' => 'return'
+                    'tab' => 'return',
                 ],
                 [
                     'type' => 'checkbox',
                     'label' => $this->l('Recipient need to sign'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
-                    'tab' => 'return'
+                    'tab' => 'return',
                 ],
                 [
                     'type' => 'checkbox',
                     'label' => $this->l('Package with insurance'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
-                    'tab' => 'return'
+                    'tab' => 'return',
                 ],
             ],
         ];
@@ -385,10 +385,11 @@ class MyParcelCarrierController extends AdminController
 
         return parent::renderForm();
     }
+
     public function postProcess()
     {
         if (Tools::isSubmit('submitAddcarrier')) {
-            DB::getInstance()->execute("DELETE FROM " . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '".Tools::getValue('id_carrier')."' ");
+            DB::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '" . Tools::getValue('id_carrier') . "' ");
 
             foreach (Tools::getAllValues() as $key => $value) {
                 DB::getInstance()->insert('myparcel_carrier_configuration', ['id_carrier' => Tools::getValue('id_carrier'), 'name' => pSQL($key), 'value' => pSQL($value)]);

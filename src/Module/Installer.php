@@ -4,9 +4,6 @@ namespace Gett\MyParcel\Module;
 
 use Tab;
 use Carrier;
-use Validate;
-use Configuration;
-use Gett\MyParcel\Constant;
 
 class Installer
 {
@@ -20,10 +17,14 @@ class Installer
 
     public function __invoke(): bool
     {
+        $carrier = $this->addCarrier('Post NL');
+        $this->addZones($carrier);
+        $this->addGroups($carrier);
+        $this->addRanges($carrier);
+
         return $this->hooks()
             && $this->migrate()
             && $this->installTabs();
-        //&& $this->addCarrier('PostNL', Constant::POSTNL_DEFAULT_CARRIER);;
     }
 
     public function installTabs()
@@ -99,65 +100,38 @@ class Installer
     {
         $languages = [];
         foreach (\Language::getLanguages(true) as $lang) {
-            $languages[$lang['id_lang']] = 'test';
+            $languages[$lang['id_lang']] = 'MyParcel Carriers';
         }
+
         return [
             'MyParcelCarrier' => [
                 'class_name' => 'MyParcelCarrier',
                 'name' => $languages,
-                'parent_class' => 'AdminCarriers',
+                'parent_class' => 'AdminParentShipping',
             ],
         ];
     }
 
-    protected function addCarrier($name, $key = Constant::POSTNL_DEFAULT_CARRIER)
+    protected function addCarrier($name)
     {
-        $carrier = Carrier::getCarrierByReference(Configuration::get($key));
-        if (Validate::isLoadedObject($carrier)) {
-            return false; // Already added to DB
-        }
-
         $carrier = new Carrier();
 
         $carrier->name = $name;
-        $carrier->delay = [];
         $carrier->is_module = true;
-        $carrier->active = 0;
+        $carrier->active = 1;
+        $carrier->range_behavior = 1;
         $carrier->need_range = 1;
         $carrier->shipping_external = true;
-        $carrier->range_behavior = 1;
+        $carrier->range_behavior = 0;
         $carrier->external_module_name = $this->module->name;
-        $carrier->shipping_handling = false;
         $carrier->shipping_method = 2;
 
         foreach (\Language::getLanguages() as $lang) {
-            $idLang = (int) $lang['id_lang'];
-            $carrier->delay[$idLang] = '-';
+            $carrier->delay[$lang['id_lang']] = 'Super fast delivery';
         }
 
-        if ($carrier->add()) {
-            /*
-             * Use the Carrier ID as id_reference! Only the `id` prop has been set at this time and since it is
-             * the first time this carrier is used the Carrier ID = `id_reference`
-             */
-            $this->addGroups($carrier);
-            $this->addZones($carrier);
-            \Db::getInstance()->update(
-                'delivery',
-                [
-                    'price' => $key == Constant::POSTNL_DEFAULT_CARRIER ? (4.99 / 1.21) : (3.50 / 1.21),
-                ],
-                '`id_carrier` = ' . (int) $carrier->id
-            );
-
-            $carrier->setTaxRulesGroup((int) \TaxRulesGroup::getIdByName('NL Standard Rate (21%)'), true);
-
-            @copy(
-                dirname(__FILE__) . '/views/img/postnl-thumb.jpg',
-                _PS_SHIP_IMG_DIR_ . DIRECTORY_SEPARATOR . (int) $carrier->id . '.jpg'
-            );
-
-            Configuration::updateGlobalValue($key, (int) $carrier->id);
+        if ($carrier->add() == true) {
+            @copy(dirname(__FILE__) . '/views/img/carrier_image.jpg', _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
 
             return $carrier;
         }
@@ -176,15 +150,6 @@ class Installer
         $carrier->setGroups($groups_ids);
     }
 
-    protected function addZones($carrier)
-    {
-        $zones = \Zone::getZones();
-
-        foreach ($zones as $zone) {
-            $carrier->addZone($zone['id_zone']);
-        }
-    }
-
     protected function addRanges($carrier)
     {
         $range_price = new \RangePrice();
@@ -198,6 +163,15 @@ class Installer
         $range_weight->delimiter1 = '0';
         $range_weight->delimiter2 = '10000';
         $range_weight->add();
+    }
+
+    protected function addZones($carrier)
+    {
+        $zones = \Zone::getZones();
+
+        foreach ($zones as $zone) {
+            $carrier->addZone($zone['id_zone']);
+        }
     }
 
     private function hooks(): bool

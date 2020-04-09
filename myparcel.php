@@ -15,12 +15,15 @@ class MyParcel extends CarrierModule
     use DisplayAdminProductsExtra;
 
     public $baseUrl;
+    public $id_carrier;
     public $migrations = [
         \Gett\MyParcel\Database\CreateProductConfigurationTableMigration::class,
     ];
     public $hooks = [
         'displayAdminProductsExtra',
         'actionProductUpdate',
+        'displayCarrierExtraContent',
+        'displayHeader',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -62,6 +65,30 @@ class MyParcel extends CarrierModule
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
     }
 
+    public function hookDisplayHeader()
+    {
+        //todo add check if it's checkout page
+        $this->context->controller->addCss($this->_path . 'views/sandbox/sandbox.css'); //will be removed after frontend implemented
+        $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
+
+        return "<script type='text/javascript' src='modules/" . $this->name . "/views/js/myparcel.js'></script>";
+    }
+
+    public function hookDisplayCarrierExtraContent()
+    {
+        $address = new \Address($this->context->cart->id_address_delivery);
+        if (\Validate::isLoadedObject($address)) {
+            $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
+
+            $this->context->smarty->assign([
+                'address' => $address,
+            ]);
+
+            //TODO pass carrier configuraiton params
+            return $this->display(__FILE__, 'carrier.tpl');
+        }
+    }
+
     public function getAdminLink(string $controller, bool $withToken = true, array $params = [])
     {
         $url = $this->mypa_parse_url($this->context->link->getAdminLink($controller, $withToken));
@@ -93,7 +120,7 @@ class MyParcel extends CarrierModule
 
     public function getOrderShippingCost($params, $shipping_cost)
     {
-        return $shipping_cost;
+        return 228;
     }
 
     public function getOrderShippingCostExternal($params)
