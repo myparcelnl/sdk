@@ -180,7 +180,7 @@ class Installer
         foreach ($this->module->hooks as $hook) {
             $result &= $this->module->registerHook($hook);
         }
-
+        //$this->module->registerHook('actionOrderIndexAfter'); //IDK why but module reset is not working if this hook is in array of hooks
         return $result;
     }
 

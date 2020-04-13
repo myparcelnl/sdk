@@ -1,0 +1,60 @@
+a {
+    color: #00b3c4;
+}
+
+.h2, h2, .h3, h3 {
+    color: #00b3c4;
+}
+
+.h3, h3 {
+    font-size: 1rem;
+}
+
+.box {
+    background-color: rgba(0, 179, 196, 0.04);
+    -moz-box-shadow:    inset 0 0 10px #caeef2;
+    -webkit-box-shadow: inset 0 0 10px #caeef2;
+    box-shadow:         inset 0 0 10px #caeef2;
+    padding: 10px;
+}
+
+.checkbox-padding {
+    padding: 12px;
+}
+
+.col-form-label {
+    color: #5c5b5b;
+}
+
+.btn-info {
+    background-color: #00b3c4;
+    border-color: #00b3c4;
+}
+
+.header {
+    padding: 40px;
+    color: #fff;
+    text-align: center;
+    background-color: #1eb9c4;
+    background-image: linear-gradient(120deg, #57595a, #1eb9c4);
+}
+
+div[class*="fade"] {
+    animation: fadeIn 2s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+.fade1 {
+    animation-delay: 0s;
+}
+.fade2 {
+    animation-delay: 4s;
+}
+.fade3 {
+    animation-delay: 8s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

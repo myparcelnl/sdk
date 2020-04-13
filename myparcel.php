@@ -24,6 +24,9 @@ class MyParcel extends CarrierModule
         'actionProductUpdate',
         'displayCarrierExtraContent',
         'displayHeader',
+        'actionCarrierProcess',
+        'actionOrderGridDefinitionModifier',
+        'actionAdminOrderIndexAfter',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -63,6 +66,43 @@ class MyParcel extends CarrierModule
         $this->description = $this->l('PrestaShop module to intergratie with MyParcel NL and MyParcel BE');
 
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
+    }
+
+    public function hookActionAdminOrderIndexAfter(array $params)
+    {
+        var_dump($params);
+        die();
+    }
+
+    public function hookActionOrderGridDefinitionModifier(array $params)
+    {
+        /** @var \PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinitionInterface $definition */
+        $definition = $params['definition'];
+
+        $definition->getBulkActions()->add(
+            (new \Gett\MyParcel\Grid\Action\Bulk\CreateLabelBulkAction('create_label'))
+                ->setName('Create label')
+                ->setOptions([
+                    'submit_route' => 'admin_myparcel_orders_label_bulk_create',
+                ])
+        );
+
+        $definition
+            ->getColumns()
+            ->addAfter(
+                'osname',
+                (new \Gett\MyParcel\Grid\Column\BarcodeTypeColumn('barcode'))
+                    ->setName($this->l('Barcode'))
+                    ->setOptions([
+                        'barcode' => 'Barcode Example',
+                    ])
+            )
+        ;
+    }
+
+    public function hookActionCarrierProcess()
+    {
+        //var_dump($_POST);die();
     }
 
     public function hookDisplayHeader()

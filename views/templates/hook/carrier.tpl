@@ -198,6 +198,6 @@
     })();
 
     $('#mypa-error-try-again').click(function (e) {
-        e.preventDefault();
+        e.stopPropagation();
     })
 </script>

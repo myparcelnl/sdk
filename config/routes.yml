@@ -9,3 +9,11 @@ admin_productmyparcel_save:
             id_product: productId
     requirements:
         id: \d+
+
+admin_myparcel_orders_label_bulk_create:
+    path: /create-label-bulk
+    methods: [POST]
+    defaults:
+        _controller: Gett\MyParcel\Controllers\Admin\LabelController::createLabelsBulk
+        _legacy_controller: AdminLabelController
+        _legacy_link: AdminLabel:createLabelsBulk

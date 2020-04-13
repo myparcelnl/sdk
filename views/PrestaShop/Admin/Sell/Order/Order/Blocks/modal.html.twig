@@ -1,0 +1,31 @@
+{% embed 'PrestaShopBundle:Admin/Helpers:bootstrap_popup.html.twig' with {
+    'id': 'modal',
+    'title': 'Test modal',
+    'closable': true,
+    'actions': [{
+        'type': 'button',
+        'label': 'Update',
+        'class': 'btn btn-primary btn-lg js-submit-modal-form-btn',
+    }],
+} %}
+    {% block content %}
+        <div class="modal-body">
+            {{ form_start(changeOrderStatusesForm, {
+                'action': path('admin_myparcel_orders_label_bulk_create'),
+                'attr': {
+                    'data-bulk-inputs-id': changeOrderStatusesForm.order_ids.vars.id
+                }
+            }) }}
+
+            <div class="form-group mb-0">
+                {{ form_widget(changeOrderStatusesForm.new_order_status_id) }}
+            </div>
+
+            <div class="d-none">
+                {{ form_widget(changeOrderStatusesForm.order_ids) }}
+            </div>
+
+            {{ form_end(changeOrderStatusesForm) }}
+        </div>
+    {% endblock %}
+{% endembed %}
