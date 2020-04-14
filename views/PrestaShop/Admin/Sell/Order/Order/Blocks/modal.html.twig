@@ -10,22 +10,10 @@
 } %}
     {% block content %}
         <div class="modal-body">
-            {{ form_start(changeOrderStatusesForm, {
-                'action': path('admin_myparcel_orders_label_bulk_create'),
-                'attr': {
-                    'data-bulk-inputs-id': changeOrderStatusesForm.order_ids.vars.id
-                }
-            }) }}
 
-            <div class="form-group mb-0">
-                {{ form_widget(changeOrderStatusesForm.new_order_status_id) }}
-            </div>
-
-            <div class="d-none">
-                {{ form_widget(changeOrderStatusesForm.order_ids) }}
-            </div>
-
-            {{ form_end(changeOrderStatusesForm) }}
+            <form method="post" action="{{ path('admin_myparcel_orders_label_bulk_create') }}" data-bulk-inputs-id = "create_label_order_ids">
+                <div id="create_label_order_ids" data-prototype="<input type=&quot;hidden&quot; id=&quot;create_label_order_ids___name__&quot; name=&quot;create_label[order_ids][__name__]&quot; required=&quot;required&quot; class=&quot;form-control&quot; />"></div>
+            </form>
         </div>
     {% endblock %}
 {% endembed %}

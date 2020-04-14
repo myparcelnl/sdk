@@ -2,7 +2,7 @@
 
 namespace Gett\MyParcel\Database;
 
-class CreateProductConfigurationTableMigration implements Migration
+class CreateOrderLabelTableMigration implements Migration
 {
     public static function up(): bool
     {
@@ -15,6 +15,7 @@ class CreateProductConfigurationTableMigration implements Migration
           `barcode` int(11) DEFAULT NULL,
           `track_link` varchar(255) DEFAULT NULL,
           `payment_url` varchar(255) DEFAULT NULL,
+          `id_label` bigint(20) NOT NULL,
           PRIMARY KEY (`id_order_label`)
         ) ENGINE={ENGINE} DEFAULT CHARSET=utf8
 SQL;

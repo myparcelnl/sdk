@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Table()
  * @ORM\Entity()
@@ -57,6 +59,25 @@ class MyparcelOrderLabel
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_label", type="integer")
+     */
+    private $id_label;
+
+    public function getIdLabel(): int
+    {
+        return $this->id_label;
+    }
+
+    public function setIdLabel(int $id_label): MyparcelOrderLabel
+    {
+        $this->id_label = $id_label;
+
+        return $this;
+    }
 
     public function getId(): int
     {

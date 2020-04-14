@@ -1,3 +1,18 @@
+parameters:
+    configuration.api_key_name: !php/const Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME
+
 services:
     _defaults:
         public: true
+
+    gett.myparcel.repository.order_label_repository:
+        class: Gett\MyParcel\Repository\OrderLabelRepository
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '%database_prefix%'
+
+    gett.myparcel.service.consignment_service:
+        class: Gett\MyParcel\Service\ConsignmentService
+        arguments:
+            - "@=service('prestashop.adapter.legacy.configuration').get(parameter('configuration.api_key_name'))"
+            - "@doctrine.orm.entity_manager"

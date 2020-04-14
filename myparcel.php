@@ -2,6 +2,7 @@
 
 use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
+use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\ModalFormSubmitBulkAction;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -79,14 +80,39 @@ class MyParcel extends CarrierModule
         /** @var \PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinitionInterface $definition */
         $definition = $params['definition'];
 
+//        foreach ($definition->getColumns() as $column) {
+//            if ($column->getName() == "Actions") {
+//                $column->getOptions()['actions']->add((new \PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\SubmitRowAction('export'))
+//                    ->setName($this->trans('Export', [], 'Admin.Actions'))
+//                    ->setIcon('export')
+//                    ->setOptions([
+//                        'route' => 'admin_categories_export',
+//                        'route_param_name' => 'categoryId',
+//                        'route_param_field' => 'id_order',
+//                        'confirm_message' => $this->trans(
+//                            'Export selected item?',
+//                            [],
+//                            'Admin.Notifications.Warning'
+//                        ),
+//                    ]));
+//            }
+//        }
+
+//        $definition->getBulkActions()->add(
+//            (new \Gett\MyParcel\Grid\Action\Bulk\CreateLabelBulkAction('create_label'))
+//                ->setName('Create label')
+//                ->setOptions([
+//                    'submit_route' => 'admin_myparcel_orders_label_bulk_create',
+//                ])
+//        );
         $definition->getBulkActions()->add(
-            (new \Gett\MyParcel\Grid\Action\Bulk\CreateLabelBulkAction('create_label'))
-                ->setName('Create label')
+            (new ModalFormSubmitBulkAction('label_position'))
+                ->setName($this->l('Create label'))
                 ->setOptions([
                     'submit_route' => 'admin_myparcel_orders_label_bulk_create',
+                    'modal_id' => 'modal',
                 ])
         );
-
         $definition
             ->getColumns()
             ->addAfter(
