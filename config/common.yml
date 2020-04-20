@@ -1,9 +1,34 @@
-parameters:
-    configuration.api_key_name: !php/const Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME
-
 services:
     _defaults:
         public: true
+
+    gett.myparcel.service.consignment.create:
+        class: Gett\MyParcel\Service\Consignment\Create
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@gett.myparcel.service.myparcel_status_provider"
+            - "@gett.myparcel.factory.consignment_factory"
+
+    gett.myparcel.service.consignment.download:
+        class: Gett\MyParcel\Service\Consignment\Download
+        arguments:
+            - "@=service('prestashop.adapter.legacy.configuration').get(parameter('configuration.api_key_name'))"
+            - '@=service("request_stack").getCurrentRequest()'
+            - "@=service('prestashop.adapter.legacy.configuration')"
+
+    gett.myparcel.service.consignment.update:
+        class: Gett\MyParcel\Service\Consignment\update
+        arguments:
+            - "@=service('prestashop.adapter.legacy.configuration').get(parameter('configuration.api_key_name'))"
+            - "@doctrine.orm.entity_manager"
+            - "@gett.myparcel.service.myparcel_status_provider"
+
+    gett.myparcel.factory.consignment_factory:
+        class: Gett\MyParcel\Factory\Consignment\ConsignmentFactory
+        arguments:
+            - "@=service('prestashop.adapter.legacy.configuration').get(parameter('configuration.api_key_name'))"
+            - '@=service("request_stack").getCurrentRequest()'
+            - "@=service('prestashop.adapter.legacy.configuration')"
 
     gett.myparcel.repository.order_label_repository:
         class: Gett\MyParcel\Repository\OrderLabelRepository
@@ -11,8 +36,5 @@ services:
             - '@doctrine.dbal.default_connection'
             - '%database_prefix%'
 
-    gett.myparcel.service.consignment_service:
-        class: Gett\MyParcel\Service\ConsignmentService
-        arguments:
-            - "@=service('prestashop.adapter.legacy.configuration').get(parameter('configuration.api_key_name'))"
-            - "@doctrine.orm.entity_manager"
+    gett.myparcel.service.myparcel_status_provider:
+        class: Gett\MyParcel\Service\MyparcelStatusProvider

@@ -2,7 +2,9 @@
 
 namespace Gett\MyParcel\Repository;
 
+use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Class OrderLabelRepository.
@@ -26,6 +28,39 @@ class OrderLabelRepository
 
     public function getOrdersForLabelCreate(array $orderIds)
     {
+        $qb = $this->getOrderQueryBuilder();
+
+        $qb->where('o.id_order IN (' . implode(',', $orderIds) . ') ');
+
+        return $qb->execute()->fetchAll();
+    }
+
+    public function getIdLabelByBarcode(string $barcode)
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb->select(
+            'ol.id_label'
+        );
+        $qb->from($this->tablePrefix . 'myparcel_order_label', 'ol');
+        $qb->where('barcode = "' . $barcode . '" ');
+
+        return $qb->execute()->fetch()['id_label'];
+    }
+
+    public function getOrderLabels(array $orders_id)
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb->select(
+            'ol.id_label'
+        );
+        $qb->from($this->tablePrefix . 'myparcel_order_label', 'ol');
+        $qb->where('id_order IN ("' . implode(',', $orders_id) . '") ');
+
+        return $qb->execute()->fetchAll(FetchMode::COLUMN);
+    }
+
+    private function getOrderQueryBuilder(): QueryBuilder
+    {
         $qb = $this->connection->createQueryBuilder();
         $qb->select(
             'o.id_order,
@@ -35,14 +70,14 @@ class OrderLabelRepository
                     CONCAT(a.address1, " ", a.address2) as full_street,
                     a.postcode,
                     a.city,
-                    c.email'
+                    c.email,
+                    a.phone'
         );
         $qb->from($this->tablePrefix . 'orders', 'o');
         $qb->innerJoin('o', $this->tablePrefix . 'address', 'a', 'o.id_address_delivery = a.id_address');
         $qb->innerJoin('a', $this->tablePrefix . 'country', 'co', 'co.id_country = a.id_country');
         $qb->innerJoin('o', $this->tablePrefix . 'customer', 'c', 'o.id_customer = c.id_customer');
-        $qb->where('o.id_order IN (' . implode(',', $orderIds) . ') ');
 
-        return $qb->execute()->fetchAll();
+        return $qb;
     }
 }

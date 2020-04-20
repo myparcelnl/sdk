@@ -99,7 +99,7 @@ class OrderForm extends AbstractForm
             ],
             'MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS' => [
                 'type' => 'switch',
-                'label' => $this->module->l('Order status mail'),
+                'label' => $this->module->l('Automatic set order state to ‘sent’ for digital stamp'),
                 'name' => 'MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS',
                 'required' => false,
                 'is_bool' => true,

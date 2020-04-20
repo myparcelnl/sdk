@@ -7,12 +7,12 @@ class CreateOrderLabelTableMigration implements Migration
     public static function up(): bool
     {
         $sql = <<<'SQL'
-        CREATE TABLE `{PREFIX}myparcel_order_label` (
+        CREATE TABLE IF NOT EXISTS `{PREFIX}myparcel_order_label` (
           `id_order_label` int(11) NOT NULL AUTO_INCREMENT,
           `id_order` int(11) NOT NULL,
-          `status` int(11) NOT NULL,
+          `status` varchar (60) NOT NULL,
           `new_order_state` int(11) DEFAULT NULL,
-          `barcode` int(11) DEFAULT NULL,
+          `barcode` varchar (60) DEFAULT NULL,
           `track_link` varchar(255) DEFAULT NULL,
           `payment_url` varchar(255) DEFAULT NULL,
           `id_label` bigint(20) NOT NULL,

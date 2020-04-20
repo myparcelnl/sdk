@@ -1,4 +1,22 @@
-{{ column.options.barcode }}
+{% set barcodes = record.barcode|split(',') %}
+{% set track_links = record.track_link|split(',') %}
+{% set statuses = record.status|split(',') %}
+{% set ids = record.ids|split(',') %}
 
+{% for key in barcodes|keys %}
+    <label>{{ statuses[key] }}</label>
+    <a href="{{ track_links[key] }}" >{{ barcodes[key] }}</a>
 
-<button data-modal-id = "modal" onclick="return false;" class="js-bulk-modal-form-submit-btn">Test Modal</button>
+    {% if ids[key] != "" %}
+    <button class="js-bulk-modal-form-submit-btn printLabel"
+            type="button"
+            data-label_id = "{{ ids[key] }}"
+            data-modal-id = "print-modal" onclick="return false;"
+            data-form-method="POST" >
+        Print
+    </button>
+
+    <a href="{{ path('admin_myparcel_order_label_refresh', {'labelId': ids[key]}) }}">Refresh</a>
+    {% endif %}
+    <br>
+{% endfor %}

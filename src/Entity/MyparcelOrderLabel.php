@@ -18,9 +18,9 @@ class MyparcelOrderLabel
     protected $id_order;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="status", type="string")
      */
     protected $status;
 
@@ -32,9 +32,9 @@ class MyparcelOrderLabel
     protected $new_order_state;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="barcode", type="integer")
+     * @ORM\Column(name="barcode", type="string")
      */
     protected $barcode;
 
@@ -103,12 +103,12 @@ class MyparcelOrderLabel
         return $this;
     }
 
-    public function getStatus(): int
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): MyparcelOrderLabel
+    public function setStatus(string $status): MyparcelOrderLabel
     {
         $this->status = $status;
 
@@ -127,12 +127,12 @@ class MyparcelOrderLabel
         return $this;
     }
 
-    public function getBarcode(): int
+    public function getBarcode(): string
     {
         return $this->barcode;
     }
 
-    public function setBarcode(int $barcode): MyparcelOrderLabel
+    public function setBarcode(string $barcode): MyparcelOrderLabel
     {
         $this->barcode = $barcode;
 

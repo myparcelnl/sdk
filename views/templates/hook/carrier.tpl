@@ -1,4 +1,4 @@
-<div id="result_checkout">
+<div id="result_checkout" style="text-align: left;">
     <div id="mypa-load" class="box">
         <div class="mypa-message-model"></div>
         <div id="mypa-location-details"></div>
@@ -191,11 +191,16 @@
         }
     };
 
-    (async() => {
-        while(!window.hasOwnProperty("$"))
-            await new Promise(resolve => setTimeout(resolve, 1000));
+    function defer(method) {
+        if (window.jQuery) {
+            method();
+        } else {
+            setTimeout(function() { defer(method) }, 50);
+        }
+    }
+    defer(function () {
         MyParcel.init(data);
-    })();
+    });
 
     $('#mypa-error-try-again').click(function (e) {
         e.stopPropagation();

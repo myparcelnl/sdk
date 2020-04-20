@@ -7,7 +7,7 @@ class CreateProductConfigurationTableMigration implements Migration
     public static function up(): bool
     {
         $sql = <<<'SQL'
-                CREATE TABLE `{PREFIX}myparcel_product_configuration` (
+                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcel_product_configuration` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_product` int(11) NOT NULL,
   `name` varchar(150) NOT NULL,

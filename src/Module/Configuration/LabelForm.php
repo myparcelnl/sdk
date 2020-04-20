@@ -25,8 +25,8 @@ class LabelForm extends AbstractForm
                 'name' => 'MY_PARCEL_LABEL_SIZE',
                 'options' => [
                     'query' => [
-                        ['id' => 'A4', 'name' => 'A4'],
-                        ['id' => 'A6', 'name' => 'A6'],
+                        ['id' => 'a4', 'name' => 'A4'],
+                        ['id' => 'a6', 'name' => 'A6'],
                     ],
                     'id' => 'id',
                     'name' => 'name',
@@ -53,8 +53,8 @@ class LabelForm extends AbstractForm
                 'name' => 'MY_PARCEL_LABEL_OPEN_DOWNLOAD',
                 'options' => [
                     'query' => [
-                        ['id' => 'open', 'name' => $this->module->l('Open')],
-                        ['id' => 'download', 'name' => $this->module->l('Download')],
+                        ['id' => 'true', 'name' => $this->module->l('Open')],
+                        ['id' => 'false', 'name' => $this->module->l('Download')],
                     ],
                     'id' => 'id',
                     'name' => 'name',
