@@ -189,8 +189,9 @@ class MyParcel extends CarrierModule
         //todo add check if it's checkout page
         $this->context->controller->addCss($this->_path . 'views/sandbox/sandbox.css'); //will be removed after frontend implemented
         $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
+        $this->context->controller->addJs($this->_path . 'views/js/myparcelinit.js');
 
-        return "<script type='text/javascript' src='modules/" . $this->name . "/views/js/myparcel.js'></script>";
+        return "<script type='text/javascript' src='modules/" . $this->name . "/node_modules/@myparcel/delivery-options/dist/myparcel.js'></script>";
     }
 
     public function hookDisplayCarrierExtraContent()
