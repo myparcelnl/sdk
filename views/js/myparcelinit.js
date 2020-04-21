@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    let initialized = false;
+
     $.ajax({
         url: "/index.php?fc=module&module=myparcel&controller=checkout",
         dataType: "json",
@@ -20,16 +22,28 @@ $(document).ready(function() {
             return false;
         }
 
-        let $wrapper = $option.closest('.delivery-option').next().find('.myparcel-delivery-options-wrapper').not('.myparcel-delivery-options-initialized');
+        let $wrapper = $option.closest('.delivery-option').next().find('.myparcel-delivery-options-wrapper');
         if(!$wrapper.length) {
             console.log('wrapper empty');
             return false;
+        }
+
+        if(initialized) {
+            let $form = $('.myparcel-delivery-options');
+
+            if($form.length) {
+                $form.detach().appendTo($wrapper);
+                return true;
+            } else {
+                initialized = false;
+            }
         }
 
         let container = document.createElement("div");
         container.id = 'myparcel-delivery-options';
         $wrapper[0].appendChild(container);
         $wrapper.addClass('myparcel-delivery-options-initialized');
+        initialized = true;
 
         document.dispatchEvent(new Event('myparcel_update_delivery_options'));
     }
