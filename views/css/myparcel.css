@@ -207,6 +207,58 @@
 
 }
 
+/* vue styles start */
+form.myparcel-delivery-options h4 {
+	margin-bottom: 1rem;
+}
+form.myparcel-delivery-options p {
+	margin-bottom: 0.5rem;
+}
+
+form.myparcel-delivery-options label {
+	text-align: left;
+}
+
+form.myparcel-delivery-options input[type="text"] {
+	background: #f1f1f1;
+	color: #7a7a7a;
+	border: 1px solid rgba(0,0,0,.25);
+	padding: .5rem 1rem;
+}
+form.myparcel-delivery-options input[type="text"]:focus {
+	outline: .1875rem solid #2fb5d2;
+	background-color: #fff;
+	color: #232323;
+}
+
+form.myparcel-delivery-options button {
+	color: #fff;
+	background-color: #2592a9;
+	border-color: transparent;
+	background-image: none;
+	box-shadow: 2px 2px 4px 0 rgba(0,0,0,.2);
+	text-transform: uppercase;
+	font-weight: 600;
+	padding: .5rem 1.25rem;
+}
+form.myparcel-delivery-options button:hover {
+	color: #fff;
+	background-color: #1e788c;
+	border-color: transparent;
+	cursor: pointer;
+}
+form.myparcel-delivery-options button + button {
+	margin-left: 0.5rem;
+}
+.myparcel-delivery-options__choice > td > div {
+	margin-bottom: 0.5rem;
+}
+.myparcel-delivery-options__table > tr > td > strong {
+	padding-bottom: 0.5rem;
+	display: inline-block;
+}
+/* vue styles end */
+
 @keyframes mypa-spin {
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
