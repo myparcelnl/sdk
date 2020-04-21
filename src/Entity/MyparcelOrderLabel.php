@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table()
  * @ORM\Entity()
+ * @ORM\EntityListeners({"Gett\MyParcel\Listener\MyparcelOrderLabelListener"})
  */
 class MyparcelOrderLabel
 {

@@ -71,6 +71,7 @@ class MyParcel extends CarrierModule
 
     public function hookActionAdminControllerSetMedia()
     {
+//        var_dump($this->context->link->getModuleLink($this->name,'checkout'));die();
         Media::addJsDef(
             [
                 'default_label_size' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),

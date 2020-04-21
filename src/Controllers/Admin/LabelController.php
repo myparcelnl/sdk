@@ -65,7 +65,7 @@ class LabelController extends FrameworkBundleAdminController
     public function updateLabel(Request $request)
     {
         /** @var Update $service */
-        $service = $this->get('gett.myparcel.service.consignment_service');
+        $service = $this->get('gett.myparcel.service.consignment.update');
 
         $service->updateLabel([$request->get('labelId')]);
 

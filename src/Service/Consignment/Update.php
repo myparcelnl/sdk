@@ -28,7 +28,6 @@ class Update
         foreach ($collection as $consignment) {
             $order_label = $this->entity_manager->getRepository(MyparcelOrderLabel::class)->findOneBy(['id_label' => $consignment->getConsignmentId()]);
             $order_label->setStatus($this->status_provider->getStatus($consignment->getStatus()));
-            $this->entity_manager->persist($order_label);
         }
 
         $this->entity_manager->flush();

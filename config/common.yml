@@ -17,7 +17,7 @@ services:
             - "@=service('prestashop.adapter.legacy.configuration')"
 
     gett.myparcel.service.consignment.update:
-        class: Gett\MyParcel\Service\Consignment\update
+        class: Gett\MyParcel\Service\Consignment\Update
         arguments:
             - "@=service('prestashop.adapter.legacy.configuration').get(parameter('configuration.api_key_name'))"
             - "@doctrine.orm.entity_manager"
@@ -38,3 +38,8 @@ services:
 
     gett.myparcel.service.myparcel_status_provider:
         class: Gett\MyParcel\Service\MyparcelStatusProvider
+
+    gett.myparcel.order_label_listener:
+        class: Gett\MyParcel\Listener\MyparcelOrderLabelListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
