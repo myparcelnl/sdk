@@ -48,4 +48,31 @@ class Constant
     const MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME = 'MY_PARCEL_LABEL_PROMPT_POSITION';
 
     const MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME = 'MY_PARCEL_LABEL_CREATED_ORDER_STATUS';
+
+    const MY_PARCEL_CARRIER_CONFIGURATION_FIELDS = [
+        'deliveryTitle',
+        'dropOffDays',
+        'cutoffTime',
+        'deliverydaysWindow',
+        'dropoffDelay',
+        'allowMondayDelivery',
+        'saturdayCutoffTime',
+        'deliveryMorningTitle',
+        'priceMorningDelivery',
+        'deliveryStandardTitle',
+        'priceStandardDelivery',
+        'deliveryEveningTitle',
+        'priceEveningDelivery',
+        'signatureTitle',
+        'priceSignature',
+        'onlyRecipientTitle',
+        'priceOnlyRecipient',
+        'pickupTitle',
+        'pricePickup',
+        'pricePickupExpress',
+        'BEdeliveryTitle',
+        'MY_PARCEL_PACKAGE_TYPE',
+        'MY_PARCEL_PACKAGE_FORMAT',
+    ];
+
 }

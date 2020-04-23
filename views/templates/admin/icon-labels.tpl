@@ -1,4 +1,3 @@
-
 {foreach from=$labels item=label}
     <label>{$label['status']}</label>
     <a href="{$label['track_link']}" >{$label['barcode']}</a>

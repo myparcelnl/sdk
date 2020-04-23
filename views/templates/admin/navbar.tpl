@@ -1,4 +1,3 @@
-
 {if version_compare($smarty.const._PS_VERSION_, '1.6.0.0', '<')}
     <table class="table" cellpadding="0" cellspacing="0" style="margin:auto;text-align:center">
         <tbody>

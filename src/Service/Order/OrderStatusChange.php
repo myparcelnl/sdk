@@ -2,6 +2,9 @@
 
 namespace Gett\MyParcel\Service\Order;
 
+use Gett\MyParcel\Constant;
+use PrestaShop\PrestaShop\Core\ConfigurationInterface;
+
 class OrderStatusChange
 {
     public function changeOrderStatus(int $order_id, int $order_state)

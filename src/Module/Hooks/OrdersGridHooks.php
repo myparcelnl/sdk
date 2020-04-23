@@ -32,25 +32,6 @@ trait OrdersGridHooks
 
         foreach ($definition->getColumns() as $column) {
             if ($column->getName() == 'Actions') {
-//                $column->getOptions()['actions']->add((new \PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\SubmitRowAction('export'))
-//                    ->setName($this->trans('Export', [], 'Admin.Actions'))
-//                    ->setIcon('export')
-//                    ->setOptions([
-//                        'modal_options' => new ModalOptions([
-//                            'title' => "Create Label",
-//                            'confirm_button_label' => "Confirm",
-//                            'confirm_button_class' => 'btn-danger',
-//
-//                        ]),
-//                        'route' => 'admin_categories_export',
-//                        'route_param_name' => 'categoryId',
-//                        'route_param_field' => 'id_order',
-//                        'confirm_message' => $this->trans(
-//                            'Export selected item?',
-//                            [],
-//                            'Admin.Notifications.Warning'
-//                        ),
-//                    ]));
                 $column->getOptions()['actions']->add((new \Gett\MyParcel\Grid\Action\Row\Type\CreateLabelAction('create_label'))
                     ->setName($this->l('Create Label'))
                     ->setIcon('receipt')
@@ -60,13 +41,6 @@ trait OrdersGridHooks
             }
         }
 
-//        $definition->getBulkActions()->add(
-//            (new \Gett\MyParcel\Grid\Action\Bulk\CreateLabelBulkAction('create_label'))
-//                ->setName('Create label')
-//                ->setOptions([
-//                    'submit_route' => 'admin_myparcel_orders_label_bulk_create',
-//                ])
-//        );
         $definition->getBulkActions()->add(
             (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('create_label'))
                 ->setName($this->l('Create label'))

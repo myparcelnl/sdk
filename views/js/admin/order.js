@@ -67,14 +67,32 @@ window.addEventListener('load', function() {
 
     // Add item
     bulk.appendChild(item)
-})
+});
 
+document.addEventListener("DOMContentLoaded", () => {
+    $('button[data-target="#print"]').click(function(){
+        var id = $(this).data('label-id');
+        $('#id_label').val(id);
+    });
+    $('button[data-target="#create"]').click(function(){
+        var id = $(this).data('order-id');
+        $('#order_id').val(id);
+    });
+    $('#print_button').click(function () {
+        $('#print-form').submit();
+    });
 
+    $('#add').click(function () {
+        $.ajax({
+            method: "POST",
+            url: '{{$action}}', //TODO pass action param
+            data: $('#print-modal :input').serialize()
+        }).done((result) => {
+            window.location.reload();
+        }).fail(() => {
 
-
-
-
-
-
+        });
+    });
+});
 
 

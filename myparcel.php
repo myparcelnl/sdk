@@ -1,8 +1,10 @@
 <?php
 
 use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
+use Gett\MyParcel\Module\Hooks\FrontHooks;
 use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
+use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -15,6 +17,8 @@ class MyParcel extends CarrierModule
 {
     use DisplayAdminProductsExtra;
     use OrdersGridHooks;
+    use FrontHooks;
+    use LegacyOrderPageHooks;
 
     public $baseUrl;
     public $id_carrier;
@@ -35,6 +39,7 @@ class MyParcel extends CarrierModule
         'actionOrderGridQueryBuilderModifier',
         'actionAdminOrdersListingFieldsModifier',
         'displayAdminListBefore',
+        'actionAdminControllerSetMedia',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -76,133 +81,9 @@ class MyParcel extends CarrierModule
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
     }
 
-    public function hookDisplayAdminListBefore()
-    {
-        if ($this->context->controller instanceof \AdminOrdersController) {
-            \Media::addJsDef([
-                'FEDEXBATCHEXPORT_LINK' => (new \Link())->getAdminLink('AdminFedexBatchExport'),
-                'FEDEXBATCHEXPORT_LANG' => [
-                    'FedEx batch export' => $this->trans('FedEx batch export', [], 'Modules.Fedexbatchexport.Back_office_hooks.php'),
-                ],
-            ]);
-            $this->context->controller->addJS(
-                $this->_path . 'resources/js/admin/order.js'
-            );
-
-            $link = new Link();
-            $this->context->smarty->assign([
-                'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
-                'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
-            ]);
-
-            return $this->display(__FILE__, 'views/templates/admin/hook/orders_popups.tpl');
-        }
-    }
-
-    public function hookActionAdminOrdersListingFieldsModifier($params)
-    {
-        $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`';
-//        $params['fields']['myparcel_field'] = [
-//            'title' => "Myparcel",
-//            'class' => 'fixed-width-lg',
-//            'callback' => 'printMyParcelTrackTrace',
-//            'remove_onclick' => true,
-//            'filter_key' => '1'
-//        ];
-
-        $params['fields']['myparcel_void_1'] = [
-            'title' => 'Labels',
-            'class' => 'text-nowrap',
-            'callback' => 'printMyParcelLabel',
-            'search' => false,
-            'orderby' => false,
-            'remove_onclick' => true,
-            'callback_object' => Module::getInstanceByName($this->name),
-        ];
-
-        $params['fields']['myparcel_void_2'] = [
-            'title' => 'TTTTT',
-            'class' => 'text-nowrap',
-            'callback' => 'printMyParcelIcon',
-            'search' => false,
-            'orderby' => false,
-            'remove_onclick' => true,
-            'callback_object' => Module::getInstanceByName($this->name),
-        ];
-    }
-
-    public function printMyParcelLabel($id, $params)
-    {
-        $sql = new DbQuery();
-        $sql->select('*');
-        $sql->from('myparcel_order_label');
-        $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
-        $result = Db::getInstance()->executeS($sql);
-        $link = new Link();
-        $this->context->smarty->assign([
-            'labels' => $result,
-            'link' => $link,
-        ]);
-
-        return $this->display(__FILE__, 'views/templates/admin/icon-labels.tpl');
-    }
-
-    public function printMyParcelIcon($id, $params)
-    {
-        return $this->display(__FILE__, 'views/templates/admin/icon-concept.tpl');
-    }
-
-    public function hookActionAdminControllerSetMedia()
-    {
-        $link = new Link();
-//        var_dump($this->context->link->getModuleLink($this->name,'checkout'));die();
-        Media::addJsDef(
-            [
-                'default_label_size' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
-                'default_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
-                'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
-                'create_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabelsBulk']),
-            ]
-        );
-
-        $this->context->controller->addJS(
-            $this->_path . 'views/js/admin/order.js'
-        );
-    }
-
-    public function hookActionCarrierProcess()
-    {
-//        var_dump($_POST);die();
-    }
-
-    public function hookDisplayHeader()
-    {
-        //todo add check if it's checkout page
-        $this->context->controller->addCss($this->_path . 'views/sandbox/sandbox.css'); //will be removed after frontend implemented
-        $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
-        $this->context->controller->addJs($this->_path . 'views/js/myparcelinit.js');
-
-        return "<script type='text/javascript' src='modules/" . $this->name . "/node_modules/@myparcel/delivery-options/dist/myparcel.js'></script>";
-    }
-
-    public function hookDisplayCarrierExtraContent()
-    {
-        $address = new \Address($this->context->cart->id_address_delivery);
-        if (\Validate::isLoadedObject($address)) {
-            $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
-
-            $this->context->smarty->assign([
-                'address' => $address,
-            ]);
-
-            //TODO pass carrier configuraiton params
-            return $this->display(__FILE__, 'carrier.tpl');
-        }
-    }
-
     public function getAdminLink(string $controller, bool $withToken = true, array $params = [])
     {
-        $url = $this->mypa_parse_url($this->context->link->getAdminLink($controller, $withToken));
+        $url = parse_url($this->context->link->getAdminLink($controller, $withToken));
         $url['query'] = isset($url['query']) ? $url['query'] : '';
         parse_str($url['query'], $query);
         if (version_compare(phpversion(), '5.4.0', '>=')) {
@@ -253,7 +134,7 @@ class MyParcel extends CarrierModule
 
     public function appendQueryToUrl($urlString, $query = [])
     {
-        $url = $this->mypa_parse_url($urlString);
+        $url = parse_url($urlString);
         $url['query'] = isset($url['query']) ? $url['query'] : '';
         parse_str($url['query'], $oldQuery);
         if (version_compare(phpversion(), '5.4.0', '>=')) {
@@ -278,10 +159,5 @@ class MyParcel extends CarrierModule
         $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
 
         return "{$scheme}{$user}{$pass}{$host}{$port}{$path}{$query}{$fragment}";
-    }
-
-    private function mypa_parse_url($urlString, $component = -1)
-    {
-        return call_user_func_array('parse_url', func_get_args());
     }
 }

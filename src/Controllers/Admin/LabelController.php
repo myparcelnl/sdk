@@ -37,9 +37,9 @@ class LabelController extends FrameworkBundleAdminController
 
         $service->createLabels($order[0]);
 
-        return $this->json([
-            'status' => 'ok',
-        ]);
+//        return $this->json([
+//            'status' => 'ok',  //TODO For presta bellow 1.7.7
+//        ]);
 
         return $this->redirectToRoute('admin_orders_index');
     }
