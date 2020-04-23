@@ -131,7 +131,7 @@ class Installer
         }
 
         if ($carrier->add() == true) {
-            @copy(dirname(__FILE__) . '/views/img/carrier_image.jpg', _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
+            @copy(dirname(__FILE__) . '/views/img/postnl.png', _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.png');
 
             return $carrier;
         }

@@ -154,12 +154,14 @@ class MyParcel extends CarrierModule
 
     public function hookActionAdminControllerSetMedia()
     {
+        $link = new Link();
 //        var_dump($this->context->link->getModuleLink($this->name,'checkout'));die();
         Media::addJsDef(
             [
                 'default_label_size' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
                 'default_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
                 'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+                'create_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabelsBulk']),
             ]
         );
 
