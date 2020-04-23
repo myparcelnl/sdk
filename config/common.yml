@@ -39,7 +39,13 @@ services:
     gett.myparcel.service.myparcel_status_provider:
         class: Gett\MyParcel\Service\MyparcelStatusProvider
 
+    gett.myparcel.service.order.order_status_change:
+        class: Gett\MyParcel\Service\Order\OrderStatusChange
+
     gett.myparcel.order_label_listener:
         class: Gett\MyParcel\Listener\MyparcelOrderLabelListener
+        arguments:
+            - '@gett.myparcel.service.order.order_status_change'
+            - "@=service('prestashop.adapter.legacy.configuration')"
         tags:
             - { name: doctrine.orm.entity_listener }

@@ -176,8 +176,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Allow morning delivery'),
                     'name' => 'allowMorningDelivery',
@@ -222,8 +222,8 @@ class MyParcelCarrierController extends AdminController
                     'name' => 'allowEveningDelivery',
                     'tab' => 'form',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                 ],
                 [
@@ -247,9 +247,9 @@ class MyParcelCarrierController extends AdminController
                     'name' => 'allowSignature',
                     'tab' => 'form',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
-                    ]
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
+                    ],
                 ],
                 [
                     'type' => 'text',
@@ -266,8 +266,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Allow only recipient'),
                     'name' => 'allowOnlyRecipient',
@@ -288,8 +288,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Allow pickup points'),
                     'name' => 'allowPickupPoints',
@@ -313,8 +313,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Allow pickup express'),
                     'name' => 'allowPickupExpress',
@@ -355,8 +355,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Deliver only to recipient'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
@@ -365,8 +365,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Age check'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
@@ -394,8 +394,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Return package when recipient is not home'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
@@ -404,8 +404,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Recipient need to sign'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
@@ -414,8 +414,8 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Package with insurance'),
                     'name' => \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
@@ -426,7 +426,7 @@ class MyParcelCarrierController extends AdminController
                     'tab' => 'return',
                     'type' => 'select',
                     'label' => $this->l('Default package type'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                     'options' => [
                         'query' => [
                             ['id' => 1, 'name' => 'Package'],
@@ -445,28 +445,28 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Deliver only to recipient'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
                     'tab' => 'return',
                 ],
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Age check'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
                     'tab' => 'return',
                 ],
                 [
                     'tab' => 'return',
                     'type' => 'select',
                     'label' => $this->l('Default package type'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                     'options' => [
                         'query' => [
                             ['id' => 1, 'name' => 'Normal'],
@@ -484,31 +484,31 @@ class MyParcelCarrierController extends AdminController
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Return package when recipient is not home'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
                     'tab' => 'return',
                 ],
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Recipient need to sign'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                     'tab' => 'return',
                 ],
                 [
                     'type' => 'radio',
                     'values' => [
-                        ['id'=> 'no', 'value'=>0, 'label' => 'No'],
-                        ['id'=> "Yes", 'value'=> 0, 'label' => 'Yes']
+                        ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Package with insurance'),
-                    'name' => "return_".\Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+                    'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
                     'tab' => 'return',
                 ],
             ],

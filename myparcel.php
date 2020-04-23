@@ -1,5 +1,6 @@
 <?php
 
+use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
 use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
 
@@ -13,12 +14,16 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 class MyParcel extends CarrierModule
 {
     use DisplayAdminProductsExtra;
+    use OrdersGridHooks;
 
     public $baseUrl;
     public $id_carrier;
     public $migrations = [
         \Gett\MyParcel\Database\CreateProductConfigurationTableMigration::class,
+        \Gett\MyParcel\Database\CreateCarrierConfigurationTableMigration::class,
+        \Gett\MyParcel\Database\CreateOrderLabelTableMigration::class,
     ];
+
     public $hooks = [
         'displayAdminProductsExtra',
         'actionProductUpdate',
@@ -28,6 +33,8 @@ class MyParcel extends CarrierModule
         'actionOrderGridDefinitionModifier',
         'actionAdminControllerSetMedia',
         'actionOrderGridQueryBuilderModifier',
+        'actionAdminOrdersListingFieldsModifier',
+        'displayAdminListBefore',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -69,6 +76,82 @@ class MyParcel extends CarrierModule
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
     }
 
+    public function hookDisplayAdminListBefore()
+    {
+        if ($this->context->controller instanceof \AdminOrdersController) {
+            \Media::addJsDef([
+                'FEDEXBATCHEXPORT_LINK' => (new \Link())->getAdminLink('AdminFedexBatchExport'),
+                'FEDEXBATCHEXPORT_LANG' => [
+                    'FedEx batch export' => $this->trans('FedEx batch export', [], 'Modules.Fedexbatchexport.Back_office_hooks.php'),
+                ],
+            ]);
+            $this->context->controller->addJS(
+                $this->_path . 'resources/js/admin/order.js'
+            );
+
+            $link = new Link();
+            $this->context->smarty->assign([
+                'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
+                'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
+            ]);
+
+            return $this->display(__FILE__, 'views/templates/admin/hook/orders_popups.tpl');
+        }
+    }
+
+    public function hookActionAdminOrdersListingFieldsModifier($params)
+    {
+        $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`';
+//        $params['fields']['myparcel_field'] = [
+//            'title' => "Myparcel",
+//            'class' => 'fixed-width-lg',
+//            'callback' => 'printMyParcelTrackTrace',
+//            'remove_onclick' => true,
+//            'filter_key' => '1'
+//        ];
+
+        $params['fields']['myparcel_void_1'] = [
+            'title' => 'Labels',
+            'class' => 'text-nowrap',
+            'callback' => 'printMyParcelLabel',
+            'search' => false,
+            'orderby' => false,
+            'remove_onclick' => true,
+            'callback_object' => Module::getInstanceByName($this->name),
+        ];
+
+        $params['fields']['myparcel_void_2'] = [
+            'title' => 'TTTTT',
+            'class' => 'text-nowrap',
+            'callback' => 'printMyParcelIcon',
+            'search' => false,
+            'orderby' => false,
+            'remove_onclick' => true,
+            'callback_object' => Module::getInstanceByName($this->name),
+        ];
+    }
+
+    public function printMyParcelLabel($id, $params)
+    {
+        $sql = new DbQuery();
+        $sql->select('*');
+        $sql->from('myparcel_order_label');
+        $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
+        $result = Db::getInstance()->executeS($sql);
+        $link = new Link();
+        $this->context->smarty->assign([
+            'labels' => $result,
+            'link' => $link,
+        ]);
+
+        return $this->display(__FILE__, 'views/templates/admin/icon-labels.tpl');
+    }
+
+    public function printMyParcelIcon($id, $params)
+    {
+        return $this->display(__FILE__, 'views/templates/admin/icon-concept.tpl');
+    }
+
     public function hookActionAdminControllerSetMedia()
     {
 //        var_dump($this->context->link->getModuleLink($this->name,'checkout'));die();
@@ -79,109 +162,15 @@ class MyParcel extends CarrierModule
                 'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
             ]
         );
-    }
 
-    public function hookActionOrderGridQueryBuilderModifier(array $params)
-    {
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $searchQueryBuilder */
-        $searchQueryBuilder = $params['search_query_builder'];
-
-        $searchQueryBuilder->addSelect(
-            'group_concat(mol.barcode ORDER BY mol.barcode) as barcode,
-             group_concat(mol.track_link ORDER BY mol.barcode) as track_link,
-             group_concat(status ORDER BY mol.barcode) as status,
-             group_concat(id_label ORDER BY mol.barcode) as ids
-             '
+        $this->context->controller->addJS(
+            $this->_path . 'views/js/admin/order.js'
         );
-        $searchQueryBuilder->leftJoin(
-            'o',
-            _DB_PREFIX_ . 'myparcel_order_label',
-            'mol',
-            'o.id_order = mol.id_order'
-        );
-        $searchQueryBuilder->addGroupBy('o.id_order');
-    }
-
-    public function hookActionOrderGridDefinitionModifier(array $params)
-    {
-        /** @var \PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinitionInterface $definition */
-        $definition = $params['definition'];
-
-        foreach ($definition->getColumns() as $column) {
-            if ($column->getName() == 'Actions') {
-//                $column->getOptions()['actions']->add((new \PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\SubmitRowAction('export'))
-//                    ->setName($this->trans('Export', [], 'Admin.Actions'))
-//                    ->setIcon('export')
-//                    ->setOptions([
-//                        'modal_options' => new ModalOptions([
-//                            'title' => "Create Label",
-//                            'confirm_button_label' => "Confirm",
-//                            'confirm_button_class' => 'btn-danger',
-//
-//                        ]),
-//                        'route' => 'admin_categories_export',
-//                        'route_param_name' => 'categoryId',
-//                        'route_param_field' => 'id_order',
-//                        'confirm_message' => $this->trans(
-//                            'Export selected item?',
-//                            [],
-//                            'Admin.Notifications.Warning'
-//                        ),
-//                    ]));
-                $column->getOptions()['actions']->add((new \Gett\MyParcel\Grid\Action\Row\Type\CreateLabelAction('create_label'))
-                    ->setName($this->l('Create Label'))
-                    ->setIcon('receipt')
-                    ->setOptions([
-                        'submit_route' => 'admin_myparcel_orders_label_bulk_create',
-                    ]));
-            }
-        }
-
-//        $definition->getBulkActions()->add(
-//            (new \Gett\MyParcel\Grid\Action\Bulk\CreateLabelBulkAction('create_label'))
-//                ->setName('Create label')
-//                ->setOptions([
-//                    'submit_route' => 'admin_myparcel_orders_label_bulk_create',
-//                ])
-//        );
-        $definition->getBulkActions()->add(
-            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('create_label'))
-                ->setName($this->l('Create label'))
-                ->setOptions([
-                    'submit_route' => 'admin_myparcel_orders_label_bulk_create',
-                ])
-        );
-        $definition->getBulkActions()->add(
-            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\ModalFormSubmitBulkAction('print_label'))
-                ->setName($this->l('Print labels'))
-                ->setOptions([
-                    'submit_route' => 'admin_myparcel_orders_label_bulk_print',
-                    'modal_id' => 'bulk-print-modal',
-                ])
-        );
-        $definition->getBulkActions()->add(
-            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('refresh_labels'))
-                ->setName($this->l('Refresh labels'))
-                ->setOptions([
-                    'submit_route' => 'admin_myparcel_orders_label_bulk_refresh',
-                ])
-        );
-        $definition
-            ->getColumns()
-            ->addAfter(
-                'osname',
-                (new \Gett\MyParcel\Grid\Column\BarcodeTypeColumn('barcode'))
-                    ->setName($this->l('Barcode'))
-                    ->setOptions([
-                        'barcode' => 'Barcode Example',
-                    ])
-            )
-        ;
     }
 
     public function hookActionCarrierProcess()
     {
-        //var_dump($_POST);die();
+//        var_dump($_POST);die();
     }
 
     public function hookDisplayHeader()

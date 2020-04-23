@@ -14,8 +14,9 @@ class Uninstaller
 
     public function __invoke(): bool
     {
-        return $this->hooks()
-            && $this->migrate();
+        return true;
+//        return $this->hooks()
+//            && $this->migrate();
     }
 
     private function hooks(): bool

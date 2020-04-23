@@ -31,7 +31,7 @@ admin_myparcel_order_label_create:
     methods: [POST]
     defaults:
         _controller: Gett\MyParcel\Controllers\Admin\LabelController::createLabel
-        _legacy_controller: AdminLabelController
+        _legacy_controller: AdminLabel
         _legacy_link: AdminLabel:createLabel
 
 
@@ -41,7 +41,7 @@ admin_myparcel_order_label_download:
     defaults:
         _controller: Gett\MyParcel\Controllers\Admin\LabelController::downloadLabel
         _legacy_controller: AdminLabelController
-        _legacy_link: AdminLabel:createLabel
+        _legacy_link: AdminLabel:downloadLabel
 
 admin_myparcel_order_label_refresh:
     path: /refresh-label/{labelId}

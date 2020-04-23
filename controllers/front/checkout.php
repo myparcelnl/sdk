@@ -2,14 +2,14 @@
 
 class MyparcelCheckoutModuleFrontController extends ModuleFrontController
 {
-    public function postProcess(){
-
-        $provider = new \Gett\MyParcel\Service\CarrierConfigurationProvider((int)Tools::getValue('id_carrier'));
+    public function postProcess()
+    {
+        $provider = new \Gett\MyParcel\Service\CarrierConfigurationProvider((int) Tools::getValue('id_carrier'));
         $address = new \Address($this->context->cart->id_address_delivery);
         $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
 
         $params = [
-            "config" => [
+            'config' => [
                 'platform' => 'myparcel',
                 'carriers' => ['postnl'],
 
@@ -61,8 +61,8 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
             'address' => [
                 'cc' => 'NL',
                 'city' => $address->city,
-                'postalCode' => $address->postcode
-            ]
+                'postalCode' => $address->postcode,
+            ],
         ];
 
         echo json_encode($params);

@@ -33,10 +33,13 @@ class LabelController extends FrameworkBundleAdminController
 
         /** @var Create $service */
         $service = $this->get('gett.myparcel.service.consignment.create');
-
         $order = $repository->getOrdersForLabelCreate($request->get('create_label')['order_ids']);
 
         $service->createLabels($order[0]);
+
+        return $this->json([
+            'status' => 'ok',
+        ]);
 
         return $this->redirectToRoute('admin_orders_index');
     }
