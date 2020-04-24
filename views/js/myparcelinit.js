@@ -42,13 +42,32 @@ $(document).ready(function() {
         let container = document.createElement("div");
         container.id = 'myparcel-delivery-options';
         $wrapper[0].appendChild(container);
-        $wrapper.addClass('myparcel-delivery-options-initialized');
-        initialized = true;
+
+        let input = document.createElement("input");
+        input.id = 'mypa-input';
+        input.classList.add('mypa-post-nl-data');
+        $wrapper[0].appendChild(input);
 
         document.dispatchEvent(new Event('myparcel_update_delivery_options'));
+
+        $wrapper.addClass('myparcel-delivery-options-initialized');
+        initialized = true;
+    }
+
+    let updateMypaInput = function(dataObj) {
+        let $input = $('#mypa-input');
+        if(!$input.length) {
+            return false;
+        }
+
+        let dataString = JSON.stringify(dataObj)
+
+        $input.val(dataString);
     }
 
     $(document).on('change', '.delivery-option input', function() {
         initializeMyParcelForm($(this));
     });
+
+    document.addEventListener('myparcel_updated_delivery_options', (event) => updateMypaInput(event.detail));
 });
