@@ -3,7 +3,7 @@
 namespace Gett\MyParcel\Service\Consignment;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Gett\MyParcel\Entity\MyparcelOrderLabel;
+use Gett\MyParcel\OrderLabel;
 use Gett\MyParcel\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 
@@ -33,24 +33,35 @@ class Create
         return true;
     }
 
-    private function process(MyParcelCollection $collection)
+    private function process(MyParcelCollection $collection, $return = false)
     {
-        foreach ($collection->setPdfOfLabels() as $consignment) {
-            $orderLabel = (new MyparcelOrderLabel())
-                ->setIdLabel($consignment->getConsignmentId())
-                ->setIdOrder($consignment->getReferenceId())
-                ->setBarcode($consignment->getBarcode())
-                ->setTrackLink($consignment->getBarcodeUrl(
-                    $consignment->getBarcode(),
-                    $consignment->getPostalCode(),
-                    $consignment->getCountry()
-                ))
-                ->setStatus($this->status_provider->getStatus($consignment->getStatus()))
-            ;
-            //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
-            $this->entityManager->persist($orderLabel);
+        if ($return) {
+            $collection = $collection->sendReturnLabelMails();
         }
-
-        $this->entityManager->flush();
+        foreach ($collection->setPdfOfLabels() as $consignment) {
+            $orderLabel = new OrderLabel();
+            $orderLabel->id_label = $consignment->getConsignmentId();
+            $orderLabel->id_order = $consignment->getReferenceId();
+            $orderLabel->barcode = $consignment->getBarcode();
+            $orderLabel->track_link = $consignment->getBarcodeUrl(
+                $consignment->getBarcode(),
+                $consignment->getPostalCode(),
+                $consignment->getCountry()
+            );
+            $orderLabel->new_order_state = $consignment->getStatus();
+            $orderLabel->status = $this->status_provider->getStatus($consignment->getStatus());
+            $orderLabel->add();
+            //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
+        }
     }
+
+    public function createReturnLabel(int $id_order)
+    {
+        $myParcelCollection = $this->consignment_factory->fromOrder($id_order);
+
+        $this->process($myParcelCollection);
+
+        return true;
+    }
+
 }

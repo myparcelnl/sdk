@@ -40,6 +40,9 @@ class MyParcel extends CarrierModule
         'actionAdminOrdersListingFieldsModifier',
         'displayAdminListBefore',
         'actionAdminControllerSetMedia',
+        'displayAdminOrderMainBottom',
+        'actionObjectGettMyParcelOrderLabelAddAfter',
+        'actionObjectGettMyParcelOrderLabelAddAfter'
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -79,6 +82,64 @@ class MyParcel extends CarrierModule
         $this->description = $this->l('PrestaShop module to intergratie with MyParcel NL and MyParcel BE');
 
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
+    }
+
+    public function hookActionObjectGettMyParcelOrderLabelAddAfter($params)
+    {
+        if (Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
+            $history = new \OrderHistory();
+            $history->id_order = (int)$params['object']->id_order;
+            $history->changeIdOrderState(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME, (int)$params['object']->id_order);
+            $history->add();
+            $order = new Order($params['object']->id_order);
+            $order->current_state = \Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME;
+            $order->save();
+        }
+
+        if (Configuration::get('MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS')) {
+            $history = new \OrderHistory();
+            $history->id_order = (int)$params['object']->id_order;
+            $history->changeIdOrderState(4, (int)$params['object']->id_order);
+            $history->add();
+            $order = new Order($params['object']->id_order);
+            $order->current_state = 4;
+            $order->save();
+        }
+    }
+
+    public function hookActionObjectGettMyParcelOrderLabelUpdateAfter($params)
+    {
+        $order = new \Order($params['object']->id_order);
+        if ($order->current_state != Configuration::get('MY_PARCEL_IGNORE_ORDER_STATUS')){
+            if (\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params->new_order_state == '3'){
+                $history = new \OrderHistory();
+                $history->id_order = (int)$params['object']->id_order;
+                $history->changeIdOrderState(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME, (int)$params['object']->id_order);
+                $history->add();
+
+                $order = new Order($params['object']->id_order);
+                $order->current_state = \Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME;
+                $order->save();
+            }
+            if (\Gett\MyParcel\Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'first_scan' && $params->new_order_state == '3') {
+                //TODO Send notification ????
+            }
+            if ($params['object']->new_order_state >= 7 && $params['object']->new_order_state <= 11 && Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME)){
+                $history = new \OrderHistory();
+                $history->id_order = (int)$params['object']->id_order;
+                $history->changeIdOrderState(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME, (int)$params['object']->id_order);
+                $history->add();
+
+                $order = new Order($params['object']->id_order);
+                $order->current_state = \Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME;
+                $order->save();
+            }
+        }
+    }
+
+    public function hookDisplayAdminOrderMainBottom($params)
+    {
+        return $this->display($this->name, 'views/templates/admin/order/return-form.tpl');
     }
 
     public function getAdminLink(string $controller, bool $withToken = true, array $params = [])
@@ -160,4 +221,67 @@ class MyParcel extends CarrierModule
 
         return "{$scheme}{$user}{$pass}{$host}{$port}{$path}{$query}{$fragment}";
     }
+
+    public static function updateStatus($idShipment, $barcode, $statusCode, $date = null)
+    {
+        if (!$date) {
+            $date = date('Y-m-d H:i:s');
+        }
+
+        $order = static::getOrderByShipmentId($idShipment);
+
+        if (!$order->shipping_number) {
+            // Checking a legacy field is allowed in this case
+            static::updateOrderTrackingNumber($order, $barcode);
+        }
+
+
+        if ($statusCode === 14) {
+            if (Configuration::get(MyParcel::DIGITAL_STAMP_USE_SHIPPED_STATUS)) {
+                MyParcelOrderHistory::setShipped($idShipment, false);
+            } else {
+                MyParcelOrderHistory::setPrinted($idShipment, false);
+            }
+        } else {
+            if ($statusCode >= 2) {
+                MyParcelOrderHistory::setPrinted($idShipment);
+            }
+            if ($statusCode >= 3) {
+                MyParcelOrderHistory::setShipped($idShipment);
+            }
+            if ($statusCode >= 7 && $statusCode <= 11) {
+                MyParcelOrderHistory::setReceived($idShipment);
+            }
+        }
+
+        MyParcelOrderHistory::log($idShipment, $statusCode, $date);
+
+        return (bool)Db::getInstance()->update(
+            bqSQL(static::$definition['table']),
+            array(
+                'tracktrace' => pSQL($barcode),
+                'postnl_status' => (int)$statusCode,
+                'date_upd' => pSQL($date),
+            ),
+            'id_shipment = ' . (int)$idShipment
+        );
+    }
+
+    public static function getOrderByShipmentId(int $id_shipment)
+    {
+        $sql = new \DbQuery();
+        $sql->select('*');
+        $sql->from('myparcel_order_label', 'mol');
+        $sql->where('mol.`id_label` = ' . $id_shipment);
+
+        $shipment = Db::getInstance()->getRow($sql);
+
+        if ($shipment) {
+            return $shipment;
+        }
+
+        return false;
+    }
+
+
 }

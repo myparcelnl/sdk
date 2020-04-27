@@ -2,13 +2,6 @@ services:
     _defaults:
         public: true
 
-    gett.myparcel.service.consignment.create:
-        class: Gett\MyParcel\Service\Consignment\Create
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@gett.myparcel.service.myparcel_status_provider"
-            - "@gett.myparcel.factory.consignment_factory"
-
     gett.myparcel.service.consignment.download:
         class: Gett\MyParcel\Service\Consignment\Download
         arguments:
@@ -49,3 +42,10 @@ services:
             - "@=service('prestashop.adapter.legacy.configuration')"
         tags:
             - { name: doctrine.orm.entity_listener }
+
+    gett.myparcel.service.consignment.create:
+        class: Gett\MyParcel\Service\Consignment\Create
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@gett.myparcel.service.myparcel_status_provider"
+            - "@gett.myparcel.factory.consignment_factory"

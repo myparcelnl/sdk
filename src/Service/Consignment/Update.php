@@ -4,6 +4,7 @@ namespace Gett\MyParcel\Service\Consignment;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Gett\MyParcel\Entity\MyparcelOrderLabel;
+use Gett\MyParcel\OrderLabel;
 use Gett\MyParcel\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 
@@ -26,11 +27,10 @@ class Update
         $collection->setLinkOfLabels();
 
         foreach ($collection as $consignment) {
-            $order_label = $this->entity_manager->getRepository(MyparcelOrderLabel::class)->findOneBy(['id_label' => $consignment->getConsignmentId()]);
-            $order_label->setStatus($this->status_provider->getStatus($consignment->getStatus()));
+            $order_label = OrderLabel::findByLabelId($consignment->getConsignmentId());
+            $order_label->status = $this->status_provider->getStatus($consignment->getStatus());
+            $order_label->save();
         }
-
-        $this->entity_manager->flush();
 
         return true;
     }

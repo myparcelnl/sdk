@@ -25,7 +25,9 @@ class Download
         $myParcelCollection = (new MyParcelCollection())
             ->setUserAgent('prestashop', '1.0')
         ;
-
+        if (\Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'printed')) {
+            //TODO send notification
+        }
         $collection = MyParcelCollection::findMany($id_labels, $this->api_key);
         $collection
             ->setPdfOfLabels($this->fetchPositions())

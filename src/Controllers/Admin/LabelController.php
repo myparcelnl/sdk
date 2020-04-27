@@ -87,4 +87,22 @@ class LabelController extends FrameworkBundleAdminController
 
         return $this->redirectToRoute('admin_orders_index');
     }
+
+    public function createLabelReturn(Request $request)
+    {
+        /** @var OrderLabelRepository $repository */
+        $repository = $this->get('gett.myparcel.repository.order_label_repository');
+
+        /** @var Create $service */
+        $service = $this->get('gett.myparcel.service.consignment.create');
+        $order = $repository->getOrdersForLabelCreate($request->get('create_label')['order_ids']);
+
+        $service->createReturnLabel($order[0]);
+
+//        return $this->json([
+//            'status' => 'ok',  //TODO For presta bellow 1.7.7
+//        ]);
+
+        return $this->redirectToRoute('admin_orders_index');
+    }
 }

@@ -56,14 +56,15 @@ class OrderForm extends AbstractForm
                 ],
             ],
             'MY_PARCEL_IGNORE_ORDER_STATUS' => [
-                'type' => 'select',
+                'type' => 'checkbox',
                 'label' => $this->module->l('Ignore order statuses'),
                 'name' => 'MY_PARCEL_IGNORE_ORDER_STATUS',
-                'options' => [
+                'multiple' => true,
+                'values' => array(
                     'query' => $order_states,
                     'id' => 'id_order_state',
                     'name' => 'name',
-                ],
+                ),
             ],
             'MY_PARCEL_STATUS_CHANGE_MAIL' => [
                 'type' => 'switch',

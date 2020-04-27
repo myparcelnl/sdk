@@ -9,7 +9,7 @@
     "psr-4": {
       "Gett\\MyParcel\\": "src/"
     },
-    "classmap": ["myparcel.php"],
+    "classmap": ["myparcel.php", "classes/OrderLabel.php"],
     "exclude-from-classmap": []
   },
   "config": {
