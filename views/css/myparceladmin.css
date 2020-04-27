@@ -65,3 +65,10 @@
 .money-input-wrapper {
   display: inline-block;
 }
+
+.pointer-myparcel-labels label {
+  width: 100%;
+}
+.modal .modal-title {
+  display: inline-block;
+}

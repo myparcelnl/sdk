@@ -30,7 +30,7 @@ trait LegacyOrderPageHooks
 
         $params['fields']['myparcel_void_1'] = [
             'title' => 'Labels',
-            'class' => 'text-nowrap',
+            'class' => 'pointer-myparcel-labels text-center',
             'callback' => 'printMyParcelLabel',
             'search' => false,
             'orderby' => false,

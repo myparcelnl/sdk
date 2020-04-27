@@ -2,14 +2,20 @@
     <label>{$label['status']}</label>
     <a href="{$label['track_link']}" >{$label['barcode']}</a>
 
-    <button class="btn btn-primary" data-toggle="modal"
+    <button class="btn btn-link" data-toggle="modal"
             type="button"
             data-target="#print"
     data-label-id = "{$label['id_label']}" >
-        Print
+        <i class="material-icons">
+            print
+        </i>
     </button>
 
-    <a href="{$link->getAdminLink('AdminLabel', true, ['action' => 'updateLabel'], ['labelId' => $label['id_label']])}">Refresh</a>
+    <a href="{$link->getAdminLink('AdminLabel', true, ['action' => 'updateLabel'], ['labelId' => $label['id_label']])}" class="btn btn-link">
+        <i class="material-icons">
+            refresh
+        </i>
+    </a>
 
     <br>
 {/foreach}
