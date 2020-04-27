@@ -14,7 +14,7 @@ trait LegacyOrderPageHooks
                 $this->_path . 'resources/js/admin/order.js'
             );
 
-            $link = new Link();
+            $link = new \Link();
             $this->context->smarty->assign([
                 'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
@@ -35,7 +35,7 @@ trait LegacyOrderPageHooks
             'search' => false,
             'orderby' => false,
             'remove_onclick' => true,
-            'callback_object' => Module::getInstanceByName($this->name),
+            'callback_object' => \Module::getInstanceByName($this->name),
         ];
 
         $params['fields']['myparcel_void_2'] = [
@@ -45,18 +45,18 @@ trait LegacyOrderPageHooks
             'search' => false,
             'orderby' => false,
             'remove_onclick' => true,
-            'callback_object' => Module::getInstanceByName($this->name),
+            'callback_object' => \Module::getInstanceByName($this->name),
         ];
     }
 
     public function printMyParcelLabel($id, $params)
     {
-        $sql = new DbQuery();
+        $sql = new \DbQuery();
         $sql->select('*');
         $sql->from('myparcel_order_label');
         $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
-        $result = Db::getInstance()->executeS($sql);
-        $link = new Link();
+        $result = \Db::getInstance()->executeS($sql);
+        $link = new \Link();
         $this->context->smarty->assign([
             'labels' => $result,
             'link' => $link,
