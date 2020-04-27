@@ -6,7 +6,7 @@ use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
 use Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
 use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
-
+use Gett\MyParcel\Module\Hooks\OrderLabelHooks;
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -21,7 +21,7 @@ class MyParcel extends CarrierModule
     use OrdersGridHooks;
     use FrontHooks;
     use LegacyOrderPageHooks;
-
+    use OrderLabelHooks;
     public $baseUrl;
     public $id_carrier;
     public $migrations = [
@@ -85,64 +85,6 @@ class MyParcel extends CarrierModule
         $this->description = $this->l('PrestaShop module to intergratie with MyParcel NL and MyParcel BE');
 
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
-    }
-
-    public function hookActionObjectGettMyParcelOrderLabelAddAfter($params)
-    {
-        if (Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
-            $history = new \OrderHistory();
-            $history->id_order = (int)$params['object']->id_order;
-            $history->changeIdOrderState(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME, (int)$params['object']->id_order);
-            $history->add();
-            $order = new Order($params['object']->id_order);
-            $order->current_state = \Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME;
-            $order->save();
-        }
-
-        if (Configuration::get('MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS')) {
-            $history = new \OrderHistory();
-            $history->id_order = (int)$params['object']->id_order;
-            $history->changeIdOrderState(4, (int)$params['object']->id_order);
-            $history->add();
-            $order = new Order($params['object']->id_order);
-            $order->current_state = 4;
-            $order->save();
-        }
-    }
-
-    public function hookActionObjectGettMyParcelOrderLabelUpdateAfter($params)
-    {
-        $order = new \Order($params['object']->id_order);
-        if ($order->current_state != Configuration::get('MY_PARCEL_IGNORE_ORDER_STATUS')){
-            if (\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params->new_order_state == '3'){
-                $history = new \OrderHistory();
-                $history->id_order = (int)$params['object']->id_order;
-                $history->changeIdOrderState(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME, (int)$params['object']->id_order);
-                $history->add();
-
-                $order = new Order($params['object']->id_order);
-                $order->current_state = \Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME;
-                $order->save();
-            }
-            if (\Gett\MyParcel\Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'first_scan' && $params->new_order_state == '3') {
-                //TODO Send notification ????
-            }
-            if ($params['object']->new_order_state >= 7 && $params['object']->new_order_state <= 11 && Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME)){
-                $history = new \OrderHistory();
-                $history->id_order = (int)$params['object']->id_order;
-                $history->changeIdOrderState(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME, (int)$params['object']->id_order);
-                $history->add();
-
-                $order = new Order($params['object']->id_order);
-                $order->current_state = \Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME;
-                $order->save();
-            }
-        }
-    }
-
-    public function hookDisplayAdminOrderMainBottom($params)
-    {
-        return $this->display($this->name, 'views/templates/admin/order/return-form.tpl');
     }
 
     public function getAdminLink(string $controller, bool $withToken = true, array $params = [])

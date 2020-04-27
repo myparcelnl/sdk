@@ -16,6 +16,7 @@ class CarrierConfigurationProvider
     {
         if (empty($this->params)) {
             $params = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '" . $this->id_carrier . "' ");
+
             foreach ($params as $param) {
                 $this->params[$param['name']] = $param['value'];
             }

@@ -28,6 +28,8 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
                 'cutoffTime' => $provider->get('cutoffTime'),
                 'deliveryDaysWindow' => $provider->get('deliveryDaysWindow'),
                 'dropOffDelay' => $provider->get('dropOffDelay'),
+
+                'allowOnlyRecipient' => $provider->get('allowOnlyRecipient')
             ],
             'strings' => [
                 'wrongPostalCodeCity' => $provider->get('wrongPostalCodeCity'),
@@ -62,6 +64,7 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
                 'cc' => 'NL',
                 'city' => $address->city,
                 'postalCode' => $address->postcode,
+                'number' => $address->address1
             ],
         ];
 

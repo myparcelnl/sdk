@@ -110,6 +110,10 @@ class Installer
                 'name' => $languages,
                 'parent_class' => 'AdminParentShipping',
             ],
+            'MyParcelLabelController' => [
+                'class_name' => 'Label',
+                'name' => $languages
+            ],
         ];
     }
 

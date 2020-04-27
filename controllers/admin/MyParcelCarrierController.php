@@ -267,7 +267,7 @@ class MyParcelCarrierController extends AdminController
                     'type' => 'radio',
                     'values' => [
                         ['id' => 'no', 'value' => 0, 'label' => 'No'],
-                        ['id' => 'Yes', 'value' => 0, 'label' => 'Yes'],
+                        ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
                     ],
                     'label' => $this->l('Allow only recipient'),
                     'name' => 'allowOnlyRecipient',

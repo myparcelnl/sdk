@@ -71,12 +71,15 @@ class OrderLabelRepository
                     a.postcode,
                     a.city,
                     c.email,
-                    a.phone'
+                    a.phone,
+                    ds.delivery_settings
+                    '
         );
         $qb->from($this->tablePrefix . 'orders', 'o');
         $qb->innerJoin('o', $this->tablePrefix . 'address', 'a', 'o.id_address_delivery = a.id_address');
         $qb->innerJoin('a', $this->tablePrefix . 'country', 'co', 'co.id_country = a.id_country');
         $qb->innerJoin('o', $this->tablePrefix . 'customer', 'c', 'o.id_customer = c.id_customer');
+        $qb->innerJoin('o', $this->tablePrefix . 'myparcel_delivery_settings', 'ds', 'o.id_cart = ds.id_cart');
 
         return $qb;
     }

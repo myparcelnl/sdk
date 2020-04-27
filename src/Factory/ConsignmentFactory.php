@@ -64,6 +64,7 @@ class ConsignmentFactory
 
     private function initConsignment(array $order): AbstractConsignment
     {
+
         $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))  //TODO fetch carrier
             ->setApiKey($this->api_key)
             ->setReferenceId($order['id_order'])

@@ -75,4 +75,12 @@ trait OrdersGridHooks
             )
         ;
     }
+
+    public function hookDisplayAdminOrderMainBottom($params)
+    {
+        $this->context->smarty->assign(
+            ['action' => $this->getAdminLink('Label', true, ['action' => 'return'])]
+        );
+        return $this->display($this->name, 'views/templates/admin/order/return-form.tpl');
+    }
 }
