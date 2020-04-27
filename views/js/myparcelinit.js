@@ -1,22 +1,7 @@
 $(document).ready(function() {
     let initialized = false;
 
-    $.ajax({
-        url: "/index.php?fc=module&module=myparcel&controller=checkout",
-        dataType: "json",
-        success: function(data) {
-            //populate form data
-            window.MyParcelConfig = data;
-
-            //initialize a form if the shipping method is already checked
-            initializeMyParcelForm($('.delivery-option input:checked'));
-        },
-        error: function(err) {
-            //TODO: display an error somehow
-        }
-    });
-
-    let initializeMyParcelForm = function($option) {
+    let initializeMyParcelForm = async function($option) {
         if(!$option.length) {
             console.log('option empty');
             return false;
@@ -28,31 +13,47 @@ $(document).ready(function() {
             return false;
         }
 
-        if(initialized) {
-            let $form = $('.myparcel-delivery-options');
+        let $currentCarrier = $('.delivery-option input:checked');
+        let currentCarrierId = $currentCarrier.val();
+        $.ajax({
+          url: "/index.php?fc=module&module=myparcel&controller=checkout&id_carrier=" + currentCarrierId,
+          dataType: "json",
+          success: function(data) {
+            window.MyParcelConfig = data;
 
-            if($form.length) {
+            if(initialized) {
+              let $form = $('.myparcel-delivery-options');
+              let $input = $('#mypa-input');
+
+              if($form.length) {
                 $form.detach().appendTo($wrapper);
+                $input.detach().appendTo($wrapper);
+                document.dispatchEvent(new Event('myparcel_update_delivery_options'));
                 return true;
-            } else {
+              } else {
                 initialized = false;
+              }
             }
-        }
 
-        let container = document.createElement("div");
-        container.id = 'myparcel-delivery-options';
-        $wrapper[0].appendChild(container);
+            let container = document.createElement("div");
+            container.id = 'myparcel-delivery-options';
+            $wrapper[0].appendChild(container);
 
-        let input = document.createElement("input");
-        input.id = 'mypa-input';
-        input.classList.add('mypa-post-nl-data');
-        $wrapper[0].appendChild(input);
+            let input = document.createElement("input");
+            input.id = 'mypa-input';
+            input.classList.add('mypa-post-nl-data');
+            $wrapper[0].appendChild(input);
 
-        document.dispatchEvent(new Event('myparcel_update_delivery_options'));
+            document.dispatchEvent(new Event('myparcel_update_delivery_options'));
 
-        $wrapper.addClass('myparcel-delivery-options-initialized');
-        initialized = true;
-    }
+            $wrapper.addClass('myparcel-delivery-options-initialized');
+            initialized = true;
+          },
+          error: function(err) {
+            //TODO: display an error somehow
+          }
+        });
+    };
 
     let updateMypaInput = function(dataObj) {
         let $input = $('#mypa-input');
@@ -68,6 +69,7 @@ $(document).ready(function() {
     $(document).on('change', '.delivery-option input', function() {
         initializeMyParcelForm($(this));
     });
+    initializeMyParcelForm($('.delivery-option input:checked'));
 
     document.addEventListener('myparcel_updated_delivery_options', (event) => updateMypaInput(event.detail));
 });

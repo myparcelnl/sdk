@@ -12,33 +12,109 @@
         <div class="modal-body">
             <form method="post" action="{{ path('admin_myparcel_order_label_create') }}" data-bulk-inputs-id = "create_label_order_ids">
                 <div id="create_label_order_ids" data-prototype="<input type=&quot;hidden&quot; id=&quot;create_label_order_ids___name__&quot; name=&quot;create_label[order_ids][__name__]&quot; required=&quot;required&quot; class=&quot;form-control&quot; />"></div>
-                <label for="labels_amount">Amout of labels</label>
-                <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
-                <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME') }}">Package type</label>
-                <select name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME') }}" class="custom-select">
-                    <option value="1">Packet</option>
-                    <option value="2">Mailbox package</option>
-                    <option value="3">Letter</option>
-                    <option value="4">Digital stamp</option>
-                </select>
-                <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME') }}">Only to receipient</label>
-                <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME') }}">
 
-                <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME') }}">Age check</label>
-                <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME') }}">
-                <select name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME') }}" class="custom-select">
-                    <option value="1">Normal</option>
-                    <option value="2">Large</option>
-                    <option value="3">Automatic</option>
-                </select>
-                <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME') }}">Return package</label>
-                <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME') }}">
+                <div class="form-group">
+                  <label for="labels_amount">Amout of labels</label>
+                  <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
+                </div>
 
-                <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME') }}">Signature</label>
-                <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME') }}">
+                <div class="form-group">
+                    <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME') }}">Package type</label>
+                    <select name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME') }}" class="custom-select">
+                        <option value="1">Packet</option>
+                        <option value="2">Mailbox package</option>
+                        <option value="3">Letter</option>
+                        <option value="4">Digital stamp</option>
+                    </select>
+                </div>
 
-                <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME') }}">Insurnance</label>
-                <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME') }}">
+                <div class="form-group">
+                    <span class="md-checkbox">
+                        <label>
+                            <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME') }}">
+                            <i class="md-checkbox-control"></i>
+                        </label>
+                    </span>
+                    <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME') }}">Only to receipient</label>
+                </div>
+
+                <div class="form-group">
+                    <span class="md-checkbox">
+                        <label>
+                            <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME') }}">
+                            <i class="md-checkbox-control"></i>
+                        </label>
+                    </span>
+                    <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME') }}">Age check</label>
+                </div>
+
+                <div class="form-group">
+                    <select name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME') }}" class="custom-select">
+                        <option value="1">Normal</option>
+                        <option value="2">Large</option>
+                        <option value="3">Automatic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <span class="md-checkbox">
+                        <label>
+                            <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME') }}">
+                            <i class="md-checkbox-control"></i>
+                        </label>
+                    </span>
+                    <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME') }}">Return package</label>
+                </div>
+
+                <div class="form-group">
+                    <span class="md-checkbox">
+                        <label>
+                            <input type="checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME') }}">
+                            <i class="md-checkbox-control"></i>
+                        </label>
+                    </span>
+                    <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME') }}">Signature</label>
+                </div>
+
+                <div class="form-group">
+                    <span class="md-checkbox">
+                        <label>
+                            <input type="checkbox" id="myparcel-insurance-checkbox" value="1" id="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME') }}" name="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME') }}">
+                            <i class="md-checkbox-control"></i>
+                        </label>
+                    </span>
+                    <label for="{{ constant('Gett\\MyParcel\\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME') }}">Insurnance</label>
+                </div>
+                <div class="insurance-additional-container">
+                    <div class="form-group insurance-additional-predefined">
+                        <div class="myparcel-radio-container">
+                            <input id="upto100" type="radio" value="1" name="insurance-value-option" class="myparcel-radio">
+                            <label for="upto100">Up to € 100</label>
+                        </div>
+                        <div class="myparcel-radio-container">
+                            <input id="upto250" type="radio" value="2" name="insurance-value-option" class="myparcel-radio">
+                            <label for="upto250">Up to € 250</label>
+                        </div>
+                        <div class="myparcel-radio-container">
+                            <input id="upto500" type="radio" value="3" name="insurance-value-option" class="myparcel-radio">
+                            <label for="upto500">Up to € 500</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="myparcel-radio-container">
+                            <input id="heigherthen500" type="radio" value="4" name="insurance-value-option" class="myparcel-radio">
+                            <label for="heigherthen500">Higher than € 500</label>
+                        </div>
+                        <div class="money-input-wrapper">
+                          <div class="input-group money-type">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text">€ </span>
+                              </div>
+                              <input type="text" id="myparcel-insurance-higher-amount" name="insurance-higher-amount" class="form-control" value="1000" />
+                          </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     {% endblock %}

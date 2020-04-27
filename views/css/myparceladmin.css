@@ -1,0 +1,67 @@
+/* custom radio buttons */
+.myparcel-radio-wrapper {
+  text-align: center;
+}
+.myparcel-radio-container {
+  display: inline-block;
+  padding: 0 20px;
+}
+.myparcel-radio {
+  display: none;
+}
+.myparcel-radio + label {
+  position: relative;
+  margin-left: 27px;
+}
+.myparcel-radio + label:before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 0px;
+  top: 0px;
+  margin-left: -29px;
+  margin-top: 0px;
+  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(204, 204, 204);
+  border-image: initial;
+  border-radius: 50%;
+  transition: border 0.15s ease-in-out 0s;
+}
+.myparcel-radio + label:after {
+  display: inline-block;
+  position: absolute;
+  content: " ";
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  top: 3px;
+  margin-left: -29px;
+  margin-top: 0px;
+  background-color: rgb(37, 185, 215);
+  transform: scale(0, 0);
+  border-radius: 50%;
+  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33) 0s;
+}
+.myparcel-radio:checked + label:after {
+  transform: scale(1, 1);
+}
+
+.insurance-additional-container {
+  display: none;
+  margin: 0 20px;
+}
+.insurance-additional-container.insurance-active {
+  display: block;
+}
+.insurance-additional-predefined {
+  display: flex;
+  justify-content: space-between;
+}
+.money-input-wrapper {
+  display: inline-block;
+}
