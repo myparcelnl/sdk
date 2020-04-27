@@ -20,7 +20,7 @@ trait LegacyOrderPageHooks
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
             ]);
 
-            return $this->display(__FILE__, 'views/templates/admin/hook/orders_popups.tpl');
+            return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');
         }
     }
 
@@ -62,12 +62,12 @@ trait LegacyOrderPageHooks
             'link' => $link,
         ]);
 
-        return $this->display(__FILE__, 'views/templates/admin/icon-labels.tpl');
+        return $this->display($this->name, 'views/templates/admin/icon-labels.tpl');
     }
 
     public function printMyParcelIcon($id, $params)
     {
-        return $this->display(__FILE__, 'views/templates/admin/icon-concept.tpl');
+        return $this->display($this->name, 'views/templates/admin/icon-concept.tpl');
     }
 
     public function hookActionAdminControllerSetMedia()
