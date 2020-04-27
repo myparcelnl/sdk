@@ -1,7 +1,16 @@
-<button class="js-bulk-modal-form-submit-btn addLabel"
+<button class="btn btn-link dropdown-item tooltip-link inline-dropdown-item js-bulk-modal-form-submit-btn addLabel"
         type="button"
+
+        data-toggle="pstooltip"
+        data-placement="top"
+        data-original-title="{{ action.name }}"
+>
+    <i
+        class="material-icons"
         data-modal-id = "modal" onclick="return false;"
         data-form-url="{{ path(action.options.submit_route) }}"
-        data-form-method="POST" >
-    {{ action.name }}
+        data-form-method="POST"
+    >
+      label
+    </i>
 </button>

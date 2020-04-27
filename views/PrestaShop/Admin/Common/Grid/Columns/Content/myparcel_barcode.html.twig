@@ -4,19 +4,42 @@
 {% set ids = record.ids|split(',') %}
 
 {% for key in barcodes|keys %}
+  <div style="text-align: center;margin-top: 5px;">
+
     <label>{{ statuses[key] }}</label>
-    <a href="{{ track_links[key] }}" >{{ barcodes[key] }}</a>
+    <a href="{{ track_links[key] }}">{{ barcodes[key] }}</a>
 
     {% if ids[key] != "" %}
-    <button class="js-bulk-modal-form-submit-btn printLabel"
-            type="button"
-            data-label_id = "{{ ids[key] }}"
-            data-modal-id = "print-modal" onclick="return false;"
-            data-form-method="POST" >
-        Print
-    </button>
+      <a class="tooltip-link js-bulk-modal-form-submit-btn printLabel"
+         type="button"
+         href="#"
 
-    <a href="{{ path('admin_myparcel_order_label_refresh', {'labelId': ids[key]}) }}">Refresh</a>
+         data-toggle="pstooltip"
+         data-placement="top"
+         data-original-title="Print"
+      >
+        <i
+          class="material-icons"
+          data-label_id="{{ ids[key] }}"
+          data-modal-id="print-modal" onclick="return false;"
+          data-form-method="POST"
+        >
+          print
+        </i>
+      </a>
+
+      <a
+        class="tooltip-link"
+        href="{{ path('admin_myparcel_order_label_refresh', {'labelId': ids[key]}) }}"
+
+        data-toggle="pstooltip"
+        data-placement="top"
+        data-original-title="Refresh"
+      >
+        <i class="material-icons">
+          refresh
+        </i>
+      </a>
     {% endif %}
-    <br>
+  </div>
 {% endfor %}

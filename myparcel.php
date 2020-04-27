@@ -4,6 +4,7 @@ use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
 use Gett\MyParcel\Module\Hooks\FrontHooks;
 use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
+use Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
 use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
 
 if (!defined('_PS_VERSION_')) {
@@ -16,6 +17,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 class MyParcel extends CarrierModule
 {
     use DisplayAdminProductsExtra;
+    use DisplayBackOfficeHeader;
     use OrdersGridHooks;
     use FrontHooks;
     use LegacyOrderPageHooks;
@@ -30,6 +32,7 @@ class MyParcel extends CarrierModule
 
     public $hooks = [
         'displayAdminProductsExtra',
+        'displayBackOfficeHeader',
         'actionProductUpdate',
         'displayCarrierExtraContent',
         'displayHeader',
