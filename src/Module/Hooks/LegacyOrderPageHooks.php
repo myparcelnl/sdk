@@ -17,6 +17,7 @@ trait LegacyOrderPageHooks
             $link = new \Link();
             $this->context->smarty->assign([
                 'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
+                'print_bulk_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabelsBulk']),
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
             ]);
 
@@ -81,6 +82,7 @@ trait LegacyOrderPageHooks
                     'default_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
                     'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                     'create_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabelsBulk']),
+                    'refresh_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, ['action' => 'refreshLabelsBulk']),
                 ]
             );
 
