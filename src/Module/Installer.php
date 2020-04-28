@@ -18,14 +18,19 @@ class Installer
 
     public function __invoke(): bool
     {
-        $carrier = $this->addCarrier('Post NL');
-        $this->addZones($carrier);
-        $this->addGroups($carrier);
-        $this->addRanges($carrier);
+        $result = false;
+        $result &= $this->migrate();
+        $result &= $this->hooks();
+        $result &= $this->installTabs();
 
-        return $this->hooks()
-            && $this->migrate()
-            && $this->installTabs();
+        if ($result) {
+            $carrier = $this->addCarrier('Post NL');
+            $this->addZones($carrier);
+            $this->addGroups($carrier);
+            $this->addRanges($carrier);
+        }
+
+        return $result;
     }
 
     public function installTabs()
