@@ -72,7 +72,7 @@ class ConsignmentFactory
             ->setPerson($order['person'])
             ->setFullStreet($order['full_street'])
             ->setPostalCode($order['postcode'])
-            ->setCity($order['city'])
+            ->setCity($order['city']);
         ;
 
         if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
@@ -82,7 +82,21 @@ class ConsignmentFactory
         if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME)) {
             $consignment->setPhone($order['phone']);
         }
+        $delivery_setting = json_decode($order['delivery_settings']);
+        $consignment->setDeliveryDate(date('Y-m-d H:i:s',strtotime($delivery_setting->date)));
+        if ($delivery_setting->isPickup) {
+            $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]);
+            $consignment->setPickupNetworkId($delivery_setting->pickupLocation->retail_network_id);
+        } else {
+            $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$delivery_setting->deliveryType]);
+        }
 
+        if ($delivery_setting->shipmentOptions->only_recipient) {
+            $consignment->setOnlyRecipient(true);
+        }
+        if ($delivery_setting->shipmentOptions->signature) {
+            $consignment->setSignature(true);
+        }
         $consignment->setLabelDescription($this->configuration->get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME));
 
         return $consignment;

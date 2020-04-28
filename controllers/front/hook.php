@@ -4,7 +4,7 @@ if (!defined('_PS_VERSION_')) {
     return;
 }
 
-require_once dirname(__FILE__) . '/../../MyParcel.php';
+require_once dirname(__FILE__) . '/../../myparcel.php';
 
 class MyParcelHookModuleFrontController extends ModuleFrontController
 {
@@ -48,7 +48,7 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
                     && isset($item['status'])
                     && isset($item['barcode'])
                 ) {
-                    MyParcelOrder::updateStatus($item['shipment_id'], $item['barcode'], $item['status']);
+                    \Gett\MyParcel\OrderLabel::updateStatus($item['shipment_id'], $item['barcode'], $item['status']);
                 }
             }
 

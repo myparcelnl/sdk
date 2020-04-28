@@ -52,35 +52,57 @@ class ApiForm extends AbstractForm
     {
         $parent = parent::update();
 
-        if (!$parent) {
-            if ((Tools::isSubmit('MY_PARCEL_API_KEY') && Tools::getValue('MY_PARCEL_API_KEY') != Configuration::get('MY_PARCEL_API_KEY')) || Tools::isSubmit('resetHook')) {
-                $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
-                $result = $service->addSubscription(
-                    new Subscription(
-                        Subscription::SHIPMENT_STATUS_CHANGE_HOOK_NAME,
-                        rtrim(
-                            (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://') . Tools::getShopDomainSsl() . __PS_BASE_URI__,
-                            '/'
-                        ) . "/index.php?fc=module&module={$this->module->name}&controller=hook"
-                    )
+        if ((Tools::isSubmit('MY_PARCEL_API_KEY') && Tools::getValue('MY_PARCEL_API_KEY') != Configuration::get('MY_PARCEL_API_KEY')) || Tools::isSubmit('resetHook')) {
+            $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
+            $result = $service->addSubscription(
+                new Subscription(
+                    Subscription::SHIPMENT_STATUS_CHANGE_HOOK_NAME,
+                    rtrim(
+                        (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://') . Tools::getShopDomainSsl() . __PS_BASE_URI__,
+                        '/'
+                    ) . "/index.php?fc=module&module={$this->module->name}&controller=hook"
+                )
+            );
+
+            if (isset($result['data']['ids'][0]['id'])) {
+                Configuration::updateValue(
+                    'MY_PARCEL_WEBHOOK_ID',
+                    Tools::getValue($result['data']['ids'][0]['id'])
                 );
-
-                if (isset($result['data']['ids'][0]['id'])) {
-                    Configuration::updateValue(
-                        'MY_PARCEL_WEBHOOK_ID',
-                        Tools::getValue($result['data']['ids'][0]['id'])
-                    );
-                }
             }
-            if (Tools::isSubmit('deleteHook')) {
-                $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
-                $service->deleteSubscription(Tools::getValue('MY_PARCEL_WEBHOOK_ID'));
-                Configuration::updateValue('MY_PARCEL_WEBHOOK_ID', '');
-            }
-
-            return true;
+        }
+        if (Tools::isSubmit('deleteHook')) {
+            $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
+            $service->deleteSubscription(Tools::getValue('MY_PARCEL_WEBHOOK_ID'));
+            Configuration::updateValue('MY_PARCEL_WEBHOOK_ID', '');
         }
 
+
         return $parent;
+    }
+
+    public function getButtons()
+    {
+        $buttons = [
+            'reset' => [
+                'title' => $this->module->l('Refresh'),
+                'name' => 'resetHook',
+                'type' => 'submit',
+                'class' => 'btn btn-default pull-left',
+                'icon' => 'process-icon-reset',
+            ],
+        ];
+
+        if (Configuration::get('MY_PARCEL_WEBHOOK_ID')){
+            $buttons['delete']=  [
+                    'title' => $this->module->l('Delete'),
+                    'name' => 'deleteHook',
+                    'type' => 'submit',
+                    'class' => 'btn btn-default pull-left',
+                    'icon' => 'process-icon-delete',
+            ];
+        }
+
+        return $buttons;
     }
 }

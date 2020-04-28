@@ -18,7 +18,7 @@ class Installer
 
     public function __invoke(): bool
     {
-        $result = false;
+        $result = true;
         $result &= $this->migrate();
         $result &= $this->hooks();
         $result &= $this->installTabs();

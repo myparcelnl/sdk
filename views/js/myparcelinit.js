@@ -42,6 +42,8 @@ $(document).ready(function() {
             let input = document.createElement("input");
             input.id = 'mypa-input';
             input.classList.add('mypa-post-nl-data');
+            input.style = "display:none;";
+            input.name = "myparcel-delivery-options";
             $wrapper[0].appendChild(input);
 
             document.dispatchEvent(new Event('myparcel_update_delivery_options'));

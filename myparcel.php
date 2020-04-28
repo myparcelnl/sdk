@@ -45,7 +45,7 @@ class MyParcel extends CarrierModule
         'actionAdminControllerSetMedia',
         'displayAdminOrderMainBottom',
         'actionObjectGettMyParcelOrderLabelAddAfter',
-        'actionObjectGettMyParcelOrderLabelAddAfter'
+        'actionObjectGettMyParcelOrderLabelUpdateAfter'
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;

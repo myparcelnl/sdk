@@ -34,20 +34,20 @@ class OrderLabel extends \ObjectModel
         }
 
         if ($statusCode === 14) {
-            if (Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
-                MyParcelOrderHistory::setShipped($idShipment, false);
+            if (\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
+                OrderLabel::setShipped($idShipment, false);
             } else {
-                MyParcelOrderHistory::setPrinted($idShipment, false);
+                OrderLabel::setPrinted($idShipment, false);
             }
         } else {
             if ($statusCode >= 2) {
-                MyParcelOrderHistory::setPrinted($idShipment);
+                OrderLabel::setPrinted($idShipment);
             }
             if ($statusCode >= 3) {
-                MyParcelOrderHistory::setShipped($idShipment);
+                OrderLabel::setShipped($idShipment);
             }
             if ($statusCode >= 7 && $statusCode <= 11) {
-                MyParcelOrderHistory::setReceived($idShipment);
+                OrderLabel::setReceived($idShipment);
             }
         }
 
@@ -67,5 +67,83 @@ class OrderLabel extends \ObjectModel
     public static function findByLabelId(int $label_id)
     {
         return \Db::getInstance()->executeS("SELECT * FROM " ._DB_PREFIX_.self::$definition['table'] ." WHERE id_label = '".$label_id."' ")[0];
+    }
+
+    public static function setShipped($idShipment, $mail = true)
+    {
+        $targetOrderState = \Configuration::get('PS_OS_SHIPPING');
+        if (!Configuration::get(MyParcel::NOTIFICATION_MOMENT) && $mail) {
+            static::sendShippedNotification($idShipment);
+        }
+
+        if (!$targetOrderState) {
+            return;
+        }
+
+        static::setOrderStatus($idShipment, $targetOrderState);
+    }
+
+    public static function setPrinted($idShipment, $mail = true)
+    {
+        $targetOrderState = 14;
+        if ($mail && \Configuration::get(MyParcel::NOTIFICATION_MOMENT)) {
+            static::sendShippedNotification($idShipment);
+        }
+
+        if (!$targetOrderState) {
+            return;
+        }
+
+        static::setOrderStatus($idShipment, $targetOrderState);
+    }
+
+    public static function sendShippedNotification()
+    {
+
+    }
+
+    public static function setOrderStatus($idShipment, $status, $addWithEmail = true)
+    {
+        $targetOrderState = (int)$status;
+        if (!$targetOrderState) {
+            return;
+        }
+        $order = MyParcelOrder::getOrderByShipmentId($idShipment);
+        $shipment = MyParcelOrder::getByShipmentId($idShipment);
+        if (!Validate::isLoadedObject($order) || !Validate::isLoadedObject($shipment)) {
+            return;
+        }
+        if (in_array($order->getCurrentState(), MyParcel::getIgnoredStatuses())) {
+            return;
+        }
+        $shipment = mypa_dot(@json_decode($shipment->shipment, true));
+
+        $idOrder = (int)$order->id;
+        $history = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS("SELECT `id_order_state` FROM " . _DB_PREFIX_ . "order_history WHERE `id_order` = $idOrder");
+        if (is_array($history)) {
+            $history = array_column($history, 'id_order_state');
+            if (in_array($targetOrderState, $history)) {
+                return;
+            }
+        }
+
+        $history = new OrderHistory();
+        $history->id_order = (int)$order->id;
+        $history->changeIdOrderState($targetOrderState, (int)$order->id, !$order->hasInvoice());
+        if ($addWithEmail && !in_array((int)$shipment->get('options.package_type'), array(1, 2))) {
+            $history->addWithemail();
+        } else {
+            $history->add();
+        }
+    }
+
+    public static function setReceived($idShipment)
+    {
+        $targetOrderState = (int)Configuration::get(MyParcel::RECEIVED_STATUS);
+        if (!$targetOrderState) {
+            return;
+        }
+
+        static::setOrderStatus($idShipment, $targetOrderState);
     }
 }

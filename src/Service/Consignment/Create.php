@@ -35,10 +35,11 @@ class Create
 
     private function process(MyParcelCollection $collection, $return = false)
     {
+        $collection->setPdfOfLabels();
         if ($return) {
-            $collection = $collection->sendReturnLabelMails();
+            $collection->sendReturnLabelMails();
         }
-        foreach ($collection->setPdfOfLabels() as $consignment) {
+        foreach ($collection as $consignment) {
             $orderLabel = new OrderLabel();
             $orderLabel->id_label = $consignment->getConsignmentId();
             $orderLabel->id_order = $consignment->getReferenceId();
@@ -59,9 +60,8 @@ class Create
     {
         $myParcelCollection = $this->consignment_factory->fromOrder($id_order);
 
-        $this->process($myParcelCollection);
+        $this->process($myParcelCollection, true);
 
         return true;
     }
-
 }
