@@ -44,6 +44,50 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="bulk-print" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{$print_bulk_action}" method="post" id="print-bulk-form" >
+                    <div class="myparcel-radio-wrapper">
+                        <div class="myparcel-radio-container">
+                            <input id="a4" type="radio" value="a4" name="format" class="myparcel-radio">
+                            <label for="a4">A4</label>
+                        </div>
+                        <div class="myparcel-radio-container">
+                            <input id="a6" type="radio" checked value="a6" name="format" class="myparcel-radio">
+                            <label for="a6">A6</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="positions-block">
+                        <input id="top-left" type="checkbox" value="1" name="position[]">
+                        <label for="top-left">Top-left</label>
+                        <br>
+                        <input id="top-right" type="checkbox" value="2" name="position[]">
+                        <label for="top-right">Top-right</label>
+                        <br>
+                        <input id="bottom-left" type="checkbox" value="3" name="position[]">
+                        <label for="bottom-left">Bottom-left</label>
+                        <br>
+                        <input id="bottom-right" type="checkbox" value="4" name="position[]">
+                        <label for="bottom-right">Bottom-right</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="print-bulk-button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

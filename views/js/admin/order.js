@@ -4,69 +4,91 @@ window.addEventListener('load', function() {
         return
     }
 
-    // Build item
-    let item = document.createElement('li'),
-        link = document.createElement('a')
 
-    link.innerHTML = '<i class="icon-download"></i> ' + "Create label"
-    link.href = '#'
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        ids = []
-        document.querySelectorAll('input[name="orderBox[]"]:checked').forEach (e => {
-            ids.push(e.value)
-        })
+    let addBulkOption = function(link) {
+        let item = document.createElement('li');
+        item.appendChild(link);
+        bulk.appendChild(item);
+    };
 
-        $.ajax({
-            method: "POST",
-            url: create_labels_bulk_route,
-            data: {
-                order_orders_bulk : ids
-            }
-        }).done((result) => {
-            window.location.reload();
-        }).fail(() => {
+    let addBulkCreateLabel = function() {
+        let link = document.createElement('a');
 
+        link.innerHTML = '<i class="icon-download"></i> ' + "Create label";
+        link.href = '#';
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            ids = [];
+            document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
+                ids.push(e.value);
+            });
+
+            $.ajax({
+                method: "POST",
+                url: create_labels_bulk_route,
+                data: {
+                    order_ids: ids
+                }
+            }).done((result) => {
+                window.location.reload();
+            }).fail(() => {
+
+            });
         });
 
-        //window.location = "EXport label link" + '&ids=' + ids.join()
-    })
-    item.appendChild(link)
+        addBulkOption(link);
+    };
 
-    // Add item
-    bulk.appendChild(item)
+    let addBulkRefreshLabel = function() {
+        let link = document.createElement('a');
 
+        link.innerHTML = '<i class="icon-download"></i> ' + "Refresh labels";
+        link.href = '#';
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            ids = [];
+            document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
+                ids.push(e.value);
+            });
 
-    let printItem = document.createElement('li'),
-        printLink = document.createElement('a')
+            $.ajax({
+                method: "POST",
+                url: refresh_labels_bulk_route,
+                data: {
+                    order_ids: ids
+                }
+            }).done((result) => {
+                window.location.reload();
+            }).fail(() => {
 
-    link.innerHTML = '<i class="icon-download"></i> ' + "Create label"
-    link.href = '#'
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        ids = []
-        document.querySelectorAll('input[name="orderBox[]"]:checked').forEach (e => {
-            ids.push(e.value)
-        })
-
-        $.ajax({
-            method: "POST",
-            url: create_labels_bulk_route,
-            data: {
-                order_orders_bulk : ids
-            }
-        }).done((result) => {
-            window.location.reload();
-        }).fail(() => {
-
+            });
         });
 
-        //window.location = "EXport label link" + '&ids=' + ids.join()
-    })
-    item.appendChild(link)
+        addBulkOption(link);
+    };
 
-    // Add item
-    bulk.appendChild(item)
+    let addBulkPrintLabel = function() {
+        let link = document.createElement('a');
+
+        link.innerHTML = '<i class="icon-download"></i> ' + "Print labels";
+        link.setAttribute('data-toggle', 'modal');
+        link.setAttribute('data-target', '#bulk-print');
+        link.href = '#';
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            let ids = [];
+            document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
+                let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
+                $labelIdInput.prependTo('#bulk-print form');
+            });
+        });
+
+        addBulkOption(link);
+    };
+
+    addBulkPrintLabel();
+    addBulkRefreshLabel();
+    addBulkCreateLabel();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -80,6 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     $('#print_button').click(function () {
         $('#print-form').submit();
+    });
+    $('#print-bulk-button').click(function () {
+        $('#print-bulk-form').submit();
     });
 
     $('#add').click(function () {
