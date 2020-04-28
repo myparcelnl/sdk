@@ -14,13 +14,13 @@ trait LegacyOrderPageHooks
                 $this->_path . 'resources/js/admin/order.js'
             );
 
-            $link = new Link();
+            $link = new \Link();
             $this->context->smarty->assign([
                 'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
             ]);
 
-            return $this->display(__FILE__, 'views/templates/admin/hook/orders_popups.tpl');
+            return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');
         }
     }
 
@@ -30,12 +30,12 @@ trait LegacyOrderPageHooks
 
         $params['fields']['myparcel_void_1'] = [
             'title' => 'Labels',
-            'class' => 'text-nowrap',
+            'class' => 'pointer-myparcel-labels text-center',
             'callback' => 'printMyParcelLabel',
             'search' => false,
             'orderby' => false,
             'remove_onclick' => true,
-            'callback_object' => Module::getInstanceByName($this->name),
+            'callback_object' => \Module::getInstanceByName($this->name),
         ];
 
         $params['fields']['myparcel_void_2'] = [
@@ -45,29 +45,29 @@ trait LegacyOrderPageHooks
             'search' => false,
             'orderby' => false,
             'remove_onclick' => true,
-            'callback_object' => Module::getInstanceByName($this->name),
+            'callback_object' => \Module::getInstanceByName($this->name),
         ];
     }
 
     public function printMyParcelLabel($id, $params)
     {
-        $sql = new DbQuery();
+        $sql = new \DbQuery();
         $sql->select('*');
         $sql->from('myparcel_order_label');
         $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
-        $result = Db::getInstance()->executeS($sql);
-        $link = new Link();
+        $result = \Db::getInstance()->executeS($sql);
+        $link = new \Link();
         $this->context->smarty->assign([
             'labels' => $result,
             'link' => $link,
         ]);
 
-        return $this->display(__FILE__, 'views/templates/admin/icon-labels.tpl');
+        return $this->display($this->name, 'views/templates/admin/icon-labels.tpl');
     }
 
     public function printMyParcelIcon($id, $params)
     {
-        return $this->display(__FILE__, 'views/templates/admin/icon-concept.tpl');
+        return $this->display($this->name, 'views/templates/admin/icon-concept.tpl');
     }
 
     public function hookActionAdminControllerSetMedia()
