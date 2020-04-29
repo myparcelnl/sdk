@@ -97,8 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
         $('#id_label').val(id);
     });
     $('button[data-target="#create"]').click(function(){
-        var id = $(this).data('order-id');
+        var id = $(this).data('order-id'),
+            package_type = $(this).data('package-type');
         $('#order_id').val(id);
+        $('#package-type').val(package_type);
     });
     $('#print_button').click(function () {
         $('#print-form').submit();

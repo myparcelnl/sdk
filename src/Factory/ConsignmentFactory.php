@@ -2,7 +2,9 @@
 
 namespace Gett\MyParcel\Factory\Consignment;
 
+use Gett\MyParcel\Carrier\PackageTypeCalculator;
 use Gett\MyParcel\Constant;
+use Gett\MyParcel\Service\CarrierConfigurationProvider;
 use Symfony\Component\HttpFoundation\Request;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
@@ -75,6 +77,13 @@ class ConsignmentFactory
             ->setCity($order['city']);
         ;
 
+        if ($package_type = $this->request->get('MY_PARCEL_PACKAGE_TYPE')) {
+            $consignment->setPackageType($package_type);
+        } else {
+            $carrier_configuration = new CarrierConfigurationProvider($order['id_carrier']);
+            $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'], $carrier_configuration->get('MY_PARCEL_PACKAGE_TYPE')));
+        }
+
         if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
             $consignment->setEmail($order['email']);
         }
@@ -84,6 +93,7 @@ class ConsignmentFactory
         }
         $delivery_setting = json_decode($order['delivery_settings']);
         $consignment->setDeliveryDate(date('Y-m-d H:i:s',strtotime($delivery_setting->date)));
+
         if ($delivery_setting->isPickup) {
             $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]);
             $consignment->setPickupNetworkId($delivery_setting->pickupLocation->retail_network_id);

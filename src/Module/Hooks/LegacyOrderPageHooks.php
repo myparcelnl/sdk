@@ -2,6 +2,10 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
+use Gett\MyParcel\Carrier\PackageTypeCalculator;
+use Gett\MyParcel\Constant;
+use Gett\MyParcel\Service\CarrierConfigurationProvider;
+
 trait LegacyOrderPageHooks
 {
     public function hookDisplayAdminListBefore()
@@ -27,7 +31,7 @@ trait LegacyOrderPageHooks
 
     public function hookActionAdminOrdersListingFieldsModifier($params)
     {
-        $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`';
+        $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`, a.id_carrier';
 
         $params['fields']['myparcel_void_1'] = [
             'title' => 'Labels',
@@ -58,9 +62,10 @@ trait LegacyOrderPageHooks
         $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
         $result = \Db::getInstance()->executeS($sql);
         $link = new \Link();
+
         $this->context->smarty->assign([
             'labels' => $result,
-            'link' => $link,
+            'link' => $link
         ]);
 
         return $this->display($this->name, 'views/templates/admin/icon-labels.tpl');
@@ -68,6 +73,15 @@ trait LegacyOrderPageHooks
 
     public function printMyParcelIcon($id, $params)
     {
+        $carrier_configuration = new CarrierConfigurationProvider($params['id_carrier']);
+        $default_package_type = $carrier_configuration->get('MY_PARCEL_PACKAGE_TYPE');
+
+        $this->context->smarty->assign(
+            [
+                'package_type' => PackageTypeCalculator::getOrderPackageType($params['id_order'], $default_package_type)
+            ]
+        );
+
         return $this->display($this->name, 'views/templates/admin/icon-concept.tpl');
     }
 

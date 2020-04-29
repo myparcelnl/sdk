@@ -106,7 +106,7 @@
 
                 <div class="form-group">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}">Package type</label>
-                    <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}" class="custom-select">
+                    <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}"  id="package-type" class="custom-select">
                         <option value="1">Packet</option>
                         <option value="2">Mailbox package</option>
                         <option value="3">Letter</option>

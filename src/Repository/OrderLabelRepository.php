@@ -72,7 +72,8 @@ class OrderLabelRepository
                     a.city,
                     c.email,
                     a.phone,
-                    ds.delivery_settings
+                    ds.delivery_settings,
+                    o.id_carrier
                     '
         );
         $qb->from($this->tablePrefix . 'orders', 'o');

@@ -28,6 +28,7 @@ class MyParcel extends CarrierModule
         \Gett\MyParcel\Database\CreateProductConfigurationTableMigration::class,
         \Gett\MyParcel\Database\CreateCarrierConfigurationTableMigration::class,
         \Gett\MyParcel\Database\CreateOrderLabelTableMigration::class,
+        \Gett\MyParcel\Database\CreateDeliverySettingTableMigration::class,
     ];
 
     public $hooks = [
