@@ -22,6 +22,6 @@ class CarrierConfigurationProvider
             }
         }
 
-        return isset($this->params[$name]) ? $this->params[$name] : $default;
+        return isset($this->params[$name]) && $this->params[$name] ? $this->params[$name] : $default;
     }
 }
