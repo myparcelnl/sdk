@@ -74,7 +74,7 @@ trait LegacyOrderPageHooks
     public function printMyParcelIcon($id, $params)
     {
         $carrier_configuration = new CarrierConfigurationProvider($params['id_carrier']);
-        $default_package_type = $carrier_configuration->get('MY_PARCEL_PACKAGE_TYPE');
+        $default_package_type = $carrier_configuration->get('MY_PARCEL_PACKAGE_TYPE', 1);
 
         $this->context->smarty->assign(
             [

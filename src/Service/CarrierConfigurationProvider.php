@@ -12,7 +12,7 @@ class CarrierConfigurationProvider
         $this->id_carrier = $id_carrier;
     }
 
-    public function get(string $name)
+    public function get(string $name, $default)
     {
         if (empty($this->params)) {
             $params = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '" . $this->id_carrier . "' ");
@@ -22,6 +22,6 @@ class CarrierConfigurationProvider
             }
         }
 
-        return isset($this->params[$name]) ? $this->params[$name] : null;
+        return isset($this->params[$name]) ? $this->params[$name] : $default;
     }
 }
