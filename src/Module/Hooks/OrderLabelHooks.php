@@ -31,7 +31,7 @@ trait OrderLabelHooks
     {
         $order = new \Order($params['object']->id_order);
         if ($order->current_state != \Configuration::get('MY_PARCEL_IGNORE_ORDER_STATUS')){
-            if (\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params->new_order_state == '3'){
+            if (\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params['object']->new_order_state == '3'){
                 $history = new \OrderHistory();
                 $history->id_order = (int)$params['object']->id_order;
                 $history->changeIdOrderState(\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME), (int)$params['object']->id_order);

@@ -18,19 +18,19 @@ window.addEventListener('load', function() {
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            ids = [];
+            ids = {};
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
-                ids.push(e.value);
+                ids[e.value] = document.querySelector('button[data-order-id="'+e.value+'"]').dataset.labelOptions;
             });
 
             $.ajax({
                 method: "POST",
                 url: create_labels_bulk_route,
                 data: {
-                    order_ids: ids
+                    data: ids
                 }
             }).done((result) => {
-                window.location.reload();
+                // window.location.reload();
             }).fail(() => {
 
             });
@@ -58,7 +58,7 @@ window.addEventListener('load', function() {
                     order_ids: ids
                 }
             }).done((result) => {
-                window.location.reload();
+                //window.location.reload();
             }).fail(() => {
 
             });
@@ -77,6 +77,7 @@ window.addEventListener('load', function() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             let ids = [];
+            $('#print-bulk-form').find('input[name="order_ids[]"]').remove();
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
                 let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
                 $labelIdInput.prependTo('#bulk-print form');
@@ -98,9 +99,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     $('button[data-target="#create"]').click(function(){
         var id = $(this).data('order-id'),
-            package_type = $(this).data('package-type');
+            options = $(this).data('label-options');
+        console.log(options);
         $('#order_id').val(id);
-        $('#package-type').val(package_type);
+        $('#package-type').val(options.package_type);
+        if (options.only_to_recepient == true) {
+            $("#MY_PARCEL_RECIPIENT_ONLY").prop("checked", true)
+        }
+        if (options.age_check == true) {
+            $("#MY_PARCEL_AGE_CHECK").prop("checked", true)
+        }
+        if (options.signature == true) {
+            $("#MY_PARCEL_SIGNATURE_REQUIRED").prop("checked", true)
+        }
+        if (options.insurance) {
+            $("#MY_PARCEL_INSURANCE").prop("checked", true)
+        }
     });
     $('#print_button').click(function () {
         $('#print-form').submit();
@@ -112,10 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
     $('#add').click(function () {
         $.ajax({
             method: "POST",
-            url: '{{$action}}', //TODO pass action param
+            url: create_label_action,
             data: $('#print-modal :input').serialize()
         }).done((result) => {
-            window.location.reload();
+            //window.location.reload();
         }).fail(() => {
 
         });

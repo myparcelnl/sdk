@@ -66,7 +66,9 @@ class OrderLabel extends \ObjectModel
 
     public static function findByLabelId(int $label_id)
     {
-        return \Db::getInstance()->executeS("SELECT * FROM " ._DB_PREFIX_.self::$definition['table'] ." WHERE id_label = '".$label_id."' ")[0];
+        $id = \Db::getInstance()->getValue("SELECT id_order_label FROM " ._DB_PREFIX_.self::$definition['table'] ." WHERE id_label = '".$label_id."' ");
+
+        return new OrderLabel($id);
     }
 
     public static function setShipped($idShipment, $mail = true)
@@ -145,5 +147,69 @@ class OrderLabel extends \ObjectModel
         }
 
         static::setOrderStatus($idShipment, $targetOrderState);
+    }
+
+    public static function getDataForLabelsCreate(array $orderIds)
+    {
+        $qb = new \DbQuery();
+        $qb->select('o.id_order,
+                    o.reference,
+                    co.iso_code,
+                    CONCAT(a.firstname, " ",a.lastname) as person,
+                    CONCAT(a.address1, " ", a.address2) as full_street,
+                    a.postcode,
+                    a.city,
+                    c.email,
+                    a.phone,
+                    ds.delivery_settings,
+                    o.id_carrier
+                    ');
+        $qb->from('orders', 'o');
+        $qb->innerJoin('address', 'a', 'o.id_address_delivery = a.id_address');
+        $qb->innerJoin('country', 'co', 'co.id_country = a.id_country');
+        $qb->innerJoin('customer', 'c', 'o.id_customer = c.id_customer');
+        $qb->innerJoin('myparcel_delivery_settings', 'ds', 'o.id_cart = ds.id_cart');
+
+        $qb->where('o.id_order IN (' . implode(',', $orderIds) . ') ');
+
+        return \Db::getInstance()->executeS($qb);
+    }
+
+    public static function getOrderDeliveryOptions(int $id_order)
+    {
+        $qb = new \DbQuery();
+        $qb->select('ds.delivery_settings');
+        $qb->from('myparcel_delivery_settings', 'ds');
+        $qb->innerJoin('orders', 'o', 'o.id_cart = ds.id_cart');
+        $qb->where('o.id_order = "'.$id_order.'" ');
+
+
+        return json_decode(\Db::getInstance()->executeS($qb)[0]['delivery_settings']);
+    }
+
+    public static function getOrderProducts(int $id_order)
+    {
+        $qb = new \DbQuery();
+        $qb->select('od.product_id');
+        $qb->from('order_detail', 'od');
+        $qb->where('od.id_order = "'.$id_order.'" ');
+
+
+        return \Db::getInstance()->executeS($qb);
+    }
+
+    public static function getOrderLabels(array $orders_id)
+    {
+        $qb = new \DbQuery();
+        $qb->select('ol.id_label');
+        $qb->from('myparcel_order_label', 'ol');
+        $qb->where('ol.id_order IN (' . implode(',', $orders_id) . ') ');
+
+        $return = [];
+        foreach (\Db::getInstance()->executeS($qb) as $item) {
+            $return[] = $item['id_label'];
+        }
+
+        return $return;
     }
 }

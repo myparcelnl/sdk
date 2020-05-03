@@ -61,13 +61,13 @@
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}" type="checkbox" id="only-reciepient">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}" type="checkbox" value="1" id="only-reciepient">
                     <label class="form-check-label" for="only-reciepient">
                         Only recipient
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" id="ageCheck">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" value="1" id="ageCheck">
                     <label class="form-check-label" for="ageCheck">
                         Age check
                     </label>
@@ -86,19 +86,19 @@
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" type="checkbox" id="gridCheck">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" type="checkbox" value="1" id="gridCheck">
                     <label class="form-check-label" for="gridCheck">
                         Return package
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" type="checkbox" id="signature">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" type="checkbox" value="1" id="signature">
                     <label class="form-check-label" for="signature">
                         Signature
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" name= "{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" type="checkbox" id="insurance">
+                    <input class="form-check-input" name= "{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" type="checkbox" value="1" id="insurance">
                     <label class="form-check-label" for="insurance">
                         Insurance
                     </label>
@@ -137,7 +137,7 @@
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" id="age-check">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" value="1" id="age-check">
                     <label class="form-check-label" for="age-check">
                         Customs age check
                     </label>

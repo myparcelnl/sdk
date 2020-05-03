@@ -47,7 +47,6 @@ class ConsignmentFactory
 
         for ($i = 0; $i < $this->request->get('number'); ++$i) {
             $consignment = $this->initConsignment($order);
-
             foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $option) {
                 if ($this->request->get($option)) {
                     if (method_exists($this, $option)) {
@@ -80,8 +79,7 @@ class ConsignmentFactory
         if ($package_type = $this->request->get('MY_PARCEL_PACKAGE_TYPE')) {
             $consignment->setPackageType($package_type);
         } else {
-            $carrier_configuration = new CarrierConfigurationProvider($order['id_carrier']);
-            $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'], $carrier_configuration->get('MY_PARCEL_PACKAGE_TYPE')));
+            $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'],$order['id_carrier']));
         }
 
         if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {

@@ -4,24 +4,18 @@ namespace Gett\MyParcel\Service;
 
 class CarrierConfigurationProvider
 {
-    private $id_carrier;
-    private $params;
+    static $configuration;
 
-    public function __construct(int $id_carrier)
+    public static function get(int $carrier_id, string $name, $default = null)
     {
-        $this->id_carrier = $id_carrier;
-    }
+        if (!static::$configuration[$carrier_id][$name]) {
+            $result = \Db::getInstance()->executeS('SELECT name,value FROM ' . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '$carrier_id' ");
 
-    public function get(string $name, $default)
-    {
-        if (empty($this->params)) {
-            $params = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '" . $this->id_carrier . "' ");
-
-            foreach ($params as $param) {
-                $this->params[$param['name']] = $param['value'];
+            foreach ($result as $item) {
+                static::$configuration[$carrier_id][$item['name']] = $item['value'];
             }
         }
 
-        return isset($this->params[$name]) && $this->params[$name] ? $this->params[$name] : $default;
+        return isset(static::$configuration[$carrier_id][$name]) && static::$configuration[$carrier_id][$name] ? static::$configuration[$carrier_id][$name] : $default;
     }
 }

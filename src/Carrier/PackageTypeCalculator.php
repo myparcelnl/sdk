@@ -2,9 +2,12 @@
 
 namespace Gett\MyParcel\Carrier;
 
+use Gett\MyParcel\Constant;
+use Gett\MyParcel\Service\CarrierConfigurationProvider;
+
 class PackageTypeCalculator
 {
-    public static function getOrderPackageType(int $id_order, int $default_package_type)
+    public static function getOrderPackageType(int $id_order, int $id_carrier)
     {
         $package_types = array_unique(self::getOrderProductsPackageTypes($id_order));
 
@@ -12,7 +15,7 @@ class PackageTypeCalculator
             return min($package_types);
         }
 
-        return $default_package_type;
+        return CarrierConfigurationProvider::get($id_carrier,Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME);
     }
 
     private static function getOrderProductsPackageTypes(int $id_order)
@@ -25,7 +28,7 @@ class PackageTypeCalculator
         $result = \Db::getInstance()->executeS($sql);
         $package_types = [];
         foreach ($result as $item) {
-            if ($item['name'] == 'MY_PARCEL_PACKAGE_TYPE') {
+            if ($item['name'] == 'MY_PARCEL_PACKAGE_TYPE' && $item['value']) {
                 $package_types[$item['id_product']] = $item['value'];
             }
         }

@@ -81,6 +81,7 @@ trait OrdersGridHooks
         $this->context->smarty->assign(
             ['action' => $this->getAdminLink('Label', true, ['action' => 'return', 'id_order' => $this->getOrderId()])]
         );
+
         return $this->display($this->name, 'views/templates/admin/order/return-form.tpl');
     }
 
