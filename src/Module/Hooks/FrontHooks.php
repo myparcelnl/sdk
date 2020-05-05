@@ -6,7 +6,6 @@ trait FrontHooks
 {
     public function hookActionCarrierProcess($params)
     {
-        //var_dump($_POST);die();
         if (\Tools::isSubmit('confirmDeliveryOption') && $options = \Tools::getValue('myparcel-delivery-options')) {
             \Db::getInstance()->insert('myparcel_delivery_settings', ['id_cart' => $params['cart']->id, 'delivery_settings' => $options]);
         }

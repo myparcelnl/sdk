@@ -162,7 +162,8 @@ class OrderLabel extends \ObjectModel
                     c.email,
                     a.phone,
                     ds.delivery_settings,
-                    o.id_carrier
+                    o.id_carrier,
+                    a.id_country
                     ');
         $qb->from('orders', 'o');
         $qb->innerJoin('address', 'a', 'o.id_address_delivery = a.id_address');
@@ -183,8 +184,12 @@ class OrderLabel extends \ObjectModel
         $qb->innerJoin('orders', 'o', 'o.id_cart = ds.id_cart');
         $qb->where('o.id_order = "'.$id_order.'" ');
 
+        $res = \Db::getInstance()->executeS($qb);
+        if (isset($res[0]['delivery_settings'])) {
+            return json_decode($res[0]['delivery_settings']);
+        }
 
-        return json_decode(\Db::getInstance()->executeS($qb)[0]['delivery_settings']);
+        return false;
     }
 
     public static function getOrderProducts(int $id_order)
@@ -211,5 +216,21 @@ class OrderLabel extends \ObjectModel
         }
 
         return $return;
+    }
+
+    public static function getCustomsOrderProducts(int $id_order)
+    {
+        $qb = new \DbQuery();
+        $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_price, od.product_weight');
+        $qb->from('order_detail', 'od');
+        $qb->innerJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
+        $qb->where('od.id_order = "'.$id_order.'" AND pc.name = "'.Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME.'" ');
+
+        $return = [];
+        foreach (\Db::getInstance()->executeS($qb) as $item) {
+            if ($item['value'] && $item['value'] == 'No') {
+                return false;
+            }
+        }
     }
 }

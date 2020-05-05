@@ -1,9 +1,13 @@
 <?php
 
+use \Gett\MyParcel\Service\CarrierConfigurationProvider;
+
 class MyparcelCheckoutModuleFrontController extends ModuleFrontController
 {
     public function postProcess()
     {
+        $id_carrier = intval(Tools::getValue('id_carrier'));
+
         $provider = new \Gett\MyParcel\Service\CarrierConfigurationProvider((int) Tools::getValue('id_carrier'));
         $address = new \Address($this->context->cart->id_address_delivery);
         $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
@@ -13,55 +17,55 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
                 'platform' => 'myparcel',
                 'carriers' => ['postnl'],
 
-                'priceMorningDelivery' => $provider->get('priceMorningDelivery'),
-                'priceStandardDelivery' => $provider->get('priceStandardDelivery'),
-                'priceEveningDelivery' => $provider->get('priceEveningDelivery'),
-                'priceSignature' => $provider->get('priceSignature'),
-                'priceOnlyRecipient' => $provider->get('priceOnlyRecipient'),
-                'pricePickup' => $provider->get('pricePickup'),
+                'priceMorningDelivery' => CarrierConfigurationProvider::get($id_carrier,'priceMorningDelivery'),
+                'priceStandardDelivery' => CarrierConfigurationProvider::get($id_carrier,'priceStandardDelivery'),
+                'priceEveningDelivery' => CarrierConfigurationProvider::get($id_carrier,'priceEveningDelivery'),
+                'priceSignature' => CarrierConfigurationProvider::get($id_carrier,'priceSignature'),
+                'priceOnlyRecipient' => CarrierConfigurationProvider::get($id_carrier,'priceOnlyRecipient'),
+                'pricePickup' => CarrierConfigurationProvider::get($id_carrier,'pricePickup'),
 
-                'allowSaturdayDelivery' => $provider->get('allowSaturdayDelivery'),
-                'allowPickupLocations' => $provider->get('allowPickupLocations'),
-                'allowSignature' => $provider->get('allowSignature'),
+                'allowSaturdayDelivery' => CarrierConfigurationProvider::get($id_carrier,'allowSaturdayDelivery'),
+                'allowPickupLocations' => CarrierConfigurationProvider::get($id_carrier,'allowPickupLocations'),
+                'allowSignature' => CarrierConfigurationProvider::get($id_carrier,'allowSignature'),
 
-                'dropOffDays' => $provider->get('dropOffDays'),
-                'cutoffTime' => $provider->get('cutoffTime'),
-                'deliveryDaysWindow' => $provider->get('deliveryDaysWindow'),
-                'dropOffDelay' => $provider->get('dropOffDelay'),
+                'dropOffDays' => CarrierConfigurationProvider::get($id_carrier,'dropOffDays'),
+                'cutoffTime' => CarrierConfigurationProvider::get($id_carrier,'cutoffTime'),
+                'deliveryDaysWindow' => CarrierConfigurationProvider::get($id_carrier,'deliveryDaysWindow'),
+                'dropOffDelay' => CarrierConfigurationProvider::get($id_carrier,'dropOffDelay'),
 
-                'allowOnlyRecipient' => $provider->get('allowOnlyRecipient')
+                'allowOnlyRecipient' => CarrierConfigurationProvider::get($id_carrier,'allowOnlyRecipient')
             ],
             'strings' => [
-                'wrongPostalCodeCity' => $provider->get('wrongPostalCodeCity'),
-                'saturdayDeliveryTitle' => $provider->get('saturdayDeliveryTitle'),
+                'wrongPostalCodeCity' => CarrierConfigurationProvider::get($id_carrier,'wrongPostalCodeCity'),
+                'saturdayDeliveryTitle' => CarrierConfigurationProvider::get($id_carrier,'saturdayDeliveryTitle'),
 
-                'city' => $provider->get('city'),
-                'postcode' => $provider->get('postcode'),
-                'houseNumber' => $provider->get('houseNumber'),
-                'addressNotFound' => $provider->get('addressNotFound'),
+                'city' => CarrierConfigurationProvider::get($id_carrier,'city'),
+                'postcode' => CarrierConfigurationProvider::get($id_carrier,'postcode'),
+                'houseNumber' => CarrierConfigurationProvider::get($id_carrier,'houseNumber'),
+                'addressNotFound' => CarrierConfigurationProvider::get($id_carrier,'addressNotFound'),
 
-                'deliveryEveningTitle' => $provider->get('deliveryEveningTitle'),
-                'deliveryMorningTitle' => $provider->get('deliveryMorningTitle'),
-                'deliveryStandardTitle' => $provider->get('deliveryStandardTitle'),
+                'deliveryEveningTitle' => CarrierConfigurationProvider::get($id_carrier,'deliveryEveningTitle'),
+                'deliveryMorningTitle' => CarrierConfigurationProvider::get($id_carrier,'deliveryMorningTitle'),
+                'deliveryStandardTitle' => CarrierConfigurationProvider::get($id_carrier,'deliveryStandardTitle'),
 
-                'deliveryTitle' => $provider->get('deliveryTitle'),
-                'pickupTitle' => $provider->get('pickupTitle'),
+                'deliveryTitle' => CarrierConfigurationProvider::get($id_carrier,'deliveryTitle'),
+                'pickupTitle' => CarrierConfigurationProvider::get($id_carrier,'pickupTitle'),
 
-                'onlyRecipientTitle' => $provider->get('onlyRecipientTitle'),
-                'signatureTitle' => $provider->get('signatureTitle'),
+                'onlyRecipientTitle' => CarrierConfigurationProvider::get($id_carrier,'onlyRecipientTitle'),
+                'signatureTitle' => CarrierConfigurationProvider::get($id_carrier,'signatureTitle'),
 
-                'pickUpFrom' => $provider->get('pickUpFrom'),
-                'openingHours' => $provider->get('openingHours'),
+                'pickUpFrom' => CarrierConfigurationProvider::get($id_carrier,'pickUpFrom'),
+                'openingHours' => CarrierConfigurationProvider::get($id_carrier,'openingHours'),
 
-                'closed' => $provider->get('closed'),
-                'discount' => $provider->get('discount'),
-                'free' => $provider->get('free'),
-                'from' => $provider->get('from'),
-                'loadMore' => $provider->get('loadMore'),
-                'retry' => $provider->get('retry'),
+                'closed' => CarrierConfigurationProvider::get($id_carrier,'closed'),
+                'discount' => CarrierConfigurationProvider::get($id_carrier,'discount'),
+                'free' => CarrierConfigurationProvider::get($id_carrier,'free'),
+                'from' => CarrierConfigurationProvider::get($id_carrier,'from'),
+                'loadMore' => CarrierConfigurationProvider::get($id_carrier,'loadMore'),
+                'retry' => CarrierConfigurationProvider::get($id_carrier,'retry'),
             ],
             'address' => [
-                'cc' => 'NL',
+                'cc' => 'BE',
                 'city' => $address->city,
                 'postalCode' => $address->postcode,
                 'number' => $address->address1

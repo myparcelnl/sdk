@@ -4,7 +4,11 @@ namespace Gett\MyParcel\Factory\Consignment;
 
 use Gett\MyParcel\Carrier\PackageTypeCalculator;
 use Gett\MyParcel\Constant;
+use Gett\MyParcel\OrderLabel;
 use Gett\MyParcel\Service\CarrierConfigurationProvider;
+use Gett\MyParcel\Service\ProductConfigurationProvider;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use PrestaShop\Module\PrestashopCheckout\Api\Payment\Order;
 use Symfony\Component\HttpFoundation\Request;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
@@ -106,6 +110,27 @@ class ConsignmentFactory
             $consignment->setSignature(true);
         }
         $consignment->setLabelDescription($this->configuration->get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME));
+
+        if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') //NON EU zone
+        {
+            $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
+            if ($products !== false) {
+                foreach ($products as $product) {
+                    $item = new MyParcelCustomsItem();
+                    $item->setAmount($product['product_quantity']);
+                    $item->setClassification(
+                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME)
+                    );
+                    $item->setCountry(
+                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME) ??  $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
+                    );
+                    $item->setDescription($product['product_name']);
+                    $item->setItemValue($product['product_price']);
+                    $item->setWeight($product['product_weight']);
+                    $consignment->addItem($item);
+                }
+            }
+        }
 
         return $consignment;
     }

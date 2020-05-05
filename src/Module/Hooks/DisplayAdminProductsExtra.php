@@ -20,6 +20,24 @@ trait DisplayAdminProductsExtra
 
     public function hookDisplayAdminProductsExtra($params)
     {
+        $this->context->smarty->assign(
+                [
+                    'params' => $this->getProductSettings($params['id_product']),
+                    'countries' => \Country::getCountries(\Context::getContext()->language->id)
+                ]
+        );
+
         return $this->display($this->name, 'views/templates/admin/hook/products_form.tpl');
+    }
+
+    private function getProductSettings(int $id_product)
+    {
+        $result = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'myparcel_product_configuration WHERE id_product = "'.$id_product.'" ');
+        $return = [];
+        foreach ($result as $item) {
+            $return[$item['name']] = $item['value'] ? $item['value'] : 0;
+        }
+
+        return $return;
     }
 }

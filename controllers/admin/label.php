@@ -104,7 +104,7 @@ class LabelController extends ModuleAdminControllerCore
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
-
+        OrderLabel::getCustomsOrderProducts(5);
         $orders = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate(array_keys(Tools::getValue('data')));
 
         $collection = $factory->fromOrders($orders);

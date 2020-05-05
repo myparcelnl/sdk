@@ -25,19 +25,19 @@ class LabelOptionsResolver
         ]);
     }
 
-    private function getOnlyToReciepient(\stdClass $delivery_settings, array $products, int $id_carrier)
+    private function getOnlyToReciepient($delivery_settings, array $products, int $id_carrier)
     {
-        if ($delivery_settings->shipmentOptions->only_recipient === true) {
+        if (isset($delivery_settings->shipmentOptions->only_recipient) && $delivery_settings->shipmentOptions->only_recipient=== true) {
             return true;
         }
 
         foreach ($products as $product) {
-            if (ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME)) {
+            if (ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME, false)) {
                 return true;
             }
         }
 
-        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME);
+        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME, false);
     }
 
     private function getAgeCheck(array $products, int $id_carrier)
@@ -48,12 +48,12 @@ class LabelOptionsResolver
             }
         }
 
-        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME);
+        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME, false);
     }
 
-    private function getSignature(\stdClass $delivery_settings, array $products, int $id_carrier)
+    private function getSignature($delivery_settings, array $products, int $id_carrier)
     {
-        if ($delivery_settings->shipmentOptions->signature === true) {
+        if (isset($delivery_settings->shipmentOptions->signature) && $delivery_settings->shipmentOptions->signature === true) {
             return true;
         }
 
@@ -64,7 +64,7 @@ class LabelOptionsResolver
             }
         }
 
-        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME);
+        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME, false);
     }
 
     private function getInsurance(array $products, int $id_carrier)
@@ -75,6 +75,6 @@ class LabelOptionsResolver
             }
         }
 
-        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME);
+        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME, false);
     }
 }

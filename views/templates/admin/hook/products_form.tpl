@@ -51,23 +51,23 @@
                 <div class="col">
                     <label for="package-type-select">Select package type</label>
                     <select class="form-control" name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}" id = "package-type-select">
-                        <option value="0" selected>Open this select menu</option>
-                        <option value="1">Package</option>
-                        <option value="2">Mailbox package</option>
-                        <option value="3">Letter</option>
-                        <option value="4">Digital stamp</option>
+                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 0}selected{/if}>- Selection required -</option>
+                        <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 1}selected{/if}>Package</option>
+                        <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 2}selected{/if}>Mailbox package</option>
+                        <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 3}selected{/if}>Letter</option>
+                        <option value="4" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 4}selected{/if}>Digital stamp</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}" type="checkbox" value="1" id="only-reciepient">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="only-reciepient">
                     <label class="form-check-label" for="only-reciepient">
                         Only recipient
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" value="1" id="ageCheck">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="ageCheck">
                     <label class="form-check-label" for="ageCheck">
                         Age check
                     </label>
@@ -77,28 +77,28 @@
                 <div class="col">
                     <label for="package-type-select">Select package format</label>
                     <select class="form-control" name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}" id="package-type-select">
-                        <option value="0" selected>Open this select menu</option>
-                        <option value="1">Normal</option>
-                        <option value="2">Large</option>
-                        <option value="3">Automatic</option>
+                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 0}selected{/if}>- sSelection required -</option>
+                        <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 1}selected{/if}>Normal</option>
+                        <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 2}selected{/if}>Large</option>
+                        <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 3}selected{/if}>Automatic</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" type="checkbox" value="1" id="gridCheck">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="gridCheck">
                     <label class="form-check-label" for="gridCheck">
                         Return package
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" type="checkbox" value="1" id="signature">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="signature">
                     <label class="form-check-label" for="signature">
                         Signature
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" name= "{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" type="checkbox" value="1" id="insurance">
+                    <input class="form-check-input" name= "{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="insurance">
                     <label class="form-check-label" for="insurance">
                         Insurance
                     </label>
@@ -113,16 +113,16 @@
                 <div class="col">
                     <label for="custom-form">Custom Form</label>
                     <select class="form-control" id="custom-form" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME}">
-                        <option selected>Open this select menu</option>
-                        <option value="1">No</option>
-                        <option value="2">Add</option>
-                        <option value="3">Skip</option>
+                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 0}selected{/if}>- Selection required -</option>
+                        <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 1}selected{/if}>No</option>
+                        <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 2}selected{/if}>Add</option>
+                        <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 3}selected{/if}>Skip</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <label for="custom-code">Custom Code</label>
-                <input type="text" class="form-control" id="custom-code" placeholder="Example input" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME}">
+                <input type="text" class="form-control" id="custom-code" value="{$params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME]}" placeholder="Example input" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME}">
             </div>
             <div class="form-row">
                 <div class="col">
@@ -130,14 +130,14 @@
                     <select class="form-control" id="custom-origin" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME}" >
                         <option selected value="0">Open this select menu</option>
                         {foreach $countries as $country}
-                            <option selected value="{$country['id']}">{$country['name']}</option>
+                            <option {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME] == $country['iso_code']}selected{/if} value="{$country['iso_code']}">{$country['name']}</option>
                         {/foreach}
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" value="1" id="age-check">
+                    <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="age-check">
                     <label class="form-check-label" for="age-check">
                         Customs age check
                     </label>

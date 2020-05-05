@@ -41,7 +41,7 @@ trait LegacyOrderPageHooks
             'search' => false,
             'orderby' => false,
             'remove_onclick' => true,
-            'callback_object' => \Module::getInstanceByName($this->name),
+            'callback_object' => $this,
         ];
 
         $params['fields']['myparcel_void_2'] = [
@@ -51,7 +51,7 @@ trait LegacyOrderPageHooks
             'search' => false,
             'orderby' => false,
             'remove_onclick' => true,
-            'callback_object' => \Module::getInstanceByName($this->name),
+            'callback_object' => $this,
         ];
     }
 
