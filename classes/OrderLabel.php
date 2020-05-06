@@ -12,20 +12,20 @@ class OrderLabel extends \ObjectModel
     public $payment_url;
     public $id_label;
 
-    public static $definition = array(
-        'table' => "myparcel_order_label",
+    public static $definition = [
+        'table' => 'myparcel_order_label',
         'primary' => 'id_order_label',
         'multilang' => false,
-        'fields' => array(
-            'id_order' => array('type' => self::TYPE_INT, 'required' => TRUE),
-            'status' => array('type' => self::TYPE_STRING),
-            'new_order_state' => array('type' => self::TYPE_INT),
-            'barcode' => array('type' => self::TYPE_STRING),
-            'track_link' => array('type' => self::TYPE_STRING),
-            'payment_url' => array('type' => self::TYPE_STRING),
-            'id_label' => array('type' => self::TYPE_STRING)
-        )
-    );
+        'fields' => [
+            'id_order' => ['type' => self::TYPE_INT, 'required' => true],
+            'status' => ['type' => self::TYPE_STRING],
+            'new_order_state' => ['type' => self::TYPE_INT],
+            'barcode' => ['type' => self::TYPE_STRING],
+            'track_link' => ['type' => self::TYPE_STRING],
+            'payment_url' => ['type' => self::TYPE_STRING],
+            'id_label' => ['type' => self::TYPE_STRING],
+        ],
+    ];
 
     public static function updateStatus($idShipment, $barcode, $statusCode, $date = null)
     {
@@ -53,20 +53,20 @@ class OrderLabel extends \ObjectModel
 
         MyParcelOrderHistory::log($idShipment, $statusCode, $date);
 
-        return (bool)Db::getInstance()->update(
+        return (bool) Db::getInstance()->update(
             bqSQL(static::$definition['table']),
-            array(
+            [
                 'tracktrace' => pSQL($barcode),
-                'postnl_status' => (int)$statusCode,
+                'postnl_status' => (int) $statusCode,
                 'date_upd' => pSQL($date),
-            ),
-            'id_shipment = ' . (int)$idShipment
+            ],
+            'id_shipment = ' . (int) $idShipment
         );
     }
 
     public static function findByLabelId(int $label_id)
     {
-        $id = \Db::getInstance()->getValue("SELECT id_order_label FROM " ._DB_PREFIX_.self::$definition['table'] ." WHERE id_label = '".$label_id."' ");
+        $id = \Db::getInstance()->getValue('SELECT id_order_label FROM ' . _DB_PREFIX_ . self::$definition['table'] . " WHERE id_label = '" . $label_id . "' ");
 
         return new OrderLabel($id);
     }
@@ -101,12 +101,11 @@ class OrderLabel extends \ObjectModel
 
     public static function sendShippedNotification()
     {
-
     }
 
     public static function setOrderStatus($idShipment, $status, $addWithEmail = true)
     {
-        $targetOrderState = (int)$status;
+        $targetOrderState = (int) $status;
         if (!$targetOrderState) {
             return;
         }
@@ -120,8 +119,8 @@ class OrderLabel extends \ObjectModel
         }
         $shipment = mypa_dot(@json_decode($shipment->shipment, true));
 
-        $idOrder = (int)$order->id;
-        $history = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS("SELECT `id_order_state` FROM " . _DB_PREFIX_ . "order_history WHERE `id_order` = $idOrder");
+        $idOrder = (int) $order->id;
+        $history = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_order_state` FROM ' . _DB_PREFIX_ . "order_history WHERE `id_order` = {$idOrder}");
         if (is_array($history)) {
             $history = array_column($history, 'id_order_state');
             if (in_array($targetOrderState, $history)) {
@@ -130,9 +129,9 @@ class OrderLabel extends \ObjectModel
         }
 
         $history = new OrderHistory();
-        $history->id_order = (int)$order->id;
-        $history->changeIdOrderState($targetOrderState, (int)$order->id, !$order->hasInvoice());
-        if ($addWithEmail && !in_array((int)$shipment->get('options.package_type'), array(1, 2))) {
+        $history->id_order = (int) $order->id;
+        $history->changeIdOrderState($targetOrderState, (int) $order->id, !$order->hasInvoice());
+        if ($addWithEmail && !in_array((int) $shipment->get('options.package_type'), [1, 2])) {
             $history->addWithemail();
         } else {
             $history->add();
@@ -141,7 +140,7 @@ class OrderLabel extends \ObjectModel
 
     public static function setReceived($idShipment)
     {
-        $targetOrderState = (int)Configuration::get(MyParcel::RECEIVED_STATUS);
+        $targetOrderState = (int) Configuration::get(MyParcel::RECEIVED_STATUS);
         if (!$targetOrderState) {
             return;
         }
@@ -182,7 +181,7 @@ class OrderLabel extends \ObjectModel
         $qb->select('ds.delivery_settings');
         $qb->from('myparcel_delivery_settings', 'ds');
         $qb->innerJoin('orders', 'o', 'o.id_cart = ds.id_cart');
-        $qb->where('o.id_order = "'.$id_order.'" ');
+        $qb->where('o.id_order = "' . $id_order . '" ');
 
         $res = \Db::getInstance()->executeS($qb);
         if (isset($res[0]['delivery_settings'])) {
@@ -197,8 +196,7 @@ class OrderLabel extends \ObjectModel
         $qb = new \DbQuery();
         $qb->select('od.product_id');
         $qb->from('order_detail', 'od');
-        $qb->where('od.id_order = "'.$id_order.'" ');
-
+        $qb->where('od.id_order = "' . $id_order . '" ');
 
         return \Db::getInstance()->executeS($qb);
     }
@@ -224,7 +222,7 @@ class OrderLabel extends \ObjectModel
         $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_price, od.product_weight');
         $qb->from('order_detail', 'od');
         $qb->innerJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
-        $qb->where('od.id_order = "'.$id_order.'" AND pc.name = "'.Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME.'" ');
+        $qb->where('od.id_order = "' . $id_order . '" AND pc.name = "' . Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME . '" ');
 
         $return = [];
         foreach (\Db::getInstance()->executeS($qb) as $item) {

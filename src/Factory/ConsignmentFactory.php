@@ -2,16 +2,14 @@
 
 namespace Gett\MyParcel\Factory\Consignment;
 
-use Gett\MyParcel\Carrier\PackageTypeCalculator;
 use Gett\MyParcel\Constant;
 use Gett\MyParcel\OrderLabel;
-use Gett\MyParcel\Service\CarrierConfigurationProvider;
-use Gett\MyParcel\Service\ProductConfigurationProvider;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use PrestaShop\Module\PrestashopCheckout\Api\Payment\Order;
 use Symfony\Component\HttpFoundation\Request;
+use Gett\MyParcel\Carrier\PackageTypeCalculator;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
+use Gett\MyParcel\Service\ProductConfigurationProvider;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
@@ -69,7 +67,6 @@ class ConsignmentFactory
 
     private function initConsignment(array $order): AbstractConsignment
     {
-
         $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))  //TODO fetch carrier
             ->setApiKey($this->api_key)
             ->setReferenceId($order['id_order'])
@@ -77,13 +74,13 @@ class ConsignmentFactory
             ->setPerson($order['person'])
             ->setFullStreet($order['full_street'])
             ->setPostalCode($order['postcode'])
-            ->setCity($order['city']);
+            ->setCity($order['city'])
         ;
 
         if ($package_type = $this->request->get('MY_PARCEL_PACKAGE_TYPE')) {
             $consignment->setPackageType($package_type);
         } else {
-            $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'],$order['id_carrier']));
+            $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']));
         }
 
         if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
@@ -94,7 +91,7 @@ class ConsignmentFactory
             $consignment->setPhone($order['phone']);
         }
         $delivery_setting = json_decode($order['delivery_settings']);
-        $consignment->setDeliveryDate(date('Y-m-d H:i:s',strtotime($delivery_setting->date)));
+        $consignment->setDeliveryDate(date('Y-m-d H:i:s', strtotime($delivery_setting->date)));
 
         if ($delivery_setting->isPickup) {
             $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]);
@@ -111,8 +108,7 @@ class ConsignmentFactory
         }
         $consignment->setLabelDescription($this->configuration->get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME));
 
-        if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') //NON EU zone
-        {
+        if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
             $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
             if ($products !== false) {
                 foreach ($products as $product) {
@@ -122,7 +118,7 @@ class ConsignmentFactory
                         ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME)
                     );
                     $item->setCountry(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME) ??  $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
                     );
                     $item->setDescription($product['product_name']);
                     $item->setItemValue($product['product_price']);

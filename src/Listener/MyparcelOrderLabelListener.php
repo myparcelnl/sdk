@@ -2,11 +2,10 @@
 
 namespace Gett\MyParcel\Listener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gett\MyParcel\Constant;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gett\MyParcel\Entity\MyparcelOrderLabel;
 use Gett\MyParcel\Service\Order\OrderStatusChange;
-
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
 
 class MyparcelOrderLabelListener
@@ -20,10 +19,10 @@ class MyparcelOrderLabelListener
         $this->configuration = $configuration;
     }
 
-    public function prePersist(MyparcelOrderLabel $label, LifecycleEventArgs $event) {
+    public function prePersist(MyparcelOrderLabel $label, LifecycleEventArgs $event)
+    {
         if ($status = $this->configuration->get(Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
             $this->order_status_change->changeOrderStatus($label->getIdOrder(), $status, Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME);
         }
     }
-
 }

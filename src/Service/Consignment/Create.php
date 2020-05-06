@@ -2,8 +2,8 @@
 
 namespace Gett\MyParcel\Service\Consignment;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Gett\MyParcel\OrderLabel;
+use Doctrine\ORM\EntityManagerInterface;
 use Gett\MyParcel\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 
@@ -33,6 +33,15 @@ class Create
         return true;
     }
 
+    public function createReturnLabel(int $id_order)
+    {
+        $myParcelCollection = $this->consignment_factory->fromOrder($id_order);
+
+        $this->process($myParcelCollection, true);
+
+        return true;
+    }
+
     private function process(MyParcelCollection $collection, $return = false)
     {
         $collection->setPdfOfLabels();
@@ -54,14 +63,5 @@ class Create
             $orderLabel->add();
             //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
         }
-    }
-
-    public function createReturnLabel(int $id_order)
-    {
-        $myParcelCollection = $this->consignment_factory->fromOrder($id_order);
-
-        $this->process($myParcelCollection, true);
-
-        return true;
     }
 }

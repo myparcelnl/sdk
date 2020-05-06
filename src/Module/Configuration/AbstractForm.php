@@ -155,7 +155,7 @@ abstract class AbstractForm
                 'submit' => [
                     'title' => $this->module->l('Save', 'Modules.Myparcel.Configuration'),
                 ],
-                'buttons' => []
+                'buttons' => [],
             ],
         ];
 
@@ -166,7 +166,7 @@ abstract class AbstractForm
             $form['form']['input'][] = $field;
         }
 
-        if (method_exists($this, 'getButtons')){
+        if (method_exists($this, 'getButtons')) {
             foreach ($this->getButtons() as $button) {
                 $form['form']['buttons'][] = $button;
             }

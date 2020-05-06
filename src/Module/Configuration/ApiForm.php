@@ -12,6 +12,31 @@ class ApiForm extends AbstractForm
 {
     protected $icon = 'cog';
 
+    public function getButtons()
+    {
+        $buttons = [
+            'reset' => [
+                'title' => $this->module->l('Refresh'),
+                'name' => 'resetHook',
+                'type' => 'submit',
+                'class' => 'btn btn-default pull-left',
+                'icon' => 'process-icon-reset',
+            ],
+        ];
+
+        if (Configuration::get('MY_PARCEL_WEBHOOK_ID')) {
+            $buttons['delete'] = [
+                'title' => $this->module->l('Delete'),
+                'name' => 'deleteHook',
+                'type' => 'submit',
+                'class' => 'btn btn-default pull-left',
+                'icon' => 'process-icon-delete',
+            ];
+        }
+
+        return $buttons;
+    }
+
     protected function getLegend(): string
     {
         return $this->module->l('API Settings');
@@ -77,32 +102,6 @@ class ApiForm extends AbstractForm
             Configuration::updateValue('MY_PARCEL_WEBHOOK_ID', '');
         }
 
-
         return $parent;
-    }
-
-    public function getButtons()
-    {
-        $buttons = [
-            'reset' => [
-                'title' => $this->module->l('Refresh'),
-                'name' => 'resetHook',
-                'type' => 'submit',
-                'class' => 'btn btn-default pull-left',
-                'icon' => 'process-icon-reset',
-            ],
-        ];
-
-        if (Configuration::get('MY_PARCEL_WEBHOOK_ID')){
-            $buttons['delete']=  [
-                    'title' => $this->module->l('Delete'),
-                    'name' => 'deleteHook',
-                    'type' => 'submit',
-                    'class' => 'btn btn-default pull-left',
-                    'icon' => 'process-icon-delete',
-            ];
-        }
-
-        return $buttons;
     }
 }

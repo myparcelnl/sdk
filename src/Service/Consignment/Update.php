@@ -2,9 +2,8 @@
 
 namespace Gett\MyParcel\Service\Consignment;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Gett\MyParcel\Entity\MyparcelOrderLabel;
 use Gett\MyParcel\OrderLabel;
+use Doctrine\ORM\EntityManagerInterface;
 use Gett\MyParcel\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 

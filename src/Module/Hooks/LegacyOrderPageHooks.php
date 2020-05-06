@@ -2,10 +2,7 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
-use Gett\MyParcel\Carrier\PackageTypeCalculator;
-use Gett\MyParcel\Constant;
 use Gett\MyParcel\Label\LabelOptionsResolver;
-use Gett\MyParcel\Service\CarrierConfigurationProvider;
 
 trait LegacyOrderPageHooks
 {
@@ -66,7 +63,7 @@ trait LegacyOrderPageHooks
 
         $this->context->smarty->assign([
             'labels' => $result,
-            'link' => $link
+            'link' => $link,
         ]);
 
         return $this->display($this->name, 'views/templates/admin/icon-labels.tpl');
@@ -78,7 +75,7 @@ trait LegacyOrderPageHooks
 
         $this->context->smarty->assign(
             [
-                'label_options' => $label_options_resolver->getLabelOptions($params)
+                'label_options' => $label_options_resolver->getLabelOptions($params),
             ]
         );
 
@@ -88,7 +85,6 @@ trait LegacyOrderPageHooks
     public function hookActionAdminControllerSetMedia()
     {
         if ($this->context->controller instanceof \AdminOrdersController) {
-
             $link = new \Link();
             \Media::addJsDef(
                 [
@@ -97,14 +93,14 @@ trait LegacyOrderPageHooks
                     'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                     'create_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'createb']),
                     'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
-                    "create_label_action" => $this->getAdminLink('Label', true, ['action' => 'create'])
+                    'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
                 ]
             );
 
             $this->context->controller->addJS(
                 $this->_path . 'views/js/admin/order.js'
             );
-        } elseif ($this->context->controller->php_self == "AdminOrders"){ //symfony controller
+        } elseif ($this->context->controller->php_self == 'AdminOrders') { //symfony controller
             \Media::addJsDef(
                 [
                     'default_label_size' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),

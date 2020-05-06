@@ -1,12 +1,13 @@
 <?php
 
-use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
 use Gett\MyParcel\Module\Hooks\FrontHooks;
-use Gett\MyParcel\Module\Configuration\Configure;
-use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
-use Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
-use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
 use Gett\MyParcel\Module\Hooks\OrderLabelHooks;
+use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
+use Gett\MyParcel\Module\Configuration\Configure;
+use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
+use Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
+use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -46,7 +47,7 @@ class MyParcel extends CarrierModule
         'actionAdminControllerSetMedia',
         'displayAdminOrderMainBottom',
         'actionObjectGettMyParcelOrderLabelAddAfter',
-        'actionObjectGettMyParcelOrderLabelUpdateAfter'
+        'actionObjectGettMyParcelOrderLabelUpdateAfter',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -153,21 +154,6 @@ class MyParcel extends CarrierModule
         return $this->mypa_stringify_url($url);
     }
 
-    private function mypa_stringify_url($parsedUrl)
-    {
-        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-        $port = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-        $user = isset($parsedUrl['user']) ? $parsedUrl['user'] : '';
-        $pass = isset($parsedUrl['pass']) ? ':' . $parsedUrl['pass'] : '';
-        $pass = ($user || $pass) ? "{$pass}@" : '';
-        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
-        $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
-        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
-
-        return "{$scheme}{$user}{$pass}{$host}{$port}{$path}{$query}{$fragment}";
-    }
-
     public static function updateStatus($idShipment, $barcode, $statusCode, $date = null)
     {
         if (!$date) {
@@ -180,7 +166,6 @@ class MyParcel extends CarrierModule
             // Checking a legacy field is allowed in this case
             static::updateOrderTrackingNumber($order, $barcode);
         }
-
 
         if ($statusCode === 14) {
             if (Configuration::get(MyParcel::DIGITAL_STAMP_USE_SHIPPED_STATUS)) {
@@ -202,14 +187,14 @@ class MyParcel extends CarrierModule
 
         MyParcelOrderHistory::log($idShipment, $statusCode, $date);
 
-        return (bool)Db::getInstance()->update(
+        return (bool) Db::getInstance()->update(
             bqSQL(static::$definition['table']),
-            array(
+            [
                 'tracktrace' => pSQL($barcode),
-                'postnl_status' => (int)$statusCode,
+                'postnl_status' => (int) $statusCode,
                 'date_upd' => pSQL($date),
-            ),
-            'id_shipment = ' . (int)$idShipment
+            ],
+            'id_shipment = ' . (int) $idShipment
         );
     }
 
@@ -229,5 +214,18 @@ class MyParcel extends CarrierModule
         return false;
     }
 
+    private function mypa_stringify_url($parsedUrl)
+    {
+        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
+        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
+        $port = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+        $user = isset($parsedUrl['user']) ? $parsedUrl['user'] : '';
+        $pass = isset($parsedUrl['pass']) ? ':' . $parsedUrl['pass'] : '';
+        $pass = ($user || $pass) ? "{$pass}@" : '';
+        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+        $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
 
+        return "{$scheme}{$user}{$pass}{$host}{$port}{$path}{$query}{$fragment}";
+    }
 }

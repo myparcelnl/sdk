@@ -89,7 +89,7 @@ trait OrdersGridHooks
     {
         $parts = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         foreach ($parts as $part) {
-            if (is_numeric($part)){
+            if (is_numeric($part)) {
                 return $part;
             }
         }

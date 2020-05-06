@@ -20,6 +20,7 @@ class LabelController extends ModuleAdminControllerCore
         switch (Tools::getValue('action')) {
             case 'return':
                 $this->processReturn();
+
                 break;
         }
 
@@ -37,11 +38,12 @@ class LabelController extends ModuleAdminControllerCore
                 ->setApiKey(Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME))
                 ->setReferenceId($order->id)
                 ->setCountry(CountryCore::getIsoById($address->id_country))
-                ->setPerson($address->firstname . ' '. $address->lastname)
+                ->setPerson($address->firstname . ' ' . $address->lastname)
                 ->setFullStreet($address->address1)
                 ->setPostalCode($address->postcode)
                 ->setCity($address->city)
-                ->setEmail($customer->email);
+                ->setEmail($customer->email)
+            ;
 
             $myParcelCollection = (new \MyParcelNL\Sdk\src\Helper\MyParcelCollection())
                 ->addConsignment($consignment)
@@ -70,7 +72,7 @@ class LabelController extends ModuleAdminControllerCore
             \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
-      );
+        );
         $order = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate(Tools::getValue('create_label')['order_ids']);
 
         $collection = $factory->fromOrder($order[0]);
@@ -132,7 +134,7 @@ class LabelController extends ModuleAdminControllerCore
     {
         $id_labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
 
-        $collection = MyParcelCollection::findMany($id_labels,             \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+        $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
         $collection->setLinkOfLabels();
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
 

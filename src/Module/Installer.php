@@ -2,9 +2,9 @@
 
 namespace Gett\MyParcel\Module;
 
-use Gett\MyParcel\Constant;
 use Tab;
 use Carrier;
+use Gett\MyParcel\Constant;
 
 class Installer
 {
@@ -117,7 +117,7 @@ class Installer
             ],
             'MyParcelLabelController' => [
                 'class_name' => 'Label',
-                'name' => $languages
+                'name' => $languages,
             ],
         ];
     }
@@ -141,13 +141,14 @@ class Installer
         }
 
         if ($carrier->add() == true) {
-            @copy(_PS_MODULE_DIR_  . 'myparcel/views/images/postnl.jpg', _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
+            @copy(_PS_MODULE_DIR_ . 'myparcel/views/images/postnl.jpg', _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
 
             $insert = [];
             foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
                 $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];
             }
             \Db::getInstance()->insert('myparcel_carrier_configuration', $insert);
+
             return $carrier;
         }
 
