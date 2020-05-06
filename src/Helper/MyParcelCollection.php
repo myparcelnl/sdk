@@ -428,6 +428,8 @@ class MyParcelCollection extends Collection
      */
     public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
+        $urlLocation = 'pdfs';
+
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
@@ -452,10 +454,10 @@ class MyParcelCollection extends Collection
                 ->sendRequest('GET', $requestType);
 
             if ($this->use_v2_endpoint) {
-                $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data')['pdf']['url'];
-            } else {
-                $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
+                $urlLocation = 'pdf';
             }
+
+            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult("data.$urlLocation.url");
         }
 
         $this->setLatestData();
