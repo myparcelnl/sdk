@@ -317,7 +317,6 @@ class MyParcelCollection extends Collection
         return $numberOfOrders > MyParcelRequest::SHIPMENT_V2_ACTIVE_FROM;
     }
 
-
     /**
      * Delete concepts in MyParcel
      *
