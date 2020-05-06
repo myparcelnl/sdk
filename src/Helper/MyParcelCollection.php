@@ -75,6 +75,11 @@ class MyParcelCollection extends Collection
     private $user_agent = '';
 
     /**
+     * @var bool
+     */
+    private $use_v2_endpoint = false;
+
+    /**
      * @param bool $keepKeys
      *
      * @return AbstractConsignment[]
@@ -254,7 +259,7 @@ class MyParcelCollection extends Collection
 
         while ($i <= $amount) {
             $this->push($consignment);
-            $i ++;
+            $i++;
         }
 
         return $this;
@@ -299,6 +304,19 @@ class MyParcelCollection extends Collection
 
         return $this;
     }
+
+    /**
+     * Shipment v2 endpoint active from x number of orders
+     *
+     * @param $numberOfOrders
+     *
+     * @return bool
+     */
+    public function useShipmentV2($numberOfOrders)
+    {
+        return $numberOfOrders > MyParcelRequest::SHIPMENT_V2_ACTIVE_FROM ? true : false;
+    }
+
 
     /**
      * Delete concepts in MyParcel
@@ -418,6 +436,12 @@ class MyParcelCollection extends Collection
 
         $conceptIds = $this->getConsignmentIds($key);
 
+        $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
+        if ($this->useShipmentV2(count($conceptIds))) {
+            $requestType           = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
+            $this->use_v2_endpoint = true;
+        }
+
         if ($key) {
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
@@ -426,9 +450,13 @@ class MyParcelCollection extends Collection
                     implode(';', $conceptIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', $requestType);
 
-            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
+            if ($this->use_v2_endpoint) {
+                $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data')['pdf']['url'];
+            } else {
+                $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
+            }
         }
 
         $this->setLatestData();
@@ -458,6 +486,11 @@ class MyParcelCollection extends Collection
             ->setLabelFormat($positions);
         $conceptIds = $this->getConsignmentIds($key);
 
+        $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
+        if ($this->useShipmentV2(count($conceptIds))) {
+            $requestType = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
+        }
+
         if ($key) {
             $request = (new MyParcelRequest())
                 ->setUserAgent($this->getUserAgent())
@@ -466,7 +499,7 @@ class MyParcelCollection extends Collection
                     implode(';', $conceptIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', $requestType);
 
             $this->label_pdf = $request->getResult();
         }
@@ -610,6 +643,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
@@ -621,6 +655,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
     {
@@ -645,6 +680,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
@@ -656,6 +692,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {

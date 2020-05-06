@@ -36,6 +36,9 @@ class MyParcelRequest
      */
     const REQUEST_TYPE_SHIPMENTS      = 'shipments';
     const REQUEST_TYPE_RETRIEVE_LABEL = 'shipment_labels';
+    const REQUEST_TYPE_SETUP_LABEL    = 'v2/shipment_labels';
+
+    const SHIPMENT_V2_ACTIVE_FROM = 25;
 
     /**
      * API headers
