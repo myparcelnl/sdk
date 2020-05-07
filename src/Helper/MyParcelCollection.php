@@ -77,7 +77,7 @@ class MyParcelCollection extends Collection
     /**
      * @var bool
      */
-    private $use_v2_endpoint = false;
+    private $use_label_prepare = false;
 
     /**
      * @param bool $keepKeys
@@ -312,9 +312,9 @@ class MyParcelCollection extends Collection
      *
      * @return bool
      */
-    public function useShipmentV2(int $numberOfOrders): bool
+    public function getLimitLabelPrepare(int $numberOfOrders): bool
     {
-        return $numberOfOrders > MyParcelRequest::SHIPMENT_V2_ACTIVE_FROM;
+        return $numberOfOrders > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
     }
 
     /**
@@ -438,9 +438,9 @@ class MyParcelCollection extends Collection
         $conceptIds = $this->getConsignmentIds($key);
 
         $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
-        if ($this->useShipmentV2(count($conceptIds))) {
-            $requestType           = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
-            $this->use_v2_endpoint = true;
+        if ($this->getLimitLabelPrepare(count($conceptIds))) {
+            $requestType             = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
+            $this->use_label_prepare = true;
         }
 
         if ($key) {
@@ -453,7 +453,7 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest('GET', $requestType);
 
-            if ($this->use_v2_endpoint) {
+            if ($this->use_label_prepare) {
                 $urlLocation = 'pdf';
             }
 
