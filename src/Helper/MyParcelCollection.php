@@ -306,7 +306,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Shipment v2 endpoint active from x number of orders
+     * Label prepare wil be active from x number of orders
      *
      * @param int $numberOfOrders
      *
