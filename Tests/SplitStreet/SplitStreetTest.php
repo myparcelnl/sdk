@@ -306,6 +306,36 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'box_number'        => null
             ],
             [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Markerkant 10 apartment a',
+                'full_street'       => 'Markerkant 10 a',
+                'street'            => 'Markerkant',
+                'number'            => 10,
+                'number_suffix'     => 'a',
+                'box_number'        => null
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Markerkant 10 noordzijde',
+                'full_street'       => 'Markerkant 10 NZ',
+                'street'            => 'Markerkant',
+                'number'            => 10,
+                'number_suffix'     => 'NZ',
+                'box_number'        => null
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Markerkant 10 west',
+                'full_street'       => 'Markerkant 10 W',
+                'street'            => 'Markerkant',
+                'number'            => 10,
+                'number_suffix'     => 'W',
+                'box_number'        => null
+            ],
+            [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
                 'full_street_input' => 'Zennestraat 32 bte 20',
@@ -434,6 +464,36 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'number'            => '16',
                 'number_suffix'     => '',
                 'box_number'        => 'C',
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Dendermondestraat 55 b12',
+                'full_street'       => 'Dendermondestraat 55 bus 12',
+                'street'            => 'Dendermondestraat',
+                'number'            => '55',
+                'number_suffix'     => null,
+                'box_number'        => '12',
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Dendermondestraat 55 n12',
+                'full_street'       => 'Dendermondestraat 55 bus 12',
+                'street'            => 'Dendermondestraat',
+                'number'            => '55',
+                'number_suffix'     => null,
+                'box_number'        => '12',
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Dendermondestraat 55 /12',
+                'full_street'       => 'Dendermondestraat 55 bus 12',
+                'street'            => 'Dendermondestraat',
+                'number'            => '55',
+                'number_suffix'     => null,
+                'box_number'        => '12',
             ],
         ];
     }

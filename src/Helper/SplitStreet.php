@@ -15,11 +15,47 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Model\FullStreet;
+use phpDocumentor\Reflection\DocBlock\Description;
 
 class SplitStreet
 {
     const BOX_NL                        = 'bus';
-    const BOX_TRANSLATION_POSSIBILITIES = [' boîte', ' box', ' bte', ' Bus'];
+    const BOX_TRANSLATION_POSSIBILITIES = [' boîte', ' box', ' bte', ' Bus', ' n', ' b', ' /'];
+
+    public const NUMBER_SUFFIX_ABBREVIATION = [
+        'apartment'  => '',
+        'gedempte'   => 'GED',
+        'groot'      => 'GRT',
+        'grote'      => 'GRT',
+        'greate'     => 'GRT',
+        'noordzijde' => 'NZ',
+        'oostzijde'  => 'OZ',
+        'zuidzijde'  => 'ZZ',
+        'westzijde'  => 'WZ',
+        'noord'      => 'N',
+        'oost'       => 'O',
+        'zuid'       => 'Z',
+        'west'       => 'W',
+        'hoog'       => 'HG',
+        'hoge'       => 'HG',
+        'hege'       => 'HG',
+        'kleine'     => 'KL',
+        'klein'      => 'KL',
+        'korte'      => 'K',
+        'kort'       => 'K',
+        'koarte'     => 'K',
+        'koart'      => 'K',
+        'kromme'     => 'KR',
+        'krom'       => 'KR',
+        'laag'       => 'LG',
+        'lage'       => 'LG',
+        'lege'       => 'LG',
+        'lange'      => 'L',
+        'lang'       => 'L',
+        'nieuwe'     => 'NW',
+        'nieuw'      => 'NW',
+        'verlengde'  => 'VERL',
+    ];
 
     /**
      * Regular expression used to split street name from house number for the Netherlands.
@@ -57,9 +93,19 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
-        $translateBoxSeparator = str_ireplace(self::BOX_TRANSLATION_POSSIBILITIES, ' ' . self::BOX_NL, $fullStreet);
-        $fullStreet            = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $translateBoxSeparator));
-        $regex                 = self::getRegexByCountry($local, $destination);
+        foreach (self::NUMBER_SUFFIX_ABBREVIATION as $key => $value) {
+            if (strstr($fullStreet, $key)) {
+                $fullStreet = str_replace($key, $value, $fullStreet);
+                break;
+            }
+        }
+
+        if ($destination === AbstractConsignment::CC_BE) {
+            $translateBoxSeparator = str_ireplace(self::BOX_TRANSLATION_POSSIBILITIES, ' ', $fullStreet);
+            $fullStreet            = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $translateBoxSeparator));
+        }
+
+        $regex = self::getRegexByCountry($local, $destination);
 
         if (! $regex) {
             return new FullStreet($fullStreet, null, null, null);
