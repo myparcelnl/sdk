@@ -75,11 +75,6 @@ class MyParcelCollection extends Collection
     private $user_agent = '';
 
     /**
-     * @var bool
-     */
-    private $use_label_prepare = false;
-
-    /**
      * @param bool $keepKeys
      *
      * @return AbstractConsignment[]
@@ -308,13 +303,13 @@ class MyParcelCollection extends Collection
     /**
      * Label prepare wil be active from x number of orders
      *
-     * @param int $numberOfOrders
+     * @param int $numberOfShipments
      *
      * @return bool
      */
-    public function getLimitLabelPrepare(int $numberOfOrders): bool
+    public function useLabelPrepare(int $numberOfShipments): bool
     {
-        return $numberOfOrders > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
+        return $numberOfShipments > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
     }
 
     /**
@@ -438,9 +433,9 @@ class MyParcelCollection extends Collection
         $conceptIds = $this->getConsignmentIds($key);
 
         $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
-        if ($this->getLimitLabelPrepare(count($conceptIds))) {
-            $requestType             = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
-            $this->use_label_prepare = true;
+        if ($this->useLabelPrepare(count($conceptIds))) {
+            $requestType = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
+            $urlLocation = 'pdf';
         }
 
         if ($key) {
@@ -452,10 +447,6 @@ class MyParcelCollection extends Collection
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
                 )
                 ->sendRequest('GET', $requestType);
-
-            if ($this->use_label_prepare) {
-                $urlLocation = 'pdf';
-            }
 
             $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult("data.$urlLocation.url");
         }
