@@ -297,6 +297,31 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
+     * @return bool
+     */
+    public function hasCooledDelivery(): bool
+    {
+        return (bool) $this->cooled_delivery;
+    }
+
+    /**
+     * Age check
+     *
+     * Required: No
+     *
+     * @param bool $cooledDelivery
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setCooledDelivery(bool $cooledDelivery): AbstractConsignment
+    {
+        $this->cooled_delivery = $this->canHaveOption($cooledDelivery);
+
+        return $this;
+    }
+
+    /**
      * Pattern:  [0-9A-Za-z]
      * Example:  Albert Heijn
      * Required: Yes for pickup location

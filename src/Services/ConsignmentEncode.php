@@ -137,6 +137,10 @@ class ConsignmentEncode
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
         }
 
+        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasCooledDelivery()) {
+            $this->consignmentEncoded['options']['cooled_delivery'] = 1;
+        }
+
         if ($consignment->getDeliveryDate()) {
             $this->consignmentEncoded['options']['delivery_date'] = $consignment->getDeliveryDate();
         }
@@ -171,7 +175,7 @@ class ConsignmentEncode
             ];
         }
 
-        $this->consignmentEncoded['general_settings']['save_recipient_address'] = $this->normalizeAutoSaveRecipientAddress($consignment);
+        $this->consignmentEncoded['general_settings']['save_recipient_address']     = $this->normalizeAutoSaveRecipientAddress($consignment);
         $this->consignmentEncoded['general_settings']['disable_auto_detect_pickup'] = $this->normalizeAutoDetectPickup($consignment);
 
         return $this;
