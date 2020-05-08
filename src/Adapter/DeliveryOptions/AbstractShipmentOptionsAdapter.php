@@ -20,7 +20,7 @@ abstract class AbstractShipmentOptionsAdapter
     protected $age_check;
 
     /**
-     * @var bool|null
+     * @var bool
      */
     protected $cooled_delivery;
 
