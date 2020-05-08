@@ -226,6 +226,7 @@ $myParcelCollection
 ```
 
 Create and echo download link to PDF with `setLinkOfLabels($position)` where `$positions` is the [label position](#label-format-and-position) value.
+If you want more than 25 labels in one response, the setLinkOfLabels will automatically use a different endpoint. At that point, it is likely that the PDF is not ready yet. You should check periodically if the PDF is ready for download.
 ```php
 echo $myParcelCollection 
     ->setLinkOfLabels($positions)
