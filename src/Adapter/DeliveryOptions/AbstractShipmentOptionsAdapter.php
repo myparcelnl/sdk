@@ -64,9 +64,9 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function hasCooledDelivery(): ?bool
+    public function hasCooledDelivery(): bool
     {
         return $this->cooled_delivery;
     }
