@@ -91,13 +91,14 @@ class ConsignmentAdapter
     {
         $options = $this->data['options'];
         $fields  = [
-            'only_recipient' => false,
-            'large_format'   => false,
-            'age_check'      => false,
-            'signature'      => false,
-            'return'         => false,
-            'delivery_date'  => null,
-            'delivery_type'  => AbstractConsignment::DEFAULT_DELIVERY_TYPE,
+            'only_recipient'  => false,
+            'large_format'    => false,
+            'age_check'       => false,
+            'cooled_delivery' => false,
+            'signature'       => false,
+            'return'          => false,
+            'delivery_date'   => null,
+            'delivery_type'   => AbstractConsignment::DEFAULT_DELIVERY_TYPE,
         ];
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);
@@ -112,6 +113,10 @@ class ConsignmentAdapter
 
         if (! empty($options['age_check'])) {
             $this->consignment->setAgeCheck((bool) $options['age_check']);
+        }
+
+        if (! empty($options['cooled_delivery'])) {
+            $this->consignment->setCooledDelivery((bool) $options['cooled_delivery']);
         }
 
         if (! empty($options['signature'])) {
