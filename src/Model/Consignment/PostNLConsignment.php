@@ -305,7 +305,7 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
-     * Age check
+     * Cooled Delivery
      *
      * Required: No
      *
