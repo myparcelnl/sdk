@@ -129,7 +129,7 @@ class ConsignmentEncode
             $this->consignmentEncoded['options']['large_format'] = $consignment->isLargeFormat() ? 1 : 0;
         }
 
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
+        if ($consignment->getCountry() === AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
             $this->consignmentEncoded['options']['age_check']      = 1;
             $this->consignmentEncoded['options']['only_recipient'] = 1;
             $this->consignmentEncoded['options']['signature']      = 1;
@@ -137,7 +137,7 @@ class ConsignmentEncode
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
         }
 
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasCooledDelivery()) {
+        if ($consignment->getCountry() === AbstractConsignment::CC_NL && $consignment->hasCooledDelivery()) {
             $this->consignmentEncoded['options']['cooled_delivery'] = 1;
         }
 
