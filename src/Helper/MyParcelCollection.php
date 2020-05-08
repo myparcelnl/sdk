@@ -434,7 +434,7 @@ class MyParcelCollection extends Collection
 
         $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
         if ($this->useLabelPrepare(count($conceptIds))) {
-            $requestType = MyParcelRequest::REQUEST_TYPE_SETUP_LABEL;
+            $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
             $urlLocation = 'pdf';
         }
 
