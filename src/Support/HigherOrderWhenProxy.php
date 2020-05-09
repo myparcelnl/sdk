@@ -28,7 +28,7 @@ class HigherOrderWhenProxy
      * @param  bool  $condition
      * @return void
      */
-    public function __construct(Enumerable $collection, $condition)
+    public function __construct(Collection $collection, $condition)
     {
         $this->condition = $condition;
         $this->collection = $collection;
