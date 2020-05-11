@@ -295,12 +295,6 @@ class AbstractConsignment
 
     /**
      * @internal
-     * @var boolean
-     */
-    public $cooled_delivery;
-
-    /**
-     * @internal
      * @var string
      */
     public $label_description = '';
@@ -1356,31 +1350,6 @@ class AbstractConsignment
     {
         if ($ageCheck) {
             throw new \BadMethodCallException('Age check has to be false in ' . static::class);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasCooledDelivery(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Cooled delivery
-     * Required: No
-     *
-     * @param bool $cooledDelivery
-     *
-     * @return AbstractConsignment
-     */
-    public function setCooledDelivery(bool $cooledDelivery): self
-    {
-        if ($cooledDelivery) {
-            throw new \BadMethodCallException('Cooled delivery has to be false in ' . static::class);
         }
 
         return $this;
