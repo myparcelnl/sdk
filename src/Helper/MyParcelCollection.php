@@ -254,7 +254,7 @@ class MyParcelCollection extends Collection
 
         while ($i <= $amount) {
             $this->push($consignment);
-            $i ++;
+            $i++;
         }
 
         return $this;
@@ -298,6 +298,18 @@ class MyParcelCollection extends Collection
         $this->items = $newConsignments;
 
         return $this;
+    }
+
+    /**
+     * Label prepare wil be active from x number of orders
+     *
+     * @param int $numberOfShipments
+     *
+     * @return bool
+     */
+    public function useLabelPrepare(int $numberOfShipments): bool
+    {
+        return $numberOfShipments > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
     }
 
     /**
@@ -411,12 +423,20 @@ class MyParcelCollection extends Collection
      */
     public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
+        $urlLocation = 'pdfs';
+
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
+
+        $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
+        if ($this->useLabelPrepare(count($conceptIds))) {
+            $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
+            $urlLocation = 'pdf';
+        }
 
         if ($key) {
             $request = (new MyParcelRequest())
@@ -426,9 +446,9 @@ class MyParcelCollection extends Collection
                     implode(';', $conceptIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', $requestType);
 
-            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
+            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult("data.$urlLocation.url");
         }
 
         $this->setLatestData();
@@ -610,6 +630,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
@@ -621,6 +642,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
     {
@@ -645,6 +667,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
@@ -656,6 +679,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {
