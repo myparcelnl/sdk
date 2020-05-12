@@ -214,6 +214,29 @@ class MyParcel extends CarrierModule
         return false;
     }
 
+    public static function getModuleCountry()
+    {
+        return 'BE';
+    }
+
+    public static function isNL()
+    {
+        return self::getModuleCountry() === 'NL';
+    }
+
+    public static function isBE()
+    {
+        return self::getModuleCountry() === 'BE';
+    }
+
+    public static function getCarriers()
+    {
+        $carriers = ['postnl'];
+        if (self::isBE()) {
+            $carriers[] = 'bpost';
+        }
+    }
+
     private function mypa_stringify_url($parsedUrl)
     {
         $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';

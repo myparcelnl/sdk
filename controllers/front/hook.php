@@ -38,7 +38,7 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
         // @codingStandardsIgnoreEnd
         if (Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME)) {
             $logContent = ($content);
-            Logger::addLog(base64_encode("MyParcel - incoming webhook\n{$logContent}"));
+            \Gett\MyParcel\Logger\Logger::addLog("MyParcel - incoming webhook\n{$logContent}");
         }
 
         $data = @json_decode($content, true);

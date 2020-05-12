@@ -75,6 +75,8 @@ class ConsignmentFactory
             ->setFullStreet($order['full_street'])
             ->setPostalCode($order['postcode'])
             ->setCity($order['city'])
+            ->setContents(1)
+            ->setInvoice(123)
         ;
 
         if ($package_type = $this->request->get('MY_PARCEL_PACKAGE_TYPE')) {
@@ -100,26 +102,30 @@ class ConsignmentFactory
             $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$delivery_setting->deliveryType]);
         }
 
-        if ($delivery_setting->shipmentOptions->only_recipient) {
+        if (isset($delivery_setting->shipmentOptions->only_recipient) && $delivery_setting->shipmentOptions->only_recipient) {
             $consignment->setOnlyRecipient(true);
         }
-        if ($delivery_setting->shipmentOptions->signature) {
+        if (isset($delivery_setting->shipmentOptions->signature) && $delivery_setting->shipmentOptions->signature) {
             $consignment->setSignature(true);
         }
-        $consignment->setLabelDescription($this->configuration->get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME));
+        $consignment->setLabelDescription(
+            isset($order[\Configuration::get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME)]) ? $order[\Configuration::get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME)] : $order['id_order']
+        );
 
         if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
             $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
+            $consignment->setAgeCheck(false); //The age check is not possible with an EU shipment or world shipment
             if ($products !== false) {
                 foreach ($products as $product) {
-                    $item = new MyParcelCustomsItem();
+                    $item = (new MyParcelCustomsItem());
                     $item->setAmount($product['product_quantity']);
                     $item->setClassification(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME) ?? (int) $this->configuration->get(Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME)
                     );
                     $item->setCountry(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
                     );
+
                     $item->setDescription($product['product_name']);
                     $item->setItemValue($product['product_price']);
                     $item->setWeight($product['product_weight']);

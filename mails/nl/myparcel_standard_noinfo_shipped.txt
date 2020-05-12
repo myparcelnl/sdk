@@ -1,0 +1,20 @@
+[{shop_url}]
+
+Beste {firstname} {lastname},
+
+Uw pakket is verzonden en kunt u via onderstaande link volgen via PostNL:
+
+{followup}
+
+Het pakket zal bij het volgende adres worden afgeleverd:
+{delivery_street} {delivery_number}
+{delivery_postcode} {delivery_city}
+
+Indien u nog vragen heeft over uw bestelling, horen wij dat graag.
+
+Dit kan via de site bij contact.
+
+Met vriendelijke groet,
+
+{shop_name} [{shop_url}] powered
+by PrestaShop(tm) [http://www.prestashop.com/]

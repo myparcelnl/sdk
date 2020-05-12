@@ -42,7 +42,7 @@ class CustomsForm extends AbstractForm
                 'name' => 'MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN',
                 'options' => [
                     'query' => Country::getCountries(Context::getContext()->language->id),
-                    'id' => 'id_country',
+                    'id' => 'iso_code',
                     'name' => 'name',
                 ],
             ],

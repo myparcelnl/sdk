@@ -1,0 +1,21 @@
+[{shop_url}]
+
+Beste {firstname} {lastname},
+
+Uw pakket is verzonden en kunt u via onderstaande link volgen via PostNL:
+
+{followup}
+
+De bezorging van uw bestelling vindt naar verwachting plaats op:
+{delivery_day_name} {delivery_day} {delivery_month_name} {delivery_year} tussen {delivery_time_from_localized} en {delivery_time_to_localized} uur
+
+Het pakket zal bij het volgende adres worden afgeleverd:
+{delivery_street} {delivery_number}
+{delivery_postcode} {delivery_city}
+
+Indien u nog vragen heeft over uw bestelling, horen wij dat graag.
+
+Met vriendelijke groet,
+
+{shop_name} [{shop_url}] powered
+by PrestaShop(tm) [http://www.prestashop.com/]

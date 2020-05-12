@@ -3,6 +3,7 @@
 namespace Gett\MyParcel\Service\Consignment;
 
 use Gett\MyParcel\Constant;
+use Gett\MyParcel\Logger\Logger;
 use Symfony\Component\HttpFoundation\Request;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
@@ -28,11 +29,17 @@ class Download
         if (\Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'printed')) {
             //TODO send notification
         }
-        $collection = MyParcelCollection::findMany($id_labels, $this->api_key);
-        $collection
-            ->setPdfOfLabels($this->fetchPositions())
-            ->downloadPdfOfLabels($this->configuration->get(Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false))
-        ;
+
+        try {
+            $collection = MyParcelCollection::findMany($id_labels, $this->api_key);
+            $collection
+                ->setPdfOfLabels($this->fetchPositions())
+                ->downloadPdfOfLabels($this->configuration->get(Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false))
+            ;
+            Logger::log($collection->toJson());
+        } catch (\Exception $e) {
+            Logger::log($e->getMessage(), true);
+        }
     }
 
     private function fetchPositions()

@@ -1,0 +1,21 @@
+[{shop_url}]
+
+Your order has been shipped!
+
+Hi {firstname} {lastname},
+
+Your shipment has just been handed to PostNL and will be delivered as soon as possible.
+The product will be shipped in a mailbox package, so you do not have to stay at home to receive the shipment, since it fits in a mailbox.
+
+You can follow your order via this track &amp; trace link: {followup}.
+It is possible that there is no information available, yet.
+Usually in the evening the status is updated.
+
+
+Should you have any questions about delivery, don't hesitate to contact us.
+
+
+You can reach us via our contact form on our website.
+
+{shop_name} [{shop_url}] powered
+by PrestaShop(tm) [http://www.prestashop.com/]

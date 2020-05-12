@@ -13,4 +13,5 @@ class MyParcelRequest extends \MyParcelNL\Sdk\src\Model\MyParcelRequest
      * Supported request types.
      */
     const REQUEST_TYPE_WEBHOOK = 'webhook_subscriptions';
+    const REQUEST_TYPE_TRACKTRACE = 'tracktraces';
 }

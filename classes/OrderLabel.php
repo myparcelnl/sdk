@@ -2,6 +2,9 @@
 
 namespace Gett\MyParcel;
 
+use Gett\MyParcel\Sdk\src\Services\Tracktrace;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+
 class OrderLabel extends \ObjectModel
 {
     public $id_order;
@@ -51,17 +54,7 @@ class OrderLabel extends \ObjectModel
             }
         }
 
-        MyParcelOrderHistory::log($idShipment, $statusCode, $date);
-
-        return (bool) Db::getInstance()->update(
-            bqSQL(static::$definition['table']),
-            [
-                'tracktrace' => pSQL($barcode),
-                'postnl_status' => (int) $statusCode,
-                'date_upd' => pSQL($date),
-            ],
-            'id_shipment = ' . (int) $idShipment
-        );
+        return true;
     }
 
     public static function findByLabelId(int $label_id)
@@ -74,7 +67,7 @@ class OrderLabel extends \ObjectModel
     public static function setShipped($idShipment, $mail = true)
     {
         $targetOrderState = \Configuration::get('PS_OS_SHIPPING');
-        if (!Configuration::get(MyParcel::NOTIFICATION_MOMENT) && $mail) {
+        if (\Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME) == 'first_scan' && $mail) {
             static::sendShippedNotification($idShipment);
         }
 
@@ -88,7 +81,7 @@ class OrderLabel extends \ObjectModel
     public static function setPrinted($idShipment, $mail = true)
     {
         $targetOrderState = 14;
-        if ($mail && \Configuration::get(MyParcel::NOTIFICATION_MOMENT)) {
+        if ($mail && \Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME) == 'printed') {
             static::sendShippedNotification($idShipment);
         }
 
@@ -99,8 +92,202 @@ class OrderLabel extends \ObjectModel
         static::setOrderStatus($idShipment, $targetOrderState);
     }
 
-    public static function sendShippedNotification()
+    public static function sendShippedNotification(int $idShipment)
     {
+        if (!\Configuration::get(Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME)) {
+            return;
+        }
+        $order_label = self::findByLabelId($idShipment);
+        if (!Validate::isLoadedObject($order_label)) {
+            return;
+        }
+        $order = new Order($order_label->id_order);
+        if (!Validate::isLoadedObject($order)) {
+            return;
+        }
+
+        $customer = new Customer($order->id_customer);
+        if (!Validate::isEmail($customer->email)) {
+            return;
+        }
+        $address = new Address($order->id_address_delivery);
+        $deliveryOptions = self::getOrderDeliveryOptions($order_label->id_order);
+        $mailIso = Language::getIsoById($order->id_lang);
+        $mailIsoUpper = strtoupper($mailIso);
+        $countryIso = strtoupper(Country::getIsoById($address->id_country));
+        $templateVars = [
+            '{firstname}' => $address->firstname,
+            '{lastname}' => $address->lastname,
+            '{shipping_number}' => $order_label->barcode,
+            '{followup}' => "http://postnl.nl/tracktrace/?L={$mailIsoUpper}&B={$order_label->barcode}&P={$address->postcode}&D={$countryIso}&T=C",
+            '{order_name}' => $order->getUniqReference(),
+            '{order_id}' => $order->id,
+            '{utc_offset}' => date('P'),
+        ];
+        // Assume PHP localization is not available
+        $nlDays = [
+            1 => 'maandag',
+            2 => 'dinsdag',
+            3 => 'woensdag',
+            4 => 'donderdag',
+            5 => 'vrijdag',
+            6 => 'zaterdag',
+            0 => 'zondag',
+        ];
+        $nlMonths = [
+            1 => 'januari',
+            2 => 'februari',
+            3 => 'maart',
+            4 => 'april',
+            5 => 'mei',
+            6 => 'juni',
+            7 => 'juli',
+            8 => 'augustus',
+            9 => 'september',
+            10 => 'oktober',
+            11 => 'november',
+            12 => 'december',
+        ];
+        $tracktraceInfo = (new Tracktrace(\Configuration::get(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME)))->getTrackTrace($order_label->id_label);
+        $deliveryDate = $tracktraceInfo['data']['tracktraces'][0]['options']['delivery_date'];
+        $deliveryDateFrom = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['start']['date'];
+        $deliveryDateTo = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['end']['date'];
+        $dayNumber = (int) date('w', strtotime($deliveryDate));
+        $monthNumber = (int) date('n', strtotime($deliveryDate));
+        $templateVars['{delivery_street}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['street'];
+        $templateVars['{delivery_number}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['street_additional_info'] . ' ' . $tracktraceInfo['data']['tracktraces'][0]['recipient']['number'];
+        $templateVars['{delivery_postcode}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['postal_code'];
+        $templateVars['{delivery_city}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['city'];
+        $templateVars['{delivery_cc}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['cc'];
+        $templateVars['{pickup_name}'] = $tracktraceInfo['data']['tracktraces'][0]['pickup']['location_name'];
+        $templateVars['{pickup_street}'] = $tracktraceInfo['data']['tracktraces'][0]['pickup']['street'];
+        $templateVars['{pickup_number}'] = $tracktraceInfo['data']['tracktraces'][0]['pickup']['number'];
+        $templateVars['{pickup_postcode}'] = strtoupper(str_replace(' ', '', $tracktraceInfo['data']['tracktraces'][0]['pickup']['postal_code']));
+        $templateVars['{pickup_region}'] = $tracktraceInfo['data']['tracktraces'][0]['pickup']['region'] ?: '-';
+        $templateVars['{pickup_city}'] = $tracktraceInfo['data']['tracktraces'][0]['pickup']['city'];
+        $templateVars['{pickup_cc}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['cc'];
+
+        if (!$deliveryOptions->deliveryType || in_array(
+            AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$deliveryOptions->deliveryType],
+            [1, 2, 3]
+        )) {
+            $templateVars['{delivery_day_name}'] = date('l', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_day}'] = date('j', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_day_leading_zero}'] = date('d', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_month}'] = date('n', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_month_leading_zero}'] = date('m', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_month_name}'] = date('F', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_year}'] = date('Y', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_time_from}'] = date('H:i', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_time_from_localized}'] = date('h:i A', strtotime($deliveryDateFrom));
+            $templateVars['{delivery_time_to}'] = date('H:i', strtotime($deliveryDateTo));
+            $templateVars['{delivery_time_to_localized}'] = date('h:i A', strtotime($deliveryDateTo));
+        } elseif (in_array($deliveryOptions->deliveryType, [4, 5])) {
+            $cc = $tracktraceInfo['data']['tracktraces'][0]['recipient']['cc'];
+            $pickup_city = $tracktraceInfo['data']['tracktraces'][0]['pickup']['city'];
+            $count1 = strtoupper($cc);
+            $count = str_replace(' ', '+', $pickup_city, $count1);
+            $googleMapsDestinationLocation = implode(
+                ',',
+                [
+                    str_replace(' ', '+', $tracktraceInfo['data']['tracktraces'][0]['pickup']['street'] . ' ' . str_replace(
+                        ' ',
+                        '+',
+                        $tracktraceInfo['data']['tracktraces'][0]['pickup']['number'] . $tracktraceInfo['data']['tracktraces'][0]['pickup']['number_suffix'],
+                        $count
+                    )), ]
+            );
+            $str_replace = str_replace(' ', '+', $tracktraceInfo['data']['tracktraces'][0]['recipient']['city']);
+
+            if ($mailIsoUpper === 'NL') {
+                $dayNumber = (int) date('w', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_day_name}'] = $nlDays[$dayNumber];
+                $templateVars['{delivery_day}'] = date('j', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_day_leading_zero}'] = date('d', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_month}'] = date('n', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_month_leading_zero}'] = date('m', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_month_name}'] = $nlMonths[$monthNumber];
+                $templateVars['{delivery_year}'] = date('Y', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_time_from}'] = '15:00';
+                $templateVars['{delivery_time_from_localized}'] = '15:00';
+            } else {
+                $templateVars['{delivery_day_name}'] = date('l', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_day}'] = date('d', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_day_leading_zero}'] = date('d', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_month}'] = date('m', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_month_leading_zero}'] = date('m', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_month_name}'] = date('F', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_year}'] = date('Y', strtotime($deliveryDateFrom));
+                $templateVars['{delivery_time_from}'] = '15:00';
+                $templateVars['{delivery_time_from_localized}'] = '03:00 PM';
+            }
+            foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day) {
+                $dayFrom = $deliveryOptions->opening_hours->{$day}[0];
+                if (strpos($dayFrom, '-') !== false) {
+                    list($dayFrom) = explode('-', $dayFrom);
+                }
+                $dayTo = $deliveryOptions->opening_hours->{$day}[count($deliveryOptions->opening_hours->{$day}) - 1];
+                if (strpos($dayTo, '-') !== false) {
+                    list(, $dayTo) = array_pad(explode('-', $dayTo), 2, '');
+                }
+                if ($dayFrom) {
+                    $dayFull = "{$dayFrom} - {$dayTo}";
+                } else {
+                    $dayFull = Translate::getModuleTranslation('myparcel', 'Closed', 'myparcel');
+                }
+                $templateVars["{opening_hours_{$day}_from}"] = $dayFrom;
+                $templateVars["{opening_hours_{$day}_to}"] = $dayTo;
+                $templateVars["{opening_hours_{$day}}"] = $dayFull;
+            }
+        }
+
+        $mailType = ($tracktraceInfo['data']['tracktraces'][0]['options']['package_type'] === AbstractConsignment::PACKAGE_TYPE_MAILBOX)
+            ? 'mailboxpackage'
+            : 'standard';
+        if ($deliveryOptions->isPickup) {
+            $mailType = 'pickup';
+        }
+
+        $mailDir = false;
+        if (file_exists(_PS_THEME_DIR_ . "modules/myparcel/mails/{$mailIso}/myparcel_{$mailType}_shipped.txt")
+            && file_exists(
+                _PS_THEME_DIR_ . "modules/myparcel/mails/{$mailIso}/myparcel_{$mailType}_shipped.html"
+            )
+        ) {
+            $mailDir = _PS_THEME_DIR_ . 'modules/myparcel/mails/';
+        } elseif (file_exists(dirname(__FILE__) . "/../mails/{$mailIso}/myparcel_{$mailType}_shipped.txt")
+            && file_exists(dirname(__FILE__) . "/../mails/{$mailIso}/myparcel_{$mailType}_shipped.html")
+        ) {
+            $mailDir = dirname(__FILE__) . '/../mails/';
+        }
+
+        if ($mailDir) {
+            Mail::Send(
+                $order->id_lang,
+                "myparcel_{$mailType}_shipped",
+                $mailIsoUpper === 'NL' ? "Bestelling {$order->getUniqReference()} is verzonden" : "Order {$order->getUniqReference()} has been shipped",
+                $templateVars,
+                (string) $customer->email,
+                null,
+                (string) Configuration::get(
+                    'PS_SHOP_EMAIL',
+                    null,
+                    null,
+                    Context::getContext()->shop->id
+                ),
+                (string) Configuration::get(
+                    'PS_SHOP_NAME',
+                    null,
+                    null,
+                    Context::getContext()->shop->id
+                ),
+                null,
+                null,
+                $mailDir,
+                false,
+                Context::getContext()->shop->id
+            );
+        }
     }
 
     public static function setOrderStatus($idShipment, $status, $addWithEmail = true)
@@ -109,15 +296,17 @@ class OrderLabel extends \ObjectModel
         if (!$targetOrderState) {
             return;
         }
-        $order = MyParcelOrder::getOrderByShipmentId($idShipment);
-        $shipment = MyParcelOrder::getByShipmentId($idShipment);
-        if (!Validate::isLoadedObject($order) || !Validate::isLoadedObject($shipment)) {
+
+        $order_label = self::findByLabelId($idShipment);
+        $order = new Order($order_label->id_order);
+
+        if (!Validate::isLoadedObject($order_label) || !Validate::isLoadedObject($order)) {
             return;
         }
-        if (in_array($order->getCurrentState(), MyParcel::getIgnoredStatuses())) {
-            return;
-        }
-        $shipment = mypa_dot(@json_decode($shipment->shipment, true));
+
+//        if (in_array($order->getCurrentState(), MyParcel::getIgnoredStatuses())) {
+//            return;
+//        }
 
         $idOrder = (int) $order->id;
         $history = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_order_state` FROM ' . _DB_PREFIX_ . "order_history WHERE `id_order` = {$idOrder}");
@@ -131,7 +320,7 @@ class OrderLabel extends \ObjectModel
         $history = new OrderHistory();
         $history->id_order = (int) $order->id;
         $history->changeIdOrderState($targetOrderState, (int) $order->id, !$order->hasInvoice());
-        if ($addWithEmail && !in_array((int) $shipment->get('options.package_type'), [1, 2])) {
+        if ($addWithEmail) {
             $history->addWithemail();
         } else {
             $history->add();
@@ -140,7 +329,7 @@ class OrderLabel extends \ObjectModel
 
     public static function setReceived($idShipment)
     {
-        $targetOrderState = (int) Configuration::get(MyParcel::RECEIVED_STATUS);
+        $targetOrderState = (int) 5;
         if (!$targetOrderState) {
             return;
         }
@@ -221,14 +410,16 @@ class OrderLabel extends \ObjectModel
         $qb = new \DbQuery();
         $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_price, od.product_weight');
         $qb->from('order_detail', 'od');
-        $qb->innerJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
+        $qb->leftJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
         $qb->where('od.id_order = "' . $id_order . '" AND pc.name = "' . Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME . '" ');
 
-        $return = [];
-        foreach (\Db::getInstance()->executeS($qb) as $item) {
+        $return = \Db::getInstance()->executeS($qb);
+        foreach ($return as $item) {
             if ($item['value'] && $item['value'] == 'No') {
                 return false;
             }
         }
+
+        return $return;
     }
 }

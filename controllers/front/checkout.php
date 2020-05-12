@@ -8,14 +8,13 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
     {
         $id_carrier = intval(Tools::getValue('id_carrier'));
 
-        $provider = new \Gett\MyParcel\Service\CarrierConfigurationProvider((int) Tools::getValue('id_carrier'));
         $address = new \Address($this->context->cart->id_address_delivery);
         $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
-
+        $carrier = new \Carrier($id_carrier);
         $params = [
             'config' => [
                 'platform' => 'myparcel',
-                'carriers' => ['postnl'],
+                'carriers' => [str_replace(' ', '', strtolower($carrier->name))],
 
                 'priceMorningDelivery' => CarrierConfigurationProvider::get($id_carrier, 'priceMorningDelivery'),
                 'priceStandardDelivery' => CarrierConfigurationProvider::get($id_carrier, 'priceStandardDelivery'),
@@ -65,7 +64,7 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
                 'retry' => CarrierConfigurationProvider::get($id_carrier, 'retry'),
             ],
             'address' => [
-                'cc' => 'BE',
+                'cc' => strtoupper(Country::getIsoById($address->id_country)),
                 'city' => $address->city,
                 'postalCode' => $address->postcode,
                 'number' => $address->address1,

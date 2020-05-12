@@ -1,0 +1,20 @@
+[{shop_url}]
+
+Hi {firstname} {lastname},
+
+Your order has been shipped and you can follow it via the following link via PostNL:
+
+{followup}
+
+Your shipment will be delivered at the following address:
+{delivery_street} {delivery_number}
+{delivery_postcode} {delivery_city}
+
+Should you have any questions about delivery, don't hesitate to contact us.
+
+You can reach us via the contact form on our website.
+
+Kind regards,
+
+{shop_name} [{shop_url}] powered
+by PrestaShop(tm) [http://www.prestashop.com/]

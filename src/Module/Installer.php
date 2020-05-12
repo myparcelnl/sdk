@@ -11,6 +11,14 @@ class Installer
     /** @var \Module */
     private $module;
 
+    private static $carriers_nl = [
+        ['name' => 'Post NL', 'image' => 'postnl.jpg', 'configuration_name' => 'MYPARCEL_POSTNL'],
+    ];
+    private static $carriers_be = [
+        ['name' => 'Bpost', 'image' => 'bpost.jpg', 'configuration_name' => 'MYPARCEL_BPOST'],
+        ['name' => 'DPD', 'image' => 'dpd.jpg', 'configuration_name' => 'MYPARCEL_DPD'],
+    ];
+
     public function __construct(\Module $module)
     {
         $this->module = $module;
@@ -24,10 +32,17 @@ class Installer
         $result &= $this->installTabs();
 
         if ($result) {
-            $carrier = $this->addCarrier('Post NL');
-            $this->addZones($carrier);
-            $this->addGroups($carrier);
-            $this->addRanges($carrier);
+            $carriers = self::$carriers_nl;
+            if (\MyParcel::isBE()) {
+                $carriers = array_merge($carriers, self::$carriers_be);
+            }
+
+            foreach ($carriers as $item) {
+                $carrier = $this->addCarrier($item);
+                $this->addZones($carrier);
+                $this->addGroups($carrier);
+                $this->addRanges($carrier);
+            }
         }
 
         return $result;
@@ -122,11 +137,11 @@ class Installer
         ];
     }
 
-    protected function addCarrier($name)
+    protected function addCarrier($configuration)
     {
         $carrier = new Carrier();
 
-        $carrier->name = $name;
+        $carrier->name = $configuration['name'];
         $carrier->is_module = true;
         $carrier->active = 1;
         $carrier->range_behavior = 1;
@@ -141,8 +156,8 @@ class Installer
         }
 
         if ($carrier->add() == true) {
-            @copy(_PS_MODULE_DIR_ . 'myparcel/views/images/postnl.jpg', _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
-
+            @copy(_PS_MODULE_DIR_ . 'myparcel/views/images/' . $configuration['image'], _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
+            \Db::getInstance()->insert('configuration', ['name' => $configuration['configuration_name'], 'value' => $carrier->id]);
             $insert = [];
             foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
                 $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];

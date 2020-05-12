@@ -143,8 +143,38 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
+                    <input type="checkbox" id="myparcel-insurance-checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">Insurnance</label>
+                </div>
+                <div class="insurance-additional-container">
+                    <div class="form-group insurance-additional-predefined">
+                        <div class="myparcel-radio-container">
+                            <input id="upto100" type="radio" value="1" name="insurance-value-option" class="myparcel-radio">
+                            <label for="upto100">Up to € 100</label>
+                        </div>
+                        <div class="myparcel-radio-container">
+                            <input id="upto250" type="radio" value="2" name="insurance-value-option" class="myparcel-radio">
+                            <label for="upto250">Up to € 250</label>
+                        </div>
+                        <div class="myparcel-radio-container">
+                            <input id="upto500" type="radio" value="3" name="insurance-value-option" class="myparcel-radio">
+                            <label for="upto500">Up to € 500</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="myparcel-radio-container">
+                            <input id="heigherthen500" type="radio" value="4" name="insurance-value-option" class="myparcel-radio">
+                            <label for="heigherthen500">Higher than € 500</label>
+                        </div>
+                        <div class="money-input-wrapper">
+                            <div class="input-group money-type">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">€ </span>
+                                </div>
+                                <input type="text" id="myparcel-insurance-higher-amount" name="insurance-higher-amount" class="form-control" value="1000" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

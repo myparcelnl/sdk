@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Gett\MyParcel\Sdk\src\Services\Tracktrace;
+
 class LabelForm extends AbstractForm
 {
     protected $icon = 'cog';
@@ -13,11 +15,24 @@ class LabelForm extends AbstractForm
 
     protected function getFields(): array
     {
+        $a = new Tracktrace(\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+        echo '<pre>';
+        var_dump($a->getTrackTrace(15002021));
+        die();
+
         return [
             'MY_PARCEL_LABEL_DESCRIPTION' => [
-                'type' => 'text',
+                'type' => 'select',
                 'label' => $this->module->l('Label description'),
                 'name' => 'MY_PARCEL_LABEL_DESCRIPTION',
+                'options' => [
+                    'query' => [
+                        ['id' => 'id_order', 'name' => 'Order ID'],
+                        ['id' => 'reference', 'name' => 'Order Reference'],
+                    ],
+                    'id' => 'id',
+                    'name' => 'name',
+                ],
             ],
             'MY_PARCEL_LABEL_SIZE' => [
                 'type' => 'select',
