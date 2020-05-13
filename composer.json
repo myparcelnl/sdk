@@ -1,5 +1,5 @@
 {
-  "name": "gett/MyParcel",
+  "name": "gett/myparcel",
   "description": "PrestaShop module to intergratie with MyParcel NL and\nMyParcel BE",
   "require": {
     "php": ">=7.2.0",

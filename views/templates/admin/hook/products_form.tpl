@@ -149,4 +149,8 @@
 
 <script type="text/javascript">
     $('#show-block').tabs();
+    $(document).on('click', '.btn-tab', function(){
+        $('.btn-tab').removeClass('active');
+        $(this).addClass('active');
+    });
 </script>
