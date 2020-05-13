@@ -15,11 +15,6 @@ class LabelForm extends AbstractForm
 
     protected function getFields(): array
     {
-        $a = new Tracktrace(\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
-        echo '<pre>';
-        var_dump($a->getTrackTrace(15002021));
-        die();
-
         return [
             'MY_PARCEL_LABEL_DESCRIPTION' => [
                 'type' => 'select',

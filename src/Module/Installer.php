@@ -38,10 +38,12 @@ class Installer
             }
 
             foreach ($carriers as $item) {
-                $carrier = $this->addCarrier($item);
-                $this->addZones($carrier);
-                $this->addGroups($carrier);
-                $this->addRanges($carrier);
+                if (!\Configuration::get($item['configuration_name'])){
+                    $carrier = $this->addCarrier($item);
+                    $this->addZones($carrier);
+                    $this->addGroups($carrier);
+                    $this->addRanges($carrier);
+                }
             }
         }
 
