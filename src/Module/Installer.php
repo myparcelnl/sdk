@@ -127,11 +127,6 @@ class Installer
         }
 
         return [
-            'MyParcelCarrier' => [
-                'class_name' => 'MyParcelCarrier',
-                'name' => $languages,
-                'parent_class' => 'AdminParentShipping',
-            ],
             'MyParcelLabelController' => [
                 'class_name' => 'Label',
                 'name' => $languages,

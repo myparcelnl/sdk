@@ -17,6 +17,7 @@ class Configure
         Constant::MENU_LABEL_SETTINGS => LabelForm::class,
         Constant::MENU_ORDER_SETTINGS => OrderForm::class,
         Constant::MENU_CUSTOMS_SETTINGS => CustomsForm::class,
+        5 => Carriers::class
     ];
 
     public function __construct(Module $module)

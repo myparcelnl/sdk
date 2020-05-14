@@ -234,6 +234,7 @@ class MyParcel extends CarrierModule
         $carriers = ['postnl'];
         if (self::isBE()) {
             $carriers[] = 'bpost';
+            $carriers[] = 'dpd';
         }
     }
 
