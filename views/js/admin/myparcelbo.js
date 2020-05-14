@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let steps = Math.ceil(currentValue / amountStep);
     let newValue = amountStep * steps;
-
+    if (newValue > 5000) {
+      newValue = 5000;
+    }
     $insuranceHigherAmountInput.val(newValue);
   };
   $(document).on('change', insuranceHigherAmountSelector, function() {
