@@ -83,6 +83,16 @@ class Configure
                 'active' => false,
                 'icon' => 'icon-shopping-cart',
             ],
+            'carriersoptions' => [
+                'short' => $this->module->l('Carriers options'),
+                'desc' => $this->module->l('Carriers options'),
+                'href' => $this->module->appendQueryToUrl(
+                    $this->module->baseUrl,
+                    ['menu' => (string) Constant::MENU_CARRIER_SETTINGS]
+                ),
+                'active' => false,
+                'icon' => 'icon-shopping-cart',
+            ],
         ];
 
         switch (\Tools::getValue('menu')) {
@@ -104,6 +114,10 @@ class Configure
                 break;
             case Constant::MENU_CUSTOMS_SETTINGS:
                 $menu['customsoptions']['active'] = true;
+
+                break;
+            case Constant::MENU_CARRIER_SETTINGS:
+                $menu['carriersoptions']['active'] = true;
 
                 break;
             default:
