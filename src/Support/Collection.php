@@ -479,11 +479,11 @@ class Collection extends CollectionProxy implements ArrayAccess, Countable, Iter
      * Apply the callback if the value is truthy.
      *
      * @param  bool  $value
-     * @param  callable  $callback
-     * @param  callable  $default
+     * @param  callable|null  $callback
+     * @param  callable|null  $default
      * @return mixed
      */
-    public function when($value, callable $callback, callable $default = null)
+    public function when($value, callable $callback = null, callable $default = null)
     {
         if ($value) {
             return $callback($this, $value);
