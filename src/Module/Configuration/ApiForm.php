@@ -5,8 +5,8 @@ namespace Gett\MyParcel\Module\Configuration;
 use Tools;
 use Configuration;
 use Gett\MyParcel\Constant;
-use Gett\MyParcel\Sdk\src\Services\WebhookService;
-use Gett\MyParcel\Sdk\src\Model\Webhook\Subscription;
+use Gett\MyParcel\Services\WebhookService;
+use Gett\MyParcel\Model\Webhook\Subscription;
 
 class ApiForm extends AbstractForm
 {
