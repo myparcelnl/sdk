@@ -35,4 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
     changeInsuranceHigherAmount();
   });
   changeInsuranceHigherAmount();
+
+  if (prompt_for_label_position == 0) {
+    $('.positions-block').remove();
+  }
 }, false);
