@@ -13,7 +13,7 @@ trait LegacyOrderPageHooks
                 //TODO
             ]);
             $this->context->controller->addJS(
-                $this->_path . 'resources/js/admin/order.js'
+                $this->_path . 'views/js/admin/order.js'
             );
 
             $link = new \Link();

@@ -29,8 +29,8 @@ window.addEventListener('load', function() {
                 data: {
                     data: ids
                 }
-            }).done((result) => {
-                 window.location.reload();
+            }).done((result) => {console.log('window.location.reload();1');
+                 //window.location.reload();
             }).fail(() => {
                 $('#ajax_confirmation').before(
                     '<div class="alert alert-danger">' +
@@ -60,8 +60,8 @@ window.addEventListener('load', function() {
                 data: {
                     order_ids: ids
                 }
-            }).done((result) => {
-                window.location.reload();
+            }).done((result) => {console.log('window.location.reload();2');
+                //window.location.reload();
             }).fail((error) => {
                 $('#ajax_confirmation').before(
                     '<div class="alert alert-danger">' +
@@ -133,14 +133,34 @@ document.addEventListener("DOMContentLoaded", () => {
         $.ajax({
             method: "POST",
             url: create_label_action,
-            data: $('#print-modal :input').serialize()
-        }).done((result) => {
-            window.location.reload();
-        }).fail((error) => {
+            data: $('#print-modal :input').serialize(),
+            dataType: 'json',
+            async: true,
+            cache: false,
+            headers: { 'cache-control': 'no-cache' }
+        }).success(function(jsonData) {
+            if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
+                console.log('window.location.reload();3');
+                //window.location.reload();
+            } else {
+                var errorText = '';
+                if (typeof jsonData.errors === 'string') {
+                    errorText += jsonData.errors;
+                } else {
+                    $.each(jsonData.errors, function(index, value) {
+                        errorText += value + ((index + 1) < jsonData.errors.length ? '<br />' : '');
+                    });
+                }
+                $('#ajax_confirmation').before(
+                  '<div class="alert alert-danger">' +
+                  '<button type="button" class="close" data-dismiss="alert">×</button>'+errorText+'</div>'
+                );
+            }
+        }).fail(function(error) {
             $('#ajax_confirmation').before(
                 '<div class="alert alert-danger">' +
                 '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
-            )
+            );
         });
     });
 });

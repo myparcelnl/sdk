@@ -100,8 +100,8 @@
             <div class="modal-body" id="print-modal">
                 <input type="hidden" id="order_id" name="create_label[order_ids][]">
                 <div class="form-group">
-                    <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
                     <label for="labels_amount">Amout of labels</label>
+                    <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
                 </div>
 
                 <div class="form-group">
@@ -125,6 +125,7 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}">Package format</label>
                     <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}" class="custom-select">
                         <option value="1">Normal</option>
                         <option value="2">Large</option>

@@ -75,14 +75,22 @@ class LabelController extends ModuleAdminControllerCore
         }
     }
 
-    public function processCreate()
+    public function ajaxProcessCreate()
     {
         $factory = new \Gett\MyParcel\Factory\Consignment\ConsignmentFactory(
             \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
-        $order = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate(Tools::getValue('create_label')['order_ids']);
+        $createLabelIds = Tools::getValue('create_label');
+        if (empty($createLabelIds['order_ids'])) {
+            die($this->trans('No order ID found', [], 'Modules.Myparcel.Error'));
+        }
+        $order = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate($createLabelIds['order_ids']);
+        if (empty($order)) {
+            $this->errors[] = $this->trans('No order found.', [], 'Modules.Myparcel.Error');
+            die(json_encode(['hasError' => true, 'errors' => $this->errors]));
+        }
 
         try {
             $collection = $factory->fromOrder($order[0]);
@@ -111,7 +119,7 @@ class LabelController extends ModuleAdminControllerCore
             //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
         }
 
-        die();
+        die(json_encode(['hasError' => false]));
     }
 
     public function processCreateb()
