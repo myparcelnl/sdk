@@ -227,16 +227,13 @@ class LabelController extends ModuleAdminControllerCore
 
     public function processUpdatelabel()
     {
-        $id_labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
-
         try {
             $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
             $collection->setLinkOfLabels();
             \Gett\MyParcel\Logger\Logger::log($collection->toJson());
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
-            header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($e->getMessage());
+            Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -247,6 +244,6 @@ class LabelController extends ModuleAdminControllerCore
             $order_label->save();
         }
 
-        die();
+        Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
     }
 }
