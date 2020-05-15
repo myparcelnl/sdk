@@ -114,9 +114,9 @@
                     <label for="custom-form">Custom Form</label>
                     <select class="form-control" id="custom-form" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME}">
                         <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 0}selected{/if}>- Selection required -</option>
-                        <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 1}selected{/if}>No</option>
-                        <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 2}selected{/if}>Add</option>
-                        <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 3}selected{/if}>Skip</option>
+                        <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'No'}selected{/if}>No</option>
+                        <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Add'}selected{/if}>Add</option>
+                        <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Skip'}selected{/if}>Skip</option>
                     </select>
                 </div>
             </div>
