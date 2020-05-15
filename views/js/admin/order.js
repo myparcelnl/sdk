@@ -29,8 +29,8 @@ window.addEventListener('load', function() {
                 data: {
                     data: ids
                 }
-            }).done((result) => {console.log('window.location.reload();1');
-                 //window.location.reload();
+            }).done((result) => {
+                 window.location.reload();
             }).fail(() => {
                 $('#ajax_confirmation').before(
                     '<div class="alert alert-danger">' +
@@ -60,8 +60,8 @@ window.addEventListener('load', function() {
                 data: {
                     order_ids: ids
                 }
-            }).done((result) => {console.log('window.location.reload();2');
-                //window.location.reload();
+            }).done((result) => {
+                window.location.reload();
             }).fail((error) => {
                 $('#ajax_confirmation').before(
                     '<div class="alert alert-danger">' +
@@ -140,8 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { 'cache-control': 'no-cache' }
         }).success(function(jsonData) {
             if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
-                console.log('window.location.reload();3');
-                //window.location.reload();
+                window.location.reload();
             } else {
                 $('#content > .alert.alert-danger').remove();
                 var errorText = '';
