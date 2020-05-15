@@ -54,6 +54,8 @@ class LabelController extends ModuleAdminControllerCore
                 \Gett\MyParcel\Logger\Logger::log($myParcelCollection->toJson());
             } catch (Exception $e) {
                 \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+                header('HTTP/1.1 500 Internal Server Error', true, 500);
+                die($e->getMessage());
             }
 
             $consignment = $myParcelCollection->first();
@@ -82,13 +84,15 @@ class LabelController extends ModuleAdminControllerCore
         );
         $order = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate(Tools::getValue('create_label')['order_ids']);
 
-        //try {
-        $collection = $factory->fromOrder($order[0]);
-        \Gett\MyParcel\Logger\Logger::log($collection->toJson());
-        $collection->setLinkOfLabels();
-//        } catch (Exception $e) {
-//            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
-//        }
+        try {
+            $collection = $factory->fromOrder($order[0]);
+            \Gett\MyParcel\Logger\Logger::log($collection->toJson());
+            $collection->setLinkOfLabels();
+        } catch (Exception $e) {
+            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($e->getMessage());
+        }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
         foreach ($collection as $consignment) {
@@ -153,6 +157,8 @@ class LabelController extends ModuleAdminControllerCore
             \Gett\MyParcel\Logger\Logger::log($collection->toJson());
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($e->getMessage());
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -184,6 +190,8 @@ class LabelController extends ModuleAdminControllerCore
             \Gett\MyParcel\Logger\Logger::log($collection->toJson());
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($e->getMessage());
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -207,5 +215,30 @@ class LabelController extends ModuleAdminControllerCore
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
         $service->downloadLabel($labels);
+    }
+
+    public function processUpdatelabel()
+    {
+        $id_labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
+
+        try {
+            $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+            $collection->setLinkOfLabels();
+            \Gett\MyParcel\Logger\Logger::log($collection->toJson());
+        } catch (Exception $e) {
+            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($e->getMessage());
+        }
+
+        $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
+
+        foreach ($collection as $consignment) {
+            $order_label = OrderLabel::findByLabelId($consignment->getConsignmentId());
+            $order_label->status = $status_provider->getStatus($consignment->getStatus());
+            $order_label->save();
+        }
+
+        die();
     }
 }

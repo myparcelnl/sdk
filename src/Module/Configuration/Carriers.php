@@ -2,22 +2,24 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Gett\MyParcel\Constant;
+
 class Carriers
 {
     private $context;
+
     public function __construct($module)
     {
-        $this->module = $module;        $this->name = str_replace(' ', '', $module->displayName) . self::class;
+        $this->module = $module;
+        $this->name = str_replace(' ', '', $module->displayName) . self::class;
         $this->context = \Context::getContext();
     }
 
     public function __invoke(): string
     {
         if (\Tools::isSubmit('submitMyparcelCarrierSettings')) {
-            \DB::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . "myparcel_carrier_configuration WHERE id_carrier = '" . \Tools::getValue('id_carrier') . "' ");
-
-            foreach (\Tools::getAllValues() as $key => $value) {
-                \DB::getInstance()->update('myparcel_carrier_configuration', ['value' => pSQL($value)], ['id_carrier' => \Tools::getValue('id_carrier'), 'name' => pSQL($key),]);
+            foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $value) {
+                \DB::getInstance()->update('myparcel_carrier_configuration', ['value' => pSQL(\Tools::getValue($value))], 'id_carrier = "' . \Tools::getValue('id_carrier') . '" AND name = "' . pSQL($value) . '" ');
             }
         }
 
@@ -188,7 +190,7 @@ class Carriers
                     ],
                     [
                         'type' => 'switch',
-                    'is_bool' => true,
+                        'is_bool' => true,
                         'label' => $this->module->l('Allow signature'),
                         'name' => 'allowSignature',
                         'tab' => 'form',
@@ -260,7 +262,7 @@ class Carriers
                     ],
                     [
                         'type' => 'switch',
-                            'is_bool' => true,
+                        'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
@@ -303,7 +305,7 @@ class Carriers
                     ],
                     [
                         'type' => 'switch',
-                                'is_bool' => true,
+                        'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
@@ -344,7 +346,7 @@ class Carriers
                     ],
                     [
                         'type' => 'switch',
-                                'is_bool' => true,
+                        'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
@@ -398,7 +400,7 @@ class Carriers
                     ],
                     [
                         'type' => 'switch',
-                                'is_bool' => true,
+                        'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
@@ -439,7 +441,7 @@ class Carriers
                     ],
                     [
                         'type' => 'switch',
-                                'is_bool' => true,
+                        'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
@@ -472,13 +474,13 @@ class Carriers
                     ],
                     [
                         'type' => 'hidden',
-                        'name' => 'id_carrier'
-                    ]
+                        'name' => 'id_carrier',
+                    ],
                 ],
                 'submit' => [
                     'title' => $this->module->l('Save'),
-                ]
-            ]
+                ],
+            ],
         ];
 
         $helper = new \HelperForm();
@@ -490,21 +492,20 @@ class Carriers
 
         $helper->submit_action = 'submitMyparcelCarrierSettings';
         $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . \Tools::getValue(
-                'menu',
-                0
-            );
+            'menu',
+            0
+        );
         $helper->token = \Tools::getAdminTokenLite('AdminModules');
 
-
-        $result = \Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'myparcel_carrier_configuration WHERE id_carrier = "'.\Tools::getValue('id_carrier').'"  ');
+        $result = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'myparcel_carrier_configuration WHERE id_carrier = "' . \Tools::getValue('id_carrier') . '"  ');
         $vars = [];
         foreach ($result as $item) {
             $vars[$item['name']] = $item['value'];
         }
         $vars['id_carrier'] = \Tools::getValue('id_carrier');
-        $helper->tpl_vars = array(
+        $helper->tpl_vars = [
             'fields_value' => $vars,
-        );
+        ];
 
         return $helper->generateForm([$fields]);
     }
@@ -525,7 +526,7 @@ class Carriers
         $helper = new \HelperList();
         $helper->shopLinkType = '';
         $helper->simple_header = true;
-        $helper->actions = array('edit');
+        $helper->actions = ['edit'];
         $helper->show_toolbar = false;
         $helper->module = $this;
         $helper->identifier = 'id_carrier';
@@ -533,24 +534,14 @@ class Carriers
         $helper->table = 'carrier';
         $helper->token = \Tools::getAdminTokenLite('AdminModules');
         $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . \Tools::getValue(
-                'menu',
-                0
-            );
+            'menu',
+            0
+        );
         $helper->colorOnBackground = true;
         $helper->no_link = true;
-        //$list = $this->getDeliveryOptionsList($helper);
-        //$helper->listTotal = count($list);
 
-//        foreach ($list as $carrier) {
-//            if ($carrier['external_module_name'] && $carrier['external_module_name'] !== $this->name) {
-//                $this->context->controller->warnings[] =
-//                    $this->module->l('Some carriers are managed by external modules.')
-//                    . ' ' .
-//                    $this->module->l('Delivery options will not be available for these carriers.');
-//                break;
-//            }
-//        }
-        $list = \Db::getInstance()->executeS("SELECT SQL_CALC_FOUND_ROWS a.* FROM `ps_carrier` a WHERE 1 AND a.`deleted` = 0 ORDER BY a.`position` ASC LIMIT 0, 50");
+        $list = \Db::getInstance()->executeS('SELECT a.* FROM `' . _DB_PREFIX_ . "carrier` a WHERE a.external_module_name = '" . $this->module->name . "' AND a.`deleted` = 0 ORDER BY a.`position` ASC LIMIT 0, 50");
+
         return $helper->generateList($list, $fieldsList);
     }
 }

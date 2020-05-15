@@ -2,8 +2,6 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
-use Gett\MyParcel\Sdk\src\Services\Tracktrace;
-
 class LabelForm extends AbstractForm
 {
     protected $icon = 'cog';

@@ -68,12 +68,12 @@ abstract class AbstractForm
             if ($name == 'MY_PARCEL_IGNORE_ORDER_STATUS') {
                 $ignored = [];
                 foreach (Tools::getAllValues() as $key => $value) {
-                    if (stripos($key,'MY_PARCEL_IGNORE_ORDER_STATUS') !== false) {
+                    if (stripos($key, 'MY_PARCEL_IGNORE_ORDER_STATUS') !== false) {
                         $temp = explode('_', $key);
                         $ignored[] = end($temp);
                     }
                 }
-                Configuration::updateValue($name, implode(',',$ignored));
+                Configuration::updateValue($name, implode(',', $ignored));
             }
             $value = Tools::getValue($name, Configuration::get($name));
             $result = $result && Configuration::updateValue($name, trim($value));
@@ -126,7 +126,7 @@ abstract class AbstractForm
             if ($name == 'MY_PARCEL_IGNORE_ORDER_STATUS') {
                 $temp = explode(',', $values[$name]);
                 foreach ($temp as $value) {
-                    $values["MY_PARCEL_IGNORE_ORDER_STATUS_$value"] = 1;
+                    $values["MY_PARCEL_IGNORE_ORDER_STATUS_{$value}"] = 1;
                 }
             }
         }

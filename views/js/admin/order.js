@@ -30,9 +30,12 @@ window.addEventListener('load', function() {
                     data: ids
                 }
             }).done((result) => {
-                // window.location.reload();
+                 window.location.reload();
             }).fail(() => {
-
+                $('#ajax_confirmation').before(
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
+                )
             });
         });
 
@@ -58,9 +61,12 @@ window.addEventListener('load', function() {
                     order_ids: ids
                 }
             }).done((result) => {
-                //window.location.reload();
-            }).fail(() => {
-
+                window.location.reload();
+            }).fail((error) => {
+                $('#ajax_confirmation').before(
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
+                )
             });
         });
 
@@ -129,9 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
             url: create_label_action,
             data: $('#print-modal :input').serialize()
         }).done((result) => {
-            //window.location.reload();
-        }).fail(() => {
-
+            window.location.reload();
+        }).fail((error) => {
+            $('#ajax_confirmation').before(
+                '<div class="alert alert-danger">' +
+                '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
+            )
         });
     });
 });

@@ -10,8 +10,7 @@
             print
         </i>
     </button>
-
-    <a href="{$link->getAdminLink('AdminLabel', true, ['action' => 'updateLabel'], ['labelId' => $label['id_label']])}" class="btn btn-link">
+    <a href="{$link->getAdminLink('Label', true, [], ['action' => 'updateLabel', 'labelId' => $label['id_label']])}" class="btn btn-link">
         <i class="material-icons">
             refresh
         </i>

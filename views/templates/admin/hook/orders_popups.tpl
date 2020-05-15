@@ -143,7 +143,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" id="myparcel-insurance-checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
+                    <input type="checkbox" id="myparcel-insurance-checkbox" ./value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">Insurnance</label>
                 </div>
                 <div class="insurance-additional-container">

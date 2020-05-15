@@ -155,6 +155,7 @@ class ConsignmentFactory
     private function MY_PARCEL_INSURANCE(AbstractConsignment $consignment)
     {
         $insurance = $this->request->get('insurance-higher-amount') * 100 ?? $this->request->get('insurance-value-option');
+
         return $consignment->setInsurance($insurance);
     }
 
