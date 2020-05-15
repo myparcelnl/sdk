@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log('window.location.reload();3');
                 //window.location.reload();
             } else {
+                $('#content > .alert.alert-danger').remove();
                 var errorText = '';
                 if (typeof jsonData.errors === 'string') {
                     errorText += jsonData.errors;
@@ -157,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
         }).fail(function(error) {
+            $('#content > .alert.alert-danger').remove();
             $('#ajax_confirmation').before(
                 '<div class="alert alert-danger">' +
                 '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
