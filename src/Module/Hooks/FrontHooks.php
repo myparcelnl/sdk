@@ -15,7 +15,7 @@ trait FrontHooks
     {
         if ($this->context->controller instanceof \OrderController) {
             $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
-            $this->context->controller->addJs($this->_path . 'node_modules/@myparcel/delivery-options/dist/myparcel.js');
+            $this->context->controller->addJs($this->_path . 'views/dist/myparcel.js');
             $this->context->controller->addJs($this->_path . 'views/js/myparcelinit.js');
         }
     }
