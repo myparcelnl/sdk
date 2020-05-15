@@ -46,9 +46,9 @@ class Installer
                     $this->addRanges($carrier);
                 } else {
                     foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $field) {
-                        $field = \Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'myparcel_carrier_configuration WHERE name = "'.$field.'" AND id_carrier = "'.\Configuration::get($item['configuration_name']).'"   ');
-                        if (!$field) {
-                            \Db::getInstance()->insert('myparcel_carrier_configuration', ['name' => $field, 'id_carrier' => \Configuration::get($item['configuration_name'])]);
+                        $exists = \Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'myparcel_carrier_configuration WHERE name = "'.$field.'" AND id_carrier = "'.\Configuration::get($item['configuration_name']).'"   ');
+                        if (!$exists) {
+                            \Db::getInstance()->insert('myparcel_carrier_configuration', [['name' => $field, 'id_carrier' => \Configuration::get($item['configuration_name'])]]);
                         }
                     }
                 }
