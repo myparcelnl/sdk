@@ -110,20 +110,11 @@ class Carriers
                         'tab' => 'form',
                     ],
                     [
-                        'type' => 'text',
-                        'label' => $this->module->l('Allow monday delivery'),
-                        'name' => 'allowMondayDelivery',
-                        'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
-                        ],
-                    ],
-                    [
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            ['id' => 'allowMorningDelivery_on', 'value' => 1, 'label' => 'Yes'],
+                            ['id' => 'allowMorningDelivery_off', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Allow morning delivery'),
                         'name' => 'allowMorningDelivery',
