@@ -96,6 +96,9 @@ class LabelController extends ModuleAdminControllerCore
             $collection = $factory->fromOrder($order[0]);
             \Gett\MyParcel\Logger\Logger::log($collection->toJson());
             $collection->setLinkOfLabels();
+            if (Tools::getValue(\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME)) {
+                $collection->sendReturnLabelMails();
+            }
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
