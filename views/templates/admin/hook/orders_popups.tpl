@@ -13,12 +13,12 @@
                     <input type="hidden" name="label_id" id="id_label">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
-                            <input id="a4" type="radio" value="a4" name="format" class="myparcel-radio">
-                            <label for="a4">A4</label>
+                            <input id="a4_bulk" type="radio" value="a4" name="format" class="myparcel-radio">
+                            <label for="a4_bulk">A4</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="a6" type="radio" checked value="a6" name="format" class="myparcel-radio">
-                            <label for="a6">A6</label>
+                            <input id="a6_bulk" type="radio" checked value="a6" name="format" class="myparcel-radio">
+                            <label for="a6_bulk">A6</label>
                         </div>
                     </div>
                     <br>
