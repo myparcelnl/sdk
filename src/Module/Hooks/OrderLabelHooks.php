@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
+use Gett\MyParcel\Constant;
+
 trait OrderLabelHooks
 {
     public function hookActionObjectGettMyParcelOrderLabelAddAfter($params)
@@ -30,7 +32,11 @@ trait OrderLabelHooks
     public function hookActionObjectGettMyParcelOrderLabelUpdateAfter($params)
     {
         $order = new \Order($params['object']->id_order);
-        if ($order->current_state != \Configuration::get('MY_PARCEL_IGNORE_ORDER_STATUS')) {
+        $ignore = \Configuration::get(Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME);
+        if ($ignore) {
+            $ignore = explode(',', $ignore);
+        }
+        if (in_array($order->getCurrentState(), $ignore)) {
             if (\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params['object']->new_order_state == '3') {
                 $history = new \OrderHistory();
                 $history->id_order = (int) $params['object']->id_order;

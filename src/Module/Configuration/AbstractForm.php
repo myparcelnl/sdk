@@ -2,6 +2,7 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Gett\MyParcel\Constant;
 use Tools;
 use Module;
 use HelperForm;
@@ -65,10 +66,10 @@ abstract class AbstractForm
         $result = true;
 
         foreach (array_keys($this->getFields()) as $name) {
-            if ($name == 'MY_PARCEL_IGNORE_ORDER_STATUS') {
+            if ($name == Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME) {
                 $ignored = [];
                 foreach (Tools::getAllValues() as $key => $value) {
-                    if (stripos($key, 'MY_PARCEL_IGNORE_ORDER_STATUS') !== false) {
+                    if (stripos($key, Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME) !== false) {
                         $temp = explode('_', $key);
                         $ignored[] = end($temp);
                     }
@@ -123,7 +124,7 @@ abstract class AbstractForm
                 null,
                 isset($field['default']) ? $field['default'] : null
             );
-            if ($name == 'MY_PARCEL_IGNORE_ORDER_STATUS') {
+            if ($name == Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME) {
                 $temp = explode(',', $values[$name]);
                 foreach ($temp as $value) {
                     $values["MY_PARCEL_IGNORE_ORDER_STATUS_{$value}"] = 1;
@@ -143,19 +144,6 @@ abstract class AbstractForm
         }
 
         return $this->update();
-        if ($this->validate()) {
-        }
-
-        $text = implode(' ', [
-            $this->module->l(
-                'Form field values doesn\'t meet the validation criteria.',
-                [],
-                'Modules.Myparcel.Configuration'
-            ),
-            $this->module->l('Are you sure all values are correct?', 'Modules.Myparcel.Configuration'),
-        ]);
-
-        return $this->module->displayError($text);
     }
 
     private function form(): array

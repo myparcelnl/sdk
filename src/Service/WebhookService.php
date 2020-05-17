@@ -2,8 +2,8 @@
 
 namespace Gett\MyParcel\Services;
 
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use Gett\MyParcel\Model\Webhook\Subscription;
+use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use Gett\MyParcel\Model\MyParcelRequest as Request;
 
 class WebhookService

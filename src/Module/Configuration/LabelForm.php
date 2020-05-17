@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Gett\MyParcel\Constant;
+
 class LabelForm extends AbstractForm
 {
     protected $icon = 'cog';
@@ -14,10 +16,10 @@ class LabelForm extends AbstractForm
     protected function getFields(): array
     {
         return [
-            'MY_PARCEL_LABEL_DESCRIPTION' => [
+            Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Label description'),
-                'name' => 'MY_PARCEL_LABEL_DESCRIPTION',
+                'name' => Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
                         ['id' => 'id_order', 'name' => 'Order ID'],
@@ -27,10 +29,10 @@ class LabelForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_LABEL_SIZE' => [
+            Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Default label size'),
-                'name' => 'MY_PARCEL_LABEL_SIZE',
+                'name' => Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
                         ['id' => 'a4', 'name' => 'A4'],
@@ -40,10 +42,10 @@ class LabelForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_LABEL_POSITION' => [
+            Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Default label position'),
-                'name' => 'MY_PARCEL_LABEL_POSITION',
+                'name' => Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
                         ['id' => '1', 'name' => $this->module->l('Top left')],
@@ -55,10 +57,10 @@ class LabelForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_LABEL_OPEN_DOWNLOAD' => [
+            Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Open or download label'),
-                'name' => 'MY_PARCEL_LABEL_OPEN_DOWNLOAD',
+                'name' => Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
                         ['id' => 'true', 'name' => $this->module->l('Open')],
@@ -68,10 +70,10 @@ class LabelForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_LABEL_PROMPT_POSITION' => [
+            Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Prompt for label position'),
-                'name' => 'MY_PARCEL_LABEL_PROMPT_POSITION',
+                'name' => Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
                 'values' => [
