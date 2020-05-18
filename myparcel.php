@@ -120,7 +120,7 @@ class MyParcel extends CarrierModule
 
     public function getOrderShippingCost($params, $shipping_cost)
     {
-        return 228;
+        return 0;
     }
 
     public function getOrderShippingCostExternal($params)

@@ -3,6 +3,7 @@
 namespace Gett\MyParcel\Module\Configuration;
 
 use Context;
+use Gett\MyParcel\Constant;
 use OrderState;
 
 class OrderForm extends AbstractForm
@@ -24,20 +25,20 @@ class OrderForm extends AbstractForm
         ] + OrderState::getOrderStates((int) Context::getContext()->language->id);
 
         return [
-            'MY_PARCEL_LABEL_CREATED_ORDER_STATUS' => [
+            Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Order status when label created'),
-                'name' => 'MY_PARCEL_LABEL_CREATED_ORDER_STATUS',
+                'name' => Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME,
                 'options' => [
                     'query' => $order_states,
                     'id' => 'id_order_state',
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_LABEL_SCANNED_ORDER_STATUS' => [
+            Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Order status when label scanned'),
-                'name' => 'MY_PARCEL_LABEL_SCANNED_ORDER_STATUS',
+                'name' => Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME,
                 'default_value' => '0',
                 'options' => [
                     'query' => $order_states,
@@ -45,20 +46,20 @@ class OrderForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_DELIVERED_ORDER_STATUS' => [
+            Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Order status when delivered'),
-                'name' => 'MY_PARCEL_DELIVERED_ORDER_STATUS',
+                'name' => Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME,
                 'options' => [
                     'query' => $order_states,
                     'id' => 'id_order_state',
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_IGNORE_ORDER_STATUS' => [
+            Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'checkbox',
                 'label' => $this->module->l('Ignore order statuses'),
-                'name' => 'MY_PARCEL_IGNORE_ORDER_STATUS',
+                'name' => Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
                 'multiple' => true,
                 'values' => [
                     'query' => $order_states,
@@ -66,10 +67,10 @@ class OrderForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_STATUS_CHANGE_MAIL' => [
+            Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Order status mail'),
-                'name' => 'MY_PARCEL_STATUS_CHANGE_MAIL',
+                'name' => Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
                 'values' => [
@@ -85,10 +86,10 @@ class OrderForm extends AbstractForm
                     ],
                 ],
             ],
-            'MY_PARCEL_ORDER_NOTIFICATION_AFTER' => [
+            Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Send notification after'),
-                'name' => 'MY_PARCEL_ORDER_NOTIFICATION_AFTER',
+                'name' => Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
                         ['id' => 'first_scan', 'name' => $this->module->l('Label has passed first scan')],
@@ -98,10 +99,10 @@ class OrderForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            'MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS' => [
+            Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Automatic set order state to ‘sent’ for digital stamp'),
-                'name' => 'MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS',
+                'name' => Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
                 'values' => [

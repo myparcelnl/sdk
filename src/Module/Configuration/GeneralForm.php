@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Gett\MyParcel\Constant;
+
 class GeneralForm extends AbstractForm
 {
     protected $icon = 'cog';
@@ -14,10 +16,10 @@ class GeneralForm extends AbstractForm
     protected function getFields(): array
     {
         return [
-            'MY_PARCEL_SHARE_CUSTOMER_EMAIL' => [
+            Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Share customer email with MyParcel'),
-                'name' => 'MY_PARCEL_SHARE_CUSTOMER_EMAIL',
+                'name' => Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
                 'values' => [
@@ -33,10 +35,10 @@ class GeneralForm extends AbstractForm
                     ],
                 ],
             ],
-            'MY_PARCEL_SHARE_CUSTOMER_PHONE' => [
+            Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Share customer phone with MyParcel'),
-                'name' => 'MY_PARCEL_SHARE_CUSTOMER_PHONE',
+                'name' => Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
                 'values' => [

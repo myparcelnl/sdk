@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
+use Gett\MyParcel\Constant;
+
 trait OrderLabelHooks
 {
     public function hookActionObjectGettMyParcelOrderLabelAddAfter($params)
@@ -10,7 +12,7 @@ trait OrderLabelHooks
             $history = new \OrderHistory();
             $history->id_order = (int) $params['object']->id_order;
             $history->changeIdOrderState(\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME), (int) $params['object']->id_order);
-            $history->add();
+            $history->addWithemail();
             $order = new \Order($params['object']->id_order);
             $order->current_state = \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME);
             $order->save();
@@ -20,7 +22,7 @@ trait OrderLabelHooks
             $history = new \OrderHistory();
             $history->id_order = (int) $params['object']->id_order;
             $history->changeIdOrderState(4, (int) $params['object']->id_order);
-            $history->add();
+            $history->addWithemail();
             $order = new \Order($params['object']->id_order);
             $order->current_state = 4;
             $order->save();
@@ -30,25 +32,27 @@ trait OrderLabelHooks
     public function hookActionObjectGettMyParcelOrderLabelUpdateAfter($params)
     {
         $order = new \Order($params['object']->id_order);
-        if ($order->current_state != \Configuration::get('MY_PARCEL_IGNORE_ORDER_STATUS')) {
+        $ignore = \Configuration::get(Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME);
+        if ($ignore) {
+            $ignore = explode(',', $ignore);
+        }
+        if (in_array($order->getCurrentState(), $ignore)) {
             if (\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params['object']->new_order_state == '3') {
                 $history = new \OrderHistory();
                 $history->id_order = (int) $params['object']->id_order;
                 $history->changeIdOrderState(\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME), (int) $params['object']->id_order);
-                $history->add();
+                $history->addWithemail();
 
                 $order = new \Order($params['object']->id_order);
                 $order->current_state = \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME);
                 $order->save();
             }
-            if (\Gett\MyParcel\Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'first_scan' && $params->new_order_state == '3') {
-                //TODO Send notification ????
-            }
+
             if ($params['object']->new_order_state >= 7 && $params['object']->new_order_state <= 11 && \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME)) {
                 $history = new \OrderHistory();
                 $history->id_order = (int) $params['object']->id_order;
                 $history->changeIdOrderState(\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME), (int) $params['object']->id_order);
-                $history->add();
+                $history->addWithemail();
 
                 $order = new \Order($params['object']->id_order);
                 $order->current_state = \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME);

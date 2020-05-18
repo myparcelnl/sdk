@@ -298,18 +298,21 @@ class OrderLabel extends \ObjectModel
         }
 
         $order_label = self::findByLabelId($idShipment);
-        $order = new Order($order_label->id_order);
+        $order = new \Order($order_label->id_order);
 
-        if (!Validate::isLoadedObject($order_label) || !Validate::isLoadedObject($order)) {
+        if (!\Validate::isLoadedObject($order_label) || !\Validate::isLoadedObject($order)) {
+            return;
+        }
+        $ignore = \Configuration::get(Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME);
+        if ($ignore) {
+            $ignore = explode(',', $ignore);
+        }
+        if (in_array($order->getCurrentState(), $ignore)) {
             return;
         }
 
-//        if (in_array($order->getCurrentState(), MyParcel::getIgnoredStatuses())) {
-//            return;
-//        }
-
         $idOrder = (int) $order->id;
-        $history = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_order_state` FROM ' . _DB_PREFIX_ . "order_history WHERE `id_order` = {$idOrder}");
+        $history = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_order_state` FROM ' . _DB_PREFIX_ . "order_history WHERE `id_order` = {$idOrder}");
         if (is_array($history)) {
             $history = array_column($history, 'id_order_state');
             if (in_array($targetOrderState, $history)) {
@@ -317,7 +320,7 @@ class OrderLabel extends \ObjectModel
             }
         }
 
-        $history = new OrderHistory();
+        $history = new \OrderHistory();
         $history->id_order = (int) $order->id;
         $history->changeIdOrderState($targetOrderState, (int) $order->id, !$order->hasInvoice());
         if ($addWithEmail) {

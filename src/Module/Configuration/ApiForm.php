@@ -24,7 +24,7 @@ class ApiForm extends AbstractForm
             ],
         ];
 
-        if (Configuration::get('MY_PARCEL_WEBHOOK_ID')) {
+        if (Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)) {
             $buttons['delete'] = [
                 'title' => $this->module->l('Delete'),
                 'name' => 'deleteHook',
@@ -78,8 +78,8 @@ class ApiForm extends AbstractForm
         $parent = parent::update();
 
         try {
-            if ((Tools::isSubmit('MY_PARCEL_API_KEY') && Tools::getValue('MY_PARCEL_API_KEY') != Configuration::get('MY_PARCEL_API_KEY')) || Tools::isSubmit('resetHook')) {
-                $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
+            if ((Tools::isSubmit(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME) && Tools::getValue(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME) != Configuration::get(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME)) || Tools::isSubmit('resetHook')) {
+                $service = new WebhookService(Tools::getValue(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
                 $result = $service->addSubscription(
                     new Subscription(
                         Subscription::SHIPMENT_STATUS_CHANGE_HOOK_NAME,
@@ -92,15 +92,15 @@ class ApiForm extends AbstractForm
 
                 if (isset($result['data']['ids'][0]['id'])) {
                     Configuration::updateValue(
-                        'MY_PARCEL_WEBHOOK_ID',
+                        Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME,
                         Tools::getValue($result['data']['ids'][0]['id'])
                     );
                 }
             }
             if (Tools::isSubmit('deleteHook')) {
-                $service = new WebhookService(Tools::getValue('MY_PARCEL_API_KEY'));
-                $service->deleteSubscription(Tools::getValue('MY_PARCEL_WEBHOOK_ID'));
-                Configuration::updateValue('MY_PARCEL_WEBHOOK_ID', '');
+                $service = new WebhookService(Tools::getValue(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+                $service->deleteSubscription(Tools::getValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME));
+                Configuration::updateValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME, '');
             }
         } catch (\Exception $e) {
             return $this->module->displayError(
