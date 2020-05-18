@@ -19,8 +19,9 @@ use phpDocumentor\Reflection\DocBlock\Description;
 
 class SplitStreet
 {
-    const BOX_NL                        = 'bus';
-    const BOX_TRANSLATION_POSSIBILITIES = [' boîte', ' box', ' bte', ' Bus', ' n', ' b', ' /'];
+    const BOX_NL                 = 'bus';
+    const BOX_SEPARATOR          = [' boîte', ' box', ' bte', ' Bus'];
+    const BOX_SEPARATOR_BY_REGEX = ['n', 'b', '\/'];
 
     public const NUMBER_SUFFIX_ABBREVIATION = [
         'apartment'  => '',
@@ -93,16 +94,18 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
-        foreach (self::NUMBER_SUFFIX_ABBREVIATION as $key => $value) {
-            if (strstr($fullStreet, $key)) {
-                $fullStreet = str_replace($key, $value, $fullStreet);
-                break;
-            }
+        foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
+            $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
         }
 
         if ($destination === AbstractConsignment::CC_BE) {
-            $translateBoxSeparator = str_ireplace(self::BOX_TRANSLATION_POSSIBILITIES, ' ', $fullStreet);
-            $fullStreet            = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $translateBoxSeparator));
+            $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
+
+            foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
+                $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . '$1', $fullStreet);
+            }
+
+            $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         }
 
         $regex = self::getRegexByCountry($local, $destination);

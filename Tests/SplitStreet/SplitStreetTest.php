@@ -40,21 +40,21 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
         $numberSuffix,
         $boxNumber
     ) {
-            $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
-                ->setCountry($country)
-                ->setFullStreet($fullStreetInput);
+        $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
+            ->setCountry($country)
+            ->setFullStreet($fullStreetInput);
 
-            $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreetInput);
-            $this->assertEquals($street, $consignment->getStreet(), 'Street: ' . $fullStreetInput);
-            $this->assertEquals($number, $consignment->getNumber(), 'Number from: ' . $fullStreetInput);
+        $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreetInput);
+        $this->assertEquals($street, $consignment->getStreet(), 'Street: ' . $fullStreetInput);
+        $this->assertEquals($number, $consignment->getNumber(), 'Number from: ' . $fullStreetInput);
 
-            if (null != $numberSuffix) {
-                $this->assertEquals($numberSuffix, $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetInput);
-            }
+        if (null != $numberSuffix) {
+            $this->assertEquals($numberSuffix, $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetInput);
+        }
 
-            if (null != $boxNumber) {
-                $this->assertEquals($boxNumber, $consignment->getBoxNumber(), 'Box number from: ' . $fullStreetInput);
-            }
+        if (null != $boxNumber) {
+            $this->assertEquals($boxNumber, $consignment->getBoxNumber(), 'Box number from: ' . $fullStreetInput);
+        }
     }
 
     /**
@@ -126,8 +126,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'box_number'        => null
             ],
             [
-                'carrier_id' => PostNLConsignment::CARRIER_ID,
-                'country'    => 'NL',
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => 'Abeelstreet H 10',
                 'full_street'       => 'Abeelstreet H 10',
                 'street'            => 'Abeelstreet H',
@@ -166,8 +166,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'box_number'        => null
             ],
             [
-                'carrier_id' => PostNLConsignment::CARRIER_ID,
-                'country'    => 'NL',
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => 'street 12',
                 'full_street'       => 'street 12',
                 'street'            => 'street',
@@ -468,32 +468,53 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
-                'full_street_input' => 'Dendermondestraat 55 b12',
-                'full_street'       => 'Dendermondestraat 55 bus 12',
-                'street'            => 'Dendermondestraat',
-                'number'            => '55',
-                'number_suffix'     => null,
-                'box_number'        => '12',
+                'full_street_input' => 'Brusselsesteenweg 30 /0101',
+                'full_street'       => 'Brusselsesteenweg 30 bus 0101',
+                'street'            => 'Brusselsesteenweg',
+                'number'            => 30,
+                'number_suffix'     => '',
+                'box_number'        => '0101'
+            ],
+
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Onze-Lieve-Vrouwstraat 150/1',
+                'full_street'       => 'Onze-Lieve-Vrouwstraat 150 bus 1',
+                'street'            => 'Onze-Lieve-Vrouwstraat',
+                'number'            => 150,
+                'number_suffix'     => '',
+                'box_number'        => '1'
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
-                'full_street_input' => 'Dendermondestraat 55 n12',
-                'full_street'       => 'Dendermondestraat 55 bus 12',
-                'street'            => 'Dendermondestraat',
-                'number'            => '55',
-                'number_suffix'     => null,
-                'box_number'        => '12',
+                'full_street_input' => 'Wilgenstraat 6/1',
+                'full_street'       => 'Wilgenstraat 6 bus 1',
+                'street'            => 'Wilgenstraat',
+                'number'            => 6,
+                'number_suffix'     => '',
+                'box_number'        => '1'
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
-                'full_street_input' => 'Dendermondestraat 55 /12',
-                'full_street'       => 'Dendermondestraat 55 bus 12',
-                'street'            => 'Dendermondestraat',
-                'number'            => '55',
-                'number_suffix'     => null,
-                'box_number'        => '12',
+                'full_street_input' => 'Wilgenstraat 6 n1',
+                'full_street'       => 'Wilgenstraat 6 bus 1',
+                'street'            => 'Wilgenstraat',
+                'number'            => 6,
+                'number_suffix'     => '',
+                'box_number'        => '1'
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Wilgenstraat 6 b1',
+                'full_street'       => 'Wilgenstraat 6 bus 1',
+                'street'            => 'Wilgenstraat',
+                'number'            => 6,
+                'number_suffix'     => '',
+                'box_number'        => '1'
             ],
         ];
     }
