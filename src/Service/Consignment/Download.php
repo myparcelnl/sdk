@@ -23,6 +23,7 @@ class Download
 
     public function downloadLabel(array $id_labels)
     {
+
         $myParcelCollection = (new MyParcelCollection())
             ->setUserAgent('prestashop', '1.0')
         ;

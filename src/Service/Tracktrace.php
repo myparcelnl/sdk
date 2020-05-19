@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcel\Services;
+namespace Gett\MyParcel\Service;
 
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use Gett\MyParcel\Model\MyParcelRequest as Request;

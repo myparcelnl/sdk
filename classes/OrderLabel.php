@@ -2,7 +2,7 @@
 
 namespace Gett\MyParcel;
 
-use Gett\MyParcel\Services\Tracktrace;
+use Gett\MyParcel\Service\Tracktrace;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class OrderLabel extends \ObjectModel

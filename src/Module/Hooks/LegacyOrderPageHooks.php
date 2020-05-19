@@ -2,6 +2,7 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
+use Gett\MyParcel\Constant;
 use Gett\MyParcel\Label\LabelOptionsResolver;
 
 trait LegacyOrderPageHooks
@@ -54,6 +55,14 @@ trait LegacyOrderPageHooks
 
     public function printMyParcelLabel($id, $params)
     {
+        $order = new \Order($params['id_order']);
+        if (!in_array($order->id_carrier, [
+            \Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
+            \Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
+            \Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
+        ])) {
+            return '';
+        }
         $sql = new \DbQuery();
         $sql->select('*');
         $sql->from('myparcel_order_label');
@@ -71,6 +80,15 @@ trait LegacyOrderPageHooks
 
     public function printMyParcelIcon($id, $params)
     {
+        $order = new \Order($params['id_order']);
+        if (!in_array($order->id_carrier, [
+            \Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
+            \Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
+            \Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
+        ])) {
+            return '';
+        }
+
         $label_options_resolver = new LabelOptionsResolver();
 
         $this->context->smarty->assign(
@@ -94,6 +112,7 @@ trait LegacyOrderPageHooks
                     'create_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'createb']),
                     'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
                     'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
+                    'create_label_error' => $this->l('Cannot create label for orders'),
                 ]
             );
 
