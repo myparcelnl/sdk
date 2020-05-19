@@ -36,7 +36,18 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   changeInsuranceHigherAmount();
 
-  if (prompt_for_label_position == 0) {
+  if (prompt_for_label_position == 1) {
+    $('#a6, #a6_bulk').change(function () {
+      $('.positions-block').hide();
+    });
+    $('#a4, #a4_bulk').change(function () {
+      $('.positions-block').show();
+    });
+    if ($('#a6').attr('checked') == 'checked' || $('#a6_bulk').attr('checked') == 'checked') {
+      $('.positions-block').hide();
+    }
+  } else {
     $('.positions-block').remove();
   }
+
 }, false);
