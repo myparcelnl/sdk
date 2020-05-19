@@ -5,7 +5,7 @@ namespace Gett\MyParcel\Module\Configuration;
 use Tools;
 use Configuration;
 use Gett\MyParcel\Constant;
-use Gett\MyParcel\Services\WebhookService;
+use Gett\MyParcel\Service\WebhookService;
 use Gett\MyParcel\Model\Webhook\Subscription;
 
 class ApiForm extends AbstractForm
@@ -93,7 +93,7 @@ class ApiForm extends AbstractForm
                 if (isset($result['data']['ids'][0]['id'])) {
                     Configuration::updateValue(
                         Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME,
-                        Tools::getValue($result['data']['ids'][0]['id'])
+                        $result['data']['ids'][0]['id']
                     );
                 }
             }

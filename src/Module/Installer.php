@@ -38,7 +38,7 @@ class Installer
             }
 
             foreach ($carriers as $item) {
-                if (!\Configuration::get($item['configuration_name']) && \Validate::isLoadedObject(new \Carrier(\Configuration::get($item['configuration_name'])))) {
+                if (!\Configuration::get($item['configuration_name'])) {
                     $carrier = $this->addCarrier($item);
                     $this->addZones($carrier);
                     $this->addGroups($carrier);

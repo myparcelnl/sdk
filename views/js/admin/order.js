@@ -20,9 +20,17 @@ window.addEventListener('load', function() {
             e.preventDefault();
             ids = {};
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
-                ids[e.value] = document.querySelector('button[data-order-id="'+e.value+'"]').dataset.labelOptions;
+                if (document.querySelector('button[data-order-id="'+e.value+'"]')){
+                    ids[e.value] = document.querySelector('button[data-order-id="'+e.value+'"]').dataset.labelOptions;
+                }
             });
-
+            if (ids.length == 0) {
+                $('#ajax_confirmation').before(
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">×</button>'+create_label_error+'</div>'
+                )
+                return;
+            }
             $.ajax({
                 method: "POST",
                 url: create_labels_bulk_route,

@@ -132,9 +132,15 @@ class LabelController extends ModuleAdminControllerCore
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
-
+        if (!Tools::getValue('data')) {
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($this->trans('Can\'t create label for these orders', [], 'Modules.Myparcel.Error'));
+        }
         $orders = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate(array_keys(Tools::getValue('data')));
-
+        if (empty($orders)) {
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($this->trans('Can\'t create label for these orders', [], 'Modules.Myparcel.Error'));
+        }
         try {
             $collection = $factory->fromOrders($orders);
             foreach (Tools::getValue('data') as $key => $item) {
@@ -192,8 +198,12 @@ class LabelController extends ModuleAdminControllerCore
 
     public function processRefresh()
     {
-        $id_labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
 
+        $id_labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
+        if (empty($id_labels)) {
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            die($this->trans('No created labels found', [], 'Modules.Myparcel.Error'));
+        }
         try {
             $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
 
@@ -219,7 +229,9 @@ class LabelController extends ModuleAdminControllerCore
     public function processPrint()
     {
         $labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
-
+        if (empty($labels)) {
+            Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
+        }
         $service = new \Gett\MyParcel\Service\Consignment\Download(
             \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),

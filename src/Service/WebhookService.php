@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcel\Services;
+namespace Gett\MyParcel\Service;
 
 use Gett\MyParcel\Model\Webhook\Subscription;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
@@ -27,7 +27,7 @@ class WebhookService
             ->sendRequest('POST', Request::REQUEST_TYPE_WEBHOOK)
         ;
 
-        return json_decode($request->getResult(), true);
+        return $request->getResult();
     }
 
     public function deleteSubscription(int $id)
