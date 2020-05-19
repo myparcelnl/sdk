@@ -16,7 +16,7 @@ class ApiForm extends AbstractForm
     {
         $buttons = [
             'reset' => [
-                'title' => $this->module->l('Refresh'),
+                'title' => $this->module->l('Create webhook'),
                 'name' => 'resetHook',
                 'type' => 'submit',
                 'class' => 'btn btn-default pull-left',
@@ -25,8 +25,9 @@ class ApiForm extends AbstractForm
         ];
 
         if (Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)) {
+            $buttons['reset']['title'] = $this->module->l('Refresh Webhook');
             $buttons['delete'] = [
-                'title' => $this->module->l('Delete'),
+                'title' => $this->module->l('Delete Webhook'),
                 'name' => 'deleteHook',
                 'type' => 'submit',
                 'class' => 'btn btn-default pull-left',

@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
+use Gett\MyParcel\Constant;
+
 trait DisplayAdminProductsExtra
 {
     public function hookActionProductUpdate()
@@ -20,6 +22,8 @@ trait DisplayAdminProductsExtra
 
     public function hookDisplayAdminProductsExtra($params)
     {
+        $params = $this->getProductSettings($params['id_product']);
+
         $this->context->smarty->assign(
             [
                 'params' => $this->getProductSettings($params['id_product']),
@@ -36,6 +40,14 @@ trait DisplayAdminProductsExtra
         $return = [];
         foreach ($result as $item) {
             $return[$item['name']] = $item['value'] ? $item['value'] : 0;
+        }
+
+        if (!$return[Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME]) {
+            $return[Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] = \Configuration::get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME);
+        }
+
+        if (!$return[Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME]) {
+            $return[Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME] = \Configuration::get(Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME);
         }
 
         return $return;

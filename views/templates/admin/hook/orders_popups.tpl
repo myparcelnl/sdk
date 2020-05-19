@@ -24,22 +24,22 @@
                     <br>
                     <div class="positions-block">
                         <input id="top-left" type="checkbox" value="1" name="position[]">
-                        <label for="top-left">Top-left</label>
+                        <label for="top-left">{l s='Top-left' mod='myparcel'}</label>
                         <br>
                         <input id="top-right" type="checkbox" value="2" name="position[]">
-                        <label for="top-right">Top-right</label>
+                        <label for="top-right">{l s='Top-right' mod='myparcel'}</label>
                         <br>
                         <input id="bottom-left" type="checkbox" value="3" name="position[]">
-                        <label for="bottom-left">Bottom-left</label>
+                        <label for="bottom-left">{l s='Bottom-left' mod='myparcel'}</label>
                         <br>
                         <input id="bottom-right" type="checkbox" value="4" name="position[]">
-                        <label for="bottom-right">Bottom-right</label>
+                        <label for="bottom-right">{l s='Bottom-right' mod='myparcel'}</label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id = "print_button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcel'}</button>
+                <button type="button" id = "print_button" class="btn btn-primary">{l s='Save changes' mod='myparcel'}</button>
             </div>
         </div>
     </div>
@@ -68,22 +68,22 @@
                     <br>
                     <div class="positions-block">
                         <input id="top-left" type="checkbox" value="1" name="position[]">
-                        <label for="top-left">Top-left</label>
+                        <label for="top-left">{l s='Top-left' mod='myparcel'}</label>
                         <br>
                         <input id="top-right" type="checkbox" value="2" name="position[]">
-                        <label for="top-right">Top-right</label>
+                        <label for="top-right">{l s='Top-right' mod='myparcel'}</label>
                         <br>
                         <input id="bottom-left" type="checkbox" value="3" name="position[]">
-                        <label for="bottom-left">Bottom-left</label>
+                        <label for="bottom-left">{l s='{l s='Print' mod='myparcel'}' mod='myparcel'}</label>
                         <br>
                         <input id="bottom-right" type="checkbox" value="4" name="position[]">
-                        <label for="bottom-right">Bottom-right</label>
+                        <label for="bottom-right">{l s='Bottom-right' mod='myparcel'}</label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="print-bulk-button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcel'}</button>
+                <button type="submit" id="print-bulk-button" class="btn btn-primary">{l s='Save changes' mod='myparcel'}</button>
             </div>
         </div>
     </div>
@@ -100,72 +100,72 @@
             <div class="modal-body" id="print-modal">
                 <input type="hidden" id="order_id" name="create_label[order_ids][]">
                 <div class="form-group">
-                    <label for="labels_amount">Amout of labels</label>
+                    <label for="labels_amount">{l s='Amount of labels' mod='myparcel'}</label>
                     <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
                 </div>
 
                 <div class="form-group">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}">Package type</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}">{l s='Package type' mod='myparcel'}</label>
                     <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}"  id="package-type" class="custom-select">
-                        <option value="1">Packet</option>
-                        <option value="2">Mailbox package</option>
-                        <option value="3">Letter</option>
-                        <option value="4">Digital stamp</option>
+                        <option value="1">{l s='Packet' mod='myparcel'}</option>
+                        <option value="2">{l s='Mailbox package' mod='myparcel'}</option>
+                        <option value="3">{l s='Letter' mod='myparcel'}</option>
+                        <option value="4">{l s='Digital stamp' mod='myparcel'}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}">Only to receipient</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}">{l s='Only to receipient' mod='myparcel'}</label>
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}">Age check</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}">{l s='Age check' mod='myparcel'}</label>
                 </div>
 
                 <div class="form-group">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}">Package format</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}">{l s='Package format' mod='myparcel'}</label>
                     <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}" class="custom-select">
-                        <option value="1">Normal</option>
-                        <option value="2">Large</option>
-                        <option value="3">Automatic</option>
+                        <option value="1">{l s='Normal' mod='myparcel'}</option>
+                        <option value="2">{l s='Large' mod='myparcel'}</option>
+                        <option value="3">{l s='Automatic' mod='myparcel'}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}">Return package</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}">{l s='Return package' mod='myparcel'}</label>
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}">Signature</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}">{l s='Signature' mod='myparcel'}</label>
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" id="myparcel-insurance-checkbox" ./value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
-                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">Insurnance</label>
+                    <label for="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">{l s='Insurnance' mod='myparcel'}</label>
                 </div>
                 <div class="insurance-additional-container">
                     <div class="form-group insurance-additional-predefined">
                         <div class="myparcel-radio-container">
                             <input id="upto100" type="radio" value="1000" name="insurance-value-option" class="myparcel-radio">
-                            <label for="upto100">Up to € 100</label>
+                            <label for="upto100">{l s='Up to € 100' mod='myparcel'}</label>
                         </div>
                         <div class="myparcel-radio-container">
                             <input id="upto250" type="radio" value="2500" name="insurance-value-option" class="myparcel-radio">
-                            <label for="upto250">Up to € 250</label>
+                            <label for="upto250">{l s='Up to € 250' mod='myparcel'}</label>
                         </div>
                         <div class="myparcel-radio-container">
                             <input id="upto500" type="radio" value="5000" name="insurance-value-option" class="myparcel-radio">
-                            <label for="upto500">Up to € 500</label>
+                            <label for="upto500">{l s='Up to € 500' mod='myparcel'}</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="myparcel-radio-container">
                             <input id="heigherthen500" type="radio" value="4" class="myparcel-radio">
-                            <label for="heigherthen500">Higher than € 500</label>
+                            <label for="heigherthen500">{l s='Higher than € 500' mod='myparcel'}</label>
                         </div>
                         <div class="money-input-wrapper">
                             <div class="input-group money-type">
@@ -179,8 +179,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id = "add" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcel'}</button>
+                <button type="button" id = "add" class="btn btn-primary">{l s='Save changes' mod='myparcel'}</button>
             </div>
         </div>
     </div>
