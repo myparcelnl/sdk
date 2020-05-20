@@ -51,7 +51,6 @@
                 <div class="col">
                     <label for="package-type-select">{l s='Select package type' mod="myparcel"}</label>
                     <select class="form-control" name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}" id = "package-type-select">
-                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 0}selected{/if}>{l s='- Selection required -' mod="myparcel"}</option>
                         <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 1}selected{/if}>{l s='Package' mod="myparcel"}</option>
                         <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 2}selected{/if}>{l s='Mailbox package' mod="myparcel"}</option>
                         <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 3}selected{/if}>{l s='Letter' mod="myparcel"}</option>
@@ -77,7 +76,6 @@
                 <div class="col">
                     <label for="package-type-select">{l s='Select package format' mod="myparcel"}</label>
                     <select class="form-control" name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}" id="package-type-select">
-                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 0}selected{/if}>{l s='- Selection required -' mod="myparcel"}</option>
                         <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 1}selected{/if}>{l s='Normal' mod="myparcel"}</option>
                         <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 2}selected{/if}>{l s='Large' mod="myparcel"}</option>
                         <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 3}selected{/if}>{l s='Automatic' mod="myparcel"}</option>

@@ -50,4 +50,14 @@ document.addEventListener('DOMContentLoaded', function() {
     $('.positions-block').remove();
   }
 
+  if ($('#MY_PARCEL_LABEL_SIZE').val() == 'a6') {
+    $('#MY_PARCEL_LABEL_POSITION').hide();
+  }
+  $('#MY_PARCEL_LABEL_SIZE').change(function() {
+    if ($(this).val() == 'a6') {
+      $('#MY_PARCEL_LABEL_POSITION').hide();
+    } else {
+      $('#MY_PARCEL_LABEL_POSITION').show();
+    }
+  });
 }, false);
