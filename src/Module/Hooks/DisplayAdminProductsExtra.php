@@ -22,7 +22,7 @@ trait DisplayAdminProductsExtra
 
     public function hookDisplayAdminProductsExtra($params)
     {
-        $params = $this->getProductSettings($params['id_product']);
+        $params = $this->getProductSettings((int) $params['id_product']);
 
         $this->context->smarty->assign(
             [
