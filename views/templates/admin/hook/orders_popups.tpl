@@ -74,7 +74,7 @@
                         <label for="top-right">{l s='Top-right' mod='myparcel'}</label>
                         <br>
                         <input id="bottom-left" type="checkbox" value="3" name="position[]">
-                        <label for="bottom-left">{l s='{l s='Print' mod='myparcel'}' mod='myparcel'}</label>
+                        <label for="bottom-left">{l s='Print' d='Modules.Myparcel.Admin'}</label>
                         <br>
                         <input id="bottom-right" type="checkbox" value="4" name="position[]">
                         <label for="bottom-right">{l s='Bottom-right' mod='myparcel'}</label>
