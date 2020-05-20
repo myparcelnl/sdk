@@ -26,7 +26,7 @@ trait DisplayAdminProductsExtra
 
         $this->context->smarty->assign(
             [
-                'params' => $this->getProductSettings($params['id_product']),
+                'params' => $params,
                 'countries' => \Country::getCountries(\Context::getContext()->language->id),
             ]
         );
