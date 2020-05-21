@@ -7,12 +7,12 @@
             data-target="#print"
     data-label-id = "{$label['id_label']}" >
         <i class="material-icons">
-            {l s='Print' mod='myparcel'}
+            print
         </i>
     </button>
     <a href="{$link->getAdminLink('Label', true, [], ['action' => 'updateLabel', 'labelId' => $label['id_label']])}" class="btn btn-link">
         <i class="material-icons">
-            {l s='Refresh' mod='myparcel'}
+            refresh
         </i>
     </a>
 
