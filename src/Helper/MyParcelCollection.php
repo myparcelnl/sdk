@@ -379,7 +379,7 @@ class MyParcelCollection extends Collection
      * @param     $key
      * @param int $size
      *
-     * @deprecated use MyParcelCollection::query($key) instead
+     * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
      *
      * @return $this
      * @throws ApiException
@@ -626,6 +626,13 @@ class MyParcelCollection extends Collection
     public static function query(string $apiKey, $parameters): MyParcelCollection
     {
         $collection = new static();
+
+        // The field `size` is required to prevent bugs. Think carefully about what
+        // the maximum size should be in your use case. If you want to pick up all
+        // open consignments for example, you would probably want to adjust size to 300.
+        if (empty($parameters['size'])) {
+            throw new MissingFieldException('Field size is requested.');
+        }
 
         $request = (new MyParcelRequest())
             ->setRequestParameters(

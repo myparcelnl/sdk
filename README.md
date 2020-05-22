@@ -208,6 +208,7 @@ $collection = MyParcelCollection::query(
             [
                 'q'                    => 'Niels',
                 'reference_identifier' => 'order-1234',
+                'status'               => 2,
                 'from'                 => '2020-01-01 00:00:00',
                 'to'                   => '2020-02-01 00:00:00',
                 'page'                 => 1,
@@ -219,9 +220,8 @@ $collection = MyParcelCollection::query(
             ]
         )
 ```
-- If you want to pick up all open consignments, you would probably want to adjust size (because the default value is 30).
-- For `q` and `reference identifier` you can use `*` to search smarter.
-- If the 2nd parameter is an object, then public properties will be used. If you query in many ways, creating a separate class can provide a clean solution.
+For `q` and `reference identifier` you can use `*` to search smarter.
+> If the 2nd parameter is an object, then public properties will be used. If you query in many ways, creating a separate class can provide a clean solution.
 
 More information: https://myparcelnl.github.io/api/#6_E.
 
