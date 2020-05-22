@@ -379,6 +379,8 @@ class MyParcelCollection extends Collection
      * @param     $key
      * @param int $size
      *
+     * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
+     *
      * @return $this
      * @throws ApiException
      * @throws MissingFieldException
@@ -386,27 +388,8 @@ class MyParcelCollection extends Collection
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
-        $params = '?size=' . $size;
-
-        $request = (new MyParcelRequest())
-            ->setUserAgent($this->getUserAgent())
-            ->setRequestParameters(
-                $key,
-                $params,
-                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
-            )
-            ->sendRequest('GET');
-
-        if ($request->getResult() === null) {
-            throw new ApiException('Unknown error in MyParcel API response');
-        }
-
-        foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($key)));
-            $this->addConsignment($consignmentAdapter->getConsignment());
-        }
-
-        return $this;
+        $params = ['size' => $size];
+        return self::query($key, $params);
     }
 
     /**
@@ -623,6 +606,52 @@ class MyParcelCollection extends Collection
     public function clearConsignmentsCollection()
     {
         $this->items = [];
+    }
+
+    /**
+     * To search and filter consignments by certain values
+     *
+     * @param string $apiKey
+     * @param mixed  $parameters May be an array or object containing properties.
+     *                           If query_data is an array, it may be a simple one-dimensional structure,
+     *                           or an array of arrays (which in turn may contain other arrays).
+     *                           If query_data is an object, then only public properties will be incorporated
+     *                           into the result.
+     *
+     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public static function query(string $apiKey, $parameters): MyParcelCollection
+    {
+        $collection = new static();
+
+        // The field `size` is required to prevent bugs. Think carefully about what
+        // the maximum size should be in your use case. If you want to pick up all
+        // open consignments for example, you would probably want to adjust size to 300.
+        if (empty($parameters['size'])) {
+            throw new MissingFieldException('Field "size" is required.');
+        }
+
+        $request = (new MyParcelRequest())
+            ->setRequestParameters(
+                $apiKey,
+                '?' . http_build_query($parameters),
+                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
+            )
+            ->sendRequest('GET');
+
+        if ($request->getResult() === null) {
+            throw new ApiException('Unknown error in MyParcel API response');
+        }
+
+        foreach ($request->getResult()['data']['shipments'] as $shipment) {
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey)));
+            $collection->addConsignment($consignmentAdapter->getConsignment());
+        }
+
+        return $collection;
     }
 
     /**
