@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
     $('button[data-target="#create"]').click(function(){
         var id = $(this).data('order-id'),
             options = $(this).data('label-options');
-        console.log(options);
         $('#order_id').val(id);
         $('#package-type').val(options.package_type);
         if (options.only_to_recepient == true) {

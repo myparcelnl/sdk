@@ -36,12 +36,12 @@
     <ul class="list-tab">
         <li>
             <a href="#tab-1" class="toolbar_btn btn-tab active">
-                {l s='Delivery&Return' mod="myparcel"}
+                {l s='Delivery&Return' d='Modules.Myparcel.Front'}
             </a>
         </li>
         <li>
             <a href="#tab-2" class="toolbar_btn btn-tab">
-                {l s='Customs' mod="myparcel"}
+                {l s='Customs' d='Modules.Myparcel.Front'}
             </a>
         </li>
     </ul>
@@ -49,13 +49,12 @@
         <div>
             <div class="form-row">
                 <div class="col">
-                    <label for="package-type-select">Select package type</label>
+                    <label for="package-type-select">{l s='Select package type' d='Modules.Myparcel.Front'}</label>
                     <select class="form-control" name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}" id = "package-type-select">
-                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 0}selected{/if}>- Selection required -</option>
-                        <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 1}selected{/if}>Package</option>
-                        <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 2}selected{/if}>Mailbox package</option>
-                        <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 3}selected{/if}>Letter</option>
-                        <option value="4" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 4}selected{/if}>Digital stamp</option>
+                        <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 1}selected{/if}>{l s='Package' d='Modules.Myparcel.Front'}</option>
+                        <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 2}selected{/if}>{l s='Mailbox package' d='Modules.Myparcel.Front'}</option>
+                        <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 3}selected{/if}>{l s='Letter' d='Modules.Myparcel.Front'}</option>
+                        <option value="4" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME] == 4}selected{/if}>{l s='Digital stamp' d='Modules.Myparcel.Front'}</option>
                     </select>
                 </div>
             </div>
@@ -63,24 +62,23 @@
                 <div class="form-check">
                     <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="only-reciepient">
                     <label class="form-check-label" for="only-reciepient">
-                        Only recipient
+                        {l s='Only recipient' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="ageCheck">
                     <label class="form-check-label" for="ageCheck">
-                        Age check
+                        {l s='Age check' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col">
-                    <label for="package-type-select">Select package format</label>
+                    <label for="package-type-select">{l s='Select package format' d='Modules.Myparcel.Front'}</label>
                     <select class="form-control" name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}" id="package-type-select">
-                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 0}selected{/if}>- sSelection required -</option>
-                        <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 1}selected{/if}>Normal</option>
-                        <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 2}selected{/if}>Large</option>
-                        <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 3}selected{/if}>Automatic</option>
+                        <option value="1" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 1}selected{/if}>{l s='Normal' d='Modules.Myparcel.Front'}</option>
+                        <option value="2" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 2}selected{/if}>{l s='Large' d='Modules.Myparcel.Front'}</option>
+                        <option value="3" {if $params[Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME] == 3}selected{/if}>{l s='Automatic' d='Modules.Myparcel.Front'}</option>
                     </select>
                 </div>
             </div>
@@ -88,19 +86,19 @@
                 <div class="form-check">
                     <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="gridCheck">
                     <label class="form-check-label" for="gridCheck">
-                        Return package
+                        {l s='Return package' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="signature">
                     <label class="form-check-label" for="signature">
-                        Signature
+                        {l s='Signature' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" name= "{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="insurance">
                     <label class="form-check-label" for="insurance">
-                        Insurance
+                        {l s='Insurance' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
             </div>
@@ -111,24 +109,22 @@
         <div>
             <div class="form-row">
                 <div class="col">
-                    <label for="custom-form">Custom Form</label>
+                    <label for="custom-form">{l s='Custom Form' d='Modules.Myparcel.Front'}</label>
                     <select class="form-control" id="custom-form" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME}">
-                        <option value="0" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 0}selected{/if}>- Selection required -</option>
-                        <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'No'}selected{/if}>No</option>
-                        <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Add'}selected{/if}>Add</option>
-                        <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Skip'}selected{/if}>Skip</option>
+                        <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'No'}selected{/if}>{l s='No' d='Modules.Myparcel.Front'}</option>
+                        <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Add'}selected{/if}>{l s='Add' d='Modules.Myparcel.Front'}</option>
+                        <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Skip'}selected{/if}>{l s='Skip' d='Modules.Myparcel.Front'}</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <label for="custom-code">Custom Code</label>
+                <label for="custom-code">{l s='Custom Code' d='Modules.Myparcel.Front'}</label>
                 <input type="text" class="form-control" id="custom-code" value="{$params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME]}" placeholder="Example input" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME}">
             </div>
             <div class="form-row">
                 <div class="col">
-                    <label for="custom-origin">Customs Origin</label>
+                    <label for="custom-origin">{l s='Customs Origin' d='Modules.Myparcel.Front'}</label>
                     <select class="form-control" id="custom-origin" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME}" >
-                        <option selected value="0">Open this select menu</option>
                         {foreach $countries as $country}
                             <option {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME] == $country['iso_code']}selected{/if} value="{$country['iso_code']}">{$country['name']}</option>
                         {/foreach}
@@ -139,7 +135,7 @@
                 <div class="form-check">
                     <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="age-check">
                     <label class="form-check-label" for="age-check">
-                        Customs age check
+                        {l s='Customs age check' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
             </div>
