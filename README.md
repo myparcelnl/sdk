@@ -15,6 +15,8 @@ Do you want to be kept informed of new functionalities or do you just need help?
     - [Create multiple consignments](#create-multiple-consignments)
     - [Label format and position](#label-format-and-position)
     - [Package type and options](#package-type-and-options)
+    - [Find consignments](#find-consignments)
+    - [Query consignments](#query-consignments)
     - [Retrieve data from a consignment](#retrieve-data-from-a-consignment)
     - [Create and download label(s)](#create-and-download-labels)
 - [List of classes and their methods](#list-of-classes-and-their-methods)
@@ -186,6 +188,43 @@ Available options:
 
 More information: https://myparcelnl.github.io/api/#6_A_3
 
+### Find consignments
+After creating consignments, it is often necessary to pick up a specific consignment:
+```php
+$collection = MyParcelCollection::find(432345);
+```
+Instead of `find()` you can also use `findMany()`, `findByReferenceId()` or `findManyByReferenceId()`.
+
+For `reference identifier` you can use a `*` to search smarter:
+```php
+$collection = MyParcelCollection::findByReferenceId('your-label-*');
+```
+
+### Query consignments
+You can search and filter consignments by certain values:
+```php
+$collection = MyParcelCollection::query(
+            'api_key_from_MyParcel_backoffice',
+            [
+                'q'                    => 'Niels',
+                'reference_identifier' => 'order-1234',
+                'from'                 => '2020-01-01 00:00:00',
+                'to'                   => '2020-02-01 00:00:00',
+                'page'                 => 1,
+                'size'                 => 200,
+                'order'                => 'DESC',
+                'package_type'         => 1,
+                'region'               => 'NL;EU',
+                'dropoff_today'        => 1,
+            ]
+        )
+```
+- If you want to pick up all open consignments, you would probably want to adjust size (because the default value is 30).
+- For `q` and `reference identifier` you can use `*` to search smarter.
+- If the 2nd parameter is an object, then public properties will be used. If you query in many ways, creating a separate class can provide a clean solution.
+
+More information: https://myparcelnl.github.io/api/#6_E.
+
 ### Retrieve data from a consignment
 Most attributes that have a set...() method also have a get...() method to retrieve the data. View [all methods](#PostNLConsignment) for consignments here. 
 ```php
@@ -234,8 +273,8 @@ echo $myParcelCollection
 ```
 
 If you want to download a label at a later time, you can also use the following to fill the collection:
-```
-$collection = MyParcelCollection::findByReferenceId('999999', 'xxxxxx');
+```php
+$collection = MyParcelCollection::findByReferenceId('999999', 'api_key_from_MyParcel_backoffice');
 $collection
     ->setPdfOfLabels()
     ->downloadPdfOfLabels();
@@ -428,7 +467,6 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     
     ->sendReturnLabelMails() // Send return label to customer. The customer can pay and download the label
     ->setLatestData() // Set id and run this function to update all the information about this shipment
-    ->setLatestDataWithoutIds() // Receive the last created shipments
     
     ->setLinkOfLabels()
     ->getLinkOfLabels()
