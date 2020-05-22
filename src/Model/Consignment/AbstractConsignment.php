@@ -1686,9 +1686,9 @@ class AbstractConsignment
     }
 
     /**
+     * @return null|string
      * @deprecated Use getRetailNetworkId instead
      *
-     * @return null|string
      */
     public function getPickupNetworkId(): ?string
     {
@@ -1709,8 +1709,9 @@ class AbstractConsignment
      * Required: Yes for pickup location
      *
      * @param string $retailNetworkId
-     * @deprecated Use setRetailNetworkId instead
+     *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @deprecated Use setRetailNetworkId instead
      */
     public function setPickupNetworkId($retailNetworkId): self
     {
