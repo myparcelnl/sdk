@@ -34,7 +34,6 @@ class PostNLConsignment extends AbstractConsignment
      */
     protected $local_cc = self::CC_NL;
 
-
     /**
      * The id of the consignment
      *
@@ -301,13 +300,29 @@ class PostNLConsignment extends AbstractConsignment
      * Example:  Albert Heijn
      * Required: Yes for pickup location
      *
-     * @param string $pickupNetworkId
+     * @deprecated Use setRetailNetworkId instead
+     *
+     * @param string $retailNetworkId
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
-    public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
+    public function setPickupNetworkId($retailNetworkId): AbstractConsignment
     {
-        $this->pickup_network_id = $pickupNetworkId;
+        return $this->setRetailNetworkId($retailNetworkId);
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $retailNetworkId
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setRetailNetworkId($retailNetworkId): AbstractConsignment
+    {
+        $this->retail_network_id = $retailNetworkId;
 
         return $this;
     }

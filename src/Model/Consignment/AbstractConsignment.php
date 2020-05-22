@@ -69,7 +69,6 @@ class AbstractConsignment
     public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
 
-
     /**
      * Customs declaration types
      */
@@ -373,9 +372,9 @@ class AbstractConsignment
 
     /**
      * @internal
-     * @var string
+     * @var null|string
      */
-    public $pickup_network_id = '';
+    public $retail_network_id;
 
     /**
      * @var bool
@@ -391,12 +390,6 @@ class AbstractConsignment
      * @var bool
      */
     private $save_recipient_address = true;
-
-    /**
-     * @internal
-     * @var null|string
-     */
-    private $retail_network_id;
 
     /**
      * @var Helpers
@@ -1693,11 +1686,21 @@ class AbstractConsignment
     }
 
     /**
+     * @deprecated Use setRetailNetworkId instead
+     *
      * @return string
      */
     public function getPickupNetworkId(): string
     {
-        return $this->pickup_network_id;
+        return $this->getRetailNetworkId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRetailNetworkId(): string
+    {
+        return $this->retail_network_id;
     }
 
     /**
@@ -1705,13 +1708,13 @@ class AbstractConsignment
      * Example:  Albert Heijn
      * Required: Yes for pickup location
      *
-     * @param string $pickupNetworkId
+     * @param string $retailNetworkId
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
-    public function setPickupNetworkId($pickupNetworkId): self
+    public function setPickupNetworkId($retailNetworkId): self
     {
-        if (! empty($pickupNetworkId)) {
+        if (! empty($retailNetworkId)) {
             throw new \BadMethodCallException('Pickup network id has to be empty in ' . static::class);
         }
 
