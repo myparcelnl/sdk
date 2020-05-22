@@ -1742,7 +1742,7 @@ class AbstractConsignment
     /**
      * The total weight for all items in whole grams
      *
-     * @return intsetPickupNetworkId
+     * @return int
      */
     public function getTotalWeight(): int
     {
