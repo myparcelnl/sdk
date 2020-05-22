@@ -15,7 +15,6 @@ namespace MyParcelNL\Sdk\src\Helper;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Model\FullStreet;
-use phpDocumentor\Reflection\DocBlock\Description;
 
 class SplitStreet
 {
