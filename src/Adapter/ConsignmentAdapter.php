@@ -191,7 +191,7 @@ class ConsignmentAdapter
                 'pickup_number'        => null,
                 'pickup_location_name' => null,
                 'pickup_location_code' => '',
-                'pickup_network_id'    => '',
+                'retail_network_id'    => '',
 
             ];
             /** @noinspection PhpInternalEntityUsedInspection */
