@@ -52,13 +52,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if ($('#MY_PARCEL_LABEL_SIZE').val() == 'a6') {
-    $('#MY_PARCEL_LABEL_POSITION').hide();
+    $('.label_position').hide();
   }
   $('#MY_PARCEL_LABEL_SIZE').change(function() {
     if ($(this).val() == 'a6') {
-      $('#MY_PARCEL_LABEL_POSITION').hide();
+      $('.label_position').hide();
     } else {
-      $('#MY_PARCEL_LABEL_POSITION').show();
+      $('.label_position').show();
     }
   });
 }, false);

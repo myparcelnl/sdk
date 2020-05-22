@@ -46,6 +46,7 @@ class LabelForm extends AbstractForm
                 'type' => 'select',
                 'label' => $this->module->l('Default label position'),
                 'name' => Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME,
+                'form_group_class' => 'label_position',
                 'options' => [
                     'query' => [
                         ['id' => '1', 'name' => $this->module->l('Top left')],
