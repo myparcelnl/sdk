@@ -16,7 +16,7 @@ class PickupLocationV2Adapter extends AbstractPickupLocationAdapter
     {
         $this->location_name     = $data["location_name"];
         $this->location_code     = $data["location_code"];
-        $this->pickup_network_id = $data["pickup_network_id"] ?? null;
+        $this->retail_network_id = $data["retail_network_id"] ?? null;
         $this->street            = $data["street"];
         $this->number            = $data["number"];
         $this->postal_code       = $data["postal_code"];
