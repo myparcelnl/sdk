@@ -1686,19 +1686,19 @@ class AbstractConsignment
     }
 
     /**
-     * @deprecated Use setRetailNetworkId instead
+     * @deprecated Use getRetailNetworkId instead
      *
-     * @return string
+     * @return null|string
      */
-    public function getPickupNetworkId(): string
+    public function getPickupNetworkId(): ?string
     {
         return $this->getRetailNetworkId();
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getRetailNetworkId(): string
+    public function getRetailNetworkId(): ?string
     {
         return $this->retail_network_id;
     }
@@ -1709,7 +1709,7 @@ class AbstractConsignment
      * Required: Yes for pickup location
      *
      * @param string $retailNetworkId
-     *
+     * @deprecated Use setRetailNetworkId instead
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setPickupNetworkId($retailNetworkId): self
@@ -1722,9 +1722,27 @@ class AbstractConsignment
     }
 
     /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $retailNetworkId
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setRetailNetworkId(string $retailNetworkId): self
+    {
+        if (! empty($retailNetworkId)) {
+            throw new \BadMethodCallException('Retail network id has to be empty in ' . static::class);
+        }
+
+        return $this;
+    }
+
+    /**
      * The total weight for all items in whole grams
      *
-     * @return int
+     * @return intsetPickupNetworkId
      */
     public function getTotalWeight(): int
     {
