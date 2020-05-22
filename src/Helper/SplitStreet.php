@@ -18,8 +18,44 @@ use MyParcelNL\Sdk\src\Model\FullStreet;
 
 class SplitStreet
 {
-    const BOX_NL                        = 'bus';
-    const BOX_TRANSLATION_POSSIBILITIES = [' boîte', ' box', ' bte', ' Bus'];
+    const BOX_NL                 = 'bus';
+    const BOX_SEPARATOR          = [' boîte', ' box', ' bte', ' Bus'];
+    const BOX_SEPARATOR_BY_REGEX = ['\/'];
+
+    public const NUMBER_SUFFIX_ABBREVIATION = [
+        'apartment'  => '',
+        'gedempte'   => 'GED',
+        'groot'      => 'GRT',
+        'grote'      => 'GRT',
+        'greate'     => 'GRT',
+        'noordzijde' => 'NZ',
+        'oostzijde'  => 'OZ',
+        'zuidzijde'  => 'ZZ',
+        'westzijde'  => 'WZ',
+        'noord'      => 'N',
+        'oost'       => 'O',
+        'zuid'       => 'Z',
+        'west'       => 'W',
+        'hoog'       => 'HG',
+        'hoge'       => 'HG',
+        'hege'       => 'HG',
+        'kleine'     => 'KL',
+        'klein'      => 'KL',
+        'korte'      => 'K',
+        'kort'       => 'K',
+        'koarte'     => 'K',
+        'koart'      => 'K',
+        'kromme'     => 'KR',
+        'krom'       => 'KR',
+        'laag'       => 'LG',
+        'lage'       => 'LG',
+        'lege'       => 'LG',
+        'lange'      => 'L',
+        'lang'       => 'L',
+        'nieuwe'     => 'NW',
+        'nieuw'      => 'NW',
+        'verlengde'  => 'VERL',
+    ];
 
     /**
      * Regular expression used to split street name from house number for the Netherlands.
@@ -57,9 +93,25 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
-        $translateBoxSeparator = str_ireplace(self::BOX_TRANSLATION_POSSIBILITIES, ' ' . self::BOX_NL, $fullStreet);
-        $fullStreet            = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $translateBoxSeparator));
-        $regex                 = self::getRegexByCountry($local, $destination);
+        // Replace house number suffix by an abbreviation, only possible for the Netherlands
+        if ($destination === AbstractConsignment::CC_NL) {
+            foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
+                $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
+            }
+        }
+
+        if ($destination === AbstractConsignment::CC_BE) {
+            // Replace box variants to bus
+            $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
+            // When a caracter is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must replaced by bus
+            foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
+                $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . '$1', $fullStreet);
+            }
+
+            $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
+        }
+
+        $regex = self::getRegexByCountry($local, $destination);
 
         if (! $regex) {
             return new FullStreet($fullStreet, null, null, null);
