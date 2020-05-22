@@ -652,7 +652,6 @@ class MyParcelCollection extends Collection
         }
 
         return $collection;
-
     }
 
     /**
