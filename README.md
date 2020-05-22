@@ -74,13 +74,13 @@ $consignment = (ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER
     ->setCity('Amsterdam')
     ->setEmail('piet.hier@test.nl');
     
-$myParcelCollection = (new MyParcelCollection())
+$consignments = (new MyParcelCollection())
     ->addConsignment($consignment)
     ->setPdfOfLabels();
 
-$consignmentId = $myParcelCollection->first()->getConsignmentId();
+$consignmentId = $consignments->first()->getConsignmentId();
 
-$myParcelCollection->downloadPdfOfLabels();
+$consignments->downloadPdfOfLabels();
 ```
 
 ### Create multiple consignments
@@ -88,7 +88,7 @@ This example creates multiple consignments by adding them to one ```MyParcelColl
 
 ```php
 // Create the collection before the loop
-$myParcelCollection = (new MyParcelCollection())
+$consignments = (new MyParcelCollection())
     ->setUserAgent('name_of_cms', '1.0'); 
 
 // Loop through your shipments, adding each to the same MyParcelCollection()
@@ -103,7 +103,7 @@ foreach ($yourShipments as $yourShipment) {
         ->setCity($yourShipment['city']);
         
     // Add each consignment to the collection created before
-    $myParcelCollection
+    $consignments
         ->addConsignment($consignment);
 }
 ```
@@ -191,19 +191,19 @@ More information: https://myparcelnl.github.io/api/#6_A_3
 ### Find consignments
 After creating consignments, it is often necessary to pick up a specific consignment:
 ```php
-$collection = MyParcelCollection::find(432345);
+$consignments = MyParcelCollection::find(432345);
 ```
 Instead of `find()` you can also use `findMany()`, `findByReferenceId()` or `findManyByReferenceId()`.
 
 For `reference identifier` you can use a `*` to search smarter:
 ```php
-$collection = MyParcelCollection::findByReferenceId('your-label-*');
+$consignments = MyParcelCollection::findByReferenceId('your-label-*');
 ```
 
 ### Query consignments
 You can search and filter consignments by certain values:
 ```php
-$collection = MyParcelCollection::query(
+$consignments = MyParcelCollection::query(
             'api_key_from_MyParcel_backoffice',
             [
                 'q'                    => 'Niels',
@@ -259,7 +259,7 @@ echo $consignment->getBarcodeUrl(3SMYPA123456789, '2231JE', 'NL'); // Barcode , 
 ### Create and download label(s)
 Create and directly download PDF with `setPdfOfLabels($position)` where `$positions` is the [label position](#label-format-and-position) value. 
 ```php
-$myParcelCollection
+$consignments
     ->setPdfOfLabels()
     ->downloadPdfOfLabels(false); // Opens pdf "inline" by default, pass false as argument to download file  
 ```
@@ -267,15 +267,15 @@ $myParcelCollection
 Create and echo download link to PDF with `setLinkOfLabels($position)` where `$positions` is the [label position](#label-format-and-position) value.
 If you want more than 25 labels in one response, the setLinkOfLabels will automatically use a different endpoint. At that point, it is likely that the PDF is not ready yet. You should check periodically if the PDF is ready for download.
 ```php
-echo $myParcelCollection 
+echo $consignments 
     ->setLinkOfLabels($positions)
     ->getLinkOfLabels();
 ```
 
 If you want to download a label at a later time, you can also use the following to fill the collection:
 ```php
-$collection = MyParcelCollection::findByReferenceId('999999', 'api_key_from_MyParcel_backoffice');
-$collection
+$consignments = MyParcelCollection::findByReferenceId('999999', 'api_key_from_MyParcel_backoffice');
+$consignments
     ->setPdfOfLabels()
     ->downloadPdfOfLabels();
 ```
