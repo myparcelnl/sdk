@@ -631,7 +631,7 @@ class MyParcelCollection extends Collection
         // the maximum size should be in your use case. If you want to pick up all
         // open consignments for example, you would probably want to adjust size to 300.
         if (empty($parameters['size'])) {
-            throw new MissingFieldException('Field size is requested.');
+            throw new MissingFieldException('Field "size" is required.');
         }
 
         $request = (new MyParcelRequest())
