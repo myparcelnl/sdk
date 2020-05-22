@@ -94,8 +94,10 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
-        foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
-            $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
+        if ($destination === AbstractConsignment::CC_NL) {
+            foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
+                $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
+            }
         }
 
         if ($destination === AbstractConsignment::CC_BE) {
