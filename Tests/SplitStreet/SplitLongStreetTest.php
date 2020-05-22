@@ -66,7 +66,7 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'carrier_id'             => PostNLConsignment::CARRIER_ID,
-                'BE',
+                'NZ',
                 'full_street_input'      => 'Ir. Mr. Dr. van Waterschoot van der Grachtstraat in Heerlen 14 t',
                 'street'                 => 'Ir. Mr. Dr. van Waterschoot van der',
                 'street_additional_info' => 'Grachtstraat in Heerlen 14 t',
@@ -80,14 +80,14 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'carrier_id'             => PostNLConsignment::CARRIER_ID,
-                'BE',
+                'NZ',
                 'full_street_input'      => 'testtienpp testtienpp',
                 'street'                 => 'testtienpp testtienpp',
                 'street_additional_info' => '',
             ],
             [
                 'carrier_id'             => PostNLConsignment::CARRIER_ID,
-                'BE',
+                'NZ',
                 'full_street_input'      => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
                 'street'                 => 'Wethouder Fierman Eduard Meerburg senior',
                 'street_additional_info' => 'kade 14 t',
