@@ -24,9 +24,9 @@ class CustomsForm extends AbstractForm
                 'name' => Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
-                        ['id' => 'No', 'name' => 'No'],
-                        ['id' => 'Add', 'name' => 'ADD'],
-                        ['id' => 'Skip', 'name' => 'Skip'],
+                        ['id' => 'No', 'name' => $this->module->l('No => Do not automatically generate customs form')],
+                        ['id' => 'Add', 'name' => $this->module->l('ADD => Add this product to customs form'),
+                        ['id' => 'Skip', 'name' => $this->module->l('Skip => Skip this product on customs form')],
                     ],
                     'id' => 'id',
                     'name' => 'name',
@@ -48,9 +48,22 @@ class CustomsForm extends AbstractForm
                 ],
             ],
             Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME => [
-                'type' => 'text',
+                'type' => 'switch',
                 'label' => $this->module->l('Default customs age check'),
                 'name' => Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
+                'is_bool' => true,
+                'values' => [
+                    [
+                        'id' => 'active_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled'),
+                    ],
+                    [
+                        'id' => 'active_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled'),
+                    ],
+                ],
             ],
         ];
     }
