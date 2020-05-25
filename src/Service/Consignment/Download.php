@@ -37,9 +37,9 @@ class Download
                 ->setPdfOfLabels($this->fetchPositions())
                 ->downloadPdfOfLabels($this->configuration->get(Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false))
             ;
-            Logger::log($collection->toJson());
+            Logger::addLog($collection->toJson());
         } catch (\Exception $e) {
-            Logger::log($e->getMessage(), true);
+            Logger::addLog($e->getMessage(), true);
         }
     }
 
