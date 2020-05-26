@@ -17,17 +17,10 @@ class LabelForm extends AbstractForm
     {
         return [
             Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME => [
-                'type' => 'select',
+                'type' => 'text',
                 'label' => $this->module->l('Label description'),
                 'name' => Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME,
-                'options' => [
-                    'query' => [
-                        ['id' => 'id_order', 'name' => 'Order ID'],
-                        ['id' => 'reference', 'name' => 'Order Reference'],
-                    ],
-                    'id' => 'id',
-                    'name' => 'name',
-                ],
+                'placeholder' => '{order.id} {order.reference}',
             ],
             Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME => [
                 'type' => 'select',

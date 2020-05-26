@@ -55,7 +55,7 @@ class LabelController extends ModuleAdminControllerCore
             } catch (Exception $e) {
                 \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
                 header('HTTP/1.1 500 Internal Server Error', true, 500);
-                die($e->getMessage());
+                die($this->module->l('Error'));
             }
 
             $consignment = $myParcelCollection->first();
@@ -102,7 +102,7 @@ class LabelController extends ModuleAdminControllerCore
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($e->getMessage());
+            die($this->module->l('Error'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -175,7 +175,7 @@ class LabelController extends ModuleAdminControllerCore
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($e->getMessage());
+            die($this->module->l('Error'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -212,7 +212,7 @@ class LabelController extends ModuleAdminControllerCore
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($e->getMessage());
+            die($this->module->l('Error'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
