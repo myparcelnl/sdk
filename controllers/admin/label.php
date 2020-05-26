@@ -51,9 +51,9 @@ class LabelController extends ModuleAdminControllerCore
                 $myParcelCollection = (new \MyParcelNL\Sdk\src\Helper\MyParcelCollection())
                     ->addConsignment($consignment)
                     ->setPdfOfLabels()->sendReturnLabelMails();
-                \Gett\MyParcel\Logger\Logger::log($myParcelCollection->toJson());
+                \Gett\MyParcel\Logger\Logger::addLog($myParcelCollection->toJson());
             } catch (Exception $e) {
-                \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+                \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
                 header('HTTP/1.1 500 Internal Server Error', true, 500);
                 die($this->module->l('Error'));
             }
@@ -94,13 +94,13 @@ class LabelController extends ModuleAdminControllerCore
 
         try {
             $collection = $factory->fromOrder($order[0]);
-            \Gett\MyParcel\Logger\Logger::log($collection->toJson());
+            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
             $collection->setLinkOfLabels();
             if (Tools::getValue(\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME)) {
                 $collection->sendReturnLabelMails();
             }
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('Error'));
         }
@@ -171,9 +171,9 @@ class LabelController extends ModuleAdminControllerCore
                 }
             }
             $collection->setPdfOfLabels();
-            \Gett\MyParcel\Logger\Logger::log($collection->toJson());
+            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('Error'));
         }
@@ -208,9 +208,9 @@ class LabelController extends ModuleAdminControllerCore
             $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
 
             $collection->setLinkOfLabels();
-            \Gett\MyParcel\Logger\Logger::log($collection->toJson());
+            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('Error'));
         }
@@ -245,9 +245,9 @@ class LabelController extends ModuleAdminControllerCore
         try {
             $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
             $collection->setLinkOfLabels();
-            \Gett\MyParcel\Logger\Logger::log($collection->toJson());
+            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::log($e->getMessage(), true);
+            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
 

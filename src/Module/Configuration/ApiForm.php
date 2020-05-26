@@ -85,7 +85,9 @@ class ApiForm extends AbstractForm
                     new Subscription(
                         Subscription::SHIPMENT_STATUS_CHANGE_HOOK_NAME,
                         rtrim(
-                            (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://') . Tools::getShopDomainSsl() . __PS_BASE_URI__,
+                            (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://')
+                                . Tools::getShopDomainSsl()
+                                . __PS_BASE_URI__,
                             '/'
                         ) . "/index.php?fc=module&module={$this->module->name}&controller=hook"
                     )
@@ -100,8 +102,12 @@ class ApiForm extends AbstractForm
             }
             if (Tools::isSubmit('deleteHook')) {
                 $service = new WebhookService(Tools::getValue(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
-                $service->deleteSubscription(Tools::getValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME));
-                Configuration::updateValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME, '');
+                $result = $service->deleteSubscription(
+                    Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)
+                );
+                if ($result === null) {
+                    Configuration::updateValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME, '');
+                }
             }
         } catch (\Exception $e) {
             return $this->module->displayError(
