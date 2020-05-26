@@ -94,6 +94,12 @@ class LabelController extends ModuleAdminControllerCore
 
         try {
             $collection = $factory->fromOrder($order[0]);
+            $consignments = $collection->getConsignments();
+            if (!empty($consignments)) {
+                foreach ($consignments as &$consignment) {
+                    $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
+                }
+            }
             \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
             $collection->setLinkOfLabels();
             if (Tools::getValue(\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME)) {
@@ -260,5 +266,25 @@ class LabelController extends ModuleAdminControllerCore
         }
 
         Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
+    }
+
+    public function fixPastDeliveryDate(?string $deliveryDate): ?string
+    {
+        if (!$deliveryDate) {
+            return $deliveryDate;
+        }
+        $tomorrow = new \DateTime('tomorrow');
+        try {
+            $oldDate = new \DateTime($deliveryDate);
+        } catch (Exception $e) {
+            return $deliveryDate;
+        }
+        $tomorrow->setTime(0, 0, 0, 0);
+        $oldDate->setTime(0, 0, 0, 0);
+        if ($tomorrow > $oldDate) {
+            $deliveryDate = null; //$tomorrow->format('Y-m-d H:i:s');
+        }
+
+        return $deliveryDate;
     }
 }
