@@ -109,7 +109,7 @@ class ConsignmentFactory
             $consignment->setSignature(true);
         }
         $consignment->setLabelDescription(
-            isset($order[\Configuration::get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME)]) ? $order[\Configuration::get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME)] : $order['id_order']
+            $this->getLabelParams($order, \Configuration::get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME))
         );
 
         if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
@@ -172,5 +172,50 @@ class ConsignmentFactory
     private function MY_PARCEL_PACKAGE_FORMAT(AbstractConsignment $consignment)
     {
         return $consignment->setLargeFormat($this->request->get(__FUNCTION__) == 2);
+    }
+
+    private function getLabelParams(array $order, string $labelParams, string $labelDefaultParam = 'id_order'): string
+    {
+        if (!isset($order[$labelDefaultParam])) {
+            $labelDefaultParam = 'id_order';
+        }
+        if (empty(trim($labelParams))) {
+            return $order[$labelDefaultParam];
+        }
+
+        $pattern = '/\{[a-zA-Z_]+\.[a-zA-Z_]+\}/m';
+
+        preg_match_all($pattern, $labelParams, $matches, PREG_SET_ORDER, 0);
+
+        $keys = [];
+        if (!empty($matches)) {
+            foreach ($matches as $result) {
+                foreach ($result as $value) {
+                    $key = trim($value, '{}');
+                    $key = explode('.', $key);
+                    if (count($key) === 1) {
+                        $keys[$value] = $key;
+                        continue;
+                    }
+                    if (count($key) === 2) {
+                        if ($key[0] === 'order') {
+                            $keys[$value] = $key[1];
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        if (empty($keys)) {
+            return $order[$labelDefaultParam];
+        }
+        foreach ($keys as $index => $key) {
+            if (!isset($order[$key])) {
+                unset($keys[$index]);
+            }
+            $labelParams = str_replace($index, $order[$key], $labelParams);
+        }
+
+        return trim($labelParams);
     }
 }
