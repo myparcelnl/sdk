@@ -106,9 +106,9 @@
             <div class="form-group">
                 <label for="custom-form">{l s='Custom Form' d='Modules.Myparcel.Front'}</label>
                 <select class="form-control" id="custom-form" name = "{Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME}">
-                    <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'No'}selected{/if}>{l s='No => Do not automatically generate customs form' d='Modules.Myparcel.Front'}</option>
-                    <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Add'}selected{/if}>{l s='ADD => Add this product to customs form' d='Modules.Myparcel.Front'}</option>
-                    <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Skip'}selected{/if}>{l s='Skip => Skip this product on customs form' d='Modules.Myparcel.Front'}</option>
+                    <option value="No" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'No'}selected{/if}>{l s='Do not automatically generate customs form' d='Modules.Myparcel.Front'}</option>
+                    <option value="Add" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Add'}selected{/if}>{l s='Add this product to customs form' d='Modules.Myparcel.Front'}</option>
+                    <option value="Skip" {if $params[Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME] == 'Skip'}selected{/if}>{l s='Skip this product on customs form' d='Modules.Myparcel.Front'}</option>
                 </select>
             </div>
             <div class="form-group">

@@ -4,6 +4,8 @@ namespace Gett\MyParcel\Factory\Consignment;
 
 use Gett\MyParcel\Constant;
 use Gett\MyParcel\OrderLabel;
+use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use Symfony\Component\HttpFoundation\Request;
 use Gett\MyParcel\Carrier\PackageTypeCalculator;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -67,7 +69,7 @@ class ConsignmentFactory
 
     private function initConsignment(array $order): AbstractConsignment
     {
-        $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))  //TODO fetch carrier
+        $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId($this->getMyparcelCarrierId($order['id_carrier'])))
             ->setApiKey($this->api_key)
             ->setReferenceId($order['id_order'])
             ->setCountry($order['iso_code'])
@@ -76,7 +78,7 @@ class ConsignmentFactory
             ->setPostalCode($order['postcode'])
             ->setCity($order['city'])
             ->setContents(1)
-            ->setInvoice(123)
+            ->setInvoice($order['invoice_number'])
         ;
 
         if ($package_type = $this->request->get('MY_PARCEL_PACKAGE_TYPE')) {
@@ -217,5 +219,22 @@ class ConsignmentFactory
         }
 
         return trim($labelParams);
+    }
+
+    private function getMyparcelCarrierId(int $id_carrier):int
+    {
+        if ($id_carrier == $this->configuration->get('MYPARCEL_POSTNL')) {
+            return PostNLConsignment::CARRIER_ID;
+        }
+
+        if ($id_carrier == $this->configuration->get('MYPARCEL_BPOST')) {
+            return BpostConsignment::CARRIER_ID;
+        }
+
+        if ($id_carrier == $this->configuration->get('MYPARCEL_DPD')) {
+            return DPDConsignment::CARRIER_ID;
+        }
+
+        throw new \Exception('Undefined carrier');
     }
 }

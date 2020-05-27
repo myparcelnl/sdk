@@ -24,9 +24,9 @@ class CustomsForm extends AbstractForm
                 'name' => Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
-                        ['id' => 'No', 'name' => $this->module->l('No => Do not automatically generate customs form')],
-                        ['id' => 'Add', 'name' => $this->module->l('ADD => Add this product to customs form'),
-                        ['id' => 'Skip', 'name' => $this->module->l('Skip => Skip this product on customs form')],
+                        ['id' => 'No', 'name' => $this->module->l('Do not automatically generate customs form')],
+                        ['id' => 'Add', 'name' => $this->module->l('Add this product to customs form')],
+                        ['id' => 'Skip', 'name' => $this->module->l('Skip this product on customs form')],
                     ],
                     'id' => 'id',
                     'name' => 'name',
