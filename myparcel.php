@@ -2,6 +2,7 @@
 
 use Gett\MyParcel\Module\Hooks\FrontHooks;
 use Gett\MyParcel\Module\Hooks\OrderLabelHooks;
+use Gett\MyParcel\Module\Hooks\CarrierHooks;
 use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
 use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
@@ -23,6 +24,7 @@ class MyParcel extends CarrierModule
     use FrontHooks;
     use LegacyOrderPageHooks;
     use OrderLabelHooks;
+    use CarrierHooks;
     public $baseUrl;
     public $id_carrier;
     public $migrations = [
@@ -37,6 +39,7 @@ class MyParcel extends CarrierModule
         'displayBackOfficeHeader',
         'actionProductUpdate',
         'displayCarrierExtraContent',
+        'actionCarrierUpdate',
         'displayHeader',
         'actionCarrierProcess',
         'actionOrderGridDefinitionModifier',
