@@ -69,7 +69,9 @@ class ConsignmentFactory
 
     private function initConsignment(array $order): AbstractConsignment
     {
-        $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId($this->getMyparcelCarrierId($order['id_carrier'])))
+        $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(
+            $this->getMyParcelCarrierId($order['id_carrier']))
+        )
             ->setApiKey($this->api_key)
             ->setReferenceId($order['id_order'])
             ->setCountry($order['iso_code'])
@@ -221,17 +223,21 @@ class ConsignmentFactory
         return trim($labelParams);
     }
 
-    private function getMyparcelCarrierId(int $id_carrier):int
+    private function getMyParcelCarrierId(int $id_carrier):int
     {
-        if ($id_carrier == $this->configuration->get('MYPARCEL_POSTNL')) {
+        $carrier = new \Carrier($id_carrier);
+        if (!\Validate::isLoadedObject($carrier)) {
+            throw new \Exception('No carrier found.');
+        }
+        if ($carrier->id_reference == $this->configuration->get('MYPARCEL_POSTNL')) {
             return PostNLConsignment::CARRIER_ID;
         }
 
-        if ($id_carrier == $this->configuration->get('MYPARCEL_BPOST')) {
+        if ($carrier->id_reference == $this->configuration->get('MYPARCEL_BPOST')) {
             return BpostConsignment::CARRIER_ID;
         }
 
-        if ($id_carrier == $this->configuration->get('MYPARCEL_DPD')) {
+        if ($carrier->id_reference == $this->configuration->get('MYPARCEL_DPD')) {
             return DPDConsignment::CARRIER_ID;
         }
 
