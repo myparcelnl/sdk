@@ -41,15 +41,8 @@ class WebhookService
 
     public function deleteSubscription(int $id)
     {
-        $request = (new MyParcelRequest())
-            ->setUserAgent()
-            ->setRequestParameters(
-                $this->api_key,
-                null,
-                Request::REQUEST_HEADER_WEBHOOK
-            )
-            ->sendRequest('DELETE', Request::REQUEST_TYPE_WEBHOOK . '/' . $id);
-        Logger::addLog('DeleteSubscription function called. Result: ' . json_encode($request->getResult()));
+        $result = $this->delete(Request::REQUEST_TYPE_WEBHOOK . '/' . $id);
+        Logger::addLog('DeleteSubscription function called. Result: ' . $result);
         Logger::addLog(sprintf(
             'WebhookService::DeleteSubscription function called. Method: POST: Header: %s. Request message: %s',
             (string) Request::REQUEST_HEADER_WEBHOOK,
@@ -57,9 +50,25 @@ class WebhookService
         ), false, true);
         Logger::addLog(sprintf(
             'WebhookService::DeleteSubscription function called. Result message: %s',
-            json_encode($request->getResult())
+            $result
         ), false, true);
 
-        return $request->getResult();
+        return $result;
+    }
+
+    private function delete($url){
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                Request::REQUEST_HEADER_WEBHOOK,
+                'Authorization: basic' . base64_encode($this->api_key)
+            )
+        );
+
+        $result = curl_exec($ch);
+        return $result;
     }
 }

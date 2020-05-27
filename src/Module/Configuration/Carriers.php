@@ -25,7 +25,9 @@ class Carriers
                     $dropOff[] = end($temp);
                 }
             }
-            $_POST['dropOffDays'] = implode(';', $dropOff);
+            if (isset($dropOff)) {
+                $_POST['dropOffDays'] = implode(';', $dropOff);
+            }
             foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $value) {
                 \DB::getInstance()->update('myparcel_carrier_configuration', ['value' => pSQL(\Tools::getValue($value))], 'id_carrier = "' . \Tools::getValue('id_carrier') . '" AND name = "' . pSQL($value) . '" ');
             }
@@ -44,6 +46,37 @@ class Carriers
         if (\Tools::getValue('id_carrier')){
             $carrier = (new \Carrier(\Tools::getValue('id_carrier')))->name;
         }
+
+        $deliveryDaysOptions = array(
+            array(
+                'id'   => -1,
+                'name' => $this->module->l('Hide days'),
+            ),
+        );
+        for ($i = 1; $i < 15; $i++) {
+            $deliveryDaysOptions[] = array(
+                'id'   => $i,
+                'name' => sprintf($this->module->l('%d days'), $i),
+            );
+        }
+
+        $dropOffDelayOptions = array(
+            array(
+                'id'   => 0,
+                'name' => $this->module->l('No delay'),
+            ),
+            array(
+                'id'   => 1,
+                'name' => $this->module->l('1 day'),
+            ),
+        );
+        for ($i = 2; $i < 15; $i++) {
+            $dropOffDelayOptions[] = array(
+                'id'   => $i,
+                'name' => sprintf($this->module->l('%d days'), $i),
+            );
+        }
+
         $fields = [
             'form' => [
                 'legend' => [
@@ -91,7 +124,7 @@ class Carriers
                         'desc' => $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.'),
                     ],
                     [
-                        'type' => 'text',
+                        'type' => 'time',
                         'label' => $this->module->l('Cutoff Time'),
                         'name' => 'cutoffTime',
                         'tab' => 'form',
@@ -101,20 +134,30 @@ class Carriers
                         'desc' => $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.'),
                     ],
                     [
-                        'type' => 'text',
+                        'type' => 'select',
                         'label' => $this->module->l('Delivery days window'),
                         'name' => 'deliverydaysWindow',
                         'tab' => 'form',
+                        'options'  => array(
+                            'query' => $deliveryDaysOptions,
+                            'id'    => 'id',
+                            'name'  => 'name',
+                        ),
                         'hint' => [
                             $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.'),
                         ],
                         'desc' => $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.'),
                     ],
                     [
-                        'type' => 'text',
+                        'type' => 'select',
                         'label' => $this->module->l('Drop off delay'),
                         'name' => 'dropoffDelay',
                         'tab' => 'form',
+                        'options'  => array(
+                            'query' => $dropOffDelayOptions,
+                            'id'    => 'id',
+                            'name'  => 'name',
+                        ),
                         'hint' => [
                             $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.'),
                         ],
@@ -136,7 +179,7 @@ class Carriers
                         ],
                     ],
                     [
-                        'type' => 'text',
+                        'type' => 'time',
                         'label' => $this->module->l('Saturday cutoff time'),
                         'name' => 'saturdayCutoffTime',
                         'tab' => 'form',
