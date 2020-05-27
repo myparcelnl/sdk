@@ -354,7 +354,8 @@ class OrderLabel extends \ObjectModel
                     a.phone,
                     ds.delivery_settings,
                     o.id_carrier,
-                    a.id_country
+                    a.id_country,
+                    o.invoice_number
                     ');
         $qb->from('orders', 'o');
         $qb->innerJoin('address', 'a', 'o.id_address_delivery = a.id_address');
