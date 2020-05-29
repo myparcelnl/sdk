@@ -97,7 +97,8 @@ class ConsignmentFactory
             $consignment->setPhone($order['phone']);
         }
         $delivery_setting = json_decode($order['delivery_settings']);
-        $consignment->setDeliveryDate(date('Y-m-d H:i:s', strtotime($delivery_setting->date)));
+        $deliveryDate = new \DateTime($delivery_setting->date);
+        $consignment->setDeliveryDate($deliveryDate->format('Y-m-d H:i:s'));
 
         if ($delivery_setting->isPickup) {
             $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]);

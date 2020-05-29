@@ -176,6 +176,7 @@ class LabelController extends ModuleAdminControllerCore
                 if ($options->insurance) {
                     $consignment->setInsurance(2500);
                 }
+                $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
             }
             $collection->setPdfOfLabels();
             \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
