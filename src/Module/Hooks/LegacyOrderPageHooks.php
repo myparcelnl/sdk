@@ -30,6 +30,9 @@ trait LegacyOrderPageHooks
 
     public function hookActionAdminOrdersListingFieldsModifier($params)
     {
+        if (isset($params['select'])) {
+            $params['select'] = '';
+        }
         $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`, a.id_carrier';
 
         $params['fields']['myparcel_void_1'] = [
