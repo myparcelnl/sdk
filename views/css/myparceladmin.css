@@ -72,3 +72,13 @@
 .modal .modal-title {
   display: inline-block;
 }
+.label-description-variables code {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #000;
+  color: #fff;
+}
