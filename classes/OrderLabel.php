@@ -344,6 +344,7 @@ class OrderLabel extends \ObjectModel
     {
         $qb = new \DbQuery();
         $qb->select('o.id_order,
+                    o.id_order AS id,
                     o.reference,
                     co.iso_code,
                     CONCAT(a.firstname, " ",a.lastname) as person,

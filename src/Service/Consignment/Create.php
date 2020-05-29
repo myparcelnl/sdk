@@ -23,7 +23,8 @@ class Create
     public function createLabels(array $orders)
     {
         if (isset($orders['id_order'])) {
-            $myParcelCollection = $this->consignment_factory->fromOrder($orders);
+            $order = $orders;
+            $myParcelCollection = $this->consignment_factory->fromOrder($order);
         } else {
             $myParcelCollection = $this->consignment_factory->fromOrders($orders);
         }
@@ -33,9 +34,9 @@ class Create
         return true;
     }
 
-    public function createReturnLabel(int $id_order)
+    public function createReturnLabel(array $order)
     {
-        $myParcelCollection = $this->consignment_factory->fromOrder($id_order);
+        $myParcelCollection = $this->consignment_factory->fromOrder($order);
 
         $this->process($myParcelCollection, true);
 

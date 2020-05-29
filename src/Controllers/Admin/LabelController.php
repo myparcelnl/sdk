@@ -95,9 +95,9 @@ class LabelController extends FrameworkBundleAdminController
 
         /** @var Create $service */
         $service = $this->get('gett.myparcel.service.consignment.create');
-        $order = $repository->getOrdersForLabelCreate($request->get('create_label')['order_ids']);
+        $orders = $repository->getOrdersForLabelCreate($request->get('create_label')['order_ids']);
 
-        $service->createReturnLabel($order[0]);
+        $service->createReturnLabel(reset($orders));
 
 //        return $this->json([
 //            'status' => 'ok',  //TODO For presta bellow 1.7.7

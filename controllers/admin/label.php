@@ -86,14 +86,15 @@ class LabelController extends ModuleAdminControllerCore
         if (empty($createLabelIds['order_ids'])) {
             die($this->trans('No order ID found', [], 'Modules.Myparcel.Error'));
         }
-        $order = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate($createLabelIds['order_ids']);
-        if (empty($order)) {
+        $orders = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate($createLabelIds['order_ids']);
+        if (empty($orders)) {
             $this->errors[] = $this->trans('No order found.', [], 'Modules.Myparcel.Error');
             die(json_encode(['hasError' => true, 'errors' => $this->errors]));
         }
+        $order = reset($orders);
 
         try {
-            $collection = $factory->fromOrder($order[0]);
+            $collection = $factory->fromOrder($order);
             $consignments = $collection->getConsignments();
             if (!empty($consignments)) {
                 foreach ($consignments as &$consignment) {
