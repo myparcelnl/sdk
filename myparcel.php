@@ -121,9 +121,9 @@ class MyParcel extends CarrierModule
         return $output . $configuration(Tools::getValue('menu'));
     }
 
-    public function getOrderShippingCost($params, $shipping_cost)
+    public function getOrderShippingCost($cart, $shipping_cost)
     {
-        return 0;
+        return $shipping_cost;
     }
 
     public function getOrderShippingCostExternal($params)
