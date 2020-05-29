@@ -103,9 +103,9 @@ class ApiForm extends AbstractForm
             if (Tools::isSubmit('deleteHook')) {
                 $service = new WebhookService(Configuration::get(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
                 $result = $service->deleteSubscription(
-                    Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)
+                    (int) Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)
                 );
-                if ($result === null) {
+                if ($result === true) {
                     Configuration::updateValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME, '');
                 }
             }

@@ -42,33 +42,49 @@ class WebhookService
     public function deleteSubscription(int $id)
     {
         $result = $this->delete(Request::REQUEST_TYPE_WEBHOOK . '/' . $id);
-        Logger::addLog('DeleteSubscription function called. Result: ' . $result);
+        Logger::addLog('DeleteSubscription function called. Result: ' . $result['result']);
         Logger::addLog(sprintf(
             'WebhookService::DeleteSubscription function called. Method: POST: Header: %s. Request message: %s',
             (string) Request::REQUEST_HEADER_WEBHOOK,
             Request::REQUEST_TYPE_WEBHOOK . '/' . $id
         ), false, true);
         Logger::addLog(sprintf(
-            'WebhookService::DeleteSubscription function called. Result message: %s',
-            $result
+            'WebhookService::DeleteSubscription function called. Result message: %s. Http status: %s. Error: %s',
+            $result['result'],
+            $result['httpCode'],
+            $result['error']
         ), false, true);
 
-        return $result;
+        if ($result['httpCode'] == 204) {
+            return true;
+        }
+
+        return false;
     }
 
-    private function delete($url){
+    private function delete(string $url): array
+    {
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                Request::REQUEST_HEADER_WEBHOOK,
-                'Authorization: basic' . base64_encode($this->api_key)
-            )
-        );
+        $ch = curl_init();
+        $options = [
+            CURLOPT_URL => MyParcelRequest::REQUEST_URL . '/' . $url,
+            CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: basic ' . base64_encode($this->api_key),
+                'User-Agent: CustomApiCall/2',
+                Request::REQUEST_HEADER_WEBHOOK
+            ]
+        ];
+        curl_setopt_array($ch, $options);
 
         $result = curl_exec($ch);
-        return $result;
+
+        return [
+            'result' => $result,
+            'httpCode' => curl_getinfo($ch, CURLINFO_HTTP_CODE),
+            'error' => curl_error($ch)
+        ];
     }
 }
