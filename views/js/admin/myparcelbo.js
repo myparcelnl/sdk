@@ -61,4 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
       $('.label_position').show();
     }
   });
+  $(document).on('click', '.label-description-variables code', function() {
+    var $input = $(this).closest('.col-lg-9').find('input[type="text"]');
+    if ($input.length) {
+      $input.val($input.val() + ' ' + $(this).html());
+    }
+  });
 }, false);

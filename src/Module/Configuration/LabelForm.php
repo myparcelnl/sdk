@@ -21,6 +21,19 @@ class LabelForm extends AbstractForm
                 'label' => $this->module->l('Label description'),
                 'name' => Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME,
                 'placeholder' => '{order.id} {order.reference}',
+                'desc' => [
+                    $this->module->l('You can add the following variables to the description'),
+                    '<ul class="label-description-variables">'
+                        . '<li>'
+                            . '<code>{order.id}</code>'
+                            . sprintf(' - %s', $this->module->l('Order number'))
+                        . '</li>'
+                        . '<li>'
+                            . '<code>{order.reference}</code>'
+                            . sprintf(' - %s', $this->module->l('Order reference'))
+                        . '</li>'
+                    . '</ul>',
+                ],
             ],
             Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME => [
                 'type' => 'select',
