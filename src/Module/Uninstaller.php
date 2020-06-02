@@ -2,6 +2,8 @@
 
 namespace Gett\MyParcel\Module;
 
+use Tab;
+
 class Uninstaller
 {
     /** @var \Module */
@@ -14,9 +16,9 @@ class Uninstaller
 
     public function __invoke(): bool
     {
-        return true;
-//        return $this->hooks()
-//            && $this->migrate();
+        return $this->hooks()
+            && $this->migrate()
+            && $this->uninstallTabs();
     }
 
     private function hooks(): bool
@@ -37,5 +39,22 @@ class Uninstaller
         }
 
         return $result;
+    }
+
+    private function uninstallTabs()
+    {
+        $res = true;
+
+        $tabs = ['MyParcelLabelController'];
+
+        foreach ($tabs as $tabName) {
+            $id_tab = (int) Tab::getIdFromClassName($tabName);
+            if ($id_tab) {
+                $tab = new Tab($id_tab);
+                $res &= $tab->delete();
+            }
+        }
+
+        return $res;
     }
 }
