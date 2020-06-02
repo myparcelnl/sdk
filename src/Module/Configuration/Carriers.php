@@ -225,7 +225,7 @@ class Carriers
                         'hint' => [
                             $this->module->l('When there is no title, the delivery time will automatically be visible.'),
                         ],
-                        'desc' =>                             $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.'),
 
                     ],
                     [
@@ -253,7 +253,7 @@ class Carriers
                         'hint' => [
                             $this->module->l('When there is no title, the delivery time will automatically be visible.'),
                         ],
-                        'desc' =>                             $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.'),
 
                     ],
                     [
@@ -333,8 +333,7 @@ class Carriers
                         'hint' => [
                             $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.'),
                         ],
-                        'desc' =>                             $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.'),
-
+                        'desc' => $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.'),
                     ],
                     [
                         'type' => 'switch',
@@ -373,10 +372,6 @@ class Carriers
                             ],
                             'id' => 'id',
                             'name' => 'name',
-                            'default' => [
-                                'label' => $this->module->l('Select'),
-                                'value' => 0,
-                            ],
                         ],
                     ],
                     [
@@ -404,7 +399,7 @@ class Carriers
                     [
                         'tab' => 'delivery',
                         'type' => 'select',
-                        'label' => $this->module->l('Default package type'),
+                        'label' => $this->module->l('Default package format'),
                         'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
@@ -468,10 +463,6 @@ class Carriers
                             ],
                             'id' => 'id',
                             'name' => 'name',
-                            'default' => [
-                                'label' => $this->module->l('Select'),
-                                'value' => 0,
-                            ],
                         ],
                     ],
                     [
@@ -499,7 +490,7 @@ class Carriers
                     [
                         'tab' => 'return',
                         'type' => 'select',
-                        'label' => $this->module->l('Default package type'),
+                        'label' => $this->module->l('Default package format'),
                         'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [

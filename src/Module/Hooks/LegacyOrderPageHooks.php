@@ -7,6 +7,8 @@ use Gett\MyParcel\Label\LabelOptionsResolver;
 
 trait LegacyOrderPageHooks
 {
+    protected $carrierList = [];
+
     public function hookDisplayAdminListBefore()
     {
         if ($this->context->controller instanceof \AdminOrdersController) {
@@ -26,6 +28,8 @@ trait LegacyOrderPageHooks
 
             return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');
         }
+
+        return '';
     }
 
     public function hookActionAdminOrdersListingFieldsModifier($params)
@@ -58,12 +62,7 @@ trait LegacyOrderPageHooks
 
     public function printMyParcelLabel($id, $params)
     {
-        $order = new \Order($params['id_order']);
-        if (!in_array($order->id_carrier, [
-            \Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
-            \Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
-            \Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
-        ])) {
+        if (!$this->searchMyParcelCarrier((int) $params['id_carrier'])) {
             return '';
         }
         $sql = new \DbQuery();
@@ -71,7 +70,7 @@ trait LegacyOrderPageHooks
         $sql->from('myparcel_order_label');
         $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
         $result = \Db::getInstance()->executeS($sql);
-        $link = new \Link();
+        $link = $this->context->link;
 
         $this->context->smarty->assign([
             'labels' => $result,
@@ -83,22 +82,15 @@ trait LegacyOrderPageHooks
 
     public function printMyParcelIcon($id, $params)
     {
-        $order = new \Order($params['id_order']);
-        if (!in_array($order->id_carrier, [
-            \Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
-            \Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
-            \Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
-        ])) {
+        if (!$this->searchMyParcelCarrier((int) $params['id_carrier'])) {
             return '';
         }
 
         $label_options_resolver = new LabelOptionsResolver();
 
-        $this->context->smarty->assign(
-            [
-                'label_options' => $label_options_resolver->getLabelOptions($params),
-            ]
-        );
+        $this->context->smarty->assign([
+            'label_options' => $label_options_resolver->getLabelOptions($params),
+        ]);
 
         return $this->display($this->name, 'views/templates/admin/icon-concept.tpl');
     }
@@ -135,5 +127,19 @@ trait LegacyOrderPageHooks
                 $this->_path . 'views/js/admin/symfony/orders-list.js'
             );
         }
+    }
+
+    public function searchMyParcelCarrier($idCarrier)
+    {
+        $carrier = $this->carrierList[$idCarrier] ?? new \Carrier($idCarrier);
+        if (empty($this->carrierList[$idCarrier])) {
+            $this->carrierList[$idCarrier] = $carrier->id_reference;
+        }
+
+        return in_array($this->carrierList[$idCarrier], [
+            \Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
+            \Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
+            \Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
+        ]);
     }
 }

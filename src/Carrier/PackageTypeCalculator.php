@@ -15,7 +15,11 @@ class PackageTypeCalculator
             return min($package_types);
         }
 
-        return CarrierConfigurationProvider::get($id_carrier, Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME);
+        $packageType = CarrierConfigurationProvider::get(
+            $id_carrier, Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME
+        );
+
+        return $packageType ?: 1;
     }
 
     private static function getOrderProductsPackageTypes(int $id_order)
