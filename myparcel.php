@@ -8,6 +8,7 @@ use Gett\MyParcel\Module\Configuration\Configure;
 use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
 use Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
 use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
+use Gett\MyParcel\Service\CarrierConfigurationProvider;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -123,7 +124,26 @@ class MyParcel extends CarrierModule
 
     public function getOrderShippingCost($cart, $shipping_cost)
     {
-        return $shipping_cost;
+        $myParcelCost = 0;
+        $deliverySettings = $this->getDeliverySettingsByCart((int) $cart->id);
+        if (empty($deliverySettings)) {
+            return $shipping_cost;
+        }
+
+        if ($deliverySettings['isPickup']) {
+            $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, 'pricePickup');
+        } else {
+            $priceHourInterval = 'price' . ucfirst($deliverySettings['deliveryType']) . 'Delivery';
+            $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, $priceHourInterval);
+            if (!empty($deliverySettings['shipmentOptions']['only_recipient'])) {
+                $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, 'priceOnlyRecipient');
+            }
+            if (!empty($deliverySettings['shipmentOptions']['signature'])) {
+                $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, 'priceSignature');
+            }
+        }
+
+        return $shipping_cost + $myParcelCost;
     }
 
     public function getOrderShippingCostExternal($params)
@@ -217,29 +237,31 @@ class MyParcel extends CarrierModule
         return false;
     }
 
-    public static function getModuleCountry()
+    public function getModuleCountry()
     {
-        return 'BE';
+        return $this->name === 'myparcelbe' ? 'BE' : 'NL';
     }
 
-    public static function isNL()
+    public function isNL()
     {
-        return self::getModuleCountry() === 'NL';
+        return $this->getModuleCountry() === 'NL';
     }
 
-    public static function isBE()
+    public function isBE()
     {
-        return self::getModuleCountry() === 'BE';
+        return $this->getModuleCountry() === 'BE';
     }
 
-    public static function getCarriers()
-    {
-        $carriers = ['postnl'];
-        if (self::isBE()) {
-            $carriers[] = 'bpost';
-            $carriers[] = 'dpd';
-        }
-    }
+//    public function getCarriers()
+//    {
+//        $carriers = ['postnl'];
+//        if ($this->isBE()) {
+//            $carriers[] = 'bpost';
+//            $carriers[] = 'dpd';
+//        }
+//
+//        return $carriers;
+//    }
 
     private function mypa_stringify_url($parsedUrl)
     {
@@ -254,5 +276,19 @@ class MyParcel extends CarrierModule
         $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
 
         return "{$scheme}{$user}{$pass}{$host}{$port}{$path}{$query}{$fragment}";
+    }
+
+    public function getDeliverySettingsByCart(int $idCart): ?array
+    {
+        $query = new DbQuery();
+        $query->select('delivery_settings');
+        $query->from('myparcel_delivery_settings');
+        $query->where('id_cart = ' . (int) $idCart);
+        $deliverySettings = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query);
+        if (empty($deliverySettings)) {
+            return null;
+        }
+
+        return json_decode($deliverySettings, true);
     }
 }

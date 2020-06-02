@@ -49,6 +49,7 @@ $(document).ready(function() {
             document.dispatchEvent(new Event('myparcel_update_delivery_options'));
 
             $wrapper.addClass('myparcel-delivery-options-initialized');
+            initDefaults();
             initialized = true;
           },
           error: function(err) {
@@ -66,6 +67,36 @@ $(document).ready(function() {
         let dataString = JSON.stringify(dataObj)
 
         $input.val(dataString);
+    }
+
+    let initDefaults = function() {
+      setTimeout(function() {
+        if (typeof deliverySettingsMP === 'undefined' || deliverySettingsMP === null) {
+          return false;
+        }
+        let $parent = $('.myparcel-delivery-options-wrapper.myparcel-delivery-options-initialized');
+        if (deliverySettingsMP.isPickup) {
+          $('#myparcel-delivery-options__delivery--pickup', $parent).trigger('click');
+        }
+        if (deliverySettingsMP.deliveryType === 'morning') {
+          $('#myparcel-delivery-options__deliveryMoment--morning', $parent).trigger('click');
+        }
+        if (deliverySettingsMP.deliveryType === 'evening') {
+          $('#myparcel-delivery-options__deliveryMoment--evening', $parent).trigger('click');
+        }
+        setTimeout(function() {
+          if (deliverySettingsMP.shipmentOptions.only_recipient) {
+            $('#myparcel-delivery-options__shipmentOptions--only_recipient', $parent).prop('checked', true);
+          } else {
+            $('#myparcel-delivery-options__shipmentOptions--only_recipient', $parent).prop('checked', false);
+          }
+          if (deliverySettingsMP.shipmentOptions.signature) {
+            $('#myparcel-delivery-options__shipmentOptions--signature', $parent).prop('checked', true);
+          } else {
+            $('#myparcel-delivery-options__shipmentOptions--signature', $parent).prop('checked', false);
+          }
+        }, 100);
+      }, 2000);// TODO: find an event to bind to
     }
 
     $(document).on('change', '.delivery-option input', function() {

@@ -7,7 +7,13 @@ trait FrontHooks
     public function hookActionCarrierProcess($params)
     {
         if (\Tools::isSubmit('confirmDeliveryOption') && $options = \Tools::getValue('myparcel-delivery-options')) {
-            \Db::getInstance()->insert('myparcel_delivery_settings', ['id_cart' => $params['cart']->id, 'delivery_settings' => $options]);
+            \Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
+                'myparcel_delivery_settings',
+                ['id_cart' => $params['cart']->id, 'delivery_settings' => $options],
+                false,
+                true,
+                \Db::REPLACE
+            );
         }
     }
 
@@ -28,9 +34,12 @@ trait FrontHooks
 
             $this->context->smarty->assign([
                 'address' => $address,
+                'delivery_settings' => $this->getDeliverySettingsByCart((int) $this->context->cart->id),
             ]);
 
             return $this->display($this->name, 'views/templates/hook/carrier.tpl');
         }
+
+        return '';
     }
 }
