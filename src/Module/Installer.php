@@ -153,19 +153,25 @@ class Installer
             $carrier->delay[$lang['id_lang']] = 'Super fast delivery';
         }
 
-        if ($carrier->add() == true) {
-            @copy(
-                _PS_MODULE_DIR_ . 'myparcel/views/images/' . $configuration['image'],
-                _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg'
-            );
-            Configuration::updateValue($configuration['configuration_name'], $carrier->id);
-            $insert = [];
-            foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
-                $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];
-            }
-            Db::getInstance()->insert('myparcel_carrier_configuration', $insert);
+        try {
+            if ($carrier->add()) {
+                @copy(
+                    _PS_MODULE_DIR_ . 'myparcel/views/images/' . $configuration['image'],
+                    _PS_SHIP_IMG_DIR_ . '/' . (int)$carrier->id . '.jpg'
+                );
+                Configuration::updateValue($configuration['configuration_name'], $carrier->id);
+                $insert = [];
+                foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
+                    $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];
+                }
+                Db::getInstance()->insert('myparcel_carrier_configuration', $insert);
 
-            return $carrier;
+                return $carrier;
+            }
+        } catch (\PrestaShopDatabaseException $e) {
+            \PrestaShopLogger::addLog('[MYPARCEL] PrestaShopDatabaseException carrier install: ' . $e->getMessage());
+        } catch (\PrestaShopException $e) {
+            \PrestaShopLogger::addLog('[MYPARCEL] PrestaShopException carrier install: ' . $e->getMessage());
         }
 
         return false;
