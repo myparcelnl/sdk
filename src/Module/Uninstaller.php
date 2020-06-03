@@ -82,7 +82,8 @@ class Uninstaller
             $idCarrier = (int) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query);
             if ($idCarrier) {
                 $carrier = new Carrier($idCarrier);
-                $result &= $carrier->delete();
+                $carrier->deleted = 1;
+                $result &= $carrier->update();
             }
         }
 
