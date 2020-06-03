@@ -41,28 +41,10 @@ class Installer
             }
 
             foreach ($carriers as $item) {
-                if (!Configuration::get($item['configuration_name'])) {
-                    $carrier = $this->addCarrier($item);
-                    $this->addZones($carrier);
-                    $this->addGroups($carrier);
-                    $this->addRanges($carrier);
-                } else {
-                    foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $field) {
-                        $exists = Db::getInstance()->executeS('SELECT *
-                            FROM ' . _DB_PREFIX_ . 'myparcel_carrier_configuration
-                            WHERE name = "' . pSQL($field) . '"
-                                AND id_carrier = ' . (int) Configuration::get($item['configuration_name']));
-                        if (!$exists) {
-                            Db::getInstance()->insert(
-                                'myparcel_carrier_configuration',
-                                [
-                                    'name' => $field,
-                                    'id_carrier' => (int) Configuration::get($item['configuration_name'])
-                                ]
-                            );
-                        }
-                    }
-                }
+                $carrier = $this->addCarrier($item);
+                $this->addZones($carrier);
+                $this->addGroups($carrier);
+                $this->addRanges($carrier);
             }
         }
 
@@ -176,13 +158,7 @@ class Installer
                 _PS_MODULE_DIR_ . 'myparcel/views/images/' . $configuration['image'],
                 _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg'
             );
-            Db::getInstance()->insert(
-                'configuration',
-                [
-                    'name' => $configuration['configuration_name'],
-                    'value' => $carrier->id
-                ]
-            );
+            Configuration::updateValue($configuration['configuration_name'], $carrier->id);
             $insert = [];
             foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
                 $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];

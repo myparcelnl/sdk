@@ -2,8 +2,10 @@
 
 namespace Gett\MyParcel\Module\Configuration;
 
+use Db;
+use Configuration;
 use Gett\MyParcel\Constant;
-use PrestaShop\PrestaShop\Adapter\Tools;
+use Tools;
 
 class Carriers
 {
@@ -18,8 +20,9 @@ class Carriers
 
     public function __invoke(): string
     {
-        if (\Tools::isSubmit('submitMyparcelCarrierSettings')) {
-            foreach (\Tools::getAllValues() as $key => $value) {
+        if (Tools::isSubmit('submitMyparcelCarrierSettings')) {
+            $dropOff = [];
+            foreach (Tools::getAllValues() as $key => $value) {
                 if (stripos($key, 'dropOffDays') !== false) {
                     $temp = explode('_', $key);
                     $dropOff[] = end($temp);
@@ -29,11 +32,15 @@ class Carriers
                 $_POST['dropOffDays'] = implode(';', $dropOff);
             }
             foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $value) {
-                \DB::getInstance()->update('myparcel_carrier_configuration', ['value' => pSQL(\Tools::getValue($value))], 'id_carrier = "' . \Tools::getValue('id_carrier') . '" AND name = "' . pSQL($value) . '" ');
+                Db::getInstance()->update(
+                    'myparcel_carrier_configuration',
+                    ['value' => pSQL(Tools::getValue($value))],
+                    'id_carrier = "' . Tools::getValue('id_carrier') . '" AND name = "' . pSQL($value) . '" '
+                );
             }
         }
 
-        if (\Tools::isSubmit('updatecarrier')) {
+        if (Tools::isSubmit('updatecarrier')) {
             return $this->getForm();
         }
 
@@ -43,8 +50,8 @@ class Carriers
     private function getForm()
     {
         $carrier = $this->module->l('Carriers');
-        if (\Tools::getValue('id_carrier')){
-            $carrier = (new \Carrier(\Tools::getValue('id_carrier')))->name;
+        if (Tools::getValue('id_carrier')){
+            $carrier = (new \Carrier(Tools::getValue('id_carrier')))->name;
         }
 
         $deliveryDaysOptions = array(
@@ -197,7 +204,7 @@ class Carriers
                         'hint' => [
                             $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
                         ],
-                        'desc' =>                             $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                        'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
 
                     ],
                     [
@@ -208,7 +215,7 @@ class Carriers
                         'hint' => [
                             $this->module->l('When there is no title, the delivery time will automatically be visible.'),
                         ],
-                        'desc' =>                             $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.'),
 
                     ],
                     [
@@ -362,7 +369,7 @@ class Carriers
                         'tab' => 'delivery',
                         'type' => 'select',
                         'label' => $this->module->l('Default package type'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => 'Package'],
@@ -382,7 +389,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Deliver only to recipient'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
@@ -393,14 +400,14 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Age check'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
                         'tab' => 'delivery',
                         'type' => 'select',
                         'label' => $this->module->l('Default package format'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => 'Normal'],
@@ -423,7 +430,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Return package when recipient is not home'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
@@ -434,7 +441,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Recipient need to sign'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
@@ -445,7 +452,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Package with insurance'),
-                        'name' => \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+                        'name' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
 
@@ -453,7 +460,7 @@ class Carriers
                         'tab' => 'return',
                         'type' => 'select',
                         'label' => $this->module->l('Default package type'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => 'Package'],
@@ -473,7 +480,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Deliver only to recipient'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -484,14 +491,14 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Age check'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
                         'tab' => 'return',
                         'type' => 'select',
                         'label' => $this->module->l('Default package format'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => 'Normal'],
@@ -514,7 +521,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Return package when recipient is not home'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -525,7 +532,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Recipient need to sign'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -536,7 +543,7 @@ class Carriers
                             ['id' => 'no', 'value' => 0, 'label' => 'No'],
                         ],
                         'label' => $this->module->l('Package with insurance'),
-                        'name' => 'return_' . \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -555,16 +562,18 @@ class Carriers
         $helper->show_toolbar = false;
         $helper->module = $this->module;
         $helper->default_form_language = $this->context->language->id;
-        $helper->allow_employee_form_lang = \Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
+        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
 
         $helper->submit_action = 'submitMyparcelCarrierSettings';
-        $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . \Tools::getValue(
+        $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . Tools::getValue(
             'menu',
             0
         );
-        $helper->token = \Tools::getAdminTokenLite('AdminModules');
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
 
-        $result = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'myparcel_carrier_configuration WHERE id_carrier = "' . \Tools::getValue('id_carrier') . '"  ');
+        $result = Db::getInstance()->executeS('SELECT *
+            FROM ' . _DB_PREFIX_ . 'myparcel_carrier_configuration
+            WHERE id_carrier = "' . Tools::getValue('id_carrier') . '"  ');
         $vars = [];
         foreach ($result as $item) {
             if ($item['name'] == 'dropOffDays') {
@@ -576,7 +585,7 @@ class Carriers
             $vars[$item['name']] = $item['value'];
         }
 
-        $vars['id_carrier'] = \Tools::getValue('id_carrier');
+        $vars['id_carrier'] = Tools::getValue('id_carrier');
         $helper->tpl_vars = [
             'fields_value' => $vars,
         ];
@@ -606,15 +615,20 @@ class Carriers
         $helper->identifier = 'id_carrier';
         $helper->title = "{$this->module->l('Delivery options')}";
         $helper->table = 'carrier';
-        $helper->token = \Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . \Tools::getValue(
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . Tools::getValue(
             'menu',
             0
         );
         $helper->colorOnBackground = true;
         $helper->no_link = true;
 
-        $list = \Db::getInstance()->executeS('SELECT a.* FROM `' . _DB_PREFIX_ . "carrier` a WHERE a.external_module_name = '" . $this->module->name . "' AND a.`deleted` = 0 ORDER BY a.`position` ASC LIMIT 0, 50");
+        $list = Db::getInstance()->executeS('SELECT a.*
+            FROM `' . _DB_PREFIX_ . "carrier` a
+            WHERE a.external_module_name = '" . $this->module->name . "'
+                AND a.`deleted` = 0
+            ORDER BY a.`position` ASC
+            LIMIT 0, 50");
 
         return $helper->generateList($list, $fieldsList);
     }
