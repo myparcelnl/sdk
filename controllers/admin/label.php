@@ -277,14 +277,18 @@ class LabelController extends ModuleAdminControllerCore
         }
         $tomorrow = new \DateTime('tomorrow');
         try {
-            $oldDate = new \DateTime($deliveryDate);
+            $deliveryDateObj = new \DateTime($deliveryDate);
         } catch (Exception $e) {
-            return $deliveryDate;
+            return $tomorrow->format('Y-m-d H:i:s');
         }
+        $oldDate = clone $deliveryDateObj;
         $tomorrow->setTime(0, 0, 0, 0);
         $oldDate->setTime(0, 0, 0, 0);
         if ($tomorrow > $oldDate) {
-            $deliveryDate = null; //$tomorrow->format('Y-m-d H:i:s');
+            do {
+                $deliveryDateObj->add(new DateInterval('P1D'));
+            } while ($tomorrow > $deliveryDateObj || $deliveryDateObj->format('w') == 0);
+            $deliveryDate = $deliveryDateObj->format('Y-m-d H:i:s');
         }
 
         return $deliveryDate;
