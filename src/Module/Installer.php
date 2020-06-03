@@ -5,6 +5,9 @@ namespace Gett\MyParcel\Module;
 use Tab;
 use Carrier;
 use Gett\MyParcel\Constant;
+use Configuration;
+use Db;
+use Context;
 
 class Installer
 {
@@ -33,21 +36,30 @@ class Installer
 
         if ($result) {
             $carriers = self::$carriers_nl;
-            if (\MyParcel::isBE()) {
+            if ($this->module->isBE()) {
                 $carriers = array_merge($carriers, self::$carriers_be);
             }
 
             foreach ($carriers as $item) {
-                if (!\Configuration::get($item['configuration_name'])) {
+                if (!Configuration::get($item['configuration_name'])) {
                     $carrier = $this->addCarrier($item);
                     $this->addZones($carrier);
                     $this->addGroups($carrier);
                     $this->addRanges($carrier);
                 } else {
                     foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $field) {
-                        $exists = \Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'myparcel_carrier_configuration WHERE name = "' . $field . '" AND id_carrier = "' . \Configuration::get($item['configuration_name']) . '"   ');
+                        $exists = Db::getInstance()->executeS('SELECT *
+                            FROM ' . _DB_PREFIX_ . 'myparcel_carrier_configuration
+                            WHERE name = "' . pSQL($field) . '"
+                                AND id_carrier = ' . (int) Configuration::get($item['configuration_name']));
                         if (!$exists) {
-                            \Db::getInstance()->insert('myparcel_carrier_configuration', [['name' => $field, 'id_carrier' => \Configuration::get($item['configuration_name'])]]);
+                            Db::getInstance()->insert(
+                                'myparcel_carrier_configuration',
+                                [
+                                    'name' => $field,
+                                    'id_carrier' => (int) Configuration::get($item['configuration_name'])
+                                ]
+                            );
                         }
                     }
                 }
@@ -160,13 +172,22 @@ class Installer
         }
 
         if ($carrier->add() == true) {
-            @copy(_PS_MODULE_DIR_ . 'myparcel/views/images/' . $configuration['image'], _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg');
-            \Db::getInstance()->insert('configuration', ['name' => $configuration['configuration_name'], 'value' => $carrier->id]);
+            @copy(
+                _PS_MODULE_DIR_ . 'myparcel/views/images/' . $configuration['image'],
+                _PS_SHIP_IMG_DIR_ . '/' . (int) $carrier->id . '.jpg'
+            );
+            Db::getInstance()->insert(
+                'configuration',
+                [
+                    'name' => $configuration['configuration_name'],
+                    'value' => $carrier->id
+                ]
+            );
             $insert = [];
             foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
                 $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];
             }
-            \Db::getInstance()->insert('myparcel_carrier_configuration', $insert);
+            Db::getInstance()->insert('myparcel_carrier_configuration', $insert);
 
             return $carrier;
         }
@@ -177,7 +198,7 @@ class Installer
     protected function addGroups($carrier)
     {
         $groups_ids = [];
-        $groups = \Group::getGroups(\Context::getContext()->language->id);
+        $groups = \Group::getGroups(Context::getContext()->language->id);
         foreach ($groups as $group) {
             $groups_ids[] = $group['id_group'];
         }
