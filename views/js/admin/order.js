@@ -18,17 +18,20 @@ window.addEventListener('load', function() {
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            ids = {};
+            let ids = {};
+            let idsArray = [];
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
                 if (document.querySelector('button[data-order-id="'+e.value+'"]')){
                     ids[e.value] = document.querySelector('button[data-order-id="'+e.value+'"]').dataset.labelOptions;
+                    idsArray.push(e.value);
                 }
             });
-            if (ids.length == 0) {
+            if (!idsArray.length) {
                 $('#ajax_confirmation').before(
                     '<div class="alert alert-danger">' +
-                    '<button type="button" class="close" data-dismiss="alert">×</button>'+create_label_error+'</div>'
-                )
+                    '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
+                );
+                $.scrollTo(0);
                 return;
             }
             $.ajax({
@@ -39,7 +42,7 @@ window.addEventListener('load', function() {
                 }
             }).done((result) => {
                  window.location.reload();
-            }).fail(() => {
+            }).fail((error) => {
                 $('#ajax_confirmation').before(
                     '<div class="alert alert-danger">' +
                     '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
@@ -57,10 +60,19 @@ window.addEventListener('load', function() {
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            ids = [];
+            let ids = [];
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
                 ids.push(e.value);
             });
+
+            if (!ids.length) {
+                $('#ajax_confirmation').before(
+                  '<div class="alert alert-danger">' +
+                  '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
+                );
+                $.scrollTo(0);
+                return false;
+            }
 
             $.ajax({
                 method: "POST",
@@ -93,6 +105,7 @@ window.addEventListener('load', function() {
             let ids = [];
             $('#print-bulk-form').find('input[name="order_ids[]"]').remove();
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
+                ids.push(e.value);
                 let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
                 $labelIdInput.prependTo('#bulk-print form');
             });
@@ -170,6 +183,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
             );
         });
+    });
+
+    $('#print-bulk-form').on('submit', function(e) {
+        if (!$('input[name="order_ids[]"]', $(this)).length) {
+            e.preventDefault();
+            $('#ajax_confirmation').before(
+              '<div class="alert alert-danger">' +
+              '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
+            );
+            $('#bulk-print').modal('hide');
+            $.scrollTo(0);
+        }
     });
 });
 

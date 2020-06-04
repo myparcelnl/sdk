@@ -13,12 +13,12 @@
                     <input type="hidden" name="label_id" id="id_label">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
-                            <input id="a4_bulk" type="radio" value="a4" name="format" class="myparcel-radio">
-                            <label for="a4_bulk">A4</label>
+                            <input id="a4" type="radio" value="a4" name="format" class="myparcel-radio">
+                            <label for="a4">A4</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="a6_bulk" type="radio" checked value="a6" name="format" class="myparcel-radio">
-                            <label for="a6_bulk">A6</label>
+                            <input id="a6" type="radio" checked value="a6" name="format" class="myparcel-radio">
+                            <label for="a6">A6</label>
                         </div>
                     </div>
                     <br>
@@ -57,27 +57,27 @@
                 <form action="{$print_bulk_action}" method="post" id="print-bulk-form">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
-                            <input id="a4" type="radio" value="a4" name="format" class="myparcel-radio">
-                            <label for="a4">A4</label>
+                            <input id="a4_bulk" type="radio" value="a4" name="format" class="myparcel-radio">
+                            <label for="a4_bulk">A4</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="a6" type="radio" checked value="a6" name="format" class="myparcel-radio">
-                            <label for="a6">A6</label>
+                            <input id="a6_bulk" type="radio" checked value="a6" name="format" class="myparcel-radio">
+                            <label for="a6_bulk">A6</label>
                         </div>
                     </div>
                     <br>
                     <div class="positions-block">
-                        <input id="top-left" type="checkbox" value="1" name="position[]">
-                        <label for="top-left">{l s='Top-left' d='Modules.Myparcel.Front'}</label>
+                        <input id="top-left-bulk" type="checkbox" value="1" name="position[]">
+                        <label for="top-left-bulk">{l s='Top-left' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="top-right" type="checkbox" value="2" name="position[]">
-                        <label for="top-right">{l s='Top-right' d='Modules.Myparcel.Front'}</label>
+                        <input id="top-right-bulk" type="checkbox" value="2" name="position[]">
+                        <label for="top-right-bulk">{l s='Top-right' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="bottom-left" type="checkbox" value="3" name="position[]">
-                        <label for="bottom-left">{l s='Print' d='Modules.Myparcel.Admin'}</label>
+                        <input id="bottom-left-bulk" type="checkbox" value="3" name="position[]">
+                        <label for="bottom-left-bulk">{l s='Print' d='Modules.Myparcel.Admin'}</label>
                         <br>
-                        <input id="bottom-right" type="checkbox" value="4" name="position[]">
-                        <label for="bottom-right">{l s='Bottom-right' d='Modules.Myparcel.Front'}</label>
+                        <input id="bottom-right-bulk" type="checkbox" value="4" name="position[]">
+                        <label for="bottom-right-bulk">{l s='Bottom-right' d='Modules.Myparcel.Front'}</label>
                     </div>
                 </form>
             </div>

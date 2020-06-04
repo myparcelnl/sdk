@@ -23,7 +23,7 @@ trait LegacyOrderPageHooks
             $this->context->smarty->assign([
                 'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
-                'print_bulk_action' => $link->getAdminLink('Label', true, ['action' => 'print']),
+                'print_bulk_action' => $link->getAdminLink('Label', true, [], ['action' => 'print']),
                 'isBE' => $this->isBE(),
             ]);
 
@@ -109,6 +109,7 @@ trait LegacyOrderPageHooks
                     'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
                     'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
                     'create_label_error' => $this->l('Cannot create label for orders'),
+                    'no_order_selected_error' => $this->l('Please select at least one order first.'),
                 ]
             );
 

@@ -35,15 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
     changeInsuranceHigherAmount();
   });
   changeInsuranceHigherAmount();
-  if (typeof prompt_for_label_position != 'undefined') {
-    if (prompt_for_label_position == 1) {
+  if (typeof prompt_for_label_position !== 'undefined') {
+    if (parseInt(prompt_for_label_position) === 1) {
       $('#a6, #a6_bulk').change(function () {
         $('.positions-block').hide();
       });
       $('#a4, #a4_bulk').change(function () {
         $('.positions-block').show();
       });
-      if ($('#a6').attr('checked') == 'checked' || $('#a6_bulk').attr('checked') == 'checked') {
+      if ($('#a6').is(':checked') || $('#a6_bulk').is(':checked')) {
         $('.positions-block').hide();
       }
     } else {
