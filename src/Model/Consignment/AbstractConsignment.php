@@ -993,7 +993,6 @@ class AbstractConsignment
     /**
      * @param string $setPostalCode
      *
-     * @return $this
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \BadMethodCallException
      * @throws \Exception
