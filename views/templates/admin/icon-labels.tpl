@@ -1,6 +1,6 @@
 {foreach from=$labels item=label}
     <label>{$label['status']}</label>
-    <a href="{$label['track_link']}" >{$label['barcode']}</a>
+    <a class="_blank" href="{$label['track_link']}">{$label['barcode']}</a>
 
     <button class="btn btn-link" data-toggle="modal"
             type="button"
