@@ -28,6 +28,7 @@ trait DisplayAdminProductsExtra
             [
                 'params' => $params,
                 'countries' => \Country::getCountries(\Context::getContext()->language->id),
+                'isBE' => $this->isBE(),
             ]
         );
 

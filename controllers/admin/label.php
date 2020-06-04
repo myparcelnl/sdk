@@ -103,7 +103,8 @@ class LabelController extends ModuleAdminControllerCore
             }
             \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
             $collection->setLinkOfLabels();
-            if (Tools::getValue(\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME)) {
+            if ($this->module->isNL()
+                && Tools::getValue(\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME)) {
                 $collection->sendReturnLabelMails();
             }
         } catch (Exception $e) {

@@ -393,7 +393,7 @@ class Carriers
                         'tab' => 'delivery',
                     ],
                     [
-                        'type' => 'switch',
+                        'type' => $this->getExclusiveFieldType(Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
@@ -423,7 +423,7 @@ class Carriers
                         ],
                     ],
                     [
-                        'type' => 'switch',
+                        'type' => $this->getExclusiveFieldType(Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
@@ -484,7 +484,7 @@ class Carriers
                         'tab' => 'return',
                     ],
                     [
-                        'type' => 'switch',
+                        'type' => $this->getExclusiveFieldType('return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
@@ -514,7 +514,7 @@ class Carriers
                         ],
                     ],
                     [
-                        'type' => 'switch',
+                        'type' => $this->getExclusiveFieldType('return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
@@ -586,6 +586,7 @@ class Carriers
         }
 
         $vars['id_carrier'] = Tools::getValue('id_carrier');
+        $this->setExclusiveFieldsValues($vars);
         $helper->tpl_vars = [
             'fields_value' => $vars,
         ];
@@ -631,5 +632,28 @@ class Carriers
             LIMIT 0, 50");
 
         return $helper->generateList($list, $fieldsList);
+    }
+
+    private function getExclusiveFieldType(string $field): string
+    {
+        $fieldType = 'switch';
+        if (!$this->module->isBE()) {
+            return $fieldType;
+        }
+
+        if (in_array($field, Constant::MY_PARCEL_EXCLUSIVE_FIELDS_NL)) {
+            $fieldType = 'hidden';
+        }
+
+        return $fieldType;
+    }
+
+    private function setExclusiveFieldsValues(array &$vars): void
+    {
+        if ($this->module->isBE()) {
+            foreach (Constant::MY_PARCEL_EXCLUSIVE_FIELDS_NL as $field) {
+                $vars[$field] = 0;
+            }
+        }
     }
 }

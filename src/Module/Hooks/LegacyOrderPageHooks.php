@@ -19,11 +19,12 @@ trait LegacyOrderPageHooks
                 $this->_path . 'views/js/admin/order.js'
             );
 
-            $link = new \Link();
+            $link = $this->context->link;
             $this->context->smarty->assign([
                 'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
-                'print_bulk_action' => $this->getAdminLink('Label', true, ['action' => 'print']),
+                'print_bulk_action' => $link->getAdminLink('Label', true, ['action' => 'print']),
+                'isBE' => $this->isBE(),
             ]);
 
             return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');

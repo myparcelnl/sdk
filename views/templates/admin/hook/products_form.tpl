@@ -63,12 +63,14 @@
                         {l s='Only recipient' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
+                {if !$isBE}
                 <div class="form-check">
                     <label>
                         <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="ageCheck">
                         {l s='Age check' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
+                {/if}
             </div>
             <div class="form-group">
                 <label for="package-type-select">{l s='Select package format' d='Modules.Myparcel.Front'}</label>
@@ -79,12 +81,14 @@
                 </select>
             </div>
             <div class="form-group">
+                {if !$isBE}
                 <div class="form-check">
                     <label>
                         <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="gridCheck">
                         {l s='Return package' d='Modules.Myparcel.Front'}
                     </label>
                 </div>
+                {/if}
                 <div class="form-check">
                     <label>
                         <input class="form-check-input" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" type="checkbox" {if $params[Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME] == 1}checked{/if} value="1" id="signature">

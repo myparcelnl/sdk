@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{$download_action}" method="post" id = "print-form" >
+                <form action="{$download_action}" method="post" id="print-form">
                     <input type="hidden" name="label_id" id="id_label">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
@@ -39,7 +39,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' d='Modules.Myparcel.Front'}</button>
-                <button type="button" id = "print_button" class="btn btn-primary">{l s='Save changes' d='Modules.Myparcel.Front'}</button>
+                <button type="button" id="print_button" class="btn btn-primary">{l s='Save changes' d='Modules.Myparcel.Front'}</button>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{$print_bulk_action}" method="post" id="print-bulk-form" >
+                <form action="{$print_bulk_action}" method="post" id="print-bulk-form">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
                             <input id="a4" type="radio" value="a4" name="format" class="myparcel-radio">
@@ -106,7 +106,7 @@
 
                 <div class="form-group">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}">{l s='Package type' d='Modules.Myparcel.Front'}</label>
-                    <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}"  id="package-type" class="custom-select">
+                    <select name="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME}" id="package-type" class="custom-select">
                         <option value="1">{l s='Packet' d='Modules.Myparcel.Front'}</option>
                         <option value="2">{l s='Mailbox package' d='Modules.Myparcel.Front'}</option>
                         <option value="3">{l s='Letter' d='Modules.Myparcel.Front'}</option>
@@ -119,10 +119,12 @@
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME}">{l s='Only to receipient' d='Modules.Myparcel.Front'}</label>
                 </div>
 
+                {if !$isBE}
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME}">{l s='Age check' d='Modules.Myparcel.Front'}</label>
                 </div>
+                {/if}
 
                 <div class="form-group">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME}">{l s='Package format' d='Modules.Myparcel.Front'}</label>
@@ -133,10 +135,12 @@
                     </select>
                 </div>
 
+                {if !$isBE}
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME}">{l s='Return package' d='Modules.Myparcel.Front'}</label>
                 </div>
+                {/if}
 
                 <div class="form-group">
                     <input type="checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME}">
@@ -144,7 +148,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" id="myparcel-insurance-checkbox" ./value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
+                    <input type="checkbox" id="myparcel-insurance-checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">{l s='Insurnance' d='Modules.Myparcel.Front'}</label>
                 </div>
                 <div class="insurance-additional-container">
@@ -180,7 +184,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' d='Modules.Myparcel.Front'}</button>
-                <button type="button" id = "add" class="btn btn-primary">{l s='Save changes' d='Modules.Myparcel.Front'}</button>
+                <button type="button" id="add" class="btn btn-primary">{l s='Save changes' d='Modules.Myparcel.Front'}</button>
             </div>
         </div>
     </div>
