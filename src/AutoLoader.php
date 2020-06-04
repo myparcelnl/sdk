@@ -9,6 +9,7 @@ require_once('Helper/RequestError.php');
 require_once('Helper/MyParcelCollection.php');
 require_once('Helper/MyParcelCurl.php');
 require_once('Helper/SplitStreet.php');
+require_once('Helper/Validate.php');
 require_once('Helper/LabelHelper.php');
 require_once('Helper/CheckoutFields.php');
 require_once('Helper/TrackTraceUrl.php');
