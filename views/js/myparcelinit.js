@@ -2,30 +2,28 @@ $(document).ready(function() {
     let initialized = false;
 
     let initializeMyParcelForm = async function($option) {
-        if(!$option.length) {
-            console.log('option empty');
+        if (!$option.length) {
             return false;
         }
 
         let $wrapper = $option.closest('.delivery-option').next().find('.myparcel-delivery-options-wrapper');
-        if(!$wrapper.length) {
-            console.log('wrapper empty');
+        if (!$wrapper.length) {
             return false;
         }
 
         let $currentCarrier = $('.delivery-option input:checked');
         let currentCarrierId = $currentCarrier.val();
         $.ajax({
-          url: "/index.php?fc=module&module=myparcel&controller=checkout&id_carrier=" + currentCarrierId,
+          url: '/index.php?fc=module&module=myparcel&controller=checkout&id_carrier=' + currentCarrierId,
           dataType: "json",
           success: function(data) {
             window.MyParcelConfig = data;
 
-            if(initialized) {
+            if (initialized) {
               let $form = $('.myparcel-delivery-options');
               let $input = $('#mypa-input');
 
-              if($form.length) {
+              if ($form.length) {
                 $form.detach().appendTo($wrapper);
                 $input.detach().appendTo($wrapper);
                 document.dispatchEvent(new Event('myparcel_update_delivery_options'));
@@ -35,15 +33,15 @@ $(document).ready(function() {
               }
             }
 
-            let container = document.createElement("div");
+            let container = document.createElement('div');
             container.id = 'myparcel-delivery-options';
             $wrapper[0].appendChild(container);
 
-            let input = document.createElement("input");
+            let input = document.createElement('input');
             input.id = 'mypa-input';
             input.classList.add('mypa-post-nl-data');
-            input.style = "display:none;";
-            input.name = "myparcel-delivery-options";
+            input.style = 'display:none;';
+            input.name = 'myparcel-delivery-options';
             $wrapper[0].appendChild(input);
 
             document.dispatchEvent(new Event('myparcel_update_delivery_options'));
@@ -100,7 +98,11 @@ $(document).ready(function() {
     }
 
     $(document).on('change', '.delivery-option input', function() {
-        initializeMyParcelForm($(this));
+        //initializeMyParcelForm($(this));
+    });
+    prestashop.on('updatedDeliveryForm', function(event) {
+      let $parent = $(event.deliveryOption);
+      initializeMyParcelForm($('input:checked', $parent));
     });
     initializeMyParcelForm($('.delivery-option input:checked'));
 

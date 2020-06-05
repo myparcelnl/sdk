@@ -168,6 +168,9 @@ class MyParcel extends CarrierModule
 
     public function getOrderShippingCost($cart, $shipping_cost)
     {
+        if ($this->id_carrier != $cart->id_carrier) {
+            return $shipping_cost;
+        }
         $myParcelCost = 0;
         $deliverySettings = $this->getDeliverySettingsByCart((int) $cart->id);
         if (empty($deliverySettings)) {
