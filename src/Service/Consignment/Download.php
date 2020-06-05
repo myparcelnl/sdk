@@ -33,11 +33,14 @@ class Download
 
         try {
             $collection = MyParcelCollection::findMany($id_labels, $this->api_key);
-            $collection
-                ->setPdfOfLabels($this->fetchPositions())
-                ->downloadPdfOfLabels($this->configuration->get(Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false))
-            ;
-            Logger::addLog($collection->toJson());
+            if (!empty($collection->getConsignments())) {
+                $collection
+                    ->setPdfOfLabels($this->fetchPositions())
+                    ->downloadPdfOfLabels($this->configuration->get(Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false));
+                Logger::addLog($collection->toJson());
+            } else {
+                \Tools::redirectAdmin(\Context::getContext()->link->getAdminLink('AdminOrders'));
+            }
         } catch (\Exception $e) {
             Logger::addLog($e->getMessage(), true);
         }
