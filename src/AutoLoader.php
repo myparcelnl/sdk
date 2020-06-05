@@ -1,5 +1,4 @@
 <?php declare(strict_types=1);
-require_once('Support/CollectionProxy.php');
 require_once('Support/Arr.php');
 require_once('Support/Collection.php');
 require_once('Support/Helpers.php');

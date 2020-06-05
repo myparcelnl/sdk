@@ -33,9 +33,9 @@ use IteratorAggregate;
  * @property-read HigherOrderCollectionProxy $unique
  *
  * Class Collection
- * @example https://laravel.com/docs/5.7/collections
+ * @see https://laravel.com/docs/7.x
  */
-class Collection extends CollectionProxy implements ArrayAccess, Countable, IteratorAggregate
+class Collection implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @var Helpers
