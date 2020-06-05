@@ -112,7 +112,7 @@ class MyParcelCollection extends Collection
     public function getConsignmentsByReferenceId($id): MyParcelCollection
     {
         if ($id === null) {
-            throw new InvalidArgumentException ('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
+            throw new InvalidArgumentException('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
         if ($this->count() === 1) {
@@ -270,7 +270,6 @@ class MyParcelCollection extends Collection
     public function createConcepts(): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
-
         $this->addMissingReferenceId();
 
         /* @var $consignments MyParcelCollection */
@@ -512,7 +511,6 @@ class MyParcelCollection extends Collection
      */
     public function sendReturnLabelMails()
     {
-
         $parentConsignment = $this->getConsignments(false)[0];
 
         $apiKey = $parentConsignment->getApiKey();
@@ -678,7 +676,6 @@ class MyParcelCollection extends Collection
         $collection = new static();
 
         foreach ($consignmentIds as $id) {
-
             $consignment = new AbstractConsignment();
             $consignment->setConsignmentId((int) $id);
             $consignment->setApiKey($apiKey);
@@ -712,11 +709,9 @@ class MyParcelCollection extends Collection
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {
-
         $collection = new static();
 
         foreach ($referenceIds as $id) {
-
             $consignment = new AbstractConsignment();
             $consignment->setReferenceId($id);
             $consignment->setApiKey($apiKey);
@@ -817,7 +812,7 @@ class MyParcelCollection extends Collection
      */
     private function addMissingReferenceId(): void
     {
-        $this->transform(function(AbstractConsignment $consignment) {
+        $this->transform(function (AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
@@ -833,7 +828,7 @@ class MyParcelCollection extends Collection
      */
     private function findByReferenceIdGroup($id): MyParcelCollection
     {
-        return $this->filter(function($consignment) use ($id) {
+        return $this->filter(function ($consignment) use ($id) {
             /**
              * @var AbstractConsignment $consignment
              */
