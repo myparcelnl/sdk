@@ -96,7 +96,7 @@ class SplitStreet
         // Replace house number suffix by an abbreviation, only possible for the Netherlands
         if ($destination === AbstractConsignment::CC_NL) {
             foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
-                $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
+                $fullStreet = preg_replace("/(\d.*-?)[\s]$from/i", '$1' . $to, $fullStreet);
             }
         }
 

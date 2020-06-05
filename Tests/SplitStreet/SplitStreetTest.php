@@ -308,7 +308,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'country'           => 'NL',
-                'full_street_input' => 'Markerkant 10 apartment a',
+                'full_street_input' => 'Markerkant 10 Apartment a',
                 'full_street'       => 'Markerkant 10 a',
                 'street'            => 'Markerkant',
                 'number'            => 10,
