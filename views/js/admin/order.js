@@ -123,9 +123,12 @@ window.addEventListener('load', function() {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    $('button[data-target="#print"]').click(function(){
+    $('button.btn-print-label').click(function(){
         var id = $(this).data('label-id');
         $('#id_label').val(id);
+        if (!$(this).hasClass('label-modal')) {
+            $('#print_button').trigger('click');
+        }
     });
     $('button[data-target="#create"]').click(function(){
         var id = $(this).data('order-id'),

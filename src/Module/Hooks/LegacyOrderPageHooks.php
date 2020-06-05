@@ -81,6 +81,7 @@ trait LegacyOrderPageHooks
         $this->context->smarty->assign([
             'labels' => $result,
             'link' => $link,
+            'promptForLabelPosition' => Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
         ]);
 
         return $this->display($this->name, 'views/templates/admin/icon-labels.tpl');
