@@ -13,26 +13,64 @@
                     <input type="hidden" name="label_id" id="id_label">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
-                            <input id="a4" type="radio" value="a4" name="format" class="myparcel-radio">
+                            <input
+                                    id="a4"
+                                    type="radio"
+                                    value="a4"
+                                    name="format"
+                                    class="myparcel-radio"
+                                    {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a4'}checked="checked"{/if}
+                            >
                             <label for="a4">A4</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="a6" type="radio" checked value="a6" name="format" class="myparcel-radio">
+                            <input
+                                    id="a6"
+                                    type="radio"
+                                    value="a6"
+                                    name="format"
+                                    class="myparcel-radio"
+                                    {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a6'}checked="checked"{/if}
+                            >
                             <label for="a6">A6</label>
                         </div>
                     </div>
                     <br>
                     <div class="positions-block">
-                        <input id="top-left" type="checkbox" value="1" name="position[]">
+                        <input
+                                id="top-left"
+                                type="checkbox"
+                                value="1"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 1}checked="checked"{/if}
+                        >
                         <label for="top-left">{l s='Top-left' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="top-right" type="checkbox" value="2" name="position[]">
+                        <input
+                                id="top-right"
+                                type="checkbox"
+                                value="2"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 2}checked="checked"{/if}
+                        >
                         <label for="top-right">{l s='Top-right' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="bottom-left" type="checkbox" value="3" name="position[]">
+                        <input
+                                id="bottom-left"
+                                type="checkbox"
+                                value="3"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 3}checked="checked"{/if}
+                        >
                         <label for="bottom-left">{l s='Bottom-left' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="bottom-right" type="checkbox" value="4" name="position[]">
+                        <input
+                                id="bottom-right"
+                                type="checkbox"
+                                value="4"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 4}checked="checked"{/if}
+                        >
                         <label for="bottom-right">{l s='Bottom-right' d='Modules.Myparcel.Front'}</label>
                     </div>
                 </form>
@@ -57,26 +95,64 @@
                 <form action="{$print_bulk_action}" method="post" id="print-bulk-form">
                     <div class="myparcel-radio-wrapper">
                         <div class="myparcel-radio-container">
-                            <input id="a4_bulk" type="radio" value="a4" name="format" class="myparcel-radio">
+                            <input
+                                    id="a4_bulk"
+                                    type="radio"
+                                    value="a4"
+                                    name="format"
+                                    class="myparcel-radio"
+                                    {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a4'}checked="checked"{/if}
+                            >
                             <label for="a4_bulk">A4</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="a6_bulk" type="radio" checked value="a6" name="format" class="myparcel-radio">
+                            <input
+                                    id="a6_bulk"
+                                    type="radio"
+                                    value="a6"
+                                    name="format"
+                                    class="myparcel-radio"
+                                    {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a6'}checked="checked"{/if}
+                            >
                             <label for="a6_bulk">A6</label>
                         </div>
                     </div>
                     <br>
                     <div class="positions-block">
-                        <input id="top-left-bulk" type="checkbox" value="1" name="position[]">
+                        <input
+                                id="top-left-bulk"
+                                type="checkbox"
+                                value="1"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 1}checked="checked"{/if}
+                        >
                         <label for="top-left-bulk">{l s='Top-left' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="top-right-bulk" type="checkbox" value="2" name="position[]">
+                        <input
+                                id="top-right-bulk"
+                                type="checkbox"
+                                value="2"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 2}checked="checked"{/if}
+                        >
                         <label for="top-right-bulk">{l s='Top-right' d='Modules.Myparcel.Front'}</label>
                         <br>
-                        <input id="bottom-left-bulk" type="checkbox" value="3" name="position[]">
+                        <input
+                                id="bottom-left-bulk"
+                                type="checkbox"
+                                value="3"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 3}checked="checked"{/if}
+                        >
                         <label for="bottom-left-bulk">{l s='Print' d='Modules.Myparcel.Admin'}</label>
                         <br>
-                        <input id="bottom-right-bulk" type="checkbox" value="4" name="position[]">
+                        <input
+                                id="bottom-right-bulk"
+                                type="checkbox"
+                                value="4"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 4}checked="checked"{/if}
+                        >
                         <label for="bottom-right-bulk">{l s='Bottom-right' d='Modules.Myparcel.Front'}</label>
                     </div>
                 </form>
@@ -148,7 +224,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" id="myparcel-insurance-checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
+                    <input type="checkbox" class="myparcel-insurance-checkbox" value="1" id="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">
                     <label for="{Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME}">{l s='Insurnance' d='Modules.Myparcel.Front'}</label>
                 </div>
                 <div class="insurance-additional-container">

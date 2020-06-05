@@ -2,6 +2,7 @@
 
 namespace Gett\MyParcel\Module\Hooks;
 
+use Configuration;
 use Gett\MyParcel\Constant;
 use Gett\MyParcel\Label\LabelOptionsResolver;
 
@@ -15,6 +16,9 @@ trait LegacyOrderPageHooks
             \Media::addJsDef([
                 //TODO
             ]);
+            \Media::addJsDefL('print_labels_text', $this->l('Print labels'));
+            \Media::addJsDefL('refresh_labels_text', $this->l('Refresh labels'));
+            \Media::addJsDefL('create_label_text', $this->l('Create label'));
             $this->context->controller->addJS(
                 $this->_path . 'views/js/admin/order.js'
             );
@@ -25,6 +29,7 @@ trait LegacyOrderPageHooks
                 'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
                 'print_bulk_action' => $link->getAdminLink('Label', true, [], ['action' => 'print']),
                 'isBE' => $this->isBE(),
+                'labelConfiguration' => $this->getLabelDefaultConfiguration(),
             ]);
 
             return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');
@@ -41,7 +46,7 @@ trait LegacyOrderPageHooks
         $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`, a.id_carrier';
 
         $params['fields']['myparcel_void_1'] = [
-            'title' => 'Labels',
+            'title' => $this->l('Labels'),
             'class' => 'pointer-myparcel-labels text-center',
             'callback' => 'printMyParcelLabel',
             'search' => false,
@@ -102,9 +107,9 @@ trait LegacyOrderPageHooks
             $link = new \Link();
             \Media::addJsDef(
                 [
-                    'default_label_size' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
-                    'default_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
-                    'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+                    'default_label_size' => Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
+                    'default_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
+                    'prompt_for_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                     'create_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'createb']),
                     'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
                     'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
@@ -119,9 +124,9 @@ trait LegacyOrderPageHooks
         } elseif ($this->context->controller->php_self == 'AdminOrders') { //symfony controller
             \Media::addJsDef(
                 [
-                    'default_label_size' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
-                    'default_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
-                    'prompt_for_label_position' => \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+                    'default_label_size' => Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
+                    'default_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
+                    'prompt_for_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                 ]
             );
 
@@ -139,9 +144,17 @@ trait LegacyOrderPageHooks
         }
 
         return in_array($this->carrierList[$idCarrier], [
-            \Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
-            \Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
-            \Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
+            Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
+            Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
+            Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
+        ]);
+    }
+    
+    public function getLabelDefaultConfiguration(): array
+    {
+        return Configuration::getMultiple([
+            Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME,
+            Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME,
         ]);
     }
 }

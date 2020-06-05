@@ -56,8 +56,8 @@ class LabelForm extends AbstractForm
                 'options' => [
                     'query' => [
                         ['id' => '1', 'name' => $this->module->l('Top left')],
-                        ['id' => '3', 'name' => $this->module->l('Top right')],
-                        ['id' => '2', 'name' => $this->module->l('Bottom left')],
+                        ['id' => '2', 'name' => $this->module->l('Top right')],
+                        ['id' => '3', 'name' => $this->module->l('Bottom left')],
                         ['id' => '4', 'name' => $this->module->l('Bottom right')],
                     ],
                     'id' => 'id',

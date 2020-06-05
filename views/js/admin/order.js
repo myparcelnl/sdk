@@ -14,7 +14,7 @@ window.addEventListener('load', function() {
     let addBulkCreateLabel = function() {
         let link = document.createElement('a');
 
-        link.innerHTML = '<i class="icon-download"></i> ' + "Create label";
+        link.innerHTML = '<i class="icon-download"></i> ' + create_label_text;
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -56,7 +56,7 @@ window.addEventListener('load', function() {
     let addBulkRefreshLabel = function() {
         let link = document.createElement('a');
 
-        link.innerHTML = '<i class="icon-download"></i> ' + "Refresh labels";
+        link.innerHTML = '<i class="icon-download"></i> ' + refresh_labels_text;
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -96,19 +96,22 @@ window.addEventListener('load', function() {
     let addBulkPrintLabel = function() {
         let link = document.createElement('a');
 
-        link.innerHTML = '<i class="icon-download"></i> ' + "Print labels";
-        link.setAttribute('data-toggle', 'modal');
-        link.setAttribute('data-target', '#bulk-print');
+        link.innerHTML = '<i class="icon-download"></i> ' + print_labels_text;
+        if (typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
+            link.setAttribute('data-toggle', 'modal');
+            link.setAttribute('data-target', '#bulk-print');
+        }
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            let ids = [];
             $('#print-bulk-form').find('input[name="order_ids[]"]').remove();
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
-                ids.push(e.value);
                 let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
                 $labelIdInput.prependTo('#bulk-print form');
             });
+            if (typeof prompt_for_label_position === 'undefined' || parseInt(prompt_for_label_position) !== 1) {
+                $('#print-bulk-button').trigger('click');
+            }
         });
 
         addBulkOption(link);

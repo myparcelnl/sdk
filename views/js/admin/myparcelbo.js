@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  const insuranceCheckboxSelector = '#myparcel-insurance-checkbox';
+  const insuranceCheckboxSelector = '.myparcel-insurance-checkbox';
   let toggleInsuranceAdditional = function() {
     const insuranceAdditionalActiveClassname = 'insurance-active';
-    let $insuranceCheckbox = $(insuranceCheckboxSelector);
+    let $insuranceCheckbox = $(insuranceCheckboxSelector).first();
     let $insuranceAdditional = $('.insurance-additional-container');
     let isChecked = $insuranceCheckbox.is(':checked');
 
-    if(isChecked) {
+    if (isChecked) {
       $insuranceAdditional.addClass(insuranceAdditionalActiveClassname);
     } else {
       $insuranceAdditional.removeClass(insuranceAdditionalActiveClassname);
@@ -35,19 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
     changeInsuranceHigherAmount();
   });
   changeInsuranceHigherAmount();
-  if (typeof prompt_for_label_position !== 'undefined') {
-    if (parseInt(prompt_for_label_position) === 1) {
-      $('#a6, #a6_bulk').change(function () {
-        $('.positions-block').hide();
-      });
-      $('#a4, #a4_bulk').change(function () {
-        $('.positions-block').show();
-      });
-      if ($('#a6').is(':checked') || $('#a6_bulk').is(':checked')) {
-        $('.positions-block').hide();
-      }
-    } else {
-      $('.positions-block').remove();
+  if ($('#a6').length) {
+    $('#a6, #a6_bulk').change(function () {
+      $('.positions-block').hide();
+    });
+    $('#a4, #a4_bulk').change(function () {
+      $('.positions-block').show();
+    });
+    if ($('#a6').is(':checked') || $('#a6_bulk').is(':checked')) {
+      $('.positions-block').hide();
     }
   }
 
