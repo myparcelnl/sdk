@@ -33,6 +33,7 @@ class Installer
         $result &= $this->migrate();
         $result &= $this->hooks();
         $result &= $this->installTabs();
+        $result &= $this->addDefaultConfigurations();
 
         if ($result) {
             $carriers = self::$carriers_nl;
@@ -227,6 +228,24 @@ class Installer
         $result = true;
         foreach ($this->module->migrations as $migration) {
             $result &= $migration::up();
+        }
+
+        return $result;
+    }
+
+    private function addDefaultConfigurations(): bool
+    {
+        $result = true;
+
+        $configs = [
+            Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME => '{order.reference}',
+            Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME => 'a4',
+            Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME => 1,
+            Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME => false,
+            Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME => 1,
+        ];
+        foreach ($configs as $key => $value) {
+            $result &= Configuration::updateValue($key, $value);
         }
 
         return $result;
