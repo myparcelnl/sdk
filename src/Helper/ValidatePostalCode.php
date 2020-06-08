@@ -6,7 +6,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class ValidatePostalCode
 {
-    const VALIDATE_POSTAL_CODE_REGEX_NL = '/^[1-9][0-9]{3} ?[a-z]{2}$/i';
+    const VALIDATE_POSTAL_CODE_REGEX_NL = '/^[1-9]\d{3}\s?[a-z]{2}$/i';
     const VALIDATE_POSTAL_CODE_REGEX_BE = '/[1-9]\d{3}$/';
 
     public static function validate(string $postalCode, ?string $destinationCountry): bool
