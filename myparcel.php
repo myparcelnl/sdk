@@ -1,32 +1,22 @@
 <?php
 
-use Gett\MyParcel\Constant;
-use Gett\MyParcel\Module\Hooks\FrontHooks;
-use Gett\MyParcel\Module\Hooks\OrderLabelHooks;
-use Gett\MyParcel\Module\Hooks\CarrierHooks;
-use Gett\MyParcel\Module\Hooks\OrdersGridHooks;
-use Gett\MyParcel\Module\Configuration\Configure;
-use Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
-use Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
-use Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
-use Gett\MyParcel\Service\CarrierConfigurationProvider;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
 class MyParcel extends CarrierModule
 {
-    use DisplayAdminProductsExtra;
-    use DisplayBackOfficeHeader;
-    use OrdersGridHooks;
-    use FrontHooks;
-    use LegacyOrderPageHooks;
-    use OrderLabelHooks;
-    use CarrierHooks;
+    use \Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
+    use \Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
+    use \Gett\MyParcel\Module\Hooks\OrdersGridHooks;
+    use \Gett\MyParcel\Module\Hooks\FrontHooks;
+    use \Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
+    use \Gett\MyParcel\Module\Hooks\OrderLabelHooks;
+    use \Gett\MyParcel\Module\Hooks\CarrierHooks;
     public $baseUrl;
     public $id_carrier;
     public $migrations = [
@@ -37,46 +27,46 @@ class MyParcel extends CarrierModule
     ];
 
     public $configItems = [
-        Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_DPD_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_DPD_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME,// Keep the API key
+        \Gett\MyParcel\Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME,// Keep the API key
 
-        Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME,
-        Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME,
 
-        Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcel\Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME,
     ];
 
     public $hooks = [
@@ -153,7 +143,7 @@ class MyParcel extends CarrierModule
 
     public function getContent()
     {
-        $configuration = new Configure($this);
+        $configuration = new \Gett\MyParcel\Module\Configuration\Configure($this);
 
         $this->context->smarty->assign([
             'menutabs' => $configuration->initNavigation(),
@@ -178,15 +168,27 @@ class MyParcel extends CarrierModule
         }
 
         if ($deliverySettings['isPickup']) {
-            $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, 'pricePickup');
+            $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+                $cart->id_carrier,
+                'pricePickup'
+            );
         } else {
             $priceHourInterval = 'price' . ucfirst($deliverySettings['deliveryType']) . 'Delivery';
-            $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, $priceHourInterval);
+            $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+                $cart->id_carrier,
+                $priceHourInterval
+            );
             if (!empty($deliverySettings['shipmentOptions']['only_recipient'])) {
-                $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, 'priceOnlyRecipient');
+                $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+                    $cart->id_carrier,
+                    'priceOnlyRecipient'
+                );
             }
             if (!empty($deliverySettings['shipmentOptions']['signature'])) {
-                $myParcelCost += (float) CarrierConfigurationProvider::get($cart->id_carrier, 'priceSignature');
+                $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+                    $cart->id_carrier,
+                    'priceSignature'
+                );
             }
         }
 
