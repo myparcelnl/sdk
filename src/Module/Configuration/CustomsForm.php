@@ -18,10 +18,10 @@ class CustomsForm extends AbstractForm
     protected function getFields(): array
     {
         return [
-            Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME => [
+            Constant::CUSTOMS_FORM_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Default customs form', 'customsform'),
-                'name' => Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME,
+                'name' => Constant::CUSTOMS_FORM_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
                         [
@@ -44,25 +44,25 @@ class CustomsForm extends AbstractForm
                     'name' => 'name',
                 ],
             ],
-            Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME => [
+            Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME => [
                 'type' => 'text',
                 'label' => $this->module->l('Default customs code', 'customsform'),
-                'name' => Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
+                'name' => Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
             ],
-            Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME => [
+            Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME => [
                 'type' => 'select',
                 'label' => $this->module->l('Default customs origin', 'customsform'),
-                'name' => Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
+                'name' => Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
                 'options' => [
                     'query' => Country::getCountries(Context::getContext()->language->id),
                     'id' => 'iso_code',
                     'name' => 'name',
                 ],
             ],
-            Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME => [
+            Constant::CUSTOMS_AGE_CHECK_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Default customs age check', 'customsform'),
-                'name' => Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
+                'name' => Constant::CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
                 'is_bool' => true,
                 'values' => [
                     [

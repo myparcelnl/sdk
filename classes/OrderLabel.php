@@ -37,7 +37,7 @@ class OrderLabel extends \ObjectModel
         }
 
         if ($statusCode === 14) {
-            if (\Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
+            if (\Configuration::get(\Gett\MyParcel\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
                 OrderLabel::setShipped($idShipment, false);
             } else {
                 OrderLabel::setPrinted($idShipment, false);
@@ -67,7 +67,7 @@ class OrderLabel extends \ObjectModel
     public static function setShipped($idShipment, $mail = true)
     {
         $targetOrderState = \Configuration::get('PS_OS_SHIPPING');
-        if (\Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME) == 'first_scan' && $mail) {
+        if (\Configuration::get(Constant::ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME) == 'first_scan' && $mail) {
             static::sendShippedNotification($idShipment);
         }
 
@@ -81,7 +81,7 @@ class OrderLabel extends \ObjectModel
     public static function setPrinted($idShipment, $mail = true)
     {
         $targetOrderState = 14;
-        if ($mail && \Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME) == 'printed') {
+        if ($mail && \Configuration::get(Constant::ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME) == 'printed') {
             static::sendShippedNotification($idShipment);
         }
 
@@ -94,7 +94,7 @@ class OrderLabel extends \ObjectModel
 
     public static function sendShippedNotification(int $idShipment)
     {
-        if (!\Configuration::get(Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME)) {
+        if (!\Configuration::get(Constant::STATUS_CHANGE_MAIL_CONFIGURATION_NAME)) {
             return;
         }
         $order_label = self::findByLabelId($idShipment);
@@ -148,7 +148,7 @@ class OrderLabel extends \ObjectModel
             11 => 'november',
             12 => 'december',
         ];
-        $tracktraceInfo = (new Tracktrace(\Configuration::get(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME)))->getTrackTrace($order_label->id_label);
+        $tracktraceInfo = (new Tracktrace(\Configuration::get(Constant::API_KEY_CONFIGURATION_NAME)))->getTrackTrace($order_label->id_label);
         $deliveryDate = $tracktraceInfo['data']['tracktraces'][0]['options']['delivery_date'];
         $deliveryDateFrom = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['start']['date'];
         $deliveryDateTo = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['end']['date'];
@@ -303,7 +303,7 @@ class OrderLabel extends \ObjectModel
         if (!\Validate::isLoadedObject($order_label) || !\Validate::isLoadedObject($order)) {
             return;
         }
-        $ignore = \Configuration::get(Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME);
+        $ignore = \Configuration::get(Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME);
         if ($ignore) {
             $ignore = explode(',', $ignore);
         }
@@ -416,7 +416,7 @@ class OrderLabel extends \ObjectModel
         $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_price, od.product_weight');
         $qb->from('order_detail', 'od');
         $qb->leftJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
-        $qb->where('od.id_order = "' . $id_order . '" AND pc.name = "' . Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME . '" ');
+        $qb->where('od.id_order = "' . $id_order . '" AND pc.name = "' . Constant::CUSTOMS_FORM_CONFIGURATION_NAME . '" ');
 
         $return = \Db::getInstance()->executeS($qb);
         foreach ($return as $item) {

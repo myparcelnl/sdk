@@ -81,7 +81,7 @@ trait LegacyOrderPageHooks
         $this->context->smarty->assign([
             'labels' => $result,
             'link' => $link,
-            'promptForLabelPosition' => Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+            'promptForLabelPosition' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
         ]);
 
         return $this->display($this->name, 'views/templates/admin/icon-labels.tpl');
@@ -108,9 +108,9 @@ trait LegacyOrderPageHooks
             $link = new \Link();
             \Media::addJsDef(
                 [
-                    'default_label_size' => Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
-                    'default_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
-                    'prompt_for_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+                    'default_label_size' => Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME),
+                    'default_label_position' => Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME),
+                    'prompt_for_label_position' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                     'create_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'createb']),
                     'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
                     'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
@@ -125,9 +125,9 @@ trait LegacyOrderPageHooks
         } elseif ($this->context->controller->php_self == 'AdminOrders') { //symfony controller
             \Media::addJsDef(
                 [
-                    'default_label_size' => Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME),
-                    'default_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME),
-                    'prompt_for_label_position' => Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+                    'default_label_size' => Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME),
+                    'default_label_position' => Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME),
+                    'prompt_for_label_position' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                 ]
             );
 
@@ -145,17 +145,17 @@ trait LegacyOrderPageHooks
         }
 
         return in_array($this->carrierList[$idCarrier], [
-            Configuration::get(Constant::MY_PARCEL_DPD_CONFIGURATION_NAME),
-            Configuration::get(Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME),
-            Configuration::get(Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME),
+            Configuration::get(Constant::DPD_CONFIGURATION_NAME),
+            Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
+            Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
         ]);
     }
     
     public function getLabelDefaultConfiguration(): array
     {
         return Configuration::getMultiple([
-            Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME,
-            Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME,
+            Constant::LABEL_SIZE_CONFIGURATION_NAME,
+            Constant::LABEL_POSITION_CONFIGURATION_NAME,
         ]);
     }
 }

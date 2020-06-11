@@ -36,7 +36,7 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
     {
         $content = file_get_contents('php://input');
         // @codingStandardsIgnoreEnd
-        if (Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME)) {
+        if (Configuration::get(\Gett\MyParcel\Constant::API_LOGGING_CONFIGURATION_NAME)) {
             $logContent = ($content);
             \Gett\MyParcel\Logger\Logger::addLog("MyParcel - incoming webhook\n{$logContent}");
         }

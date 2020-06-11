@@ -24,7 +24,7 @@ class ApiForm extends AbstractForm
             ],
         ];
 
-        if (Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)) {
+        if (Configuration::get(Constant::WEBHOOK_ID_CONFIGURATION_NAME)) {
             $buttons['reset']['title'] = $this->module->l('Refresh Webhook', 'apiform');
             $buttons['delete'] = [
                 'title' => $this->module->l('Delete Webhook', 'apiform'),
@@ -46,16 +46,16 @@ class ApiForm extends AbstractForm
     protected function getFields(): array
     {
         return [
-            Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME => [
+            Constant::API_KEY_CONFIGURATION_NAME => [
                 'type' => 'text',
                 'label' => $this->module->l('Your API key', 'apiform'),
-                'name' => Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME,
+                'name' => Constant::API_KEY_CONFIGURATION_NAME,
                 'required' => false,
             ],
-            Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME => [
+            Constant::API_LOGGING_CONFIGURATION_NAME => [
                 'type' => 'switch',
                 'label' => $this->module->l('Api logging', 'apiform'),
-                'name' => Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME,
+                'name' => Constant::API_LOGGING_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
                 'values' => [
@@ -79,8 +79,8 @@ class ApiForm extends AbstractForm
         $parent = parent::update();
 
         try {
-            if ((Tools::isSubmit(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME) && Tools::getValue(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME) != Configuration::get(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME)) || Tools::isSubmit('resetHook')) {
-                $service = new WebhookService(Tools::getValue(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+            if ((Tools::isSubmit(Constant::API_KEY_CONFIGURATION_NAME) && Tools::getValue(Constant::API_KEY_CONFIGURATION_NAME) != Configuration::get(Constant::API_KEY_CONFIGURATION_NAME)) || Tools::isSubmit('resetHook')) {
+                $service = new WebhookService(Tools::getValue(Constant::API_KEY_CONFIGURATION_NAME));
                 $result = $service->addSubscription(
                     new Subscription(
                         Subscription::SHIPMENT_STATUS_CHANGE_HOOK_NAME,
@@ -95,18 +95,18 @@ class ApiForm extends AbstractForm
 
                 if (isset($result['data']['ids'][0]['id'])) {
                     Configuration::updateValue(
-                        Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME,
+                        Constant::WEBHOOK_ID_CONFIGURATION_NAME,
                         $result['data']['ids'][0]['id']
                     );
                 }
             }
             if (Tools::isSubmit('deleteHook')) {
-                $service = new WebhookService(Configuration::get(Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+                $service = new WebhookService(Configuration::get(Constant::API_KEY_CONFIGURATION_NAME));
                 $result = $service->deleteSubscription(
-                    (int) Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)
+                    (int) Configuration::get(Constant::WEBHOOK_ID_CONFIGURATION_NAME)
                 );
                 if ($result === true) {
-                    Configuration::updateValue(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME, '');
+                    Configuration::updateValue(Constant::WEBHOOK_ID_CONFIGURATION_NAME, '');
                 }
             }
         } catch (\Exception $e) {

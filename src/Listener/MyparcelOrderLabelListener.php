@@ -21,8 +21,8 @@ class MyparcelOrderLabelListener
 
     public function prePersist(MyparcelOrderLabel $label, LifecycleEventArgs $event)
     {
-        if ($status = $this->configuration->get(Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
-            $this->order_status_change->changeOrderStatus($label->getIdOrder(), $status, Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME);
+        if ($status = $this->configuration->get(Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
+            $this->order_status_change->changeOrderStatus($label->getIdOrder(), $status, Constant::STATUS_CHANGE_MAIL_CONFIGURATION_NAME);
         }
     }
 }

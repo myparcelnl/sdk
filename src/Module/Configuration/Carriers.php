@@ -31,7 +31,7 @@ class Carriers
             if (isset($dropOff)) {
                 $_POST['dropOffDays'] = implode(';', $dropOff);
             }
-            foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $value) {
+            foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $value) {
                 Db::getInstance()->update(
                     'myparcel_carrier_configuration',
                     ['value' => pSQL(Tools::getValue($value))],
@@ -425,7 +425,7 @@ class Carriers
                         'tab' => 'delivery',
                         'type' => 'select',
                         'label' => $this->module->l('Default package type', 'carriers'),
-                        'name' => Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
+                        'name' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => $this->module->l('Package', 'carriers')],
@@ -442,44 +442,44 @@ class Carriers
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_on',
+                                'id' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_off',
+                                'id' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Deliver only to recipient', 'carriers'),
-                        'name' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+                        'name' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
-                        'type' => $this->getExclusiveFieldType(Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME),
+                        'type' => $this->getExclusiveFieldType(Constant::AGE_CHECK_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_on',
+                                'id' => Constant::AGE_CHECK_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_off',
+                                'id' => Constant::AGE_CHECK_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Age check', 'carriers'),
-                        'name' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+                        'name' => Constant::AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
                         'tab' => 'delivery',
                         'type' => 'select',
                         'label' => $this->module->l('Default package format', 'carriers'),
-                        'name' => Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+                        'name' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
@@ -495,22 +495,22 @@ class Carriers
                         ],
                     ],
                     [
-                        'type' => $this->getExclusiveFieldType(Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME),
+                        'type' => $this->getExclusiveFieldType(Constant::RETURN_PACKAGE_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_on',
+                                'id' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_off',
+                                'id' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Return package when recipient is not home', 'carriers'),
-                        'name' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+                        'name' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
@@ -518,18 +518,18 @@ class Carriers
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_on',
+                                'id' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_off',
+                                'id' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Recipient need to sign', 'carriers'),
-                        'name' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                        'name' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
@@ -537,18 +537,18 @@ class Carriers
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_on',
+                                'id' => Constant::INSURANCE_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_off',
+                                'id' => Constant::INSURANCE_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Package with insurance', 'carriers'),
-                        'name' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+                        'name' => Constant::INSURANCE_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
 
@@ -556,7 +556,7 @@ class Carriers
                         'tab' => 'return',
                         'type' => 'select',
                         'label' => $this->module->l('Default package type', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => $this->module->l('Package', 'carriers')],
@@ -573,44 +573,44 @@ class Carriers
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_on',
+                                'id' => 'return_' . Constant::ONLY_RECIPIENT_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_off',
+                                'id' => 'return_' . Constant::ONLY_RECIPIENT_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Deliver only to recipient', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
-                        'type' => $this->getExclusiveFieldType('return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME),
+                        'type' => $this->getExclusiveFieldType('return_' . Constant::AGE_CHECK_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_on',
+                                'id' => 'return_' . Constant::AGE_CHECK_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_off',
+                                'id' => 'return_' . Constant::AGE_CHECK_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Age check', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
                         'tab' => 'return',
                         'type' => 'select',
                         'label' => $this->module->l('Default package format', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
                                 ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
@@ -626,22 +626,22 @@ class Carriers
                         ],
                     ],
                     [
-                        'type' => $this->getExclusiveFieldType('return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME),
+                        'type' => $this->getExclusiveFieldType('return_' . Constant::RETURN_PACKAGE_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_on',
+                                'id' => 'return_' . Constant::RETURN_PACKAGE_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_off',
+                                'id' => 'return_' . Constant::RETURN_PACKAGE_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Return package when recipient is not home', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -649,18 +649,18 @@ class Carriers
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_on',
+                                'id' => 'return_' . Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_off',
+                                'id' => 'return_' . Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Recipient need to sign', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -668,18 +668,18 @@ class Carriers
                         'is_bool' => true,
                         'values' => [
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_on',
+                                'id' => 'return_' . Constant::INSURANCE_CONFIGURATION_NAME.'_on',
                                 'value' => 1,
                                 'label' => $this->module->l('Yes', 'carriers')
                             ],
                             [
-                                'id' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_off',
+                                'id' => 'return_' . Constant::INSURANCE_CONFIGURATION_NAME.'_off',
                                 'value' => 0,
                                 'label' => $this->module->l('No', 'carriers')
                             ],
                         ],
                         'label' => $this->module->l('Package with insurance', 'carriers'),
-                        'name' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
+                        'name' => 'return_' . Constant::INSURANCE_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
@@ -777,7 +777,7 @@ class Carriers
             return $fieldType;
         }
 
-        if (in_array($field, Constant::MY_PARCEL_EXCLUSIVE_FIELDS_NL)) {
+        if (in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
             $fieldType = 'hidden';
         }
 
@@ -787,7 +787,7 @@ class Carriers
     private function setExclusiveFieldsValues(array &$vars): void
     {
         if ($this->module->isBE()) {
-            foreach (Constant::MY_PARCEL_EXCLUSIVE_FIELDS_NL as $field) {
+            foreach (Constant::EXCLUSIVE_FIELDS_NL as $field) {
                 $vars[$field] = 0;
             }
         }

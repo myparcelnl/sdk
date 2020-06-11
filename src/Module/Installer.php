@@ -162,7 +162,7 @@ class Installer
                 );
                 Configuration::updateValue($configuration['configuration_name'], $carrier->id);
                 $insert = [];
-                foreach (Constant::MY_PARCEL_CARRIER_CONFIGURATION_FIELDS as $item) {
+                foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $item) {
                     $insert[] = ['id_carrier' => $carrier->id, 'name' => $item];
                 }
                 Db::getInstance()->insert('myparcel_carrier_configuration', $insert);
@@ -238,11 +238,11 @@ class Installer
         $result = true;
 
         $configs = [
-            Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME => '{order.reference}',
-            Constant::MY_PARCEL_LABEL_SIZE_CONFIGURATION_NAME => 'a4',
-            Constant::MY_PARCEL_LABEL_POSITION_CONFIGURATION_NAME => 1,
-            Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME => false,
-            Constant::MY_PARCEL_LABEL_PROMPT_POSITION_CONFIGURATION_NAME => 1,
+            Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME => '{order.reference}',
+            Constant::LABEL_SIZE_CONFIGURATION_NAME => 'a4',
+            Constant::LABEL_POSITION_CONFIGURATION_NAME => 1,
+            Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME => false,
+            Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME => 1,
         ];
         foreach ($configs as $key => $value) {
             $result &= Configuration::updateValue($key, $value);

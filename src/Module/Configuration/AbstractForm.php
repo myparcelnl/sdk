@@ -66,10 +66,10 @@ abstract class AbstractForm
         $result = true;
 
         foreach (array_keys($this->getFields()) as $name) {
-            if ($name == Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME) {
+            if ($name == Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME) {
                 $ignored = [];
                 foreach (Tools::getAllValues() as $key => $value) {
-                    if (stripos($key, Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME) !== false) {
+                    if (stripos($key, Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME) !== false) {
                         $temp = explode('_', $key);
                         $ignored[] = end($temp);
                     }
@@ -124,7 +124,7 @@ abstract class AbstractForm
                 null,
                 isset($field['default']) ? $field['default'] : null
             );
-            if ($name == Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME) {
+            if ($name == Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME) {
                 $temp = explode(',', $values[$name]);
                 foreach ($temp as $value) {
                     $values["MY_PARCEL_IGNORE_ORDER_STATUS_{$value}"] = 1;

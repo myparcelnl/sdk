@@ -13,7 +13,7 @@ class Logger
         $severity = 1,
         $errorCode = null
     ) {
-        if ($is_exception || \Configuration::get(Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME)) {
+        if ($is_exception || \Configuration::get(Constant::API_LOGGING_CONFIGURATION_NAME)) {
             \PrestaShopLogger::addLog(
                 '[MYPARCEL] ' . $message,
                 $severity,

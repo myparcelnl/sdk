@@ -37,7 +37,7 @@ class LabelController extends ModuleAdminControllerCore
 
             try {
                 $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(\MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment::CARRIER_ID))
-                    ->setApiKey(Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME))
+                    ->setApiKey(Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME))
                     ->setReferenceId($order->id)
                     ->setCountry(CountryCore::getIsoById($address->id_country))
                     ->setPerson($address->firstname . ' ' . $address->lastname)
@@ -78,7 +78,7 @@ class LabelController extends ModuleAdminControllerCore
     public function ajaxProcessCreate()
     {
         $factory = new \Gett\MyParcel\Factory\Consignment\ConsignmentFactory(
-            \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME),
+            \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
@@ -104,7 +104,7 @@ class LabelController extends ModuleAdminControllerCore
             \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
             $collection->setLinkOfLabels();
             if ($this->module->isNL()
-                && Tools::getValue(\Gett\MyParcel\Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME)) {
+                && Tools::getValue(\Gett\MyParcel\Constant::RETURN_PACKAGE_CONFIGURATION_NAME)) {
                 $collection->sendReturnLabelMails();
             }
         } catch (Exception $e) {
@@ -136,7 +136,7 @@ class LabelController extends ModuleAdminControllerCore
     public function processCreateb()
     {
         $factory = new \Gett\MyParcel\Factory\Consignment\ConsignmentFactory(
-            \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME),
+            \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
@@ -214,7 +214,7 @@ class LabelController extends ModuleAdminControllerCore
             die($this->trans('No created labels found', [], 'Modules.Myparcel.Error'));
         }
         try {
-            $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+            $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME));
 
             $collection->setLinkOfLabels();
             \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
@@ -242,7 +242,7 @@ class LabelController extends ModuleAdminControllerCore
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
         $service = new \Gett\MyParcel\Service\Consignment\Download(
-            \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME),
+            \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
@@ -252,7 +252,7 @@ class LabelController extends ModuleAdminControllerCore
     public function processUpdatelabel()
     {
         try {
-            $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcel\Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME));
+            $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME));
             $collection->setLinkOfLabels();
             \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {

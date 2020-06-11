@@ -27,7 +27,7 @@ class Download
         $myParcelCollection = (new MyParcelCollection())
             ->setUserAgent('prestashop', '1.0')
         ;
-        if (\Configuration::get(Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'printed')) {
+        if (\Configuration::get(Constant::ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'printed')) {
             //TODO send notification
         }
 
@@ -36,7 +36,7 @@ class Download
             if (!empty($collection->getConsignments())) {
                 $collection
                     ->setPdfOfLabels($this->fetchPositions())
-                    ->downloadPdfOfLabels($this->configuration->get(Constant::MY_PARCEL_LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false));
+                    ->downloadPdfOfLabels($this->configuration->get(Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false));
                 Logger::addLog($collection->toJson());
             } else {
                 \Tools::redirectAdmin(\Context::getContext()->link->getAdminLink('AdminOrders'));

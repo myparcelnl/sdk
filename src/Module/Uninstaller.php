@@ -69,9 +69,9 @@ class Uninstaller
     {
         $result = true;
         $carrierListConfig = [
-            Constant::MY_PARCEL_POSTNL_CONFIGURATION_NAME,
-            Constant::MY_PARCEL_BPOST_CONFIGURATION_NAME,
-            Constant::MY_PARCEL_DPD_CONFIGURATION_NAME,
+            Constant::POSTNL_CONFIGURATION_NAME,
+            Constant::BPOST_CONFIGURATION_NAME,
+            Constant::DPD_CONFIGURATION_NAME,
         ];
         foreach ($carrierListConfig as $item) {
             $idReference = Configuration::get($item);

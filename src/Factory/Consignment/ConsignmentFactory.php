@@ -89,11 +89,11 @@ class ConsignmentFactory
             $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']));
         }
 
-        if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
+        if ($this->configuration->get(Constant::SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
             $consignment->setEmail($order['email']);
         }
 
-        if ($this->configuration->get(Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME)) {
+        if ($this->configuration->get(Constant::SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME)) {
             $consignment->setPhone($order['phone']);
         }
         $delivery_setting = json_decode($order['delivery_settings']);
@@ -114,10 +114,10 @@ class ConsignmentFactory
             $consignment->setSignature(true);
         }
         $consignment->setLabelDescription(
-            $this->getLabelParams($order, \Configuration::get(Constant::MY_PARCEL_LABEL_DESCRIPTION_CONFIGURATION_NAME))
+            $this->getLabelParams($order, \Configuration::get(Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME))
         );
 
-        if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
+        if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
             $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
             $consignment->setAgeCheck(false); //The age check is not possible with an EU shipment or world shipment
             if ($products !== false) {
@@ -125,10 +125,10 @@ class ConsignmentFactory
                     $item = (new MyParcelCustomsItem());
                     $item->setAmount($product['product_quantity']);
                     $item->setClassification(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_CODE_CONFIGURATION_NAME) ?? (int) $this->configuration->get(Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get($product['product_id'], Constant::CUSTOMS_CODE_CONFIGURATION_NAME) ?? (int) $this->configuration->get(Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME)
                     );
                     $item->setCountry(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::MY_PARCEL_CUSTOMS_ORIGIN_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get($product['product_id'], Constant::CUSTOMS_ORIGIN_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
                     );
 
                     $item->setDescription($product['product_name']);

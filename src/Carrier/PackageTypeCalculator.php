@@ -16,7 +16,7 @@ class PackageTypeCalculator
         }
 
         $packageType = CarrierConfigurationProvider::get(
-            $id_carrier, Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME
+            $id_carrier, Constant::PACKAGE_TYPE_CONFIGURATION_NAME
         );
 
         return $packageType ?: 1;
