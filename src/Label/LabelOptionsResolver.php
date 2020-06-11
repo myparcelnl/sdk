@@ -1,12 +1,12 @@
 <?php
 
-namespace Gett\MyParcel\Label;
+namespace Gett\MyParcelBE\Label;
 
-use Gett\MyParcel\Constant;
-use Gett\MyParcel\OrderLabel;
-use Gett\MyParcel\Carrier\PackageTypeCalculator;
-use Gett\MyParcel\Service\CarrierConfigurationProvider;
-use Gett\MyParcel\Service\ProductConfigurationProvider;
+use Gett\MyParcelBE\Constant;
+use Gett\MyParcelBE\OrderLabel;
+use Gett\MyParcelBE\Carrier\PackageTypeCalculator;
+use Gett\MyParcelBE\Service\CarrierConfigurationProvider;
+use Gett\MyParcelBE\Service\ProductConfigurationProvider;
 
 class LabelOptionsResolver
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Gett\MyParcel;
+namespace Gett\MyParcelBE;
 
-use Gett\MyParcel\Service\Tracktrace;
+use Gett\MyParcelBE\Service\Tracktrace;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class OrderLabel extends \ObjectModel
@@ -37,7 +37,7 @@ class OrderLabel extends \ObjectModel
         }
 
         if ($statusCode === 14) {
-            if (\Configuration::get(\Gett\MyParcel\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
+            if (\Configuration::get(\Gett\MyParcelBE\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
                 OrderLabel::setShipped($idShipment, false);
             } else {
                 OrderLabel::setPrinted($idShipment, false);
@@ -249,12 +249,12 @@ class OrderLabel extends \ObjectModel
         }
 
         $mailDir = false;
-        if (file_exists(_PS_THEME_DIR_ . "modules/myparcel/mails/{$mailIso}/myparcel_{$mailType}_shipped.txt")
+        if (file_exists(_PS_THEME_DIR_ . "modules/myparcelbe/mails/{$mailIso}/myparcel_{$mailType}_shipped.txt")
             && file_exists(
-                _PS_THEME_DIR_ . "modules/myparcel/mails/{$mailIso}/myparcel_{$mailType}_shipped.html"
+                _PS_THEME_DIR_ . "modules/myparcelbe/mails/{$mailIso}/myparcel_{$mailType}_shipped.html"
             )
         ) {
-            $mailDir = _PS_THEME_DIR_ . 'modules/myparcel/mails/';
+            $mailDir = _PS_THEME_DIR_ . 'modules/myparcelbe/mails/';
         } elseif (file_exists(dirname(__FILE__) . "/../mails/{$mailIso}/myparcel_{$mailType}_shipped.txt")
             && file_exists(dirname(__FILE__) . "/../mails/{$mailIso}/myparcel_{$mailType}_shipped.html")
         ) {

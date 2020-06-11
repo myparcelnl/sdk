@@ -1,10 +1,10 @@
 <?php
 
-namespace Gett\MyParcel\Module\Configuration;
+namespace Gett\MyParcelBE\Module\Configuration;
 
 use Context;
 use Country;
-use Gett\MyParcel\Constant;
+use Gett\MyParcelBE\Constant;
 
 class CustomsForm extends AbstractForm
 {

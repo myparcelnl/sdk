@@ -1,10 +1,10 @@
 <?php
 
-namespace Gett\MyParcel\Service\Consignment;
+namespace Gett\MyParcelBE\Service\Consignment;
 
-use Gett\MyParcel\OrderLabel;
+use Gett\MyParcelBE\OrderLabel;
 use Doctrine\ORM\EntityManagerInterface;
-use Gett\MyParcel\Service\MyparcelStatusProvider;
+use Gett\MyParcelBE\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 
 class Create
@@ -13,7 +13,7 @@ class Create
     private $status_provider;
     private $consignment_factory;
 
-    public function __construct(EntityManagerInterface $entityManager, MyparcelStatusProvider $status_provider, \Gett\MyParcel\Factory\Consignment\ConsignmentFactory $factory)
+    public function __construct(EntityManagerInterface $entityManager, MyparcelStatusProvider $status_provider, \Gett\MyParcelBE\Factory\Consignment\ConsignmentFactory $factory)
     {
         $this->entityManager = $entityManager;
         $this->status_provider = $status_provider;

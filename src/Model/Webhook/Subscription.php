@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcel\Model\Webhook;
+namespace Gett\MyParcelBE\Model\Webhook;
 
 use Exception;
 

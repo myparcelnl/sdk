@@ -1,9 +1,9 @@
 <?php
 
-namespace Gett\MyParcel\Service;
+namespace Gett\MyParcelBE\Service;
 
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use Gett\MyParcel\Model\MyParcelRequest as Request;
+use Gett\MyParcelBE\Model\MyParcelRequest as Request;
 
 class Tracktrace
 {

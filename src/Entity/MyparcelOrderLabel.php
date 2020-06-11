@@ -1,13 +1,13 @@
 <?php
 
-namespace Gett\MyParcel\Entity;
+namespace Gett\MyParcelBE\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\EntityListeners({"Gett\MyParcel\Listener\MyparcelOrderLabelListener"})
+ * @ORM\EntityListeners({"Gett\MyParcelBE\Listener\MyparcelOrderLabelListener"})
  */
 class MyparcelOrderLabel
 {

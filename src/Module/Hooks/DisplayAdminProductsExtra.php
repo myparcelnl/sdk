@@ -1,8 +1,8 @@
 <?php
 
-namespace Gett\MyParcel\Module\Hooks;
+namespace Gett\MyParcelBE\Module\Hooks;
 
-use Gett\MyParcel\Constant;
+use Gett\MyParcelBE\Constant;
 
 trait DisplayAdminProductsExtra
 {

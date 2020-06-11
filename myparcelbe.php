@@ -8,65 +8,65 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-class MyParcel extends CarrierModule
+class MyParcelBE extends CarrierModule
 {
-    use \Gett\MyParcel\Module\Hooks\DisplayAdminProductsExtra;
-    use \Gett\MyParcel\Module\Hooks\DisplayBackOfficeHeader;
-    use \Gett\MyParcel\Module\Hooks\OrdersGridHooks;
-    use \Gett\MyParcel\Module\Hooks\FrontHooks;
-    use \Gett\MyParcel\Module\Hooks\LegacyOrderPageHooks;
-    use \Gett\MyParcel\Module\Hooks\OrderLabelHooks;
-    use \Gett\MyParcel\Module\Hooks\CarrierHooks;
+    use \Gett\MyParcelBE\Module\Hooks\DisplayAdminProductsExtra;
+    use \Gett\MyParcelBE\Module\Hooks\DisplayBackOfficeHeader;
+    use \Gett\MyParcelBE\Module\Hooks\OrdersGridHooks;
+    use \Gett\MyParcelBE\Module\Hooks\FrontHooks;
+    use \Gett\MyParcelBE\Module\Hooks\LegacyOrderPageHooks;
+    use \Gett\MyParcelBE\Module\Hooks\OrderLabelHooks;
+    use \Gett\MyParcelBE\Module\Hooks\CarrierHooks;
     public $baseUrl;
     public $id_carrier;
     public $migrations = [
-        \Gett\MyParcel\Database\CreateProductConfigurationTableMigration::class,
-        \Gett\MyParcel\Database\CreateCarrierConfigurationTableMigration::class,
-        \Gett\MyParcel\Database\CreateOrderLabelTableMigration::class,
-        \Gett\MyParcel\Database\CreateDeliverySettingTableMigration::class,
+        \Gett\MyParcelBE\Database\CreateProductConfigurationTableMigration::class,
+        \Gett\MyParcelBE\Database\CreateCarrierConfigurationTableMigration::class,
+        \Gett\MyParcelBE\Database\CreateOrderLabelTableMigration::class,
+        \Gett\MyParcelBE\Database\CreateDeliverySettingTableMigration::class,
     ];
 
     public $configItems = [
-        \Gett\MyParcel\Constant::POSTNL_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::BPOST_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::DPD_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::POSTNL_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::BPOST_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::DPD_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::STATUS_CHANGE_MAIL_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::DELIVERED_ORDER_STATUS_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::STATUS_CHANGE_MAIL_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::DELIVERED_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::WEBHOOK_ID_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::WEBHOOK_ID_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::API_LOGGING_CONFIGURATION_NAME,// Keep the API key
+        \Gett\MyParcelBE\Constant::API_LOGGING_CONFIGURATION_NAME,// Keep the API key
 
-        \Gett\MyParcel\Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::AGE_CHECK_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::AGE_CHECK_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::INSURANCE_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::CUSTOMS_FORM_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::CUSTOMS_CODE_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::CUSTOMS_ORIGIN_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::INSURANCE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::CUSTOMS_FORM_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::CUSTOMS_CODE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::CUSTOMS_ORIGIN_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::LABEL_SIZE_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::LABEL_POSITION_CONFIGURATION_NAME,
-        \Gett\MyParcel\Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_SIZE_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_POSITION_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME,
 
-        \Gett\MyParcel\Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME,
+        \Gett\MyParcelBE\Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME,
     ];
 
     public $hooks = [
@@ -92,7 +92,7 @@ class MyParcel extends CarrierModule
 
     public function __construct()
     {
-        $this->name = 'myparcel';
+        $this->name = 'myparcelbe';
         $this->tab = 'shipping_logistics';
         $this->version = '1.0.0';
         $this->author = 'Gett';
@@ -121,7 +121,7 @@ class MyParcel extends CarrierModule
                 ]
             );
         }
-        $this->displayName = $this->l('MyParcel');
+        $this->displayName = $this->l('MyParcelBE');
         $this->description = $this->l('PrestaShop module to intergratie with MyParcel NL and MyParcel BE');
 
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
@@ -143,7 +143,7 @@ class MyParcel extends CarrierModule
 
     public function getContent()
     {
-        $configuration = new \Gett\MyParcel\Module\Configuration\Configure($this);
+        $configuration = new \Gett\MyParcelBE\Module\Configuration\Configure($this);
 
         $this->context->smarty->assign([
             'menutabs' => $configuration->initNavigation(),
@@ -168,24 +168,24 @@ class MyParcel extends CarrierModule
         }
 
         if ($deliverySettings['isPickup']) {
-            $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+            $myParcelCost += (float) \Gett\MyParcelBE\Service\CarrierConfigurationProvider::get(
                 $cart->id_carrier,
                 'pricePickup'
             );
         } else {
             $priceHourInterval = 'price' . ucfirst($deliverySettings['deliveryType']) . 'Delivery';
-            $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+            $myParcelCost += (float) \Gett\MyParcelBE\Service\CarrierConfigurationProvider::get(
                 $cart->id_carrier,
                 $priceHourInterval
             );
             if (!empty($deliverySettings['shipmentOptions']['only_recipient'])) {
-                $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+                $myParcelCost += (float) \Gett\MyParcelBE\Service\CarrierConfigurationProvider::get(
                     $cart->id_carrier,
                     'priceOnlyRecipient'
                 );
             }
             if (!empty($deliverySettings['shipmentOptions']['signature'])) {
-                $myParcelCost += (float) \Gett\MyParcel\Service\CarrierConfigurationProvider::get(
+                $myParcelCost += (float) \Gett\MyParcelBE\Service\CarrierConfigurationProvider::get(
                     $cart->id_carrier,
                     'priceSignature'
                 );
@@ -203,12 +203,12 @@ class MyParcel extends CarrierModule
     public function install(): bool
     {
         return parent::install()
-            && (new \Gett\MyParcel\Module\Installer($this))();
+            && (new \Gett\MyParcelBE\Module\Installer($this))();
     }
 
     public function uninstall(): bool
     {
-        return (new \Gett\MyParcel\Module\Uninstaller($this))()
+        return (new \Gett\MyParcelBE\Module\Uninstaller($this))()
             && parent::uninstall();
     }
 

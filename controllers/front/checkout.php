@@ -1,8 +1,8 @@
 <?php
 
-use Gett\MyParcel\Service\CarrierConfigurationProvider;
+use Gett\MyParcelBE\Service\CarrierConfigurationProvider;
 
-class MyparcelCheckoutModuleFrontController extends ModuleFrontController
+class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
 {
     public function postProcess()
     {

@@ -1,10 +1,10 @@
 <?php
 
-use Gett\MyParcel\OrderLabel;
+use Gett\MyParcelBE\OrderLabel;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 
-if (file_exists(_PS_MODULE_DIR_ . 'myparcel/vendor/autoload.php')) {
-    require_once _PS_MODULE_DIR_ . 'myparcel/vendor/autoload.php';
+if (file_exists(_PS_MODULE_DIR_ . 'myparcelbe/vendor/autoload.php')) {
+    require_once _PS_MODULE_DIR_ . 'myparcelbe/vendor/autoload.php';
 }
 
 class LabelController extends ModuleAdminControllerCore
@@ -37,7 +37,7 @@ class LabelController extends ModuleAdminControllerCore
 
             try {
                 $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(\MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment::CARRIER_ID))
-                    ->setApiKey(Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME))
+                    ->setApiKey(Configuration::get(\Gett\MyParcelBE\Constant::API_KEY_CONFIGURATION_NAME))
                     ->setReferenceId($order->id)
                     ->setCountry(CountryCore::getIsoById($address->id_country))
                     ->setPerson($address->firstname . ' ' . $address->lastname)
@@ -51,9 +51,9 @@ class LabelController extends ModuleAdminControllerCore
                 $myParcelCollection = (new \MyParcelNL\Sdk\src\Helper\MyParcelCollection())
                     ->addConsignment($consignment)
                     ->setPdfOfLabels()->sendReturnLabelMails();
-                \Gett\MyParcel\Logger\Logger::addLog($myParcelCollection->toJson());
+                \Gett\MyParcelBE\Logger\Logger::addLog($myParcelCollection->toJson());
             } catch (Exception $e) {
-                \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
+                \Gett\MyParcelBE\Logger\Logger::addLog($e->getMessage(), true);
                 header('HTTP/1.1 500 Internal Server Error', true, 500);
                 die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
             }
@@ -68,7 +68,7 @@ class LabelController extends ModuleAdminControllerCore
                 $consignment->getPostalCode(),
                 $consignment->getCountry()
             );
-            $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
+            $status_provider = new \Gett\MyParcelBE\Service\MyparcelStatusProvider();
             $orderLabel->new_order_state = $consignment->getStatus();
             $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
             $orderLabel->add();
@@ -77,8 +77,8 @@ class LabelController extends ModuleAdminControllerCore
 
     public function ajaxProcessCreate()
     {
-        $factory = new \Gett\MyParcel\Factory\Consignment\ConsignmentFactory(
-            \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME),
+        $factory = new \Gett\MyParcelBE\Factory\Consignment\ConsignmentFactory(
+            \Configuration::get(\Gett\MyParcelBE\Constant::API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
@@ -86,7 +86,7 @@ class LabelController extends ModuleAdminControllerCore
         if (empty($createLabelIds['order_ids'])) {
             die($this->trans('No order ID found', [], 'Modules.Myparcel.Error'));
         }
-        $orders = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate($createLabelIds['order_ids']);
+        $orders = \Gett\MyParcelBE\OrderLabel::getDataForLabelsCreate($createLabelIds['order_ids']);
         if (empty($orders)) {
             $this->errors[] = $this->trans('No order found.', [], 'Modules.Myparcel.Error');
             die(json_encode(['hasError' => true, 'errors' => $this->errors]));
@@ -101,21 +101,21 @@ class LabelController extends ModuleAdminControllerCore
                     $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
                 }
             }
-            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
+            \Gett\MyParcelBE\Logger\Logger::addLog($collection->toJson());
             $collection->setLinkOfLabels();
             if ($this->module->isNL()
-                && Tools::getValue(\Gett\MyParcel\Constant::RETURN_PACKAGE_CONFIGURATION_NAME)) {
+                && Tools::getValue(\Gett\MyParcelBE\Constant::RETURN_PACKAGE_CONFIGURATION_NAME)) {
                 $collection->sendReturnLabelMails();
             }
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
+            \Gett\MyParcelBE\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
         }
 
-        $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
+        $status_provider = new \Gett\MyParcelBE\Service\MyparcelStatusProvider();
         foreach ($collection as $consignment) {
-            $orderLabel = new \Gett\MyParcel\OrderLabel();
+            $orderLabel = new \Gett\MyParcelBE\OrderLabel();
             $orderLabel->id_label = $consignment->getConsignmentId();
             $orderLabel->id_order = $consignment->getReferenceId();
             $orderLabel->barcode = $consignment->getBarcode();
@@ -135,8 +135,8 @@ class LabelController extends ModuleAdminControllerCore
 
     public function processCreateb()
     {
-        $factory = new \Gett\MyParcel\Factory\Consignment\ConsignmentFactory(
-            \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME),
+        $factory = new \Gett\MyParcelBE\Factory\Consignment\ConsignmentFactory(
+            \Configuration::get(\Gett\MyParcelBE\Constant::API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
@@ -144,7 +144,7 @@ class LabelController extends ModuleAdminControllerCore
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->trans('Can\'t create label for these orders', [], 'Modules.Myparcel.Error'));
         }
-        $orders = \Gett\MyParcel\OrderLabel::getDataForLabelsCreate(array_keys(Tools::getValue('data')));
+        $orders = \Gett\MyParcelBE\OrderLabel::getDataForLabelsCreate(array_keys(Tools::getValue('data')));
         if (empty($orders)) {
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->trans('Can\'t create label for these orders', [], 'Modules.Myparcel.Error'));
@@ -180,14 +180,14 @@ class LabelController extends ModuleAdminControllerCore
                 $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
             }
             $collection->setPdfOfLabels();
-            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
+            \Gett\MyParcelBE\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
+            \Gett\MyParcelBE\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
         }
 
-        $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
+        $status_provider = new \Gett\MyParcelBE\Service\MyparcelStatusProvider();
         foreach ($collection as $consignment) {
             $orderLabel = new OrderLabel();
             $orderLabel->id_label = $consignment->getConsignmentId();
@@ -214,17 +214,17 @@ class LabelController extends ModuleAdminControllerCore
             die($this->trans('No created labels found', [], 'Modules.Myparcel.Error'));
         }
         try {
-            $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME));
+            $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(\Gett\MyParcelBE\Constant::API_KEY_CONFIGURATION_NAME));
 
             $collection->setLinkOfLabels();
-            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
+            \Gett\MyParcelBE\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
+            \Gett\MyParcelBE\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
         }
 
-        $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
+        $status_provider = new \Gett\MyParcelBE\Service\MyparcelStatusProvider();
 
         foreach ($collection as $consignment) {
             $order_label = OrderLabel::findByLabelId($consignment->getConsignmentId());
@@ -241,8 +241,8 @@ class LabelController extends ModuleAdminControllerCore
         if (empty($labels)) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
-        $service = new \Gett\MyParcel\Service\Consignment\Download(
-            \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME),
+        $service = new \Gett\MyParcelBE\Service\Consignment\Download(
+            \Configuration::get(\Gett\MyParcelBE\Constant::API_KEY_CONFIGURATION_NAME),
             Symfony\Component\HttpFoundation\Request::createFromGlobals(),
             new \PrestaShop\PrestaShop\Adapter\Configuration()
         );
@@ -252,15 +252,15 @@ class LabelController extends ModuleAdminControllerCore
     public function processUpdatelabel()
     {
         try {
-            $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcel\Constant::API_KEY_CONFIGURATION_NAME));
+            $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(\Gett\MyParcelBE\Constant::API_KEY_CONFIGURATION_NAME));
             $collection->setLinkOfLabels();
-            \Gett\MyParcel\Logger\Logger::addLog($collection->toJson());
+            \Gett\MyParcelBE\Logger\Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
+            \Gett\MyParcelBE\Logger\Logger::addLog($e->getMessage(), true);
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
 
-        $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
+        $status_provider = new \Gett\MyParcelBE\Service\MyparcelStatusProvider();
 
         foreach ($collection as $consignment) {
             $order_label = OrderLabel::findByLabelId($consignment->getConsignmentId());

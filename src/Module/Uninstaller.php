@@ -1,13 +1,13 @@
 <?php
 
-namespace Gett\MyParcel\Module;
+namespace Gett\MyParcelBE\Module;
 
 use Tab;
 use Configuration;
 use DbQuery;
 use Db;
 use Carrier;
-use Gett\MyParcel\Constant;
+use Gett\MyParcelBE\Constant;
 
 class Uninstaller
 {

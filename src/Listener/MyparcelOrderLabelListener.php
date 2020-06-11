@@ -1,11 +1,11 @@
 <?php
 
-namespace Gett\MyParcel\Listener;
+namespace Gett\MyParcelBE\Listener;
 
-use Gett\MyParcel\Constant;
+use Gett\MyParcelBE\Constant;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Gett\MyParcel\Entity\MyparcelOrderLabel;
-use Gett\MyParcel\Service\Order\OrderStatusChange;
+use Gett\MyParcelBE\Entity\MyparcelOrderLabel;
+use Gett\MyParcelBE\Service\Order\OrderStatusChange;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
 
 class MyparcelOrderLabelListener

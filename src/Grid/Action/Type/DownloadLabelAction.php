@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcel\Grid\Action\Type;
+namespace Gett\MyParcelBE\Grid\Action\Type;
 
 class DownloadLabelAction extends \PrestaShop\PrestaShop\Core\Grid\Action\Row\AbstractRowAction
 {

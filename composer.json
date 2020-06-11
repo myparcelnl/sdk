@@ -1,5 +1,5 @@
 {
-  "name": "gett/myparcel",
+  "name": "gett/myparcelbe",
   "description": "PrestaShop module to intergratie with MyParcel NL and\nMyParcel BE",
   "require": {
     "php": ">=7.2.0",
@@ -7,9 +7,9 @@
   },
   "autoload": {
     "psr-4": {
-      "Gett\\MyParcel\\": "src/"
+      "Gett\\MyParcelBE\\": "src/"
     },
-    "classmap": ["myparcel.php", "classes/OrderLabel.php"],
+    "classmap": ["myparcelbe.php", "classes/OrderLabel.php"],
     "exclude-from-classmap": []
   },
   "config": {

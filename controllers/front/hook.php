@@ -4,9 +4,9 @@ if (!defined('_PS_VERSION_')) {
     return;
 }
 
-require_once dirname(__FILE__) . '/../../myparcel.php';
+require_once dirname(__FILE__) . '/../../myparcelbe.php';
 
-class MyParcelHookModuleFrontController extends ModuleFrontController
+class MyParcelBEHookModuleFrontController extends ModuleFrontController
 {
     public $module;
 
@@ -22,7 +22,7 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
-        if (!Module::isEnabled('myparcel')) {
+        if (!Module::isEnabled('myparcelbe')) {
             header('Content-Type: application/json; charset=utf8');
             die(json_encode(['data' => ['message' => 'Module is not enabled']]));
         }
@@ -36,9 +36,9 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
     {
         $content = file_get_contents('php://input');
         // @codingStandardsIgnoreEnd
-        if (Configuration::get(\Gett\MyParcel\Constant::API_LOGGING_CONFIGURATION_NAME)) {
+        if (Configuration::get(\Gett\MyParcelBE\Constant::API_LOGGING_CONFIGURATION_NAME)) {
             $logContent = ($content);
-            \Gett\MyParcel\Logger\Logger::addLog("MyParcel - incoming webhook\n{$logContent}");
+            \Gett\MyParcelBE\Logger\Logger::addLog("MyParcel - incoming webhook\n{$logContent}");
         }
 
         $data = @json_decode($content, true);
@@ -46,7 +46,7 @@ class MyParcelHookModuleFrontController extends ModuleFrontController
             foreach ($data['data']['hooks'] as &$item) {
                 if (isset($item['shipment_id'], $item['status'], $item['barcode'])
                 ) {
-                    \Gett\MyParcel\OrderLabel::updateStatus($item['shipment_id'], $item['barcode'], $item['status']);
+                    \Gett\MyParcelBE\OrderLabel::updateStatus($item['shipment_id'], $item['barcode'], $item['status']);
                 }
             }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Gett\MyParcel\Module\Configuration;
+namespace Gett\MyParcelBE\Module\Configuration;
 
 use Context;
-use Gett\MyParcel\Constant;
+use Gett\MyParcelBE\Constant;
 use OrderState;
 
 class OrderForm extends AbstractForm

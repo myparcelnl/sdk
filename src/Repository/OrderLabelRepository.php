@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcel\Repository;
+namespace Gett\MyParcelBE\Repository;
 
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Connection;

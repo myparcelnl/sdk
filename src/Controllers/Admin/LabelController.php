@@ -1,12 +1,12 @@
 <?php
 
-namespace Gett\MyParcel\Controllers\Admin;
+namespace Gett\MyParcelBE\Controllers\Admin;
 
-use Gett\MyParcel\Service\Consignment\Create;
-use Gett\MyParcel\Service\Consignment\Update;
+use Gett\MyParcelBE\Service\Consignment\Create;
+use Gett\MyParcelBE\Service\Consignment\Update;
 use Symfony\Component\HttpFoundation\Request;
-use Gett\MyParcel\Service\Consignment\Download;
-use Gett\MyParcel\Repository\OrderLabelRepository;
+use Gett\MyParcelBE\Service\Consignment\Download;
+use Gett\MyParcelBE\Repository\OrderLabelRepository;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
 class LabelController extends FrameworkBundleAdminController
@@ -14,10 +14,10 @@ class LabelController extends FrameworkBundleAdminController
     public function createLabelsBulk(Request $request)
     {
         /** @var OrderLabelRepository $repository */
-        $repository = $this->get('gett.myparcel.repository.order_label_repository');
+        $repository = $this->get('gett.myparcelbe.repository.order_label_repository');
 
         /** @var Create $service */
-        $service = $this->get('gett.myparcel.service.consignment.create');
+        $service = $this->get('gett.myparcelbe.service.consignment.create');
 
         $orders = $repository->getOrdersForLabelCreate($request->get('order_orders_bulk'));
 
@@ -29,10 +29,10 @@ class LabelController extends FrameworkBundleAdminController
     public function createLabel(Request $request)
     {
         /** @var OrderLabelRepository $repository */
-        $repository = $this->get('gett.myparcel.repository.order_label_repository');
+        $repository = $this->get('gett.myparcelbe.repository.order_label_repository');
 
         /** @var Create $service */
-        $service = $this->get('gett.myparcel.service.consignment.create');
+        $service = $this->get('gett.myparcelbe.service.consignment.create');
         $order = $repository->getOrdersForLabelCreate($request->get('create_label')['order_ids']);
 
         $service->createLabels($order[0]);
@@ -47,7 +47,7 @@ class LabelController extends FrameworkBundleAdminController
     public function downloadLabel(Request $request)
     {
         /** @var Download $service */
-        $service = $this->get('gett.myparcel.service.consignment.download');
+        $service = $this->get('gett.myparcelbe.service.consignment.download');
 
         $service->downloadLabel([$request->get('label_id')]);
     }
@@ -55,12 +55,12 @@ class LabelController extends FrameworkBundleAdminController
     public function downloadLabelsBulk(Request $request)
     {
         /** @var OrderLabelRepository $repository */
-        $repository = $this->get('gett.myparcel.repository.order_label_repository');
+        $repository = $this->get('gett.myparcelbe.repository.order_label_repository');
 
         $labels = $repository->getOrderLabels($request->get('print_label')['order_ids']);
 
         /** @var Download $service */
-        $service = $this->get('gett.myparcel.service.consignment.download');
+        $service = $this->get('gett.myparcelbe.service.consignment.download');
 
         $service->downloadLabel($labels);
     }
@@ -68,7 +68,7 @@ class LabelController extends FrameworkBundleAdminController
     public function updateLabel(Request $request)
     {
         /** @var Update $service */
-        $service = $this->get('gett.myparcel.service.consignment.update');
+        $service = $this->get('gett.myparcelbe.service.consignment.update');
 
         $service->updateLabel([$request->get('labelId')]);
 
@@ -78,11 +78,11 @@ class LabelController extends FrameworkBundleAdminController
     public function refreshLabelsBulk(Request $request)
     {
         /** @var OrderLabelRepository $repository */
-        $repository = $this->get('gett.myparcel.repository.order_label_repository');
+        $repository = $this->get('gett.myparcelbe.repository.order_label_repository');
         $labels = $repository->getOrderLabels($request->get('order_orders_bulk'));
 
         /** @var Update $service */
-        $service = $this->get('gett.myparcel.service.consignment.update');
+        $service = $this->get('gett.myparcelbe.service.consignment.update');
         $service->updateLabel($labels);
 
         return $this->redirectToRoute('admin_orders_index');
@@ -91,10 +91,10 @@ class LabelController extends FrameworkBundleAdminController
     public function createLabelReturn(Request $request)
     {
         /** @var OrderLabelRepository $repository */
-        $repository = $this->get('gett.myparcel.repository.order_label_repository');
+        $repository = $this->get('gett.myparcelbe.repository.order_label_repository');
 
         /** @var Create $service */
-        $service = $this->get('gett.myparcel.service.consignment.create');
+        $service = $this->get('gett.myparcelbe.service.consignment.create');
         $orders = $repository->getOrdersForLabelCreate($request->get('create_label')['order_ids']);
 
         $service->createReturnLabel(reset($orders));

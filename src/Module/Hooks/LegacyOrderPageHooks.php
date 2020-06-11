@@ -1,10 +1,10 @@
 <?php
 
-namespace Gett\MyParcel\Module\Hooks;
+namespace Gett\MyParcelBE\Module\Hooks;
 
 use Configuration;
-use Gett\MyParcel\Constant;
-use Gett\MyParcel\Label\LabelOptionsResolver;
+use Gett\MyParcelBE\Constant;
+use Gett\MyParcelBE\Label\LabelOptionsResolver;
 
 trait LegacyOrderPageHooks
 {

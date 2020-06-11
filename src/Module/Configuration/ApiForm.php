@@ -1,12 +1,12 @@
 <?php
 
-namespace Gett\MyParcel\Module\Configuration;
+namespace Gett\MyParcelBE\Module\Configuration;
 
 use Tools;
 use Configuration;
-use Gett\MyParcel\Constant;
-use Gett\MyParcel\Service\WebhookService;
-use Gett\MyParcel\Model\Webhook\Subscription;
+use Gett\MyParcelBE\Constant;
+use Gett\MyParcelBE\Service\WebhookService;
+use Gett\MyParcelBE\Model\Webhook\Subscription;
 
 class ApiForm extends AbstractForm
 {
