@@ -327,7 +327,7 @@ class MyParcel extends CarrierModule
         return "{$scheme}{$user}{$pass}{$host}{$port}{$path}{$query}{$fragment}";
     }
 
-    public function getDeliverySettingsByCart(int $idCart): ?array
+    public function getDeliverySettingsByCart(int $idCart)
     {
         $query = new DbQuery();
         $query->select('delivery_settings');
