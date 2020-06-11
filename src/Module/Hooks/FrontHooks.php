@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Module\Hooks;
+namespace Gett\MyparcelBE\Module\Hooks;
 
 trait FrontHooks
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Controllers\Admin;
+namespace Gett\MyparcelBE\Controllers\Admin;
 
 class MyparcelProductController
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace Gett\MyParcelBE\Factory\Consignment;
+namespace Gett\MyparcelBE\Factory\Consignment;
 
-use Gett\MyParcelBE\Constant;
-use Gett\MyParcelBE\OrderLabel;
+use Gett\MyparcelBE\Constant;
+use Gett\MyparcelBE\OrderLabel;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use Symfony\Component\HttpFoundation\Request;
-use Gett\MyParcelBE\Carrier\PackageTypeCalculator;
+use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
-use Gett\MyParcelBE\Service\ProductConfigurationProvider;
+use Gett\MyparcelBE\Service\ProductConfigurationProvider;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 

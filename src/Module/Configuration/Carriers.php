@@ -1,10 +1,10 @@
 <?php
 
-namespace Gett\MyParcelBE\Module\Configuration;
+namespace Gett\MyparcelBE\Module\Configuration;
 
 use Db;
 use Configuration;
-use Gett\MyParcelBE\Constant;
+use Gett\MyparcelBE\Constant;
 use Tools;
 
 class Carriers

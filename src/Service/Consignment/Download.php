@@ -1,9 +1,9 @@
 <?php
 
-namespace Gett\MyParcelBE\Service\Consignment;
+namespace Gett\MyparcelBE\Service\Consignment;
 
-use Gett\MyParcelBE\Constant;
-use Gett\MyParcelBE\Logger\Logger;
+use Gett\MyparcelBE\Constant;
+use Gett\MyparcelBE\Logger\Logger;
 use Symfony\Component\HttpFoundation\Request;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;

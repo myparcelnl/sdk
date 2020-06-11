@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Service;
+namespace Gett\MyparcelBE\Service;
 
 class OrderLabelStatusChange
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Gett\MyParcelBE\Service\Consignment;
+namespace Gett\MyparcelBE\Service\Consignment;
 
-use Gett\MyParcelBE\OrderLabel;
+use Gett\MyparcelBE\OrderLabel;
 use Doctrine\ORM\EntityManagerInterface;
-use Gett\MyParcelBE\Service\MyparcelStatusProvider;
+use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 
 class Update

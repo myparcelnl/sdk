@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE;
+namespace Gett\MyparcelBE;
 
 class Constant
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Gett\MyParcelBE\Carrier;
+namespace Gett\MyparcelBE\Carrier;
 
-use Gett\MyParcelBE\Constant;
-use Gett\MyParcelBE\Service\CarrierConfigurationProvider;
+use Gett\MyparcelBE\Constant;
+use Gett\MyparcelBE\Service\CarrierConfigurationProvider;
 
 class PackageTypeCalculator
 {

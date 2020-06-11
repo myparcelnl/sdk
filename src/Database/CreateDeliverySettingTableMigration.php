@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Database;
+namespace Gett\MyparcelBE\Database;
 
 class CreateDeliverySettingTableMigration
 {

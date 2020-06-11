@@ -7,7 +7,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Gett\\MyParcelBE\\": "src/"
+      "Gett\\MyparcelBE\\": "src/"
     },
     "classmap": ["myparcelbe.php", "classes/OrderLabel.php"],
     "exclude-from-classmap": []

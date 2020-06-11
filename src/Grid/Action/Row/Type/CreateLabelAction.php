@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Grid\Action\Row\Type;
+namespace Gett\MyparcelBE\Grid\Action\Row\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

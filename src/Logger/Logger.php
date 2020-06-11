@@ -1,8 +1,8 @@
 <?php
 
-namespace Gett\MyParcelBE\Logger;
+namespace Gett\MyparcelBE\Logger;
 
-use Gett\MyParcelBE\Constant;
+use Gett\MyparcelBE\Constant;
 
 class Logger
 {

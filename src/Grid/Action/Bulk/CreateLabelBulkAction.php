@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Grid\Action\Bulk;
+namespace Gett\MyparcelBE\Grid\Action\Bulk;
 
 use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\AbstractBulkAction;
 

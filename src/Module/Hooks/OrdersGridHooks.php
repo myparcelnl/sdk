@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Module\Hooks;
+namespace Gett\MyparcelBE\Module\Hooks;
 
 trait OrdersGridHooks
 {
@@ -32,7 +32,7 @@ trait OrdersGridHooks
 
         foreach ($definition->getColumns() as $column) {
             if ($column->getName() == 'Actions') {
-                $column->getOptions()['actions']->add((new \Gett\MyParcelBE\Grid\Action\Row\Type\CreateLabelAction('create_label'))
+                $column->getOptions()['actions']->add((new \Gett\MyparcelBE\Grid\Action\Row\Type\CreateLabelAction('create_label'))
                     ->setName($this->l('Create Label', 'ordersgridhooks'))
                     ->setIcon('receipt')
                     ->setOptions([
@@ -67,7 +67,7 @@ trait OrdersGridHooks
             ->getColumns()
             ->addAfter(
                 'osname',
-                (new \Gett\MyParcelBE\Grid\Column\BarcodeTypeColumn('barcode'))
+                (new \Gett\MyparcelBE\Grid\Column\BarcodeTypeColumn('barcode'))
                     ->setName($this->l('Barcode', 'ordersgridhooks'))
                     ->setOptions([
                         'barcode' => 'Barcode Example',

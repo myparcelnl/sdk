@@ -1,11 +1,11 @@
 <?php
 
-namespace Gett\MyParcelBE\Service;
+namespace Gett\MyparcelBE\Service;
 
-use Gett\MyParcelBE\Logger\Logger;
-use Gett\MyParcelBE\Model\Webhook\Subscription;
+use Gett\MyparcelBE\Logger\Logger;
+use Gett\MyparcelBE\Model\Webhook\Subscription;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use Gett\MyParcelBE\Model\MyParcelRequest as Request;
+use Gett\MyparcelBE\Model\MyParcelRequest as Request;
 
 class WebhookService
 {

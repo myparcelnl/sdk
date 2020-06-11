@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Service;
+namespace Gett\MyparcelBE\Service;
 
 class MyparcelStatusProvider
 {
@@ -8,7 +8,7 @@ class MyparcelStatusProvider
 
     public function __construct()
     {
-        $this->module = \Module::getInstanceByName('myparcel');
+        $this->module = \Module::getInstanceByName('myparcelbe');
     }
 
     public function getStatus(int $id_status)

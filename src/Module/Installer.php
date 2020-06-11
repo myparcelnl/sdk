@@ -1,10 +1,10 @@
 <?php
 
-namespace Gett\MyParcelBE\Module;
+namespace Gett\MyparcelBE\Module;
 
 use Tab;
 use Carrier;
-use Gett\MyParcelBE\Constant;
+use Gett\MyparcelBE\Constant;
 use Configuration;
 use Db;
 use Context;

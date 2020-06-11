@@ -1,12 +1,12 @@
 <?php
 
-namespace Gett\MyParcelBE\Controllers\Admin;
+namespace Gett\MyparcelBE\Controllers\Admin;
 
-use Gett\MyParcelBE\Service\Consignment\Create;
-use Gett\MyParcelBE\Service\Consignment\Update;
+use Gett\MyparcelBE\Service\Consignment\Create;
+use Gett\MyparcelBE\Service\Consignment\Update;
 use Symfony\Component\HttpFoundation\Request;
-use Gett\MyParcelBE\Service\Consignment\Download;
-use Gett\MyParcelBE\Repository\OrderLabelRepository;
+use Gett\MyparcelBE\Service\Consignment\Download;
+use Gett\MyparcelBE\Repository\OrderLabelRepository;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
 class LabelController extends FrameworkBundleAdminController

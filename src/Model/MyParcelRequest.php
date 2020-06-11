@@ -1,6 +1,6 @@
 <?php
 
-namespace Gett\MyParcelBE\Model;
+namespace Gett\MyparcelBE\Model;
 
 class MyParcelRequest extends \MyParcelNL\Sdk\src\Model\MyParcelRequest
 {

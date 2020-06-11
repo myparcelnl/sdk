@@ -36,9 +36,9 @@ class MyParcelBEHookModuleFrontController extends ModuleFrontController
     {
         $content = file_get_contents('php://input');
         // @codingStandardsIgnoreEnd
-        if (Configuration::get(\Gett\MyParcelBE\Constant::API_LOGGING_CONFIGURATION_NAME)) {
+        if (Configuration::get(\Gett\MyparcelBE\Constant::API_LOGGING_CONFIGURATION_NAME)) {
             $logContent = ($content);
-            \Gett\MyParcelBE\Logger\Logger::addLog("MyParcel - incoming webhook\n{$logContent}");
+            \Gett\MyparcelBE\Logger\Logger::addLog("MyParcel - incoming webhook\n{$logContent}");
         }
 
         $data = @json_decode($content, true);
@@ -46,7 +46,7 @@ class MyParcelBEHookModuleFrontController extends ModuleFrontController
             foreach ($data['data']['hooks'] as &$item) {
                 if (isset($item['shipment_id'], $item['status'], $item['barcode'])
                 ) {
-                    \Gett\MyParcelBE\OrderLabel::updateStatus($item['shipment_id'], $item['barcode'], $item['status']);
+                    \Gett\MyparcelBE\OrderLabel::updateStatus($item['shipment_id'], $item['barcode'], $item['status']);
                 }
             }
 

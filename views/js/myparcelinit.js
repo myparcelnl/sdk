@@ -14,7 +14,7 @@ $(document).ready(function() {
         let $currentCarrier = $('.delivery-option input:checked');
         let currentCarrierId = $currentCarrier.val();
         $.ajax({
-          url: '/index.php?fc=module&module=myparcel&controller=checkout&id_carrier=' + currentCarrierId,
+          url: '/index.php?fc=module&module=myparcelbe&controller=checkout&id_carrier=' + currentCarrierId,
           dataType: "json",
           success: function(data) {
             window.MyParcelConfig = data;

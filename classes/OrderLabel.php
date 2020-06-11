@@ -1,8 +1,8 @@
 <?php
 
-namespace Gett\MyParcelBE;
+namespace Gett\MyparcelBE;
 
-use Gett\MyParcelBE\Service\Tracktrace;
+use Gett\MyparcelBE\Service\Tracktrace;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class OrderLabel extends \ObjectModel
@@ -37,7 +37,7 @@ class OrderLabel extends \ObjectModel
         }
 
         if ($statusCode === 14) {
-            if (\Configuration::get(\Gett\MyParcelBE\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
+            if (\Configuration::get(\Gett\MyparcelBE\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
                 OrderLabel::setShipped($idShipment, false);
             } else {
                 OrderLabel::setPrinted($idShipment, false);
@@ -233,7 +233,7 @@ class OrderLabel extends \ObjectModel
                 if ($dayFrom) {
                     $dayFull = "{$dayFrom} - {$dayTo}";
                 } else {
-                    $dayFull = Translate::getModuleTranslation('myparcel', 'Closed', 'myparcel');
+                    $dayFull = Translate::getModuleTranslation('myparcelbe', 'Closed', 'myparcelbe');
                 }
                 $templateVars["{opening_hours_{$day}_from}"] = $dayFrom;
                 $templateVars["{opening_hours_{$day}_to}"] = $dayTo;
