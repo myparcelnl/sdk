@@ -12,7 +12,7 @@ class CustomsForm extends AbstractForm
 
     protected function getLegend(): string
     {
-        return $this->module->l('Customs Settings');
+        return $this->module->l('Customs Settings', 'customsform');
     }
 
     protected function getFields(): array
@@ -20,13 +20,25 @@ class CustomsForm extends AbstractForm
         return [
             Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME => [
                 'type' => 'select',
-                'label' => $this->module->l('Default customs form'),
+                'label' => $this->module->l('Default customs form', 'customsform'),
                 'name' => Constant::MY_PARCEL_CUSTOMS_FORM_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
-                        ['id' => 'No', 'name' => $this->module->l('Do not automatically generate customs form')],
-                        ['id' => 'Add', 'name' => $this->module->l('Add this product to customs form')],
-                        ['id' => 'Skip', 'name' => $this->module->l('Skip this product on customs form')],
+                        [
+                            'id' => 'No',
+                            'name' => $this->module->l(
+                                'Do not automatically generate customs form',
+                                'customsform'
+                            )
+                        ],
+                        [
+                            'id' => 'Add',
+                            'name' => $this->module->l('Add this product to customs form', 'customsform')
+                        ],
+                        [
+                            'id' => 'Skip',
+                            'name' => $this->module->l('Skip this product on customs form', 'customsform')
+                        ],
                     ],
                     'id' => 'id',
                     'name' => 'name',
@@ -34,12 +46,12 @@ class CustomsForm extends AbstractForm
             ],
             Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME => [
                 'type' => 'text',
-                'label' => $this->module->l('Default customs code'),
+                'label' => $this->module->l('Default customs code', 'customsform'),
                 'name' => Constant::MY_PARCEL_DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME,
             ],
             Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME => [
                 'type' => 'select',
-                'label' => $this->module->l('Default customs origin'),
+                'label' => $this->module->l('Default customs origin', 'customsform'),
                 'name' => Constant::MY_PARCEL_DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME,
                 'options' => [
                     'query' => Country::getCountries(Context::getContext()->language->id),
@@ -49,19 +61,19 @@ class CustomsForm extends AbstractForm
             ],
             Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME => [
                 'type' => 'switch',
-                'label' => $this->module->l('Default customs age check'),
+                'label' => $this->module->l('Default customs age check', 'customsform'),
                 'name' => Constant::MY_PARCEL_CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
                 'is_bool' => true,
                 'values' => [
                     [
                         'id' => 'active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Enabled'),
+                        'label' => $this->module->l('Enabled', 'customsform'),
                     ],
                     [
                         'id' => 'active_off',
                         'value' => 0,
-                        'label' => $this->module->l('Disabled'),
+                        'label' => $this->module->l('Disabled', 'customsform'),
                     ],
                 ],
             ],

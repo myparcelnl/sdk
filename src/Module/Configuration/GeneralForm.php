@@ -10,7 +10,7 @@ class GeneralForm extends AbstractForm
 
     protected function getLegend(): string
     {
-        return $this->module->l('General Settings');
+        return $this->module->l('General Settings', 'generalform');
     }
 
     protected function getFields(): array
@@ -18,7 +18,7 @@ class GeneralForm extends AbstractForm
         return [
             Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME => [
                 'type' => 'switch',
-                'label' => $this->module->l('Share customer email with MyParcel'),
+                'label' => $this->module->l('Share customer email with MyParcel', 'generalform'),
                 'name' => Constant::MY_PARCEL_SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
@@ -26,18 +26,18 @@ class GeneralForm extends AbstractForm
                     [
                         'id' => 'active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Enabled'),
+                        'label' => $this->module->l('Enabled', 'generalform'),
                     ],
                     [
                         'id' => 'active_off',
                         'value' => 0,
-                        'label' => $this->module->l('Disabled'),
+                        'label' => $this->module->l('Disabled', 'generalform'),
                     ],
                 ],
             ],
             Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME => [
                 'type' => 'switch',
-                'label' => $this->module->l('Share customer phone with MyParcel'),
+                'label' => $this->module->l('Share customer phone with MyParcel', 'generalform'),
                 'name' => Constant::MY_PARCEL_SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
@@ -45,12 +45,12 @@ class GeneralForm extends AbstractForm
                     [
                         'id' => 'active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Enabled'),
+                        'label' => $this->module->l('Enabled', 'generalform'),
                     ],
                     [
                         'id' => 'active_off',
                         'value' => 0,
-                        'label' => $this->module->l('Disabled'),
+                        'label' => $this->module->l('Disabled', 'generalform'),
                     ],
                 ],
             ],

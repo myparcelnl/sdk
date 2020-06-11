@@ -82,12 +82,12 @@ abstract class AbstractForm
 
         if (!$result) {
             return $this->module->displayError(
-                $this->module->l('Could not update configuration!', 'Modules.Myparcel.Configuration')
+                $this->module->l('Could not update configuration!', 'abstractform')
             );
         }
 
         return $this->module->displayConfirmation(
-            $this->module->l('Configuration was successfully updated!', 'Modules.Myparcel.Configuration')
+            $this->module->l('Configuration was successfully updated!', 'abstractform')
         );
     }
 
@@ -157,7 +157,7 @@ abstract class AbstractForm
                 ],
                 'input' => [],
                 'submit' => [
-                    'title' => $this->module->l('Save', 'Modules.Myparcel.Configuration'),
+                    'title' => $this->module->l('Save', 'abstractform'),
                 ],
                 'buttons' => [],
             ],

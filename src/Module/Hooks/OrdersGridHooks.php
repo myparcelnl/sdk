@@ -33,7 +33,7 @@ trait OrdersGridHooks
         foreach ($definition->getColumns() as $column) {
             if ($column->getName() == 'Actions') {
                 $column->getOptions()['actions']->add((new \Gett\MyParcel\Grid\Action\Row\Type\CreateLabelAction('create_label'))
-                    ->setName($this->l('Create Label'))
+                    ->setName($this->l('Create Label', 'ordersgridhooks'))
                     ->setIcon('receipt')
                     ->setOptions([
                         'submit_route' => 'admin_myparcel_orders_label_bulk_create',
@@ -43,14 +43,14 @@ trait OrdersGridHooks
 
         $definition->getBulkActions()->add(
             (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('create_label'))
-                ->setName($this->l('Create label'))
+                ->setName($this->l('Create label', 'ordersgridhooks'))
                 ->setOptions([
                     'submit_route' => 'admin_myparcel_orders_label_bulk_create',
                 ])
         );
         $definition->getBulkActions()->add(
             (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\ModalFormSubmitBulkAction('print_label'))
-                ->setName($this->l('Print labels'))
+                ->setName($this->l('Print labels', 'ordersgridhooks'))
                 ->setOptions([
                     'submit_route' => 'admin_myparcel_orders_label_bulk_print',
                     'modal_id' => 'bulk-print-modal',
@@ -58,7 +58,7 @@ trait OrdersGridHooks
         );
         $definition->getBulkActions()->add(
             (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('refresh_labels'))
-                ->setName($this->l('Refresh labels'))
+                ->setName($this->l('Refresh labels', 'ordersgridhooks'))
                 ->setOptions([
                     'submit_route' => 'admin_myparcel_orders_label_bulk_refresh',
                 ])
@@ -68,7 +68,7 @@ trait OrdersGridHooks
             ->addAfter(
                 'osname',
                 (new \Gett\MyParcel\Grid\Column\BarcodeTypeColumn('barcode'))
-                    ->setName($this->l('Barcode'))
+                    ->setName($this->l('Barcode', 'ordersgridhooks'))
                     ->setOptions([
                         'barcode' => 'Barcode Example',
                     ])

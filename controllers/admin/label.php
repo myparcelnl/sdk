@@ -55,7 +55,7 @@ class LabelController extends ModuleAdminControllerCore
             } catch (Exception $e) {
                 \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
                 header('HTTP/1.1 500 Internal Server Error', true, 500);
-                die($this->module->l('A error occurred in the MyParcel module, please try again.'));
+                die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
             }
 
             $consignment = $myParcelCollection->first();
@@ -110,7 +110,7 @@ class LabelController extends ModuleAdminControllerCore
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('A error occurred in the MyParcel module, please try again.'));
+            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -184,7 +184,7 @@ class LabelController extends ModuleAdminControllerCore
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('A error occurred in the MyParcel module, please try again.'));
+            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();
@@ -221,7 +221,7 @@ class LabelController extends ModuleAdminControllerCore
         } catch (Exception $e) {
             \Gett\MyParcel\Logger\Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('A error occurred in the MyParcel module, please try again.'));
+            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
         }
 
         $status_provider = new \Gett\MyParcel\Service\MyparcelStatusProvider();

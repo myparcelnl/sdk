@@ -12,7 +12,7 @@ class OrderForm extends AbstractForm
 
     protected function getLegend(): string
     {
-        return $this->module->l('Order Settings');
+        return $this->module->l('Order Settings', 'orderform');
     }
 
     protected function getFields(): array
@@ -27,7 +27,7 @@ class OrderForm extends AbstractForm
         return [
             Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'select',
-                'label' => $this->module->l('Order status when label created'),
+                'label' => $this->module->l('Order status when label created', 'orderform'),
                 'name' => Constant::MY_PARCEL_LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME,
                 'options' => [
                     'query' => $order_states,
@@ -37,7 +37,7 @@ class OrderForm extends AbstractForm
             ],
             Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'select',
-                'label' => $this->module->l('Order status when label scanned'),
+                'label' => $this->module->l('Order status when label scanned', 'orderform'),
                 'name' => Constant::MY_PARCEL_LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME,
                 'default_value' => '0',
                 'options' => [
@@ -48,7 +48,7 @@ class OrderForm extends AbstractForm
             ],
             Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'select',
-                'label' => $this->module->l('Order status when delivered'),
+                'label' => $this->module->l('Order status when delivered', 'orderform'),
                 'name' => Constant::MY_PARCEL_DELIVERED_ORDER_STATUS_CONFIGURATION_NAME,
                 'options' => [
                     'query' => $order_states,
@@ -58,7 +58,7 @@ class OrderForm extends AbstractForm
             ],
             Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME => [
                 'type' => 'checkbox',
-                'label' => $this->module->l('Ignore order statuses'),
+                'label' => $this->module->l('Ignore order statuses', 'orderform'),
                 'name' => Constant::MY_PARCEL_IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
                 'multiple' => true,
                 'values' => [
@@ -69,7 +69,7 @@ class OrderForm extends AbstractForm
             ],
             Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME => [
                 'type' => 'switch',
-                'label' => $this->module->l('Order status mail'),
+                'label' => $this->module->l('Order status mail', 'orderform'),
                 'name' => Constant::MY_PARCEL_STATUS_CHANGE_MAIL_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
@@ -77,23 +77,29 @@ class OrderForm extends AbstractForm
                     [
                         'id' => 'active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Enabled'),
+                        'label' => $this->module->l('Enabled', 'orderform'),
                     ],
                     [
                         'id' => 'active_off',
                         'value' => 0,
-                        'label' => $this->module->l('Disabled'),
+                        'label' => $this->module->l('Disabled', 'orderform'),
                     ],
                 ],
             ],
             Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME => [
                 'type' => 'select',
-                'label' => $this->module->l('Send notification after'),
+                'label' => $this->module->l('Send notification after', 'orderform'),
                 'name' => Constant::MY_PARCEL_ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME,
                 'options' => [
                     'query' => [
-                        ['id' => 'first_scan', 'name' => $this->module->l('Label has passed first scan')],
-                        ['id' => 'printed', 'name' => $this->module->l('Label is printed')],
+                        [
+                            'id' => 'first_scan',
+                            'name' => $this->module->l('Label has passed first scan', 'orderform')
+                        ],
+                        [
+                            'id' => 'printed',
+                            'name' => $this->module->l('Label is printed', 'orderform')
+                        ],
                     ],
                     'id' => 'id',
                     'name' => 'name',
@@ -101,7 +107,7 @@ class OrderForm extends AbstractForm
             ],
             Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME => [
                 'type' => 'switch',
-                'label' => $this->module->l('Automatic set order state to ‘sent’ for digital stamp'),
+                'label' => $this->module->l('Automatic set order state to ‘sent’ for digital stamp', 'orderform'),
                 'name' => Constant::MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
@@ -109,12 +115,12 @@ class OrderForm extends AbstractForm
                     [
                         'id' => 'active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Enabled'),
+                        'label' => $this->module->l('Enabled', 'orderform'),
                     ],
                     [
                         'id' => 'active_off',
                         'value' => 0,
-                        'label' => $this->module->l('Disabled'),
+                        'label' => $this->module->l('Disabled', 'orderform'),
                     ],
                 ],
             ],

@@ -49,7 +49,7 @@ class Carriers
 
     private function getForm()
     {
-        $carrier = $this->module->l('Carriers');
+        $carrier = $this->module->l('Carriers', 'carriers');
         if (Tools::getValue('id_carrier')){
             $carrier = (new \Carrier(Tools::getValue('id_carrier')))->name;
         }
@@ -57,30 +57,30 @@ class Carriers
         $deliveryDaysOptions = array(
             array(
                 'id'   => -1,
-                'name' => $this->module->l('Hide days'),
+                'name' => $this->module->l('Hide days', 'carriers'),
             ),
         );
         for ($i = 1; $i < 15; $i++) {
             $deliveryDaysOptions[] = array(
                 'id'   => $i,
-                'name' => sprintf($this->module->l('%d days'), $i),
+                'name' => sprintf($this->module->l('%d days', 'carriers'), $i),
             );
         }
 
         $dropOffDelayOptions = array(
             array(
                 'id'   => 0,
-                'name' => $this->module->l('No delay'),
+                'name' => $this->module->l('No delay', 'carriers'),
             ),
             array(
                 'id'   => 1,
-                'name' => $this->module->l('1 day'),
+                'name' => $this->module->l('1 day', 'carriers'),
             ),
         );
         for ($i = 2; $i < 15; $i++) {
             $dropOffDelayOptions[] = array(
                 'id'   => $i,
-                'name' => sprintf($this->module->l('%d days'), $i),
+                'name' => sprintf($this->module->l('%d days', 'carriers'), $i),
             );
         }
 
@@ -91,25 +91,25 @@ class Carriers
                     'icon' => 'icon-truck',
                 ],
                 'tabs' => [
-                    'form' => $this->module->l('Checkout delivery form'),
-                    'delivery' => $this->module->l('Delivery'),
-                    'return' => $this->module->l('Return'),
+                    'form' => $this->module->l('Checkout delivery form', 'carriers'),
+                    'delivery' => $this->module->l('Delivery', 'carriers'),
+                    'return' => $this->module->l('Return', 'carriers'),
                 ],
                 'input' => [
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery Title'),
+                        'label' => $this->module->l('Delivery Title', 'carriers'),
                         'name' => 'deliveryTitle',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('General delivery title'),
+                            $this->module->l('General delivery title', 'carriers'),
                         ],
-                        'desc' => $this->module->l('General delivery title'),
+                        'desc' => $this->module->l('General delivery title', 'carriers'),
                     ],
                     [
                         'type' => 'checkbox',
                         'multiple' => true,
-                        'label' => $this->module->l('Drop off days'),
+                        'label' => $this->module->l('Drop off days', 'carriers'),
                         'name' => 'dropOffDays',
                         'tab' => 'form',
                         'values' => [
@@ -126,23 +126,23 @@ class Carriers
                             'name' => 'name',
                         ],
                         'hint' => [
-                            $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.'),
+                            $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.'),
+                        'desc' => $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.', 'carriers'),
                     ],
                     [
                         'type' => 'time',
-                        'label' => $this->module->l('Cutoff Time'),
+                        'label' => $this->module->l('Cutoff Time', 'carriers'),
                         'name' => 'cutoffTime',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.'),
+                            $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.'),
+                        'desc' => $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.', 'carriers'),
                     ],
                     [
                         'type' => 'select',
-                        'label' => $this->module->l('Delivery days window'),
+                        'label' => $this->module->l('Delivery days window', 'carriers'),
                         'name' => 'deliverydaysWindow',
                         'tab' => 'form',
                         'options'  => array(
@@ -151,13 +151,13 @@ class Carriers
                             'name'  => 'name',
                         ),
                         'hint' => [
-                            $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.'),
+                            $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.'),
+                        'desc' => $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.', 'carriers'),
                     ],
                     [
                         'type' => 'select',
-                        'label' => $this->module->l('Drop off delay'),
+                        'label' => $this->module->l('Drop off delay', 'carriers'),
                         'name' => 'dropoffDelay',
                         'tab' => 'form',
                         'options'  => array(
@@ -166,28 +166,36 @@ class Carriers
                             'name'  => 'name',
                         ),
                         'hint' => [
-                            $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.'),
+                            $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.'),
+                        'desc' => $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.', 'carriers'),
                     ],
                     [
                         'type' => 'switch',
                         'is_bool' => true,
-                        'label' => $this->module->l('Allow monday delivery'),
+                        'label' => $this->module->l('Allow monday delivery', 'carriers'),
                         'name' => 'allowMondayDelivery',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                        'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
                         'values' => [
-                            ['id' => 'allowMondayDelivery_on', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'allowMondayDelivery_off', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowMondayDelivery_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowMondayDelivery_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
                     ],
                     [
                         'type' => 'time',
-                        'label' => $this->module->l('Saturday cutoff time'),
+                        'label' => $this->module->l('Saturday cutoff time', 'carriers'),
                         'name' => 'saturdayCutoffTime',
                         'tab' => 'form',
                     ],
@@ -195,100 +203,124 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'allowMorningDelivery_on', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'allowMorningDelivery_off', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowMorningDelivery_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowMorningDelivery_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Allow morning delivery'),
+                        'label' => $this->module->l('Allow morning delivery', 'carriers'),
                         'name' => 'allowMorningDelivery',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.'),
+                        'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
 
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery morning title'),
+                        'label' => $this->module->l('Delivery morning title', 'carriers'),
                         'name' => 'deliveryMorningTitle',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                            $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
 
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery morning price'),
+                        'label' => $this->module->l('Delivery morning price', 'carriers'),
                         'name' => 'priceMorningDelivery',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery standart title'),
+                        'label' => $this->module->l('Delivery standart title', 'carriers'),
                         'name' => 'deliveryStandardTitle',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                            $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
 
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery standart price'),
+                        'label' => $this->module->l('Delivery standart price', 'carriers'),
                         'name' => 'priceStandardDelivery',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'switch',
                         'is_bool' => true,
-                        'label' => $this->module->l('Allow evening delivery'),
+                        'label' => $this->module->l('Allow evening delivery', 'carriers'),
                         'name' => 'allowEveningDelivery',
                         'tab' => 'form',
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowEveningDelivery_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowEveningDelivery_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery evening title'),
+                        'label' => $this->module->l('Delivery evening title', 'carriers'),
                         'name' => 'deliveryEveningTitle',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                            $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.'),
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
 
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price evening delivery'),
+                        'label' => $this->module->l('Price evening delivery', 'carriers'),
                         'name' => 'priceEveningDelivery',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'switch',
                         'is_bool' => true,
-                        'label' => $this->module->l('Allow signature'),
+                        'label' => $this->module->l('Allow signature', 'carriers'),
                         'name' => 'allowSignature',
                         'tab' => 'form',
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowSignature_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowSignature_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Signature title'),
+                        'label' => $this->module->l('Signature title', 'carriers'),
                         'name' => 'signatureTitle',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price signature'),
+                        'label' => $this->module->l('Price signature', 'carriers'),
                         'name' => 'priceSignature',
                         'tab' => 'form',
                     ],
@@ -296,22 +328,30 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowOnlyRecipient_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowOnlyRecipient_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Allow only recipient'),
+                        'label' => $this->module->l('Allow only recipient', 'carriers'),
                         'name' => 'allowOnlyRecipient',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Only recipient title'),
+                        'label' => $this->module->l('Only recipient title', 'carriers'),
                         'name' => 'onlyRecipientTitle',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price Only recipient'),
+                        'label' => $this->module->l('Price Only recipient', 'carriers'),
                         'name' => 'priceOnlyRecipient',
                         'tab' => 'form',
                     ],
@@ -319,63 +359,79 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowPickupPoints_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowPickupPoints_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Allow pickup points'),
+                        'label' => $this->module->l('Allow pickup points', 'carriers'),
                         'name' => 'allowPickupPoints',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Pickup title'),
+                        'label' => $this->module->l('Pickup title', 'carriers'),
                         'name' => 'pickupTitle',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Pickup price'),
+                        'label' => $this->module->l('Pickup price', 'carriers'),
                         'name' => 'pricePickup',
                         'tab' => 'form',
                         'hint' => [
-                            $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.'),
+                            $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.', 'carriers'),
                         ],
-                        'desc' => $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.'),
+                        'desc' => $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.', 'carriers'),
                     ],
                     [
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'allowPickupExpress_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'allowPickupExpress_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Allow pickup express'),
+                        'label' => $this->module->l('Allow pickup express', 'carriers'),
                         'name' => 'allowPickupExpress',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price pickup express'),
+                        'label' => $this->module->l('Price pickup express', 'carriers'),
                         'name' => 'pricePickupExpress',
                         'tab' => 'form',
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('BE delivery title'),
+                        'label' => $this->module->l('BE delivery title', 'carriers'),
                         'name' => 'BEdeliveryTitle',
                         'tab' => 'form',
                     ],
                     [
                         'tab' => 'delivery',
                         'type' => 'select',
-                        'label' => $this->module->l('Default package type'),
+                        'label' => $this->module->l('Default package type', 'carriers'),
                         'name' => Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
-                                ['id' => 1, 'name' => 'Package'],
-                                ['id' => 2, 'name' => 'Mailbox package'],
-                                ['id' => 3, 'name' => 'Letter'],
-                                ['id' => 4, 'name' => 'Digital stamp'],
+                                ['id' => 1, 'name' => $this->module->l('Package', 'carriers')],
+                                ['id' => 2, 'name' => $this->module->l('Mailbox package', 'carriers')],
+                                ['id' => 3, 'name' => $this->module->l('Letter', 'carriers')],
+                                ['id' => 4, 'name' => $this->module->l('Digital stamp', 'carriers')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -385,10 +441,18 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Deliver only to recipient'),
+                        'label' => $this->module->l('Deliver only to recipient', 'carriers'),
                         'name' => Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
@@ -396,28 +460,36 @@ class Carriers
                         'type' => $this->getExclusiveFieldType(Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Age check'),
+                        'label' => $this->module->l('Age check', 'carriers'),
                         'name' => Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
                     [
                         'tab' => 'delivery',
                         'type' => 'select',
-                        'label' => $this->module->l('Default package format'),
+                        'label' => $this->module->l('Default package format', 'carriers'),
                         'name' => Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
-                                ['id' => 1, 'name' => 'Normal'],
-                                ['id' => 2, 'name' => 'Large'],
-                                ['id' => 3, 'name' => 'Automatic'],
+                                ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
+                                ['id' => 2, 'name' => $this->module->l('Large', 'carriers')],
+                                ['id' => 3, 'name' => $this->module->l('Automatic', 'carriers')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
                             'default' => [
-                                'label' => $this->module->l('Select'),
+                                'label' => $this->module->l('Select', 'carriers'),
                                 'value' => 0,
                             ],
                         ],
@@ -426,10 +498,18 @@ class Carriers
                         'type' => $this->getExclusiveFieldType(Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Return package when recipient is not home'),
+                        'label' => $this->module->l('Return package when recipient is not home', 'carriers'),
                         'name' => Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
@@ -437,10 +517,18 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Recipient need to sign'),
+                        'label' => $this->module->l('Recipient need to sign', 'carriers'),
                         'name' => Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
@@ -448,10 +536,18 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Package with insurance'),
+                        'label' => $this->module->l('Package with insurance', 'carriers'),
                         'name' => Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
                         'tab' => 'delivery',
                     ],
@@ -459,14 +555,14 @@ class Carriers
                     [
                         'tab' => 'return',
                         'type' => 'select',
-                        'label' => $this->module->l('Default package type'),
+                        'label' => $this->module->l('Default package type', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
-                                ['id' => 1, 'name' => 'Package'],
-                                ['id' => 2, 'name' => 'Mailbox package'],
-                                ['id' => 3, 'name' => 'Letter'],
-                                ['id' => 4, 'name' => 'Digital stamp'],
+                                ['id' => 1, 'name' => $this->module->l('Package', 'carriers')],
+                                ['id' => 2, 'name' => $this->module->l('Mailbox package', 'carriers')],
+                                ['id' => 3, 'name' => $this->module->l('Letter', 'carriers')],
+                                ['id' => 4, 'name' => $this->module->l('Digital stamp', 'carriers')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -476,10 +572,18 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Deliver only to recipient'),
+                        'label' => $this->module->l('Deliver only to recipient', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_ONLY_RECIPIENT_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
@@ -487,28 +591,36 @@ class Carriers
                         'type' => $this->getExclusiveFieldType('return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Age check'),
+                        'label' => $this->module->l('Age check', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
                     [
                         'tab' => 'return',
                         'type' => 'select',
-                        'label' => $this->module->l('Default package format'),
+                        'label' => $this->module->l('Default package format', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_PACKAGE_FORMAT_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
-                                ['id' => 1, 'name' => 'Normal'],
-                                ['id' => 2, 'name' => 'Large'],
-                                ['id' => 3, 'name' => 'Automatic'],
+                                ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
+                                ['id' => 2, 'name' => $this->module->l('Large', 'carriers')],
+                                ['id' => 3, 'name' => $this->module->l('Automatic', 'carriers')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
                             'default' => [
-                                'label' => $this->module->l('Select'),
+                                'label' => $this->module->l('Select', 'carriers'),
                                 'value' => 0,
                             ],
                         ],
@@ -517,10 +629,18 @@ class Carriers
                         'type' => $this->getExclusiveFieldType('return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME),
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Return package when recipient is not home'),
+                        'label' => $this->module->l('Return package when recipient is not home', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_RETURN_PACKAGE_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
@@ -528,10 +648,18 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Recipient need to sign'),
+                        'label' => $this->module->l('Recipient need to sign', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_SIGNATURE_REQUIRED_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
@@ -539,10 +667,18 @@ class Carriers
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
-                            ['id' => 'Yes', 'value' => 1, 'label' => 'Yes'],
-                            ['id' => 'no', 'value' => 0, 'label' => 'No'],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_on',
+                                'value' => 1,
+                                'label' => $this->module->l('Yes', 'carriers')
+                            ],
+                            [
+                                'id' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME.'_off',
+                                'value' => 0,
+                                'label' => $this->module->l('No', 'carriers')
+                            ],
                         ],
-                        'label' => $this->module->l('Package with insurance'),
+                        'label' => $this->module->l('Package with insurance', 'carriers'),
                         'name' => 'return_' . Constant::MY_PARCEL_INSURANCE_CONFIGURATION_NAME,
                         'tab' => 'return',
                     ],
@@ -552,7 +688,7 @@ class Carriers
                     ],
                 ],
                 'submit' => [
-                    'title' => $this->module->l('Save'),
+                    'title' => $this->module->l('Save', 'carriers'),
                 ],
             ],
         ];
@@ -598,12 +734,12 @@ class Carriers
     {
         $fieldsList = [
             'id_carrier' => [
-                'title' => $this->module->l('ID'),
+                'title' => $this->module->l('ID', 'carriers'),
                 'align' => 'center',
                 'class' => 'fixed-width-xs',
             ],
             'name' => [
-                'title' => $this->module->l('Name'),
+                'title' => $this->module->l('Name', 'carriers'),
             ],
         ];
 
@@ -614,7 +750,7 @@ class Carriers
         $helper->show_toolbar = false;
         $helper->module = $this;
         $helper->identifier = 'id_carrier';
-        $helper->title = "{$this->module->l('Delivery options')}";
+        $helper->title = $this->module->l('Delivery options', 'carriers');
         $helper->table = 'carrier';
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . Tools::getValue(

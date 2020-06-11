@@ -16,9 +16,9 @@ trait LegacyOrderPageHooks
             \Media::addJsDef([
                 //TODO
             ]);
-            \Media::addJsDefL('print_labels_text', $this->l('Print labels'));
-            \Media::addJsDefL('refresh_labels_text', $this->l('Refresh labels'));
-            \Media::addJsDefL('create_label_text', $this->l('Create label'));
+            \Media::addJsDefL('print_labels_text', $this->l('Print labels', 'legacyorderpagehooks'));
+            \Media::addJsDefL('refresh_labels_text', $this->l('Refresh labels', 'legacyorderpagehooks'));
+            \Media::addJsDefL('create_label_text', $this->l('Create label', 'legacyorderpagehooks'));
             $this->context->controller->addJS(
                 $this->_path . 'views/js/admin/order.js'
             );
@@ -46,7 +46,7 @@ trait LegacyOrderPageHooks
         $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`, a.id_carrier';
 
         $params['fields']['myparcel_void_1'] = [
-            'title' => $this->l('Labels'),
+            'title' => $this->l('Labels', 'legacyorderpagehooks'),
             'class' => 'pointer-myparcel-labels text-center',
             'callback' => 'printMyParcelLabel',
             'search' => false,
@@ -114,8 +114,8 @@ trait LegacyOrderPageHooks
                     'create_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'createb']),
                     'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
                     'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
-                    'create_label_error' => $this->l('Cannot create label for orders'),
-                    'no_order_selected_error' => $this->l('Please select at least one order first.'),
+                    'create_label_error' => $this->l('Cannot create label for orders', 'legacyorderpagehooks'),
+                    'no_order_selected_error' => $this->l('Please select at least one order first.', 'legacyorderpagehooks'),
                 ]
             );
 

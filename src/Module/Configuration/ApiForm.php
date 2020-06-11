@@ -16,7 +16,7 @@ class ApiForm extends AbstractForm
     {
         $buttons = [
             'reset' => [
-                'title' => $this->module->l('Create webhook'),
+                'title' => $this->module->l('Create webhook', 'apiform'),
                 'name' => 'resetHook',
                 'type' => 'submit',
                 'class' => 'btn btn-default pull-left',
@@ -25,9 +25,9 @@ class ApiForm extends AbstractForm
         ];
 
         if (Configuration::get(Constant::MY_PARCEL_WEBHOOK_ID_CONFIGURATION_NAME)) {
-            $buttons['reset']['title'] = $this->module->l('Refresh Webhook');
+            $buttons['reset']['title'] = $this->module->l('Refresh Webhook', 'apiform');
             $buttons['delete'] = [
-                'title' => $this->module->l('Delete Webhook'),
+                'title' => $this->module->l('Delete Webhook', 'apiform'),
                 'name' => 'deleteHook',
                 'type' => 'submit',
                 'class' => 'btn btn-default pull-left',
@@ -40,7 +40,7 @@ class ApiForm extends AbstractForm
 
     protected function getLegend(): string
     {
-        return $this->module->l('API Settings');
+        return $this->module->l('API Settings', 'apiform');
     }
 
     protected function getFields(): array
@@ -48,13 +48,13 @@ class ApiForm extends AbstractForm
         return [
             Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME => [
                 'type' => 'text',
-                'label' => $this->module->l('Your API key'),
+                'label' => $this->module->l('Your API key', 'apiform'),
                 'name' => Constant::MY_PARCEL_API_KEY_CONFIGURATION_NAME,
                 'required' => false,
             ],
             Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME => [
                 'type' => 'switch',
-                'label' => $this->module->l('Api logging'),
+                'label' => $this->module->l('Api logging', 'apiform'),
                 'name' => Constant::MY_PARCEL_API_LOGGING_CONFIGURATION_NAME,
                 'required' => false,
                 'is_bool' => true,
@@ -62,12 +62,12 @@ class ApiForm extends AbstractForm
                     [
                         'id' => 'active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Enabled'),
+                        'label' => $this->module->l('Enabled', 'apiform'),
                     ],
                     [
                         'id' => 'active_off',
                         'value' => 0,
-                        'label' => $this->module->l('Disabled'),
+                        'label' => $this->module->l('Disabled', 'apiform'),
                     ],
                 ],
             ],
@@ -110,9 +110,7 @@ class ApiForm extends AbstractForm
                 }
             }
         } catch (\Exception $e) {
-            return $this->module->displayError(
-                $this->module->l($e->getMessage(), 'Modules.Myparcel.Configuration')
-            );
+            return $this->module->displayError($e->getMessage());
         }
 
         return $parent;
