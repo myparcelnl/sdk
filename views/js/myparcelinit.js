@@ -100,10 +100,12 @@ $(document).ready(function() {
     $(document).on('change', '.delivery-option input', function() {
         //initializeMyParcelForm($(this));
     });
-    prestashop.on('updatedDeliveryForm', function(event) {
-      let $parent = $(event.deliveryOption);
-      initializeMyParcelForm($('input:checked', $parent));
-    });
+    if (typeof prestashop !== 'undefined') {
+      prestashop.on('updatedDeliveryForm', function (event) {
+        let $parent = $(event.deliveryOption);
+        initializeMyParcelForm($('input:checked', $parent));
+      });
+    }
     initializeMyParcelForm($('.delivery-option input:checked'));
 
     document.addEventListener('myparcel_updated_delivery_options', (event) => updateMypaInput(event.detail));
