@@ -124,7 +124,7 @@ class MyParcel extends CarrierModule
         $this->displayName = $this->l('MyParcel');
         $this->description = $this->l('PrestaShop module to intergratie with MyParcel NL and MyParcel BE');
 
-        $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
     }
 
     public function getAdminLink(string $controller, bool $withToken = true, array $params = [])
