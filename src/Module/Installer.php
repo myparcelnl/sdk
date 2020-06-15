@@ -130,7 +130,7 @@ class Installer
 
         return [
             'MyParcelLabelController' => [
-                'class_name' => 'Label',
+                'class_name' => 'AdminLabel',
                 'name' => $languages,
             ],
         ];
