@@ -13,9 +13,6 @@ trait LegacyOrderPageHooks
     public function hookDisplayAdminListBefore()
     {
         if ($this->context->controller instanceof \AdminOrdersController) {
-            \Media::addJsDef([
-                //TODO
-            ]);
             \Media::addJsDefL('print_labels_text', $this->l('Print labels', 'legacyorderpagehooks'));
             \Media::addJsDefL('refresh_labels_text', $this->l('Refresh labels', 'legacyorderpagehooks'));
             \Media::addJsDefL('create_label_text', $this->l('Create label', 'legacyorderpagehooks'));
@@ -25,11 +22,18 @@ trait LegacyOrderPageHooks
 
             $link = $this->context->link;
             $this->context->smarty->assign([
-                'action' => $link->getAdminLink('AdminLabel', true, ['action' => 'createLabel']),
-                'download_action' => $link->getAdminLink('AdminLabel', true, ['action' => 'downloadLabel']),
-                'print_bulk_action' => $link->getAdminLink('Label', true, [], ['action' => 'print']),
+                'action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
+                'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
+                'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
                 'isBE' => $this->isBE(),
                 'labelConfiguration' => $this->getLabelDefaultConfiguration(),
+                'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+                'ONLY_RECIPIENT' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
+                'AGE_CHECK' => Constant::AGE_CHECK_CONFIGURATION_NAME,
+                'PACKAGE_FORMAT' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+                'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
+                'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
             ]);
 
             return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');
@@ -111,9 +115,9 @@ trait LegacyOrderPageHooks
                     'default_label_size' => Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME),
                     'default_label_position' => Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME),
                     'prompt_for_label_position' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
-                    'create_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'createb']),
-                    'refresh_labels_bulk_route' => $this->getAdminLink('Label', true, ['action' => 'refresh']),
-                    'create_label_action' => $this->getAdminLink('Label', true, ['action' => 'create']),
+                    'create_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createb']),
+                    'refresh_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'refresh']),
+                    'create_label_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'create']),
                     'create_label_error' => $this->l('Cannot create label for orders', 'legacyorderpagehooks'),
                     'no_order_selected_error' => $this->l('Please select at least one order first.', 'legacyorderpagehooks'),
                 ]

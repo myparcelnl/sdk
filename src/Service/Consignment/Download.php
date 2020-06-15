@@ -2,6 +2,7 @@
 
 namespace Gett\MyparcelBE\Service\Consignment;
 
+use Configuration;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Logger\Logger;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ class Download
     private $request;
     private $configuration;
 
-    public function __construct(string $api_key, Request $request, ConfigurationInterface $configuration)
+    public function __construct(string $api_key, array $request, Configuration $configuration)
     {
         $this->api_key = $api_key;
         $this->request = $request;
@@ -36,7 +37,7 @@ class Download
             if (!empty($collection->getConsignments())) {
                 $collection
                     ->setPdfOfLabels($this->fetchPositions())
-                    ->downloadPdfOfLabels($this->configuration->get(Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false));
+                    ->downloadPdfOfLabels($this->configuration::get(Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false));
                 Logger::addLog($collection->toJson());
             } else {
                 \Tools::redirectAdmin(\Context::getContext()->link->getAdminLink('AdminOrders'));
@@ -48,10 +49,10 @@ class Download
 
     private function fetchPositions()
     {
-        if ($this->request->get('format') == 'a6') {
+        if ($this->request['format'] == 'a6') {
             return false;
         }
 
-        return $this->request->get('position');
+        return $this->request['position'];
     }
 }

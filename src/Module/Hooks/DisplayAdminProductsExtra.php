@@ -27,6 +27,17 @@ trait DisplayAdminProductsExtra
         $this->context->smarty->assign(
             [
                 'params' => $params,
+                'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+                'ONLY_RECIPIENT' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
+                'AGE_CHECK' => Constant::AGE_CHECK_CONFIGURATION_NAME,
+                'PACKAGE_FORMAT' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+                'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
+                'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+                'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
+                'CUSTOMS_FORM' => Constant::CUSTOMS_FORM_CONFIGURATION_NAME,
+                'CUSTOMS_CODE' => Constant::CUSTOMS_CODE_CONFIGURATION_NAME,
+                'CUSTOMS_ORIGIN' => Constant::CUSTOMS_ORIGIN_CONFIGURATION_NAME,
+                'CUSTOMS_AGE_CHECK' => Constant::CUSTOMS_AGE_CHECK_CONFIGURATION_NAME,
                 'countries' => \Country::getCountries(\Context::getContext()->language->id),
                 'isBE' => $this->isBE(),
             ]

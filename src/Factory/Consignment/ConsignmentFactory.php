@@ -2,8 +2,10 @@
 
 namespace Gett\MyparcelBE\Factory\Consignment;
 
+use Configuration;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\OrderLabel;
+use Module;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +22,14 @@ class ConsignmentFactory
     private $api_key;
     private $request;
     private $configuration;
+    private $module;
 
-    public function __construct(string $api_key, Request $request, ConfigurationInterface $configuration)
+    public function __construct(string $api_key, array $request, Configuration $configuration, Module $module)
     {
         $this->api_key = $api_key;
         $this->configuration = $configuration;
         $this->request = $request;
+        $this->module = $module;
     }
 
     public function fromOrders(array $orders): MyParcelCollection
@@ -49,10 +53,10 @@ class ConsignmentFactory
             ->setUserAgent('prestashop', '1.0')
         ;
 
-        for ($i = 0; $i < $this->request->get('number'); ++$i) {
+        for ($i = 0; $i < $this->request['number']; ++$i) {
             $consignment = $this->initConsignment($order);
             foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $option) {
-                if ($this->request->get($option)) {
+                if (isset($this->request[$option])) {
                     if (method_exists($this, $option)) {
                         $consignment = $this->{$option}($consignment);
                     }
@@ -83,17 +87,17 @@ class ConsignmentFactory
             ->setInvoice($order['invoice_number'])
         ;
 
-        if ($package_type = $this->request->get('MY_PARCEL_PACKAGE_TYPE')) {
+        if (isset($this->request['MY_PARCEL_PACKAGE_TYPE']) && $package_type = $this->request['MY_PARCEL_PACKAGE_TYPE']) {
             $consignment->setPackageType($package_type);
         } else {
             $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']));
         }
 
-        if ($this->configuration->get(Constant::SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
+        if ($this->configuration::get(Constant::SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
             $consignment->setEmail($order['email']);
         }
 
-        if ($this->configuration->get(Constant::SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME)) {
+        if ($this->configuration::get(Constant::SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME)) {
             $consignment->setPhone($order['phone']);
         }
         $delivery_setting = json_decode($order['delivery_settings']);
@@ -117,7 +121,8 @@ class ConsignmentFactory
             $this->getLabelParams($order, \Configuration::get(Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME))
         );
 
-        if (\CountryCore::getIdZone($order['id_country']) != 1 && $this->configuration->get(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
+        if (\CountryCore::getIdZone($order['id_country']) != 1
+            && $this->configuration::get(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
             $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
             $consignment->setAgeCheck(false); //The age check is not possible with an EU shipment or world shipment
             if ($products !== false) {
@@ -125,10 +130,18 @@ class ConsignmentFactory
                     $item = (new MyParcelCustomsItem());
                     $item->setAmount($product['product_quantity']);
                     $item->setClassification(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::CUSTOMS_CODE_CONFIGURATION_NAME) ?? (int) $this->configuration->get(Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get(
+                            $product['product_id'],
+                            Constant::CUSTOMS_CODE_CONFIGURATION_NAME)
+                                ?? (int) $this->configuration::get(Constant::DEFAULT_CUSTOMS_CODE_CONFIGURATION_NAME
+                        )
                     );
                     $item->setCountry(
-                        ProductConfigurationProvider::get($product['product_id'], Constant::CUSTOMS_ORIGIN_CONFIGURATION_NAME) ?? $this->configuration->get(Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME)
+                        ProductConfigurationProvider::get(
+                            $product['product_id'],
+                            Constant::CUSTOMS_ORIGIN_CONFIGURATION_NAME)
+                                ?? $this->configuration::get(Constant::DEFAULT_CUSTOMS_ORIGIN_CONFIGURATION_NAME
+                        )
                     );
 
                     $item->setDescription($product['product_name']);
@@ -154,12 +167,26 @@ class ConsignmentFactory
 
     private function MY_PARCEL_PACKAGE_TYPE(AbstractConsignment $consignment)
     {
-        return $consignment->setPackageType($this->request->get(__FUNCTION__));
+        return $consignment->setPackageType($this->request[__FUNCTION__]);
     }
 
     private function MY_PARCEL_INSURANCE(AbstractConsignment $consignment)
     {
-        $insurance = $this->request->get('insurance-higher-amount') * 100 ?? $this->request->get('insurance-value-option');
+        $insurance = $this->request['insurance-value-option'];
+        if (isset($this->request['heigherthen500'])) {
+            if (empty($this->request['insurance-higher-amount'])) {
+                throw new \Exception('Insurance value cannot be empty');
+            }
+            $insurance = $this->request['insurance-higher-amount'];
+        }
+        if ($this->module->isBE() && $insurance > 50000) {
+            $this->module->controller->errors[] = $this->module->l('Insurance value cannot more than € 500', 'consignmentfactory');
+            throw new \Exception('Insurance value cannot more than € 500');
+        }
+        if ($this->module->isNL() && $insurance > 500000) {
+            $this->module->controller->errors[] = $this->module->l('Insurance value cannot more than € 5000', 'consignmentfactory');
+            throw new \Exception('Insurance value cannot more than € 5000');
+        }
 
         return $consignment->setInsurance($insurance);
     }
@@ -176,7 +203,7 @@ class ConsignmentFactory
 
     private function MY_PARCEL_PACKAGE_FORMAT(AbstractConsignment $consignment)
     {
-        return $consignment->setLargeFormat($this->request->get(__FUNCTION__) == 2);
+        return $consignment->setLargeFormat($this->request[__FUNCTION__] == 2);
     }
 
     private function getLabelParams(array $order, string $labelParams, string $labelDefaultParam = 'id_order'): string
@@ -230,15 +257,15 @@ class ConsignmentFactory
         if (!\Validate::isLoadedObject($carrier)) {
             throw new \Exception('No carrier found.');
         }
-        if ($carrier->id_reference == $this->configuration->get('MYPARCEL_POSTNL')) {
+        if ($carrier->id_reference == $this->configuration::get('MYPARCEL_POSTNL')) {
             return PostNLConsignment::CARRIER_ID;
         }
 
-        if ($carrier->id_reference == $this->configuration->get('MYPARCEL_BPOST')) {
+        if ($carrier->id_reference == $this->configuration::get('MYPARCEL_BPOST')) {
             return BpostConsignment::CARRIER_ID;
         }
 
-        if ($carrier->id_reference == $this->configuration->get('MYPARCEL_DPD')) {
+        if ($carrier->id_reference == $this->configuration::get('MYPARCEL_DPD')) {
             return DPDConsignment::CARRIER_ID;
         }
 
