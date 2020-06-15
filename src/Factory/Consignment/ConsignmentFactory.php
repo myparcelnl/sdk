@@ -179,11 +179,11 @@ class ConsignmentFactory
             }
             $insurance = $this->request['insurance-higher-amount'];
         }
-        if ($this->module->isBE() && $insurance > 50000) {
+        if ($this->module->isBE() && $insurance > 500) {
             $this->module->controller->errors[] = $this->module->l('Insurance value cannot more than € 500', 'consignmentfactory');
             throw new \Exception('Insurance value cannot more than € 500');
         }
-        if ($this->module->isNL() && $insurance > 500000) {
+        if ($this->module->isNL() && $insurance > 5000) {
             $this->module->controller->errors[] = $this->module->l('Insurance value cannot more than € 5000', 'consignmentfactory');
             throw new \Exception('Insurance value cannot more than € 5000');
         }
