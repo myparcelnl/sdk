@@ -8,6 +8,7 @@ use Gett\MyparcelBE\Service\Consignment\Download;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory as ConsignmentFactorySdk;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 
@@ -108,6 +109,7 @@ class AdminLabelController extends ModuleAdminController
             if (!empty($consignments)) {
                 foreach ($consignments as &$consignment) {
                     $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
+                    $this->fixSignature($consignment);
                 }
             }
             Logger::addLog($collection->toJson());
@@ -121,7 +123,7 @@ class AdminLabelController extends ModuleAdminController
             Logger::addLog($e->getFile(), true);
             Logger::addLog($e->getLine(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'label'));
+            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
         }
 
         $status_provider = new MyparcelStatusProvider();
@@ -190,6 +192,7 @@ class AdminLabelController extends ModuleAdminController
                     $consignment->setInsurance(2500);
                 }
                 $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
+                $this->fixSignature($consignment);
             }
             $collection->setPdfOfLabels();
             Logger::addLog($collection->toJson());
@@ -320,5 +323,15 @@ class AdminLabelController extends ModuleAdminController
         );
 
         $service->downloadLabel([Tools::getValue('label_id')]);
+    }
+
+    public function fixSignature(AbstractConsignment $consignment)
+    {
+        if ($consignment->getCountry() === 'NL' && $this->module->isBE()) {
+            $consignment->signature = 0;
+        }
+        if ($consignment->getCountry() === 'BE' && $this->module->isNL()) {
+            $consignment->signature = 0;
+        }
     }
 }

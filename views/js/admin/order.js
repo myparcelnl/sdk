@@ -146,12 +146,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (options.age_check == true) {
             $('#MY_PARCEL_AGE_CHECK').prop('checked', true)
         }
-        if ($(this).data('allowSetOnlySignature') === 0) {
+        if ($(this).data('allowSetSignature') === 0) {
             $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('checked', false).prop('disabled', true);
         } else {
             $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('disabled', false);
         }
-        if (options.signature == true && $(this).data('allowSetOnlySignature') === 1) {
+        if (options.signature == true && $(this).data('allowSetSignature') === 1) {
             $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('checked', true);
         }
         if (options.insurance) {
