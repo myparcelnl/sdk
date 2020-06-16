@@ -74,13 +74,18 @@ $(document).ready(function() {
         }
         let $parent = $('.myparcel-delivery-options-wrapper.myparcel-delivery-options-initialized');
         if (deliverySettingsMP.isPickup) {
-          $('#myparcel-delivery-options__delivery--pickup', $parent).trigger('click');
+          $('#myparcel-delivery-options__delivery--deliver', $parent).prop('checked', false);
+          //$('#myparcel-delivery-options__delivery--pickup', $parent).prop('checked', true);
         }
         if (deliverySettingsMP.deliveryType === 'morning') {
-          $('#myparcel-delivery-options__deliveryMoment--morning', $parent).trigger('click');
+          $('#myparcel-delivery-options__deliveryMoment--morning', $parent).prop('checked', true);
+          $('#myparcel-delivery-options__deliveryMoment--standard', $parent).prop('checked', false);
+          $('#myparcel-delivery-options__deliveryMoment--evening', $parent).prop('checked', false);
         }
         if (deliverySettingsMP.deliveryType === 'evening') {
-          $('#myparcel-delivery-options__deliveryMoment--evening', $parent).trigger('click');
+          $('#myparcel-delivery-options__deliveryMoment--morning', $parent).prop('checked', false);
+          $('#myparcel-delivery-options__deliveryMoment--standard', $parent).prop('checked', false);
+          $('#myparcel-delivery-options__deliveryMoment--evening', $parent).prop('checked', true);
         }
         setTimeout(function() {
           if (typeof deliverySettingsMP.shipmentOptions !== 'undefined') {
