@@ -9,6 +9,7 @@ use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory as ConsignmentFactorySdk;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 
 if (file_exists(_PS_MODULE_DIR_ . 'myparcelbe/vendor/autoload.php')) {
     require_once _PS_MODULE_DIR_ . 'myparcelbe/vendor/autoload.php';
@@ -170,7 +171,7 @@ class AdminLabelController extends ModuleAdminController
                 } else {
                     $consignment->setPackageType(1);
                 }
-                if ($options->only_to_recepient == 1) {
+                if ($options->only_to_recepient == 1 && $consignment instanceof PostNLConsignment) {
                     $consignment->setOnlyRecipient(true);
                 } else {
                     $consignment->setOnlyRecipient(false);
@@ -180,7 +181,7 @@ class AdminLabelController extends ModuleAdminController
                 } else {
                     $consignment->setAgeCheck(false);
                 }
-                if ($options->signature == 1) {
+                if ($options->signature == 1 && !($consignment instanceof DPDConsignment)) {
                     $consignment->setSignature(true);
                 } else {
                     $consignment->setSignature(false);

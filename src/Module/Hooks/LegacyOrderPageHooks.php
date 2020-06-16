@@ -98,9 +98,26 @@ trait LegacyOrderPageHooks
         }
 
         $label_options_resolver = new LabelOptionsResolver();
+        $carrierReference = (int) $this->carrierList[(int) $params['id_carrier']];
+        $allowSetSignature = true;
+        $allowSetOnlyRecipient = true;
+        switch ($carrierReference) {
+            case (int) Configuration::get(Constant::DPD_CONFIGURATION_NAME):
+                $allowSetSignature = false;
+                $allowSetOnlyRecipient = false;
+                break;
+            case (int) Configuration::get(Constant::BPOST_CONFIGURATION_NAME):
+                $allowSetOnlyRecipient = false;
+                break;
+            case (int) Configuration::get(Constant::POSTNL_CONFIGURATION_NAME):
+            default:
+                break;
+        }
 
         $this->context->smarty->assign([
             'label_options' => $label_options_resolver->getLabelOptions($params),
+            'allowSetSignature' => $allowSetSignature,
+            'allowSetOnlyRecipient' => $allowSetOnlyRecipient,
         ]);
 
         return $this->display($this->name, 'views/templates/admin/icon-concept.tpl');

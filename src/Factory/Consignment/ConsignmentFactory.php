@@ -111,10 +111,14 @@ class ConsignmentFactory
             $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$delivery_setting->deliveryType]);
         }
 
-        if (isset($delivery_setting->shipmentOptions->only_recipient) && $delivery_setting->shipmentOptions->only_recipient) {
+        if ($consignment instanceof PostNLConsignment
+            && isset($delivery_setting->shipmentOptions->only_recipient)
+            && $delivery_setting->shipmentOptions->only_recipient) {
             $consignment->setOnlyRecipient(true);
         }
-        if (isset($delivery_setting->shipmentOptions->signature) && $delivery_setting->shipmentOptions->signature) {
+        if (!$consignment instanceof DPDConsignment
+            && isset($delivery_setting->shipmentOptions->signature)
+            && $delivery_setting->shipmentOptions->signature) {
             $consignment->setSignature(true);
         }
         $consignment->setLabelDescription(
@@ -157,7 +161,11 @@ class ConsignmentFactory
 
     private function MY_PARCEL_RECIPIENT_ONLY(AbstractConsignment $consignment)
     {
-        return $consignment->setOnlyRecipient(true);
+        if ($consignment instanceof PostNLConsignment) {
+            return $consignment->setOnlyRecipient(true);
+        }
+
+        return false;
     }
 
     private function MY_PARCEL_AGE_CHECK(AbstractConsignment $consignment)
@@ -198,7 +206,11 @@ class ConsignmentFactory
 
     private function MY_PARCEL_SIGNATURE_REQUIRED(AbstractConsignment $consignment)
     {
-        return $consignment->setSignature(true);
+        if (!$consignment instanceof DPDConsignment) {
+            return $consignment->setSignature(true);
+        }
+
+        return false;
     }
 
     private function MY_PARCEL_PACKAGE_FORMAT(AbstractConsignment $consignment)

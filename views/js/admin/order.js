@@ -135,17 +135,27 @@ document.addEventListener("DOMContentLoaded", () => {
             options = $(this).data('label-options');
         $('#order_id').val(id);
         $('#package-type').val(options.package_type);
-        if (options.only_to_recepient == true) {
-            $("#MY_PARCEL_RECIPIENT_ONLY").prop("checked", true)
+        if ($(this).data('allowSetOnlyRecipient') === 0) {
+            $('#MY_PARCEL_RECIPIENT_ONLY').prop('checked', false).prop('disabled', true);
+        } else {
+            $('#MY_PARCEL_RECIPIENT_ONLY').prop('disabled', false);
+        }
+        if (options.only_to_recepient == true && $(this).data('allowSetOnlyRecipient') === 1) {
+            $('#MY_PARCEL_RECIPIENT_ONLY').prop('checked', true);
         }
         if (options.age_check == true) {
-            $("#MY_PARCEL_AGE_CHECK").prop("checked", true)
+            $('#MY_PARCEL_AGE_CHECK').prop('checked', true)
         }
-        if (options.signature == true) {
-            $("#MY_PARCEL_SIGNATURE_REQUIRED").prop("checked", true)
+        if ($(this).data('allowSetOnlySignature') === 0) {
+            $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('checked', false).prop('disabled', true);
+        } else {
+            $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('disabled', false);
+        }
+        if (options.signature == true && $(this).data('allowSetOnlySignature') === 1) {
+            $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('checked', true);
         }
         if (options.insurance) {
-            $("#MY_PARCEL_INSURANCE").prop("checked", true)
+            $('#MY_PARCEL_INSURANCE').prop('checked', true);
         }
     });
     $('#print_button').click(function () {
