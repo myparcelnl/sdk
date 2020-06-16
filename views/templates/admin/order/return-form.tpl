@@ -1,34 +1,34 @@
 <form method="post" action="{$action}">
     <label for="labels_amount">{l s='Amout of labels' mod='myparcelbe'}</label>
     <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
-    <label for="{Gett\MyparcelBE\Constant::PACKAGE_TYPE_CONFIGURATION_NAME}">{l s='Package type' mod='myparcelbe'}</label>
-    <select name="{Gett\MyparcelBE\Constant::PACKAGE_TYPE_CONFIGURATION_NAME}" class="custom-select">
+    <label for="{$PACKAGE_TYPE}">{l s='Package type' mod='myparcelbe'}</label>
+    <select name="{$PACKAGE_TYPE}" class="custom-select">
         <option value="1">{l s='Packet' mod='myparcelbe'}</option>
         <option value="2">{l s='Mailbox package' mod='myparcelbe'}</option>
         <option value="3">{l s='Letter' mod='myparcelbe'}</option>
         <option value="4">{l s='Digital stamp' mod='myparcelbe'}</option>
     </select>
-    <label for="{Gett\MyparcelBE\Constant::ONLY_RECIPIENT_CONFIGURATION_NAME}">{l s='Only to receipient' mod='myparcelbe'}</label>
-    <input type="checkbox" value="1" id="{Gett\MyparcelBE\Constant::ONLY_RECIPIENT_CONFIGURATION_NAME}" name="{Gett\MyparcelBE\Constant::ONLY_RECIPIENT_CONFIGURATION_NAME}">
+    <label for="{$ONLY_RECIPIENT}">{l s='Only to receipient' mod='myparcelbe'}</label>
+    <input type="checkbox" value="1" id="{$ONLY_RECIPIENT}" name="{$ONLY_RECIPIENT}">
 
     {if !isBE}
-    <label for="{Gett\MyparcelBE\Constant::AGE_CHECK_CONFIGURATION_NAME}">{l s='Age check' mod='myparcelbe'}</label>
-    <input type="checkbox" value="1" id="{Gett\MyparcelBE\Constant::AGE_CHECK_CONFIGURATION_NAME}" name="{Gett\MyparcelBE\Constant::AGE_CHECK_CONFIGURATION_NAME}">
+    <label for="{$AGE_CHECK}">{l s='Age check' mod='myparcelbe'}</label>
+    <input type="checkbox" value="1" id="{$AGE_CHECK}" name="{$AGE_CHECK}">
     {/if}
-    <select name="{Gett\MyparcelBE\Constant::PACKAGE_FORMAT_CONFIGURATION_NAME}" class="custom-select">
+    <select name="{$PACKAGE_FORMAT}" class="custom-select">
         <option value="1">{l s='Normal' mod='myparcelbe'}</option>
         <option value="2">{l s='Large' mod='myparcelbe'}</option>
         <option value="3">{l s='Automatic' mod='myparcelbe'}</option>
     </select>
     {if !isBE}
-    <label for="{Gett\MyparcelBE\Constant::RETURN_PACKAGE_CONFIGURATION_NAME}">{l s='Return package' mod='myparcelbe'}</label>
-    <input type="checkbox" value="1" id="{Gett\MyparcelBE\Constant::RETURN_PACKAGE_CONFIGURATION_NAME}" name="{Gett\MyparcelBE\Constant::RETURN_PACKAGE_CONFIGURATION_NAME}">
+    <label for="{$RETURN_PACKAGE}">{l s='Return package' mod='myparcelbe'}</label>
+    <input type="checkbox" value="1" id="{$RETURN_PACKAGE}" name="{$RETURN_PACKAGE}">
     {/if}
 
-    <label for="{Gett\MyparcelBE\Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME}">{l s='Signature' mod='myparcelbe'}</label>
-    <input type="checkbox" value="1" id="{Gett\MyparcelBE\Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME}" name="{Gett\MyparcelBE\Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME}">
+    <label for="{$SIGNATURE_REQUIRED}">{l s='Signature' mod='myparcelbe'}</label>
+    <input type="checkbox" value="1" id="{$SIGNATURE_REQUIRED}" name="{$SIGNATURE_REQUIRED}">
 
-    <label for="{Gett\MyparcelBE\Constant::INSURANCE_CONFIGURATION_NAME}">{l s='Insurnance' mod='myparcelbe'}</label>
-    <input type="checkbox" value="1" id="{Gett\MyparcelBE\Constant::INSURANCE_CONFIGURATION_NAME}" name="{Gett\MyparcelBE\Constant::INSURANCE_CONFIGURATION_NAME}">
+    <label for="{$INSURANCE}">{l s='Insurnance' mod='myparcelbe'}</label>
+    <input type="checkbox" value="1" id="{$INSURANCE}" name="{$INSURANCE}">
     <button type="submit">{l s='Submit' mod='myparcelbe'}</button>
 </form>

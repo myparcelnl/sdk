@@ -2,6 +2,8 @@
 
 namespace Gett\MyparcelBE\Module\Hooks;
 
+use Gett\MyparcelBE\Constant;
+
 trait OrdersGridHooks
 {
     public function hookActionOrderGridQueryBuilderModifier(array $params)
@@ -85,6 +87,13 @@ trait OrdersGridHooks
                 ['action' => 'return', 'id_order' => $this->getOrderId()]
             ),
             'isBE' => $this->isBE(),
+            'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+            'ONLY_RECIPIENT' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
+            'AGE_CHECK' => Constant::AGE_CHECK_CONFIGURATION_NAME,
+            'PACKAGE_FORMAT' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+            'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
+            'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+            'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
         ]);
 
         return $this->display($this->name, 'views/templates/admin/order/return-form.tpl');
