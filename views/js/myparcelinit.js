@@ -83,15 +83,21 @@ $(document).ready(function() {
           $('#myparcel-delivery-options__deliveryMoment--evening', $parent).trigger('click');
         }
         setTimeout(function() {
-          if (deliverySettingsMP.shipmentOptions.only_recipient) {
-            $('#myparcel-delivery-options__shipmentOptions--only_recipient', $parent).prop('checked', true);
-          } else {
-            $('#myparcel-delivery-options__shipmentOptions--only_recipient', $parent).prop('checked', false);
-          }
-          if (deliverySettingsMP.shipmentOptions.signature) {
-            $('#myparcel-delivery-options__shipmentOptions--signature', $parent).prop('checked', true);
-          } else {
-            $('#myparcel-delivery-options__shipmentOptions--signature', $parent).prop('checked', false);
+          if (typeof deliverySettingsMP.shipmentOptions !== 'undefined') {
+            if (typeof deliverySettingsMP.shipmentOptions.only_recipient !== 'undefined') {
+              if (deliverySettingsMP.shipmentOptions.only_recipient) {
+                $('#myparcel-delivery-options__shipmentOptions--only_recipient', $parent).prop('checked', true);
+              } else {
+                $('#myparcel-delivery-options__shipmentOptions--only_recipient', $parent).prop('checked', false);
+              }
+            }
+            if (typeof deliverySettingsMP.shipmentOptions.signature !== 'undefined') {
+              if (deliverySettingsMP.shipmentOptions.signature) {
+                $('#myparcel-delivery-options__shipmentOptions--signature', $parent).prop('checked', true);
+              } else {
+                $('#myparcel-delivery-options__shipmentOptions--signature', $parent).prop('checked', false);
+              }
+            }
           }
         }, 100);
       }, 2000);// TODO: find an event to bind to
