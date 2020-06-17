@@ -59,7 +59,7 @@ class CheckApiKeyService
                 throw new ApiException('Unable to connect to MyParcel.');
             }
         } catch (\Exception $exception) {
-            if (strpos($exception, 'Access Denied') > 1) {
+            if (strpos($exception->getMessage(), 'Access Denied') > 1) {
                 return false;
             }
         }
