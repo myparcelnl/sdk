@@ -110,6 +110,8 @@ class AdminLabelController extends ModuleAdminController
                 foreach ($consignments as &$consignment) {
                     $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
                     $this->fixSignature($consignment);
+                    $this->sanitizeDeliveryType($consignment);
+                    $this->sanitizePackageType($consignment);
                 }
             }
             Logger::addLog($collection->toJson());
@@ -193,6 +195,8 @@ class AdminLabelController extends ModuleAdminController
                 }
                 $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
                 $this->fixSignature($consignment);
+                $this->sanitizeDeliveryType($consignment);
+                $this->sanitizePackageType($consignment);
             }
             $collection->setPdfOfLabels();
             Logger::addLog($collection->toJson());
@@ -332,6 +336,27 @@ class AdminLabelController extends ModuleAdminController
         }
         if ($consignment->getCountry() === 'BE' && $this->module->isNL()) {
             $consignment->signature = 0;
+        }
+    }
+
+    public function sanitizeDeliveryType(AbstractConsignment $consignment)
+    {
+        if ($this->module->isBE()) {
+            if ($consignment->delivery_type < 4) {
+                $consignment->delivery_type = 2;
+            }
+            if ($consignment->delivery_type > 4) {
+                $consignment->delivery_type = 4;
+            }
+        }
+    }
+
+    public function sanitizePackageType(AbstractConsignment $consignment)
+    {
+        if ($this->module->isBE()) {
+            if ($consignment->package_type !== 1) {
+                $consignment->package_type = 1;
+            }
         }
     }
 }
