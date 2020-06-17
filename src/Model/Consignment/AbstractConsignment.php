@@ -8,6 +8,7 @@ use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
+use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Helpers;
 
@@ -990,16 +991,28 @@ class AbstractConsignment
     }
 
     /**
-     * The address postal code
-     * Required: Yes for NL and EU destinations except for IE
+     * @param string $postalCode
      *
-     * @param string $postal_code
-     *
-     * @return $this
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @throws \BadMethodCallException
+     * @throws \Exception
      */
-    public function setPostalCode(string $postal_code): self
+    public function setPostalCode(string $postalCode): self
     {
-        $this->postal_code = $postal_code;
+        if ($this->getCountry() === null) {
+            throw new MissingFieldException(
+                'First set the country code with setCountry() before running setPostalCode()'
+            );
+        }
+        if (empty($this->local_cc)) {
+            throw new \BadMethodCallException('Can not create a shipment when the local country code is empty.');
+        }
+
+        if (! ValidatePostalCode::validate($postalCode, $this->getCountry())) {
+            throw new \BadMethodCallException('Invalid postal code');
+        }
+
+        $this->postal_code = $postalCode;
 
         return $this;
     }

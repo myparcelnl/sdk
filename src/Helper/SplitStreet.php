@@ -58,27 +58,6 @@ class SplitStreet
     ];
 
     /**
-     * Regular expression used to split street name from house number for the Netherlands.
-     *
-     * This regex goes from right to left
-     * Contains php keys to store the data in an array
-     */
-    const SPLIT_STREET_REGEX_NL =
-        '~(?P<street>.{2,78}?)' .         // The rest belongs to the street
-        '\s' .                            // Separator between street and number
-        '(?P<number>\d{1,4})' .           // Number can contain a maximum of 4 numbers
-        '[/\s\-]{0,2}' .                  // Separators between number and addition
-        '(?P<number_suffix>' .
-        '[a-z]{1}\d{1,3}|' .              // Numbers suffix starts with a letter followed by numbers or
-        '-\d{1,4}|' .                     // starts with - and has up to 4 numbers or
-        '\d{2}\w{1,2}|' .                 // starts with 2 numbers followed by letters or
-        '[a-z]{1}[a-z\s]{0,3}' .          // has up to 4 letters with a space
-        ')?$~i';
-
-    const SPLIT_STREET_REGEX_BE =
-        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>\d{1,4})\s?(?P<box_separator>' . self::BOX_NL . '?)?[\s-]?(?P<box_number>\w{0,8}$))$~';
-
-    /**
      * Splits street data into separate parts for street name, house number and extension.
      * Only for Dutch and Belgium addresses
      *
@@ -111,7 +90,7 @@ class SplitStreet
             $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         }
 
-        $regex = self::getRegexByCountry($local, $destination);
+        $regex = ValidateStreet::getStreetRegexByCountry($local, $destination);
 
         if (! $regex) {
             return new FullStreet($fullStreet, null, null, null);
@@ -149,48 +128,23 @@ class SplitStreet
      * @param string|null $destinationCountry
      *
      * @return bool
+     * @deprecated use ValidateStreet::validate instead
      */
     public static function isCorrectStreet(string $fullStreet, string $localCountry, ?string $destinationCountry): bool
     {
-        $result = preg_match(SplitStreet::getRegexByCountry($localCountry, $destinationCountry), $fullStreet, $matches);
-
-        if (! $result || ! is_array($matches)) {
-            // Invalid full street supplied
-            return false;
-        }
-
-        $fullStreet = str_replace('\n', ' ', $fullStreet);
-        if ($fullStreet != $matches[0]) {
-            // Characters are gone by preg_match
-            return false;
-        }
-
-        return (bool) $result;
+        return ValidateStreet::validate($fullStreet, $localCountry, $destinationCountry);
     }
 
     /**
      * @param string $local
      * @param string $destination
      *
-     * @return string
+     * @return null|string
+     * @deprecated use ValidateStreet::getStreetRegexByCountry instead
      */
     public static function getRegexByCountry(string $local, string $destination): ?string
     {
-        if (
-            ($local === AbstractConsignment::CC_NL && $destination === AbstractConsignment::CC_NL) ||
-            ($local === AbstractConsignment::CC_NL && $destination === AbstractConsignment::CC_BE)
-        ) {
-            return self::SPLIT_STREET_REGEX_NL;
-        }
-
-        if (
-            ($local === AbstractConsignment::CC_BE && $destination === AbstractConsignment::CC_BE) ||
-            ($local === AbstractConsignment::CC_BE && $destination === AbstractConsignment::CC_NL)
-        ) {
-            return self::SPLIT_STREET_REGEX_BE;
-        }
-
-        return null;
+        return ValidateStreet::getStreetRegexByCountry($local, $destination);
     }
 
 

@@ -16,13 +16,13 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Helper\RequestError;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\src\Helper\RequestError;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Support\Arr;
 
 class MyParcelRequest
 {
@@ -89,7 +89,6 @@ class MyParcelRequest
     {
         return $this->error;
     }
-
 
     /**
      * Sets the parameters for an API call based on a string with all required request parameters and the requested API
