@@ -991,13 +991,13 @@ class AbstractConsignment
     }
 
     /**
-     * @param string $setPostalCode
+     * @param string $postalCode
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @throws \BadMethodCallException
      * @throws \Exception
      */
-    public function setPostalCode(string $setPostalCode): self
+    public function setPostalCode(string $postalCode): self
     {
         if ($this->getCountry() === null) {
             throw new MissingFieldException(
@@ -1008,11 +1008,11 @@ class AbstractConsignment
             throw new \BadMethodCallException('Can not create a shipment when the local country code is empty.');
         }
 
-        if (! ValidatePostalCode::validate($setPostalCode, $this->getCountry())) {
+        if (! ValidatePostalCode::validate($postalCode, $this->getCountry())) {
             throw new \BadMethodCallException('Invalid postal code');
         }
 
-        $this->postal_code = $setPostalCode;
+        $this->postal_code = $postalCode;
 
         return $this;
     }
