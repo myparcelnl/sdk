@@ -167,7 +167,7 @@ class ConsignmentEncode
                 'number'            => $consignment->getPickupNumber(),
                 'location_name'     => $consignment->getPickupLocationName(),
                 'location_code'     => $consignment->getPickupLocationCode(),
-                'retail_network_id' => $consignment->getPickupNetworkId(),
+                'retail_network_id' => $consignment->getRetailNetworkId(),
             ];
         }
 

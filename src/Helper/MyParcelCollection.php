@@ -254,7 +254,7 @@ class MyParcelCollection extends Collection
 
         while ($i <= $amount) {
             $this->push($consignment);
-            $i ++;
+            $i++;
         }
 
         return $this;
@@ -298,6 +298,18 @@ class MyParcelCollection extends Collection
         $this->items = $newConsignments;
 
         return $this;
+    }
+
+    /**
+     * Label prepare wil be active from x number of orders
+     *
+     * @param int $numberOfShipments
+     *
+     * @return bool
+     */
+    public function useLabelPrepare(int $numberOfShipments): bool
+    {
+        return $numberOfShipments > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
     }
 
     /**
@@ -367,6 +379,8 @@ class MyParcelCollection extends Collection
      * @param     $key
      * @param int $size
      *
+     * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
+     *
      * @return $this
      * @throws ApiException
      * @throws MissingFieldException
@@ -374,27 +388,8 @@ class MyParcelCollection extends Collection
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
-        $params = '?size=' . $size;
-
-        $request = (new MyParcelRequest())
-            ->setUserAgent($this->getUserAgent())
-            ->setRequestParameters(
-                $key,
-                $params,
-                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
-            )
-            ->sendRequest('GET');
-
-        if ($request->getResult() === null) {
-            throw new ApiException('Unknown error in MyParcel API response');
-        }
-
-        foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($key)));
-            $this->addConsignment($consignmentAdapter->getConsignment());
-        }
-
-        return $this;
+        $params = ['size' => $size];
+        return self::query($key, $params);
     }
 
     /**
@@ -411,12 +406,20 @@ class MyParcelCollection extends Collection
      */
     public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION)
     {
+        $urlLocation = 'pdfs';
+
         /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
+
+        $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
+        if ($this->useLabelPrepare(count($conceptIds))) {
+            $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
+            $urlLocation = 'pdf';
+        }
 
         if ($key) {
             $request = (new MyParcelRequest())
@@ -426,9 +429,9 @@ class MyParcelCollection extends Collection
                     implode(';', $conceptIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', $requestType);
 
-            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult('data.pdfs.url');
+            $this->label_link = MyParcelRequest::REQUEST_URL . $request->getResult("data.$urlLocation.url");
         }
 
         $this->setLatestData();
@@ -606,10 +609,57 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * To search and filter consignments by certain values
+     *
+     * @param string $apiKey
+     * @param mixed  $parameters May be an array or object containing properties.
+     *                           If query_data is an array, it may be a simple one-dimensional structure,
+     *                           or an array of arrays (which in turn may contain other arrays).
+     *                           If query_data is an object, then only public properties will be incorporated
+     *                           into the result.
+     *
+     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public static function query(string $apiKey, $parameters): MyParcelCollection
+    {
+        $collection = new static();
+
+        // The field `size` is required to prevent bugs. Think carefully about what
+        // the maximum size should be in your use case. If you want to pick up all
+        // open consignments for example, you would probably want to adjust size to 300.
+        if (empty($parameters['size'])) {
+            throw new MissingFieldException('Field "size" is required.');
+        }
+
+        $request = (new MyParcelRequest())
+            ->setRequestParameters(
+                $apiKey,
+                '?' . http_build_query($parameters),
+                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
+            )
+            ->sendRequest('GET');
+
+        if ($request->getResult() === null) {
+            throw new ApiException('Unknown error in MyParcel API response');
+        }
+
+        foreach ($request->getResult()['data']['shipments'] as $shipment) {
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey)));
+            $collection->addConsignment($consignmentAdapter->getConsignment());
+        }
+
+        return $collection;
+    }
+
+    /**
      * @param int    $id
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function find(int $id, string $apiKey): MyParcelCollection
     {
@@ -621,6 +671,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
     {
@@ -645,6 +696,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
     {
@@ -656,6 +708,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return MyParcelCollection
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
     {

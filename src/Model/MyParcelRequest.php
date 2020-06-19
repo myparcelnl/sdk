@@ -34,8 +34,11 @@ class MyParcelRequest
     /**
      * Supported request types.
      */
-    const REQUEST_TYPE_SHIPMENTS      = 'shipments';
-    const REQUEST_TYPE_RETRIEVE_LABEL = 'shipment_labels';
+    const REQUEST_TYPE_SHIPMENTS               = 'shipments';
+    const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
+    const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
+
+    const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
     /**
      * API headers
