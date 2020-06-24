@@ -801,12 +801,12 @@ class AbstractConsignment
             $fullStreet .= ' ' . $this->getNumber();
         }
 
-        if ($this->getNumberSuffix()) {
-            $fullStreet .= ' ' . $this->getNumberSuffix();
-        }
-
         if ($this->getBoxNumber()) {
             $fullStreet .= ' ' . splitstreet::BOX_NL . ' ' . $this->getBoxNumber();
+        }
+
+        if ($this->getNumberSuffix()) {
+            $fullStreet .= ' ' . $this->getNumberSuffix();
         }
 
         return trim($fullStreet);
