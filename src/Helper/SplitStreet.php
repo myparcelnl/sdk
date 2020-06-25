@@ -12,14 +12,14 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\FullStreet;
 
 class SplitStreet
 {
     const BOX_NL                 = 'bus';
-    const BOX_SEPARATOR          = [' boîte', ' box', ' bte', ' Bus'];
+    const BOX_SEPARATOR          = ['boîte', 'box', 'bte', 'Bus'];
     const BOX_SEPARATOR_BY_REGEX = ['\/'];
 
     public const NUMBER_SUFFIX_ABBREVIATION = [
@@ -146,7 +146,6 @@ class SplitStreet
     {
         return ValidateStreet::getStreetRegexByCountry($local, $destination);
     }
-
 
     /**
      * @param string $fullStreet

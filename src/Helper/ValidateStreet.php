@@ -25,7 +25,7 @@ class ValidateStreet
         ')?$~i';
 
     const SPLIT_STREET_REGEX_BE =
-        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>\d{1,4})\s?(?P<box_separator>' . self::BOX_NL . '?)?[\s-]?(?P<box_number>\w{0,8}$))$~';
+        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{1,8})\s?(?P<box_separator>' . SplitStreet::BOX_NL . ')?\s?(?P<box_number>\d{0,8})\s?(?P<number_suffix>[A-z]{0,4}$)?)$~';
 
     /**
      * @param string      $fullStreet
