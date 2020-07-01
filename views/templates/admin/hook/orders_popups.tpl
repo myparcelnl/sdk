@@ -225,7 +225,7 @@
 
                 <div class="form-group">
                     <input type="checkbox" class="myparcel-insurance-checkbox" value="1" id="{$INSURANCE}" name="{$INSURANCE}">
-                    <label for="{$INSURANCE}">{l s='Insurnance' mod='myparcelbe'}</label>
+                    <label for="{$INSURANCE}">{l s='Insurance' mod='myparcelbe'}</label>
                 </div>
                 <div class="insurance-additional-container">
                     <div class="form-group insurance-additional-predefined">
