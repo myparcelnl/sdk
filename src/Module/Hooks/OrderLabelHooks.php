@@ -8,17 +8,25 @@ trait OrderLabelHooks
 {
     public function hookActionObjectGettMyParcelOrderLabelAddAfter($params)
     {
-        if (\Configuration::get(\Gett\MyparcelBE\Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
+        if (\Configuration::get(Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
             $history = new \OrderHistory();
             $history->id_order = (int) $params['object']->id_order;
-            $history->changeIdOrderState(\Configuration::get(\Gett\MyparcelBE\Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME), (int) $params['object']->id_order, true);
+            $history->changeIdOrderState(\Configuration::get(
+                Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME),
+                (int) $params['object']->id_order,
+                true
+            );
             $history->addWithemail();
         }
 
-        if (\Configuration::get('MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS')) {
+        if (\Configuration::get(Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME) && $this->isNL()) {
             $history = new \OrderHistory();
             $history->id_order = (int) $params['object']->id_order;
-            $history->changeIdOrderState(\Configuration::get('PS_OS_SHIPPING'), (int) $params['object']->id_order, true);
+            $history->changeIdOrderState(
+                \Configuration::get('PS_OS_SHIPPING'),
+                (int) $params['object']->id_order,
+                true
+            );
             $history->addWithemail();
         }
     }
@@ -31,17 +39,28 @@ trait OrderLabelHooks
             $ignore = explode(',', $ignore);
         }
         if (is_array($ignore) && in_array($order->getCurrentState(), $ignore)) {
-            if (\Gett\MyparcelBE\Constant::LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME && $params['object']->new_order_state == Constant::SCANNED_STATUS) {
+            if (Constant::LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME
+                && $params['object']->new_order_state == Constant::SCANNED_STATUS) {
                 $history = new \OrderHistory();
                 $history->id_order = (int) $params['object']->id_order;
-                $history->changeIdOrderState(\Configuration::get(\Gett\MyparcelBE\Constant::LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME), (int) $params['object']->id_order, true);
+                $history->changeIdOrderState(
+                    \Configuration::get(Constant::LABEL_SCANNED_ORDER_STATUS_CONFIGURATION_NAME),
+                    (int) $params['object']->id_order,
+                    true
+                );
                 $history->addWithemail();
             }
 
-            if ($params['object']->new_order_state >= Constant::DELIVERED_STATUS && $params['object']->new_order_state <= Constant::RETURN_PICKED_STATUS && \Configuration::get(\Gett\MyparcelBE\Constant::DELIVERED_ORDER_STATUS_CONFIGURATION_NAME)) {
+            if ($params['object']->new_order_state >= Constant::DELIVERED_STATUS
+                && $params['object']->new_order_state <= Constant::RETURN_PICKED_STATUS
+                && \Configuration::get(Constant::DELIVERED_ORDER_STATUS_CONFIGURATION_NAME)) {
                 $history = new \OrderHistory();
                 $history->id_order = (int) $params['object']->id_order;
-                $history->changeIdOrderState(\Configuration::get(\Gett\MyparcelBE\Constant::DELIVERED_ORDER_STATUS_CONFIGURATION_NAME), (int) $params['object']->id_order, true);
+                $history->changeIdOrderState(
+                    \Configuration::get(Constant::DELIVERED_ORDER_STATUS_CONFIGURATION_NAME),
+                    (int) $params['object']->id_order,
+                    true
+                );
                 $history->addWithemail();
             }
         }

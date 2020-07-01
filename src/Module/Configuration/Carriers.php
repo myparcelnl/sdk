@@ -770,20 +770,6 @@ class Carriers
         return $helper->generateList($list, $fieldsList);
     }
 
-    private function getExclusiveFieldType(string $field): string
-    {
-        $fieldType = 'switch';
-        if (!$this->module->isBE()) {
-            return $fieldType;
-        }
-
-        if (in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
-            $fieldType = 'hidden';
-        }
-
-        return $fieldType;
-    }
-
     private function setExclusiveFieldsValues(array &$vars): void
     {
         if ($this->module->isBE()) {

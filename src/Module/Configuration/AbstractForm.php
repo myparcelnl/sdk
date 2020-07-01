@@ -178,4 +178,18 @@ abstract class AbstractForm
 
         return ['form' => $form];
     }
+
+    protected function getExclusiveFieldType(string $field): string
+    {
+        $fieldType = 'switch';
+        if (!$this->module->isBE()) {
+            return $fieldType;
+        }
+
+        if (in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
+            $fieldType = 'hidden';
+        }
+
+        return $fieldType;
+    }
 }
