@@ -74,6 +74,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 'postalCode' => $address->postcode,
                 'number' => $address->address1,
             ],
+            'delivery_settings' => $this->module->getDeliverySettingsByCart((int) $this->context->cart->id),
         ];
 
         echo json_encode($params);

@@ -26,6 +26,11 @@ $(document).ready(function() {
               if ($form.length) {
                 $form.detach().appendTo($wrapper);
                 $input.detach().appendTo($wrapper);
+                if (typeof data.delivery_settings !== 'undefined') {
+                  updateMypaInput(data.delivery_settings);
+                }
+                //document.dispatchEvent(new Event('myparcel_update_config'));
+                $(document).trigger('myparcel_update_config', data);
                 document.dispatchEvent(new Event('myparcel_update_delivery_options'));
                 return true;
               } else {
