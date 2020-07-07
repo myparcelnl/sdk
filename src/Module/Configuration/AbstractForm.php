@@ -21,7 +21,7 @@ abstract class AbstractForm
     protected $icon = 'cog';
 
     /** @var string */
-    private $name;
+    public $name;
 
     public function __construct(Module $module)
     {
@@ -191,5 +191,14 @@ abstract class AbstractForm
         }
 
         return $fieldType;
+    }
+
+    protected function setExclusiveFieldsValues(array &$vars): void
+    {
+        if ($this->module->isBE()) {
+            foreach (Constant::EXCLUSIVE_FIELDS_NL as $field) {
+                $vars[$field] = 0;
+            }
+        }
     }
 }
