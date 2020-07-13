@@ -26,7 +26,7 @@ class MyparcelCheckoutModuleFrontController extends ModuleFrontController
                 'allowMondayDelivery' => CarrierConfigurationProvider::get($id_carrier, 'allowMondayDelivery'),
                 'allowMorningDelivery' => CarrierConfigurationProvider::get($id_carrier, 'allowMorningDelivery'),
                 'allowEveningDelivery' => CarrierConfigurationProvider::get($id_carrier, 'allowEveningDelivery'),
-                'allowSaturdayDelivery' => CarrierConfigurationProvider::get($id_carrier, 'allowSaturdayDelivery'),
+                'allowSaturdayDelivery' => "1",
                 'allowPickupPoints' => CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
                 // TODO: remove allowPickupLocations after fixing the allowPickupPoints reference
                 'allowPickupLocations' => CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
