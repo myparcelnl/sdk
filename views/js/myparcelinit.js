@@ -21,6 +21,7 @@ $(document).ready(function() {
 
             if (initialized) {
               let $form = $('.myparcel-delivery-options');
+              $form.outerHTML = '<div id="myparcel-delivery-options"></div>';
               let $input = $('#mypa-input');
 
               if ($form.length) {
