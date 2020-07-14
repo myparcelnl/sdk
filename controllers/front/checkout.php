@@ -26,7 +26,6 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         $params = [
             'config' => [
                 'platform' => ($this->module->isBE() ? 'belgie' : 'myparcel'),
-                'carriers' => [$carrierName],
                 'carrierSettings' => $carrierSettings,
 
                 'priceMorningDelivery' => CarrierConfigurationProvider::get($id_carrier, 'priceMorningDelivery'),
