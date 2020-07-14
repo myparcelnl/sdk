@@ -28,7 +28,7 @@
     <label for="{$SIGNATURE_REQUIRED}">{l s='Signature' mod='myparcelbe'}</label>
     <input type="checkbox" value="1" id="{$SIGNATURE_REQUIRED}" name="{$SIGNATURE_REQUIRED}">
 
-    <label for="{$INSURANCE}">{l s='Insurnance' mod='myparcelbe'}</label>
+    <label for="{$INSURANCE}">{l s='Insurance' mod='myparcelbe'}</label>
     <input type="checkbox" value="1" id="{$INSURANCE}" name="{$INSURANCE}">
     <button type="submit">{l s='Submit' mod='myparcelbe'}</button>
 </form>

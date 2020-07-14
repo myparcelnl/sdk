@@ -37,7 +37,9 @@ class OrderLabel extends \ObjectModel
         }
 
         if ($statusCode === 14) {
-            if (\Configuration::get(\Gett\MyparcelBE\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
+            $myparcel = \Module::getInstanceByName('myparacelbe');
+            if ($myparcel->isNL()
+                && \Configuration::get(\Gett\MyparcelBE\Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME)) {
                 OrderLabel::setShipped($idShipment, false);
             } else {
                 OrderLabel::setPrinted($idShipment, false);

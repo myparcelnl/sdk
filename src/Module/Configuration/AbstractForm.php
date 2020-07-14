@@ -21,7 +21,7 @@ abstract class AbstractForm
     protected $icon = 'cog';
 
     /** @var string */
-    private $name;
+    public $name;
 
     public function __construct(Module $module)
     {
@@ -177,5 +177,28 @@ abstract class AbstractForm
         }
 
         return ['form' => $form];
+    }
+
+    protected function getExclusiveFieldType(string $field): string
+    {
+        $fieldType = 'switch';
+        if (!$this->module->isBE()) {
+            return $fieldType;
+        }
+
+        if (in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
+            $fieldType = 'hidden';
+        }
+
+        return $fieldType;
+    }
+
+    protected function setExclusiveFieldsValues(array &$vars): void
+    {
+        if ($this->module->isBE()) {
+            foreach (Constant::EXCLUSIVE_FIELDS_NL as $field) {
+                $vars[$field] = 0;
+            }
+        }
     }
 }

@@ -11,10 +11,23 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         $address = new \Address($this->context->cart->id_address_delivery);
         $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
         $carrier = new \Carrier($id_carrier);
+        $carrierName = str_replace(' ', '', strtolower($carrier->name));
+        $carrierSettings = [
+            'bpost' => ['allowDeliveryOptions' => false],
+            'dpd' => ['allowDeliveryOptions' => false],
+            'postnl' => ['allowDeliveryOptions' => false],
+        ];
+        $carrierSettings[$carrierName]['allowDeliveryOptions'] = true;
+        $carrierSettings[$carrierName]['allowPickupLocations'] = (bool) CarrierConfigurationProvider::get(
+            $id_carrier,
+            'allowPickupPoints'
+        );
+
         $params = [
             'config' => [
-                'platform' => 'myparcel',
-                'carriers' => [str_replace(' ', '', strtolower($carrier->name))],
+                'platform' => ($this->module->isBE() ? 'belgie' : 'myparcel'),
+                'carriers' => [$carrierName],
+                'carrierSettings' => $carrierSettings,
 
                 'priceMorningDelivery' => CarrierConfigurationProvider::get($id_carrier, 'priceMorningDelivery'),
                 'priceStandardDelivery' => CarrierConfigurationProvider::get($id_carrier, 'priceStandardDelivery'),
@@ -74,6 +87,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 'postalCode' => $address->postcode,
                 'number' => $address->address1,
             ],
+            'delivery_settings' => $this->module->getDeliverySettingsByCart((int) $this->context->cart->id),
         ];
 
         echo json_encode($params);

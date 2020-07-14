@@ -7,15 +7,24 @@ use Configuration;
 use Gett\MyparcelBE\Constant;
 use Tools;
 
-class Carriers
+class Carriers extends AbstractForm
 {
     private $context;
 
-    public function __construct($module)
+    public function __construct(\Module $module)
     {
-        $this->module = $module;
-        $this->name = str_replace(' ', '', $module->displayName) . self::class;
+        parent::__construct($module);
         $this->context = \Context::getContext();
+    }
+
+    protected function getLegend(): string
+    {
+        return '';
+    }
+
+    protected function getFields(): array
+    {
+        return [];
     }
 
     public function __invoke(): string
@@ -768,28 +777,5 @@ class Carriers
             LIMIT 0, 50");
 
         return $helper->generateList($list, $fieldsList);
-    }
-
-    private function getExclusiveFieldType(string $field): string
-    {
-        $fieldType = 'switch';
-        if (!$this->module->isBE()) {
-            return $fieldType;
-        }
-
-        if (in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
-            $fieldType = 'hidden';
-        }
-
-        return $fieldType;
-    }
-
-    private function setExclusiveFieldsValues(array &$vars): void
-    {
-        if ($this->module->isBE()) {
-            foreach (Constant::EXCLUSIVE_FIELDS_NL as $field) {
-                $vars[$field] = 0;
-            }
-        }
     }
 }

@@ -118,5 +118,6 @@ class Constant
         self::RETURN_PACKAGE_CONFIGURATION_NAME,
         'return_' . self::AGE_CHECK_CONFIGURATION_NAME,
         'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME,
+        self::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
     ];
 }

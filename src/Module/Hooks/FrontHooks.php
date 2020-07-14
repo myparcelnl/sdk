@@ -2,18 +2,43 @@
 
 namespace Gett\MyparcelBE\Module\Hooks;
 
+use Address;
+use Db;
+use Tools;
+use Validate;
+
 trait FrontHooks
 {
     public function hookActionCarrierProcess($params)
     {
-        if (\Tools::isSubmit('confirmDeliveryOption') && $options = \Tools::getValue('myparcel-delivery-options')) {
-            \Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
+        $options = Tools::getValue('myparcel-delivery-options');
+        if (Tools::isSubmit('confirmDeliveryOption') && !empty($options)) {
+            Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                 'myparcel_delivery_settings',
                 ['id_cart' => $params['cart']->id, 'delivery_settings' => $options],
                 false,
                 true,
-                \Db::REPLACE
+                Db::REPLACE
             );
+        }
+        $action = Tools::getValue('action');
+        $id_carrier = Tools::getValue('delivery_option');
+        if ($action == 'selectDeliveryOption' && !empty($options) && !empty($id_carrier)) {
+            if (is_array($id_carrier)) {
+                $id_carrier = (int) reset($id_carrier);
+            }
+            $carrier = new \Carrier($id_carrier);
+            if (Validate::isLoadedObject($carrier)) {
+                $options_decoded = json_decode($options);
+                $options_decoded->carrier = str_replace(' ', '', strtolower($carrier->name));
+                Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
+                    'myparcel_delivery_settings',
+                    ['id_cart' => $params['cart']->id, 'delivery_settings' => json_encode($options_decoded)],
+                    false,
+                    true,
+                    Db::REPLACE
+                );
+            }
         }
     }
 
@@ -28,8 +53,8 @@ trait FrontHooks
 
     public function hookDisplayCarrierExtraContent()
     {
-        $address = new \Address($this->context->cart->id_address_delivery);
-        if (\Validate::isLoadedObject($address)) {
+        $address = new Address($this->context->cart->id_address_delivery);
+        if (Validate::isLoadedObject($address)) {
             $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
 
             $this->context->smarty->assign([
