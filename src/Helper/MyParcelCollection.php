@@ -414,7 +414,6 @@ class MyParcelCollection extends Collection
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
-        var_dump($conceptIds);
         $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
         if ($this->useLabelPrepare(count($conceptIds))) {
             $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
@@ -514,7 +513,7 @@ class MyParcelCollection extends Collection
      * @throws \Exception
      * @TODO Change param, don't send email to customer
      */
-    public function generateReturnConsignments(bool $sendMail)
+    public function generateReturnConsignments(bool $sendMail): self
     {
         // Be sure consignments are created
         $this->createConcepts();
@@ -538,14 +537,22 @@ class MyParcelCollection extends Collection
             throw new ApiException('Unknown Error in MyParcel API response');
         }
 
-        $returnIds          = Arr::pluck($result, 'data.ids.*.id');
+        $returnIds          = Arr::pluck(Arr::get($result, 'data.ids'), 'id');
         if (! $returnIds || count($returnIds) < 1) {
             throw new InvalidArgumentException('Can\'t send return label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
 
-        $returnConsignments = (new MyParcelCollection())->addConsignmentByConsignmentIds($returnIds, $apiKey);
+        $returnConsignments = (new MyParcelCollection())->addConsignmentByConsignmentIds($returnIds, $apiKey)->setLatestData();
 
-        $this->zip($returnConsignments->toArray())->flatten();
+        $result = [];
+        $returnConsignmentst = $returnConsignments->toArray();
+
+        // @todo move to support/app.php make abstract
+        foreach ($this as $index => $normal) {
+            $result[] = $normal;
+            $result[] = $returnConsignmentst[$index];
+        }
+        $this->items = $result;
 
         return $this;
     }
@@ -838,7 +845,7 @@ class MyParcelCollection extends Collection
      */
     private function addMissingReferenceId(): void
     {
-        $this->transform(function(AbstractConsignment $consignment) {
+        $this->transform(function (AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
@@ -854,7 +861,7 @@ class MyParcelCollection extends Collection
      */
     private function findByReferenceIdGroup($id): MyParcelCollection
     {
-        return $this->filter(function($consignment) use ($id) {
+        return $this->filter(function ($consignment) use ($id) {
             /**
              * @var AbstractConsignment $consignment
              */

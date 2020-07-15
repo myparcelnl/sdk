@@ -56,13 +56,10 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
         $myParcelCollection
             ->addConsignment($consignment)
             ->setLinkOfLabels() // @TODO remove if it isn't necessary in the api
-            ->generateReturnConsignments(true)
-            ->setLinkOfLabels()
-            ->setLatestData();
+            ->generateReturnConsignments(false)
+            ->setLinkOfLabels();
 
-        var_dump($myParcelCollection->getLinkOfLabels());
-        exit("\n|-------------\n" . __FILE__ . ':' . __LINE__ . "\n|-------------\n");
-        $this->assertNotNull($myParcelCollection);
+        $this->assertContains('myparcel.nl/pdfs', $myParcelCollection->getLinkOfLabels());
     }
 
     /**
