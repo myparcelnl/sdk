@@ -301,6 +301,12 @@ class AbstractConsignment
 
     /**
      * @internal
+     * @var bool
+     */
+    protected static $retour_in_the_box = false;
+
+    /**
+     * @internal
      * @var int
      */
     public $insurance = 0;
@@ -1381,6 +1387,28 @@ class AbstractConsignment
         $this->label_description = (string) $label_description;
 
         return $this;
+    }
+
+    /**
+     * @todo nice comments
+     * @param bool $retour_in_the_box
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     */
+    public function setRetourInTheBox($retour_in_the_box): self
+    {
+        self::$retour_in_the_box = $retour_in_the_box;
+
+        return $this;
+    }
+    /**
+     * @return bool
+     * @todo nice comments
+     *
+     */
+    public function getRetourInTheBox(): bool
+    {
+        return self::$retour_in_the_box;
     }
 
     /**

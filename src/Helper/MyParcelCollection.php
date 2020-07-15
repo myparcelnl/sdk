@@ -378,16 +378,17 @@ class MyParcelCollection extends Collection
      * @param     $key
      * @param int $size
      *
-     * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
-     *
      * @return $this
      * @throws ApiException
      * @throws MissingFieldException
      * @throws Exception
+     * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
+     *
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
         $params = ['size' => $size];
+
         return self::query($key, $params);
     }
 
@@ -413,11 +414,18 @@ class MyParcelCollection extends Collection
             ->setLabelFormat($positions);
 
         $conceptIds = $this->getConsignmentIds($key);
-
+        var_dump($conceptIds);
         $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
         if ($this->useLabelPrepare(count($conceptIds))) {
             $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
             $urlLocation = 'pdf';
+        }
+
+        if ((new AbstractConsignment())->getRetourInTheBox()) {
+            $conceptIds = $this->sendReturnLabel();
+//            $conceptIds = [72702775,72702776];
+            var_dump($conceptIds);
+            exit("\n|-------------\n" . __FILE__ . ':' . __LINE__ . "\n|-------------\n");
         }
 
         if ($key) {
@@ -500,6 +508,34 @@ class MyParcelCollection extends Collection
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         echo $this->label_pdf;
         exit;
+    }
+
+    /**
+     * Send return label to customer.
+     *
+     * @return $this
+     * @throws ApiException
+     * @throws MissingFieldException
+     */
+    public function sendReturnLabel()
+    {
+        $parentConsignment = $this->getConsignments()[0];
+        $apiKey            = $parentConsignment->getApiKey();
+        $data              = $this->apiEncodeReturnShipment($parentConsignment);
+
+        $request = (new MyParcelRequest())
+            ->setUserAgent($this->getUserAgent())
+            ->setRequestParameters(
+                $apiKey,
+                $data,
+                MyParcelRequest::REQUEST_HEADER_RETURN
+            )
+            ->sendRequest();
+        $result = array_merge($parentConsignment, $request->getResult());
+        var_dump($result);
+        exit("\n|-------------\n" . __FILE__ . ':' . __LINE__ . "\n|-------------\n");
+
+        return $this;
     }
 
     /**
