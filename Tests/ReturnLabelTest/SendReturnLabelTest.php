@@ -51,13 +51,13 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
             ->setCity($consignmentTest['city'])
             ->setEmail($consignmentTest['email'])
             ->setPhone($consignmentTest['phone'])
-            ->setLabelDescription($consignmentTest['label_description'])
-            ->setRetourInTheBox($consignmentTest['retour_in_the_box']);
+            ->setLabelDescription($consignmentTest['label_description']);
 
         $myParcelCollection
             ->addConsignment($consignment)
+            ->setLinkOfLabels() // @TODO remove if it isn't necessary in the api
+            ->generateReturnConsignments(true)
             ->setLinkOfLabels()
-//            ->sendReturnLabel()
             ->setLatestData();
 
         var_dump($myParcelCollection->getLinkOfLabels());
