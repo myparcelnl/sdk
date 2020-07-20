@@ -79,7 +79,7 @@ class MyParcelCollection extends Collection
      *
      * @return AbstractConsignment[]
      */
-    public function getConsignments($keepKeys = true)
+    public function getConsignments($keepKeys = true): array
     {
         if ($keepKeys) {
             return $this->items;
@@ -505,29 +505,39 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @param bool $sendMail
+     * @param bool     $sendMail
+     *
+     * @param \Closure $modifier
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
-     * @TODO Change param, don't send email to customer
      */
-    public function generateReturnConsignments(bool $sendMail): self
+    public function generateReturnConsignments(bool $sendMail, \Closure $modifier = null): self
     {
         // Be sure consignments are created
         $this->createConcepts();
 
         $parentConsignments = $this->getConsignments(false);
-        $apiKey = $parentConsignments[0]->getApiKey();
-        $data   = $this->apiEncodeReturnShipments($parentConsignments);
+        $returnConsignments = $parentConsignments;
+
+        // Let the user of the SDK adjust the return consignment by means of a callback.
+        foreach ($returnConsignments as $i => $returnConsignment) {
+            $parentConsignment = $parentConsignments[$i];
+            $modifier($returnConsignment, $parentConsignment);
+        }
+
+        $data   = $this->apiEncodeReturnShipments($returnConsignments);
+        $apiKey = $returnConsignments[0]->getApiKey();
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
             ->setRequestParameters(
                 $apiKey,
                 $data,
-                MyParcelRequest::REQUEST_HEADER_RETURN
+                MyParcelRequest::REQUEST_HEADER_RETURN,
+                $sendMail
             )
             ->sendRequest('POST');
 
@@ -542,17 +552,10 @@ class MyParcelCollection extends Collection
             throw new InvalidArgumentException('Can\'t send return label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
 
-        $returnConsignments = (new MyParcelCollection())->addConsignmentByConsignmentIds($returnIds, $apiKey)->setLatestData();
-
-        $result = [];
+        $returnConsignments  = (new MyParcelCollection())->addConsignmentByConsignmentIds($returnIds, $apiKey)->setLatestData();
         $returnConsignmentst = $returnConsignments->toArray();
 
-        // @todo move to support/app.php make abstract
-        foreach ($this as $index => $normal) {
-            $result[] = $normal;
-            $result[] = $returnConsignmentst[$index];
-        }
-        $this->items = $result;
+        $this->items = Arr::mergeAfterEachOther($this, $returnConsignmentst);
 
         return $this;
     }
@@ -788,7 +791,7 @@ class MyParcelCollection extends Collection
     /**
      * Encode ReturnShipment to send to MyParcel
      *
-     * @param array | []AbstractConsignment $consignments
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $consignments
      *
      * @return string
      */
@@ -802,6 +805,12 @@ class MyParcelCollection extends Collection
                 'carrier' => $consignment->getCarrierId(),
                 'email'   => $consignment->getEmail(),
                 'name'    => $consignment->getPerson(),
+                'options' => [
+                    'label_description' => $consignment->getLabelDescription(),
+                    'only_recipient' => (int) $consignment->isOnlyRecipient(),
+                    'signature' => (int) $consignment->isSignature(),
+                    'insurance' => (int) $consignment->getInsurance()
+                ]
             ];
 
             $data['data']['return_shipments'][] = $shipment;

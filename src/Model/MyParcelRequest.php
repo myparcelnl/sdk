@@ -16,6 +16,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use Magento\Tests\NamingConvention\true\string;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -98,15 +99,21 @@ class MyParcelRequest
      * @param string $body
      * @param string $requestHeader
      *
+     * @param bool   $sendMail
+     *
      * @return $this
      */
-    public function setRequestParameters($apiKey, $body, $requestHeader): MyParcelRequest
+    public function setRequestParameters(string $apiKey, string $body, string $requestHeader, bool $sendMail = true): MyParcelRequest
     {
         $this->api_key = $apiKey;
         $this->body    = $body;
 
         $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
+
+        if (! $sendMail) {
+            $header[] = 'send_return_mail: ' . $sendMail;
+        }
 
         $this->header = $header;
 

@@ -20,6 +20,7 @@ namespace MyParcelNL\Sdk\Tests\ReturnLabelTest;
 
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
@@ -28,6 +29,7 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function testSendReturnLabel()
     {
@@ -51,14 +53,31 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
             ->setCity($consignmentTest['city'])
             ->setEmail($consignmentTest['email'])
             ->setPhone($consignmentTest['phone'])
+            ->setPackageType($consignmentTest['package_type'])
             ->setLabelDescription($consignmentTest['label_description']);
 
         $myParcelCollection
             ->addConsignment($consignment)
-            ->setLinkOfLabels() // @TODO remove if it isn't necessary in the api
-            ->generateReturnConsignments(false)
+            ->generateReturnConsignments(
+                false,
+                function (
+                    AbstractConsignment $returnConsignment,
+                    AbstractConsignment $parent
+                ): AbstractConsignment {
+                    $returnConsignment->setLabelDescription(
+                        'Retour: ' . $parent->getLabelDescription() .
+                        ' This label is valid untill: ' . date("d-m-Y", strtotime("+ 21 day"))
+                    );
+                    $returnConsignment->setOnlyRecipient($parent->isOnlyRecipient());
+                    $returnConsignment->setSignature($parent->isSignature());
+                    $returnConsignment->setInsurance($parent->getInsurance());
+                    return $returnConsignment;
+                }
+            )
             ->setLinkOfLabels();
 
+        var_dump($myParcelCollection->getLinkOfLabels());
+        exit("\n|-------------\n" . __FILE__ . ':' . __LINE__ . "\n|-------------\n");
         $this->assertContains('myparcel.nl/pdfs', $myParcelCollection->getLinkOfLabels());
     }
 
@@ -81,7 +100,8 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
             'postal_code'       => '2231JE',
             'city'              => 'Katwijk',
             'phone'             => '123-45-235-435',
-            'label_description' => 'Label description',
+            'package_type'      => 1,
+            'label_description' => '1234',
             'retour_in_the_box' => true,
         ];
     }

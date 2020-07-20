@@ -50,6 +50,24 @@ class Arr
     }
 
     /**
+     * @param $array1
+     * @param $array2
+     *
+     * @return array
+     */
+    public static function mergeAfterEachOther($array1, $array2): array
+    {
+        $result = [];
+
+        foreach ($array1 as $index => $normal) {
+            $result[] = $normal;
+            $result[] = $array2[$index];
+        }
+
+        return $result;
+    }
+
+    /**
      * Determine whether the given value is array accessible.
      *
      * @param  mixed  $value
