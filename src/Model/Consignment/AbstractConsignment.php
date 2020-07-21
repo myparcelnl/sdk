@@ -301,12 +301,6 @@ class AbstractConsignment
 
     /**
      * @internal
-     * @var bool
-     */
-    protected static $retour_in_the_box = false;
-
-    /**
-     * @internal
      * @var int
      */
     public $insurance = 0;

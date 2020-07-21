@@ -13,7 +13,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
 - [Quick start and examples](#quick-start-and-examples)
     - [Create a consignment](#create-a-consignment)
     - [Create multiple consignments](#create-multiple-consignments)
-    - [Create retour in the box](#create-retour-in-the-box)
+    - [Create return in the box](#create-return-in-the-box)
     - [Label format and position](#label-format-and-position)
     - [Package type and options](#package-type-and-options)
     - [Find consignments](#find-consignments)
@@ -110,7 +110,7 @@ foreach ($yourShipments as $yourShipment) {
 }
 ```
 
-### Create retour in the box
+### Create return in the box
 This example creates a consignment and return consignment by adding them to one ```MyParcelCollection()``` and then create and download one PDF with both labels.
 
 ```php
@@ -141,7 +141,7 @@ foreach ($yourShipments as $yourShipment) {
                 AbstractConsignment $parent
             ): AbstractConsignment {
                 $returnConsignment->setLabelDescription(
-                    'Retour: ' . $parent->getLabelDescription() .
+                    'Return: ' . $parent->getLabelDescription() .
                     ' This label is valid untill: ' . date("d-m-Y", strtotime("+ 21 day"))
                 );
 

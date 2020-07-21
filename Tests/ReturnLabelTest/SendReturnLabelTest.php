@@ -88,7 +88,7 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
                         AbstractConsignment $parent
                     ): AbstractConsignment {
                         $returnConsignment->setLabelDescription(
-                            'Retour: ' . $parent->getLabelDescription() .
+                            'Return: ' . $parent->getLabelDescription() .
                             ' This label is valid untill: ' . date("d-m-Y", strtotime("+ 21 day"))
                         );
                         $returnConsignment->setOnlyRecipient($parent->isOnlyRecipient());
