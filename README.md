@@ -142,7 +142,7 @@ foreach ($yourShipments as $yourShipment) {
             ): AbstractConsignment {
                 $returnConsignment->setLabelDescription(
                     'Return: ' . $parent->getLabelDescription() .
-                    ' This label is valid untill: ' . date("d-m-Y", strtotime("+ 21 day"))
+                    ' This label is valid untill: ' . date("d-m-Y", strtotime("+ 28day"))
                 );
 
                 return $returnConsignment;
