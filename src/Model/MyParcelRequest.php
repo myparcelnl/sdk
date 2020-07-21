@@ -16,7 +16,6 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
-use Magento\Tests\NamingConvention\true\string;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
