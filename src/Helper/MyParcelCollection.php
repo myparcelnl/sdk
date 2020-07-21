@@ -413,7 +413,7 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
 
-        $conceptIds = $this->getConsignmentIds($key);
+        $conceptIds  = $this->getConsignmentIds($key);
         $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
         if ($this->useLabelPrepare(count($conceptIds))) {
             $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
@@ -547,7 +547,7 @@ class MyParcelCollection extends Collection
             throw new ApiException('Unknown Error in MyParcel API response');
         }
 
-        $returnIds          = Arr::pluck(Arr::get($result, 'data.ids'), 'id');
+        $returnIds = Arr::pluck(Arr::get($result, 'data.ids'), 'id');
         if (! $returnIds || count($returnIds) < 1) {
             throw new InvalidArgumentException('Can\'t send return label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
@@ -807,8 +807,15 @@ class MyParcelCollection extends Collection
                 'name'    => $consignment->getPerson(),
                 'options' => [
                     'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient' => (int) $consignment->isOnlyRecipient(),
-                    'signature' => (int) $consignment->isSignature()
+                    'only_recipient'    => (int) $consignment->isOnlyRecipient(),
+                    'signature'         => (int) $consignment->isSignature(),
+                    'age_check'         => (int) $consignment->hasAgeCheck(),
+                    'return'            => (int) $consignment->isReturn(),
+                    'large_format'      => (int) $consignment->isLargeFormat(),
+                    'insurance'         => [
+                        'amount'   => (int) $consignment->getInsurance() * 100,
+                        'currency' => 'EUR',
+                    ]
                 ]
             ];
 

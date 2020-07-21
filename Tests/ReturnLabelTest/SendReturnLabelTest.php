@@ -54,7 +54,12 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
             ->setEmail($consignmentTest['email'])
             ->setPhone($consignmentTest['phone'])
             ->setPackageType($consignmentTest['package_type'])
-            ->setLabelDescription($consignmentTest['label_description']);
+            ->setLabelDescription($consignmentTest['label_description'])
+            ->setOnlyRecipient($consignmentTest['only_recipient'])
+            ->setSignature($consignmentTest['signature'])
+            ->setAgeCheck($consignmentTest['age_check'])
+            ->setReturn($consignmentTest['return'])
+            ->setInsurance($consignmentTest['insurance']);
 
         $myParcelCollection
             ->addConsignment($consignment)
@@ -70,6 +75,11 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
                     );
                     $returnConsignment->setOnlyRecipient($parent->isOnlyRecipient());
                     $returnConsignment->setSignature($parent->isSignature());
+                    $returnConsignment->setAgeCheck($parent->hasAgeCheck());
+                    $returnConsignment->setReturn($parent->isReturn());
+                    $returnConsignment->setLargeFormat($parent->isLargeFormat());
+                    $returnConsignment->setInsurance($parent->getInsurance());
+
                     return $returnConsignment;
                 }
             )
@@ -101,7 +111,11 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
             'phone'             => '123-45-235-435',
             'package_type'      => 1,
             'label_description' => '1234',
-            'retour_in_the_box' => true,
+            'only_recipient'    => true,
+            'signature'         => true,
+            'age_check'         => true,
+            'return'            => true,
+            'insurance'         => 250
         ];
     }
 }

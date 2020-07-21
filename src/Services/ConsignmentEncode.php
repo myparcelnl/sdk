@@ -171,7 +171,7 @@ class ConsignmentEncode
             ];
         }
 
-        $this->consignmentEncoded['general_settings']['save_recipient_address'] = $this->normalizeAutoSaveRecipientAddress($consignment);
+        $this->consignmentEncoded['general_settings']['save_recipient_address']     = $this->normalizeAutoSaveRecipientAddress($consignment);
         $this->consignmentEncoded['general_settings']['disable_auto_detect_pickup'] = $this->normalizeAutoDetectPickup($consignment);
 
         return $this;
@@ -273,9 +273,9 @@ class ConsignmentEncode
             'classification' => $customsItem->getClassification(),
             'country'        => $customsItem->getCountry(),
             'item_value'     => [
-                    'amount'   => $customsItem->getItemValue(),
-                    'currency' => $currency,
-                ],
+                'amount'   => $customsItem->getItemValue(),
+                'currency' => $currency,
+            ],
         ];
 
         return $item;
