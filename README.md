@@ -13,6 +13,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
 - [Quick start and examples](#quick-start-and-examples)
     - [Create a consignment](#create-a-consignment)
     - [Create multiple consignments](#create-multiple-consignments)
+    - [Create retour in the box](#create-retour-in-the-box)
     - [Label format and position](#label-format-and-position)
     - [Package type and options](#package-type-and-options)
     - [Find consignments](#find-consignments)
@@ -100,11 +101,53 @@ foreach ($yourShipments as $yourShipment) {
         ->setPerson($yourShipment['name'])
         ->setPostalCode($yourShipment['postal_code'])
         ->setFullStreet($yourShipment['full_street']) 
-        ->setCity($yourShipment['city']);
+        ->setCity($yourShipment['city'])
+    );
         
     // Add each consignment to the collection created before
     $consignments
         ->addConsignment($consignment);
+}
+```
+
+### Create retour in the box
+This example creates a consignment and return consignment by adding them to one ```MyParcelCollection()``` and then create and download one PDF with both labels.
+
+```php
+// Create the collection before the loop
+$consignments = new MyParcelCollection();
+
+// Loop through your shipments, adding each to the same MyParcelCollection()
+foreach ($yourShipments as $yourShipment) {
+
+    $consignment = ((ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
+        ->setApiKey('api_key_from_MyParcel_backoffice')
+        ->setCountry($yourShipment['cc'])
+        ->setPerson($yourShipment['person'])
+        ->setCompany($yourShipment['company'])
+        ->setFullStreet($yourShipment['full_street_input'])
+        ->setPostalCode($yourShipment['postal_code'])
+        ->setCity($yourShipment['city'])
+        ->setLabelDescription($yourShipment['label_description'])
+    );
+        
+    // Add the consignment to the collection and generate teh return consignment
+    $consignments
+        ->addConsignment($consignment)
+        ->generateReturnConsignments(
+            false,
+            function (
+                AbstractConsignment $returnConsignment,
+                AbstractConsignment $parent
+            ): AbstractConsignment {
+                $returnConsignment->setLabelDescription(
+                    'Retour: ' . $parent->getLabelDescription() .
+                    ' This label is valid untill: ' . date("d-m-Y", strtotime("+ 21 day"))
+                );
+
+                return $returnConsignment;
+            }
+        );
 }
 ```
 
