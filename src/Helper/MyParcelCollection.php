@@ -808,8 +808,7 @@ class MyParcelCollection extends Collection
                 'options' => [
                     'label_description' => $consignment->getLabelDescription(),
                     'only_recipient' => (int) $consignment->isOnlyRecipient(),
-                    'signature' => (int) $consignment->isSignature(),
-                    'insurance' => (int) $consignment->getInsurance()
+                    'signature' => (int) $consignment->isSignature()
                 ]
             ];
 

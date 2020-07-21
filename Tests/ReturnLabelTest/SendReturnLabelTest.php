@@ -70,7 +70,6 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
                     );
                     $returnConsignment->setOnlyRecipient($parent->isOnlyRecipient());
                     $returnConsignment->setSignature($parent->isSignature());
-                    $returnConsignment->setInsurance($parent->getInsurance());
                     return $returnConsignment;
                 }
             )
