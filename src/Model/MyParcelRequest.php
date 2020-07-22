@@ -29,7 +29,7 @@ class MyParcelRequest
     /**
      * API URL
      */
-    const REQUEST_URL = 'http://edie.api.staging.myparcel.nl';
+    const REQUEST_URL = 'https://api.myparcel.nl';
 
     /**
      * Supported request types.
