@@ -92,7 +92,7 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
             /**
              * @var AbstractConsignment $returnConsignment
              */
-            $returnConsignment = $myParcelCollection[1];
+            $returnConsignment = $myParcelCollection[0];
             $this->assertEquals(
                 $consignmentTest['return_only_recipient'],
                 $returnConsignment->isOnlyRecipient(),

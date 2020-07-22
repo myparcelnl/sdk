@@ -51,8 +51,8 @@ class ConsignmentEncode
             $this->consignmentEncoded,
             Arr::first($this->consignments)
         );
-
-        $this->encodePickup()
+        $this->encodeDeliveryType()
+             ->encodePickup()
              ->encodePhysicalProperties()
              ->encodeCdCountry()
              ->encodeMultiCollo();
@@ -74,10 +74,9 @@ class ConsignmentEncode
                 'options' => [
                     'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
                     'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient' => (int) $consignment->isOnlyRecipient(),
-                    'signature'      => (int) $consignment->isSignature(),
-                    'return'         => (int) $consignment->isReturn(),
-                    'delivery_type'  => $consignment->getDeliveryType(),
+                    'only_recipient'    => (int) $consignment->isOnlyRecipient(),
+                    'signature'         => (int) $consignment->isSignature(),
+                    'return'            => (int) $consignment->isReturn(),
                 ],
             ]
         );
@@ -106,6 +105,18 @@ class ConsignmentEncode
         }
 
         return $consignmentEncoded;
+    }
+
+    /**
+     * @return self
+     */
+    private function encodeDeliveryType(): self
+    {
+        /** @var AbstractConsignment $consignment */
+        $consignment = Arr::first($this->consignments);
+        $this->consignmentEncoded['options']['delivery_type'] = $consignment->getDeliveryType();
+
+        return $this;
     }
 
     /**
