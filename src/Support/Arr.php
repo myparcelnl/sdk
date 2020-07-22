@@ -59,8 +59,8 @@ class Arr
     {
         $result = [];
 
-        foreach ($array1 as $index => $normal) {
-            $result[] = $normal;
+        foreach ($array1 as $index => $value1) {
+            $result[] = $value1;
             $result[] = $array2[$index];
         }
 
