@@ -131,6 +131,7 @@ foreach ($yourShipments as $yourShipment) {
     );
         
     // Add the consignment to the collection and generate the return consignment
+    // When there are no options set, the options from the parent consignment are used
     $consignments
         ->addConsignment($consignment)
         ->generateReturnConsignments(
@@ -141,8 +142,9 @@ foreach ($yourShipments as $yourShipment) {
             ): AbstractConsignment {
                 $returnConsignment->setLabelDescription(
                     'Return: ' . $parent->getLabelDescription() .
-                    ' This label is valid until: ' . date("d-m-Y", strtotime("+ 28day"))
+                    ' This label is valid until: ' . date("d-m-Y", strtotime("+ 28 days"))
                 );
+                $returnConsignment->setSignature(true);
 
                 return $returnConsignment;
             }
@@ -491,7 +493,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
 ```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
 ```php
     ->addConsignment() // Add consignment to collection
-    ->generateReturnConsignments() // Add the consignment to the collection and generate the return consignment
+    ->generateReturnConsignments() // Generate the return consignments based on already added consignments
 
     // Get consignments from the collection
     ->getConsignments()
