@@ -65,7 +65,7 @@ class MyParcelRequest
     private $userAgent = null;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $query;
 
