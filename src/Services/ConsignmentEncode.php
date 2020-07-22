@@ -122,7 +122,7 @@ class ConsignmentEncode
     /**
      * @return self
      */
-    private function encodeBase()
+    private function encodeBase(): self
     {
         /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
