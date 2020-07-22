@@ -110,7 +110,7 @@ foreach ($yourShipments as $yourShipment) {
 }
 ```
 
-### Create return in the box
+### Create return label in the box
 This example creates a consignment and return consignment by adding them to one ```MyParcelCollection()``` and then create and download one PDF with both labels.
 
 ```php
