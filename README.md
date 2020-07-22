@@ -491,6 +491,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
 ```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
 ```php
     ->addConsignment() // Add consignment to collection
+    ->generateReturnConsignments() // Add the consignment to the collection and generate the return consignment
 
     // Get consignments from the collection
     ->getConsignments()
