@@ -24,6 +24,7 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
+use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -804,19 +805,9 @@ class MyParcelCollection extends Collection
                 'carrier' => $consignment->getCarrierId(),
                 'email'   => $consignment->getEmail(),
                 'name'    => $consignment->getPerson(),
-                'options' => [
-                    'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient'    => (int) $consignment->isOnlyRecipient(),
-                    'signature'         => (int) $consignment->isSignature(),
-                    'age_check'         => (int) $consignment->hasAgeCheck(),
-                    'return'            => (int) $consignment->isReturn(),
-                    'large_format'      => (int) $consignment->isLargeFormat(),
-                    'insurance'         => [
-                        'amount'   => (int) $consignment->getInsurance() * 100,
-                        'currency' => 'EUR',
-                    ]
-                ]
             ];
+
+            $shipment = ConsignmentEncode::encodeExtraOptions($shipment, $consignment);
 
             $data['data']['return_shipments'][] = $shipment;
         }

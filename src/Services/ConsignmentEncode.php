@@ -44,9 +44,16 @@ class ConsignmentEncode
      */
     public function apiEncode()
     {
-        $this->encodeBaseOptions()
-             ->encodeStreet()
-             ->encodeExtraOptions()
+        $this->encodeBase()
+             ->encodeStreet();
+
+        $this->consignmentEncoded = self::encodeExtraOptions(
+            $this->consignmentEncoded,
+            Arr::first($this->consignments)
+        );
+
+        $this->encodePickup()
+             ->encodePhysicalProperties()
              ->encodeCdCountry()
              ->encodeMultiCollo();
 
@@ -54,13 +61,60 @@ class ConsignmentEncode
     }
 
     /**
+     * @param array                                                     $consignmentEncoded
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     *
+     * @return array
+     */
+    public static function encodeExtraOptions(array $consignmentEncoded, AbstractConsignment $consignment): array
+    {
+        $consignmentEncoded = array_merge_recursive(
+            $consignmentEncoded,
+            [
+                'options' => [
+                    'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
+                    'label_description' => $consignment->getLabelDescription(),
+                    'only_recipient' => (int) $consignment->isOnlyRecipient(),
+                    'signature'      => (int) $consignment->isSignature(),
+                    'return'         => (int) $consignment->isReturn(),
+                    'delivery_type'  => $consignment->getDeliveryType(),
+                ],
+            ]
+        );
+
+        if ($consignment->isEuCountry()) {
+            $consignmentEncoded['options']['large_format'] = (int) $consignment->isLargeFormat();
+        }
+
+        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
+            $consignmentEncoded['options']['age_check']      = 1;
+            $consignmentEncoded['options']['only_recipient'] = 1;
+            $consignmentEncoded['options']['signature']      = 1;
+        } elseif ($consignment->hasAgeCheck()) {
+            throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
+        }
+
+        if ($consignment->getDeliveryDate()) {
+            $consignmentEncoded['options']['delivery_date'] = $consignment->getDeliveryDate();
+        }
+
+        if ($consignment->getInsurance() > 1) {
+            $consignmentEncoded['options']['insurance'] = [
+                'amount'   => (int) $consignment->getInsurance() * 100,
+                'currency' => 'EUR',
+            ];
+        }
+
+        return $consignmentEncoded;
+    }
+
+    /**
      * @return self
      */
-    private function encodeBaseOptions()
+    private function encodeBase()
     {
         /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
-        $packageType = $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE);
 
         $this->consignmentEncoded = [
             'recipient' => [
@@ -70,10 +124,6 @@ class ConsignmentEncode
                 'city'        => (string) $consignment->getCity(),
                 'email'       => (string) $consignment->getEmail(),
                 'phone'       => (string) $consignment->getPhone(),
-            ],
-            'options'   => [
-                'package_type'      => $packageType,
-                'label_description' => $consignment->getLabelDescription(),
             ],
             'carrier'   => $consignment->getCarrierId(),
         ];
@@ -96,50 +146,6 @@ class ConsignmentEncode
     {
         $consignment              = Arr::first($this->consignments);
         $this->consignmentEncoded = $consignment->encodeStreet($this->consignmentEncoded);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     */
-    private function encodeExtraOptions()
-    {
-        $consignment = Arr::first($this->consignments);
-
-        /** @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment */
-        $this->consignmentEncoded = array_merge_recursive(
-            $this->consignmentEncoded,
-            [
-                'options' => [
-                    'only_recipient' => $consignment->isOnlyRecipient() ? 1 : 0,
-                    'signature'      => $consignment->isSignature() ? 1 : 0,
-                    'return'         => $consignment->isReturn() ? 1 : 0,
-                    'delivery_type'  => $consignment->getDeliveryType(),
-                ],
-            ]
-        );
-        $this
-            ->encodePickup()
-            ->encodeInsurance()
-            ->encodePhysicalProperties();
-
-        if ($consignment->isEuCountry()) {
-            $this->consignmentEncoded['options']['large_format'] = $consignment->isLargeFormat() ? 1 : 0;
-        }
-
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
-            $this->consignmentEncoded['options']['age_check']      = 1;
-            $this->consignmentEncoded['options']['only_recipient'] = 1;
-            $this->consignmentEncoded['options']['signature']      = 1;
-        } elseif ($consignment->hasAgeCheck()) {
-            throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
-        }
-
-        if ($consignment->getDeliveryDate()) {
-            $this->consignmentEncoded['options']['delivery_date'] = $consignment->getDeliveryDate();
-        }
 
         return $this;
     }
@@ -173,24 +179,6 @@ class ConsignmentEncode
 
         $this->consignmentEncoded['general_settings']['save_recipient_address']     = $this->normalizeAutoSaveRecipientAddress($consignment);
         $this->consignmentEncoded['general_settings']['disable_auto_detect_pickup'] = $this->normalizeAutoDetectPickup($consignment);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function encodeInsurance()
-    {
-        $consignment = Arr::first($this->consignments);
-
-        // Set insurance
-        if ($consignment->getInsurance() > 1) {
-            $this->consignmentEncoded['options']['insurance'] = [
-                'amount'   => (int) $consignment->getInsurance() * 100,
-                'currency' => 'EUR',
-            ];
-        }
 
         return $this;
     }
