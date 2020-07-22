@@ -50,12 +50,12 @@ class Arr
     }
 
     /**
-     * @param $array1
-     * @param array $array2
+     * @param mixed $array1
+     * @param mixed $array2
      *
      * @return array
      */
-    public static function mergeAfterEachOther($array1, array $array2): array
+    public static function mergeAfterEachOther($array1, $array2): array
     {
         $result = [];
 
