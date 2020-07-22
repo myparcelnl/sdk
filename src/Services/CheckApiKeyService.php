@@ -50,7 +50,7 @@ class CheckApiKeyService
                 ->setUserAgent($userAgent)
                 ->setRequestParameters(
                     $this->getApiKey(),
-                    '',
+                    null,
                     MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
                 )
                 ->sendRequest('GET');

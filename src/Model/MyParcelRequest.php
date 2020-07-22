@@ -35,7 +35,6 @@ class MyParcelRequest
      * Supported request types.
      */
     const REQUEST_TYPE_SHIPMENTS               = 'shipments';
-    const REQUEST_TYPE_RETURN_SHIPMENT         = 'shipments?send_return_mail';
     const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
     const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
 
@@ -56,10 +55,19 @@ class MyParcelRequest
      */
     private $api_key = '';
     private $header = [];
-    private $body = '';
-    private $error = null;
-    private $result = null;
+
+    /**
+     * @var string|null
+     */
+    private $body      = '';
+    private $error     = null;
+    private $result    = null;
     private $userAgent = null;
+
+    /**
+     * @var array
+     */
+    private $query;
 
     /**
      * Get an item from tje result using "dot" notation.
@@ -95,13 +103,13 @@ class MyParcelRequest
      * Sets the parameters for an API call based on a string with all required request parameters and the requested API
      * method.
      *
-     * @param string $apiKey
-     * @param string $body
-     * @param string $requestHeader
+     * @param string      $apiKey
+     * @param string|null $body
+     * @param string      $requestHeader
      *
      * @return $this
      */
-    public function setRequestParameters(string $apiKey, string $body, string $requestHeader): MyParcelRequest
+    public function setRequestParameters(string $apiKey, ?string $body, string $requestHeader): MyParcelRequest
     {
         $this->api_key = $apiKey;
         $this->body    = $body;
@@ -110,6 +118,16 @@ class MyParcelRequest
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
 
         $this->header = $header;
+
+        return $this;
+    }
+
+    /**
+     * @param array $parameters
+     */
+    public function setQuery(array $parameters)
+    {
+        $this->query = $parameters;
 
         return $this;
     }
@@ -138,6 +156,10 @@ class MyParcelRequest
         $url    = $this->getRequestUrl($uri);
         if ($method !== 'POST' && $this->body) {
             $url .= '/' . $this->body;
+        }
+
+        if ($this->query) {
+            $url .= '?' . http_build_query($this->query);
         }
 
         $request->write($method, $url, $header, $this->body);

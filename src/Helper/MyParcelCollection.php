@@ -327,7 +327,7 @@ class MyParcelCollection extends Collection
                     ->setUserAgent($this->getUserAgent())
                     ->setRequestParameters(
                         $key,
-                        $consignment->getConsignmentId(),
+                        (string) $consignment->getConsignmentId(),
                         MyParcelRequest::REQUEST_HEADER_DELETE
                     )
                     ->sendRequest('DELETE');
@@ -529,7 +529,7 @@ class MyParcelCollection extends Collection
 
         $data        = $this->apiEncodeReturnShipments($returnConsignments);
         $apiKey      = $returnConsignments[0]->getApiKey();
-        $requestType = MyParcelRequest::REQUEST_TYPE_RETURN_SHIPMENT . '=' . (int) $sendMail;
+        $requestType = MyParcelRequest::REQUEST_TYPE_SHIPMENTS;
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
@@ -538,6 +538,7 @@ class MyParcelCollection extends Collection
                 $data,
                 MyParcelRequest::REQUEST_HEADER_RETURN
             )
+            ->setQuery(['send_return_mail' => (int) $sendMail])
             ->sendRequest('POST', $requestType);
 
         $result = $request->getResult();
@@ -668,9 +669,10 @@ class MyParcelCollection extends Collection
         $request = (new MyParcelRequest())
             ->setRequestParameters(
                 $apiKey,
-                '?' . http_build_query($parameters),
+                null,
                 MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
             )
+            ->setQuery($parameters)
             ->sendRequest('GET');
 
         if ($request->getResult() === null) {
