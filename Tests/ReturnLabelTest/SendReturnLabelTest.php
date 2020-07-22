@@ -70,17 +70,17 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
                     function (
                         AbstractConsignment $returnConsignment,
                         AbstractConsignment $parent
-                    ): AbstractConsignment {
+                    ) use ($consignmentTest): AbstractConsignment {
                         $returnConsignment->setLabelDescription(
                             'Return: ' . $parent->getLabelDescription() .
                             ' This label is valid until: ' . date("d-m-Y", strtotime("+ 28 days"))
                         );
-                        $returnConsignment->setOnlyRecipient($parent->isOnlyRecipient());
-                        $returnConsignment->setSignature($parent->isSignature());
-                        $returnConsignment->setAgeCheck($parent->hasAgeCheck());
-                        $returnConsignment->setReturn($parent->isReturn());
-                        $returnConsignment->setLargeFormat($parent->isLargeFormat());
-                        $returnConsignment->setInsurance($parent->getInsurance());
+                        $returnConsignment->setOnlyRecipient($consignmentTest['return_only_recipient']);
+                        $returnConsignment->setSignature($consignmentTest['return_signature']);
+                        $returnConsignment->setAgeCheck($consignmentTest['return_age_check']);
+                        $returnConsignment->setReturn($consignmentTest['return_return']);
+                        $returnConsignment->setLargeFormat($consignmentTest['return_large_format']);
+                        $returnConsignment->setInsurance($consignmentTest['return_insurance']);
 
                         return $returnConsignment;
                     }
@@ -88,6 +88,46 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
                 ->setLinkOfLabels();
 
             $this->assertContains('myparcel.nl/pdfs', $myParcelCollection->getLinkOfLabels());
+
+            /**
+             * @var AbstractConsignment $returnConsignment
+             */
+            $returnConsignment = $myParcelCollection[1];
+            $this->assertEquals(
+                $consignmentTest['return_only_recipient'],
+                $returnConsignment->isOnlyRecipient(),
+                'isOnlyRecipient()'
+            );
+            $this->assertEquals(
+                $consignmentTest['return_signature'],
+                $returnConsignment->isSignature(),
+                'isSignature()'
+            );
+            $this->assertEquals(
+                $consignmentTest['return_age_check'],
+                $returnConsignment->hasAgeCheck(),
+                'hasAgeCheck()'
+            );
+            $this->assertEquals(
+                $consignmentTest['return_return'],
+                $returnConsignment->isReturn(),
+                'isReturn()'
+            );
+            $this->assertEquals(
+                $consignmentTest['return_large_format'],
+                $returnConsignment->isLargeFormat(),
+                'isLargeFormat()'
+            );
+            $this->assertEquals(
+                $consignmentTest['return_insurance'],
+                $returnConsignment->getInsurance(),
+                'getInsurance()'
+            );
+            $this->assertContains(
+                'This label is valid until',
+                $returnConsignment->getLabelDescription(),
+                'getInsurance()'
+            );
         }
     }
 
@@ -100,26 +140,32 @@ class SendReturnLabelTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'api_key'           => getenv('API_KEY'),
-                'carrier_id'        => PostNLConsignment::CARRIER_ID,
-                'cc'                => 'NL',
-                'person'            => 'Piet',
-                'email'             => 'richard@myparcel.nl',
-                'company'           => 'Mega Store',
-                'full_street_input' => 'Koestraat 55',
-                'number_suffix'     => '',
-                'postal_code'       => '2231JE',
-                'city'              => 'Katwijk',
-                'phone'             => '123-45-235-435',
-                'package_type'      => 1,
-                'label_description' => '1234',
-                'only_recipient'    => true,
-                'signature'         => true,
-                'age_check'         => true,
-                'return'            => true,
-                'large_format'      => true,
-                'insurance'         => 250
-            ]
+                'api_key'               => getenv('API_KEY'),
+                'carrier_id'            => PostNLConsignment::CARRIER_ID,
+                'cc'                    => 'NL',
+                'person'                => 'Piet',
+                'email'                 => 'richard@myparcel.nl',
+                'company'               => 'Mega Store',
+                'full_street_input'     => 'Koestraat 55',
+                'number_suffix'         => '',
+                'postal_code'           => '2231JE',
+                'city'                  => 'Katwijk',
+                'phone'                 => '123-45-235-435',
+                'package_type'          => 1,
+                'label_description'     => '1234',
+                'only_recipient'        => false,
+                'signature'             => false,
+                'age_check'             => false,
+                'return'                => false,
+                'large_format'          => false,
+                'insurance'             => 0,
+                'return_only_recipient' => true,
+                'return_signature'      => true,
+                'return_age_check'      => true,
+                'return_return'         => true,
+                'return_large_format'   => true,
+                'return_insurance'      => 250,
+            ],
         ];
     }
 }
