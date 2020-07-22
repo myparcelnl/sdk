@@ -383,7 +383,6 @@ class MyParcelCollection extends Collection
      * @throws MissingFieldException
      * @throws Exception
      * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
-     *
      */
     public function setLatestDataWithoutIds($key, $size = 300)
     {
