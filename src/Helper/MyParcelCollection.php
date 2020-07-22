@@ -553,9 +553,7 @@ class MyParcelCollection extends Collection
         }
 
         $returnConsignments  = (new MyParcelCollection())->addConsignmentByConsignmentIds($returnIds, $apiKey)->setLatestData();
-        $returnConsignmentst = $returnConsignments->toArray();
-
-        $this->items = Arr::mergeAfterEachOther($this, $returnConsignmentst);
+        $this->items = Arr::mergeAfterEachOther($this, $returnConsignments->toArray());
 
         return $this;
     }
