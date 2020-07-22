@@ -505,7 +505,6 @@ class MyParcelCollection extends Collection
      * Send return label to customer. The customer can pay and download the label.
      *
      * @param bool     $sendMail
-     *
      * @param \Closure $modifier
      *
      * @return $this
@@ -551,7 +550,10 @@ class MyParcelCollection extends Collection
             throw new InvalidArgumentException('Can\'t send return label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
 
-        $returnConsignments  = (new MyParcelCollection())->addConsignmentByConsignmentIds($returnIds, $apiKey)->setLatestData();
+        $returnConsignments = (new MyParcelCollection())
+            ->addConsignmentByConsignmentIds($returnIds, $apiKey)
+            ->setLatestData();
+
         $this->items = Arr::mergeAfterEachOther($this, $returnConsignments->toArray());
 
         return $this;
