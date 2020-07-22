@@ -131,7 +131,7 @@ foreach ($yourShipments as $yourShipment) {
         ->setLabelDescription($yourShipment['label_description'])
     );
         
-    // Add the consignment to the collection and generate teh return consignment
+    // Add the consignment to the collection and generate the return consignment
     $consignments
         ->addConsignment($consignment)
         ->generateReturnConsignments(
