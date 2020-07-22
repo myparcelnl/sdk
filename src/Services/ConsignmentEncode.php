@@ -42,7 +42,7 @@ class ConsignmentEncode
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function apiEncode()
+    public function apiEncode(): array
     {
         $this->encodeBase()
              ->encodeStreet();
