@@ -568,7 +568,7 @@ class MyParcelCollection extends Collection
      * @throws MissingFieldException
      * @deprecated Use generateReturnConsignments instead
      */
-    public function sendReturnLabelMails()
+    public function sendReturnLabelMails(): self
     {
         return $this->generateReturnConsignments(true);
     }
