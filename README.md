@@ -111,8 +111,7 @@ foreach ($yourShipments as $yourShipment) {
 ```
 
 ### Create return in the box
-This example creates a consignment and return consignment by adding them to one ```MyParcelCollection()``` and then create and download one PDF with both labels.
-
+This example creates a consignment and a related return consignment by adding them to one `MyParcelCollection` and then creates and downloads a single PDF file with both labels.
 ```php
 // Create the collection before the loop
 $consignments = new MyParcelCollection();
@@ -135,7 +134,7 @@ foreach ($yourShipments as $yourShipment) {
     $consignments
         ->addConsignment($consignment)
         ->generateReturnConsignments(
-            false,
+            false, // Don't send an email to the customer
             function (
                 AbstractConsignment $returnConsignment,
                 AbstractConsignment $parent

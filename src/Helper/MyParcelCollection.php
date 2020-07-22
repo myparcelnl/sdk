@@ -528,18 +528,18 @@ class MyParcelCollection extends Collection
             $modifier($returnConsignment, $parentConsignment);
         }
 
-        $data   = $this->apiEncodeReturnShipments($returnConsignments);
-        $apiKey = $returnConsignments[0]->getApiKey();
+        $data        = $this->apiEncodeReturnShipments($returnConsignments);
+        $apiKey      = $returnConsignments[0]->getApiKey();
+        $requestType = MyParcelRequest::REQUEST_TYPE_RETURN_SHIPMENT . '=' . (int) $sendMail;
 
         $request = (new MyParcelRequest())
             ->setUserAgent($this->getUserAgent())
             ->setRequestParameters(
                 $apiKey,
                 $data,
-                MyParcelRequest::REQUEST_HEADER_RETURN,
-                $sendMail
+                MyParcelRequest::REQUEST_HEADER_RETURN
             )
-            ->sendRequest('POST');
+            ->sendRequest('POST', $requestType);
 
         $result = $request->getResult();
 
@@ -795,7 +795,7 @@ class MyParcelCollection extends Collection
      *
      * @return string
      */
-    private function apiEncodeReturnShipments(array $consignments)
+    private function apiEncodeReturnShipments(array $consignments): string
     {
         $data = [];
 
@@ -860,7 +860,7 @@ class MyParcelCollection extends Collection
      */
     private function addMissingReferenceId(): void
     {
-        $this->transform(function (AbstractConsignment $consignment) {
+        $this->transform(function(AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
@@ -876,7 +876,7 @@ class MyParcelCollection extends Collection
      */
     private function findByReferenceIdGroup($id): MyParcelCollection
     {
-        return $this->filter(function ($consignment) use ($id) {
+        return $this->filter(function($consignment) use ($id) {
             /**
              * @var AbstractConsignment $consignment
              */

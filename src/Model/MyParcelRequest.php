@@ -29,12 +29,13 @@ class MyParcelRequest
     /**
      * API URL
      */
-    const REQUEST_URL = 'https://api.myparcel.nl';
+    const REQUEST_URL = 'http://edie.api.staging.myparcel.nl';
 
     /**
      * Supported request types.
      */
     const REQUEST_TYPE_SHIPMENTS               = 'shipments';
+    const REQUEST_TYPE_RETURN_SHIPMENT         = 'shipments?send_return_mail';
     const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
     const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
 
@@ -98,21 +99,15 @@ class MyParcelRequest
      * @param string $body
      * @param string $requestHeader
      *
-     * @param bool   $sendMail
-     *
      * @return $this
      */
-    public function setRequestParameters(string $apiKey, string $body, string $requestHeader, bool $sendMail = true): MyParcelRequest
+    public function setRequestParameters(string $apiKey, string $body, string $requestHeader): MyParcelRequest
     {
         $this->api_key = $apiKey;
         $this->body    = $body;
 
         $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
-
-        if (! $sendMail) {
-            $header[] = 'send_return_mail: ' . $sendMail;
-        }
 
         $this->header = $header;
 
