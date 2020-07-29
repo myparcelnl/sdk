@@ -28,12 +28,15 @@ class LabelHelper
             /** @noinspection PhpMissingBreakStatementInspection */
             case 1:
                 $aPositions[] = 1;
+                break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 2:
                 $aPositions[] = 2;
+                break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 3:
                 $aPositions[] = 3;
+                break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 4:
                 $aPositions[] = 4;
