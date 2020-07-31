@@ -46,10 +46,10 @@ $ composer require myparcelnl/sdk
 ### Installation without Composer
 It's also possible to use the SDK without installing it with Composer.
 
-You can download the zip on the project's [releases page](https://github.com/myparcelnl/sdk/releases).
+You can download the zip on https://github.com/myparcelnl/sdk/archive/master.zip.
 
-1. Download the package (SDKvx.x.x.zip).
-2. Extract the downloaded .zip file and upload the vendor directory to your server.
+1. [Download the package](https://github.com/myparcelnl/sdk/archive/master.zip).
+2. Extract the downloaded .zip file and upload it to your server.
 3. Require `src/AutoLoader.php`
 4. You can now use the SDK in your project!
 
