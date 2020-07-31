@@ -14,7 +14,7 @@ class PickupLocationV2Adapter extends AbstractPickupLocationAdapter
      */
     public function __construct(array $data)
     {
-        $this->location_name     = $data["location_name"];
+        $this->location_name     = $data["location_name"] ?? $data["location"];
         $this->location_code     = $data["location_code"];
         $this->retail_network_id = $data["retail_network_id"] ?? null;
         $this->street            = $data["street"];

@@ -8,7 +8,7 @@
  * https://github.com/myparcelnl
  *
  * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
+ * @copyright   2010-2020 MyParcel
  * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release v0.1.0
@@ -16,13 +16,13 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Helper\RequestError;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\src\Helper\RequestError;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Support\Arr;
 
 class MyParcelRequest
 {
@@ -55,10 +55,19 @@ class MyParcelRequest
      */
     private $api_key = '';
     private $header = [];
-    private $body = '';
-    private $error = null;
-    private $result = null;
+
+    /**
+     * @var string|null
+     */
+    private $body      = '';
+    private $error     = null;
+    private $result    = null;
     private $userAgent = null;
+
+    /**
+     * @var array|null
+     */
+    private $query;
 
     /**
      * Get an item from tje result using "dot" notation.
@@ -90,18 +99,17 @@ class MyParcelRequest
         return $this->error;
     }
 
-
     /**
      * Sets the parameters for an API call based on a string with all required request parameters and the requested API
      * method.
      *
-     * @param string $apiKey
-     * @param string $body
-     * @param string $requestHeader
+     * @param string      $apiKey
+     * @param string|null $body
+     * @param string      $requestHeader
      *
      * @return $this
      */
-    public function setRequestParameters($apiKey, $body, $requestHeader): MyParcelRequest
+    public function setRequestParameters(string $apiKey, ?string $body, string $requestHeader): MyParcelRequest
     {
         $this->api_key = $apiKey;
         $this->body    = $body;
@@ -110,6 +118,16 @@ class MyParcelRequest
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
 
         $this->header = $header;
+
+        return $this;
+    }
+
+    /**
+     * @param array $parameters
+     */
+    public function setQuery(array $parameters)
+    {
+        $this->query = $parameters;
 
         return $this;
     }
@@ -138,6 +156,10 @@ class MyParcelRequest
         $url    = $this->getRequestUrl($uri);
         if ($method !== 'POST' && $this->body) {
             $url .= '/' . $this->body;
+        }
+
+        if ($this->query) {
+            $url .= '?' . http_build_query($this->query);
         }
 
         $request->write($method, $url, $header, $this->body);

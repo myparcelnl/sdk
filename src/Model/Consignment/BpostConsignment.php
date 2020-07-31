@@ -93,6 +93,22 @@ class BpostConsignment extends AbstractConsignment
      *
      * Required: no
      *
+     * @param string $numberSuffix
+     *
+     * @return $this
+     */
+    public function setNumberSuffix(?string $numberSuffix): AbstractConsignment
+    {
+        $this->number_suffix = $numberSuffix;
+
+        return $this;
+    }
+
+    /**
+     * Street number suffix.
+     *
+     * Required: no
+     *
      * @param string $boxNumber
      *
      * @return $this
