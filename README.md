@@ -49,7 +49,7 @@ It's also possible to use the SDK without installing it with Composer.
 You can download the zip on https://github.com/myparcelnl/sdk/archive/master.zip.
 
 1. [Download the package](https://github.com/myparcelnl/sdk/archive/master.zip).
-2. Extract the downloaded .zip file and upload to your server.
+2. Extract the downloaded .zip file and upload it to your server.
 3. Require `src/AutoLoader.php`
 4. You can now use the SDK in your project!
 
