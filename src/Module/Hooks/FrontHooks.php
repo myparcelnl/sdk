@@ -3,7 +3,10 @@
 namespace Gett\MyparcelBE\Module\Hooks;
 
 use Address;
+use Configuration;
+use Currency;
 use Db;
+use Product;
 use Tools;
 use Validate;
 
@@ -51,15 +54,45 @@ trait FrontHooks
         }
     }
 
-    public function hookDisplayCarrierExtraContent()
+    public function hookDisplayCarrierExtraContent($params)
     {
         $address = new Address($this->context->cart->id_address_delivery);
         if (Validate::isLoadedObject($address)) {
             $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
 
+            $include_taxes = !Product::getTaxCalculationMethod((int) $this->context->cart->id_customer)
+                && (int) Configuration::get('PS_TAX');
+            $display_taxes_label = (Configuration::get('PS_TAX') && !Configuration::get('AEUC_LABEL_TAX_INC_EXC'));
+
+            $shipping_cost = Tools::displayPrice(
+                $this->cartCarrierStandardShippingCost,
+                Currency::getCurrencyInstance((int) $this->context->cart->id_currency),
+                false
+            );
+
+            if ($include_taxes) {
+                if ($display_taxes_label) {
+                    $shipping_cost = $this->context->getTranslator()->trans(
+                        '%price% tax incl.',
+                        array('%price%' => $shipping_cost),
+                        'Shop.Theme.Checkout'
+                    );
+                }
+            } else {
+                if ($display_taxes_label) {
+                    $shipping_cost = $this->context->getTranslator()->trans(
+                        '%price% tax excl.',
+                        array('%price%' => $shipping_cost),
+                        'Shop.Theme.Checkout'
+                    );
+                }
+            }
+
             $this->context->smarty->assign([
                 'address' => $address,
                 'delivery_settings' => $this->getDeliverySettingsByCart((int) $this->context->cart->id),
+                'shipping_cost' => $shipping_cost,
+                'carrier' => $params['carrier'],
             ]);
 
             return $this->display($this->name, 'views/templates/hook/carrier.tpl');
