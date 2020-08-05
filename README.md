@@ -13,6 +13,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
 - [Quick start and examples](#quick-start-and-examples)
     - [Create a consignment](#create-a-consignment)
     - [Create multiple consignments](#create-multiple-consignments)
+    - [Create return in the box](#create-return-in-the-box)
     - [Label format and position](#label-format-and-position)
     - [Package type and options](#package-type-and-options)
     - [Find consignments](#find-consignments)
@@ -45,10 +46,10 @@ $ composer require myparcelnl/sdk
 ### Installation without Composer
 It's also possible to use the SDK without installing it with Composer.
 
-You can download the zip on the project's [releases page](https://github.com/myparcelnl/sdk/releases).
+You can download the zip on https://github.com/myparcelnl/sdk/archive/master.zip.
 
-1. Download the package (SDKvx.x.x.zip).
-2. Extract the downloaded .zip file and upload the vendor directory to your server.
+1. [Download the package](https://github.com/myparcelnl/sdk/archive/master.zip).
+2. Extract the downloaded .zip file and upload it to your server.
 3. Require `src/AutoLoader.php`
 4. You can now use the SDK in your project!
 
@@ -100,11 +101,54 @@ foreach ($yourShipments as $yourShipment) {
         ->setPerson($yourShipment['name'])
         ->setPostalCode($yourShipment['postal_code'])
         ->setFullStreet($yourShipment['full_street']) 
-        ->setCity($yourShipment['city']);
+        ->setCity($yourShipment['city'])
+    );
         
     // Add each consignment to the collection created before
     $consignments
         ->addConsignment($consignment);
+}
+```
+
+### Create return label in the box
+This example creates a consignment and a related return consignment by adding them to one `MyParcelCollection()` and then creates and downloads a single PDF file with both labels.
+```php
+// Create the collection before the loop
+$consignments = new MyParcelCollection();
+
+// Loop through your shipments, adding each to the same MyParcelCollection()
+foreach ($yourShipments as $yourShipment) {
+
+    $consignment = ((ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
+        ->setApiKey('api_key_from_MyParcel_backoffice')
+        ->setCountry($yourShipment['cc'])
+        ->setPerson($yourShipment['person'])
+        ->setCompany($yourShipment['company'])
+        ->setFullStreet($yourShipment['full_street_input'])
+        ->setPostalCode($yourShipment['postal_code'])
+        ->setCity($yourShipment['city'])
+        ->setLabelDescription($yourShipment['label_description'])
+    );
+        
+    // Add the consignment to the collection and generate the return consignment
+    // When there are no options set, the options from the parent consignment are used
+    $consignments
+        ->addConsignment($consignment)
+        ->generateReturnConsignments(
+            false,
+            function (
+                AbstractConsignment $returnConsignment,
+                AbstractConsignment $parent
+            ): AbstractConsignment {
+                $returnConsignment->setLabelDescription(
+                    'Return: ' . $parent->getLabelDescription() .
+                    ' This label is valid until: ' . date("d-m-Y", strtotime("+ 28 days"))
+                );
+                $returnConsignment->setSignature(true);
+
+                return $returnConsignment;
+            }
+        );
 }
 ```
 
@@ -449,6 +493,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
 ```MyParcelNL/Sdk/src/Helper/MyParcelCollection.php```
 ```php
     ->addConsignment() // Add consignment to collection
+    ->generateReturnConsignments() // Generate the return consignments based on already added consignments
 
     // Get consignments from the collection
     ->getConsignments()
