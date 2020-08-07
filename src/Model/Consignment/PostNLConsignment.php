@@ -182,10 +182,6 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function setDeliveryDate(?string $delivery_date): AbstractConsignment
     {
-        if (! $delivery_date) {
-            throw new \BadMethodCallException('First set delivery date before running setDeliveryDate() for shipment: ' . $this->consignment_id);
-        }
-
         return parent::setDeliveryDate($delivery_date);
     }
 
