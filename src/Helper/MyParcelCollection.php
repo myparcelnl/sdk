@@ -505,13 +505,12 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @param bool     $sendMail
-     * @param \Closure $modifier
+     * @param bool          $sendMail
+     * @param \Closure|null $modifier
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \Exception
      */
     public function generateReturnConsignments(bool $sendMail, \Closure $modifier = null): self
     {
@@ -519,13 +518,7 @@ class MyParcelCollection extends Collection
         $this->createConcepts();
 
         $parentConsignments = $this->getConsignments(false);
-        $returnConsignments = $parentConsignments;
-
-        // Let the user of the SDK adjust the return consignment by means of a callback.
-        foreach ($returnConsignments as $i => $returnConsignment) {
-            $parentConsignment = $parentConsignments[$i];
-            $modifier($returnConsignment, $parentConsignment);
-        }
+        $returnConsignments = $this->getReturnConsignments($parentConsignments, $modifier);
 
         $data        = $this->apiEncodeReturnShipments($returnConsignments);
         $apiKey      = $returnConsignments[0]->getApiKey();
@@ -852,7 +845,7 @@ class MyParcelCollection extends Collection
      */
     private function addMissingReferenceId(): void
     {
-        $this->transform(function(AbstractConsignment $consignment) {
+        $this->transform(function (AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
@@ -868,11 +861,34 @@ class MyParcelCollection extends Collection
      */
     private function findByReferenceIdGroup($id): MyParcelCollection
     {
-        return $this->filter(function($consignment) use ($id) {
+        return $this->filter(function ($consignment) use ($id) {
             /**
              * @var AbstractConsignment $consignment
              */
             return Str::startsWith($consignment->getReferenceId(), $id);
         });
+    }
+
+    /**
+     * Let the user of the SDK adjust the return consignment by means of a callback.
+     *
+     * @param array|AbstractConsignment[] $parentConsignments
+     * @param \Closure|null               $modifier
+     *
+     * @return array|AbstractConsignment[]
+     */
+    private function getReturnConsignments(array $parentConsignments, ?\Closure $modifier): array
+    {
+        $returnConsignments = $parentConsignments;
+
+        foreach ($returnConsignments as $i => $returnConsignment) {
+            $parentConsignment = $parentConsignments[$i];
+            $returnConsignment->setDeliveryDate(null);
+            if ($modifier) {
+                $modifier($returnConsignment, $parentConsignment);
+            }
+        }
+
+        return $returnConsignments;
     }
 }

@@ -1201,7 +1201,7 @@ class AbstractConsignment
      * @param string|null $delivery_date
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
-     * @throws \Exception
+     * @throws \BadMethodCallException
      */
     public function setDeliveryDate(?string $delivery_date): self
     {
