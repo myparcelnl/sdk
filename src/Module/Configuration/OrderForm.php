@@ -18,12 +18,12 @@ class OrderForm extends AbstractForm
     protected function getFields(): array
     {
         $realOrderStates = OrderState::getOrderStates((int) Context::getContext()->language->id);
-        $order_states = [
+        $order_states = array_merge([
             [
                 'id_order_state' => 0,
                 'name' => 'Off',
             ],
-        ] + $realOrderStates;
+        ], $realOrderStates);
 
         return [
             Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME => [
