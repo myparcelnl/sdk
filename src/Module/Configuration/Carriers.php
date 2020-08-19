@@ -110,9 +110,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Delivery Title', 'carriers'),
                         'name' => 'deliveryTitle',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('General delivery title', 'carriers'),
-                        ],
                         'desc' => $this->module->l('General delivery title', 'carriers'),
                     ],
                     [
@@ -123,19 +120,16 @@ class Carriers extends AbstractForm
                         'tab' => 'form',
                         'values' => [
                             'query' => [
-                                ['day_number' => 1, 'name' => "Monday"],
-                                ['day_number' => 2, 'name' => "Tuesday"],
-                                ['day_number' => 3, 'name' => "Wednesday"],
-                                ['day_number' => 4, 'name' => "Thursday"],
-                                ['day_number' => 5, 'name' => "Friday"],
-                                ['day_number' => 6, 'name' => "Saturday"],
-                                ['day_number' => 7, 'name' => "Sunday"],
+                                ['day_number' => 1, 'name' => $this->module->l('Monday', 'carriers')],
+                                ['day_number' => 2, 'name' => $this->module->l('Tuesday', 'carriers')],
+                                ['day_number' => 3, 'name' => $this->module->l('Wednesday', 'carriers')],
+                                ['day_number' => 4, 'name' => $this->module->l('Thursday', 'carriers')],
+                                ['day_number' => 5, 'name' => $this->module->l('Friday', 'carriers')],
+                                ['day_number' => 6, 'name' => $this->module->l('Saturday', 'carriers')],
+                                ['day_number' => 7, 'name' => $this->module->l('Sunday', 'carriers')],
                             ],
                             'id' => 'day_number',
                             'name' => 'name',
-                        ],
-                        'hint' => [
-                            $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.', 'carriers'),
                         ],
                         'desc' => $this->module->l('This option allows the Merchant to set the days she normally goes to PostNL to hand in her parcels. Monday is 1 and Saturday is 6.', 'carriers'),
                     ],
@@ -144,9 +138,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Cutoff Time', 'carriers'),
                         'name' => 'cutoffTime',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('This option allows the Merchant to indicate the latest cut-off time before an order will still be picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection and delivery on Tuesday.', 'carriers'),
                     ],
                     [
@@ -159,9 +150,6 @@ class Carriers extends AbstractForm
                             'id'    => 'id',
                             'name'  => 'name',
                         ),
-                        'hint' => [
-                            $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('This option allows the Merchant to set the number of days into the future for which she wants to show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 1 and max. is 14.', 'carriers'),
                     ],
                     [
@@ -174,9 +162,6 @@ class Carriers extends AbstractForm
                             'id'    => 'id',
                             'name'  => 'name',
                         ),
-                        'hint' => [
-                            $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.', 'carriers'),
                     ],
                     [
@@ -185,9 +170,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Allow monday delivery', 'carriers'),
                         'name' => 'allowMondayDelivery',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
                         'values' => [
                             [
@@ -226,9 +208,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Allow morning delivery', 'carriers'),
                         'name' => 'allowMorningDelivery',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 15:00 (14:30 recommended) so that Monday will be shown.', 'carriers'),
 
                     ],
@@ -237,11 +216,7 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Delivery morning title', 'carriers'),
                         'name' => 'deliveryMorningTitle',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-
                     ],
                     [
                         'type' => 'text',
@@ -251,18 +226,14 @@ class Carriers extends AbstractForm
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery standart title', 'carriers'),
+                        'label' => $this->module->l('Delivery standard title', 'carriers'),
                         'name' => 'deliveryStandardTitle',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Delivery standart price', 'carriers'),
+                        'label' => $this->module->l('Delivery standard price', 'carriers'),
                         'name' => 'priceStandardDelivery',
                         'tab' => 'form',
                     ],
@@ -290,15 +261,11 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Delivery evening title', 'carriers'),
                         'name' => 'deliveryEveningTitle',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price evening delivery', 'carriers'),
+                        'label' => $this->module->l('Delivery evening price', 'carriers'),
                         'name' => 'priceEveningDelivery',
                         'tab' => 'form',
                     ],
@@ -329,7 +296,7 @@ class Carriers extends AbstractForm
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price signature', 'carriers'),
+                        'label' => $this->module->l('Signature price', 'carriers'),
                         'name' => 'priceSignature',
                         'tab' => 'form',
                     ],
@@ -360,7 +327,7 @@ class Carriers extends AbstractForm
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->module->l('Price Only recipient', 'carriers'),
+                        'label' => $this->module->l('Only recipient price', 'carriers'),
                         'name' => 'priceOnlyRecipient',
                         'tab' => 'form',
                     ],
@@ -394,9 +361,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Pickup price', 'carriers'),
                         'name' => 'pricePickup',
                         'tab' => 'form',
-                        'hint' => [
-                            $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.', 'carriers'),
-                        ],
                         'desc' => $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.', 'carriers'),
                     ],
                     [
