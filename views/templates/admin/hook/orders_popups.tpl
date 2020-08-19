@@ -181,12 +181,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="{$PACKAGE_TYPE}">{l s='Package type' mod='myparcelbe'}</label>
+                    <label for="package-type">{l s='Package type' mod='myparcelbe'}</label>
                     <select name="{$PACKAGE_TYPE}" id="package-type" class="custom-select">
                         <option value="1">{l s='Parcel' mod='myparcelbe'}</option>
                         <option value="2">{l s='Mailbox package' mod='myparcelbe'}</option>
                         <option value="3">{l s='Letter' mod='myparcelbe'}</option>
                         <option value="4">{l s='Digital stamp' mod='myparcelbe'}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="{$PACKAGE_FORMAT}">{l s='Package format' mod='myparcelbe'}</label>
+                    <select name="{$PACKAGE_FORMAT}" class="custom-select" id="{$PACKAGE_FORMAT}">
+                        <option value="1">{l s='Normal' mod='myparcelbe'}</option>
+                        <option value="2">{l s='Large' mod='myparcelbe'}</option>
+                        <option value="3">{l s='Automatic' mod='myparcelbe'}</option>
                     </select>
                 </div>
 
@@ -201,15 +210,6 @@
                     <label for="{$AGE_CHECK}">{l s='Age check' mod='myparcelbe'}</label>
                 </div>
                 {/if}
-
-                <div class="form-group">
-                    <label for="{$PACKAGE_FORMAT}">{l s='Package format' mod='myparcelbe'}</label>
-                    <select name="{$PACKAGE_FORMAT}" class="custom-select">
-                        <option value="1">{l s='Normal' mod='myparcelbe'}</option>
-                        <option value="2">{l s='Large' mod='myparcelbe'}</option>
-                        <option value="3">{l s='Automatic' mod='myparcelbe'}</option>
-                    </select>
-                </div>
 
                 {if !$isBE}
                 <div class="form-group">
