@@ -447,6 +447,25 @@ class Carriers extends AbstractForm
                         ],
                     ],
                     [
+                        'tab' => 'delivery',
+                        'type' => 'select',
+                        'label' => $this->module->l('Default package format', 'carriers'),
+                        'name' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+                        'options' => [
+                            'query' => [
+                                ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
+                                ['id' => 2, 'name' => $this->module->l('Large', 'carriers')],
+                                ['id' => 3, 'name' => $this->module->l('Automatic', 'carriers')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                            'default' => [
+                                'label' => $this->module->l('Select', 'carriers'),
+                                'value' => 0,
+                            ],
+                        ],
+                    ],
+                    [
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
@@ -483,25 +502,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Age check', 'carriers'),
                         'name' => Constant::AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'delivery',
-                    ],
-                    [
-                        'tab' => 'delivery',
-                        'type' => 'select',
-                        'label' => $this->module->l('Default package format', 'carriers'),
-                        'name' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
-                        'options' => [
-                            'query' => [
-                                ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
-                                ['id' => 2, 'name' => $this->module->l('Large', 'carriers')],
-                                ['id' => 3, 'name' => $this->module->l('Automatic', 'carriers')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                            'default' => [
-                                'label' => $this->module->l('Select', 'carriers'),
-                                'value' => 0,
-                            ],
-                        ],
                     ],
                     [
                         'type' => $this->getExclusiveFieldType(Constant::RETURN_PACKAGE_CONFIGURATION_NAME),
@@ -578,6 +578,25 @@ class Carriers extends AbstractForm
                         ],
                     ],
                     [
+                        'tab' => 'return',
+                        'type' => 'select',
+                        'label' => $this->module->l('Default package format', 'carriers'),
+                        'name' => 'return_' . Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+                        'options' => [
+                            'query' => [
+                                ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
+                                ['id' => 2, 'name' => $this->module->l('Large', 'carriers')],
+                                ['id' => 3, 'name' => $this->module->l('Automatic', 'carriers')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                            'default' => [
+                                'label' => $this->module->l('Select', 'carriers'),
+                                'value' => 0,
+                            ],
+                        ],
+                    ],
+                    [
                         'type' => 'switch',
                         'is_bool' => true,
                         'values' => [
@@ -614,25 +633,6 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('Age check', 'carriers'),
                         'name' => 'return_' . Constant::AGE_CHECK_CONFIGURATION_NAME,
                         'tab' => 'return',
-                    ],
-                    [
-                        'tab' => 'return',
-                        'type' => 'select',
-                        'label' => $this->module->l('Default package format', 'carriers'),
-                        'name' => 'return_' . Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
-                        'options' => [
-                            'query' => [
-                                ['id' => 1, 'name' => $this->module->l('Normal', 'carriers')],
-                                ['id' => 2, 'name' => $this->module->l('Large', 'carriers')],
-                                ['id' => 3, 'name' => $this->module->l('Automatic', 'carriers')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                            'default' => [
-                                'label' => $this->module->l('Select', 'carriers'),
-                                'value' => 0,
-                            ],
-                        ],
                     ],
                     [
                         'type' => $this->getExclusiveFieldType('return_' . Constant::RETURN_PACKAGE_CONFIGURATION_NAME),
