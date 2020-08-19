@@ -2,6 +2,7 @@
 
 namespace Gett\MyparcelBE\Module\Configuration;
 
+use Currency;
 use Db;
 use Configuration;
 use Gett\MyparcelBE\Constant;
@@ -41,6 +42,40 @@ class Carriers extends AbstractForm
                 $_POST['dropOffDays'] = implode(';', $dropOff);
             }
             foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $value) {
+                if (stripos($value, 'price') === 0) {
+                    $price = Tools::getValue($value);
+                    if (!empty($price) && !\Validate::isFloat($price)) {
+
+                        switch ($value) {
+                            case 'priceMorningDelivery':
+                                $label = $this->module->l('Delivery morning price', 'carriers');
+                                break;
+                            case 'priceStandardDelivery':
+                                $label = $this->module->l('Delivery standard price', 'carriers');
+                                break;
+                            case 'priceEveningDelivery':
+                                $label = $this->module->l('Delivery evening price', 'carriers');
+                                break;
+                            case 'priceSignature':
+                                $label = $this->module->l('Signature price', 'carriers');
+                                break;
+                            case 'priceOnlyRecipient':
+                                $label = $this->module->l('Only recipient price', 'carriers');
+                                break;
+                            case 'pricePickup':
+                                $label = $this->module->l('Pickup price', 'carriers');
+                                break;
+                            default:
+                                $label = $this->module->l('Price field', 'carriers');
+                                break;
+                        }
+                        $this->context->controller->errors[] = sprintf(
+                            $this->module->l('Wrong price format for %s', 'carriers'),
+                            $label
+                        );
+                        continue;
+                    }
+                }
                 Db::getInstance()->update(
                     'myparcel_carrier_configuration',
                     ['value' => pSQL(Tools::getValue($value))],
@@ -58,9 +93,11 @@ class Carriers extends AbstractForm
 
     private function getForm()
     {
+        $currency = Currency::getDefaultCurrency();
         $carrier = $this->module->l('Carriers', 'carriers');
-        if (Tools::getValue('id_carrier')){
-            $carrier = (new \Carrier(Tools::getValue('id_carrier')))->name;
+        $id_carrier = (int) Tools::getValue('id_carrier');
+        if ($id_carrier){
+            $carrier = (new \Carrier($id_carrier))->name;
         }
 
         $deliveryDaysOptions = array(
@@ -165,6 +202,21 @@ class Carriers extends AbstractForm
                         'desc' => $this->module->l('This option allows the Merchant to set the number of days it takes her to pick, pack and hand in her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.', 'carriers'),
                     ],
                     [
+                        'type' => 'text',
+                        'label' => $this->module->l('Delivery standard title', 'carriers'),
+                        'name' => 'deliveryStandardTitle',
+                        'tab' => 'form',
+                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->l('Delivery standard price', 'carriers'),
+                        'name' => 'priceStandardDelivery',
+                        'suffix' => $currency->getSign(),
+                        'class' => 'col-lg-2',
+                        'tab' => 'form',
+                    ],
+                    [
                         'type' => 'switch',
                         'is_bool' => true,
                         'label' => $this->module->l('Allow monday delivery', 'carriers'),
@@ -222,19 +274,8 @@ class Carriers extends AbstractForm
                         'type' => 'text',
                         'label' => $this->module->l('Delivery morning price', 'carriers'),
                         'name' => 'priceMorningDelivery',
-                        'tab' => 'form',
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->module->l('Delivery standard title', 'carriers'),
-                        'name' => 'deliveryStandardTitle',
-                        'tab' => 'form',
-                        'desc' => $this->module->l('When there is no title, the delivery time will automatically be visible.', 'carriers'),
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->module->l('Delivery standard price', 'carriers'),
-                        'name' => 'priceStandardDelivery',
+                        'suffix' => $currency->getSign(),
+                        'class' => 'col-lg-2',
                         'tab' => 'form',
                     ],
                     [
@@ -267,6 +308,8 @@ class Carriers extends AbstractForm
                         'type' => 'text',
                         'label' => $this->module->l('Delivery evening price', 'carriers'),
                         'name' => 'priceEveningDelivery',
+                        'suffix' => $currency->getSign(),
+                        'class' => 'col-lg-2',
                         'tab' => 'form',
                     ],
                     [
@@ -298,6 +341,8 @@ class Carriers extends AbstractForm
                         'type' => 'text',
                         'label' => $this->module->l('Signature price', 'carriers'),
                         'name' => 'priceSignature',
+                        'suffix' => $currency->getSign(),
+                        'class' => 'col-lg-2',
                         'tab' => 'form',
                     ],
                     [
@@ -329,6 +374,8 @@ class Carriers extends AbstractForm
                         'type' => 'text',
                         'label' => $this->module->l('Only recipient price', 'carriers'),
                         'name' => 'priceOnlyRecipient',
+                        'suffix' => $currency->getSign(),
+                        'class' => 'col-lg-2',
                         'tab' => 'form',
                     ],
                     [
@@ -360,6 +407,8 @@ class Carriers extends AbstractForm
                         'type' => 'text',
                         'label' => $this->module->l('Pickup price', 'carriers'),
                         'name' => 'pricePickup',
+                        'suffix' => $currency->getSign(),
+                        'class' => 'col-lg-2',
                         'tab' => 'form',
                         'desc' => $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.', 'carriers'),
                     ],
@@ -674,10 +723,10 @@ class Carriers extends AbstractForm
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
 
         $helper->submit_action = 'submitMyparcelCarrierSettings';
-        $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name . '&menu=' . Tools::getValue(
-            'menu',
-            0
-        );
+        $helper->currentIndex = \AdminController::$currentIndex
+            . '&configure='
+            . $this->module->name
+            . '&menu=' . Tools::getValue('menu', 0);
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
         $result = Db::getInstance()->executeS('SELECT *
