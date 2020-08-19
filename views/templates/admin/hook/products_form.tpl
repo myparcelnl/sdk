@@ -51,7 +51,7 @@
                 <label for="package-type-select">{l s='Select package type' mod='myparcelbe'}</label>
                 <select class="form-control" name="{$PACKAGE_TYPE}" id = "package-type-select">
                     <option value="1"{if $params[$PACKAGE_TYPE] == 1} selected{/if}>
-                        {l s='Package' mod='myparcelbe'}
+                        {l s='Parcel' mod='myparcelbe'}
                     </option>
                     <option value="2"{if $params[$PACKAGE_TYPE] == 2} selected{/if}>
                         {l s='Mailbox package' mod='myparcelbe'}

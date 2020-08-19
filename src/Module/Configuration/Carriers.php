@@ -437,7 +437,7 @@ class Carriers extends AbstractForm
                         'name' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
-                                ['id' => 1, 'name' => $this->module->l('Package', 'carriers')],
+                                ['id' => 1, 'name' => $this->module->l('Parcel', 'carriers')],
                                 ['id' => 2, 'name' => $this->module->l('Mailbox package', 'carriers')],
                                 ['id' => 3, 'name' => $this->module->l('Letter', 'carriers')],
                                 ['id' => 4, 'name' => $this->module->l('Digital stamp', 'carriers')],
@@ -568,7 +568,7 @@ class Carriers extends AbstractForm
                         'name' => 'return_' . Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
                         'options' => [
                             'query' => [
-                                ['id' => 1, 'name' => $this->module->l('Package', 'carriers')],
+                                ['id' => 1, 'name' => $this->module->l('Parcel', 'carriers')],
                                 ['id' => 2, 'name' => $this->module->l('Mailbox package', 'carriers')],
                                 ['id' => 3, 'name' => $this->module->l('Letter', 'carriers')],
                                 ['id' => 4, 'name' => $this->module->l('Digital stamp', 'carriers')],
