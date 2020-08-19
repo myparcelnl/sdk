@@ -1,16 +1,14 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     let initializeMyParcelForm = function (carrier) {
-        if (!carrier || !carrier.find('input:checked')) {
-            console.log('a')
-            return
+        if (!carrier || !carrier.length || !carrier.find('input:checked')) {
+            return;
         }
 
         let carrierId = carrier.find('input:checked')[0].value.split(',').join('')
         let wrapper = carrier[0].nextElementSibling.querySelector('.myparcel-delivery-options-wrapper')
 
         if (!wrapper) {
-            console.log('b', carrier[0].nextElementSiblin.querySelector('.myparcel-delivery-options-wrapper'))
-            return
+            return;
         }
 
         $.ajax({
