@@ -17,12 +17,13 @@ class OrderForm extends AbstractForm
 
     protected function getFields(): array
     {
+        $realOrderStates = OrderState::getOrderStates((int) Context::getContext()->language->id);
         $order_states = [
             [
                 'id_order_state' => 0,
                 'name' => 'Off',
             ],
-        ] + OrderState::getOrderStates((int) Context::getContext()->language->id);
+        ] + $realOrderStates;
 
         return [
             Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME => [
@@ -62,7 +63,7 @@ class OrderForm extends AbstractForm
                 'name' => Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
                 'multiple' => true,
                 'values' => [
-                    'query' => $order_states,
+                    'query' => $realOrderStates,
                     'id' => 'id_order_state',
                     'name' => 'name',
                 ],
