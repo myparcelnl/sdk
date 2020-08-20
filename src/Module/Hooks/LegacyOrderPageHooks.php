@@ -15,7 +15,11 @@ trait LegacyOrderPageHooks
         if ($this->context->controller instanceof \AdminOrdersController) {
             \Media::addJsDefL('print_labels_text', $this->l('Print labels', 'legacyorderpagehooks'));
             \Media::addJsDefL('refresh_labels_text', $this->l('Refresh labels', 'legacyorderpagehooks'));
-            \Media::addJsDefL('create_label_text', $this->l('Create label', 'legacyorderpagehooks'));
+            \Media::addJsDefL('export_labels_text', $this->l('Export labels', 'legacyorderpagehooks'));
+            \Media::addJsDefL(
+                'export_and_print_label_text',
+                $this->l('Export and print labels', 'legacyorderpagehooks')
+            );
             $this->context->controller->addJS(
                 $this->_path . 'views/js/admin/order.js'
             );
@@ -25,6 +29,7 @@ trait LegacyOrderPageHooks
                 'action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
                 'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
                 'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
+                'export_print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'exportPrint']),
                 'isBE' => $this->isBE(),
                 'labelConfiguration' => $this->getLabelDefaultConfiguration(),
                 'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,

@@ -45,7 +45,7 @@ trait OrdersGridHooks
 
         $definition->getBulkActions()->add(
             (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('create_label'))
-                ->setName($this->l('Create label', 'ordersgridhooks'))
+                ->setName($this->l('Export label', 'ordersgridhooks'))
                 ->setOptions([
                     'submit_route' => 'admin_myparcel_orders_label_bulk_create',
                 ])

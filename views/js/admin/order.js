@@ -14,7 +14,7 @@ window.addEventListener('load', function() {
     let addBulkCreateLabel = function() {
         let link = document.createElement('a');
 
-        link.innerHTML = '<i class="icon-download"></i> ' + create_label_text;
+        link.innerHTML = '<i class="icon-download"></i> ' + export_labels_text;
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -117,9 +117,49 @@ window.addEventListener('load', function() {
         addBulkOption(link);
     };
 
+    let addBulkExportPrintLabel = function() {
+        let link = document.createElement('a');
+
+        link.innerHTML = '<i class="icon-download"></i> ' + export_and_print_label_text;
+        if (typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
+            link.setAttribute('data-toggle', 'modal');
+            link.setAttribute('data-target', '#bulk-export-print');
+        }
+        link.href = '#';
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            $('#export-print-bulk-form').find('input[name="order_ids[]"]').remove();
+            document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
+                let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
+                $labelIdInput.prependTo('#bulk-export-print form');
+            });
+            if (typeof prompt_for_label_position === 'undefined' || parseInt(prompt_for_label_position) !== 1) {
+                $('#export-print-bulk-button').trigger('click');
+            }
+        });
+
+        addBulkOption(link);
+    };
+
+    $(document).on('change', '.page-format-radio', function() {
+        if ($(this).hasClass('page-format-a4') && $(this).is(':checked')) {
+            $(this).closest('form').find('.positions-block').show();
+        }
+        if ($(this).hasClass('page-format-a6') && $(this).is(':checked')) {
+            $(this).closest('form').find('.positions-block').hide();
+        }
+    });
+
+    $('#bulk-export-print').on('hidden.bs.modal', function (e) {
+        if (!$('.error-bulk-action').length) {
+            window.location.reload();
+        }
+    });
+
     addBulkPrintLabel();
     addBulkRefreshLabel();
     addBulkCreateLabel();
+    addBulkExportPrintLabel();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -164,6 +204,9 @@ document.addEventListener("DOMContentLoaded", () => {
     $('#print-bulk-button').click(function () {
         $('#print-bulk-form').submit();
     });
+    $('#export-print-bulk-button').click(function () {
+        $('#export-print-bulk-form').submit();
+    });
 
     $('#add').click(function () {
         $.ajax({
@@ -201,14 +244,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    $('#print-bulk-form').on('submit', function(e) {
+    $('#print-bulk-form, #export-print-bulk-form').on('submit', function(e) {
         if (!$('input[name="order_ids[]"]', $(this)).length) {
             e.preventDefault();
+            if ($('.error-bulk-action').length) {
+                $('.error-bulk-action').remove();
+            }
             $('#ajax_confirmation').before(
-              '<div class="alert alert-danger">' +
+              '<div class="alert alert-danger error-bulk-action">' +
               '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
             );
-            $('#bulk-print').modal('hide');
+            $(this).closest('.modal').modal('hide');
             $.scrollTo(0);
         }
     });

@@ -18,10 +18,10 @@
                                     type="radio"
                                     value="a4"
                                     name="format"
-                                    class="myparcel-radio"
+                                    class="myparcel-radio page-format-radio page-format-a4"
                                     {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a4'}checked="checked"{/if}
                             >
-                            <label for="a4">A4</label>
+                            <label for="a4">{l s='A4' mod='myparcelbe'}</label>
                         </div>
                         <div class="myparcel-radio-container">
                             <input
@@ -29,10 +29,10 @@
                                     type="radio"
                                     value="a6"
                                     name="format"
-                                    class="myparcel-radio"
+                                    class="myparcel-radio page-format-radio page-format-a6"
                                     {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a6'}checked="checked"{/if}
                             >
-                            <label for="a6">A6</label>
+                            <label for="a6">{l s='A6' mod='myparcelbe'}</label>
                         </div>
                     </div>
                     <br>
@@ -100,10 +100,10 @@
                                     type="radio"
                                     value="a4"
                                     name="format"
-                                    class="myparcel-radio"
+                                    class="myparcel-radio page-format-radio page-format-a4"
                                     {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a4'}checked="checked"{/if}
                             >
-                            <label for="a4_bulk">A4</label>
+                            <label for="a4_bulk">{l s='A4' mod='myparcelbe'}</label>
                         </div>
                         <div class="myparcel-radio-container">
                             <input
@@ -111,10 +111,10 @@
                                     type="radio"
                                     value="a6"
                                     name="format"
-                                    class="myparcel-radio"
+                                    class="myparcel-radio page-format-radio page-format-a6"
                                     {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a6'}checked="checked"{/if}
                             >
-                            <label for="a6_bulk">A6</label>
+                            <label for="a6_bulk">{l s='A6' mod='myparcelbe'}</label>
                         </div>
                     </div>
                     <br>
@@ -276,6 +276,96 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcelbe'}</button>
                 <button type="button" id="add" class="btn btn-primary">{l s='Save changes' mod='myparcelbe'}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div
+        class="modal fade"
+        id="bulk-export-print"
+        tabindex="-1" role="dialog"
+        aria-labelledby="bulkExportPrintModalLongTitle"
+        aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bulkExportPrintModalLongTitle">{l s='Export and Print' mod='myparcelbe'}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{$export_print_bulk_action}" method="post" id="export-print-bulk-form">
+                    <div class="myparcel-radio-wrapper">
+                        <div class="myparcel-radio-container">
+                            <input
+                                    type="radio"
+                                    value="a4"
+                                    name="format"
+                                    class="myparcel-radio page-format-radio page-format-a4"
+                                    id="a4_bulk_export_print"
+                                    {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a4'}checked="checked"{/if}
+                            >
+                            <label for="a4_bulk_export_print">{l s='A4' mod='myparcelbe'}</label>
+                        </div>
+                        <div class="myparcel-radio-container">
+                            <input
+                                    type="radio"
+                                    value="a6"
+                                    name="format"
+                                    class="myparcel-radio page-format-radio page-format-a6"
+                                    id="a6_bulk_export_print"
+                                    {if $labelConfiguration.MY_PARCEL_LABEL_SIZE eq 'a6'}checked="checked"{/if}
+                            >
+                            <label for="a6_bulk_export_print">{l s='A6' mod='myparcelbe'}</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="positions-block">
+                        <input
+                                id="top-left-bulk-export-print"
+                                type="checkbox"
+                                value="1"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 1}checked="checked"{/if}
+                        >
+                        <label for="top-left-bulk-export-print">{l s='Top-left' mod='myparcelbe'}</label>
+                        <br>
+                        <input
+                                id="top-right-bulk-export-print"
+                                type="checkbox"
+                                value="2"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 2}checked="checked"{/if}
+                        >
+                        <label for="top-right-bulk-export-print">{l s='Top-right' mod='myparcelbe'}</label>
+                        <br>
+                        <input
+                                id="bottom-left-bulk-export-print"
+                                type="checkbox"
+                                value="3"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 3}checked="checked"{/if}
+                        >
+                        <label for="bottom-left-bulk-export-print">{l s='Print' mod='myparcelbe'}</label>
+                        <br>
+                        <input
+                                id="bottom-right-bulk-export-print"
+                                type="checkbox"
+                                value="4"
+                                name="position[]"
+                                {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 4}checked="checked"{/if}
+                        >
+                        <label for="bottom-right-bulk-export-print">{l s='Bottom-right' mod='myparcelbe'}</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcelbe'}</button>
+                <button type="submit" id="export-print-bulk-button" class="btn btn-primary">
+                    {l s='Export and print' mod='myparcelbe'}
+                </button>
             </div>
         </div>
     </div>

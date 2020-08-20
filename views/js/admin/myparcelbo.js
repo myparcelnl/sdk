@@ -35,17 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     changeInsuranceHigherAmount();
   });
   changeInsuranceHigherAmount();
-  if ($('#a6').length) {
-    $('#a6, #a6_bulk').change(function () {
-      $('.positions-block').hide();
-    });
-    $('#a4, #a4_bulk').change(function () {
-      $('.positions-block').show();
-    });
-    if ($('#a6').is(':checked') || $('#a6_bulk').is(':checked')) {
-      $('.positions-block').hide();
-    }
-  }
 
   if ($('#MY_PARCEL_LABEL_SIZE').val() == 'a6') {
     $('.label_position').hide();
