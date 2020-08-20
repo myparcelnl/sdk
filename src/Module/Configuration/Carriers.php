@@ -180,7 +180,7 @@ class Carriers extends AbstractForm
                     [
                         'type' => 'select',
                         'label' => $this->module->l('Delivery days window', 'carriers'),
-                        'name' => 'deliverydaysWindow',
+                        'name' => 'deliveryDaysWindow',
                         'tab' => 'form',
                         'options'  => array(
                             'query' => $deliveryDaysOptions,
@@ -192,7 +192,7 @@ class Carriers extends AbstractForm
                     [
                         'type' => 'select',
                         'label' => $this->module->l('Drop off delay', 'carriers'),
-                        'name' => 'dropoffDelay',
+                        'name' => 'dropOffDelay',
                         'tab' => 'form',
                         'options'  => array(
                             'query' => $dropOffDelayOptions,
