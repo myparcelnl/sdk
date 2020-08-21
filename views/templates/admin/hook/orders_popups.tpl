@@ -348,7 +348,7 @@
                                 name="position[]"
                                 {if $labelConfiguration.MY_PARCEL_LABEL_POSITION eq 3}checked="checked"{/if}
                         >
-                        <label for="bottom-left-bulk-export-print">{l s='Print' mod='myparcelbe'}</label>
+                        <label for="bottom-left-bulk-export-print">{l s='Bottom-left' mod='myparcelbe'}</label>
                         <br>
                         <input
                                 id="bottom-right-bulk-export-print"
