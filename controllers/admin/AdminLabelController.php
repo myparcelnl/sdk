@@ -2,6 +2,7 @@
 
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Factory\Consignment\ConsignmentFactory;
+use Gett\MyparcelBE\Label\LabelOptionsResolver;
 use Gett\MyparcelBE\Logger\Logger;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Service\Consignment\Download;
@@ -150,26 +151,44 @@ class AdminLabelController extends ModuleAdminController
 
     public function processCreateb()
     {
+        $postValues = Tools::getAllValues();
+        $printPosition = false;
+        if (!empty($postValues['format']) && $postValues['format'] == 'a4') {
+            $printPosition = $postValues['position'];
+        }
         $factory = new ConsignmentFactory(
             \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
-            Tools::getAllValues(),
+            $postValues,
             new Configuration(),
             $this->module
         );
-        if (!Tools::getValue('data')) {
+        $orderIds = Tools::getValue('order_ids');
+        if (empty($orderIds)) {
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('Can\'t create label for these orders', 'adminlabelcontroller'));
         }
-        $orders = OrderLabel::getDataForLabelsCreate(array_keys(Tools::getValue('data')));
+        $orders = OrderLabel::getDataForLabelsCreate($orderIds);
         if (empty($orders)) {
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('Can\'t create label for these orders', 'adminlabelcontroller'));
+            die($this->module->l('Can\'t create label for these orders.', 'adminlabelcontroller'));
         }
         try {
             $collection = $factory->fromOrders($orders);
-            foreach (Tools::getValue('data') as $key => $item) {
-                $options = json_decode($item);
-                $consignment = $collection->getConsignmentsByReferenceId($key)->getOneConsignment();
+            $label_options_resolver = new LabelOptionsResolver();
+            foreach ($orderIds as $orderId) {
+                $orderLabelParams = [
+                    'id_order' => (int) $orderId,
+                    'id_carrier' => 0
+                ];
+                foreach ($orders as $orderRow) {
+                    if ((int) $orderRow['id_order'] === (int) $orderId) {
+                        $orderLabelParams['id_carrier'] = (int) $orderRow['id_carrier'];
+                        break;
+                    }
+                }
+                $labelOptions = $label_options_resolver->getLabelOptions($orderLabelParams);
+                $options = json_decode($labelOptions);
+                $consignment = $collection->getConsignmentsByReferenceId($orderId)->getOneConsignment();
                 if ($options->package_type && count($consignment->getItems()) == 0) {
                     $consignment->setPackageType($options->package_type);
                 } else {
@@ -198,7 +217,7 @@ class AdminLabelController extends ModuleAdminController
                 $this->sanitizeDeliveryType($consignment);
                 $this->sanitizePackageType($consignment);
             }
-            $collection->setPdfOfLabels();
+            $collection->setPdfOfLabels($printPosition);
             Logger::addLog($collection->toJson());
         } catch (Exception $e) {
             Logger::addLog($e->getMessage(), true);
@@ -224,6 +243,8 @@ class AdminLabelController extends ModuleAdminController
             $orderLabel->add();
             //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
         }
+
+        return $collection;
     }
 
     public function processRefresh()
@@ -358,5 +379,15 @@ class AdminLabelController extends ModuleAdminController
                 $consignment->package_type = 1;
             }
         }
+    }
+
+    public function processExportPrint()
+    {
+        $collection = $this->processCreateb();
+        setcookie('downloadPdfLabel', 1);
+        $collection->downloadPdfOfLabels(Configuration::get(
+            Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
+            false
+        ));
     }
 }

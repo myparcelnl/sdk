@@ -18,11 +18,9 @@ window.addEventListener('load', function() {
         link.href = '#';
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            let ids = {};
             let idsArray = [];
             document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
                 if (document.querySelector('button[data-order-id="'+e.value+'"]')){
-                    ids[e.value] = document.querySelector('button[data-order-id="'+e.value+'"]').dataset.labelOptions;
                     idsArray.push(e.value);
                 }
             });
@@ -38,7 +36,7 @@ window.addEventListener('load', function() {
                 method: "POST",
                 url: create_labels_bulk_route,
                 data: {
-                    data: ids
+                    order_ids: idsArray
                 }
             }).done((result) => {
                  window.location.reload();
@@ -133,6 +131,7 @@ window.addEventListener('load', function() {
                 let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
                 $labelIdInput.prependTo('#bulk-export-print form');
             });
+            $('#export-print-bulk-button').attr('disabled', false);
             if (typeof prompt_for_label_position === 'undefined' || parseInt(prompt_for_label_position) !== 1) {
                 $('#export-print-bulk-button').trigger('click');
             }
@@ -206,6 +205,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     $('#export-print-bulk-button').click(function () {
         $('#export-print-bulk-form').submit();
+    });
+
+    $('#export-print-bulk-form').on('submit', function(e) {
+        $('#export-print-bulk-button').attr('disabled', 'disabled');
+        function checkCookie() {
+            var key = 'downloadPdfLabel';
+
+            // To prevent the for loop in the first place assign an empty array
+            // in case there are no cookies at all.
+            var cookies = document.cookie ? document.cookie.split('; ') : [];
+            var jar = {};
+            for (var i = 0; i < cookies.length; i++) {
+                var parts = cookies[i].split('=');
+                var value = parts.slice(1).join('=');
+                var foundKey = parts[0];
+                jar[foundKey] = value;
+
+                if (key === foundKey) {
+                    break;
+                }
+            }
+
+            return typeof jar[key] !== 'undefined' ? jar[key] : null;
+        }
+        var intervalLimit = 100;
+        var intervalHandle = setInterval(function() {
+            if (checkCookie() !== null || intervalLimit <= 0) {
+                document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+                clearInterval(intervalHandle);
+                window.location.reload();
+            }
+            intervalLimit--;
+        }, 1000);
     });
 
     $('#add').click(function () {
