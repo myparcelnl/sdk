@@ -17,11 +17,24 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
             'dpd' => ['allowDeliveryOptions' => false],
             'postnl' => ['allowDeliveryOptions' => false],
         ];
-        $carrierSettings[$carrierName]['allowDeliveryOptions'] = true;
-        $carrierSettings[$carrierName]['allowPickupLocations'] = (bool) CarrierConfigurationProvider::get(
-            $id_carrier,
-            'allowPickupPoints'
-        );
+        $activeCarrierSettings = [
+            'allowDeliveryOptions' => true,
+            'allowEveningDelivery' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowEveningDelivery'),
+            'allowMondayDelivery' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowMondayDelivery'),
+            'allowMorningDelivery' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowMorningDelivery'),
+            'allowSaturdayDelivery' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowSaturdayDelivery'),
+            'allowOnlyRecipient' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
+            'allowSignature' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
+            'allowPickupPoints' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
+            // TODO: remove allowPickupLocations after fixing the allowPickupPoints reference
+            'allowPickupLocations' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
+        ];
+        foreach ($activeCarrierSettings as $key => $value) {
+            if ($key != 'allowDeliveryOptions' && $value === false) {
+                unset($activeCarrierSettings[$key]);
+            }
+        }
+        $carrierSettings[$carrierName] = array_merge($carrierSettings[$carrierName], $activeCarrierSettings);
 
         $params = [
             'config' => [
@@ -35,21 +48,24 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 'priceOnlyRecipient' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceOnlyRecipient'), 2),
                 'pricePickup' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'pricePickup'), 2),
 
-                'allowMondayDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowMondayDelivery'),
-                'allowMorningDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowMorningDelivery'),
-                'allowEveningDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowEveningDelivery'),
-                'allowSaturdayDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowSaturdayDelivery'),
-                'allowPickupPoints' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
+                //'allowMondayDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowMondayDelivery'),
+                //'allowMorningDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowMorningDelivery'),
+                //'allowEveningDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowEveningDelivery'),
+                //'allowSaturdayDelivery' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowSaturdayDelivery'),
+                //'allowPickupPoints' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
                 // TODO: remove allowPickupLocations after fixing the allowPickupPoints reference
-                'allowPickupLocations' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
-                'allowSignature' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
+                //'allowPickupLocations' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
+                //'allowSignature' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
 
-                'dropOffDays' => (int) CarrierConfigurationProvider::get($id_carrier, 'dropOffDays'),
+                'dropOffDays' => array_map(
+                    'intval',
+                    explode(',', CarrierConfigurationProvider::get($id_carrier, 'dropOffDays'))
+                ),
                 'cutoffTime' => CarrierConfigurationProvider::get($id_carrier, 'cutoffTime'),
                 'deliveryDaysWindow' => CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow'),
                 'dropOffDelay' => CarrierConfigurationProvider::get($id_carrier, 'dropOffDelay'),
 
-                'allowOnlyRecipient' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
+                //'allowOnlyRecipient' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
             ],
             'strings' => [
                 'wrongPostalCodeCity' => CarrierConfigurationProvider::get($id_carrier, 'wrongPostalCodeCity'),

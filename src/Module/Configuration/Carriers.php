@@ -39,7 +39,7 @@ class Carriers extends AbstractForm
                 }
             }
             if (isset($dropOff)) {
-                $_POST['dropOffDays'] = implode(';', $dropOff);
+                $_POST['dropOffDays'] = implode(',', $dropOff);
             }
             foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $value) {
                 if (stripos($value, 'price') === 0) {
@@ -735,7 +735,7 @@ class Carriers extends AbstractForm
         $vars = [];
         foreach ($result as $item) {
             if ($item['name'] == 'dropOffDays') {
-                $temp = explode(';', $item['value']);
+                $temp = explode(',', $item['value']);
                 foreach ($temp as $value) {
                     $vars["dropOffDays_{$value}"] = 1;
                 }
