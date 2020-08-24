@@ -52,4 +52,21 @@ document.addEventListener('DOMContentLoaded', function() {
       $input.val($input.val() + ' ' + $(this).html());
     }
   });
+
+  if ($('body').hasClass('adminmodules') && $('#configuration_form').length) {
+    $('.toggle-parent-field input[type="radio"]').on('change', function() {
+      toggleFieldsVisibility($(this));
+    });
+    $('.toggle-parent-field input[type="radio"]:checked').each(function() {
+      toggleFieldsVisibility($(this));
+    });
+  }
+  function toggleFieldsVisibility($el) {
+    var fieldName = $el.prop('name');
+    if ($el.prop('value') === '1') {
+      $('.toggle-child-field.' + fieldName).show();
+    } else {
+      $('.toggle-child-field.' + fieldName).hide();
+    }
+  }
 }, false);

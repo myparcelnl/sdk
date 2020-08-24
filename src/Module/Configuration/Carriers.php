@@ -268,18 +268,18 @@ class Carriers extends AbstractForm
             );
         }
         $fields[] = [
+            'tab' => 'form',
             'type' => 'text',
             'label' => $this->module->l('Delivery Title', 'carriers'),
             'name' => 'deliveryTitle',
-            'tab' => 'form',
             'desc' => $this->module->l('General delivery title', 'carriers'),
         ];
         $fields[] = [
+            'tab' => 'form',
             'type' => 'checkbox',
             'multiple' => true,
             'label' => $this->module->l('Drop off days', 'carriers'),
             'name' => 'dropOffDays',
-            'tab' => 'form',
             'values' => [
                 'query' => [
                     ['day_number' => 1, 'name' => $this->module->l('Monday', 'carriers')],
@@ -300,10 +300,10 @@ class Carriers extends AbstractForm
             ),
         ];
         $fields[] = [
+            'tab' => 'form',
             'type' => 'time',
             'label' => $this->module->l('Cutoff Time', 'carriers'),
             'name' => 'cutoffTime',
-            'tab' => 'form',
             'desc' => $this->module->l(
                 'This option allows the Merchant to indicate the latest cut-off time before an order will still be 
                 picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. 
@@ -314,16 +314,16 @@ class Carriers extends AbstractForm
             ),
         ];
         $fields[] = [
+            'tab' => 'form',
             'type' => 'time',
             'label' => $this->module->l('Saturday cutoff time', 'carriers'),
             'name' => 'saturdayCutoffTime',
-            'tab' => 'form',
         ];
         $fields[] = [
+            'tab' => 'form',
             'type' => 'select',
             'label' => $this->module->l('Delivery days window', 'carriers'),
             'name' => 'deliveryDaysWindow',
-            'tab' => 'form',
             'options'  => array(
                 'query' => $deliveryDaysOptions,
                 'id'    => 'id',
@@ -374,11 +374,11 @@ class Carriers extends AbstractForm
         ];
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowMondayDelivery')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => $this->getExclusiveFieldType('switch', 'allowMondayDelivery', $carrier),
                 'is_bool' => true,
                 'label' => $this->module->l('Allow Monday delivery', 'carriers'),
                 'name' => 'allowMondayDelivery',
-                'tab' => 'form',
                 'desc' => $this->module->l(
                     'Monday delivery is only possible when the package is delivered before 15.00 on Saturday at 
                     the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with 
@@ -398,19 +398,22 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('No', 'carriers')
                     ],
                 ],
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery Monday price', 'carriers'),
                 'name' => 'priceMondayDelivery',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowMondayDelivery',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowMorningDelivery')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
                 'values' => [
@@ -427,7 +430,6 @@ class Carriers extends AbstractForm
                 ],
                 'label' => $this->module->l('Allow morning delivery', 'carriers'),
                 'name' => 'allowMorningDelivery',
-                'tab' => 'form',
                 'desc' => $this->module->l(
                     'Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the 
                     designated PostNL locations. Note: To activate Monday delivery value 6 must be given with 
@@ -435,36 +437,38 @@ class Carriers extends AbstractForm
                     15:00 (14:30 recommended) so that Monday will be shown.',
                     'carriers'
                 ),
-
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery morning title', 'carriers'),
                 'name' => 'deliveryMorningTitle',
-                'tab' => 'form',
                 'desc' => $this->module->l(
                     'When there is no title, the delivery time will automatically be visible.',
                     'carriers'
                 ),
+                'form_group_class' => 'toggle-child-field allowMorningDelivery',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery morning price', 'carriers'),
                 'name' => 'priceMorningDelivery',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowMorningDelivery',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowEveningDelivery')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
                 'label' => $this->module->l('Allow evening delivery', 'carriers'),
                 'name' => 'allowEveningDelivery',
-                'tab' => 'form',
                 'values' => [
                     [
                         'id' => 'allowEveningDelivery_on',
@@ -477,30 +481,34 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('No', 'carriers')
                     ],
                 ],
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery evening title', 'carriers'),
                 'name' => 'deliveryEveningTitle',
-                'tab' => 'form',
                 'desc' => $this->module->l(
                     'When there is no title, the delivery time will automatically be visible.',
                     'carriers'
                 ),
+                'form_group_class' => 'toggle-child-field allowEveningDelivery',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery evening price', 'carriers'),
                 'name' => 'priceEveningDelivery',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowEveningDelivery',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowSaturdayDelivery')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
                 'values' => [
@@ -517,43 +525,44 @@ class Carriers extends AbstractForm
                 ],
                 'label' => $this->module->l('Allow Saturday delivery', 'carriers'),
                 'name' => 'allowSaturdayDelivery',
-                'tab' => 'form',
                 'desc' => $this->module->l(
                     'Saturday delivery is only possible when the package is delivered before 15:00 on Friday 
                     at the designated bpost locations. Note: To allow Saturday delivery, Friday must be enabled in 
                     Drop-off days.',
                     'carriers'
                 ),
-
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery Saturday title', 'carriers'),
                 'name' => 'saturdayDeliveryTitle',
-                'tab' => 'form',
                 'desc' => $this->module->l(
                     'When there is no title, the delivery time will automatically be visible.',
                     'carriers'
                 ),
+                'form_group_class' => 'toggle-child-field allowSaturdayDelivery',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Delivery Saturday price', 'carriers'),
                 'name' => 'priceSaturdayDelivery',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowSaturdayDelivery',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowSignature')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
                 'label' => $this->module->l('Allow signature', 'carriers'),
                 'name' => 'allowSignature',
-                'tab' => 'form',
                 'values' => [
                     [
                         'id' => 'allowSignature_on',
@@ -566,28 +575,34 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('No', 'carriers')
                     ],
                 ],
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Signature title', 'carriers'),
                 'name' => 'signatureTitle',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowSignature',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Signature price', 'carriers'),
                 'name' => 'priceSignature',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowSignature',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowOnlyRecipient')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
+                'label' => $this->module->l('Allow only recipient', 'carriers'),
+                'name' => 'allowOnlyRecipient',
                 'values' => [
                     [
                         'id' => 'allowOnlyRecipient_on',
@@ -600,31 +615,34 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('No', 'carriers')
                     ],
                 ],
-                'label' => $this->module->l('Allow only recipient', 'carriers'),
-                'name' => 'allowOnlyRecipient',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Only recipient title', 'carriers'),
                 'name' => 'onlyRecipientTitle',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowOnlyRecipient',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Only recipient price', 'carriers'),
                 'name' => 'priceOnlyRecipient',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowOnlyRecipient',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowPickupPoints')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
+                'label' => $this->module->l('Allow pickup points', 'carriers'),
+                'name' => 'allowPickupPoints',
                 'values' => [
                     [
                         'id' => 'allowPickupPoints_on',
@@ -637,32 +655,40 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('No', 'carriers')
                     ],
                 ],
-                'label' => $this->module->l('Allow pickup points', 'carriers'),
-                'name' => 'allowPickupPoints',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Pickup title', 'carriers'),
                 'name' => 'pickupTitle',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowPickupPoints',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Pickup price', 'carriers'),
                 'name' => 'pricePickup',
                 'suffix' => $currency->getSign(),
                 'class' => 'col-lg-2',
-                'tab' => 'form',
-                'desc' => $this->module->l('It\'s possible to fill in a positive or negative amount. Would you like to give a discount for the use of this feature or would you like to calculate extra costs? If the amount is negative the price will appear green in the checkout.', 'carriers'),
+                'desc' => $this->module->l(
+                    'It\'s possible to fill in a positive or negative amount. Would you like to give a discount 
+                    for the use of this feature or would you like to calculate extra costs? If the amount is negative 
+                    the price will appear green in the checkout.',
+                    'carriers'
+                ),
+                'form_group_class' => 'toggle-child-field allowPickupPoints',
             ];
         }
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowPickupExpress')) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'switch',
                 'is_bool' => true,
+                'label' => $this->module->l('Allow pickup express', 'carriers'),
+                'name' => 'allowPickupExpress',
                 'values' => [
                     [
                         'id' => 'allowPickupExpress_on',
@@ -675,24 +701,23 @@ class Carriers extends AbstractForm
                         'label' => $this->module->l('No', 'carriers')
                     ],
                 ],
-                'label' => $this->module->l('Allow pickup express', 'carriers'),
-                'name' => 'allowPickupExpress',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-parent-field',
             ];
             // Disable price automatically when the option is not available
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('Price pickup express', 'carriers'),
                 'name' => 'pricePickupExpress',
-                'tab' => 'form',
+                'form_group_class' => 'toggle-child-field allowPickupExpress',
             ];
         }
         if ($this->module->isBE()) {
             $fields[] = [
+                'tab' => 'form',
                 'type' => 'text',
                 'label' => $this->module->l('BE delivery title', 'carriers'),
                 'name' => 'BEdeliveryTitle',
-                'tab' => 'form',
             ];
         }
 
