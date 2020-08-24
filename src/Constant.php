@@ -2,6 +2,8 @@
 
 namespace Gett\MyparcelBE;
 
+use Configuration;
+
 class Constant
 {
     const POSTNL_DEFAULT_CARRIER = 'MYPARCEL_DEFAULT_CARRIER';
@@ -59,6 +61,7 @@ class Constant
         'deliveryDaysWindow',
         'dropOffDelay',
         'allowMondayDelivery',
+        'priceMondayDelivery',
         'saturdayCutoffTime',
         'allowMorningDelivery',
         'deliveryMorningTitle',
@@ -68,6 +71,9 @@ class Constant
         'allowEveningDelivery',
         'deliveryEveningTitle',
         'priceEveningDelivery',
+        'allowSaturdayDelivery',
+        'saturdayDeliveryTitle',
+        'priceSaturdayDelivery',
         'allowSignature',
         'signatureTitle',
         'priceSignature',
@@ -80,8 +86,8 @@ class Constant
         'allowPickupExpress',
         'pricePickupExpress',
         'BEdeliveryTitle',
-        'MY_PARCEL_PACKAGE_TYPE',
-        'MY_PARCEL_PACKAGE_FORMAT',
+        self::PACKAGE_TYPE_CONFIGURATION_NAME,
+        self::PACKAGE_FORMAT_CONFIGURATION_NAME,
         self::AGE_CHECK_CONFIGURATION_NAME,
         self::RETURN_PACKAGE_CONFIGURATION_NAME,
         self::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
@@ -119,5 +125,149 @@ class Constant
         'return_' . self::AGE_CHECK_CONFIGURATION_NAME,
         'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME,
         self::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
+    ];
+
+    const CARRIER_EXCLUSIVE = [
+        'POSTNL' => [
+            'ALLOW_STANDARD_FORM' => ['BE' => true, 'NL' => true],
+            'deliveryStandardTitle' => ['BE' => true, 'NL' => true],
+            'dropOffDays' => ['BE' => true, 'NL' => true],
+            'cutoffTime' => ['BE' => true, 'NL' => true],
+            'deliveryDaysWindow' => ['BE' => true, 'NL' => true],
+            'dropOffDelay' => ['BE' => true, 'NL' => true],
+            'allowMondayDelivery' => ['BE' => false, 'NL' => true],
+            'allowMorningDelivery' => ['BE' => false, 'NL' => true],
+            'allowEveningDelivery' => ['BE' => false, 'NL' => true],
+            'allowSaturdayDelivery' => ['BE' => false, 'NL' => false],
+            'priceSaturdayDelivery' => ['BE' => false, 'NL' => false],
+            'saturdayDeliveryTitle' => ['BE' => false, 'NL' => false],
+            'allowSignature' => ['BE' => true, 'NL' => true],
+            'priceSignature' => ['BE' => true, 'NL' => true],
+            'signatureTitle' => ['BE' => true, 'NL' => true],
+            'allowOnlyRecipient' => ['BE' => true, 'NL' => true],
+            'priceOnlyRecipient' => ['BE' => true, 'NL' => true],
+            'onlyRecipientTitle' => ['BE' => true, 'NL' => true],
+            'allowPickupPoints' => ['BE' => true, 'NL' => true],
+            'allowPickupExpress' => ['BE' => false, 'NL' => false],
+            'pricePickupExpress' => ['BE' => false, 'NL' => false],
+            // Delivery form
+            'ALLOW_DELIVERY_FORM' => ['BE' => true, 'NL' => true],
+            self::PACKAGE_TYPE_CONFIGURATION_NAME => [
+                'BE' => [1 => true],
+                'NL' => [1 => true, 2 => true, 3 => true, 4 => true]
+            ],
+            self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
+            self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => [1 => true, 2 => true]],
+            self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
+            self::INSURANCE_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
+            self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
+            self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
+            // Return form
+            'ALLOW_RETURN_FORM' => ['BE' => false, 'NL' => true],
+            'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
+                'BE' => false,
+                'NL' => [1 => true, 2 => true, 3 => true, 4 => true]
+            ],
+            'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
+            'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => false, 'NL' => [1 => true, 2 => true]],
+            'return_' . self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
+            'return_' . self::INSURANCE_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
+            'return_' . self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
+            'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
+        ],
+        'BPOST' => [
+            'ALLOW_STANDARD_FORM' => ['BE' => true, 'NL' => true],
+            'deliveryStandardTitle' => ['BE' => true, 'NL' => false],
+            'dropOffDays' => ['BE' => true, 'NL' => false],
+            'cutoffTime' => ['BE' => true, 'NL' => false],
+            'deliveryDaysWindow' => ['BE' => true, 'NL' => false],
+            'dropOffDelay' => ['BE' => true, 'NL' => false],
+            'allowMondayDelivery' => ['BE' => false, 'NL' => false],
+            'allowMorningDelivery' => ['BE' => false, 'NL' => false],
+            'allowEveningDelivery' => ['BE' => false, 'NL' => false],
+            'allowSaturdayDelivery' => ['BE' => true, 'NL' => false],
+            'priceSaturdayDelivery' => ['BE' => true, 'NL' => false],
+            'saturdayDeliveryTitle' => ['BE' => true, 'NL' => false],
+            'allowSignature' => ['BE' => true, 'NL' => false],
+            'priceSignature' => ['BE' => true, 'NL' => false],
+            'signatureTitle' => ['BE' => true, 'NL' => false],
+            'allowOnlyRecipient' => ['BE' => false, 'NL' => false],
+            'priceOnlyRecipient' => ['BE' => false, 'NL' => false],
+            'onlyRecipientTitle' => ['BE' => false, 'NL' => false],
+            'allowPickupPoints' => ['BE' => true, 'NL' => false],
+            'allowPickupExpress' => ['BE' => false, 'NL' => false],
+            'pricePickupExpress' => ['BE' => false, 'NL' => false],
+            // Delivery form
+            'ALLOW_DELIVERY_FORM' => ['BE' => true, 'NL' => true],
+            self::PACKAGE_TYPE_CONFIGURATION_NAME => [
+                'BE' => [1 => true],
+                'NL' => false
+            ],
+            self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => false],
+            self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => true, 'NL' => false],
+            self::INSURANCE_CONFIGURATION_NAME => ['BE' => true, 'NL' => false],
+            self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            // Return form
+            'ALLOW_RETURN_FORM' => ['BE' => true, 'NL' => false],
+            'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
+                'BE' => [1 => true],
+                'NL' => false
+            ],
+            'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => false],
+            'return_' . self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => true, 'NL' => false],
+            'return_' . self::INSURANCE_CONFIGURATION_NAME => ['BE' => true, 'NL' => false],
+            'return_' . self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+        ],
+        'DPD' => [
+            'ALLOW_STANDARD_FORM' => ['BE' => true, 'NL' => true],
+            'deliveryStandardTitle' => ['BE' => true, 'NL' => false],
+            'dropOffDays' => ['BE' => true, 'NL' => false],
+            'cutoffTime' => ['BE' => true, 'NL' => false],
+            'deliveryDaysWindow' => ['BE' => true, 'NL' => false],
+            'dropOffDelay' => ['BE' => true, 'NL' => false],
+            'allowMondayDelivery' => ['BE' => false, 'NL' => false],
+            'allowMorningDelivery' => ['BE' => false, 'NL' => false],
+            'allowEveningDelivery' => ['BE' => false, 'NL' => false],
+            'allowSaturdayDelivery' => ['BE' => false, 'NL' => false],
+            'priceSaturdayDelivery' => ['BE' => false, 'NL' => false],
+            'saturdayDeliveryTitle' => ['BE' => false, 'NL' => false],
+            'allowSignature' => ['BE' => false, 'NL' => false],
+            'priceSignature' => ['BE' => false, 'NL' => false],
+            'signatureTitle' => ['BE' => false, 'NL' => false],
+            'allowOnlyRecipient' => ['BE' => false, 'NL' => false],
+            'priceOnlyRecipient' => ['BE' => false, 'NL' => false],
+            'onlyRecipientTitle' => ['BE' => false, 'NL' => false],
+            'allowPickupPoints' => ['BE' => true, 'NL' => false],
+            'allowPickupExpress' => ['BE' => false, 'NL' => false],
+            'pricePickupExpress' => ['BE' => false, 'NL' => false],
+            // Delivery form
+            'ALLOW_DELIVERY_FORM' => ['BE' => true, 'NL' => true],
+            self::PACKAGE_TYPE_CONFIGURATION_NAME => [
+                'BE' => [1 => true],
+                'NL' => false
+            ],
+            self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => false],
+            self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            self::INSURANCE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            // Return form
+            'ALLOW_RETURN_FORM' => ['BE' => false, 'NL' => false],
+            'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
+                'BE' => false,
+                'NL' => false
+            ],
+            'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::INSURANCE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+            'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
+        ]
     ];
 }

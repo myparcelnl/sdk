@@ -2,7 +2,9 @@
 
 namespace Gett\MyparcelBE\Module\Configuration;
 
+use Carrier;
 use Gett\MyparcelBE\Constant;
+use Gett\MyparcelBE\Module\Carrier\ExclusiveField;
 use Tools;
 use Module;
 use HelperForm;
@@ -23,10 +25,14 @@ abstract class AbstractForm
     /** @var string */
     public $name;
 
+    /** @var Module */
+    protected $exclusiveField;
+
     public function __construct(Module $module)
     {
         $this->module = $module;
         $this->name = str_replace(' ', '', $module->displayName) . self::class;
+        $this->exclusiveField = new ExclusiveField();
     }
 
     public function __invoke(): string
@@ -179,24 +185,23 @@ abstract class AbstractForm
         return ['form' => $form];
     }
 
-    protected function getExclusiveFieldType(string $field): string
+    protected function getExclusiveFieldType(string $fieldType, string $field, Carrier $carrier, int $key = 1): string
     {
-        $fieldType = 'switch';
-        if (!$this->module->isBE()) {
-            return $fieldType;
-        }
-
-        if (in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
+        $carrierType = $this->exclusiveField->getCarrierType($carrier);
+        $countryIso = $this->module->getModuleCountry();
+        if (!$this->exclusiveField->isAvailable($countryIso, $carrierType, $field, $key)) {
             $fieldType = 'hidden';
         }
 
         return $fieldType;
     }
 
-    protected function setExclusiveFieldsValues(array &$vars): void
+    protected function setExclusiveFieldsValues($carrier, array &$vars): void
     {
-        if ($this->module->isBE()) {
-            foreach (Constant::EXCLUSIVE_FIELDS_NL as $field) {
+        $carrierType = $this->exclusiveField->getCarrierType($carrier);
+        $countryIso = $this->module->getModuleCountry();
+        foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $field) {
+            if (!$this->exclusiveField->isAvailable($countryIso, $carrierType, $field, 1)) {
                 $vars[$field] = 0;
             }
         }

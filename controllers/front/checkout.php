@@ -26,11 +26,12 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
             'allowOnlyRecipient' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
             'allowSignature' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
             'allowPickupPoints' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
+            'deliveryDaysWindow' => CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow'),
             // TODO: remove allowPickupLocations after fixing the allowPickupPoints reference
             'allowPickupLocations' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
         ];
         foreach ($activeCarrierSettings as $key => $value) {
-            if ($key != 'allowDeliveryOptions' && $value === false) {
+            if ($key != 'allowDeliveryOptions' && ($value === false || $value === 0)) {
                 unset($activeCarrierSettings[$key]);
             }
         }
