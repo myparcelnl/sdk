@@ -33,21 +33,27 @@ class Carriers extends AbstractForm
     {
         if (Tools::isSubmit('submitMyparcelCarrierSettings')) {
             $dropOff = [];
-            foreach (Tools::getAllValues() as $key => $value) {
+            $postFields = Tools::getAllValues();
+            $carrierId = $postFields['id_carrier'];
+            foreach ($postFields as $key => $value) {
                 if (stripos($key, 'dropOffDays') !== false) {
                     $temp = explode('_', $key);
                     $dropOff[] = end($temp);
                 }
             }
-            if (isset($dropOff)) {
-                $_POST['dropOffDays'] = implode(',', $dropOff);
+            $postFields['dropOffDays'] = '';
+            if (!empty($dropOff)) {
+                $postFields['dropOffDays'] = implode(',', $dropOff);
             }
-            foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $value) {
-                if (stripos($value, 'price') === 0) {
-                    $price = Tools::getValue($value);
+            foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $field) {
+                $updatedValue = $postFields[$field] ?? '';
+                if (stripos($field, 'price') === 0) {
+                    $price = $updatedValue;
                     if (!empty($price) && !\Validate::isFloat($price)) {
-
-                        switch ($value) {
+                        switch ($field) {
+                            case 'priceMondayDelivery':
+                                $label = $this->module->l('Delivery Monday price', 'carriers');
+                                break;
                             case 'priceMorningDelivery':
                                 $label = $this->module->l('Delivery morning price', 'carriers');
                                 break;
@@ -56,6 +62,9 @@ class Carriers extends AbstractForm
                                 break;
                             case 'priceEveningDelivery':
                                 $label = $this->module->l('Delivery evening price', 'carriers');
+                                break;
+                            case 'priceSaturdayDelivery':
+                                $label = $this->module->l('Delivery Saturday price', 'carriers');
                                 break;
                             case 'priceSignature':
                                 $label = $this->module->l('Signature price', 'carriers');
@@ -79,8 +88,8 @@ class Carriers extends AbstractForm
                 }
                 Db::getInstance()->update(
                     'myparcel_carrier_configuration',
-                    ['value' => pSQL(Tools::getValue($value))],
-                    'id_carrier = "' . Tools::getValue('id_carrier') . '" AND name = "' . pSQL($value) . '" '
+                    ['value' => pSQL($updatedValue)],
+                    'id_carrier = ' . (int) $carrierId . ' AND name = "' . pSQL($field) . '" '
                 );
             }
         }
@@ -136,8 +145,8 @@ class Carriers extends AbstractForm
 
         $helper->submit_action = 'submitMyparcelCarrierSettings';
         $helper->currentIndex = \AdminController::$currentIndex
-            . '&configure='
-            . $this->module->name
+            . '&configure=' . $this->module->name
+            . '&id_carrier=' . (int) $carrier->id
             . '&menu=' . Tools::getValue('menu', 0);
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
