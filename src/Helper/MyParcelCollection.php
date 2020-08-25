@@ -549,7 +549,7 @@ class MyParcelCollection extends Collection
             ->addConsignmentByConsignmentIds($returnIds, $apiKey)
             ->setLatestData();
 
-        $this->items = Arr::mergeAfterEachOther($parentConsignments, $returnConsignments->toArray());
+        $this->items = Arr::mergeAfterEachOther($parentConsignments, $returnConsignments->reverse()->toArray());
 
         return $this;
     }

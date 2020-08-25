@@ -58,6 +58,8 @@ class Arr
     public static function mergeAfterEachOther($array1, $array2): array
     {
         $result = [];
+        $array1 = array_values($array1);
+        $array2 = array_values($array2);
 
         foreach ($array1 as $index => $value1) {
             $result[] = $value1;
