@@ -26,15 +26,16 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
             'allowOnlyRecipient' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
             'allowSignature' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
             'allowPickupPoints' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
-            'deliveryDaysWindow' => CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow'),
+            'deliveryDaysWindow' => (int) (CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow') ?? 1),
             // TODO: remove allowPickupLocations after fixing the allowPickupPoints reference
             'allowPickupLocations' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
         ];
-        foreach ($activeCarrierSettings as $key => $value) {
-            if ($key != 'allowDeliveryOptions' && ($value === false || $value === 0)) {
-                unset($activeCarrierSettings[$key]);
-            }
-        }
+// Having the options as false seems to matter, at least for allowSignature | BE | Bpost
+//        foreach ($activeCarrierSettings as $key => $value) {
+//            if ($key != 'allowDeliveryOptions' && ($value === false || $value === 0)) {
+//                unset($activeCarrierSettings[$key]);
+//            }
+//        }
         $carrierSettings[$carrierName] = array_merge($carrierSettings[$carrierName], $activeCarrierSettings);
 
         $params = [
@@ -56,14 +57,14 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 //'allowPickupPoints' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
                 // TODO: remove allowPickupLocations after fixing the allowPickupPoints reference
                 //'allowPickupLocations' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowPickupPoints'),
-                //'allowSignature' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
+                'allowSignature' => (bool) CarrierConfigurationProvider::get($id_carrier, 'allowSignature'),
 
                 'dropOffDays' => array_map(
                     'intval',
                     explode(',', CarrierConfigurationProvider::get($id_carrier, 'dropOffDays'))
                 ),
                 'cutoffTime' => CarrierConfigurationProvider::get($id_carrier, 'cutoffTime'),
-                'deliveryDaysWindow' => CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow'),
+                'deliveryDaysWindow' => (int) (CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow') ?? 1),
                 'dropOffDelay' => CarrierConfigurationProvider::get($id_carrier, 'dropOffDelay'),
 
                 //'allowOnlyRecipient' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),

@@ -20,19 +20,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 let form = document.querySelector('.myparcel-delivery-options');
                 if (form) {
                     form.remove();
-                    wrapper.innerHTML = '<div id="myparcel-delivery-options"></div>';
-                    document.dispatchEvent(new Event('myparcel_render_delivery_options'));
-                } else {
-                    wrapper.innerHTML = '<div id="myparcel-delivery-options"></div>';
-                    document.dispatchEvent(new Event('myparcel_update_delivery_options'));
                 }
-
-                let input = document.createElement('input');
-                input.id = 'mypa-input';
-                input.classList.add('mypa-post-nl-data');
-                input.style = 'display:none;';
-                input.name = 'myparcel-delivery-options';
-                wrapper.appendChild(input);
+                wrapper.innerHTML = '<div id="myparcel-delivery-options"></div>';
+                document.dispatchEvent(new Event('myparcel_render_delivery_options'));
             }
         });
     }
@@ -40,7 +30,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let updateMypaInput = function(dataObj) {
         let $input = $('#mypa-input');
         if (!$input.length) {
-            return false;
+            $input = $('<input type="hidden" class="mypa-post-nl-data" id="mypa-input" name="myparcel-delivery-options" />');
+            let $wrapper = $('.delivery-option input[type="radio"]:checked')
+              .closest('.delivery-option')
+              .next()
+              .find('.myparcel-delivery-options-wrapper');
+            if ($wrapper.length) {
+                $wrapper.append($input);
+            }
         }
 
         let dataString = JSON.stringify(dataObj)
