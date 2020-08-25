@@ -1,5 +1,5 @@
 window.addEventListener('load', function() {
-    let bulk = document.querySelector('.adminorders .bulk-actions .dropdown-menu')
+    let bulk = document.querySelector('.adminorders .bulk-actions .dropdown-menu:not(.label-dropdown)');
     if (!bulk) {
         return
     }
@@ -292,4 +292,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+$(function() {
+    let initOrderPageLabelPanel = function() {
+        let $panel = $('#myparcel-order-panel');
+        if (!$panel.length) {
+            return;
+        }
+        let $kpi = $panel.parent().next('.panel.kpi-container');
+        if ($kpi.length) {
+            $kpi.insertBefore($panel);
+        }
+    };
 
+    initOrderPageLabelPanel();
+});

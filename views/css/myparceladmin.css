@@ -86,3 +86,18 @@
   border-top: 1px solid #dedede;
   padding-top: 15px;
 }
+#myparcel-order-panel.panel .panel-heading img {
+  height: 16px;
+  width: 16px;
+}
+#myparcel-order-panel.panel .form-horizontal .control-label.text-left {
+  text-align: left;
+  padding-top: 0;
+}
+#myparcel-order-panel .panel-footer-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+#myparcel-order-panel .list-empty-msg i {
+  font-size: 5rem;
+}

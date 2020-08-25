@@ -2,9 +2,14 @@
 
 namespace Gett\MyparcelBE\Module\Hooks;
 
+use Address;
+use AddressFormat;
 use Configuration;
+use Dispatcher;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
+use Order;
+use Validate;
 
 trait LegacyOrderPageHooks
 {
@@ -183,5 +188,59 @@ trait LegacyOrderPageHooks
             Constant::LABEL_SIZE_CONFIGURATION_NAME,
             Constant::LABEL_POSITION_CONFIGURATION_NAME,
         ]);
+    }
+
+    public function hookDisplayInvoice($params)
+    {
+        $idOrder = (int) $params['id_order'];
+        $controller = Dispatcher::getInstance()->getController();
+
+        if (empty($idOrder) || $controller !== 'AdminOrders') {
+            return '';
+        }
+        $order = new Order($idOrder);
+        if (!Validate::isLoadedObject($order)) {
+            return '';
+        }
+        $link = $this->context->link;
+        $deliveryAddress = new Address($order->id_address_delivery);
+        $deliveryAddressFormatted = AddressFormat::generateAddress($deliveryAddress, [], '<br />');
+        $bulk_actions = [
+            'refresh' => [
+                'text' => $this->l('Refresh', 'legacyorderpagehooks'),
+                'icon' => 'icon-refresh',
+            ],
+            'print' => [
+                'text' => $this->l('Print', 'legacyorderpagehooks'),
+                'icon' => 'icon-print',
+            ]
+        ];
+        $sql = new \DbQuery();
+        $sql->select('*');
+        $sql->from('myparcel_order_label');
+        $sql->where('id_order = ' . (int) $order->id);
+        $labelList = \Db::getInstance()->executeS($sql);
+
+        $this->context->smarty->assign([
+            'modulePathUri' => $this->getPathUri(),
+            'id_order' => $idOrder,
+            'delivery_address_formatted' => $deliveryAddressFormatted,
+            'labelList' => $labelList,
+            'bulk_actions' => $bulk_actions,
+            'labelAction' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
+            'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
+            'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
+            'export_print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'exportPrint']),
+            'isBE' => $this->isBE(),
+            'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+            'ONLY_RECIPIENT' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
+            'AGE_CHECK' => Constant::AGE_CHECK_CONFIGURATION_NAME,
+            'PACKAGE_FORMAT' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
+            'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
+            'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+            'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
+        ]);
+
+        return $this->display($this->name, 'views/templates/admin/hook/order-label-form.tpl');
     }
 }

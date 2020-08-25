@@ -87,6 +87,7 @@ class MyParcelBE extends CarrierModule
         'displayAdminOrderMainBottom',
         'actionObjectGettMyParcelOrderLabelAddAfter',
         'actionObjectGettMyParcelOrderLabelUpdateAfter',
+        'displayInvoice',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
