@@ -276,6 +276,14 @@ class Carriers extends AbstractForm
                 'name' => sprintf($this->module->l('%d days', 'carriers'), $i),
             );
         }
+        $cutoffTimeValues = [];
+        foreach (Constant::WEEK_DAYS as $index => $day) {
+            $cutoffTimeValues[$index] = [
+                'name' => $day . 'CutoffTime',
+                'class' => 'cutoff-time-pseudo',
+                'prefix' => $this->module->l('Cutoff Time', 'carriers'),
+            ];
+        }
         $fields[] = [
             'tab' => 'form',
             'type' => 'text',
@@ -289,6 +297,7 @@ class Carriers extends AbstractForm
             'multiple' => true,
             'label' => $this->module->l('Drop off days', 'carriers'),
             'name' => 'dropOffDays',
+            'form_group_class' => 'with-cutoff-time',
             'values' => [
                 'query' => [
                     ['day_number' => 1, 'name' => $this->module->l('Monday', 'carriers')],
@@ -302,32 +311,31 @@ class Carriers extends AbstractForm
                 'id' => 'day_number',
                 'name' => 'name',
             ],
-            'desc' => $this->module->l(
+            'cutoff_time' => $cutoffTimeValues,
+            'desc' => [
+                $this->module->l(
                 'This option allows the Merchant to set the days she normally goes to PostNL to hand in her 
-                parcels. Monday is 1 and Saturday is 6.',
-                'carriers'
-            ),
+                        parcels. Monday is 1 and Saturday is 6.',
+                    'carriers'
+                ),
+                $this->module->l(
+                    'The Cutoff Time option allows the Merchant to indicate the latest cut-off time before an order will 
+                        still be picked, packed and dispatched on the same/first set dropoff day, taking into account 
+                        the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 
+                        17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday 
+                        before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection 
+                        and delivery on Tuesday.',
+                    'carriers'
+                ),
+            ],
         ];
-        $fields[] = [
-            'tab' => 'form',
-            'type' => 'time',
-            'label' => $this->module->l('Cutoff Time', 'carriers'),
-            'name' => 'cutoffTime',
-            'desc' => $this->module->l(
-                'This option allows the Merchant to indicate the latest cut-off time before an order will still be 
-                picked, packed and dispatched on the same/first set dropoff day, taking into account the dropoff-delay. 
-                Industry standard default time is 17:00. For example, if cutoff time is 17:00, Monday is a delivery day 
-                and there\'s no delivery delay; all orders placed Monday before 17:00 will be dropped of at PostNL on 
-                that same Monday in time for the Monday collection and delivery on Tuesday.',
-                'carriers'
-            ),
-        ];
-        $fields[] = [
-            'tab' => 'form',
-            'type' => 'time',
-            'label' => $this->module->l('Saturday cutoff time', 'carriers'),
-            'name' => 'saturdayCutoffTime',
-        ];
+        foreach (Constant::WEEK_DAYS as $index => $day) {
+            $fields[] = [
+                'tab' => 'form',
+                'type' => 'hidden',
+                'name' => $day . 'CutoffTime',
+            ];
+        }
         $fields[] = [
             'tab' => 'form',
             'type' => 'select',

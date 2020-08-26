@@ -1,5 +1,6 @@
 <?php
 
+use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Service\CarrierConfigurationProvider;
 
 class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
@@ -37,6 +38,9 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
 //            }
 //        }
         $carrierSettings[$carrierName] = array_merge($carrierSettings[$carrierName], $activeCarrierSettings);
+        $today = date('Y-m-d');
+        $weekDayNumber = date('N', strtotime($today));
+        $dayName = Constant::WEEK_DAYS[$weekDayNumber];
 
         $params = [
             'config' => [
@@ -63,7 +67,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                     'intval',
                     explode(',', CarrierConfigurationProvider::get($id_carrier, 'dropOffDays'))
                 ),
-                'cutoffTime' => CarrierConfigurationProvider::get($id_carrier, 'cutoffTime'),
+                'cutoffTime' => CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime'),
                 'deliveryDaysWindow' => (int) (CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow') ?? 1),
                 'dropOffDelay' => CarrierConfigurationProvider::get($id_carrier, 'dropOffDelay'),
 

@@ -57,7 +57,14 @@ class Constant
     const CARRIER_CONFIGURATION_FIELDS = [
         'deliveryTitle',
         'dropOffDays',
-        'cutoffTime',
+        //'cutoffTime',
+        'mondayCutoffTime',
+        'tuesdayCutoffTime',
+        'wednesdayCutoffTime',
+        'thursdayCutoffTime',
+        'fridayCutoffTime',
+        'saturdayCutoffTime',
+        'sundayCutoffTime',
         'deliveryDaysWindow',
         'dropOffDelay',
         'allowMondayDelivery',
@@ -101,6 +108,17 @@ class Constant
         'return_' . self::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
         'return_' . self::INSURANCE_CONFIGURATION_NAME,
     ];
+
+    const WEEK_DAYS = [
+        1 => 'monday',
+        2 => 'tuesday',
+        3 => 'wednesday',
+        4 => 'thursday',
+        5 => 'friday',
+        6 => 'saturday',
+        7 => 'sunday',
+    ];
+    const DEFAULT_CUTOFF_TIME = '17:00';
 
     const STATUS_CHANGE_MAIL_CONFIGURATION_NAME = 'MY_PARCEL_STATUS_CHANGE_MAIL';
     const SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME = 'MY_PARCEL_SENT_ORDER_STATE_FOR_DIGITAL_STAMPS';

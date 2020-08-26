@@ -17,6 +17,9 @@ class ExclusiveField
      */
     public function isAvailable(string $countryIso, string $carrierType, string $field, int $key = null): bool
     {
+        if (!isset(Constant::CARRIER_EXCLUSIVE[$carrierType][$field])) {
+            return true;
+        }
         if (empty(Constant::CARRIER_EXCLUSIVE[$carrierType][$field][$countryIso])) {
             return false;
         }

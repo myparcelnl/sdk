@@ -101,3 +101,10 @@
 #myparcel-order-panel .list-empty-msg i {
   font-size: 5rem;
 }
+.with-cutoff-time .checkbox {
+  display: flex;
+  align-items: center;
+}
+.with-cutoff-time .checkbox > label {
+  flex: 0 1 150px;
+}
