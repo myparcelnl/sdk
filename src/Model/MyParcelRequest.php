@@ -61,6 +61,7 @@ class MyParcelRequest
      */
     private $body      = '';
     private $error     = null;
+    private $errorCode = null;
     private $result    = null;
     private $userAgent = null;
 
@@ -167,7 +168,13 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+            switch ($this->errorCode[0]) {
+                case 3716:
+                    throw new ApiException('Error ' . $this->errorCode[0] . ' Your account needs to be activated by MyParcel!');
+                default:
+                    throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+            }
+            
         }
 
         return $this;
@@ -253,10 +260,10 @@ class MyParcelRequest
         }
 
         $error = reset($this->result['errors']);
+        $this->errorCode = array_keys($error);
         if ((int) key($error) > 0) {
             $error = current($error);
         }
-
         $this->error = RequestError::getTotalMessage($error, $this->result);
     }
 
