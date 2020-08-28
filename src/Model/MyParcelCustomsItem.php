@@ -154,7 +154,7 @@ class MyParcelCustomsItem
      * Example: 0111 (Growing of cereals (except rice), leguminous crops and oil seeds)
      * Required: Yes
      *
-     * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/lopend/internationale-handel-in-goederen/idep-codelijsten
+     * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/internationale-handel-in-goederen/idep-codelijsten
      *
      * @param null|int $classification
      *
