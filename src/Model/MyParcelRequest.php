@@ -168,9 +168,9 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            switch ($this->errorCode[0]) {
+            switch (array_key_first($this->errorCode)) {
                 case 3716:
-                    throw new ApiException('Error ' . $this->errorCode[0] . ' Your account needs to be activated by MyParcel!');
+                    throw new ApiException('Error ' . array_key_first($this->errorCode) . ' Your account needs to be activated by MyParcel!');
                 default:
                     throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
             }
