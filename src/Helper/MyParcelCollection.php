@@ -549,7 +549,7 @@ class MyParcelCollection extends Collection
             ->addConsignmentByConsignmentIds($returnIds, $apiKey)
             ->setLatestData();
 
-        $this->items = Arr::mergeAfterEachOther($this, $returnConsignments->toArray());
+        $this->items = Arr::mergeAfterEachOther($parentConsignments, $returnConsignments->reverse()->toArray());
 
         return $this;
     }
@@ -879,14 +879,15 @@ class MyParcelCollection extends Collection
      */
     private function getReturnConsignments(array $parentConsignments, ?\Closure $modifier): array
     {
-        $returnConsignments = $parentConsignments;
+        $returnConsignments = [];
 
-        foreach ($returnConsignments as $i => $returnConsignment) {
-            $parentConsignment = $parentConsignments[$i];
+        foreach ($parentConsignments as $parentConsignment) {
+            $returnConsignment = clone $parentConsignment;
             $returnConsignment->setDeliveryDate(null);
             if ($modifier) {
-                $modifier($returnConsignment, $parentConsignment);
+                $returnConsignment = $modifier($returnConsignment, $parentConsignment);
             }
+            $returnConsignments[] = $returnConsignment;
         }
 
         return $returnConsignments;
