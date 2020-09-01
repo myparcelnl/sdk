@@ -107,7 +107,10 @@ class OrderForm extends AbstractForm
                 ],
             ],
             Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME => [
-                'type' => $this->getExclusiveFieldType(Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME),
+                'type' => $this->getExclusiveNlFieldType(
+                    'switch',
+                    Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME
+                ),
                 'label' => $this->module->l('Automatic set order state to ‘sent’ for digital stamp', 'orderform'),
                 'name' => Constant::SENT_ORDER_STATE_FOR_DIGITAL_STAMPS_CONFIGURATION_NAME,
                 'required' => false,

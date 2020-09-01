@@ -392,7 +392,7 @@ class Carriers extends AbstractForm
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowMondayDelivery')) {
             $fields[] = [
                 'tab' => 'form',
-                'type' => $this->getExclusiveFieldType('switch', 'allowMondayDelivery', $carrier),
+                'type' => 'switch',
                 'is_bool' => true,
                 'label' => $this->module->l('Allow Monday delivery', 'carriers'),
                 'name' => 'allowMondayDelivery',

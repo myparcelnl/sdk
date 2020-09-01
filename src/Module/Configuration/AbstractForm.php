@@ -185,11 +185,10 @@ abstract class AbstractForm
         return ['form' => $form];
     }
 
-    protected function getExclusiveFieldType(string $fieldType, string $field, Carrier $carrier, int $key = 1): string
+    protected function getExclusiveNlFieldType(string $fieldType, string $field): string
     {
-        $carrierType = $this->exclusiveField->getCarrierType($carrier);
         $countryIso = $this->module->getModuleCountry();
-        if (!$this->exclusiveField->isAvailable($countryIso, $carrierType, $field, $key)) {
+        if ($countryIso != 'NL' && in_array($field, Constant::EXCLUSIVE_FIELDS_NL)) {
             $fieldType = 'hidden';
         }
 

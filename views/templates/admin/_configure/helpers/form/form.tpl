@@ -36,7 +36,7 @@
         {if version_compare($smarty.const._PS_VERSION_, '1.6.0.0', '>=')}initTimepicker();{/if}
       }());
     </script>
-  {elseif $input.type == 'checkbox'}
+  {elseif $input.type == 'checkbox' && $input.type == 'dropOffDays'}
     {if isset($input.expand)}
       <a class="btn btn-default show_checkbox{if strtolower($input.expand.default) == 'hide'} hidden{/if}" href="#">
         <i class="icon-{$input.expand.show.icon}"></i>
