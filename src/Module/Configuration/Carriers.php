@@ -31,7 +31,8 @@ class Carriers extends AbstractForm
 
     public function __invoke(): string
     {
-        if (Tools::isSubmit('submitMyparcelCarrierSettings')) {
+        if (Tools::isSubmit('submitMyparcelCarrierSettings')
+            || Tools::isSubmit('submitMyparcelCarrierSettingsAndStay')) {
             $dropOff = [];
             $postFields = Tools::getAllValues();
             $carrierId = $postFields['id_carrier'];
@@ -94,7 +95,9 @@ class Carriers extends AbstractForm
             }
         }
 
-        if (Tools::isSubmit('updatecarrier')) {
+        if (Tools::isSubmit('updatecarrier')
+            || !empty($this->context->controller->errors)
+            || Tools::isSubmit('submitMyparcelCarrierSettingsAndStay')) {
             return $this->getForm();
         }
 
@@ -133,6 +136,15 @@ class Carriers extends AbstractForm
                 'submit' => [
                     'title' => $this->module->l('Save', 'carriers'),
                 ],
+                'buttons' => [
+                    'save-and-stay' => [
+                        'title' => $this->module->l('Save add stay', 'carriers'),
+                        'name' => 'submitMyparcelCarrierSettingsAndStay',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-save',
+                    ],
+                ]
             ],
         ];
 
@@ -147,7 +159,8 @@ class Carriers extends AbstractForm
         $helper->currentIndex = \AdminController::$currentIndex
             . '&configure=' . $this->module->name
             . '&id_carrier=' . (int) $carrier->id
-            . '&menu=' . Tools::getValue('menu', 0);
+            . '&menu=' . Tools::getValue('menu', 0)
+            . '&updatecarrier=';
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
         $carrierConfigs = Db::getInstance()->executeS('SELECT *
