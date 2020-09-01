@@ -7,7 +7,7 @@ use Currency;
 use Db;
 use Configuration;
 use Gett\MyparcelBE\Constant;
-use Tools;
+use Gett\MyparcelBE\Module\Tools\Tools;
 
 class Carriers extends AbstractForm
 {
@@ -48,7 +48,7 @@ class Carriers extends AbstractForm
             foreach (Constant::CARRIER_CONFIGURATION_FIELDS as $field) {
                 $updatedValue = $postFields[$field] ?? '';
                 if (stripos($field, 'price') === 0) {
-                    $price = $updatedValue;
+                    $price = $updatedValue = Tools::normalizeFloat($updatedValue);
                     if (!empty($price) && !\Validate::isFloat($price)) {
                         switch ($field) {
                             case 'priceMondayDelivery':
