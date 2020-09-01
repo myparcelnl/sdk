@@ -16,6 +16,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -51,6 +52,11 @@ class MyParcelRequest
     const REQUEST_HEADER_DELETE              = 'Accept: application/json; charset=utf8';
 
     /**
+     * Error codes
+     */
+    const ERROR_CODE_ACCOUNT_NOT_ACTIVATED = 3716;
+
+    /**
      * @var string
      */
     private $api_key = '';
@@ -59,11 +65,11 @@ class MyParcelRequest
     /**
      * @var string|null
      */
-    private $body      = '';
-    private $error     = null;
-    private $errorCode = null;
-    private $result    = null;
-    private $userAgent = null;
+    private $body       = '';
+    private $error      = null;
+    private $errorCodes = [];
+    private $result     = null;
+    private $userAgent  = null;
 
     /**
      * @var array|null
@@ -168,9 +174,9 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            switch ($this->errorCode->first()) {
-                case 3716:
-                    throw new ApiException('Error ' . $this->errorCode->first() . ' Your account needs to be activated by MyParcel!');
+            switch (Arr::first($this->errorCodes)) {
+                case self::ERROR_CODE_ACCOUNT_NOT_ACTIVATED:
+                    throw new AccountNotActiveException('Error ' . Arr::first($this->errorCodes) . ' Your account needs to be activated by MyParcel.');
                 default:
                     throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
             }
@@ -260,7 +266,7 @@ class MyParcelRequest
         }
 
         $error = reset($this->result['errors']);
-        $this->errorCode = array_keys($error);
+        $this->errorCodes = array_keys($error);
         if ((int) key($error) > 0) {
             $error = current($error);
         }
