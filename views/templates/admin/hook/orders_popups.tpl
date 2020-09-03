@@ -177,12 +177,12 @@
                 <input type="hidden" id="order_id" name="create_label[order_ids][]">
                 <div class="form-group">
                     <label for="labels_amount">{l s='Amount of labels' mod='myparcelbe'}</label>
-                    <input id="labels_amount" name="number" value="1" type="number" min="1" class="form-control">
+                    <input id="labels_amount" name="label_amount" value="1" type="number" min="1" class="form-control">
                 </div>
 
                 <div class="form-group">
-                    <label for="package-type">{l s='Package type' mod='myparcelbe'}</label>
-                    <select name="{$PACKAGE_TYPE}" id="package-type" class="custom-select">
+                    <label for="packageType">{l s='Package type' mod='myparcelbe'}</label>
+                    <select name="packageType" id="package-type" class="custom-select">
                         <option value="1">{l s='Parcel' mod='myparcelbe'}</option>
                         <option value="2">{l s='Mailbox package' mod='myparcelbe'}</option>
                         <option value="3">{l s='Letter' mod='myparcelbe'}</option>
@@ -191,8 +191,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="{$PACKAGE_FORMAT}">{l s='Package format' mod='myparcelbe'}</label>
-                    <select name="{$PACKAGE_FORMAT}" class="custom-select" id="{$PACKAGE_FORMAT}">
+                    <label for="packageFormat">{l s='Package format' mod='myparcelbe'}</label>
+                    <select name="packageFormat" class="custom-select" id="packageFormat">
                         <option value="1">{l s='Normal' mod='myparcelbe'}</option>
                         <option value="2">{l s='Large' mod='myparcelbe'}</option>
                         <option value="3">{l s='Automatic' mod='myparcelbe'}</option>
@@ -200,32 +200,32 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" value="1" id="{$ONLY_RECIPIENT}" name="{$ONLY_RECIPIENT}">
-                    <label for="{$ONLY_RECIPIENT}">{l s='Only to receipient' mod='myparcelbe'}</label>
+                    <input type="checkbox" value="1" id="onlyRecipient" name="onlyRecipient">
+                    <label for="onlyRecipient">{l s='Only to receipient' mod='myparcelbe'}</label>
                 </div>
 
                 {if !$isBE}
                 <div class="form-group">
-                    <input type="checkbox" value="1" id="{$AGE_CHECK}" name="{$AGE_CHECK}">
-                    <label for="{$AGE_CHECK}">{l s='Age check' mod='myparcelbe'}</label>
+                    <input type="checkbox" value="1" id="ageCheck" name="ageCheck">
+                    <label for="ageCheck">{l s='Age check' mod='myparcelbe'}</label>
                 </div>
                 {/if}
 
                 {if !$isBE}
                 <div class="form-group">
-                    <input type="checkbox" value="1" id="{$RETURN_PACKAGE}" name="{$RETURN_PACKAGE}">
-                    <label for="{$RETURN_PACKAGE}">{l s='Return package' mod='myparcelbe'}</label>
+                    <input type="checkbox" value="1" id="returnUndelivered" name="returnUndelivered">
+                    <label for="returnUndelivered">{l s='Return package' mod='myparcelbe'}</label>
                 </div>
                 {/if}
 
                 <div class="form-group">
-                    <input type="checkbox" value="1" id="{$SIGNATURE_REQUIRED}" name="{$SIGNATURE_REQUIRED}">
-                    <label for="{$SIGNATURE_REQUIRED}">{l s='Signature' mod='myparcelbe'}</label>
+                    <input type="checkbox" value="1" id="signatureRequired" name="signatureRequired">
+                    <label for="signatureRequired">{l s='Signature' mod='myparcelbe'}</label>
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" class="myparcel-insurance-checkbox" value="1" id="{$INSURANCE}" name="{$INSURANCE}">
-                    <label for="{$INSURANCE}">{l s='Insurance' mod='myparcelbe'}</label>
+                    <input type="checkbox" class="myparcel-insurance-checkbox" value="1" id="insurance" name="insurance">
+                    <label for="insurance">{l s='Insurance' mod='myparcelbe'}</label>
                 </div>
                 <div class="insurance-additional-container">
                     <div class="form-group insurance-additional-predefined">
@@ -233,26 +233,26 @@
                             <input
                                     id="upto100"
                                     type="radio"
-                                    value="100"
-                                    name="insurance-value-option"
+                                    value="amount100"
+                                    name="insuranceAmount"
                                     class="myparcel-radio"
                                     checked
                             >
                             <label for="upto100">{l s='Up to € 100' mod='myparcelbe'}</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="upto250" type="radio" value="250" name="insurance-value-option" class="myparcel-radio">
+                            <input id="upto250" type="radio" value="amount250" name="insuranceAmount" class="myparcel-radio">
                             <label for="upto250">{l s='Up to € 250' mod='myparcelbe'}</label>
                         </div>
                         <div class="myparcel-radio-container">
-                            <input id="upto500" type="radio" value="500" name="insurance-value-option" class="myparcel-radio">
+                            <input id="upto500" type="radio" value="amount500" name="insuranceAmount" class="myparcel-radio">
                             <label for="upto500">{l s='Up to € 500' mod='myparcelbe'}</label>
                         </div>
                     </div>
                     {if !$isBE}
                         <div class="form-group">
                             <div class="myparcel-radio-container">
-                                <input id="heigherthen500" type="radio" value="4" class="myparcel-radio" name="heigherthen500">
+                                <input id="heigherthen500" type="radio" value="-1" class="myparcel-radio" name="insuranceAmount">
                                 <label for="heigherthen500">{l s='Higher than € 500' mod='myparcelbe'}</label>
                             </div>
                             <div class="money-input-wrapper">
@@ -263,7 +263,7 @@
                                     <input
                                             type="text"
                                             id="myparcel-insurance-higher-amount"
-                                            name="insurance-higher-amount"
+                                            name="insurance-amount-custom-value"
                                             class="form-control"
                                             value="1000"
                                     />

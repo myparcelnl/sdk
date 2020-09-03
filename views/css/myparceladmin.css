@@ -108,3 +108,35 @@
 .with-cutoff-time .checkbox > label {
   flex: 0 1 150px;
 }
+.order-label-action .btn-group.open .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+.order-label-action .btn-group.open .dropdown-menu .disabled {
+  cursor: not-allowed;
+  color: rgb(171, 171, 171);
+  background-color: white;
+}
+.bootstrap .order-label-action .btn-group.open .dropdown-menu > li a.disabled:hover i {
+  color: rgb(171, 171, 171);
+}
+#content.bootstrap #myparcel-order-panel .panel-heading .badge.badge-concept-date {
+  font-size: 90%;
+  color: #fff;
+  letter-spacing: 0.0625em;
+  background-color: rgb(0, 175, 240);
+  border: none;
+  padding: 1px 10px;
+}
+.bootstrap label.control-label.insurance-amount-custom {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.insurance-amount-custom > span,
+.insurance-amount-custom > div {
+  padding-left: 4px;
+}
+.insurance-amount-custom .input-group {
+  width: 100px;
+}

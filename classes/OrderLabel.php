@@ -2,6 +2,8 @@
 
 namespace Gett\MyparcelBE;
 
+use Db;
+use DbQuery;
 use Gett\MyparcelBE\Service\Tracktrace;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
@@ -14,6 +16,8 @@ class OrderLabel extends \ObjectModel
     public $track_link;
     public $payment_url;
     public $id_label;
+    public $date_add;
+    public $date_upd;
 
     public static $definition = [
         'table' => 'myparcel_order_label',
@@ -27,6 +31,8 @@ class OrderLabel extends \ObjectModel
             'track_link' => ['type' => self::TYPE_STRING],
             'payment_url' => ['type' => self::TYPE_STRING],
             'id_label' => ['type' => self::TYPE_STRING],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
         ],
     ];
 
@@ -61,7 +67,7 @@ class OrderLabel extends \ObjectModel
 
     public static function findByLabelId(int $label_id)
     {
-        $id = \Db::getInstance()->getValue('SELECT id_order_label FROM ' . _DB_PREFIX_ . self::$definition['table'] . " WHERE id_label = '" . $label_id . "' ");
+        $id = Db::getInstance()->getValue('SELECT id_order_label FROM ' . _DB_PREFIX_ . self::$definition['table'] . " WHERE id_label = '" . $label_id . "' ");
 
         return new OrderLabel($id);
     }
@@ -314,7 +320,7 @@ class OrderLabel extends \ObjectModel
         }
 
         $idOrder = (int) $order->id;
-        $history = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_order_state` FROM ' . _DB_PREFIX_ . "order_history WHERE `id_order` = {$idOrder}");
+        $history = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_order_state` FROM ' . _DB_PREFIX_ . "order_history WHERE `id_order` = {$idOrder}");
         if (is_array($history)) {
             $history = array_column($history, 'id_order_state');
             if (in_array($targetOrderState, $history)) {
@@ -344,7 +350,7 @@ class OrderLabel extends \ObjectModel
 
     public static function getDataForLabelsCreate(array $orderIds)
     {
-        $qb = new \DbQuery();
+        $qb = new DbQuery();
         $qb->select('o.id_order,
                     o.id_order AS id,
                     o.reference,
@@ -368,18 +374,18 @@ class OrderLabel extends \ObjectModel
 
         $qb->where('o.id_order IN (' . implode(',', $orderIds) . ') ');
 
-        return \Db::getInstance()->executeS($qb);
+        return Db::getInstance()->executeS($qb);
     }
 
     public static function getOrderDeliveryOptions(int $id_order)
     {
-        $qb = new \DbQuery();
+        $qb = new DbQuery();
         $qb->select('ds.delivery_settings');
         $qb->from('myparcel_delivery_settings', 'ds');
         $qb->innerJoin('orders', 'o', 'o.id_cart = ds.id_cart');
         $qb->where('o.id_order = "' . $id_order . '" ');
 
-        $res = \Db::getInstance()->executeS($qb);
+        $res = Db::getInstance()->executeS($qb);
         if (isset($res[0]['delivery_settings'])) {
             return json_decode($res[0]['delivery_settings']);
         }
@@ -389,38 +395,51 @@ class OrderLabel extends \ObjectModel
 
     public static function getOrderProducts(int $id_order)
     {
-        $qb = new \DbQuery();
+        $qb = new DbQuery();
         $qb->select('od.product_id');
         $qb->from('order_detail', 'od');
         $qb->where('od.id_order = "' . $id_order . '" ');
 
-        return \Db::getInstance()->executeS($qb);
+        return Db::getInstance()->executeS($qb);
     }
 
-    public static function getOrderLabels(array $orders_id)
+    public static function getOrdersLabels(array $orders_id)
     {
-        $qb = new \DbQuery();
+        $qb = new DbQuery();
         $qb->select('ol.id_label');
         $qb->from('myparcel_order_label', 'ol');
         $qb->where('ol.id_order IN (' . implode(',', $orders_id) . ') ');
 
         $return = [];
-        foreach (\Db::getInstance()->executeS($qb) as $item) {
+        foreach (Db::getInstance()->executeS($qb) as $item) {
             $return[] = $item['id_label'];
         }
 
         return $return;
     }
 
+    public static function getOrderLabels(int $order_id, array $label_ids = [])
+    {
+        $sql = new DbQuery();
+        $sql->select('*');
+        $sql->from('myparcel_order_label');
+        $sql->where('id_order = ' . (int) $order_id);
+        if (!empty($label_ids)) {
+            $sql->where('id_label IN(' . implode(',', $label_ids) . ')');
+        }
+
+        return Db::getInstance()->executeS($sql);
+    }
+
     public static function getCustomsOrderProducts(int $id_order)
     {
-        $qb = new \DbQuery();
+        $qb = new DbQuery();
         $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_price, od.product_weight');
         $qb->from('order_detail', 'od');
         $qb->leftJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
         $qb->where('od.id_order = "' . $id_order . '" AND pc.name = "' . Constant::CUSTOMS_FORM_CONFIGURATION_NAME . '" ');
 
-        $return = \Db::getInstance()->executeS($qb);
+        $return = Db::getInstance()->executeS($qb);
         foreach ($return as $item) {
             if ($item['value'] && $item['value'] == 'No') {
                 return false;

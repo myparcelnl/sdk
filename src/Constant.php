@@ -34,13 +34,25 @@ class Constant
     const CUSTOMS_AGE_CHECK_CONFIGURATION_NAME = 'MY_PARCEL_CUSTOMS_AGE_CHECK';
 
     const SINGLE_LABEL_CREATION_OPTIONS = [
-        self::PACKAGE_TYPE_CONFIGURATION_NAME,
-        self::PACKAGE_FORMAT_CONFIGURATION_NAME,
-        self::ONLY_RECIPIENT_CONFIGURATION_NAME,
-        self::AGE_CHECK_CONFIGURATION_NAME,
-        self::RETURN_PACKAGE_CONFIGURATION_NAME,
-        self::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
-        self::INSURANCE_CONFIGURATION_NAME,
+        'packageType'=> self::PACKAGE_TYPE_CONFIGURATION_NAME,
+        'packageFormat' => self::PACKAGE_FORMAT_CONFIGURATION_NAME,
+        'onlyRecipient' => self::ONLY_RECIPIENT_CONFIGURATION_NAME,
+        'ageCheck' => self::AGE_CHECK_CONFIGURATION_NAME,
+        'returnUndelivered' => self::RETURN_PACKAGE_CONFIGURATION_NAME,
+        'signatureRequired' => self::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+        'insurance' => self::INSURANCE_CONFIGURATION_NAME,
+    ];
+
+    const PACKAGE_TYPES = [
+        1 => 'package',
+        2 => 'mailbox package',
+        3 => 'letter',
+        4 => 'digital stamp',
+    ];
+    const PACKAGE_FORMATS = [
+        1 => 'normal',
+        2 => 'large',
+        3 => 'automatic',
     ];
 
     const SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME = 'MY_PARCEL_SHARE_CUSTOMER_EMAIL';
@@ -133,6 +145,7 @@ class Constant
     const BPOST_CONFIGURATION_NAME = 'MYPARCEL_BPOST';
     const DPD_CONFIGURATION_NAME = 'MYPARCEL_DPD';
 
+    const CONCEPT_STATUS = 1;
     const SCANNED_STATUS = 3;
     const DELIVERED_STATUS = 7;
     const RETURN_PICKED_STATUS = 11;

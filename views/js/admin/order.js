@@ -173,28 +173,28 @@ document.addEventListener("DOMContentLoaded", () => {
         var id = $(this).data('order-id'),
             options = $(this).data('label-options');
         $('#order_id').val(id);
-        $('#package-type').val(options.package_type);
+        $('#packageType').val(options.package_type);
         if ($(this).data('allowSetOnlyRecipient') === 0) {
-            $('#MY_PARCEL_RECIPIENT_ONLY').prop('checked', false).prop('disabled', true);
+            $('#onlyRecipient').prop('checked', false).prop('disabled', true);
         } else {
-            $('#MY_PARCEL_RECIPIENT_ONLY').prop('disabled', false);
+            $('#onlyRecipient').prop('disabled', false);
         }
         if (options.only_to_recepient == true && $(this).data('allowSetOnlyRecipient') === 1) {
-            $('#MY_PARCEL_RECIPIENT_ONLY').prop('checked', true);
+            $('#onlyRecipient').prop('checked', true);
         }
         if (options.age_check == true) {
-            $('#MY_PARCEL_AGE_CHECK').prop('checked', true)
+            $('#ageCheck').prop('checked', true)
         }
         if ($(this).data('allowSetSignature') === 0) {
-            $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('checked', false).prop('disabled', true);
+            $('#signatureRequired').prop('checked', false).prop('disabled', true);
         } else {
-            $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('disabled', false);
+            $('#signatureRequired').prop('disabled', false);
         }
         if (options.signature == true && $(this).data('allowSetSignature') === 1) {
-            $('#MY_PARCEL_SIGNATURE_REQUIRED').prop('checked', true);
+            $('#signatureRequired').prop('checked', true);
         }
         if (options.insurance) {
-            $('#MY_PARCEL_INSURANCE').prop('checked', true);
+            $('#insurance').prop('checked', true);
         }
     });
     $('#print_button').click(function () {
@@ -289,6 +289,125 @@ document.addEventListener("DOMContentLoaded", () => {
             $(this).closest('.modal').modal('hide');
             $.scrollTo(0);
         }
+    });
+
+    // Toggle insurance values
+    function toggleInsuranceValuesDisplay($el) {
+        if (!$el.length || !$el.is(':checked')) {
+            $('.insurance-values').hide();
+        } else {
+            $('.insurance-values').show();
+        }
+    }
+    $('input[name="insurance"]').on('change', function() {
+        toggleInsuranceValuesDisplay($(this));
+    });
+    toggleInsuranceValuesDisplay($('input[name="insurance"]'));
+
+    // Save order label new settings
+    $('#submitCreateConcept').on('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+            method: 'POST',
+            url: $(this).closest('#myparcel-order-panel').data('url'),
+            data: $('.concept-label-wrapper :input').serialize() + '&action=saveConcept&ajax=1&rand=' + Math.random(),
+            dataType: 'json',
+            async: true,
+            cache: false,
+            headers: { 'cache-control': 'no-cache' }
+        }).success(function(jsonData) {
+            if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
+                $('#content > .alert.alert-danger').remove();
+            } else {
+                $('#content > .alert.alert-danger').remove();
+                var errorText = '';
+                if (typeof jsonData.errors === 'string') {
+                    errorText += jsonData.errors;
+                } else {
+                    $.each(jsonData.errors, function(index, value) {
+                        errorText += value + ((index + 1) < jsonData.errors.length ? '<br />' : '');
+                    });
+                }
+                $('#ajax_confirmation').before(
+                  '<div class="alert alert-danger">' +
+                  '<button type="button" class="close" data-dismiss="alert">×</button>'+errorText+'</div>'
+                );
+                $.scrollTo(0);
+            }
+        }).fail(function(error) {
+            $('#content > .alert.alert-danger').remove();
+            $('#ajax_confirmation').before(
+              '<div class="alert alert-danger">' +
+              '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
+            );
+            $.scrollTo(0);
+        });
+    });
+
+    // Create new shipment label for the current order
+    function createLabel($el, reload, callback) {
+        $.ajax({
+            method: 'POST',
+            url: $el.closest('#myparcel-order-panel').data('url'),
+            data: $('.concept-label-wrapper :input').serialize() + '&action=createLabel&ajax=1&rand=' + Math.random(),
+            dataType: 'json',
+            async: true,
+            cache: false,
+            headers: { 'cache-control': 'no-cache' }
+        }).success(function(jsonData) {
+            if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
+                if (typeof reload !== 'undefined' && reload) {
+                    window.location.reload();
+                }
+                $('#content > .alert.alert-danger').remove();
+                if(typeof callback === 'function'){
+                    callback.call(this, jsonData);
+                }
+            } else {
+                $('#content > .alert.alert-danger').remove();
+                var errorText = '';
+                if (typeof jsonData.errors === 'string') {
+                    errorText += jsonData.errors;
+                } else {
+                    $.each(jsonData.errors, function(index, value) {
+                        errorText += value + ((index + 1) < jsonData.errors.length ? '<br />' : '');
+                    });
+                }
+                $('#ajax_confirmation').before(
+                  '<div class="alert alert-danger">' +
+                  '<button type="button" class="close" data-dismiss="alert">×</button>'+errorText+'</div>'
+                );
+                $.scrollTo(0);
+            }
+        }).fail(function(error) {
+            $('#content > .alert.alert-danger').remove();
+            $('#ajax_confirmation').before(
+              '<div class="alert alert-danger">' +
+              '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
+            );
+            $.scrollTo(0);
+        });
+    }
+    function printLabel(jsonData) {
+        var $form = $('#print_label_form');
+        if (typeof jsonData.labelIds !== 'undefined') {
+            $.each(jsonData.labelIds, function(index, value) {
+                $form.append('<input type="hidden" name="label_id[]" value="'+value+'">');
+            });
+        }
+        $form.submit();
+    }
+    $('#submitCreateLabel').on('click', function (e) {
+        e.preventDefault();
+        createLabel($(this), true);
+    });
+
+    // Create new shipment label for the current order and print it
+    $('#submitCreateLabelPrint').on('click', function (e) {
+        e.preventDefault();
+    });
+    $('#button_print_label').click(function () {
+        createLabel($('#submitCreateLabelPrint'), false, printLabel);
     });
 });
 

@@ -16,7 +16,15 @@ class CreateOrderLabelTableMigration implements Migration
           `track_link` varchar(255) DEFAULT NULL,
           `payment_url` varchar(255) DEFAULT NULL,
           `id_label` bigint(20) NOT NULL,
-          PRIMARY KEY (`id_order_label`)
+          `date_add` datetime NOT NULL,
+          `date_upd` datetime NOT NULL,
+          PRIMARY KEY (`id_order_label`),
+          KEY `id_order` (`id_order`),
+          KEY `new_order_state` (`new_order_state`),
+          KEY `barcode` (`barcode`),
+          KEY `id_label` (`id_label`),
+          KEY `date_add` (`date_add`),
+          KEY `date_upd` (`date_upd`)
         ) ENGINE={ENGINE} DEFAULT CHARSET=utf8
 SQL;
 

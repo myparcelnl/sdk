@@ -4,10 +4,14 @@ namespace Gett\MyparcelBE\Module\Hooks;
 
 use Address;
 use AddressFormat;
+use Carrier;
 use Configuration;
+use Currency;
 use Dispatcher;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
+use Gett\MyparcelBE\Module\Carrier\ExclusiveField;
+use Gett\MyparcelBE\OrderLabel;
 use Order;
 use Validate;
 
@@ -202,6 +206,23 @@ trait LegacyOrderPageHooks
         if (!Validate::isLoadedObject($order)) {
             return '';
         }
+
+        $currency = Currency::getDefaultCurrency();
+        $exclusiveField = new ExclusiveField();
+        $carrier = new Carrier($order->id_carrier);
+        $carrierType = $exclusiveField->getCarrierType($carrier);
+        $countryIso = $this->getModuleCountry();
+        $carrierSettings = Constant::CARRIER_EXCLUSIVE[$carrierType];
+
+        $carrierLabelSettings = [
+            'delivery' => [],
+            'return' => []
+        ];
+        foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $key => $field) {
+            $carrierLabelSettings['delivery'][$key] = $carrierSettings[$field][$countryIso];
+            $carrierLabelSettings['return'][$key] = $carrierSettings['return_' . $field][$countryIso];
+        }
+
         $link = $this->context->link;
         $deliveryAddress = new Address($order->id_address_delivery);
         $deliveryAddressFormatted = AddressFormat::generateAddress($deliveryAddress, [], '<br />');
@@ -215,11 +236,14 @@ trait LegacyOrderPageHooks
                 'icon' => 'icon-print',
             ]
         ];
-        $sql = new \DbQuery();
-        $sql->select('*');
-        $sql->from('myparcel_order_label');
-        $sql->where('id_order = ' . (int) $order->id);
-        $labelList = \Db::getInstance()->executeS($sql);
+        $deliveryOptions = OrderLabel::getOrderDeliveryOptions($order->id);
+        $labelList = OrderLabel::getOrderLabels($order->id, []);
+        $nextDeliveryDate = new \DateTime('tomorrow');// TODO: get next available delivery date
+        $deliveryDate = new \DateTime($deliveryOptions->date);
+        $deliveryOptions->date = $deliveryDate->format('Y-m-d');
+        if ($nextDeliveryDate > $deliveryDate) {
+            $deliveryOptions->date = $nextDeliveryDate->format('Y-m-d');
+        }
 
         $this->context->smarty->assign([
             'modulePathUri' => $this->getPathUri(),
@@ -227,18 +251,18 @@ trait LegacyOrderPageHooks
             'delivery_address_formatted' => $deliveryAddressFormatted,
             'labelList' => $labelList,
             'bulk_actions' => $bulk_actions,
+            'labelUrl' => $link->getAdminLink('AdminLabel', true, [], ['id_order' => $idOrder]),
             'labelAction' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
             'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
             'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
             'export_print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'exportPrint']),
             'isBE' => $this->isBE(),
-            'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
-            'ONLY_RECIPIENT' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
-            'AGE_CHECK' => Constant::AGE_CHECK_CONFIGURATION_NAME,
-            'PACKAGE_FORMAT' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
-            'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
-            'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
-            'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
+            'carrierSettings' => $carrierLabelSettings,
+            'carrierLabels' => Constant::SINGLE_LABEL_CREATION_OPTIONS,
+            'date_warning_display' => ($nextDeliveryDate > $deliveryDate),
+            'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
+            'currencySign' => $currency->getSign(),
+            'labelConfiguration' => $this->getLabelDefaultConfiguration(),
         ]);
 
         return $this->display($this->name, 'views/templates/admin/hook/order-label-form.tpl');

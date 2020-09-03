@@ -47,7 +47,7 @@ class OrderLabelRepository
         return $qb->execute()->fetch()['id_label'];
     }
 
-    public function getOrderLabels(array $orders_id)
+    public function getOrdersLabels(array $orders_id)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb->select(

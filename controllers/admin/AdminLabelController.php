@@ -8,6 +8,7 @@ use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Service\Consignment\Download;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory as ConsignmentFactorySdk;
+use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
@@ -250,7 +251,7 @@ class AdminLabelController extends ModuleAdminController
     public function processRefresh()
     {
 
-        $id_labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
+        $id_labels = OrderLabel::getOrdersLabels(Tools::getValue('order_ids'));
         if (empty($id_labels)) {
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('No created labels found', 'adminlabelcontroller'));
@@ -279,7 +280,7 @@ class AdminLabelController extends ModuleAdminController
 
     public function processPrint()
     {
-        $labels = OrderLabel::getOrderLabels(Tools::getValue('order_ids'));
+        $labels = OrderLabel::getOrdersLabels(Tools::getValue('order_ids'));
         if (empty($labels)) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
@@ -389,5 +390,185 @@ class AdminLabelController extends ModuleAdminController
             Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
             false
         ));
+    }
+
+    public function ajaxProcessSaveConcept()
+    {
+        $postValues = Tools::getAllValues();
+        if (!isset($postValues['id_order'])) {
+            $this->errors[] = $this->module->l('Order not found by ID', 'adminlabelcontroller');
+        }
+        if (!empty($this->errors)) {
+            $this->returnAjaxResponse();
+        }
+        $currency = Currency::getDefaultCurrency();
+        $deliveryOptions = OrderLabel::getOrderDeliveryOptions((int) $postValues['id_order']);
+        try {
+            $order = new Order((int) $postValues['id_order']);
+            $deliveryOptions->date = $postValues['deliveryDate'] . 'T00:00:00.000Z';
+            $deliveryOptions->shipmentOptions = new StdClass(); // Reset shipment options
+            foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $key => $name) {
+                if (isset($postValues[$key])) {
+                    switch ($key) {
+                        case 'packageType':
+                            $deliveryOptions->shipmentOptions->package_type = $postValues[$key];
+                            break;
+                        case 'packageFormat':
+                            if (Constant::PACKAGE_FORMATS[$postValues[$key]] == 'large') {
+                                $deliveryOptions->shipmentOptions->large_format = true;
+                            }
+                            break;
+                        case 'onlyRecipient':
+                            $deliveryOptions->shipmentOptions->only_recipient = true;
+                            break;
+                        case 'ageCheck':
+                            $deliveryOptions->shipmentOptions->age_check = true;
+                            break;
+                        case 'returnUndelivered':
+                            $deliveryOptions->shipmentOptions->return = true;
+                            break;
+                        case 'signatureRequired':
+                            $deliveryOptions->shipmentOptions->signature = true;
+                            break;
+                        case 'insurance':
+                            $deliveryOptions->shipmentOptions->insurance = new StdClass();
+                            if (isset($postValues['insuranceAmount'])) {
+                                if (strpos($postValues['insuranceAmount'], 'amount') !== false) {
+                                    $insuranceValue = (int) str_replace(
+                                        'amount',
+                                        '',
+                                        $postValues['insuranceAmount']
+                                    );
+                                } else {
+                                    $insuranceValue = (int) $postValues['insurance-amount-custom-value'] ?? 0;
+                                }
+                                $deliveryOptions->shipmentOptions->insurance->amount = $insuranceValue * 100;// cents
+                                $deliveryOptions->shipmentOptions->insurance->currency = $currency->iso_code;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            Db::getInstance(_PS_USE_SQL_SLAVE_)->update(
+                'myparcel_delivery_settings',
+                ['delivery_settings' => json_encode($deliveryOptions)],
+                'id_cart = ' . (int) $order->id_cart
+            );
+        } catch (Exception $e) {
+            $this->errors[] = $this->module->l('Error loading the delivery options.', 'adminlabelcontroller');
+            $this->errors[] = $e->getMessage();
+        }
+
+        $this->returnAjaxResponse();
+    }
+
+    public function returnAjaxResponse($response = [])
+    {
+        $results = ['hasError' => false];
+        if (!empty($this->errors)) {
+            $results['hasError'] = true;
+            $results['errors'] = $this->errors;
+        }
+
+        $results = array_merge($results, $response);
+
+        die(json_encode($results));
+    }
+
+    public function ajaxProcessCreateLabel()
+    {
+        $postValues = Tools::getAllValues();
+        $factory = new ConsignmentFactory(
+            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            $postValues,
+            new Configuration(),
+            $this->module
+        );
+        $idOrder = $postValues['id_order'] ?? 0;
+        if (!$idOrder) {
+            $this->errors[] = $this->module->l('No order ID found.', 'adminlabelcontroller');
+            $this->returnAjaxResponse();
+        }
+        $orders = OrderLabel::getDataForLabelsCreate([(int) $idOrder]);
+        if (empty($orders)) {
+            $this->errors[] = $this->module->l('No order found.', 'adminlabelcontroller');
+            $this->returnAjaxResponse();
+        }
+        $order = reset($orders);
+
+        try {
+            $collection = $factory->fromOrder($order);
+            $consignments = $collection->getConsignments();
+            if (!empty($consignments)) {
+                foreach ($consignments as &$consignment) {
+                    $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
+                    $this->fixSignature($consignment);
+                    $this->sanitizeDeliveryType($consignment);
+                    $this->sanitizePackageType($consignment);
+                }
+            }
+            Logger::addLog($collection->toJson());
+            $collection->setLinkOfLabels();
+            if ($this->module->isNL()
+                && $postValues[Constant::RETURN_PACKAGE_CONFIGURATION_NAME]) {
+                $collection->sendReturnLabelMails();
+            }
+        } catch (Exception $e) {
+            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getFile(), true);
+            Logger::addLog($e->getLine(), true);
+            header('HTTP/1.1 500 Internal Server Error', true, 500);
+            $this->errors[] = $this->module->l(
+                'An error occurred in MyParcel module, please try again.',
+                'adminlabelcontroller'
+            );
+            $this->returnAjaxResponse();
+        }
+
+        $labelIds = [];
+        $status_provider = new MyparcelStatusProvider();
+        foreach ($collection as $consignment) {
+            $orderLabel = new OrderLabel();
+            $orderLabel->id_label = $consignment->getConsignmentId();
+            $orderLabel->id_order = $consignment->getReferenceId();
+            $orderLabel->barcode = $consignment->getBarcode();
+            $orderLabel->track_link = $consignment->getBarcodeUrl(
+                $consignment->getBarcode(),
+                $consignment->getPostalCode(),
+                $consignment->getCountry()
+            );
+            $orderLabel->new_order_state = $consignment->getStatus();
+            $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
+            $orderLabel->add();
+            if (!empty($orderLabel->id)) {
+                $labelIds[] = $orderLabel->id_label;
+            }
+        }
+
+        $this->returnAjaxResponse(['labelIds' => $labelIds]);
+    }
+
+    public function processPrintOrderLabel()
+    {
+        $labels = OrderLabel::getOrderLabels(Tools::getValue('id_order'), Tools::getValue('label_id'));
+        if (empty($labels)) {
+            Tools::redirectAdmin($this->context->link->getAdminLink(
+                'AdminOrders',
+                true,
+                [],
+                [
+                    'vieworder' => '',
+                    'id_order' => (int) Tools::getValue('id_order'),
+                ]
+            ));
+        }
+        $service = new Download(
+            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            Tools::getAllValues(),
+            new Configuration()
+        );
+        $service->downloadLabel($labels);
     }
 }

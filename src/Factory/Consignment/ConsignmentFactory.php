@@ -53,10 +53,10 @@ class ConsignmentFactory
             ->setUserAgent('prestashop', '1.0')
         ;
 
-        for ($i = 0; $i < $this->request['number']; ++$i) {
+        for ($i = 0; $i < $this->request['label_amount']; ++$i) {
             $consignment = $this->initConsignment($order);
-            foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $option) {
-                if (isset($this->request[$option])) {
+            foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $key => $option) {
+                if (isset($this->request[$key])) {
                     if (method_exists($this, $option)) {
                         $consignment = $this->{$option}($consignment);
                     }
@@ -175,28 +175,43 @@ class ConsignmentFactory
 
     private function MY_PARCEL_PACKAGE_TYPE(AbstractConsignment $consignment)
     {
-        return $consignment->setPackageType($this->request[__FUNCTION__]);
+        return $consignment->setPackageType($this->request['packageType']);
     }
 
     private function MY_PARCEL_INSURANCE(AbstractConsignment $consignment)
     {
-        $insurance = $this->request['insurance-value-option'];
-        if (isset($this->request['heigherthen500'])) {
-            if (empty($this->request['insurance-higher-amount'])) {
-                throw new \Exception('Insurance value cannot be empty');
+        $insuranceValue = 0;
+        if (isset($postValues['insuranceAmount'])) {
+            if (strpos($postValues['insuranceAmount'], 'amount') !== false) {
+                $insuranceValue = (int) str_replace(
+                    'amount-',
+                    '',
+                    $postValues['insuranceAmount']
+                );
+            } else {
+                $insuranceValue = (int) $postValues['insurance-amount-custom-value'] ?? 0;
+                if (empty($insuranceValue)) {
+                    throw new \Exception('Insurance value cannot be empty');
+                }
             }
-            $insurance = $this->request['insurance-higher-amount'];
         }
-        if ($this->module->isBE() && $insurance > 500) {
-            $this->module->controller->errors[] = $this->module->l('Insurance value cannot more than € 500', 'consignmentfactory');
+
+        if ($this->module->isBE() && $insuranceValue > 500) {
+            $this->module->controller->errors[] = $this->module->l(
+                'Insurance value cannot more than € 500',
+                'consignmentfactory'
+            );
             throw new \Exception('Insurance value cannot more than € 500');
         }
-        if ($this->module->isNL() && $insurance > 5000) {
-            $this->module->controller->errors[] = $this->module->l('Insurance value cannot more than € 5000', 'consignmentfactory');
+        if ($this->module->isNL() && $insuranceValue > 5000) {
+            $this->module->controller->errors[] = $this->module->l(
+                'Insurance value cannot more than € 5000',
+                'consignmentfactory'
+            );
             throw new \Exception('Insurance value cannot more than € 5000');
         }
 
-        return $consignment->setInsurance($insurance);
+        return $consignment->setInsurance($insuranceValue);
     }
 
     private function MY_PARCEL_RETURN_PACKAGE(AbstractConsignment $consignment)
@@ -215,7 +230,7 @@ class ConsignmentFactory
 
     private function MY_PARCEL_PACKAGE_FORMAT(AbstractConsignment $consignment)
     {
-        return $consignment->setLargeFormat($this->request[__FUNCTION__] == 2);
+        return $consignment->setLargeFormat($this->request['packageFormat'] == 2);
     }
 
     private function getLabelParams(array $order, string $labelParams, string $labelDefaultParam = 'id_order'): string

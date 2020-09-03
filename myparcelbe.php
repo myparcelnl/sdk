@@ -233,6 +233,7 @@ class MyParcelBE extends CarrierModule
 
     public static function updateStatus($idShipment, $barcode, $statusCode, $date = null)
     {
+        throw new Exception('Duplicate function trap: MyParcel::updateStatus(). Require delete.');
         if (!$date) {
             $date = date('Y-m-d H:i:s');
         }
