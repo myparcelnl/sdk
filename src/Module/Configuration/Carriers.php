@@ -175,6 +175,10 @@ class Carriers extends AbstractForm
                 }
                 continue;
             }
+            if ($row['name'] == Constant::CUTOFF_EXCEPTIONS && empty($row['value'])) {
+                $vars[$row['name']] = '{}';
+                continue;
+            }
             $vars[$row['name']] = $row['value'];
         }
 
@@ -327,7 +331,7 @@ class Carriers extends AbstractForm
             'cutoff_time' => $cutoffTimeValues,
             'desc' => [
                 $this->module->l(
-                'This option allows the Merchant to set the days she normally goes to PostNL to hand in her 
+                'This option allows the Merchant to set the days he normally goes to PostNL to hand in the 
                         parcels. Monday is 1 and Saturday is 6.',
                     'carriers'
                 ),
@@ -349,6 +353,12 @@ class Carriers extends AbstractForm
                 'name' => $day . 'CutoffTime',
             ];
         }
+        $fields[] = [
+            'tab' => 'form',
+            'type' => 'cutoffexceptions',
+            'label' => $this->module->l('Exception schedule', 'carriers'),
+            'name' => Constant::CUTOFF_EXCEPTIONS,
+        ];
         $fields[] = [
             'tab' => 'form',
             'type' => 'select',

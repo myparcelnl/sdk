@@ -43,6 +43,8 @@ class Constant
         'insurance' => self::INSURANCE_CONFIGURATION_NAME,
     ];
 
+    const CUTOFF_EXCEPTIONS = 'cutoff_exceptions';
+
     const PACKAGE_TYPES = [
         1 => 'package',
         2 => 'mailbox package',
@@ -70,6 +72,7 @@ class Constant
         'deliveryTitle',
         'dropOffDays',
         //'cutoffTime',
+        self::CUTOFF_EXCEPTIONS,
         'mondayCutoffTime',
         'tuesdayCutoffTime',
         'wednesdayCutoffTime',

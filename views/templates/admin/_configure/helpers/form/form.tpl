@@ -36,7 +36,7 @@
         {if version_compare($smarty.const._PS_VERSION_, '1.6.0.0', '>=')}initTimepicker();{/if}
       }());
     </script>
-  {elseif $input.type == 'checkbox' && $input.type == 'dropOffDays'}
+  {elseif $input.type == 'checkbox' && $input.form_group_class == 'with-cutoff-time'}
     {if isset($input.expand)}
       <a class="btn btn-default show_checkbox{if strtolower($input.expand.default) == 'hide'} hidden{/if}" href="#">
         <i class="icon-{$input.expand.show.icon}"></i>
@@ -102,6 +102,190 @@
         }());
       </script>
     {/foreach}
+  {elseif $input.type == 'cutoffexceptions'}
+    <input type="hidden" id="{$input.name|escape:'html'}" name="{$input.name|escape:'html'}"
+           value="{$fields_value[$input.name]|escape:'html'}">
+    <div class="row">
+      <div id="datepicker_{$input.name|escape:'html'}" class="col-lg-3" style="margin-bottom: 5px"></div>
+      <div class="col-lg-9 clearfix">
+        <div id="{$input.name|escape:'html'}_datepanel" class="panel">
+          <div class="panel-heading">
+            <i class="icon icon-calendar"></i> <span id="{$input.name|escape:'html'}_datetitle"></span>
+          </div>
+          <div class="date-warning" style="display:none">
+            <div class="alert alert-info">{l s='Select a date in the future to configure its cutoff time' mod='myparcelbe'}</div>
+          </div>
+          <div class="panel-body">
+            <div class="btn-group" role="group">
+              <button type="button" id="{$input.name|escape:'html'}-nodispatch-btn" class="btn btn-default">
+                <i class="icon-times"></i> {l s='No dispatch' mod='myparcelbe'}
+              </button>
+              <button type="button" id="{$input.name|escape:'html'}-otherdispatch-btn" class="btn btn-default">
+                <i  class="icon-clock-o"></i> {l s='Different cut-off time' mod='myparcelbe'}
+              </button>
+              <div id="{$input.name|escape:'html'}-dispatch-btn" class="btn btn-success">
+                <i class="icon-check"></i> {l s='Normal cut-off time' mod='myparcelbe'}
+              </div>
+            </div>
+            <div class="form-inline well" style="margin-top: 5px">
+              <div class="form-group">
+                <label for="{$input.name|escape:'html'}-cutoff">{l s='Cut-off time' mod='myparcelbe'}: </label>
+                <div class="input-group">
+                  <input type="text"
+                         id="{$input.name|escape:'html'}-cutoff"
+                         name="{$input.name|escape:'html'}-cutoff"
+                         class="{if isset($input.class)}{$input.class|escape:'html'}{/if} form-control"
+                          {if isset($input.readonly) && $input.readonly} readonly="readonly"{/if}
+                          {if isset($input.disabled) && $input.disabled} disabled="disabled"{/if}
+                          {if isset($input.required) && $input.required} required="required" {/if}
+                          {if isset($input.placeholder) && $input.placeholder} placeholder="{$input.placeholder|escape:'html'}"{/if} />
+                  <span class="input-group-addon">
+                  <i class="icon-clock-o"></i>
+                </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      (function () {
+        function {$input.name|escape:'html'}highlightDays(date) {
+          var dates = JSON.parse($('#{$input.name|escape:'html'}').val());
+          for (var i = 0; i < Object.keys(dates).length; i++) {
+            var item = dates[Object.keys(dates)[i]];
+            var formattedDate = Object.keys(dates)[i].split('-');
+            if (new Date(formattedDate[2], formattedDate[1] - 1, formattedDate[0]).toISOString().slice(0, 10) == date.toISOString().slice(0, 10)) {
+              if (item.cutoff) {
+                return [true, 'ui-state-warning', ''];
+              } else {
+                return [true, 'ui-state-danger', ''];
+              }
+
+            }
+          }
+          return [true, ''];
+        }
+
+        function {$input.name|escape:'javascript'}dateSelect(date) {
+          if (moment().format('YYYY-MM-DD') > moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')) {
+            $('#{$input.name|escape:'html'}_datepanel').find('.panel-body').hide();
+            $('#{$input.name|escape:'html'}_datepanel').find('.date-warning').show();
+          } else {
+            $('#{$input.name|escape:'html'}_datepanel').find('.panel-body').show();
+            $('#{$input.name|escape:'html'}_datepanel').find('.date-warning').hide();
+            var dates = JSON.parse($('#{$input.name|escape:'html'}').val());
+            if (!!dates[date]) {
+              var item = dates[date];
+              if (item.cutoff) {
+                  {$input.name|escape:'javascript'}setOtherDispatch(item.cutoff);
+              } else {
+                  {$input.name|escape:'javascript'}setNoDispatch();
+              }
+            } else {
+                {$input.name|escape:'javascript'}setDispatch();
+            }
+          }
+
+          $('#{$input.name|escape:'html'}_datetitle').text(moment(date, 'DD-MM-YYYY').format('DD MMMM YYYY'));
+        }
+
+        window.setDate = {$input.name|escape:'javascript'}dateSelect;
+
+        function {$input.name|escape:'javascript'}setDispatch() {
+          $('#{$input.name|escape:'javascript'}-nodispatch-btn').addClass('btn-default').removeClass('btn-danger');
+          $('#{$input.name|escape:'javascript'}-otherdispatch-btn').addClass('btn-default').removeClass('btn-warning');
+          $('#{$input.name|escape:'javascript'}-dispatch-btn').addClass('btn-success').removeClass('btn-default');
+          $('#{$input.name|escape:'javascript'}-cutoff').val('');
+        }
+
+        function {$input.name|escape:'javascript'}setOtherDispatch(cutoff) {
+          $('#{$input.name|escape:'javascript'}-nodispatch-btn').addClass('btn-default').removeClass('btn-danger');
+          $('#{$input.name|escape:'javascript'}-otherdispatch-btn').addClass('btn-warning').removeClass('btn-default');
+          $('#{$input.name|escape:'javascript'}-dispatch-btn').addClass('btn-default').removeClass('btn-success');
+          $('#{$input.name|escape:'javascript'}-cutoff').val(cutoff);
+        }
+
+        function {$input.name|escape:'javascript'}setNoDispatch() {
+          $('#{$input.name|escape:'javascript'}-nodispatch-btn').addClass('btn-danger').removeClass('btn-default');
+          $('#{$input.name|escape:'javascript'}-otherdispatch-btn').addClass('btn-default').removeClass('btn-warning');
+          $('#{$input.name|escape:'javascript'}-dispatch-btn').addClass('btn-default').removeClass('btn-success');
+          $('#{$input.name|escape:'javascript'}-cutoff').val('');
+        }
+
+        function {$input.name|escape:'javascript'}addDate(date) {
+          var dates = JSON.parse($('#{$input.name|escape:'html'}').val());
+          dates[date] = {
+            "nodispatch": true
+          };
+          $('#{$input.name|escape:'html'}').val(JSON.stringify(dates));
+        }
+
+        function {$input.name|escape:'javascript'}addCutOff(date, cutoff) {
+          var dates = JSON.parse($('#{$input.name|escape:'html'}').val());
+          dates[date] = {
+            "nodispatch": true,
+            "cutoff": cutoff
+          };
+          $('#{$input.name|escape:'html'}').val(JSON.stringify(dates));
+        }
+
+        function {$input.name|escape:'javascript'}removeDate(date) {
+          var dates = JSON.parse($('#{$input.name|escape:'html'}').val());
+          delete dates[date];
+          $('#{$input.name|escape:'html'}').val(JSON.stringify(dates));
+        }
+
+        $(document).ready(function () {
+          $('#datepicker_{$input.name|escape:'javascript'}').datepicker({
+            dateFormat: 'dd-mm-yy',
+            beforeShowDay: {$input.name|escape:'javascript'}highlightDays,
+            minDate: 0,
+            onSelect: {$input.name|escape:'javascript'}dateSelect
+          });
+          $('#{$input.name|escape:'javascript'}-cutoff').timepicker({
+            timeOnly: true,
+            timeFormat: 'hh:mm'
+          });
+          $('#{$input.name|escape:'javascript'}-dispatch-btn').click(function () {
+              {$input.name|escape:'javascript'}removeDate($('#datepicker_{$input.name|escape:'javascript'}').val());
+              {$input.name|escape:'javascript'}setDispatch();
+          });
+          $('#{$input.name|escape:'javascript'}-otherdispatch-btn').click(function () {
+            if ($('#{$input.name|escape:'javascript'}-cutoff').val()) {
+                {$input.name|escape:'javascript'}removeDate($('#datepicker_{$input.name|escape:'javascript'}').val());
+                {$input.name|escape:'javascript'}addCutOff(
+                  $('#datepicker_{$input.name|escape:'javascript'}').val(),
+                  $('#{$input.name|escape:'javascript'}-cutoff').val()
+                );
+            }
+              {$input.name|escape:'javascript'}setOtherDispatch($('#{$input.name|escape:'javascript'}-cutoff').val());
+          });
+          $('#{$input.name|escape:'javascript'}-cutoff').change(function () {
+            if ($(this).val()) {
+                {$input.name|escape:'javascript'}removeDate($('#datepicker_{$input.name|escape:'javascript'}').val());
+                {$input.name|escape:'javascript'}addCutOff(
+                  $('#datepicker_{$input.name|escape:'javascript'}').val(),
+                  $('#{$input.name|escape:'javascript'}-cutoff').val()
+                );
+                {$input.name|escape:'javascript'}setOtherDispatch($(this).val());
+            }
+          });
+          $('#{$input.name|escape:'javascript'}-nodispatch-btn').click(function () {
+              {$input.name|escape:'javascript'}removeDate($('#datepicker_{$input.name|escape:'javascript'}').val());
+              {$input.name|escape:'javascript'}addDate($('#datepicker_{$input.name|escape:'javascript'}').val());
+              {$input.name|escape:'javascript'}setNoDispatch();
+          });
+          var current_date = new Date($('#datepicker_{$input.name|escape:'javascript'}').datepicker('getDate')),
+            yr = current_date.getFullYear(),
+            month = (current_date.getMonth() + 1) < 10 ? '0' + (current_date.getMonth() + 1) : (current_date.getMonth() + 1),
+            day = current_date.getDate() < 10 ? '0' + current_date.getDate() : current_date.getDate(),
+            new_current_date = day + '-' + month + '-' + yr;
+            {$input.name|escape:'javascript'}dateSelect(new_current_date);
+        });
+      }());
+    </script>
   {else}
     {$smarty.block.parent}
   {/if}
