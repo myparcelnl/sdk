@@ -244,11 +244,27 @@ trait LegacyOrderPageHooks
         if ($nextDeliveryDate > $deliveryDate) {
             $deliveryOptions->date = $nextDeliveryDate->format('Y-m-d');
         }
+        $labelListHtml = $this->context->smarty->createData(
+            $this->context->smarty
+        );
+        $labelListHtml->assign([
+            'labelList' => $labelList,
+        ]);
+
+        $labelListHtmlTpl = $this->context->smarty->createTemplate(
+            $this->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
+            $labelListHtml
+        );
+
+        $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
+        $this->context->controller->addJs($this->_path . 'views/dist/myparcel.js');
 
         $this->context->smarty->assign([
             'modulePathUri' => $this->getPathUri(),
             'id_order' => $idOrder,
+            'id_carrier' => $order->id_carrier,
             'delivery_address_formatted' => $deliveryAddressFormatted,
+            'labelListHtml' => $labelListHtmlTpl->fetch(),
             'labelList' => $labelList,
             'bulk_actions' => $bulk_actions,
             'labelUrl' => $link->getAdminLink('AdminLabel', true, [], ['id_order' => $idOrder]),
@@ -265,6 +281,6 @@ trait LegacyOrderPageHooks
             'labelConfiguration' => $this->getLabelDefaultConfiguration(),
         ]);
 
-        return $this->display($this->name, 'views/templates/admin/hook/order-label-form.tpl');
+        return $this->display($this->name, 'views/templates/admin/hook/order-label-block.tpl');
     }
 }

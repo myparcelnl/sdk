@@ -282,6 +282,12 @@ class AdminLabelController extends ModuleAdminController
     {
         $labels = OrderLabel::getOrdersLabels(Tools::getValue('order_ids'));
         if (empty($labels)) {
+            if (Tools::getIsset('id_order')) {
+                Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders', true, [], [
+                    'id_order' => (int) Tools::getValue('id_order'),
+                    'vieworder' => '',
+                ]));
+            }
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
         $service = new Download(
@@ -547,7 +553,20 @@ class AdminLabelController extends ModuleAdminController
             }
         }
 
-        $this->returnAjaxResponse(['labelIds' => $labelIds]);
+        $labelList = OrderLabel::getOrderLabels((int) $idOrder, []);
+        $labelListHtml = $this->context->smarty->createData(
+            $this->context->smarty
+        );
+        $labelListHtml->assign([
+            'labelList' => $labelList,
+        ]);
+
+        $labelListHtmlTpl = $this->context->smarty->createTemplate(
+            $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
+            $labelListHtml
+        );
+
+        $this->returnAjaxResponse(['labelIds' => $labelIds, 'labelsHtml' => $labelListHtmlTpl->fetch()]);
     }
 
     public function processPrintOrderLabel()
@@ -564,11 +583,57 @@ class AdminLabelController extends ModuleAdminController
                 ]
             ));
         }
+        $labelIds = [];
+        foreach ($labels as $label) {
+            $labelIds[] = (int) $label['id_label'];
+        }
         $service = new Download(
             \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             Tools::getAllValues(),
             new Configuration()
         );
-        $service->downloadLabel($labels);
+        $service->downloadLabel($labelIds);
+    }
+
+    public function ajaxProcessDeleteLabel()
+    {
+        $postValues = Tools::getAllValues();
+        $result = true;
+        if (!empty($postValues['id_order_label'])) {
+            $orderLabel = new OrderLabel((int) $postValues['id_order_label']);
+            $result &= $orderLabel->delete();
+        }
+        if (!$result) {
+            $this->errors[] = $this->module->l(
+                'Error deleting the label.',
+                'adminlabelcontroller'
+            );
+        }
+
+        $this->returnAjaxResponse();
+    }
+
+    public function ajaxProcessUpdateDeliveryOptions()
+    {
+        $postValues = Tools::getAllValues();
+        $options = $postValues['myparcel-delivery-options'] ?? null;
+        $action = $postValues['action'] ?? null;
+        $order = new Order($postValues['id_order'] ?? 0);
+        if ($action === 'updateDeliveryOptions' && !empty($options) && !empty($order->id_cart)) {
+            Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
+                'myparcel_delivery_settings',
+                ['id_cart' => $order->id_cart, 'delivery_settings' => $options],
+                false,
+                true,
+                Db::REPLACE
+            );
+        } else {
+            $this->errors[] = $this->module->l(
+                'Error updating the delivery options.',
+                'adminlabelcontroller'
+            );
+        }
+
+        $this->returnAjaxResponse();
     }
 }

@@ -9,7 +9,7 @@
           <i class="icon-file-text"></i> {l s='Concept' mod='myparcelbe'}
           <button class="badge badge-concept-date">
             <div class="concept-date">
-              <span class="delivery-options-span">
+              <span class="delivery-options-span" data-toggle="modal" data-target="#deliveryDateModal">
                 {dateFormat date=$deliveryOptions.date full=false}
                 <i class="icon-pencil"></i>
               </span>
@@ -238,69 +238,9 @@
         <div class="panel-heading">
           <i class="icon-truck"></i> {l s='Shipments' mod='myparcelbe'}
         </div>
-        <form class="shipment-labels-wrapper" action="{$labelAction}" method="post">
+        <form class="shipment-labels-wrapper" action="{$labelUrl}" method="post">
           <div class="table-responsive">
-            <table class="table">
-              <thead>
-              <tr>
-                <th><span class="title_box text-center">--</span></th>
-                <th><span class="title_box">{l s='Track & Trace' mod='myparcelbe'}</span></th>
-                <th><span class="title_box">{l s='Status' mod='myparcelbe'}</span></th>
-                <th><span class="title_box">{l s='Last update' mod='myparcelbe'}</span></th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr{if !empty($labelList)} class="hidden"{/if}>
-                <td class="list-empty hidden-print" colspan="5">
-                  <div class="list-empty-msg">
-                    <i class="icon-exclamation-triangle"></i>
-                    <div>{l s='There are no shipments' mod='myparcelbe'}</div>
-                  </div>
-                </td>
-              </tr>
-              {if !empty($labelList)}
-                {foreach $labelList as $label}
-                  <tr>
-                    <td><input type="checkbox" name="labelBox[]" class="noborder" value="{$label.id_order_label}"></td>
-                    <td>
-                      <a href="{$label.track_link}" target="_blank" rel="noopener noreferrer">{$label.barcode}</a>
-                    </td>
-                    <td>{$label.status}</td>
-                    <td>{dateFormat date=$label.date_upd full=true}</td>
-                    <td class="order-label-action text-right">
-                      <div class="btn-group" id="btn_group_action">
-                        <button type="button" class="btn btn-default order-label-action-print">
-                          <i class="icon-print"></i> {l s='Print' mod='myparcelbe'}
-                        </button>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                          <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                          <li>
-                            <a href="#" class="order-label-action-refresh">
-                              <i class="icon-refresh"></i> {l s='Refresh' mod='myparcelbe'}
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" class="order-label-action-return{if !empty($label.return_disabled)} disabled{/if}">
-                              <i class="icon-reply"></i> {l s='Create return label' mod='myparcelbe'}
-                            </a>
-                          </li>
-                          <li class="divider"></li>
-                          <li>
-                            <a href="#" class="delete_product_line">
-                              <i class="icon-trash"></i> {l s='Delete' d='Admin.Actions'}
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                {/foreach}
-              {/if}
-              </tbody>
-            </table>
+            {$labelListHtml}
           </div>
           <div class="btn-group bulk-actions dropup">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"{if empty($labelList)} disabled{/if}>
@@ -323,7 +263,7 @@
                       {if $params.text != 'divider'}
                         <a
                                 href="#"
-                                onclick="{if isset($params.confirm)}if (confirm('{$params.confirm}')){/if}sendBulkAction($(this).closest('.shipment-labels-wrapper').get(0), 'submitBulk{$key}');"
+                                data-action="bulkAction{$key|ucfirst}"
                         >
                             {if isset($params.icon)}<i class="{$params.icon}"></i>{/if}&nbsp;{$params.text}
                         </a>
@@ -338,7 +278,7 @@
   </div>
 </div>
 
-<!-- Modal -->
+{* Modal Print *}
 <div class="modal fade" id="printLabelModal" tabindex="-1" role="dialog" aria-labelledby="modalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -418,6 +358,35 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcelbe'}</button>
         <button type="button" id="button_print_label" class="btn btn-primary">{l s='Create and print' mod='myparcelbe'}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{* Modal Delivery Date change *}
+<div class="modal fade" id="deliveryDateModal" tabindex="-1" role="dialog" aria-labelledby="deliveryDateModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deliveryDateModalTitle">{l s='Delivery Options' mod='myparcelbe'}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div data-url="{$labelUrl}" id="deliveryDateUpdateWrapper" class="myparcel-delivery-options-wrapper">
+          <form class="hidden-input-fields-form" action="{$labelUrl}" method="post">
+            <input type="hidden" name="action" value="deliveryDateUpdate">
+            <input type="hidden" name="id_carrier" value="{$id_carrier}">
+            <input type="hidden" name="id_order" value="{$id_order}">
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcelbe'}</button>
+        <button type="button" id="buttonDeliveryDateUpdate" class="btn btn-primary" data-url="{$labelUrl}">
+          {l s='Save' mod='myparcelbe'}
+        </button>
       </div>
     </div>
   </div>
