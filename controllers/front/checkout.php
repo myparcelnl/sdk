@@ -38,9 +38,40 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
 //            }
 //        }
         $carrierSettings[$carrierName] = array_merge($carrierSettings[$carrierName], $activeCarrierSettings);
-        $today = date('Y-m-d');
+        $dropOffDelay = (int) CarrierConfigurationProvider::get($id_carrier, 'dropOffDelay');
+        $cutoffExceptions = CarrierConfigurationProvider::get($id_carrier, Constant::CUTOFF_EXCEPTIONS);
+        $cutoffExceptions = @json_decode(
+            $cutoffExceptions,
+            true
+        );
+        if (!is_array($cutoffExceptions)) {
+            $cutoffExceptions = array();
+        }
+        $dropOffDateObj = new DateTime('today');
+        $deliveryDateObj = new DateTime('tomorrow');// Delivery is next day if past cutoff time
+        $today = $deliveryDateObj->format('Y-m-d');
         $weekDayNumber = date('N', strtotime($today));
         $dayName = Constant::WEEK_DAYS[$weekDayNumber];
+        $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
+        if ($dropOffDelay > 0) {
+            $dropOffDateObj->modify('+' . $dropOffDelay . ' day');
+            $deliveryDateObj->modify('+' . $dropOffDelay . ' day');
+            $cutoffTimeToday = false;
+        }
+        $exceptionCutoffToday = null;
+        if (isset($cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff']) && $cutoffTimeToday !== false) {
+            $cutoffTimeToday = $cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff'];
+        }
+        foreach (range(1, 14) as $day) {
+            if (!isset($cutoffExceptions[$deliveryDateObj->format('d-m-Y')]['cutoff'])
+                && isset($cutoffExceptions[$deliveryDateObj->format('d-m-Y')]['nodispatch'])) {
+                $deliveryDateObj->modify('+1 day');
+                $dropOffDelay++;
+            } else {
+                // first available day found
+                break;
+            }
+        }
 
         $params = [
             'config' => [
@@ -67,9 +98,9 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                     'intval',
                     explode(',', CarrierConfigurationProvider::get($id_carrier, 'dropOffDays'))
                 ),
-                'cutoffTime' => CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime'),
+                'cutoffTime' => $cutoffTimeToday,
                 'deliveryDaysWindow' => (int) (CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow') ?? 1),
-                'dropOffDelay' => CarrierConfigurationProvider::get($id_carrier, 'dropOffDelay'),
+                'dropOffDelay' => $dropOffDelay,
 
                 //'allowOnlyRecipient' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
             ],

@@ -140,3 +140,9 @@
 .insurance-amount-custom .input-group {
   width: 100px;
 }
+td.ui-state-warning {
+  background-color: #fbbb22;
+}
+td.ui-state-danger {
+  background-color: #E08F95;
+}

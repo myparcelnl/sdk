@@ -175,9 +175,10 @@ class Carriers extends AbstractForm
                 }
                 continue;
             }
-            if ($row['name'] == Constant::CUTOFF_EXCEPTIONS && empty($row['value'])) {
-                $vars[$row['name']] = '{}';
-                continue;
+            if ($row['name'] == Constant::CUTOFF_EXCEPTIONS) {
+                if (empty($row['value'])) {
+                    $row['value'] = '{}';
+                }
             }
             $vars[$row['name']] = $row['value'];
         }
