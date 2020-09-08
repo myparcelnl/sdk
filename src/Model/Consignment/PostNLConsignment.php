@@ -5,7 +5,6 @@ namespace MyParcelNL\Sdk\src\Model\Consignment;
 class PostNLConsignment extends AbstractConsignment
 {
     /**
-     * Carrier types
      * @var int
      */
     public const CARRIER_ID = 1;
@@ -18,6 +17,25 @@ class PostNLConsignment extends AbstractConsignment
     /**
      * @var array
      */
+    public const INSURANCE_POSSIBILITIES_LOCAL = [
+        0,
+        100,
+        250,
+        500,
+        1000,
+        1500,
+        2000,
+        2500,
+        3000,
+        3500,
+        4000,
+        4500,
+        5000
+    ];
+
+    /**
+     * @var array
+     */
     private const VALID_PACKAGE_TYPES = [
         self::PACKAGE_TYPE_PACKAGE,
         self::PACKAGE_TYPE_MAILBOX,
@@ -26,24 +44,18 @@ class PostNLConsignment extends AbstractConsignment
     ];
 
     /**
-     * @var array
-     */
-    protected $insurance_possibilities_local = [0, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
-
-    /**
      * @var string
      */
     protected $local_cc = self::CC_NL;
-
 
     /**
      * The id of the consignment
      *
      * Save this id in your database
      *
+     * @return int
      * @deprecated Use getConsignmentId instead
      *
-     * @return int
      */
     public function getMyParcelConsignmentId(): int
     {
@@ -51,15 +63,15 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
+     * @param int $id
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @internal
      *
      * The id of the consignment
      *
      * @deprecated Use getConsignmentId instead
      *
-     * @param int $id
-     *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function setMyParcelConsignmentId(int $id): AbstractConsignment
     {
@@ -70,6 +82,7 @@ class PostNLConsignment extends AbstractConsignment
      * @param array $consignmentEncoded
      *
      * @return array
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
@@ -169,10 +182,6 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function setDeliveryDate(?string $delivery_date): AbstractConsignment
     {
-        if (! $delivery_date) {
-            throw new \BadMethodCallException('First set delivery date before running setDeliveryDate() for shipment: ' . $this->consignment_id);
-        }
-
         return parent::setDeliveryDate($delivery_date);
     }
 
@@ -190,7 +199,7 @@ class PostNLConsignment extends AbstractConsignment
     public function setInsurance(?int $insurance): AbstractConsignment
     {
         if (null === $insurance) {
-            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', $this->insurance_possibilities_local));
+            throw new \BadMethodCallException('Insurance must be one of ' . implode(', ', self::INSURANCE_POSSIBILITIES_LOCAL));
         }
 
         return parent::setInsurance($insurance);
@@ -301,13 +310,29 @@ class PostNLConsignment extends AbstractConsignment
      * Example:  Albert Heijn
      * Required: Yes for pickup location
      *
-     * @param string $pickupNetworkId
+     * @param string $retailNetworkId
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @deprecated Use setRetailNetworkId instead
+     *
+     */
+    public function setPickupNetworkId($retailNetworkId): AbstractConsignment
+    {
+        return $this->setRetailNetworkId((string) $retailNetworkId);
+    }
+
+    /**
+     * Pattern:  [0-9A-Za-z]
+     * Example:  Albert Heijn
+     * Required: Yes for pickup location
+     *
+     * @param string $retailNetworkId
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
-    public function setPickupNetworkId($pickupNetworkId): AbstractConsignment
+    public function setRetailNetworkId(string $retailNetworkId): AbstractConsignment
     {
-        $this->pickup_network_id = $pickupNetworkId;
+        $this->retail_network_id = $retailNetworkId;
 
         return $this;
     }

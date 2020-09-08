@@ -40,21 +40,21 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
         $numberSuffix,
         $boxNumber
     ) {
-            $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
-                ->setCountry($country)
-                ->setFullStreet($fullStreetInput);
+        $consignment = (ConsignmentFactory::createByCarrierId($carrierId))
+            ->setCountry($country)
+            ->setFullStreet($fullStreetInput);
 
-            $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreetInput);
-            $this->assertEquals($street, $consignment->getStreet(), 'Street: ' . $fullStreetInput);
-            $this->assertEquals($number, $consignment->getNumber(), 'Number from: ' . $fullStreetInput);
+        $this->assertEquals($fullStreet, $consignment->getFullStreet(), 'Full street: ' . $fullStreetInput);
+        $this->assertEquals($street, $consignment->getStreet(), 'Street: ' . $fullStreetInput);
+        $this->assertEquals($number, $consignment->getNumber(), 'Number from: ' . $fullStreetInput);
 
-            if (null != $numberSuffix) {
-                $this->assertEquals($numberSuffix, $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetInput);
-            }
+        if (null != $numberSuffix) {
+            $this->assertEquals($numberSuffix, $consignment->getNumberSuffix(), 'Number suffix from: ' . $fullStreetInput);
+        }
 
-            if (null != $boxNumber) {
-                $this->assertEquals($boxNumber, $consignment->getBoxNumber(), 'Box number from: ' . $fullStreetInput);
-            }
+        if (null != $boxNumber) {
+            $this->assertEquals($boxNumber, $consignment->getBoxNumber(), 'Box number from: ' . $fullStreetInput);
+        }
     }
 
     /**
@@ -72,8 +72,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => 'Plein 1945 27',
                 'street'            => 'Plein 1945',
                 'number'            => 27,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -83,7 +83,17 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Plein 1940-45',
                 'number'            => 3,
                 'number_suffix'     => 'b',
-                'box_number'        => null
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Laan 1940-1945 103',
+                'full_street'       => 'Laan 1940-1945 103',
+                'street'            => 'Laan 1940-1945',
+                'number'            => 103,
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -92,8 +102,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => '300 laan 3',
                 'street'            => '300 laan',
                 'number'            => 3,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -102,8 +112,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => 'A.B.C. street 12',
                 'street'            => 'A.B.C. street',
                 'number'            => 12,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -113,18 +123,17 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'street street',
                 'number'            => 269,
                 'number_suffix'     => '133',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
-                'carrier_id' => PostNLConsignment::CARRIER_ID,
-                'country'    => 'NL',
-
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => 'Abeelstreet H 10',
                 'full_street'       => 'Abeelstreet H 10',
                 'street'            => 'Abeelstreet H',
                 'number'            => 10,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -134,7 +143,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'street street',
                 'number'            => 269,
                 'number_suffix'     => '1001',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -143,8 +152,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => 'Meijhorst 50e 26',
                 'street'            => 'Meijhorst 50e',
                 'number'            => 26,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -154,18 +163,17 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'street street',
                 'number'            => 12,
                 'number_suffix'     => 'ZW',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
-                'carrier_id' => PostNLConsignment::CARRIER_ID,
-                'country'    => 'NL',
-
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => 'street 12',
                 'full_street'       => 'street 12',
                 'street'            => 'street',
                 'number'            => 12,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -175,7 +183,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Biltstreet',
                 'number'            => 113,
                 'number_suffix'     => 'A BS',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -184,8 +192,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => 'Zonegge 23 12',
                 'street'            => 'Zonegge 23',
                 'number'            => 12,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -195,7 +203,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Markerkant',
                 'number'            => 10,
                 'number_suffix'     => '142',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -205,7 +213,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Markerkant',
                 'number'            => 10,
                 'number_suffix'     => '11e',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -215,7 +223,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Sir Winston Churchillln',
                 'number'            => 283,
                 'number_suffix'     => 'F008',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -225,7 +233,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Woning Sir Winston Churchillln',
                 'number'            => 283,
                 'number_suffix'     => '-9',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -235,7 +243,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Insulindestreet',
                 'number'            => 69,
                 'number_suffix'     => 'B03',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -245,7 +253,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Scheepvaartlaan',
                 'number'            => 34,
                 'number_suffix'     => '302',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -254,8 +262,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => 'oan e dijk 48',
                 'street'            => 'oan e dijk',
                 'number'            => 48,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -264,8 +272,8 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'full_street'       => 'Vlinderveen 137',
                 'street'            => 'Vlinderveen',
                 'number'            => 137,
-                'number_suffix'     => '',
-                'box_number'        => null
+                'number_suffix'     => null,
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -275,7 +283,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'street 39-',
                 'number'            => 1,
                 'number_suffix'     => 'hg',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -285,7 +293,7 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Nicolaas Ruyschstraat',
                 'number'            => 8,
                 'number_suffix'     => '02L',
-                'box_number'        => null
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
@@ -295,7 +303,57 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Landsdijk',
                 'number'            => 49,
                 'number_suffix'     => 'A',
-                'box_number'        => null
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Markerkant 10 apartment a',
+                'full_street'       => 'Markerkant 10 a',
+                'street'            => 'Markerkant',
+                'number'            => 10,
+                'number_suffix'     => 'a',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Markerkant 10 noordzijde',
+                'full_street'       => 'Markerkant 10 NZ',
+                'street'            => 'Markerkant',
+                'number'            => 10,
+                'number_suffix'     => 'NZ',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Markerkant 10 west',
+                'full_street'       => 'Markerkant 10 W',
+                'street'            => 'Markerkant',
+                'number'            => 10,
+                'number_suffix'     => 'W',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Hoofdweg 679 A',
+                'full_street'       => 'Hoofdweg 679 A',
+                'street'            => 'Hoofdweg',
+                'number'            => '679',
+                'number_suffix'     => 'A',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Manebruggestraat 316 bus 2 R',
+                'full_street'       => 'Manebruggestraat 316 bus 2 R',
+                'street'            => 'Manebruggestraat',
+                'number'            => '316',
+                'number_suffix'     => 'R',
+                'box_number'        => '2',
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
@@ -381,51 +439,81 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
                 'full_street_input' => 'Ildefonse Vandammestraat 5 D',
-                'full_street'       => 'Ildefonse Vandammestraat 5 bus D',
+                'full_street'       => 'Ildefonse Vandammestraat 5 D',
                 'street'            => 'Ildefonse Vandammestraat',
                 'number'            => '5',
-                'number_suffix'     => null,
-                'box_number'        => 'D',
+                'number_suffix'     => 'D',
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
                 'full_street_input' => 'I. Vandammestraat 5 D',
-                'full_street'       => 'I. Vandammestraat 5 bus D',
+                'full_street'       => 'I. Vandammestraat 5 D',
                 'street'            => 'I. Vandammestraat',
                 'number'            => '5',
-                'number_suffix'     => null,
-                'box_number'        => 'D',
+                'number_suffix'     => 'D',
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
                 'full_street_input' => 'Slameuterstraat 9B',
-                'full_street'       => 'Slameuterstraat 9 bus B',
+                'full_street'       => 'Slameuterstraat 9 B',
                 'street'            => 'Slameuterstraat',
                 'number'            => '9',
-                'number_suffix'     => null,
-                'box_number'        => 'B',
+                'number_suffix'     => 'B',
+                'box_number'        => null,
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'BE',
-                'full_street_input' => 'Oud-Dorpsstraat 136-3',
+                'full_street_input' => 'Oud-Dorpsstraat 136 3',
                 'full_street'       => 'Oud-Dorpsstraat 136 bus 3',
                 'street'            => 'Oud-Dorpsstraat',
                 'number'            => '136',
-                'number_suffix'     => '',
+                'number_suffix'     => null,
                 'box_number'        => '3',
             ],
             [
                 'carrier_id'        => BpostConsignment::CARRIER_ID,
                 'country'           => 'NL',
                 'full_street_input' => 'Groenstraat 16 C',
-                'full_street'       => 'Groenstraat 16 bus C',
+                'full_street'       => 'Groenstraat 16 C',
                 'street'            => 'Groenstraat',
                 'number'            => '16',
-                'number_suffix'     => '',
-                'box_number'        => 'C',
+                'number_suffix'     => 'C',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Brusselsesteenweg 30 /0101',
+                'full_street'       => 'Brusselsesteenweg 30 bus 0101',
+                'street'            => 'Brusselsesteenweg',
+                'number'            => 30,
+                'number_suffix'     => null,
+                'box_number'        => '0101',
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Onze-Lieve-Vrouwstraat 150/1',
+                'full_street'       => 'Onze-Lieve-Vrouwstraat 150 bus 1',
+                'street'            => 'Onze-Lieve-Vrouwstraat',
+                'number'            => 150,
+                'number_suffix'     => null,
+                'box_number'        => '1',
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'Wilgenstraat 6/1',
+                'full_street'       => 'Wilgenstraat 6 bus 1',
+                'street'            => 'Wilgenstraat',
+                'number'            => 6,
+                'number_suffix'     => null,
+                'box_number'        => '1'
             ],
         ];
     }

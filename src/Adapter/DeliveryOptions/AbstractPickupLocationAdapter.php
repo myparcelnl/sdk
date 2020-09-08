@@ -17,7 +17,7 @@ class AbstractPickupLocationAdapter
     /**
      * @var string|null
      */
-    protected $pickup_network_id;
+    protected $retail_network_id;
 
     /**
      * @var string
@@ -62,10 +62,19 @@ class AbstractPickupLocationAdapter
 
     /**
      * @return string|null
+     * @deprecated Use getRetailNetworkId instead
      */
     public function getPickupNetworkId(): ?string
     {
-        return $this->pickup_network_id;
+        return $this->getRetailNetworkId();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRetailNetworkId(): ?string
+    {
+        return $this->retail_network_id;
     }
 
     /**

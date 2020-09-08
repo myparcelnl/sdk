@@ -6,14 +6,13 @@
  * https://github.com/myparcelnl
  *
  * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2017 MyParcel
+ * @copyright   2010-2020 MyParcel
  * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
  * @link        https://github.com/myparcelnl/sdk
  * @since       File available since Release v0.1.0
  */
 
 namespace MyParcelNL\Sdk\src\Helper;
-
 
 /**
  * Class MyParcelCurl
@@ -25,7 +24,7 @@ class MyParcelCurl
      *
      * @var array
      */
-    protected $_config = array();
+    protected $_config = [];
 
     /**
      * Curl handle
@@ -39,20 +38,20 @@ class MyParcelCurl
      *
      * @var array
      */
-    protected $_allowedParams = array(
+    protected $_allowedParams = [
         'timeout'      => CURLOPT_TIMEOUT,
         'maxredirects' => CURLOPT_MAXREDIRS,
         'proxy'        => CURLOPT_PROXY,
         'ssl_cert'     => CURLOPT_SSLCERT,
         'userpwd'      => CURLOPT_USERPWD
-    );
+    ];
 
     /**
      * Array of CURL options
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Set array of additional cURL options
@@ -61,7 +60,7 @@ class MyParcelCurl
      *
      * @return MyParcelCurl
      */
-    public function setOptions(array $options = array())
+    public function setOptions(array $options = [])
     {
         $this->_options = $options;
 
@@ -89,7 +88,7 @@ class MyParcelCurl
      *
      * @return MyParcelCurl
      */
-    public function setConfig($config = array())
+    public function setConfig($config = [])
     {
         $this->_config = $config;
 
@@ -101,7 +100,7 @@ class MyParcelCurl
      *
      * @param string $method
      * @param string $url
-     * @param array $headers
+     * @param array  $headers
      * @param string $body
      *
      * @return string Request as text
@@ -114,11 +113,11 @@ class MyParcelCurl
         $this->_applyConfig();
 
         $header  = isset($this->_config['header']) ? $this->_config['header'] : true;
-        $options = array(
+        $options = [
             CURLOPT_URL            => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => $header
-        );
+        ];
         if ($method == 'POST') {
             $options[CURLOPT_POST]       = true;
             $options[CURLOPT_POSTFIELDS] = $body;
@@ -141,7 +140,13 @@ class MyParcelCurl
      */
     public function read()
     {
-        $response = curl_exec($this->_getResource());
+        $resource = $this->_getResource();
+        $response = curl_exec($resource);
+
+        // Check the return value of curl_exec()
+        if ($response === false) {
+            throw new \Exception(curl_error($resource), curl_errno($resource));
+        }
 
         // Remove 100 and 101 responses headers
         while ($this->extractCode($response) == 100 || $this->extractCode($response) == 101) {
@@ -223,10 +228,10 @@ class MyParcelCurl
      *
      * @return array
      */
-    public function multiRequest($urls, $options = array())
+    public function multiRequest($urls, $options = [])
     {
-        $handles = array();
-        $result  = array();
+        $handles = [];
+        $result  = [];
 
         $multihandle = curl_multi_init();
 
