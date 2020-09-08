@@ -239,7 +239,8 @@ class ConsignmentEncode
         }
 
         $this->consignmentEncoded = array_merge_recursive(
-            $this->consignmentEncoded, [
+            $this->consignmentEncoded,
+            [
                 'customs_declaration' => [
                     'contents' => $consignment->getContents() ?? 1,
                     'weight'   => $consignment->getTotalWeight(),
@@ -248,7 +249,8 @@ class ConsignmentEncode
                 ],
                 'physical_properties' => $consignment->getPhysicalProperties(),
             ]
-  
+        );
+
         $this->consignmentEncoded = Arr::arrayMergeRecursiveDistinct(
             $this->consignmentEncoded,
             $customsDeclaration
