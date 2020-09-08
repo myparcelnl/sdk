@@ -73,7 +73,7 @@ class MyParcelCollection extends Collection
     /**
      * @var string
      */
-    private $user_agent = '';
+    private static $user_agent;
 
     /**
      * @param bool $keepKeys
@@ -605,7 +605,7 @@ class MyParcelCollection extends Collection
      */
     public function getUserAgent()
     {
-        return $this->user_agent;
+        return $this::$user_agent;
     }
 
     /**
@@ -617,9 +617,9 @@ class MyParcelCollection extends Collection
      */
     public function setUserAgent($platform, $version = null)
     {
-        $this->user_agent = 'MyParcel-' . $platform;
+       $this::$user_agent = 'MyParcel-' . $platform;
         if ($version !== null) {
-            $this->user_agent .= '/' . str_replace('v', '', $version);
+           $this::$user_agent .= '/' . str_replace('v', '', $version);
         }
 
         return $this;

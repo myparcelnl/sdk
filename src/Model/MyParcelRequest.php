@@ -123,7 +123,7 @@ class MyParcelRequest
 
         $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
-
+        $header[] = 'User-Agent: ' . $this->getUserAgent();
         $this->header = $header;
 
         return $this;
@@ -131,6 +131,8 @@ class MyParcelRequest
 
     /**
      * @param array $parameters
+     *
+     * @return \MyParcelNL\Sdk\src\Model\MyParcelRequest
      */
     public function setQuery(array $parameters)
     {
@@ -180,7 +182,6 @@ class MyParcelRequest
                 default:
                     throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
             }
-            
         }
 
         return $this;
