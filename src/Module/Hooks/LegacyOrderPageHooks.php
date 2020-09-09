@@ -263,7 +263,7 @@ trait LegacyOrderPageHooks
                 'addaddress' => '',
                 'realedit' => 1,
                 'address_type' => 1,
-                'back' => urlencode($_SERVER['REQUEST_URI']),
+                'back' => urlencode(str_replace('&conf=4', '', $_SERVER['REQUEST_URI'])),
             ]),
             'delivery_address_formatted' => $deliveryAddressFormatted,
             'labelListHtml' => $labelListHtmlTpl->fetch(),
