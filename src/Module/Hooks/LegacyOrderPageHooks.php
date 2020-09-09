@@ -10,7 +10,8 @@ use Currency;
 use Dispatcher;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
-use Gett\MyparcelBE\Module\Carrier\ExclusiveField;
+use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
+use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Order;
 use Validate;
@@ -208,52 +209,45 @@ trait LegacyOrderPageHooks
         }
 
         $currency = Currency::getDefaultCurrency();
-        $exclusiveField = new ExclusiveField();
-        $carrier = new Carrier($order->id_carrier);
-        $carrierType = $exclusiveField->getCarrierType($carrier);
-        $countryIso = $this->getModuleCountry();
-        $carrierSettings = Constant::CARRIER_EXCLUSIVE[$carrierType];
-
-        $carrierLabelSettings = [
-            'delivery' => [],
-            'return' => []
-        ];
-        foreach (Constant::SINGLE_LABEL_CREATION_OPTIONS as $key => $field) {
-            $carrierLabelSettings['delivery'][$key] = $carrierSettings[$field][$countryIso];
-            $carrierLabelSettings['return'][$key] = $carrierSettings['return_' . $field][$countryIso];
-        }
 
         $link = $this->context->link;
         $deliveryAddress = new Address($order->id_address_delivery);
         $deliveryAddressFormatted = AddressFormat::generateAddress($deliveryAddress, [], '<br />');
         $bulk_actions = [
-            'refresh' => [
+            'refreshLabels' => [
                 'text' => $this->l('Refresh', 'legacyorderpagehooks'),
                 'icon' => 'icon-refresh',
+                'ajax' => 1,
             ],
-            'print' => [
+            'printLabels' => [
                 'text' => $this->l('Print', 'legacyorderpagehooks'),
                 'icon' => 'icon-print',
             ]
         ];
-        $deliveryOptions = OrderLabel::getOrderDeliveryOptions($order->id);
+        $deliveryOptionsProvider = new DeliveryOptionsProvider();
+        $deliveryOptions = $deliveryOptionsProvider->provide($order->id);
         $labelList = OrderLabel::getOrderLabels($order->id, []);
-        $nextDeliveryDate = new \DateTime('tomorrow');// TODO: get next available delivery date
-        $deliveryDate = new \DateTime($deliveryOptions->date);
-        $deliveryOptions->date = $deliveryDate->format('Y-m-d');
-        if ($nextDeliveryDate > $deliveryDate) {
-            $deliveryOptions->date = $nextDeliveryDate->format('Y-m-d');
-        }
-        $labelListHtml = $this->context->smarty->createData(
-            $this->context->smarty
-        );
-        $labelListHtml->assign([
-            'labelList' => $labelList,
-        ]);
 
+        $labelListHtml = $this->context->smarty->createData($this->context->smarty);
+        $labelListHtml->assign(['labelList' => $labelList]);
         $labelListHtmlTpl = $this->context->smarty->createTemplate(
             $this->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
             $labelListHtml
+        );
+
+        $labelConceptHtml = $this->context->smarty->createData($this->context->smarty);
+
+        $carrierSettingsProvider = new CarrierSettingsProvider($this);
+
+        $labelConceptHtml->assign([
+            'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
+            'carrierSettings' => $carrierSettingsProvider->provide($order->id_carrier),
+            'date_warning_display' => $deliveryOptionsProvider->provideWarningDisplay($order->id),
+            'isBE' => $this->isBE(),
+        ]);
+        $labelConceptHtmlTpl = $this->context->smarty->createTemplate(
+            $this->getTemplatePath('views/templates/admin/hook/label-concept.tpl'),
+            $labelConceptHtml
         );
 
         $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
@@ -265,6 +259,7 @@ trait LegacyOrderPageHooks
             'id_carrier' => $order->id_carrier,
             'delivery_address_formatted' => $deliveryAddressFormatted,
             'labelListHtml' => $labelListHtmlTpl->fetch(),
+            'labelConceptHtml' => $labelConceptHtmlTpl->fetch(),
             'labelList' => $labelList,
             'bulk_actions' => $bulk_actions,
             'labelUrl' => $link->getAdminLink('AdminLabel', true, [], ['id_order' => $idOrder]),
@@ -272,10 +267,10 @@ trait LegacyOrderPageHooks
             'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
             'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
             'export_print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'exportPrint']),
-            'isBE' => $this->isBE(),
-            'carrierSettings' => $carrierLabelSettings,
+            //'isBE' => $this->isBE(),
+            //'carrierSettings' => $carrierLabelSettings,
             'carrierLabels' => Constant::SINGLE_LABEL_CREATION_OPTIONS,
-            'date_warning_display' => ($nextDeliveryDate > $deliveryDate),
+            //'date_warning_display' => ($nextDeliveryDate > $deliveryDate),
             'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
             'currencySign' => $currency->getSign(),
             'labelConfiguration' => $this->getLabelDefaultConfiguration(),

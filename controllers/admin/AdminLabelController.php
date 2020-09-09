@@ -4,6 +4,9 @@ use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Factory\Consignment\ConsignmentFactory;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
 use Gett\MyparcelBE\Logger\Logger;
+use Gett\MyparcelBE\Module\Carrier\ExclusiveField;
+use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
+use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Service\Consignment\Download;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
@@ -89,7 +92,7 @@ class AdminLabelController extends ModuleAdminController
     public function ajaxProcessCreate()
     {
         $factory = new ConsignmentFactory(
-            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             Tools::getAllValues(),
             new Configuration(),
             $this->module
@@ -158,7 +161,7 @@ class AdminLabelController extends ModuleAdminController
             $printPosition = $postValues['position'];
         }
         $factory = new ConsignmentFactory(
-            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             $postValues,
             new Configuration(),
             $this->module
@@ -257,14 +260,14 @@ class AdminLabelController extends ModuleAdminController
             die($this->module->l('No created labels found', 'adminlabelcontroller'));
         }
         try {
-            $collection = MyParcelCollection::findMany($id_labels, \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME));
+            $collection = MyParcelCollection::findMany($id_labels, Configuration::get(Constant::API_KEY_CONFIGURATION_NAME));
 
             $collection->setLinkOfLabels();
             Logger::addLog($collection->toJson());
         } catch (Exception $e) {
             Logger::addLog($e->getMessage(), true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
+            die($this->module->l('An error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
         }
 
         $status_provider = new MyparcelStatusProvider();
@@ -291,7 +294,7 @@ class AdminLabelController extends ModuleAdminController
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
         $service = new Download(
-            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             Tools::getAllValues(),
             new Configuration()
         );
@@ -301,7 +304,7 @@ class AdminLabelController extends ModuleAdminController
     public function processUpdateLabel()
     {
         try {
-            $collection = MyParcelCollection::find(Tools::getValue('labelId'), \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME));
+            $collection = MyParcelCollection::find(Tools::getValue('labelId'), Configuration::get(Constant::API_KEY_CONFIGURATION_NAME));
             $collection->setLinkOfLabels();
             Logger::addLog($collection->toJson());
         } catch (Exception $e) {
@@ -487,7 +490,7 @@ class AdminLabelController extends ModuleAdminController
     {
         $postValues = Tools::getAllValues();
         $factory = new ConsignmentFactory(
-            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             $postValues,
             new Configuration(),
             $this->module
@@ -569,6 +572,9 @@ class AdminLabelController extends ModuleAdminController
         $this->returnAjaxResponse(['labelIds' => $labelIds, 'labelsHtml' => $labelListHtmlTpl->fetch()]);
     }
 
+    /**
+     * Prints single or bulk labels by (array) id_label and (int) id_order
+     **/
     public function processPrintOrderLabel()
     {
         $labels = OrderLabel::getOrderLabels(Tools::getValue('id_order'), Tools::getValue('label_id'));
@@ -588,7 +594,7 @@ class AdminLabelController extends ModuleAdminController
             $labelIds[] = (int) $label['id_label'];
         }
         $service = new Download(
-            \Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+            Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             Tools::getAllValues(),
             new Configuration()
         );
@@ -634,6 +640,108 @@ class AdminLabelController extends ModuleAdminController
             );
         }
 
-        $this->returnAjaxResponse();
+        $deliveryOptionsProvider = new DeliveryOptionsProvider();
+        $deliveryOptions = $deliveryOptionsProvider->provide($order->id);
+        $carrierSettingsProvider = new CarrierSettingsProvider($this->module);
+
+        $labelConceptHtml = $this->context->smarty->createData($this->context->smarty);
+        $labelConceptHtml->assign([
+            'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
+            'carrierSettings' => $carrierSettingsProvider->provide($order->id_carrier),
+            'date_warning_display' => $deliveryOptionsProvider->provideWarningDisplay($order->id),
+            'isBE' => $this->module->isBE(),
+        ]);
+        $labelConceptHtmlTpl = $this->context->smarty->createTemplate(
+            $this->module->getTemplatePath('views/templates/admin/hook/label-concept.tpl'),
+            $labelConceptHtml
+        );
+
+        $this->returnAjaxResponse(['labelConceptHtml' => $labelConceptHtmlTpl->fetch()]);
+    }
+
+    public function ajaxProcessRefreshLabel()
+    {
+        $postValues = Tools::getAllValues();
+        $labelId = $postValues['id_label'] ?? 0;
+        if ((int) $labelId <= 0) {
+            $this->errors[] = $this->module->l(
+                'No label ID found.',
+                'adminlabelcontroller'
+            );
+            $this->returnAjaxResponse();
+        }
+        $labelIds = [(int) $labelId];
+
+        $this->refreshLabels($labelIds, (int) $postValues['id_order']);
+    }
+
+    public function ajaxProcessBulkActionRefreshLabels()
+    {
+        $postValues = Tools::getAllValues();
+        if (empty($postValues['labelBox'])) {
+            $this->errors[] = $this->module->l(
+                'No label ID found. Please select at least one label.',
+                'adminlabelcontroller'
+            );
+            $this->returnAjaxResponse();
+        }
+        $labelIds = [];
+        foreach ($postValues['labelBox'] as $idOrderLabel) {
+            $orderLabel = new OrderLabel((int) $idOrderLabel);
+            if (!empty($orderLabel->id_label)) {
+                $labelIds[] = (int) $orderLabel->id_label;
+            }
+        }
+        if (empty($labelIds)) {
+            $this->errors[] = $this->module->l(
+                'No label found.',
+                'adminlabelcontroller'
+            );
+            $this->returnAjaxResponse();
+        }
+
+        $this->refreshLabels($labelIds, (int) $postValues['id_order']);
+    }
+
+    public function refreshLabels($labelIds, $idOrder)
+    {
+        try {
+            $collection = MyParcelCollection::findMany(
+                $labelIds,
+                Configuration::get(Constant::API_KEY_CONFIGURATION_NAME
+                ));
+
+            $collection->setLinkOfLabels();
+            Logger::addLog($collection->toJson());
+            $status_provider = new MyparcelStatusProvider();
+
+            foreach ($collection as $consignment) {
+                $order_label = OrderLabel::findByLabelId($consignment->getConsignmentId());
+                $order_label->status = $status_provider->getStatus($consignment->getStatus());
+                $order_label->save();
+            }
+        } catch (Exception $e) {
+            Logger::addLog($e->getMessage(), true);
+            $this->errors[] = $this->module->l(
+                'An error occurred in the MyParcel module, please try again.',
+                'adminlabelcontroller'
+            );
+            $this->returnAjaxResponse();
+        }
+
+        $labelList = OrderLabel::getOrderLabels((int) $idOrder, []);
+        $labelListHtml = $this->context->smarty->createData(
+            $this->context->smarty
+        );
+        $labelListHtml->assign([
+            'labelList' => $labelList,
+        ]);
+
+        $labelListHtmlTpl = $this->context->smarty->createTemplate(
+            $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
+            $labelListHtml
+        );
+
+        $this->returnAjaxResponse(['labelsHtml' => $labelListHtmlTpl->fetch()]);
     }
 }

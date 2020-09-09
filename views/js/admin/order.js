@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   function printLabel(jsonData) {
     var $form = $('#print_label_form');
-    if (typeof jsonData.labelIds !== 'undefined') {
+    if (typeof jsonData !== 'undefined' && jsonData && typeof jsonData.labelIds !== 'undefined') {
       $.each(jsonData.labelIds, function(index, value) {
         $form.append('<input type="hidden" name="label_id[]" value="'+value+'">');
       });
@@ -383,7 +383,11 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
   });
   $('#button_print_label').click(function () {
-    createLabel($('#submitCreateLabelPrint'), false, printLabel);
+    if ($('#print_label_form').find('.bulk-label-id').length) {
+      printLabel(null);
+    } else {
+      createLabel($('#submitCreateLabelPrint'), false, printLabel);
+    }
   });
 
   $('.shipment-labels-wrapper')
@@ -419,12 +423,71 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .on('click', '.order-label-action-refresh', function(e) {
       e.preventDefault();
+      var $form = $(this).closest('form');
+      var $tr = $(this).closest('tr');
+      $.ajax({
+        method: 'POST',
+        url: $form.prop('action'),
+        data: 'id_label=' + $tr.data('labelId') + '&action=refreshLabel&ajax=1&rand=' + Math.random(),
+        dataType: 'json',
+        async: true,
+        cache: false,
+        headers: { 'cache-control': 'no-cache' }
+      }).success(function(jsonData) {
+        $('#content > .alert.alert-danger').remove();
+        if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
+          if (typeof jsonData.labelsHtml !== 'undefined') {
+            $('.shipment-labels-wrapper .table-responsive').html(jsonData.labelsHtml);
+          }
+        } else {
+          displayOrderAjaxErrors(jsonData);
+        }
+      }).fail(function(error) {
+        displayOrderAjaxFailErrors(error);
+      });
     })
     .on('click', '.order-label-action-return', function(e) {
       e.preventDefault();
     })
-    .on('click', '.bulk-actions a', function(e) {
+    .on('click', '.bulk-actions a.bulk-actions-links', function(e) {
       e.preventDefault();
+      var $el = $(this);
+      var $form = $el.closest('form');
+      if (parseInt($el.data('ajax')) === 0) {
+        var $printForm = $('#print_label_form');
+        $('.bulk-label-id', $printForm).remove();
+        $('input[name="labelBox[]"]:checked', $form).each(function() {
+          var labelId = $(this).closest('tr').data('labelId');
+          $printForm.append('<input type="hidden" name="label_id[]" value="' + labelId + '" class="bulk-label-id">');
+        });
+        if ($('input[name="labelBox[]"]:checked', $form).length) {
+          $('#printLabelModal').modal('show');
+        }
+        return;
+      }
+      $.ajax({
+        method: 'POST',
+        url: $form.prop('action'),
+        data: $(':input', $form).serialize()
+          + '&action=' + $el.data('action')
+          + '&ajax=' + $el.data('ajax')
+          + '&rand=' + Math.random(),
+        dataType: 'json',
+        async: true,
+        cache: false,
+        headers: { 'cache-control': 'no-cache' }
+      }).success(function(jsonData) {
+        $('#content > .alert.alert-danger').remove();
+        if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
+          if (typeof jsonData.labelsHtml !== 'undefined') {
+            $('.shipment-labels-wrapper .table-responsive').html(jsonData.labelsHtml);
+          }
+        } else {
+          displayOrderAjaxErrors(jsonData);
+        }
+      }).fail(function(error) {
+        displayOrderAjaxFailErrors(error);
+      });
     });
 
 
@@ -493,10 +556,14 @@ document.addEventListener("DOMContentLoaded", () => {
       headers: { 'cache-control': 'no-cache' }
     }).success(function(jsonData) {
       if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
-        window.location.reload();
+        if (typeof jsonData.labelConceptHtml !== 'undefined') {
+          $('.concept-label-wrapper').html(jsonData.labelConceptHtml);
+          toggleInsuranceValuesDisplay($('input[name="insurance"]'));
+        }
       } else {
         displayOrderAjaxErrors(jsonData)
       }
+      $('#deliveryDateModal').modal('hide');
     }).fail(function(error) {
       displayOrderAjaxFailErrors(error);
     });
