@@ -609,18 +609,41 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param string $platform
-     * @param string $version
+     * @param string      $platform
+     * @param string|null $version
      *
      * @return self
      * @internal param string $user_agent
+     * @deprecated Use setCustomUserAgent instead
      */
-    public function setUserAgent($platform, $version = null)
+    public function setUserAgent(string $platform, string $version = null): self
     {
-       $this::$user_agent = 'MyParcel-' . $platform;
+        $this::$user_agent = 'MyParcel-' . $platform;
         if ($version !== null) {
-           $this::$user_agent .= '/' . str_replace('v', '', $version);
+            $this::$user_agent .= '/' . str_replace('v', '', $version);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param  array $userAgentMap
+     *
+     * @return self
+     */
+    public function setUserAgentArray(array $userAgentMap): self
+    {
+        $userAgents = [];
+
+        foreach ($userAgentMap as $key => $value) {
+            if (Str::startsWith($value, 'v')) {
+                $value = str_replace('v', '', $value);
+            }
+
+            $userAgents[] = $key . '/' . $value;
+        }
+
+        self::$user_agent = implode(' ', $userAgents);
 
         return $this;
     }
