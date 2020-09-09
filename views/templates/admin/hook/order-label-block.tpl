@@ -21,11 +21,10 @@
         </div>
         <div class="concept-label-address">
           <div class="well">
-            <button class="btn btn-default pull-right" type="button">
-              <i class="icon-pencil"></i>
-                {l s='Edit' mod='myparcelbe'}
-            </button>
-              {$delivery_address_formatted}
+            <a class="btn btn-default pull-right" href="{$addressEditUrl}">
+              <i class="icon-pencil"></i> {l s='Edit' d='Admin.Actions'}
+            </a>
+            {$delivery_address_formatted}
           </div>
         </div>
         <div class="panel-footer-wrapper">
