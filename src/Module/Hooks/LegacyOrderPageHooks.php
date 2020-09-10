@@ -13,6 +13,7 @@ use Gett\MyparcelBE\Label\LabelOptionsResolver;
 use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
+use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Order;
 use Validate;
 
@@ -226,7 +227,7 @@ trait LegacyOrderPageHooks
         ];
         $deliveryOptionsProvider = new DeliveryOptionsProvider();
         $deliveryOptions = $deliveryOptionsProvider->provide($order->id);
-        $labelList = OrderLabel::getOrderLabels($order->id, []);
+        $labelList = (new OrderLabelProvider($this))->provideLabels($order->id, []);
 
         $labelListHtml = $this->context->smarty->createData($this->context->smarty);
         $labelListHtml->assign(['labelList' => $labelList]);

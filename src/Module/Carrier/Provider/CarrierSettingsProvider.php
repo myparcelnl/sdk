@@ -31,6 +31,8 @@ class CarrierSettingsProvider
             $carrierLabelSettings['delivery'][$key] = $carrierSettings[$field][$countryIso];
             $carrierLabelSettings['return'][$key] = $carrierSettings['return_' . $field][$countryIso];
         }
+        $carrierLabelSettings['delivery']['ALLOW_FORM'] = $carrierSettings['ALLOW_DELIVERY_FORM'][$countryIso];
+        $carrierLabelSettings['return']['ALLOW_FORM'] = $carrierSettings['ALLOW_RETURN_FORM'][$countryIso];
 
         return $carrierLabelSettings;
     }

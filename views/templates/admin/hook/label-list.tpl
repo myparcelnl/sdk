@@ -40,11 +40,13 @@
                     <i class="icon-refresh"></i> {l s='Refresh' mod='myparcelbe'}
                   </a>
                 </li>
-                <li>
-                  <a href="#" class="order-label-action-return{if !empty($label.return_disabled)} disabled{/if}">
-                    <i class="icon-reply"></i> {l s='Create return label' mod='myparcelbe'}
-                  </a>
-                </li>
+                {if !empty($label.ALLOW_RETURN_FORM)}
+                  <li>
+                    <a href="#" class="order-label-action-return{if !empty($label.return_disabled)} disabled{/if}">
+                      <i class="icon-reply"></i> {l s='Create return label' mod='myparcelbe'}
+                    </a>
+                  </li>
+                {/if}
                 <li class="divider"></li>
                 <li>
                   <a href="#" class="order-label-action-delete">
