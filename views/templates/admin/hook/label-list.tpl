@@ -19,7 +19,11 @@
   </tr>
   {if !empty($labelList)}
       {foreach $labelList as $label}
-        <tr data-id="{$label.id_order_label}" data-label-id="{$label.id_label}">
+        <tr
+                data-id="{$label.id_order_label}"
+                data-label-id="{$label.id_label}"
+                data-return="{l s='Return - %s' mod='myparcelbe' sprintf=[$label.barcode]}"
+        >
           <td><input type="checkbox" name="labelBox[]" class="noborder" value="{$label.id_order_label}"></td>
           <td>
             <a href="{$label.track_link}" target="_blank" rel="noopener noreferrer">{$label.barcode}</a>

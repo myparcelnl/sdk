@@ -278,7 +278,7 @@ class ConsignmentFactory
         return trim($labelParams);
     }
 
-    private function getMyParcelCarrierId(int $id_carrier):int
+    public function getMyParcelCarrierId(int $id_carrier):int
     {
         $carrier = new \Carrier($id_carrier);
         if (!\Validate::isLoadedObject($carrier)) {

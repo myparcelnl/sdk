@@ -301,16 +301,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Toggle insurance values
   function toggleInsuranceValuesDisplay($el) {
+    var $parent = $el.closest('.label-delivery-options');
     if (!$el.length || !$el.is(':checked')) {
-      $('.insurance-values').hide();
+      $('.insurance-values', $parent).hide();
     } else {
-      $('.insurance-values').show();
+      $('.insurance-values', $parent).show();
     }
   }
   $('input[name="insurance"]').on('change', function() {
     toggleInsuranceValuesDisplay($(this));
   });
-  toggleInsuranceValuesDisplay($('input[name="insurance"]'));
+  $('input[name="insurance"]').each(function() {
+    toggleInsuranceValuesDisplay($(this));
+  });
 
   // Save order label new settings
   $('#submitCreateConcept').on('click', function (e) {
@@ -448,6 +451,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .on('click', '.order-label-action-return', function(e) {
       e.preventDefault();
+      var $tr = $(this).closest('tr');
+      $('.custom-label-return-description input[name="label_description"]').val($tr.data('return'));
+      $('#return_label_form input[name="id_order_label"]').val($tr.data('id'));
+      $('#labelReturnModal input[name="insurance"]').each(function() {
+        toggleInsuranceValuesDisplay($(this));
+      });
+      $('#labelReturnModal').modal('show');
     })
     .on('click', '.bulk-actions a.bulk-actions-links', function(e) {
       e.preventDefault();
@@ -490,6 +500,38 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
+  $('#buttonLabelReturn').on('click', function(e) {
+    e.preventDefault();
+
+    var $el = $(this);
+    var $form = $('#return_label_form');
+
+    $.ajax({
+      method: 'POST',
+      url: $form.prop('action'),
+      data: $(':input', $form).serialize()
+        + '&action=' + $el.data('action')
+        + '&ajax=' + $el.data('ajax')
+        + '&rand=' + Math.random(),
+      dataType: 'json',
+      async: true,
+      cache: false,
+      headers: { 'cache-control': 'no-cache' }
+    }).success(function(jsonData) {
+      $('#content > .alert.alert-danger').remove();
+      if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
+        if (typeof jsonData.labelsHtml !== 'undefined') {
+          $('.shipment-labels-wrapper .table-responsive').html(jsonData.labelsHtml);
+        }
+      } else {
+        displayOrderAjaxErrors(jsonData);
+      }
+      $('#labelReturnModal').modal('hide');
+    }).fail(function(error) {
+      displayOrderAjaxFailErrors(error);
+      $('#labelReturnModal').modal('hide');
+    });
+  })
 
   let initializeMyParcelForm = function () {
     var $wrapper = $('#deliveryDateUpdateWrapper');

@@ -473,12 +473,29 @@ class AdminLabelController extends ModuleAdminController
         $this->returnAjaxResponse();
     }
 
-    public function returnAjaxResponse($response = [])
+    public function returnAjaxResponse($response = [], $idOrder = null)
     {
         $results = ['hasError' => false];
         if (!empty($this->errors)) {
             $results['hasError'] = true;
             $results['errors'] = $this->errors;
+        }
+
+        if ($idOrder) {
+            $labelList = OrderLabel::getOrderLabels((int)$idOrder, []);
+            $labelListHtml = $this->context->smarty->createData(
+                $this->context->smarty
+            );
+            $labelListHtml->assign([
+                'labelList' => $labelList,
+            ]);
+
+            $labelListHtmlTpl = $this->context->smarty->createTemplate(
+                $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
+                $labelListHtml
+            );
+
+            $results['labelsHtml'] = $labelListHtmlTpl->fetch();
         }
 
         $results = array_merge($results, $response);
@@ -556,20 +573,7 @@ class AdminLabelController extends ModuleAdminController
             }
         }
 
-        $labelList = OrderLabel::getOrderLabels((int) $idOrder, []);
-        $labelListHtml = $this->context->smarty->createData(
-            $this->context->smarty
-        );
-        $labelListHtml->assign([
-            'labelList' => $labelList,
-        ]);
-
-        $labelListHtmlTpl = $this->context->smarty->createTemplate(
-            $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
-            $labelListHtml
-        );
-
-        $this->returnAjaxResponse(['labelIds' => $labelIds, 'labelsHtml' => $labelListHtmlTpl->fetch()]);
+        $this->returnAjaxResponse(['labelIds' => $labelIds], (int) $idOrder);
     }
 
     /**
@@ -729,19 +733,114 @@ class AdminLabelController extends ModuleAdminController
             $this->returnAjaxResponse();
         }
 
-        $labelList = OrderLabel::getOrderLabels((int) $idOrder, []);
-        $labelListHtml = $this->context->smarty->createData(
-            $this->context->smarty
-        );
-        $labelListHtml->assign([
-            'labelList' => $labelList,
-        ]);
+        $this->returnAjaxResponse([], (int) $idOrder);
+    }
 
-        $labelListHtmlTpl = $this->context->smarty->createTemplate(
-            $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
-            $labelListHtml
-        );
+    public function ajaxProcessCreateReturnLabel()
+    {
+        $postValues = Tools::getAllValues();
+        $result = true;
+        $idOrderLabel = $postValues['id_order_label'] ?? 0;
+        $orderLabel = new OrderLabel((int) $idOrderLabel);
+        $result &= (!empty($orderLabel) && (bool) Validate::isLoadedObject($orderLabel));
+        if (!$result) {
+            $this->errors[] = $this->module->l('Order label not found by ID', 'adminlabelcontroller');
+        }
+        $idOrder = $postValues['id_order'] ?? 0;
+        $order = new Order((int) $idOrder);
+        $result &= (!empty($order) && (bool) Validate::isLoadedObject($order) && $order->id == $orderLabel->id_order);
+        if (!$result) {
+            $this->errors[] = $this->module->l('Order not found by label ID', 'adminlabelcontroller');
+        }
+        if (!$result) {
+            $this->returnAjaxResponse();
+        }
 
-        $this->returnAjaxResponse(['labelsHtml' => $labelListHtmlTpl->fetch()]);
+        $address = new Address($order->id_address_delivery);
+        $customer = new Customer($order->id_customer);
+
+        try {
+            $factory = new ConsignmentFactory(
+                Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
+                $postValues,
+                new Configuration(),
+                $this->module
+            );
+
+            $consignment = (ConsignmentFactorySdk::createByCarrierId($factory->getMyParcelCarrierId($order->id_carrier)))
+                ->setApiKey(Configuration::get(Constant::API_KEY_CONFIGURATION_NAME))
+                ->setReferenceId($order->id)
+                ->setCountry(CountryCore::getIsoById($address->id_country))
+                ->setPerson($postValues['label_name'] ?? ($address->firstname . ' ' . $address->lastname))
+                ->setFullStreet($address->address1)
+                ->setPostalCode($address->postcode)
+                ->setCity($address->city)
+                ->setEmail($postValues['label_email'] ?? $customer->email)
+                ->setContents(1)
+                ->setPackageType(isset($postValues['packageType']) ? (int) $postValues['packageType'] : 1)
+                // This may be overridden
+                ->setLabelDescription($postValues['label_description'] ?? $orderLabel->barcode)
+            ;
+            if (isset($postValues['packageFormat'])) {
+                $consignment->setLargeFormat((int) $postValues['packageFormat'] == 2);
+            }
+            if (isset($postValues['onlyRecipient'])) {
+                $consignment->setOnlyRecipient(true);
+            }
+            if (isset($postValues['signatureRequired'])) {
+                $consignment->setSignature(true);
+            }
+            if (isset($postValues['returnUndelivered'])) {
+                $consignment->setReturn(true);
+            }
+            if (isset($postValues['ageCheck'])) {
+                $consignment->setAgeCheck(true);
+            }
+            if (isset($postValues['insurance'])) {
+                $insuranceValue = $postValues['returnInsuranceAmount'] ?? 0;
+                if (strpos($insuranceValue, 'amount') !== false) {
+                    $insuranceValue = (int) str_replace(
+                        'amount',
+                        '',
+                        $insuranceValue
+                    );
+                }
+                if ((int) $insuranceValue == -1) {
+                    $insuranceValue = $postValues['insurance-amount-custom-value'] ?? 0;
+                }
+                $consignment->setInsurance((int) $insuranceValue * 100);
+            }
+
+            $myParcelCollection = (new MyParcelCollection())
+                ->addConsignment($consignment)
+                ->setPdfOfLabels()
+                ->sendReturnLabelMails();
+            Logger::addLog($myParcelCollection->toJson());
+
+            $consignment = $myParcelCollection->first();
+            $orderLabel = new OrderLabel();
+            $orderLabel->id_label = $consignment->getConsignmentId();
+            $orderLabel->id_order = $consignment->getReferenceId();
+            $orderLabel->barcode = $consignment->getBarcode();
+            $orderLabel->track_link = $consignment->getBarcodeUrl(
+                $consignment->getBarcode(),
+                $consignment->getPostalCode(),
+                $consignment->getCountry()
+            );
+            $status_provider = new MyparcelStatusProvider();
+            $orderLabel->new_order_state = $consignment->getStatus();
+            $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
+            $orderLabel->add();
+        } catch (Exception $e) {
+            Logger::addLog($e->getMessage(), true);
+            $this->errors[] = $this->module->l(
+                'An error occurred in the MyParcel module, please try again.',
+                'adminlabelcontroller'
+            );
+            $this->errors[] = $e->getMessage();
+            $this->returnAjaxResponse();
+        }
+
+        $this->returnAjaxResponse([], (int) $idOrder);
     }
 }

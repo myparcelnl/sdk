@@ -40,7 +40,7 @@
     <input class="form-control" id="label_amount" name="label_amount" type="number" min="1" max="10" value="1">
   </div>
 </div>
-<div class="form-group">
+<div class="form-group label-delivery-options">
   <div class="col-lg-9 col-lg-offset-3">
     {if $carrierSettings.delivery.onlyRecipient}
       <p class="checkbox">

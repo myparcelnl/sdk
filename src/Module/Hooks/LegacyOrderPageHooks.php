@@ -7,6 +7,7 @@ use AddressFormat;
 use Carrier;
 use Configuration;
 use Currency;
+use Customer;
 use Dispatcher;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
@@ -15,6 +16,7 @@ use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Order;
+use PrestaShop\PrestaShop\Adapter\Presenter\Object\ObjectPresenter;
 use Validate;
 
 trait LegacyOrderPageHooks
@@ -212,6 +214,7 @@ trait LegacyOrderPageHooks
         $currency = Currency::getDefaultCurrency();
 
         $link = $this->context->link;
+        $labelUrl = $link->getAdminLink('AdminLabel', true, [], ['id_order' => $idOrder]);
         $deliveryAddress = new Address($order->id_address_delivery);
         $deliveryAddressFormatted = AddressFormat::generateAddress($deliveryAddress, [], '<br />');
         $bulk_actions = [
@@ -237,8 +240,11 @@ trait LegacyOrderPageHooks
         );
 
         $labelConceptHtml = $this->context->smarty->createData($this->context->smarty);
+        $labelReturnHtml = $this->context->smarty->createData($this->context->smarty);
 
         $carrierSettingsProvider = new CarrierSettingsProvider($this);
+        $deliveryAddress = new Address($order->id_address_delivery);
+        $customer = new Customer($order->id_customer);
 
         $labelConceptHtml->assign([
             'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
@@ -246,9 +252,22 @@ trait LegacyOrderPageHooks
             'date_warning_display' => $deliveryOptionsProvider->provideWarningDisplay($order->id),
             'isBE' => $this->isBE(),
         ]);
+        $labelReturnHtml->assign([
+            'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
+            'carrierSettings' => $carrierSettingsProvider->provide($order->id_carrier),
+            'isBE' => $this->isBE(),
+            'currencySign' => $currency->getSign(),
+            'customerName' => trim($deliveryAddress->firstname . ' ' . $deliveryAddress->lastname),
+            'customerEmail' => $customer->email,
+            'labelUrl' => $labelUrl,
+        ]);
         $labelConceptHtmlTpl = $this->context->smarty->createTemplate(
             $this->getTemplatePath('views/templates/admin/hook/label-concept.tpl'),
             $labelConceptHtml
+        );
+        $labelReturnHtmlTpl = $this->context->smarty->createTemplate(
+            $this->getTemplatePath('views/templates/admin/hook/label-return-form.tpl'),
+            $labelReturnHtml
         );
 
         $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
@@ -269,9 +288,10 @@ trait LegacyOrderPageHooks
             'delivery_address_formatted' => $deliveryAddressFormatted,
             'labelListHtml' => $labelListHtmlTpl->fetch(),
             'labelConceptHtml' => $labelConceptHtmlTpl->fetch(),
+            'labelReturnHtml' => $labelReturnHtmlTpl->fetch(),
             'labelList' => $labelList,
             'bulk_actions' => $bulk_actions,
-            'labelUrl' => $link->getAdminLink('AdminLabel', true, [], ['id_order' => $idOrder]),
+            'labelUrl' => $labelUrl,
             'labelAction' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
             'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
             'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),

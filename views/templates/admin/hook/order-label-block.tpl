@@ -209,3 +209,26 @@
     </div>
   </div>
 </div>
+
+{* Modal Label Return form *}
+<div class="modal fade" id="labelReturnModal" tabindex="-1" role="dialog" aria-labelledby="labelReturnModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="labelReturnModalTitle">{l s='Email return label to your customer' mod='myparcelbe'}</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          {$labelReturnHtml}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Close' mod='myparcelbe'}</button>
+        <button type="button" id="buttonLabelReturn" class="btn btn-primary" data-action="createReturnLabel" data-ajax="1">
+            {l s='Create' mod='myparcelbe'}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

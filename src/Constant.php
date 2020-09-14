@@ -43,6 +43,17 @@ class Constant
         'insurance' => self::INSURANCE_CONFIGURATION_NAME,
     ];
 
+    const SINGLE_LABEL_RETURN_OPTIONS = [
+        'packageType'=> 'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME,
+        'packageFormat' => 'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME,
+        'onlyRecipient' => 'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME,
+        'ageCheck' => 'return_' . self::AGE_CHECK_CONFIGURATION_NAME,
+        'returnUndelivered' => 'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME,
+        'signatureRequired' => 'return_' . self::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
+        'insurance' => 'return_' . self::INSURANCE_CONFIGURATION_NAME,
+        'labelDescription' => 'return_label_description',
+    ];
+
     const CUTOFF_EXCEPTIONS = 'cutoff_exceptions';
 
     const PACKAGE_TYPES = [
@@ -122,6 +133,7 @@ class Constant
         'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME,
         'return_' . self::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
         'return_' . self::INSURANCE_CONFIGURATION_NAME,
+        'return_label_description',
     ];
 
     const WEEK_DAYS = [
