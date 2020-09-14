@@ -16,6 +16,7 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -51,6 +52,11 @@ class MyParcelRequest
     const REQUEST_HEADER_DELETE              = 'Accept: application/json; charset=utf8';
 
     /**
+     * Error codes
+     */
+    const ERROR_CODE_ACCOUNT_NOT_ACTIVATED = 3716;
+
+    /**
      * @var string
      */
     private $api_key = '';
@@ -59,10 +65,11 @@ class MyParcelRequest
     /**
      * @var string|null
      */
-    private $body      = '';
-    private $error     = null;
-    private $result    = null;
-    private $userAgent = null;
+    private $body       = '';
+    private $error      = null;
+    private $errorCodes = [];
+    private $result     = null;
+    private $userAgent  = null;
 
     /**
      * @var array|null
@@ -116,7 +123,7 @@ class MyParcelRequest
 
         $header[] = $requestHeader;
         $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
-
+        $header[] = 'User-Agent: ' . $this->getUserAgent();
         $this->header = $header;
 
         return $this;
@@ -124,6 +131,8 @@ class MyParcelRequest
 
     /**
      * @param array $parameters
+     *
+     * @return \MyParcelNL\Sdk\src\Model\MyParcelRequest
      */
     public function setQuery(array $parameters)
     {
@@ -167,7 +176,12 @@ class MyParcelRequest
         $request->close();
 
         if ($this->getError()) {
-            throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+            switch (Arr::first($this->errorCodes)) {
+                case self::ERROR_CODE_ACCOUNT_NOT_ACTIVATED:
+                    throw new AccountNotActiveException('Error ' . Arr::first($this->errorCodes) . ' Your account needs to be activated by MyParcel.');
+                default:
+                    throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
+            }
         }
 
         return $this;
@@ -253,10 +267,10 @@ class MyParcelRequest
         }
 
         $error = reset($this->result['errors']);
+        $this->errorCodes = array_keys($error);
         if ((int) key($error) > 0) {
             $error = current($error);
         }
-
         $this->error = RequestError::getTotalMessage($error, $this->result);
     }
 
