@@ -368,7 +368,7 @@ class MyParcelCollection extends Collection
         $result        = $request->getResult('data.shipments');
         $newCollection = $this->getNewCollectionFromResult($result);
 
-        $this->items = $newCollection->items;
+        $this->items = $newCollection->sortByCollection($this)->items;
 
         return $this;
     }
@@ -549,7 +549,7 @@ class MyParcelCollection extends Collection
             ->addConsignmentByConsignmentIds($returnIds, $apiKey)
             ->setLatestData();
 
-        $this->items = Arr::mergeAfterEachOther($parentConsignments, $returnConsignments->reverse()->toArray());
+        $this->items = Arr::mergeAfterEachOther($parentConsignments, $returnConsignments->toArray());
 
         return $this;
     }
@@ -773,6 +773,28 @@ class MyParcelCollection extends Collection
         $collection->setLatestData();
 
         return $collection;
+    }
+
+    /**
+     * @param \MyParcelNL\Sdk\src\Helper\MyParcelCollection|\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $sortedCollection
+     *
+     * @return $this
+     */
+    public function sortByCollection(MyParcelCollection $sortedCollection): MyParcelCollection
+    {
+        $result = new MyParcelCollection();
+
+        foreach ($sortedCollection as $sorted) {
+            $consignment = $this->where('consignment_id', $sorted->getConsignmentId())->first();
+
+            if ($consignment) {
+                $result[] = $consignment;
+            }
+        }
+
+        $leftItems = $this->whereNotIn('consignment_id', $result->getConsignmentIds());
+
+        return $result->merge($leftItems);
     }
 
     /**

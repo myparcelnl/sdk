@@ -65,6 +65,7 @@ class Arr
             $result[] = $value1;
             $result[] = $array2[$index];
         }
+
         return $result;
     }
 

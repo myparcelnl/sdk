@@ -9,7 +9,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 class SendMultipleReturnLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
@@ -19,7 +18,7 @@ class SendMultipleReturnLabelTest extends \PHPUnit\Framework\TestCase
         if (getenv('API_KEY') == null) {
             echo "\033[31m Set MyParcel API-key in 'Environment variables' before running UnitTest. Example: API_KEY=f8912fb260639db3b1ceaef2730a4b0643ff0c31. PhpStorm example: http://take.ms/sgpgU5\n\033[0m";
 
-            return $this;
+            return;
         }
 
         $myParcelCollection = new MyParcelCollection();
@@ -68,8 +67,7 @@ class SendMultipleReturnLabelTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('second consignment', $myParcelCollection[2]->getLabelDescription());
         $this->assertEquals('Return: second consignment', $myParcelCollection[3]->getLabelDescription());
 
-//            ->setLinkOfLabels();
-
-//        $this->assertContains('myparcel.nl/pdfs', $myParcelCollection->getLinkOfLabels());
+        $myParcelCollection->setLinkOfLabels(false);
+        $this->assertContains('myparcel.nl/dasad', $myParcelCollection->getLinkOfLabels());
     }
 }
