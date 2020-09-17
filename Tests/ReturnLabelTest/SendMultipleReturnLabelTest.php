@@ -68,6 +68,6 @@ class SendMultipleReturnLabelTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Return: second consignment', $myParcelCollection[3]->getLabelDescription());
 
         $myParcelCollection->setLinkOfLabels(false);
-        $this->assertContains('myparcel.nl/dasad', $myParcelCollection->getLinkOfLabels());
+        $this->assertContains('myparcel.nl/pdfs', $myParcelCollection->getLinkOfLabels());
     }
 }
