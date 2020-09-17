@@ -73,7 +73,7 @@ class MyParcelCollection extends Collection
     /**
      * @var string
      */
-    private $user_agent = '';
+    private static $user_agent;
 
     /**
      * @param bool $keepKeys
@@ -505,13 +505,12 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @param bool     $sendMail
-     * @param \Closure $modifier
+     * @param bool          $sendMail
+     * @param \Closure|null $modifier
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \Exception
      */
     public function generateReturnConsignments(bool $sendMail, \Closure $modifier = null): self
     {
@@ -519,13 +518,7 @@ class MyParcelCollection extends Collection
         $this->createConcepts();
 
         $parentConsignments = $this->getConsignments(false);
-        $returnConsignments = $parentConsignments;
-
-        // Let the user of the SDK adjust the return consignment by means of a callback.
-        foreach ($returnConsignments as $i => $returnConsignment) {
-            $parentConsignment = $parentConsignments[$i];
-            $modifier($returnConsignment, $parentConsignment);
-        }
+        $returnConsignments = $this->getReturnConsignments($parentConsignments, $modifier);
 
         $data        = $this->apiEncodeReturnShipments($returnConsignments);
         $apiKey      = $returnConsignments[0]->getApiKey();
@@ -556,7 +549,7 @@ class MyParcelCollection extends Collection
             ->addConsignmentByConsignmentIds($returnIds, $apiKey)
             ->setLatestData();
 
-        $this->items = Arr::mergeAfterEachOther($this, $returnConsignments->toArray());
+        $this->items = Arr::mergeAfterEachOther($parentConsignments, $returnConsignments->reverse()->toArray());
 
         return $this;
     }
@@ -612,22 +605,45 @@ class MyParcelCollection extends Collection
      */
     public function getUserAgent()
     {
-        return $this->user_agent;
+        return $this::$user_agent;
     }
 
     /**
-     * @param string $platform
-     * @param string $version
+     * @param string      $platform
+     * @param string|null $version
      *
      * @return self
      * @internal param string $user_agent
+     * @deprecated Use setCustomUserAgent instead
      */
-    public function setUserAgent($platform, $version = null)
+    public function setUserAgent(string $platform, string $version = null): self
     {
-        $this->user_agent = 'MyParcel-' . $platform;
+        $this::$user_agent = 'MyParcel-' . $platform;
         if ($version !== null) {
-            $this->user_agent .= '/' . str_replace('v', '', $version);
+            $this::$user_agent .= '/' . str_replace('v', '', $version);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param  array $userAgentMap
+     *
+     * @return self
+     */
+    public function setUserAgentArray(array $userAgentMap): self
+    {
+        $userAgents = [];
+
+        foreach ($userAgentMap as $key => $value) {
+            if (Str::startsWith($value, 'v')) {
+                $value = str_replace('v', '', $value);
+            }
+
+            $userAgents[] = $key . '/' . $value;
+        }
+
+        self::$user_agent = implode(' ', $userAgents);
 
         return $this;
     }
@@ -852,7 +868,7 @@ class MyParcelCollection extends Collection
      */
     private function addMissingReferenceId(): void
     {
-        $this->transform(function(AbstractConsignment $consignment) {
+        $this->transform(function (AbstractConsignment $consignment) {
             if (null == $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid());
             }
@@ -868,11 +884,35 @@ class MyParcelCollection extends Collection
      */
     private function findByReferenceIdGroup($id): MyParcelCollection
     {
-        return $this->filter(function($consignment) use ($id) {
+        return $this->filter(function ($consignment) use ($id) {
             /**
              * @var AbstractConsignment $consignment
              */
             return Str::startsWith($consignment->getReferenceId(), $id);
         });
+    }
+
+    /**
+     * Let the user of the SDK adjust the return consignment by means of a callback.
+     *
+     * @param array|AbstractConsignment[] $parentConsignments
+     * @param \Closure|null               $modifier
+     *
+     * @return array|AbstractConsignment[]
+     */
+    private function getReturnConsignments(array $parentConsignments, ?\Closure $modifier): array
+    {
+        $returnConsignments = [];
+
+        foreach ($parentConsignments as $parentConsignment) {
+            $returnConsignment = clone $parentConsignment;
+            $returnConsignment->setDeliveryDate(null);
+            if ($modifier) {
+                $returnConsignment = $modifier($returnConsignment, $parentConsignment);
+            }
+            $returnConsignments[] = $returnConsignment;
+        }
+
+        return $returnConsignments;
     }
 }

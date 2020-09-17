@@ -42,3 +42,4 @@ require_once('Exception/InvalidConsignmentException.php');
 require_once('Exception/ApiException.php');
 require_once('Exception/MissingFieldException.php');
 require_once('Exception/NoConsignmentFoundException.php');
+require_once('Exception/AccountNotActiveException.php');

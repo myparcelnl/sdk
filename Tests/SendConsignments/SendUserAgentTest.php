@@ -79,7 +79,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
             }
 
             if (key_exists('user_agent', $consignmentTest)) {
-                $myParcelCollection->setUserAgent($consignmentTest['user_agent']['platform'], $consignmentTest['user_agent']['version']);
+                $myParcelCollection->setUserAgentArray($consignmentTest['user_agent']);
             }
 
             $myParcelCollection->addConsignment($consignment);
@@ -173,10 +173,9 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
                 'phone'             => '123-45-235-435',
                 'package_type'      => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'label_description' => 'Label description',
-                'checkout_data'     => '{"date":"'.date('Y-m-d', strtotime("+1 day")).'","time":[{"start":"16:00:00","type":4,"price":{"currency":"EUR","amount":0}}],"location":"Primera Sanders","street":"Polderplein","number":"3","postal_code":"2132BA","city":"Hoofddorp","cc":"NL","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.","phone_number":"","opening_hours":{"monday":["11:00-18:00"],"tuesday":["09:00-18:00"],"wednesday":["09:00-18:00"],"thursday":["09:00-18:00"],"friday":["09:00-21:00"],"saturday":["09:00-18:00"],"sunday":["12:00-17:00"]},"distance":"312","latitude":"52.30329367","longitude":"4.69476214","location_code":"176227","retail_network_id":"PNPNL-01","holiday":[]}',
+                'checkout_data'     => '{"date":"' . date('Y-m-d', strtotime("+1 day")) . '","time":[{"start":"16:00:00","type":4,"price":{"currency":"EUR","amount":0}}],"location":"Primera Sanders","street":"Polderplein","number":"3","postal_code":"2132BA","city":"Hoofddorp","cc":"NL","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.","phone_number":"","opening_hours":{"monday":["11:00-18:00"],"tuesday":["09:00-18:00"],"wednesday":["09:00-18:00"],"thursday":["09:00-18:00"],"friday":["09:00-21:00"],"saturday":["09:00-18:00"],"sunday":["12:00-17:00"]},"distance":"312","latitude":"52.30329367","longitude":"4.69476214","location_code":"176227","retail_network_id":"PNPNL-01","holiday":[]}',
                 'user_agent'        => [
-                    'platform' => 'SDK_UNIT_TEST',
-                    'version'  => 'v1.2.0',
+                    'MyParcel-SDK_UNIT_TEST' => 'v5.2.1'
                 ],
             ]
         ];
