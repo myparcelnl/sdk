@@ -73,8 +73,8 @@ $consignment = (ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER
     ->setFullStreet('Plein 1945 55b')
     ->setPostalCode('2231JE')
     ->setCity('Amsterdam')
-    ->setEmail('piet.hier@test.nl');
-    ->setLabelDescription('Order 146')
+    ->setEmail('piet.hier@test.nl')
+    ->setLabelDescription('Order 146');
     
 $consignments = (new MyParcelCollection())
     ->addConsignment($consignment)
