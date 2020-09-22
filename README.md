@@ -242,7 +242,7 @@ Instead of `find()` you can also use `findMany()`, `findByReferenceId()` or `fin
 
 For `reference identifier` you can use a `*` to search smarter:
 ```php
-$consignments = MyParcelCollection::findByReferenceId('order-123*');
+$consignments = MyParcelCollection::findByReferenceId('order-14*');
 ```
 
 ### Query consignments
@@ -319,7 +319,7 @@ echo $consignments
 
 If you want to download a label at a later time, you can also use the following to fill the collection:
 ```php
-$consignments = MyParcelCollection::findByReferenceId('order-1234', 'api_key_from_MyParcel_backoffice');
+$consignments = MyParcelCollection::findByReferenceId('order-146', 'api_key_from_MyParcel_backoffice');
 $consignments
     ->setPdfOfLabels()
     ->downloadPdfOfLabels();
@@ -339,7 +339,7 @@ This is a list of all the classes in this SDK and their available methods.
 ```php
     $consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment())
     ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setReferenceId('order-1203') // Not visible on the label
+    ->setReferenceId('order-146') // Not visible on the label
     
     // Recipient/address: https://myparcelnl.github.io/api/#7_B
     ->setPerson('Piet Hier')    // Name
@@ -371,7 +371,7 @@ This is a list of all the classes in this SDK and their available methods.
     ->setLargeFormat(false)     // Must be specified if the dimensions of the package are between 100x70x50 and 175x78x58 cm. 
     ->setInsurance(250)         // Allows a shipment to be insured up to certain amount. Only packages (package type 1) can be insured. 
     
-    ->setLabelDescription('Order 10034') // This description will appear on the shipment label (for package type 1)
+    ->setLabelDescription('Order 146') // This description will appear on the shipment label (for package type 1)
         
     // Delivery: https://myparcelnl.github.io/api/#8
     ->setDeliveryType()
