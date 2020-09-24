@@ -91,7 +91,7 @@ This example creates multiple consignments by adding them to one ```MyParcelColl
 ```php
 // Create the collection before the loop
 $consignments = (new MyParcelCollection())
-    ->setUserAgent('name_of_cms', '1.0'); 
+    ->setUserAgents(['name_of_cms', '1.0']); 
 
 // Loop through your shipments, adding each to the same MyParcelCollection()
 foreach ($yourShipments as $yourShipment) {
@@ -524,7 +524,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     // To give us insight into which CMS system you're connecting from, you should send a User-Agent. 
     // If you're using a known CMS system it's required. 
     // You must send the name of the CMS system (required) followed by a version number (optional).
-    ->setUserAgent('name_of_cms', '1.0')
+    ->setUserAgents(['name_of_cms', '1.0'])
     ->getUserAgent()
 ```
 
