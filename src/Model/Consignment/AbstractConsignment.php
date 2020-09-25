@@ -837,12 +837,8 @@ class AbstractConsignment
         $fullStreet = SplitStreet::splitStreet($fullStreet, $this->local_cc, $this->getCountry());
         $this->setStreet($fullStreet->getStreet());
         $this->setNumber($fullStreet->getNumber());
-
-        if ($this->getCountry() === AbstractConsignment::CC_BE) {
-            $this->setBoxNumber($fullStreet->getBoxNumber());
-        } else {
-            $this->setNumberSuffix($fullStreet->getNumberSuffix());
-        }
+        $this->setBoxNumber($fullStreet->getBoxNumber());
+        $this->setNumberSuffix($fullStreet->getNumberSuffix());
 
         return $this;
     }
