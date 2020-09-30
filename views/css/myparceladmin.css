@@ -146,3 +146,17 @@ td.ui-state-warning {
 td.ui-state-danger {
   background-color: #E08F95;
 }
+.datepicker-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.datepicker-row .datepicker-calendar {
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+.datepicker-row .datepicker-calendar .ui-datepicker-inline.ui-datepicker.ui-widget::before {
+  display: none !important;
+}
+.datepicker-row .datepicker-exceptions {
+  flex-grow: 1;
+}

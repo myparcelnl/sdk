@@ -63,7 +63,7 @@
               {$value[$input.values.name]}
           </label>
         {/strip}
-        <div class="input-group col-lg-2 col-md-3 col-sm-4">
+        <div class="input-group col-sm-4">
           {if isset($cutoff_time.prefix)}
             <span class="input-group-addon">
               {$cutoff_time.prefix}
@@ -105,9 +105,9 @@
   {elseif $input.type == 'cutoffexceptions'}
     <input type="hidden" id="{$input.name|escape:'html'}" name="{$input.name|escape:'html'}"
            value="{$fields_value[$input.name]|escape:'html'}">
-    <div class="row">
-      <div id="datepicker_{$input.name|escape:'html'}" class="col-lg-3" style="margin-bottom: 5px"></div>
-      <div class="col-lg-9 clearfix">
+    <div class="datepicker-row">
+      <div id="datepicker_{$input.name|escape:'html'}" class="datepicker-calendar"></div>
+      <div class="datepicker-exceptions clearfix">
         <div id="{$input.name|escape:'html'}_datepanel" class="panel">
           <div class="panel-heading">
             <i class="icon icon-calendar"></i> <span id="{$input.name|escape:'html'}_datetitle"></span>
