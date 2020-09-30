@@ -375,10 +375,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     $form.submit();
     $('#printLabelModal').modal('hide');
+    toggleLabelsBulkButtons();
+  }
+  function toggleLabelsBulkButtons() {
+    var $container = $('.shipment-labels-wrapper');
+    var labelCount = $('tbody > tr.tr-label-item', $container).length;
+    if (labelCount) {
+      $('tbody > tr.tr-empty-notice', $container).addClass('hidden');
+      $('.shipment-labels-bulk-actions > .btn.dropdown-toggle', $container).attr('disabled', false);
+      return;
+    }
+    $('tbody > tr.tr-empty-notice', $container).removeClass('hidden');
+    $('.shipment-labels-bulk-actions > .btn.dropdown-toggle', $container).attr('disabled', true);
   }
   $('#submitCreateLabel').on('click', function (e) {
     e.preventDefault();
-    createLabel($(this), true);
+    createLabel($(this), false, toggleLabelsBulkButtons);
   });
 
   // Create new shipment label for the current order and print it
@@ -410,6 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $('#content > .alert.alert-danger').remove();
         if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
           $tr.remove();
+          toggleLabelsBulkButtons();
         } else {
           displayOrderAjaxErrors(jsonData);
         }
