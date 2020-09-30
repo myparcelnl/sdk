@@ -108,7 +108,7 @@ class Carriers extends AbstractForm
     {
         $carrierName = $this->module->l('Carriers', 'carriers');
         $id_carrier = (int) Tools::getValue('id_carrier');
-        $carrier = new Carrier($id_carrier);
+        $carrier = new Carrier($id_carrier, $this->context->language->id);
         if (!empty($carrier->name)) {
             $carrierName = $carrier->name;
         }
@@ -331,20 +331,20 @@ class Carriers extends AbstractForm
             ],
             'cutoff_time' => $cutoffTimeValues,
             'desc' => [
-                $this->module->l(
-                'This option allows the Merchant to set the days he normally goes to PostNL to hand in the 
+                sprintf($this->module->l(
+                'This option allows the Merchant to set the days he normally goes to %s to hand in the 
                         parcels. Monday is 1 and Saturday is 6.',
                     'carriers'
-                ),
-                $this->module->l(
+                ), $carrier->name),
+                sprintf($this->module->l(
                     'The Cutoff Time option allows the Merchant to indicate the latest cut-off time before an order will 
                         still be picked, packed and dispatched on the same/first set dropoff day, taking into account 
                         the dropoff-delay. Industry standard default time is 17:00. For example, if cutoff time is 
                         17:00, Monday is a delivery day and there\'s no delivery delay; all orders placed Monday 
-                        before 17:00 will be dropped of at PostNL on that same Monday in time for the Monday collection 
+                        before 17:00 will be dropped of at %s on that same Monday in time for the Monday collection 
                         and delivery on Tuesday.',
                     'carriers'
-                ),
+                ), $carrier->name),
             ],
         ];
         foreach (Constant::WEEK_DAYS as $index => $day) {
@@ -370,14 +370,14 @@ class Carriers extends AbstractForm
                 'id'    => 'id',
                 'name'  => 'name',
             ),
-            'desc' => $this->module->l(
-                'This option allows the Merchant to set the number of days into the future for which she wants to 
-                show her consumers delivery options. For example; If set to 3 (days) in her checkout, a consumer 
+            'desc' => sprintf($this->module->l(
+                'This option allows the Merchant to set the number of days into the future for which he wants to 
+                show his consumers delivery options. For example; If set to 3 (days) in his checkout, a consumer 
                 ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided 
-                there is no drop-off delay, it\'s before the cut-off time and she goes to PostNL on Mondays). Min. is 
+                there is no drop-off delay, it\'s before the cut-off time and he goes to %s on Mondays). Min. is 
                 1 and max. is 14.',
                 'carriers'
-            ),
+            ), $carrier->name),
         ];
         $fields[] = [
             'type' => 'select',
@@ -389,11 +389,11 @@ class Carriers extends AbstractForm
                 'id'    => 'id',
                 'name'  => 'name',
             ),
-            'desc' => $this->module->l(
-                'This option allows the Merchant to set the number of days it takes her to pick, pack and hand in 
-                her parcel at PostNL when ordered before the cutoff time. By default this is 0 and max. is 14.',
+            'desc' => sprintf($this->module->l(
+                'This option allows the Merchant to set the number of days it takes him to pick, pack and hand in 
+                his parcel at %s when ordered before the cutoff time. By default this is 0 and max. is 14.',
                 'carriers'
-            ),
+            ), $carrier->name),
         ];
         $fields[] = [
             'type' => 'text',
@@ -420,13 +420,13 @@ class Carriers extends AbstractForm
                 'is_bool' => true,
                 'label' => $this->module->l('Allow Monday delivery', 'carriers'),
                 'name' => 'allowMondayDelivery',
-                'desc' => $this->module->l(
+                'desc' => sprintf($this->module->l(
                     'Monday delivery is only possible when the package is delivered before 15.00 on Saturday at 
-                    the designated PostNL locations. Note: To activate Monday delivery value 6 must be given with 
+                    the designated %s locations. Note: To activate Monday delivery value 6 must be given with 
                     dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 
                     15:00 (14:30 recommended) so that Monday will be shown.',
                     'carriers'
-                ),
+                ), $carrier->name),
                 'values' => [
                     [
                         'id' => 'allowMondayDelivery_on',
@@ -471,13 +471,13 @@ class Carriers extends AbstractForm
                 ],
                 'label' => $this->module->l('Allow morning delivery', 'carriers'),
                 'name' => 'allowMorningDelivery',
-                'desc' => $this->module->l(
+                'desc' => sprintf($this->module->l(
                     'Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the 
-                    designated PostNL locations. Note: To activate Monday delivery value 6 must be given with 
+                    designated %s locations. Note: To activate Monday delivery value 6 must be given with 
                     dropOffDays and value 1 must be given by monday_delivery. On Saturday the cutoffTime must be before 
                     15:00 (14:30 recommended) so that Monday will be shown.',
                     'carriers'
-                ),
+                ), $carrier->name),
                 'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
@@ -566,12 +566,12 @@ class Carriers extends AbstractForm
                 ],
                 'label' => $this->module->l('Allow Saturday delivery', 'carriers'),
                 'name' => 'allowSaturdayDelivery',
-                'desc' => $this->module->l(
+                'desc' => sprintf($this->module->l(
                     'Saturday delivery is only possible when the package is delivered before 15:00 on Friday 
-                    at the designated bpost locations. Note: To allow Saturday delivery, Friday must be enabled in 
+                    at the designated %s locations. Note: To allow Saturday delivery, Friday must be enabled in 
                     Drop-off days.',
                     'carriers'
-                ),
+                ), $carrier->name),
                 'form_group_class' => 'toggle-parent-field',
             ];
             // Disable title automatically when the option is not available
