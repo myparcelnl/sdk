@@ -72,20 +72,13 @@ class AdminLabelController extends ModuleAdminController
                 die($this->module->l('A error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
             }
 
-            $consignment = $myParcelCollection->first();
-            $orderLabel = new OrderLabel();
-            $orderLabel->id_label = $consignment->getConsignmentId();
-            $orderLabel->id_order = $consignment->getReferenceId();
-            $orderLabel->barcode = $consignment->getBarcode();
-            $orderLabel->track_link = $consignment->getBarcodeUrl(
-                $consignment->getBarcode(),
-                $consignment->getPostalCode(),
-                $consignment->getCountry()
-            );
             $status_provider = new MyparcelStatusProvider();
-            $orderLabel->new_order_state = $consignment->getStatus();
-            $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
-            $orderLabel->add();
+            $consignment = $myParcelCollection->first();
+            try {
+                OrderLabel::createFromConsignment($consignment, $status_provider);
+            } catch (Exception $e) {
+                $this->errors[] = $e->getMessage();
+            }
         }
     }
 
@@ -169,7 +162,11 @@ class AdminLabelController extends ModuleAdminController
 
         $status_provider = new MyparcelStatusProvider();
         foreach ($collection as $consignment) {
-            OrderLabel::createFromConsignment($consignment, $status_provider);
+            try {
+                OrderLabel::createFromConsignment($consignment, $status_provider);
+            } catch (Exception $e) {
+                $this->errors[] = $e->getMessage();
+            }
         }
 
         return $collection;
@@ -488,9 +485,13 @@ class AdminLabelController extends ModuleAdminController
         $labelIds = [];
         $status_provider = new MyparcelStatusProvider();
         foreach ($collection as $consignment) {
-            $labelId = OrderLabel::createFromConsignment($consignment, $status_provider);
-            if ($labelId) {
-                $labelIds[] = $labelId;
+            try {
+                $labelId = OrderLabel::createFromConsignment($consignment, $status_provider);
+                if ($labelId) {
+                    $labelIds[] = $labelId;
+                }
+            } catch (Exception $e) {
+                $this->errors[] = $e->getMessage();
             }
         }
         if (!empty($postValues['listingPage'])) {
