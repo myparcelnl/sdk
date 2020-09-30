@@ -4,15 +4,17 @@
   {if $input.type == 'time'}
     <div {if version_compare($smarty.const._PS_VERSION_, '1.6.0.0', '>=')}class="row"{/if}>
       <div class="input-group col-lg-2 col-md-3 col-sm-4">
-        <input type="text"
-               id="{$input.name|escape:'html'}"
-               name="{$input.name|escape:'html'}"
-               class="{if isset($input.class)}{$input.class|escape:'html'}{/if}"
-               value="{$fields_value[$input.name]|escape:'html'}"
-                {if isset($input.readonly) && $input.readonly} readonly="readonly"{/if}
-                {if isset($input.disabled) && $input.disabled} disabled="disabled"{/if}
-                {if isset($input.required) && $input.required} required="required" {/if}
-                {if isset($input.placeholder) && $input.placeholder} placeholder="{$input.placeholder|escape:'html'}"{/if} />
+        <input
+                type="text"
+                id="{$input.name|escape:'html'}"
+                name="{$input.name|escape:'html'}"
+                class="{if isset($input.class)}{$input.class|escape:'html'}{/if}"
+                value="{if isset($fields_value[$input.name])}{$fields_value[$input.name]|escape:'html'}{/if}"
+                {if isset($input.readonly) && $input.readonly}readonly="readonly"{/if}
+                {if isset($input.disabled) && $input.disabled}disabled="disabled"{/if}
+                {if isset($input.required) && $input.required}required="required" {/if}
+                {if isset($input.placeholder) && $input.placeholder}placeholder="{$input.placeholder|escape:'html'}"{/if}
+        />
         <span class="input-group-addon">
           <i class="icon-clock-o"></i>
         </span>
@@ -36,7 +38,7 @@
         {if version_compare($smarty.const._PS_VERSION_, '1.6.0.0', '>=')}initTimepicker();{/if}
       }());
     </script>
-  {elseif $input.type == 'checkbox' && $input.form_group_class == 'with-cutoff-time'}
+  {elseif $input.type == 'checkbox' && !empty($input.form_group_class) && $input.form_group_class == 'with-cutoff-time'}
     {if isset($input.expand)}
       <a class="btn btn-default show_checkbox{if strtolower($input.expand.default) == 'hide'} hidden{/if}" href="#">
         <i class="icon-{$input.expand.show.icon}"></i>
@@ -59,7 +61,14 @@
       <div class="checkbox{if isset($input.expand) && strtolower($input.expand.default) == 'show'} hidden{/if}">
         {strip}
           <label for="{$id_checkbox}">
-            <input type="checkbox" name="{$id_checkbox}" id="{$id_checkbox}" class="{if isset($input.class)}{$input.class}{/if}"{if isset($value.val)} value="{$value.val|escape:'html':'UTF-8'}"{/if}{if isset($fields_value[$id_checkbox]) && $fields_value[$id_checkbox]} checked="checked"{/if} />
+            <input
+                    type="checkbox"
+                    name="{$id_checkbox}"
+                    id="{$id_checkbox}"
+                    class="{if isset($input.class)}{$input.class}{/if}"
+                    {if isset($value.val)} value="{$value.val|escape:'html':'UTF-8'}"{/if}
+                    {if isset($fields_value[$id_checkbox]) && $fields_value[$id_checkbox]}checked="checked"{/if}
+            />
               {$value[$input.values.name]}
           </label>
         {/strip}
@@ -69,15 +78,17 @@
               {$cutoff_time.prefix}
             </span>
           {/if}
-          <input type="text"
-                 id="{$cutoff_time.name|escape:'html'}_pseudo"
-                 name="{$cutoff_time.name|escape:'html'}_pseudo"
-                 class="{if isset($cutoff_time.class)}{$cutoff_time.class|escape:'html'}{/if}"
-                 value="{$fields_value[$cutoff_time.name]|escape:'html'}"
-                  {if isset($cutoff_time.readonly) && $cutoff_time.readonly} readonly="readonly"{/if}
-                  {if isset($cutoff_time.disabled) && $cutoff_time.disabled} disabled="disabled"{/if}
-                  {if isset($cutoff_time.required) && $cutoff_time.required} required="required" {/if}
-                  {if isset($cutoff_time.placeholder) && $cutoff_time.placeholder} placeholder="{$cutoff_time.placeholder|escape:'html'}"{/if} />
+          <input
+                  type="text"
+                  id="{$cutoff_time.name|escape:'html'}_pseudo"
+                  name="{$cutoff_time.name|escape:'html'}_pseudo"
+                  class="{if isset($cutoff_time.class)}{$cutoff_time.class|escape:'html'}{/if}"
+                  value="{if isset($fields_value[$cutoff_time.name])}{$fields_value[$cutoff_time.name]|escape:'html'}{/if}"
+                  {if isset($cutoff_time.readonly) && $cutoff_time.readonly}readonly="readonly"{/if}
+                  {if isset($cutoff_time.disabled) && $cutoff_time.disabled}disabled="disabled"{/if}
+                  {if isset($cutoff_time.required) && $cutoff_time.required}required="required" {/if}
+                  {if isset($cutoff_time.placeholder) && $cutoff_time.placeholder}placeholder="{$cutoff_time.placeholder|escape:'html'}"{/if}
+          />
           <span class="input-group-addon">
             <i class="icon-clock-o"></i>
           </span>
@@ -103,8 +114,11 @@
       </script>
     {/foreach}
   {elseif $input.type == 'cutoffexceptions'}
-    <input type="hidden" id="{$input.name|escape:'html'}" name="{$input.name|escape:'html'}"
-           value="{$fields_value[$input.name]|escape:'html'}">
+    <input
+            type="hidden"
+            id="{$input.name|escape:'html'}" name="{$input.name|escape:'html'}"
+            value="{if isset($fields_value[$input.name])}{$fields_value[$input.name]|escape:'html'}{/if}"
+    />
     <div class="datepicker-row">
       <div id="datepicker_{$input.name|escape:'html'}" class="datepicker-calendar"></div>
       <div class="datepicker-exceptions clearfix">
@@ -131,14 +145,16 @@
               <div class="form-group">
                 <label for="{$input.name|escape:'html'}-cutoff">{l s='Cut-off time' mod='myparcelbe'}: </label>
                 <div class="input-group">
-                  <input type="text"
-                         id="{$input.name|escape:'html'}-cutoff"
-                         name="{$input.name|escape:'html'}-cutoff"
-                         class="{if isset($input.class)}{$input.class|escape:'html'}{/if} form-control"
-                          {if isset($input.readonly) && $input.readonly} readonly="readonly"{/if}
-                          {if isset($input.disabled) && $input.disabled} disabled="disabled"{/if}
-                          {if isset($input.required) && $input.required} required="required" {/if}
-                          {if isset($input.placeholder) && $input.placeholder} placeholder="{$input.placeholder|escape:'html'}"{/if} />
+                  <input
+                          type="text"
+                          id="{$input.name|escape:'html'}-cutoff"
+                          name="{$input.name|escape:'html'}-cutoff"
+                          class="{if isset($input.class)}{$input.class|escape:'html'}{/if} form-control"
+                          {if isset($input.readonly) && $input.readonly}readonly="readonly"{/if}
+                          {if isset($input.disabled) && $input.disabled}disabled="disabled"{/if}
+                          {if isset($input.required) && $input.required}required="required" {/if}
+                          {if isset($input.placeholder) && $input.placeholder}placeholder="{$input.placeholder|escape:'html'}"{/if}
+                  />
                   <span class="input-group-addon">
                   <i class="icon-clock-o"></i>
                 </span>

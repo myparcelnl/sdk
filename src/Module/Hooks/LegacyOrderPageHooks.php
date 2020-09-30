@@ -152,7 +152,7 @@ trait LegacyOrderPageHooks
                     'prompt_for_label_position' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
                     'create_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createb']),
                     'refresh_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'refresh']),
-                    'create_label_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'create']),
+                    'create_label_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel', 'listingPage' => true]),
                     'create_label_error' => $this->l('Cannot create label for orders', 'legacyorderpagehooks'),
                     'no_order_selected_error' => $this->l('Please select at least one order first.', 'legacyorderpagehooks'),
                 ]

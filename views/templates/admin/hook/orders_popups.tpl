@@ -174,7 +174,7 @@
                 </button>
             </div>
             <div class="modal-body" id="print-modal">
-                <input type="hidden" id="order_id" name="create_label[order_ids][]">
+                <input type="hidden" id="order_id" name="id_order">
                 <div class="form-group">
                     <label for="labels_amount">{l s='Amount of labels' mod='myparcelbe'}</label>
                     <input id="labels_amount" name="label_amount" value="1" type="number" min="1" class="form-control">

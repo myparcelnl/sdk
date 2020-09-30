@@ -6,6 +6,7 @@ use Db;
 use DbQuery;
 use Gett\MyparcelBE\Service\Tracktrace;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 
 class OrderLabel extends \ObjectModel
 {
@@ -447,5 +448,27 @@ class OrderLabel extends \ObjectModel
         }
 
         return $return;
+    }
+
+    public static function createFromConsignment(
+        AbstractConsignment $consignment,
+        MyparcelStatusProvider $status_provider
+    ) {
+        $orderLabel = new self();
+        $orderLabel->id_label = $consignment->getConsignmentId();
+        $orderLabel->id_order = $consignment->getReferenceId();
+        $orderLabel->barcode = $consignment->getBarcode();
+        $orderLabel->track_link = $consignment->getBarcodeUrl(
+            $consignment->getBarcode(),
+            $consignment->getPostalCode(),
+            $consignment->getCountry()
+        );
+        $orderLabel->new_order_state = $consignment->getStatus();
+        $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
+        if ($orderLabel->add()) {
+            return (int) $orderLabel->id_label;
+        }
+
+        return 0;
     }
 }

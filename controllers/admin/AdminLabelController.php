@@ -89,70 +89,6 @@ class AdminLabelController extends ModuleAdminController
         }
     }
 
-    public function ajaxProcessCreate()
-    {
-        $factory = new ConsignmentFactory(
-            Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
-            Tools::getAllValues(),
-            new Configuration(),
-            $this->module
-        );
-        $createLabelIds = Tools::getValue('create_label');
-        if (empty($createLabelIds['order_ids'])) {
-            die($this->module->l('No order ID found', 'adminlabelcontroller'));
-        }
-        $orders = OrderLabel::getDataForLabelsCreate($createLabelIds['order_ids']);
-        if (empty($orders)) {
-            $this->errors[] = $this->module->l('No order found.', 'adminlabelcontroller');
-            die(json_encode(['hasError' => true, 'errors' => $this->errors]));
-        }
-        $order = reset($orders);
-
-        try {
-            $collection = $factory->fromOrder($order);
-            $consignments = $collection->getConsignments();
-            if (!empty($consignments)) {
-                foreach ($consignments as &$consignment) {
-                    $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
-                    $this->fixSignature($consignment);
-                    $this->sanitizeDeliveryType($consignment);
-                    $this->sanitizePackageType($consignment);
-                }
-            }
-            Logger::addLog($collection->toJson());
-            $collection->setLinkOfLabels();
-            if ($this->module->isNL()
-                && Tools::getValue(Constant::RETURN_PACKAGE_CONFIGURATION_NAME)) {
-                $collection->sendReturnLabelMails();
-            }
-        } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
-            Logger::addLog($e->getFile(), true);
-            Logger::addLog($e->getLine(), true);
-            header('HTTP/1.1 500 Internal Server Error', true, 500);
-            die($this->module->l('A error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
-        }
-
-        $status_provider = new MyparcelStatusProvider();
-        foreach ($collection as $consignment) {
-            $orderLabel = new OrderLabel();
-            $orderLabel->id_label = $consignment->getConsignmentId();
-            $orderLabel->id_order = $consignment->getReferenceId();
-            $orderLabel->barcode = $consignment->getBarcode();
-            $orderLabel->track_link = $consignment->getBarcodeUrl(
-                $consignment->getBarcode(),
-                $consignment->getPostalCode(),
-                $consignment->getCountry()
-            );
-            $orderLabel->new_order_state = $consignment->getStatus();
-            $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
-            $orderLabel->add();
-            //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
-        }
-
-        die(json_encode(['hasError' => false]));
-    }
-
     public function processCreateb()
     {
         $postValues = Tools::getAllValues();
@@ -233,19 +169,7 @@ class AdminLabelController extends ModuleAdminController
 
         $status_provider = new MyparcelStatusProvider();
         foreach ($collection as $consignment) {
-            $orderLabel = new OrderLabel();
-            $orderLabel->id_label = $consignment->getConsignmentId();
-            $orderLabel->id_order = $consignment->getReferenceId();
-            $orderLabel->barcode = $consignment->getBarcode();
-            $orderLabel->track_link = $consignment->getBarcodeUrl(
-                $consignment->getBarcode(),
-                $consignment->getPostalCode(),
-                $consignment->getCountry()
-            );
-            $orderLabel->new_order_state = $consignment->getStatus();
-            $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
-            $orderLabel->add();
-            //$paymentUrl = $myParcelCollection->setPdfOfLabels()->getLabelPdf()['data']['payment_instructions']['0']['payment_url'];
+            OrderLabel::createFromConsignment($consignment, $status_provider);
         }
 
         return $collection;
@@ -512,7 +436,7 @@ class AdminLabelController extends ModuleAdminController
             new Configuration(),
             $this->module
         );
-        $idOrder = $postValues['id_order'] ?? 0;
+        $idOrder = (int) ($postValues['id_order'] ?? 0);
         if (!$idOrder) {
             $this->errors[] = $this->module->l('No order ID found.', 'adminlabelcontroller');
             $this->returnAjaxResponse();
@@ -523,6 +447,7 @@ class AdminLabelController extends ModuleAdminController
             $this->returnAjaxResponse();
         }
         $order = reset($orders);
+        $collection = null;
 
         try {
             $collection = $factory->fromOrder($order);
@@ -552,28 +477,27 @@ class AdminLabelController extends ModuleAdminController
             );
             $this->returnAjaxResponse();
         }
+        if ($collection === null) {
+            $this->errors[] = $this->module->l(
+                'An error occurred in the MyParcel module, please try again.',
+                'adminlabelcontroller'
+            );
+            $this->returnAjaxResponse();
+        }
 
         $labelIds = [];
         $status_provider = new MyparcelStatusProvider();
         foreach ($collection as $consignment) {
-            $orderLabel = new OrderLabel();
-            $orderLabel->id_label = $consignment->getConsignmentId();
-            $orderLabel->id_order = $consignment->getReferenceId();
-            $orderLabel->barcode = $consignment->getBarcode();
-            $orderLabel->track_link = $consignment->getBarcodeUrl(
-                $consignment->getBarcode(),
-                $consignment->getPostalCode(),
-                $consignment->getCountry()
-            );
-            $orderLabel->new_order_state = $consignment->getStatus();
-            $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
-            $orderLabel->add();
-            if (!empty($orderLabel->id)) {
-                $labelIds[] = $orderLabel->id_label;
+            $labelId = OrderLabel::createFromConsignment($consignment, $status_provider);
+            if ($labelId) {
+                $labelIds[] = $labelId;
             }
         }
+        if (!empty($postValues['listingPage'])) {
+            $idOrder = null;
+        }
 
-        $this->returnAjaxResponse(['labelIds' => $labelIds], (int) $idOrder);
+        $this->returnAjaxResponse(['labelIds' => $labelIds], $idOrder);
     }
 
     /**
