@@ -61,8 +61,8 @@ class ValidateStreet
     public static function getStreetRegexByCountry(string $local, string $destination): ?string
     {
         $localIsNlOrBe = in_array($local, [AbstractConsignment::CC_BE, AbstractConsignment::CC_NL]);
-        $destinationIsNl = AbstractConsignment::CC_NL;
-        $destinationIsBe = AbstractConsignment::CC_BE;
+        $destinationIsNl = $destination === AbstractConsignment::CC_NL;
+        $destinationIsBe = $destination === AbstractConsignment::CC_BE;
 
         if ($localIsNlOrBe && $destinationIsNl) {
             return self::SPLIT_STREET_REGEX_NL;
