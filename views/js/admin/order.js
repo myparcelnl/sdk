@@ -362,10 +362,19 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         displayOrderAjaxErrors(jsonData)
       }
+      toggleProcessIcon($el);
     }).fail(function(error) {
       displayOrderAjaxFailErrors(error);
+      toggleProcessIcon($el);
     });
   }
+
+  function toggleProcessIcon($el) {
+    if ($el.data('iconPlus') === 1) {
+      $('i', $el).removeClass('icon-refresh icon-spin icon-fw').addClass('icon-plus');
+    }
+  }
+
   function printLabel(jsonData) {
     var $form = $('#print_label_form');
     if (typeof jsonData !== 'undefined' && jsonData && typeof jsonData.labelIds !== 'undefined') {
@@ -390,6 +399,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   $('#submitCreateLabel').on('click', function (e) {
     e.preventDefault();
+    $(this).data('iconPlus', 1);
+    $('i', $(this)).removeClass('icon-plus').addClass('icon-refresh icon-spin icon-fw');
     createLabel($(this), false, toggleLabelsBulkButtons);
   });
 
@@ -398,6 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
   });
   $('#button_print_label').click(function () {
+    $(this).prepend('<i class="icon-refresh icon-spin icon-fw"></i>');
     if ($('#print_label_form').find('.bulk-label-id').length) {
       printLabel(null);
     } else {
@@ -544,7 +556,13 @@ document.addEventListener("DOMContentLoaded", () => {
       displayOrderAjaxFailErrors(error);
       $('#labelReturnModal').modal('hide');
     });
-  })
+  });
+
+  $('#printLabelModal').on('hidden.bs.modal', function () {
+    $('[name="label_id[]"]', $(this)).remove();
+  }).on('show.bs.modal', function() {
+    $('i.icon-refresh', $(this)).remove();
+  });
 
   let initializeMyParcelForm = function () {
     var $wrapper = $('#deliveryDateUpdateWrapper');
