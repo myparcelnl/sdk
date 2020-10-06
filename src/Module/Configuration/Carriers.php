@@ -138,7 +138,7 @@ class Carriers extends AbstractForm
                 ],
                 'buttons' => [
                     'save-and-stay' => [
-                        'title' => $this->module->l('Save add stay', 'carriers'),
+                        'title' => $this->module->l('Save and stay', 'carriers'),
                         'name' => 'submitMyparcelCarrierSettingsAndStay',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
