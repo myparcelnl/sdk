@@ -48,8 +48,8 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
             $cutoffExceptions = array();
         }
         $dropOffDateObj = new DateTime('today');
-        $deliveryDateObj = new DateTime('tomorrow');// Delivery is next day if past cutoff time
-        $today = $deliveryDateObj->format('Y-m-d');
+        $deliveryDateObj = new DateTime('tomorrow');// Delivery is next day
+        $today = $dropOffDateObj->format('Y-m-d');
         $weekDayNumber = date('N', strtotime($today));
         $dayName = Constant::WEEK_DAYS[$weekDayNumber];
         $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
