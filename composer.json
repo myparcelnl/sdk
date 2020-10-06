@@ -3,7 +3,7 @@
   "description": "PrestaShop module to intergratie with MyParcel NL and\nMyParcel BE",
   "require": {
     "php": ">=7.2.0",
-    "myparcelnl/sdk": "^3.1"
+    "myparcelnl/sdk": "^5.2"
   },
   "autoload": {
     "psr-4": {
