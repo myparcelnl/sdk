@@ -9,7 +9,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr{if !empty($labelList)} class="hidden"{/if}>
+  <tr class="tr-empty-notice{if !empty($labelList)} hidden{/if}">
     <td class="list-empty hidden-print" colspan="5">
       <div class="list-empty-msg">
         <i class="icon-exclamation-triangle"></i>
@@ -23,6 +23,7 @@
                 data-id="{$label.id_order_label}"
                 data-label-id="{$label.id_label}"
                 data-return="{l s='Return - %s' mod='myparcelbe' sprintf=[$label.barcode]}"
+                class="tr-label-item"
         >
           <td><input type="checkbox" name="labelBox[]" class="noborder" value="{$label.id_order_label}"></td>
           <td>

@@ -58,7 +58,7 @@
           <div class="table-responsive">
             {$labelListHtml}
           </div>
-          <div class="btn-group bulk-actions dropup">
+          <div class="btn-group bulk-actions dropup shipment-labels-bulk-actions">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"{if empty($labelList)} disabled{/if}>
                 {l s='Bulk actions' d='Admin.Global'} <span class="caret"></span>
             </button>
