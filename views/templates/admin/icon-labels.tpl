@@ -14,7 +14,7 @@
         </i>
     </button>
     <a
-            href="{$link->getAdminLink('AdminLabel', true, [], ['action' => 'updateLabel', 'labelId' => $label['id_label']])}"
+            href="{$link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'updateLabel', 'labelId' => $label['id_label']])}"
             class="btn btn-link"
     >
         <i class="material-icons">

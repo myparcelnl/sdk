@@ -52,7 +52,7 @@ class Uninstaller
     {
         $res = true;
 
-        $tabs = ['MyParcelLabelController'];
+        $tabs = ['AdminMyParcelBE', 'AdminMyParcelBELabel'];
 
         foreach ($tabs as $tabName) {
             $id_tab = (int) Tab::getIdFromClassName($tabName);

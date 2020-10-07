@@ -15,24 +15,24 @@ admin_productmyparcel_save:
 #    methods: [POST]
 #    defaults:
 #        _controller: Gett\MyparcelBE\Controllers\Admin\LabelController::createLabelsBulk
-#        _legacy_controller: AdminLabelController
-#        _legacy_link: AdminLabel:createLabelsBulk
+#        _legacy_controller: AdminMyParcelBELabelController
+#        _legacy_link: AdminMyParcelBELabel:createLabelsBulk
 
 #admin_myparcel_orders_label_bulk_print:
 #    path: /print-label-bulk
 #    methods: [POST]
 #    defaults:
 #        _controller: Gett\MyparcelBE\Controllers\Admin\LabelController::downloadLabelsBulk
-#        _legacy_controller: AdminLabelController
-#        _legacy_link: AdminLabel:downloadLabelsBulk
+#        _legacy_controller: AdminMyParcelBELabelController
+#        _legacy_link: AdminMyParcelBELabel:downloadLabelsBulk
 
 #admin_myparcel_order_label_create:
 #    path: /create-label
 #    methods: [POST]
 #    defaults:
 #        _controller: Gett\MyparcelBE\Controllers\Admin\LabelController::createLabel
-#        _legacy_controller: AdminLabel
-#        _legacy_link: AdminLabel:createLabel
+#        _legacy_controller: AdminMyParcelBELabel
+#        _legacy_link: AdminMyParcelBELabel:createLabel
 
 
 #admin_myparcel_order_label_download:
@@ -40,21 +40,21 @@ admin_productmyparcel_save:
 #    methods: [POST]
 #    defaults:
 #        _controller: Gett\MyparcelBE\Controllers\Admin\LabelController::downloadLabel
-#        _legacy_controller: AdminLabelController
-#        _legacy_link: AdminLabel:downloadLabel
+#        _legacy_controller: AdminMyParcelBELabelController
+#        _legacy_link: AdminMyParcelBELabel:downloadLabel
 
 #admin_myparcel_order_label_refresh:
 #    path: /refresh-label/{labelId}
 #    methods: [GET]
 #    defaults:
 #        _controller: Gett\MyparcelBE\Controllers\Admin\LabelController::updateLabel
-#        _legacy_controller: AdminLabelController
-#        _legacy_link: AdminLabel:updateLabel
+#        _legacy_controller: AdminMyParcelBELabelController
+#        _legacy_link: AdminMyParcelBELabel:updateLabel
 
 #admin_myparcel_orders_label_bulk_refresh:
 #    path: /refresh-label-bulk
 #    methods: [POST]
 #    defaults:
 #        _controller: Gett\MyparcelBE\Controllers\Admin\LabelController::refreshLabelsBulk
-#        _legacy_controller: AdminLabelController
-#        _legacy_link: AdminLabel:refreshLabelsBulk
+#        _legacy_controller: AdminMyParcelBELabelController
+#        _legacy_link: AdminMyParcelBELabel:refreshLabelsBulk

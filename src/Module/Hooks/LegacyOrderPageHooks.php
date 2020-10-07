@@ -39,10 +39,10 @@ trait LegacyOrderPageHooks
 
             $link = $this->context->link;
             $this->context->smarty->assign([
-                'action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
-                'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
-                'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
-                'export_print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'exportPrint']),
+                'action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel']),
+                'download_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'downloadLabel']),
+                'print_bulk_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'print']),
+                'export_print_bulk_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'exportPrint']),
                 'isBE' => $this->isBE(),
                 'labelConfiguration' => $this->getLabelDefaultConfiguration(),
                 'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
@@ -150,9 +150,9 @@ trait LegacyOrderPageHooks
                     'default_label_size' => Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME),
                     'default_label_position' => Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME),
                     'prompt_for_label_position' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
-                    'create_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createb']),
-                    'refresh_labels_bulk_route' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'refresh']),
-                    'create_label_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel', 'listingPage' => true]),
+                    'create_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createb']),
+                    'refresh_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'refresh']),
+                    'create_label_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel', 'listingPage' => true]),
                     'create_label_error' => $this->l('Cannot create label for orders', 'legacyorderpagehooks'),
                     'no_order_selected_error' => $this->l('Please select at least one order first.', 'legacyorderpagehooks'),
                 ]
@@ -214,7 +214,7 @@ trait LegacyOrderPageHooks
         $currency = Currency::getDefaultCurrency();
 
         $link = $this->context->link;
-        $labelUrl = $link->getAdminLink('AdminLabel', true, [], ['id_order' => $idOrder]);
+        $labelUrl = $link->getAdminLink('AdminMyParcelBELabel', true, [], ['id_order' => $idOrder]);
         $deliveryAddress = new Address($order->id_address_delivery);
         $deliveryAddressFormatted = AddressFormat::generateAddress($deliveryAddress, [], '<br />');
         $bulk_actions = [
@@ -292,10 +292,10 @@ trait LegacyOrderPageHooks
             'labelList' => $labelList,
             'bulk_actions' => $bulk_actions,
             'labelUrl' => $labelUrl,
-            'labelAction' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'createLabel']),
-            'download_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'downloadLabel']),
-            'print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'print']),
-            'export_print_bulk_action' => $link->getAdminLink('AdminLabel', true, [], ['action' => 'exportPrint']),
+            'labelAction' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel']),
+            'download_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'downloadLabel']),
+            'print_bulk_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'print']),
+            'export_print_bulk_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'exportPrint']),
             //'isBE' => $this->isBE(),
             //'carrierSettings' => $carrierLabelSettings,
             'carrierLabels' => Constant::SINGLE_LABEL_CREATION_OPTIONS,

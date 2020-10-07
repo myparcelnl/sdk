@@ -125,13 +125,19 @@ class Installer
     {
         $languages = [];
         foreach (\Language::getLanguages(true) as $lang) {
-            $languages[$lang['id_lang']] = 'MyParcel Carriers';
+            $languages['MyParcelLabelController'][$lang['id_lang']] = 'MyParcel Carriers';
+            $languages['MyParcelController'][$lang['id_lang']] = 'MyParcelBE';
         }
 
         return [
             'MyParcelLabelController' => [
-                'class_name' => 'AdminLabel',
-                'name' => $languages,
+                'class_name' => 'AdminMyParcelBELabel',
+                'name' => $languages['MyParcelLabelController'],
+            ],
+            'MyParcelController' => [
+                'class_name' => 'AdminMyParcelBE',
+                'name' => $languages['MyParcelController'],
+                'parent_class' => 'AdminParentShipping',
             ],
         ];
     }
