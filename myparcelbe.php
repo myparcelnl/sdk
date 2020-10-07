@@ -163,6 +163,9 @@ class MyParcelBE extends CarrierModule
         if ($this->id_carrier != $cart->id_carrier) {
             return $shipping_cost;
         }
+        if (!empty($this->context->controller->requestOriginalShippingCost)) {
+            return $shipping_cost;
+        }
 
         $this->cartCarrierStandardShippingCost = Tools::ps_round($shipping_cost, 2);
 

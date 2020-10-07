@@ -5,6 +5,8 @@ use Gett\MyparcelBE\Service\CarrierConfigurationProvider;
 
 class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
 {
+    public $requestOriginalShippingCost = false;
+
     public function postProcess()
     {
         $id_carrier = intval(Tools::getValue('id_carrier'));
@@ -73,13 +75,20 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
             }
         }
 
+        $this->requestOriginalShippingCost = true;
+        $priceStandardDelivery = $this->context->cart->getCarrierCost(
+            $id_carrier,
+            true,
+            new Country($address->id_country)
+        );
+
         $params = [
             'config' => [
                 'platform' => ($this->module->isBE() ? 'belgie' : 'myparcel'),
                 'carrierSettings' => $carrierSettings,
 
                 'priceMorningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceMorningDelivery'), 2),
-                'priceStandardDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceStandardDelivery'), 2),
+                'priceStandardDelivery' => Tools::ps_round($priceStandardDelivery, 2),
                 'priceEveningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceEveningDelivery'), 2),
                 'priceSignature' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceSignature'), 2),
                 'priceOnlyRecipient' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceOnlyRecipient'), 2),

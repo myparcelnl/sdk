@@ -58,9 +58,9 @@ class Carriers extends AbstractForm
                             case 'priceMorningDelivery':
                                 $label = $this->module->l('Delivery morning price', 'carriers');
                                 break;
-                            case 'priceStandardDelivery':
-                                $label = $this->module->l('Delivery standard price', 'carriers');
-                                break;
+//                            case 'priceStandardDelivery':
+//                                $label = $this->module->l('Delivery standard price', 'carriers');
+//                                break;
                             case 'priceEveningDelivery':
                                 $label = $this->module->l('Delivery evening price', 'carriers');
                                 break;
@@ -405,14 +405,14 @@ class Carriers extends AbstractForm
                 'carriers'
             ),
         ];
-        $fields[] = [
-            'type' => 'text',
-            'label' => $this->module->l('Delivery standard price', 'carriers'),
-            'name' => 'priceStandardDelivery',
-            'suffix' => $currency->getSign(),
-            'class' => 'col-lg-2',
-            'tab' => 'form',
-        ];
+//        $fields[] = [
+//            'type' => 'text',
+//            'label' => $this->module->l('Delivery standard price', 'carriers'),
+//            'name' => 'priceStandardDelivery',
+//            'suffix' => $currency->getSign(),
+//            'class' => 'col-lg-2',
+//            'tab' => 'form',
+//        ];
         if ($this->exclusiveField->isAvailable($countryIso, $carrierType, 'allowMondayDelivery')) {
             $fields[] = [
                 'tab' => 'form',

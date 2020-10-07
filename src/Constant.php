@@ -100,7 +100,7 @@ class Constant
         'deliveryMorningTitle',
         'priceMorningDelivery',
         'deliveryStandardTitle',
-        'priceStandardDelivery',
+//        'priceStandardDelivery',
         'allowEveningDelivery',
         'deliveryEveningTitle',
         'priceEveningDelivery',
