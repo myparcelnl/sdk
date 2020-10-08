@@ -342,6 +342,7 @@ class MyParcelBE extends CarrierModule
         $query->select('delivery_settings');
         $query->from('myparcel_delivery_settings');
         $query->where('id_cart = ' . (int) $idCart);
+        $query->orderBy('id_delivery_setting DESC');
         $deliverySettings = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query);
         if (empty($deliverySettings)) {
             return null;
