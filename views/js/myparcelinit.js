@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     form.remove();
                 }
                 wrapper.innerHTML = '<div id="myparcel-delivery-options"></div>';
-                document.dispatchEvent(new Event('myparcel_render_delivery_options'));
+                updateMypaInput(data.delivery_settings);
             }
         });
     }
@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let dataString = JSON.stringify(dataObj)
 
         $input.val(dataString);
+        document.dispatchEvent(new Event('myparcel_render_delivery_options'));
     }
 
     // On change
@@ -52,26 +53,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         });
     }
 
-    document.addEventListener(
-      'myparcel_updated_delivery_options',
-      (event) => updateMypaInput(event.detail)
-    );
-
     // Init
     initializeMyParcelForm($('.delivery-option input:checked').closest('.delivery-option'));
-});
-
-//workaround for the buggy parestashop core
-prestashop.on('changedCheckoutStep', function(values) {
-  let event = values.event;
-  let $currentTarget = $(event.currentTarget);
-  console.log($currentTarget);
-  if(!$currentTarget.hasClass('-current')) {
-    let $activeStep = $('.checkout-step.-current');
-    console.log($activeStep);
-    if(!$activeStep.length) {
-      $currentTarget.addClass('-current');
-      $currentTarget.addClass('js-current-step');
-    }
-  }
 });
