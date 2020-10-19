@@ -1,7 +1,7 @@
 <p align="center">
     <a href="https://packagist.org/packages/myparcelnl/sdk"><img src="https://img.shields.io/packagist/dt/myparcelnl/sdk" alt="Total Downloads"></a>
     <a href="https://github.com/myparcelnl/sdk/releases"><img src="https://img.shields.io/packagist/v/myparcelnl/sdk" alt="Latest Stable Version"></a>
-    <a href="https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM"><img src="https://img.shields.io/badge/Slack-Support-brightgreen" alt="Slack support" target="_black"></a>	
+    <a href="https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM"> <img src="https://img.shields.io/badge/Slack-Chat%20with%20us-green?logo=slack&labelColor=red" alt="Slack support" target="_black"></a>	
 </p>
 
 # MyParcel SDK
