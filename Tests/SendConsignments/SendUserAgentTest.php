@@ -79,7 +79,7 @@ class SendUserAgentTest extends \PHPUnit\Framework\TestCase
             }
 
             if (key_exists('user_agent', $consignmentTest)) {
-                $myParcelCollection->setUserAgentArray($consignmentTest['user_agent']);
+                $myParcelCollection->setUserAgents($consignmentTest['user_agent']);
             }
 
             $myParcelCollection->addConsignment($consignment);

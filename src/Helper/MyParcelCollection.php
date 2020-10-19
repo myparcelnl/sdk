@@ -631,7 +631,7 @@ class MyParcelCollection extends Collection
      *
      * @return self
      */
-    public function setUserAgentArray(array $userAgentMap): self
+    public function setUserAgents(array $userAgentMap): self
     {
         $userAgents = [];
 
