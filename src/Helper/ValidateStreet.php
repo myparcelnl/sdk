@@ -68,7 +68,7 @@ class ValidateStreet
             return self::SPLIT_STREET_REGEX_NL;
         }
 
-        if ($localIsNlOrBe && $destinationIsBe) {
+        if ($local === AbstractConsignment::CC_BE && $destinationIsBe) {
             return self::SPLIT_STREET_REGEX_BE;
         }
 
