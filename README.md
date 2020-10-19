@@ -1,3 +1,8 @@
+<p align="center">
+    <a href="https://packagist.org/packages/myparcelnl/sdk"><img src="https://img.shields.io/packagist/dt/myparcelnl/sdk" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/myparcelnl/sdk"><img src="https://img.shields.io/packagist/v/myparcelnl/sdk" alt="Latest Stable Version"></a>
+</p>
+
 # MyParcel SDK
 This SDK connects to the MyParcel API using PHP.
 
