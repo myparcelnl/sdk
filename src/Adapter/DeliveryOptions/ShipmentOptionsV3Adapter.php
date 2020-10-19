@@ -11,11 +11,12 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
      */
     public function __construct(array $shipmentOptions)
     {
-        $this->signature      = $shipmentOptions["signature"] ?? false;
-        $this->only_recipient = $shipmentOptions["only_recipient"] ?? false;
-        $this->insurance      = $shipmentOptions["insurance"] ?? self::DEFAULT_INSURANCE;
-        $this->age_check      = $shipmentOptions["age_check"] ?? false;
-        $this->large_format   = $shipmentOptions["large_format"] ?? false;
-        $this->return         = $shipmentOptions["return"] ?? false;
+        $this->signature         = $shipmentOptions["signature"] ?? false;
+        $this->only_recipient    = $shipmentOptions["only_recipient"] ?? false;
+        $this->insurance         = $shipmentOptions["insurance"] ?? self::DEFAULT_INSURANCE;
+        $this->age_check         = $shipmentOptions["age_check"] ?? false;
+        $this->large_format      = $shipmentOptions["large_format"] ?? false;
+        $this->return            = $shipmentOptions["return"] ?? false;
+        $this->label_description = $shipmentOptions["label_description"] ?? null;
     }
 }
