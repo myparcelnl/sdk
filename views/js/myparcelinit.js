@@ -61,10 +61,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 prestashop.on('changedCheckoutStep', function(values) {
   let event = values.event;
   let $currentTarget = $(event.currentTarget);
-  console.log($currentTarget);
   if(!$currentTarget.hasClass('-current')) {
     let $activeStep = $('.checkout-step.-current');
-    console.log($activeStep);
     if(!$activeStep.length) {
       $currentTarget.addClass('-current');
       $currentTarget.addClass('js-current-step');
