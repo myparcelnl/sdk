@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $('#add').click(function () {
     $.ajax({
       method: "POST",
-      url: create_label_action,
+      url: create_label_action + '&rand=' + Math.random(),
       data: $('#print-modal :input').serialize(),
       dataType: 'json',
       async: true,

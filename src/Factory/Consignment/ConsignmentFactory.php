@@ -101,14 +101,22 @@ class ConsignmentFactory
             $consignment->setPhone($order['phone']);
         }
         $delivery_setting = json_decode($order['delivery_settings']);
-        $deliveryDate = new \DateTime($delivery_setting->date);
-        $consignment->setDeliveryDate($deliveryDate->format('Y-m-d H:i:s'));
+        if (!empty($delivery_setting->date)) {
+            $deliveryDate = new \DateTime($delivery_setting->date);
+            $consignment->setDeliveryDate($deliveryDate->format('Y-m-d H:i:s'));
+        }
 
-        if ($delivery_setting->isPickup) {
+        if (!empty($delivery_setting->isPickup)) {
             $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]);
-            $consignment->setPickupNetworkId($delivery_setting->pickupLocation->retail_network_id);
+            if (isset($delivery_setting->pickupLocation->retail_network_id)) {
+                $consignment->setRetailNetworkId($delivery_setting->pickupLocation->retail_network_id);
+            }
         } else {
-            $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$delivery_setting->deliveryType]);
+            if (!empty($delivery_setting->deliveryType)) {
+                $consignment->setDeliveryType(
+                    AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$delivery_setting->deliveryType]
+                );
+            }
         }
 
         if ($consignment instanceof PostNLConsignment
