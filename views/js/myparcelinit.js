@@ -28,10 +28,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     let updateMypaInput = function(dataObj) {
+        let $deliveryInput = $('.delivery-option input[type="radio"]:checked');
         let $input = $('#mypa-input');
         if (!$input.length) {
             $input = $('<input type="hidden" class="mypa-post-nl-data" id="mypa-input" name="myparcel-delivery-options" />');
-            let $wrapper = $('.delivery-option input[type="radio"]:checked')
+            let $wrapper = $deliveryInput
               .closest('.delivery-option')
               .next()
               .find('.myparcel-delivery-options-wrapper');
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let dataString = JSON.stringify(dataObj)
 
         $input.val(dataString);
+        $input.trigger('change');
         document.dispatchEvent(new Event('myparcel_render_delivery_options'));
     }
 
@@ -55,6 +57,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     // Init
     initializeMyParcelForm($('.delivery-option input:checked').closest('.delivery-option'));
+
+  document.addEventListener(
+    'myparcel_updated_delivery_options',
+    (event) => {
+      if(event.detail) {
+        updateMypaInput(event.detail);
+      }
+    }
+  );
 });
 
 //workaround for the buggy parestashop core

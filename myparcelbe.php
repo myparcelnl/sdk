@@ -170,29 +170,37 @@ class MyParcelBE extends CarrierModule
         $this->cartCarrierStandardShippingCost = Tools::ps_round($shipping_cost, 2);
 
         $myParcelCost = 0;
-        $deliverySettings = $this->getDeliverySettingsByCart((int) $cart->id);
+        $deliverySettings = Tools::getValue('myparcel-delivery-options', false);
+        if($deliverySettings) {
+            $deliverySettings = json_decode($deliverySettings, true);
+        } else {
+            $deliverySettings = $this->getDeliverySettingsByCart((int) $cart->id);
+        }
+
         if (empty($deliverySettings)) {
             return $shipping_cost;
         }
 
-        if ($deliverySettings['isPickup']) {
+        $isPickup = (isset($deliverySettings['isPickup'])) ? $deliverySettings['isPickup'] : false;
+        $deliveryType = (isset($deliverySettings['deliveryType'])) ? $deliverySettings['deliveryType'] : 'standard';
+        if ($isPickup) {
             $myParcelCost += (float) \Gett\MyparcelBE\Service\CarrierConfigurationProvider::get(
                 $cart->id_carrier,
                 'pricePickup'
             );
         } else {
-            $priceHourInterval = 'price' . ucfirst($deliverySettings['deliveryType']) . 'Delivery';
+            $priceHourInterval = 'price' . ucfirst($deliveryType) . 'Delivery';
             $myParcelCost += (float) \Gett\MyparcelBE\Service\CarrierConfigurationProvider::get(
                 $cart->id_carrier,
                 $priceHourInterval
             );
-            if (!empty($deliverySettings['shipmentOptions']['only_recipient'])) {
+            if (!empty($deliverySettings['shipmentOptions']) && !empty($deliverySettings['shipmentOptions']['only_recipient'])) {
                 $myParcelCost += (float) \Gett\MyparcelBE\Service\CarrierConfigurationProvider::get(
                     $cart->id_carrier,
                     'priceOnlyRecipient'
                 );
             }
-            if (!empty($deliverySettings['shipmentOptions']['signature'])) {
+            if (!empty($deliverySettings['shipmentOptions']) && !empty($deliverySettings['shipmentOptions']['signature'])) {
                 $myParcelCost += (float) \Gett\MyparcelBE\Service\CarrierConfigurationProvider::get(
                     $cart->id_carrier,
                     'priceSignature'
