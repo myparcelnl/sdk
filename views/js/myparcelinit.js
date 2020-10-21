@@ -56,3 +56,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // Init
     initializeMyParcelForm($('.delivery-option input:checked').closest('.delivery-option'));
 });
+
+//workaround for the buggy parestashop core
+prestashop.on('changedCheckoutStep', function(values) {
+  let event = values.event;
+  let $currentTarget = $(event.currentTarget);
+  if(!$currentTarget.hasClass('-current')) {
+    let $activeStep = $('.checkout-step.-current');
+    if(!$activeStep.length) {
+      $currentTarget.addClass('-current');
+      $currentTarget.addClass('js-current-step');
+    }
+  }
+});
+
