@@ -44,9 +44,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let dataString = JSON.stringify(dataObj)
 
         $input.val(dataString);
-        setTimeout(function() {
-          $input.trigger('change');
-        },500);
+        $input.trigger('change');
         document.dispatchEvent(new Event('myparcel_render_delivery_options'));
     }
 
