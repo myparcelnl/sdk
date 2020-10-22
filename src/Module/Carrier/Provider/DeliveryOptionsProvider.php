@@ -14,9 +14,13 @@ class DeliveryOptionsProvider
     {
         $deliveryOptions = OrderLabel::getOrderDeliveryOptions($orderId);
         $this->nextDeliveryDate = new DateTime('tomorrow');// TODO: get next available delivery date
-        $this->deliveryDate = new DateTime($deliveryOptions->date);
-        $deliveryOptions->date = $this->deliveryDate->format('Y-m-d');
-        if ($this->nextDeliveryDate > $this->deliveryDate) {
+        if (!empty($deliveryOptions->date)) {
+            $this->deliveryDate = new DateTime($deliveryOptions->date);
+            $deliveryOptions->date = $this->deliveryDate->format('Y-m-d');
+            if ($this->nextDeliveryDate > $this->deliveryDate) {
+                $deliveryOptions->date = $this->nextDeliveryDate->format('Y-m-d');
+            }
+        } else {
             $deliveryOptions->date = $this->nextDeliveryDate->format('Y-m-d');
         }
 
