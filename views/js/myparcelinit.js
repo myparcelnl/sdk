@@ -41,11 +41,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
 
-        let dataString = JSON.stringify(dataObj)
+      let dataString = JSON.stringify(dataObj)
 
-        $input.val(dataString);
+      $input.val(dataString);
+
+      let $checkoutDeliverStep = $('#checkout-delivery-step');
+      let isOnDeliverStep = $checkoutDeliverStep.hasClass('js-current-step') || $checkoutDeliverStep.hasClass('-current');
+      if(isOnDeliverStep) {
         $input.trigger('change');
-        document.dispatchEvent(new Event('myparcel_render_delivery_options'));
+      }
+      document.dispatchEvent(new Event('myparcel_render_delivery_options'));
     }
 
     // On change
