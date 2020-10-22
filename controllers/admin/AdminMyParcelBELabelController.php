@@ -9,6 +9,7 @@ use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Service\Consignment\Download;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
+use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory as ConsignmentFactorySdk;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
@@ -461,6 +462,19 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                 && $postValues[Constant::RETURN_PACKAGE_CONFIGURATION_NAME]) {
                 $collection->sendReturnLabelMails();
             }
+        } catch (InvalidConsignmentException $e) {
+            Logger::addLog($this->module->l(
+                'InvalidConsignmentException exception triggered.',
+                'adminlabelcontroller'
+            ));
+            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getFile(), true);
+            Logger::addLog($e->getLine(), true);
+            $this->errors[] = sprintf($this->module->l(
+                'MyParcelBE: Delivery address is not valid for order ID: %d.',
+                'adminlabelcontroller'
+            ), (int) $idOrder);
+            $this->returnAjaxResponse();
         } catch (Exception $e) {
             Logger::addLog($e->getMessage(), true);
             Logger::addLog($e->getFile(), true);
