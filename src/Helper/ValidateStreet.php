@@ -60,8 +60,8 @@ class ValidateStreet
      */
     public static function getStreetRegexByCountry(string $local, string $destination): ?string
     {
-        $localIsBe = $local === AbstractConsignment::CC_BE;
-        $localIsNlOrBe = in_array($local, [AbstractConsignment::CC_BE, AbstractConsignment::CC_NL]);
+        $localIsBe       = $local === AbstractConsignment::CC_BE;
+        $localIsNlOrBe   = in_array($local, [AbstractConsignment::CC_BE, AbstractConsignment::CC_NL]);
         $destinationIsNl = $destination === AbstractConsignment::CC_NL;
         $destinationIsBe = $destination === AbstractConsignment::CC_BE;
 
