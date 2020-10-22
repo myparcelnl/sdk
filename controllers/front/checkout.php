@@ -73,7 +73,6 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 break;
             }
         }
-//        $this->requestOriginalShippingCost = true;
         $priceStandardDelivery = $this->context->cart->getCarrierCost(
             $id_carrier,
             true,
@@ -82,7 +81,6 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         if (empty($cutoffTimeToday)) {
             $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
         }
-
         $params = [
             'config' => [
                 'platform' => ($this->module->isBE() ? 'belgie' : 'myparcel'),
