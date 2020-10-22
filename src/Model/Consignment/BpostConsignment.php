@@ -62,6 +62,7 @@ class BpostConsignment extends AbstractConsignment
                         'street_additional_info' => $this->getStreetAdditionalInfo(),
                         'number'                 => $this->getNumber(),
                         'box_number'             => (string) $this->getBoxNumber(),
+                        'number_suffix'          => (string) $this->getNumberSuffix(),
                     ],
                 ]
             );
