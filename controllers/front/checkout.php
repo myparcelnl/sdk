@@ -51,14 +51,15 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         }
         $dropOffDateObj = new DateTime('today');
         $deliveryDateObj = new DateTime('tomorrow');// Delivery is next day
-        $today = $dropOffDateObj->format('Y-m-d');
-        $weekDayNumber = date('N', strtotime($today));
+        $weekDayNumber = $dropOffDateObj->format('N');
         $dayName = Constant::WEEK_DAYS[$weekDayNumber];
         $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
         if ($dropOffDelay > 0) {
             $dropOffDateObj->modify('+' . $dropOffDelay . ' day');
             $deliveryDateObj->modify('+' . $dropOffDelay . ' day');
-            $cutoffTimeToday = false;
+//            $weekDayNumber = $dropOffDateObj->format('N');
+//            $dayName = Constant::WEEK_DAYS[$weekDayNumber];
+//            $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
         }
         $exceptionCutoffToday = null;
         if (isset($cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff']) && $cutoffTimeToday !== false) {
@@ -81,6 +82,9 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
             true,
             new Country($address->id_country)
         );
+        if (empty($cutoffTimeToday)) {
+            $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
+        }
 
         $params = [
             'config' => [
