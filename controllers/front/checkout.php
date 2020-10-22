@@ -75,6 +75,15 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 break;
             }
         }
+//        $this->requestOriginalShippingCost = true;
+        $priceStandardDelivery = $this->context->cart->getCarrierCost(
+            $id_carrier,
+            true,
+            new Country($address->id_country)
+        );
+        if (empty($cutoffTimeToday)) {
+            $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
+        }
 
         $this->requestOriginalShippingCost = true;
         $priceStandardDelivery = $this->context->cart->getCarrierCost(
