@@ -49,14 +49,15 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         }
         $dropOffDateObj = new DateTime('today');
         $deliveryDateObj = new DateTime('tomorrow');// Delivery is next day
-        $today = $dropOffDateObj->format('Y-m-d');
-        $weekDayNumber = date('N', strtotime($today));
+        $weekDayNumber = $dropOffDateObj->format('N');
         $dayName = Constant::WEEK_DAYS[$weekDayNumber];
         $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
         if ($dropOffDelay > 0) {
             $dropOffDateObj->modify('+' . $dropOffDelay . ' day');
             $deliveryDateObj->modify('+' . $dropOffDelay . ' day');
-            $cutoffTimeToday = false;
+//            $weekDayNumber = $dropOffDateObj->format('N');
+//            $dayName = Constant::WEEK_DAYS[$weekDayNumber];
+//            $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
         }
         $exceptionCutoffToday = null;
         if (isset($cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff']) && $cutoffTimeToday !== false) {
@@ -72,6 +73,15 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 break;
             }
         }
+//        $this->requestOriginalShippingCost = true;
+        $priceStandardDelivery = $this->context->cart->getCarrierCost(
+            $id_carrier,
+            true,
+            new Country($address->id_country)
+        );
+        if (empty($cutoffTimeToday)) {
+            $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
+        }
 
         $params = [
             'config' => [
@@ -79,7 +89,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 'carrierSettings' => $carrierSettings,
 
                 'priceMorningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceMorningDelivery'), 2),
-                'priceStandardDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceStandardDelivery'), 2),
+                'priceStandardDelivery' => Tools::ps_round($priceStandardDelivery, 2),
                 'priceEveningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceEveningDelivery'), 2),
                 'priceSignature' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceSignature'), 2),
                 'priceOnlyRecipient' => Tools::ps_round(CarrierConfigurationProvider::get($id_carrier, 'priceOnlyRecipient'), 2),
