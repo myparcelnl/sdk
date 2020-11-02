@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyparcelNL\Sdk\src\Helper;
+namespace MyParcelNL\Sdk\src\Helper;
 
 class TrackTraceUrl
 {
