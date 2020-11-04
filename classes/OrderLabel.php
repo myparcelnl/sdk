@@ -2,11 +2,21 @@
 
 namespace Gett\MyparcelBE;
 
+use Address;
+use Configuration;
+use Context;
+use Country;
+use Customer;
 use Db;
 use DbQuery;
 use Gett\MyparcelBE\Service\Tracktrace;
+use Language;
+use Mail;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
+use Order;
+use Translate;
+use Validate;
 
 class OrderLabel extends \ObjectModel
 {
@@ -122,6 +132,7 @@ class OrderLabel extends \ObjectModel
         $address = new Address($order->id_address_delivery);
         $deliveryOptions = self::getOrderDeliveryOptions($order_label->id_order);
         $mailIso = Language::getIsoById($order->id_lang);
+        $mailIsoEn = 'en';
         $mailIsoUpper = strtoupper($mailIso);
         $countryIso = strtoupper(Country::getIsoById($address->id_country));
         $templateVars = [
@@ -157,10 +168,13 @@ class OrderLabel extends \ObjectModel
             11 => 'november',
             12 => 'december',
         ];
-        $tracktraceInfo = (new Tracktrace(\Configuration::get(Constant::API_KEY_CONFIGURATION_NAME)))->getTrackTrace($order_label->id_label);
-        $deliveryDate = $tracktraceInfo['data']['tracktraces'][0]['options']['delivery_date'];
-        $deliveryDateFrom = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['start']['date'];
-        $deliveryDateTo = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['end']['date'];
+        $tracktraceInfo = (new Tracktrace(\Configuration::get(Constant::API_KEY_CONFIGURATION_NAME)))
+            ->getTrackTrace($order_label->id_label, true);
+        $deliveryDate = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['start']['date']
+            ?? $tracktraceInfo['data']['tracktraces'][0]['options']['delivery_date']
+            ?? $deliveryOptions->date;
+        $deliveryDateFrom = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['start']['date'] ?? $deliveryOptions->date;
+        $deliveryDateTo = $tracktraceInfo['data']['tracktraces'][0]['delivery_moment']['end']['date'] ?? $deliveryOptions->date;
         $dayNumber = (int) date('w', strtotime($deliveryDate));
         $monthNumber = (int) date('n', strtotime($deliveryDate));
         $templateVars['{delivery_street}'] = $tracktraceInfo['data']['tracktraces'][0]['recipient']['street'];
@@ -268,10 +282,20 @@ class OrderLabel extends \ObjectModel
             && file_exists(dirname(__FILE__) . "/../mails/{$mailIso}/myparcel_{$mailType}_shipped.html")
         ) {
             $mailDir = dirname(__FILE__) . '/../mails/';
+        } elseif (file_exists(_PS_THEME_DIR_ . "modules/myparcelbe/mails/{$mailIsoEn}/myparcel_{$mailType}_shipped.txt")
+            && file_exists(
+                _PS_THEME_DIR_ . "modules/myparcelbe/mails/{$mailIsoEn}/myparcel_{$mailType}_shipped.html"
+            )
+        ) {
+            $mailDir = _PS_THEME_DIR_ . 'modules/myparcelbe/mails/';
+        } elseif (file_exists(dirname(__FILE__) . "/../mails/{$mailIsoEn}/myparcel_{$mailType}_shipped.txt")
+            && file_exists(dirname(__FILE__) . "/../mails/{$mailIsoEn}/myparcel_{$mailType}_shipped.html")
+        ) {
+            $mailDir = dirname(__FILE__) . '/../mails/';
         }
 
         if ($mailDir) {
-            Mail::Send(
+            Mail::send(
                 $order->id_lang,
                 "myparcel_{$mailType}_shipped",
                 $mailIsoUpper === 'NL' ? "Bestelling {$order->getUniqReference()} is verzonden" : "Order {$order->getUniqReference()} has been shipped",

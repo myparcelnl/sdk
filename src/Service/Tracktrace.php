@@ -14,8 +14,9 @@ class Tracktrace
         $this->api_key = $api_key;
     }
 
-    public function getTrackTrace(int $id_label)
+    public function getTrackTrace(int $id_label, $withDeliveryMoment = false)
     {
+        $extraInfo = $withDeliveryMoment ? '?extra_info=delivery_moment' : '';
         $request = (new MyParcelRequest())
             ->setUserAgent()
             ->setRequestParameters(
@@ -23,7 +24,7 @@ class Tracktrace
                 '',
                 MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
             )
-            ->sendRequest('GET', Request::REQUEST_TYPE_TRACKTRACE . "/{$id_label}")
+            ->sendRequest('GET', Request::REQUEST_TYPE_TRACKTRACE . "/{$id_label}" . $extraInfo)
         ;
 
         return $request->getResult();
