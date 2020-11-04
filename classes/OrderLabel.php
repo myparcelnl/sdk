@@ -435,10 +435,12 @@ class OrderLabel extends \ObjectModel
     public static function getCustomsOrderProducts(int $id_order)
     {
         $qb = new DbQuery();
-        $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_price, od.product_weight');
+        $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_weight');
+        $qb->select('od.unit_price_tax_incl');
         $qb->from('order_detail', 'od');
         $qb->leftJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
-        $qb->where('od.id_order = "' . $id_order . '" AND pc.name = "' . Constant::CUSTOMS_FORM_CONFIGURATION_NAME . '" ');
+        $qb->where('od.id_order = ' . $id_order);
+        $qb->where('pc.name = "' . pSQL(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) . '"');
 
         $return = Db::getInstance()->executeS($qb);
         foreach ($return as $item) {

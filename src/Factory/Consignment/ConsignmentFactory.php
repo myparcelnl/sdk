@@ -157,7 +157,7 @@ class ConsignmentFactory
                     );
 
                     $item->setDescription($product['product_name']);
-                    $item->setItemValue($product['product_price']);
+                    $item->setItemValue(\Tools::ps_round($product['unit_price_tax_incl'] * 100));// cents
                     $item->setWeight($product['product_weight']);
                     $consignment->addItem($item);
                 }
