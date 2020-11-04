@@ -176,9 +176,31 @@ class Installer
                 return $carrier;
             }
         } catch (\PrestaShopDatabaseException $e) {
-            \PrestaShopLogger::addLog('[MYPARCEL] PrestaShopDatabaseException carrier install: ' . $e->getMessage());
+            \PrestaShopLogger::addLog(
+                sprintf(
+                    '[MYPARCEL] PrestaShopDatabaseException carrier "%s" install: %s',
+                    ($configuration['name'] ?? 'empty'),
+                    $e->getMessage()
+                ),
+                1,
+                null,
+                'Cart',
+                $carrier->id ?? null,
+                true
+            );
         } catch (\PrestaShopException $e) {
-            \PrestaShopLogger::addLog('[MYPARCEL] PrestaShopException carrier install: ' . $e->getMessage());
+            \PrestaShopLogger::addLog(
+                sprintf(
+                    '[MYPARCEL] PrestaShopException carrier "%s" install: %s',
+                    ($configuration['name'] ?? 'empty'),
+                    $e->getMessage()
+                ),
+                1,
+                null,
+                'Cart',
+                $carrier->id ?? null,
+                true
+            );
         }
 
         return false;

@@ -66,7 +66,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                     ->setPdfOfLabels()->sendReturnLabelMails();
                 Logger::addLog($myParcelCollection->toJson());
             } catch (Exception $e) {
-                Logger::addLog($e->getMessage(), true);
+                Logger::addLog($e->getMessage(), true, true);
                 header('HTTP/1.1 500 Internal Server Error', true, 500);
                 die($this->module->l('A error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
             }
@@ -152,9 +152,9 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             $collection->setPdfOfLabels($printPosition);
             Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
-            Logger::addLog($e->getFile(), true);
-            Logger::addLog($e->getLine(), true);
+            Logger::addLog($e->getMessage(), true, true);
+            Logger::addLog($e->getFile(), true, true);
+            Logger::addLog($e->getLine(), true, true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('A error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
         }
@@ -185,7 +185,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             $collection->setLinkOfLabels();
             Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getMessage(), true, true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             die($this->module->l('An error occurred in the MyParcel module, please try again.', 'adminlabelcontroller'));
         }
@@ -228,7 +228,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             $collection->setLinkOfLabels();
             Logger::addLog($collection->toJson());
         } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getMessage(), true, true);
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminOrders'));
         }
 
@@ -466,19 +466,19 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             Logger::addLog($this->module->l(
                 'InvalidConsignmentException exception triggered.',
                 'adminlabelcontroller'
-            ));
-            Logger::addLog($e->getMessage(), true);
-            Logger::addLog($e->getFile(), true);
-            Logger::addLog($e->getLine(), true);
+            ), true, true);
+            Logger::addLog($e->getMessage(), true, true);
+            Logger::addLog($e->getFile(), true, true);
+            Logger::addLog($e->getLine(), true, true);
             $this->errors[] = sprintf($this->module->l(
                 'MyParcelBE: Delivery address is not valid for order ID: %d.',
                 'adminlabelcontroller'
             ), (int) $idOrder);
             $this->returnAjaxResponse();
         } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
-            Logger::addLog($e->getFile(), true);
-            Logger::addLog($e->getLine(), true);
+            Logger::addLog($e->getMessage(), true, true);
+            Logger::addLog($e->getFile(), true, true);
+            Logger::addLog($e->getLine(), true, true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
             $this->errors[] = $this->module->l(
                 'An error occurred in MyParcel module, please try again.',
@@ -662,7 +662,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                 $order_label->save();
             }
         } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getMessage(), true, true);
             $this->errors[] = $this->module->l(
                 'An error occurred in the MyParcel module, please try again.',
                 'adminlabelcontroller'
@@ -769,7 +769,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             $orderLabel->status = $status_provider->getStatus($consignment->getStatus());
             $orderLabel->add();
         } catch (Exception $e) {
-            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getMessage(), true, true);
             $this->errors[] = $this->module->l(
                 'An error occurred in the MyParcel module, please try again.',
                 'adminlabelcontroller'

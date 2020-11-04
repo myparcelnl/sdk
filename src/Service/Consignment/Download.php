@@ -43,7 +43,7 @@ class Download
                 \Tools::redirectAdmin(\Context::getContext()->link->getAdminLink('AdminOrders'));
             }
         } catch (\Exception $e) {
-            Logger::addLog($e->getMessage(), true);
+            Logger::addLog($e->getMessage(), true, true);
         }
     }
 
