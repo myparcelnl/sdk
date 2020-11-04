@@ -6,7 +6,7 @@ use Gett\MyparcelBE\Constant;
 
 trait OrderLabelHooks
 {
-    public function hookActionObjectGettMyParcelOrderLabelAddAfter($params)
+    public function hookActionObjectGettMyParcelBEOrderLabelAddAfter($params)
     {
         if (\Configuration::get(Constant::LABEL_CREATED_ORDER_STATUS_CONFIGURATION_NAME)) {
             $history = new \OrderHistory();
@@ -31,7 +31,7 @@ trait OrderLabelHooks
         }
     }
 
-    public function hookActionObjectGettMyParcelOrderLabelUpdateAfter($params)
+    public function hookActionObjectGettMyParcelBEOrderLabelUpdateAfter($params)
     {
         $order = new \Order($params['object']->id_order);
         $ignore = \Configuration::get(Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME);

@@ -85,8 +85,8 @@ class MyParcelBE extends CarrierModule
         'displayAdminListBefore',
         'actionAdminControllerSetMedia',
         'displayAdminOrderMainBottom',
-        'actionObjectGettMyParcelOrderLabelAddAfter',
-        'actionObjectGettMyParcelOrderLabelUpdateAfter',
+        'actionObjectGettMyParcelBEOrderLabelAddAfter',
+        'actionObjectGettMyParcelBEOrderLabelUpdateAfter',
         'displayInvoice',
     ];
     /** @var string $baseUrlWithoutToken */
