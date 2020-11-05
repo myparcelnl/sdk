@@ -202,8 +202,8 @@ class Constant
             self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => [1 => true, 2 => true]],
             self::SIGNATURE_REQUIRED_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
             self::INSURANCE_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
-            self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
-            self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
+            self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
+            self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
             // Return form
             'ALLOW_RETURN_FORM' => ['BE' => false, 'NL' => true],
             'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
