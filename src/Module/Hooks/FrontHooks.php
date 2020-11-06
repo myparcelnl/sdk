@@ -74,7 +74,7 @@ trait FrontHooks
             $display_taxes_label = (Configuration::get('PS_TAX') && !Configuration::get('AEUC_LABEL_TAX_INC_EXC'));
 
             $shipping_cost = Tools::displayPrice(
-                $this->cartCarrierStandardShippingCost,
+                $this->carrierStandardShippingCost[$params['carrier']['id']] ?? $this->cartCarrierStandardShippingCost,
                 Currency::getCurrencyInstance((int) $this->context->cart->id_currency),
                 false
             );

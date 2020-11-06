@@ -75,11 +75,16 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                 break;
             }
         }
-        $priceStandardDelivery = $this->context->cart->getCarrierCost(
+        // Trigger the $module->getOrderShippingCost() method then use the calculated carrier shipping cost
+        $this->context->cart->getCarrierCost(
             $id_carrier,
             true,
             new Country($address->id_country)
         );
+        $priceStandardDelivery = Tools::ps_round($this->module->cartCarrierStandardShippingCost, 2);
+        if (!empty($this->module->carrierStandardShippingCost[(int) $id_carrier])) {
+            $priceStandardDelivery = $this->module->carrierStandardShippingCost[(int)$id_carrier];
+        }
         if (empty($cutoffTimeToday)) {
             $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
         }

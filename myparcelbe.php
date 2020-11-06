@@ -25,7 +25,8 @@ class MyParcelBE extends CarrierModule
         \Gett\MyparcelBE\Database\CreateOrderLabelTableMigration::class,
         \Gett\MyparcelBE\Database\CreateDeliverySettingTableMigration::class,
     ];
-    protected $cartCarrierStandardShippingCost = null;
+    public $carrierStandardShippingCost = [];
+    public $cartCarrierStandardShippingCost = null;
 
     public $configItems = [
         \Gett\MyparcelBE\Constant::POSTNL_CONFIGURATION_NAME,
@@ -160,6 +161,7 @@ class MyParcelBE extends CarrierModule
 
     public function getOrderShippingCost($cart, $shipping_cost)
     {
+        $this->carrierStandardShippingCost[(int) $this->id_carrier] = Tools::ps_round($shipping_cost, 2);
         if ($this->id_carrier != $cart->id_carrier) {
             return $shipping_cost;
         }
