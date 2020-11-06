@@ -135,7 +135,8 @@ class ConsignmentFactory
                     $consignment->setPickupCity($pickupLocation->city);
                 }
                 if (!empty($pickupLocation->number)) {
-                    $consignment->setPickupNumber($pickupLocation->number . ($pickupLocation->number ?? ''));
+                    $consignment->setPickupNumber($pickupLocation->number
+                        . ($pickupLocation->number_suffix ?? ''));
                 }
                 if (!empty($pickupLocation->location_name)) {
                     $consignment->setPickupLocationName($pickupLocation->location_name);
