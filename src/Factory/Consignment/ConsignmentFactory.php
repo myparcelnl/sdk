@@ -155,8 +155,9 @@ class ConsignmentFactory
             $consignment->setOnlyRecipient(true);
         }
         if (!$consignment instanceof DPDConsignment
-            && isset($delivery_setting->shipmentOptions->signature)
-            && $delivery_setting->shipmentOptions->signature) {
+            && (!empty($delivery_setting->shipmentOptions->signature)
+                || $consignment->getDeliveryType() === AbstractConsignment::DELIVERY_TYPE_PICKUP)) {
+            // Signature is required for pickup delivery type
             $consignment->setSignature(true);
         }
         $consignment->setLabelDescription(

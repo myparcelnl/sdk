@@ -15,6 +15,16 @@ trait FrontHooks
     public function hookActionCarrierProcess($params)
     {
         $options = Tools::getValue('myparcel-delivery-options');
+        $optionsObj = null;
+        if (!empty($options)) {
+            $optionsObj = json_decode($options);
+            // Signature is required for pickup delivery type
+            if (!empty($optionsObj->isPickup)) {
+                $optionsObj->shipmentOptions = new \StdClass();
+                $optionsObj->shipmentOptions->signature = true;
+            }
+            $options = json_encode($optionsObj);
+        }
         if (Tools::isSubmit('confirmDeliveryOption') && !empty($options)) {
             Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                 'myparcel_delivery_settings',
@@ -32,11 +42,10 @@ trait FrontHooks
             }
             $carrier = new \Carrier($id_carrier);
             if (Validate::isLoadedObject($carrier)) {
-                $options_decoded = json_decode($options);
-                $options_decoded->carrier = str_replace(' ', '', strtolower($carrier->name));
+                $optionsObj->carrier = str_replace(' ', '', strtolower($carrier->name));
                 Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                     'myparcel_delivery_settings',
-                    ['id_cart' => $params['cart']->id, 'delivery_settings' => json_encode($options_decoded)],
+                    ['id_cart' => $params['cart']->id, 'delivery_settings' => json_encode($optionsObj)],
                     false,
                     true,
                     Db::REPLACE
