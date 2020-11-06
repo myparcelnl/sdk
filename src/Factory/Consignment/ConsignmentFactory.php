@@ -3,7 +3,9 @@
 namespace Gett\MyparcelBE\Factory\Consignment;
 
 use Configuration;
+use Country;
 use Gett\MyparcelBE\Constant;
+use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Module;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
@@ -73,12 +75,13 @@ class ConsignmentFactory
 
     private function initConsignment(array $order): AbstractConsignment
     {
+        $countryCode = strtoupper($order['iso_code']);
         $consignment = (\MyParcelNL\Sdk\src\Factory\ConsignmentFactory::createByCarrierId(
             $this->getMyParcelCarrierId($order['id_carrier']))
         )
             ->setApiKey($this->api_key)
             ->setReferenceId($order['id_order'])
-            ->setCountry($order['iso_code'])
+            ->setCountry($countryCode)
             ->setPerson($order['person'])
             ->setFullStreet($order['full_street'])
             ->setPostalCode($order['postcode'])
@@ -87,11 +90,23 @@ class ConsignmentFactory
             ->setInvoice($order['invoice_number'])
         ;
 
-        if (isset($this->request['MY_PARCEL_PACKAGE_TYPE']) && $package_type = $this->request['MY_PARCEL_PACKAGE_TYPE']) {
-            $consignment->setPackageType($package_type);
-        } else {
-            $consignment->setPackageType(PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']));
+        $carrierSettingsProvider = new CarrierSettingsProvider($this->module);
+        $carrierSettings = $carrierSettingsProvider->provide($order['id_carrier']);
+        if (!empty($labels)) {
+            foreach ($labels as &$label) {
+                $label['ALLOW_DELIVERY_FORM'] = $carrierSettings['delivery']['ALLOW_FORM'];
+                $label['ALLOW_RETURN_FORM'] = $carrierSettings['return']['ALLOW_FORM'];
+            }
         }
+        if (isset($this->request['MY_PARCEL_PACKAGE_TYPE'])) {
+            $packageType = $this->request['MY_PARCEL_PACKAGE_TYPE'];
+        } else {
+            $packageType = PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']);
+        }
+        if (empty($carrierSettings[Constant::PACKAGE_TYPE_CONFIGURATION_NAME][$countryCode][(int) $packageType])) {
+            $packageType = 1; // TODO: for NL the DPD and Bpost don't allow any.
+        }
+        $consignment->setPackageType((int) $packageType);
 
         if ($this->configuration::get(Constant::SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME)) {
             $consignment->setEmail($order['email']);
@@ -107,10 +122,9 @@ class ConsignmentFactory
         }
 
         if (!empty($delivery_setting->isPickup)) {
-            $consignment->setDeliveryType(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]);
-            if (isset($delivery_setting->pickupLocation->retail_network_id)) {
-                $consignment->setRetailNetworkId($delivery_setting->pickupLocation->retail_network_id);
-            }
+            $consignment->setDeliveryType(
+                AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME]
+            );
         } else {
             if (!empty($delivery_setting->deliveryType)) {
                 $consignment->setDeliveryType(
@@ -155,17 +169,17 @@ class ConsignmentFactory
             && $delivery_setting->shipmentOptions->only_recipient) {
             $consignment->setOnlyRecipient(true);
         }
-        if (!$consignment instanceof DPDConsignment
-            && (!empty($delivery_setting->shipmentOptions->signature)
-                || $consignment->getDeliveryType() === AbstractConsignment::DELIVERY_TYPE_PICKUP)) {
-            // Signature is required for pickup delivery type
+        // Signature is required for pickup delivery type
+        if ($consignment->getDeliveryType() === AbstractConsignment::DELIVERY_TYPE_PICKUP
+            || (!empty($delivery_setting->shipmentOptions->signature)
+                && !empty($carrierSettings['allowSignature'][$countryCode]))) {
             $consignment->setSignature(true);
         }
         $consignment->setLabelDescription(
-            $this->getLabelParams($order, \Configuration::get(Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME))
+            $this->getLabelParams($order, Configuration::get(Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME))
         );
 
-        if (\CountryCore::getIdZone($order['id_country']) != 1
+        if (Country::getIdZone($order['id_country']) != 1
             && $this->configuration::get(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone
             $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
             $consignment->setAgeCheck(false); //The age check is not possible with an EU shipment or world shipment
