@@ -119,6 +119,36 @@ class ConsignmentFactory
             }
         }
 
+        if ($consignment->getDeliveryType() === AbstractConsignment::DELIVERY_TYPE_PICKUP) {
+            $pickupLocation = $delivery_setting->pickupLocation ?? null;
+            if (!empty($pickupLocation)) {
+                if (!empty($pickupLocation->cc)) {
+                    $consignment->setPickupCountry($pickupLocation->cc);
+                }
+                if (!empty($pickupLocation->postal_code)) {
+                    $consignment->setPickupPostalCode($pickupLocation->postal_code);
+                }
+                if (!empty($pickupLocation->street)) {
+                    $consignment->setPickupStreet($pickupLocation->street);
+                }
+                if (!empty($pickupLocation->city)) {
+                    $consignment->setPickupCity($pickupLocation->city);
+                }
+                if (!empty($pickupLocation->number)) {
+                    $consignment->setPickupNumber($pickupLocation->number . ($pickupLocation->number ?? ''));
+                }
+                if (!empty($pickupLocation->location_name)) {
+                    $consignment->setPickupLocationName($pickupLocation->location_name);
+                }
+                if (!empty($pickupLocation->location_code)) {
+                    $consignment->setPickupLocationCode($pickupLocation->location_code);
+                }
+                if (!empty($pickupLocation->retail_network_id)) {
+                    $consignment->setRetailNetworkId($pickupLocation->retail_network_id);
+                }
+            }
+        }
+
         if ($consignment instanceof PostNLConsignment
             && isset($delivery_setting->shipmentOptions->only_recipient)
             && $delivery_setting->shipmentOptions->only_recipient) {
