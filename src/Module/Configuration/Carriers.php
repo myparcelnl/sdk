@@ -802,7 +802,7 @@ class Carriers extends AbstractForm
             if ($this->exclusiveField->isAvailable(
                 $countryIso,
                 $carrierType,
-                $prefix . Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+                $prefix . Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
                 $index
             )) {
                 $packageFormat[] = ['id' => $index, 'name' => $label];
