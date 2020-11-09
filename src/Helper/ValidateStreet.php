@@ -36,7 +36,7 @@ class ValidateStreet
      */
     public static function validate(string $fullStreet, string $localCountry, ?string $destinationCountry): bool
     {
-        if ($destinationCountry === null) {
+        if (null === $destinationCountry) {
             return true;
         }
 
