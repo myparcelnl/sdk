@@ -35,6 +35,11 @@ abstract class AbstractShipmentOptionsAdapter
     protected $insurance;
 
     /**
+     * @var string|null
+     */
+    protected $label_description;
+
+    /**
      * @return bool|null
      */
     public function hasSignature(): ?bool
@@ -85,17 +90,26 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
+     * @return string|null
+     */
+    public function getLabelDescription(): ?string
+    {
+        return $this->label_description;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
     {
         return [
-            'signature'      => $this->hasSignature(),
-            'insurance'      => $this->getInsurance(),
-            'age_check'      => $this->hasAgeCheck(),
-            'only_recipient' => $this->hasOnlyRecipient(),
-            'return'         => $this->isReturn(),
-            'large_format'   => $this->hasLargeFormat(),
+            'signature'         => $this->hasSignature(),
+            'insurance'         => $this->getInsurance(),
+            'age_check'         => $this->hasAgeCheck(),
+            'only_recipient'    => $this->hasOnlyRecipient(),
+            'return'            => $this->isReturn(),
+            'large_format'      => $this->hasLargeFormat(),
+            'label_description' => $this->getLabelDescription(),
         ];
     }
 }
