@@ -41,6 +41,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
 //        }
         $carrierSettings[$carrierName] = array_merge($carrierSettings[$carrierName], $activeCarrierSettings);
         $dropOffDelay = (int) CarrierConfigurationProvider::get($id_carrier, 'dropOffDelay');
+        $deliveryDaysWindow = (int) (CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow') ?? 1);
         $cutoffExceptions = CarrierConfigurationProvider::get($id_carrier, Constant::CUTOFF_EXCEPTIONS);
         $cutoffExceptions = @json_decode(
             $cutoffExceptions,
@@ -49,23 +50,23 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         if (!is_array($cutoffExceptions)) {
             $cutoffExceptions = array();
         }
+        $now = new DateTime('now');
         $dropOffDateObj = new DateTime('today');
         $deliveryDateObj = new DateTime('tomorrow');// Delivery is next day
         $weekDayNumber = $dropOffDateObj->format('N');
         $dayName = Constant::WEEK_DAYS[$weekDayNumber];
         $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
-        if ($dropOffDelay > 0) {
-            $dropOffDateObj->modify('+' . $dropOffDelay . ' day');
-            $deliveryDateObj->modify('+' . $dropOffDelay . ' day');
-//            $weekDayNumber = $dropOffDateObj->format('N');
-//            $dayName = Constant::WEEK_DAYS[$weekDayNumber];
-//            $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
+        $this->updateDatesByDropOffDelay($dropOffDelay, $dropOffDateObj, $deliveryDateObj);
+
+        // Update the dropOffDateObj with the cutoff time. Ex. 17:00 hour
+        $this->updateCutoffTime($cutoffTimeToday, $dropOffDateObj, $cutoffExceptions);
+        if ($now > $dropOffDateObj) {
+            $dropOffDelay++;
         }
+
         $exceptionCutoffToday = null;
-        if (isset($cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff']) && $cutoffTimeToday !== false) {
-            $cutoffTimeToday = $cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff'];
-        }
-        foreach (range(1, 14) as $day) {
+
+        foreach (range(1, ($deliveryDaysWindow > 1 ? $deliveryDaysWindow : 1)) as $day) {
             if (!isset($cutoffExceptions[$deliveryDateObj->format('d-m-Y')]['cutoff'])
                 && isset($cutoffExceptions[$deliveryDateObj->format('d-m-Y')]['nodispatch'])) {
                 $deliveryDateObj->modify('+1 day');
@@ -85,9 +86,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         if (!empty($this->module->carrierStandardShippingCost[(int) $id_carrier])) {
             $priceStandardDelivery = $this->module->carrierStandardShippingCost[(int)$id_carrier];
         }
-        if (empty($cutoffTimeToday)) {
-            $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
-        }
+
         $params = [
             'config' => [
                 'platform' => ($this->module->isBE() ? 'belgie' : 'myparcel'),
@@ -114,7 +113,7 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
                     explode(',', CarrierConfigurationProvider::get($id_carrier, 'dropOffDays'))
                 ),
                 'cutoffTime' => $cutoffTimeToday,
-                'deliveryDaysWindow' => (int) (CarrierConfigurationProvider::get($id_carrier, 'deliveryDaysWindow') ?? 1),
+                'deliveryDaysWindow' => $deliveryDaysWindow,
                 'dropOffDelay' => $dropOffDelay,
 
                 //'allowOnlyRecipient' => (int) CarrierConfigurationProvider::get($id_carrier, 'allowOnlyRecipient'),
@@ -158,6 +157,30 @@ class MyParcelBECheckoutModuleFrontController extends ModuleFrontController
         ];
 
         echo json_encode($params);
-        die();
+        exit;
+    }
+
+    public function updateDatesByDropOffDelay($dropOffDelay, $dropOffDateObj, $deliveryDateObj)
+    {
+        if ($dropOffDelay > 0) {
+            $dropOffDateObj->modify('+' . $dropOffDelay . ' day');
+            $deliveryDateObj->modify('+' . $dropOffDelay . ' day');
+//            $weekDayNumber = $dropOffDateObj->format('N');
+//            $dayName = Constant::WEEK_DAYS[$weekDayNumber];
+//            $cutoffTimeToday = CarrierConfigurationProvider::get($id_carrier, $dayName . 'CutoffTime');
+        }
+    }
+
+    public function updateCutoffTime(&$cutoffTimeToday, $dropOffDateObj, $cutoffExceptions)
+    {
+        if (isset($cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff']) && $cutoffTimeToday !== false) {
+            $cutoffTimeToday = $cutoffExceptions[$dropOffDateObj->format('d-m-Y')]['cutoff'];
+        }
+        if (empty($cutoffTimeToday)) {
+            $cutoffTimeToday = Constant::DEFAULT_CUTOFF_TIME;
+        }
+
+        list($hour, $minute) = explode(':', $cutoffTimeToday);
+        $dropOffDateObj->setTime((int) $hour, (int) $minute, 0, 0);
     }
 }
