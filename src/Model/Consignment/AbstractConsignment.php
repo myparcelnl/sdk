@@ -1577,7 +1577,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupStreet(): string
+    public function getPickupStreet(): ?string
     {
         return $this->pickup_street;
     }
@@ -1601,7 +1601,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupCity(): string
+    public function getPickupCity(): ?string
     {
         return $this->pickup_city;
     }
@@ -1625,7 +1625,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupNumber(): string
+    public function getPickupNumber(): ?string
     {
         return $this->pickup_number;
     }
