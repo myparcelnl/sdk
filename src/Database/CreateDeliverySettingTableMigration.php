@@ -7,7 +7,7 @@ class CreateDeliverySettingTableMigration
     public static function up(): bool
     {
         $sql = <<<'SQL'
-                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcel_delivery_settings` (
+                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcelbe_delivery_settings` (
   `id_delivery_setting` int(11) NOT NULL AUTO_INCREMENT,
   `id_cart` int(11) NOT NULL,
   `delivery_settings` text,
@@ -25,7 +25,7 @@ SQL;
     {
         $sql =
             <<<'SQL'
-                DROP TABLE IF EXISTS {PREFIX}myparcel_delivery_settings;
+                DROP TABLE IF EXISTS {PREFIX}myparcelbe_delivery_settings;
 SQL;
 
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)

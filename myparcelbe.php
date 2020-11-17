@@ -295,7 +295,7 @@ class MyParcelBE extends CarrierModule
     {
         $sql = new \DbQuery();
         $sql->select('*');
-        $sql->from('myparcel_order_label', 'mol');
+        $sql->from('myparcelbe_order_label', 'mol');
         $sql->where('mol.`id_label` = ' . $id_shipment);
 
         $shipment = Db::getInstance()->getRow($sql);
@@ -352,7 +352,7 @@ class MyParcelBE extends CarrierModule
     {
         $query = new DbQuery();
         $query->select('delivery_settings');
-        $query->from('myparcel_delivery_settings');
+        $query->from('myparcelbe_delivery_settings');
         $query->where('id_cart = ' . (int) $idCart);
         $query->orderBy('id_delivery_setting DESC');
         $deliverySettings = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query);

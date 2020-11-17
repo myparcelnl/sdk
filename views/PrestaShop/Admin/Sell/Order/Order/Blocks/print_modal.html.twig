@@ -10,7 +10,7 @@
 } %}
     {% block content %}
         <div class="modal-body">
-            <form method="post" id="print-form" action="{{ path('admin_myparcel_order_label_download') }}">
+            <form method="post" id="print-form" action="{{ path('admin_myparcelbe_order_label_download') }}">
                 <input type="hidden" name="label_id" id="label_id" value="">
                 {% include '@PrestaShop/Admin/Sell/Order/Order/Blocks/print_position_block.html.twig' %}
             </form>

@@ -10,7 +10,7 @@ class ProductConfigurationProvider
     {
         if (!isset(static::$products[$id_product][$param])) {
             $result = \Db::getInstance()->executeS(
-                'SELECT name, value FROM ' . _DB_PREFIX_ . "myparcel_product_configuration WHERE id_product = '{$id_product}' "
+                'SELECT name, value FROM ' . _DB_PREFIX_ . "myparcelbe_product_configuration WHERE id_product = '{$id_product}' "
             );
             foreach ($result as $item) {
                 static::$products[$id_product][$item['name']] = $item['value'];

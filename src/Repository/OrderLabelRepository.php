@@ -41,7 +41,7 @@ class OrderLabelRepository
         $qb->select(
             'ol.id_label'
         );
-        $qb->from($this->tablePrefix . 'myparcel_order_label', 'ol');
+        $qb->from($this->tablePrefix . 'myparcelbe_order_label', 'ol');
         $qb->where('barcode = "' . $barcode . '" ');
 
         return $qb->execute()->fetch()['id_label'];
@@ -53,7 +53,7 @@ class OrderLabelRepository
         $qb->select(
             'ol.id_label'
         );
-        $qb->from($this->tablePrefix . 'myparcel_order_label', 'ol');
+        $qb->from($this->tablePrefix . 'myparcelbe_order_label', 'ol');
         $qb->where('id_order IN ("' . implode(',', $orders_id) . '") ');
 
         return $qb->execute()->fetchAll(FetchMode::COLUMN);
@@ -80,7 +80,7 @@ class OrderLabelRepository
         $qb->innerJoin('o', $this->tablePrefix . 'address', 'a', 'o.id_address_delivery = a.id_address');
         $qb->innerJoin('a', $this->tablePrefix . 'country', 'co', 'co.id_country = a.id_country');
         $qb->innerJoin('o', $this->tablePrefix . 'customer', 'c', 'o.id_customer = c.id_customer');
-        $qb->innerJoin('o', $this->tablePrefix . 'myparcel_delivery_settings', 'ds', 'o.id_cart = ds.id_cart');
+        $qb->innerJoin('o', $this->tablePrefix . 'myparcelbe_delivery_settings', 'ds', 'o.id_cart = ds.id_cart');
 
         return $qb;
     }

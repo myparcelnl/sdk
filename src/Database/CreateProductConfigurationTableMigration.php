@@ -7,7 +7,7 @@ class CreateProductConfigurationTableMigration implements Migration
     public static function up(): bool
     {
         $sql = <<<'SQL'
-                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcel_product_configuration` (
+                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcelbe_product_configuration` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_product` int(11) NOT NULL,
   `name` varchar(150) NOT NULL,
@@ -25,7 +25,7 @@ SQL;
     {
         $sql =
             <<<'SQL'
-                DROP TABLE IF EXISTS {PREFIX}myparcel_product_configuration;
+                DROP TABLE IF EXISTS {PREFIX}myparcelbe_product_configuration;
 SQL;
 
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)

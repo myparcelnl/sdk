@@ -381,7 +381,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                 }
             }
             Db::getInstance(_PS_USE_SQL_SLAVE_)->update(
-                'myparcel_delivery_settings',
+                'myparcelbe_delivery_settings',
                 ['delivery_settings' => json_encode($deliveryOptions)],
                 'id_cart = ' . (int) $order->id_cart
             );
@@ -568,7 +568,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
         $order = new Order($postValues['id_order'] ?? 0);
         if ($action === 'updateDeliveryOptions' && !empty($options) && !empty($order->id_cart)) {
             Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
-                'myparcel_delivery_settings',
+                'myparcelbe_delivery_settings',
                 ['id_cart' => $order->id_cart, 'delivery_settings' => $options],
                 false,
                 true,

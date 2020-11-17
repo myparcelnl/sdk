@@ -88,7 +88,7 @@ class Carriers extends AbstractForm
                     }
                 }
                 Db::getInstance()->update(
-                    'myparcel_carrier_configuration',
+                    'myparcelbe_carrier_configuration',
                     ['value' => pSQL($updatedValue)],
                     'id_carrier = ' . (int) $carrierId . ' AND name = "' . pSQL($field) . '" '
                 );
@@ -164,7 +164,7 @@ class Carriers extends AbstractForm
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
         $carrierConfigs = Db::getInstance()->executeS('SELECT *
-            FROM `' . _DB_PREFIX_ . 'myparcel_carrier_configuration`
+            FROM `' . _DB_PREFIX_ . 'myparcelbe_carrier_configuration`
             WHERE `id_carrier` = ' . $id_carrier);
         $vars = [];
         foreach ($carrierConfigs as $row) {

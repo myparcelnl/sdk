@@ -31,7 +31,7 @@ class OrderLabel extends \ObjectModel
     public $date_upd;
 
     public static $definition = [
-        'table' => 'myparcel_order_label',
+        'table' => 'myparcelbe_order_label',
         'primary' => 'id_order_label',
         'multilang' => false,
         'fields' => [
@@ -395,7 +395,7 @@ class OrderLabel extends \ObjectModel
         $qb->innerJoin('address', 'a', 'o.id_address_delivery = a.id_address');
         $qb->innerJoin('country', 'co', 'co.id_country = a.id_country');
         $qb->innerJoin('customer', 'c', 'o.id_customer = c.id_customer');
-        $qb->innerJoin('myparcel_delivery_settings', 'ds', 'o.id_cart = ds.id_cart');
+        $qb->innerJoin('myparcelbe_delivery_settings', 'ds', 'o.id_cart = ds.id_cart');
 
         $qb->where('o.id_order IN (' . implode(',', $orderIds) . ') ');
 
@@ -406,7 +406,7 @@ class OrderLabel extends \ObjectModel
     {
         $qb = new DbQuery();
         $qb->select('ds.delivery_settings');
-        $qb->from('myparcel_delivery_settings', 'ds');
+        $qb->from('myparcelbe_delivery_settings', 'ds');
         $qb->innerJoin('orders', 'o', 'o.id_cart = ds.id_cart');
         $qb->where('o.id_order = "' . $id_order . '" ');
 
@@ -432,7 +432,7 @@ class OrderLabel extends \ObjectModel
     {
         $qb = new DbQuery();
         $qb->select('ol.id_label');
-        $qb->from('myparcel_order_label', 'ol');
+        $qb->from('myparcelbe_order_label', 'ol');
         $qb->where('ol.id_order IN (' . implode(',', $orders_id) . ') ');
 
         $return = [];
@@ -447,7 +447,7 @@ class OrderLabel extends \ObjectModel
     {
         $sql = new DbQuery();
         $sql->select('*');
-        $sql->from('myparcel_order_label');
+        $sql->from('myparcelbe_order_label');
         $sql->where('id_order = ' . (int) $order_id);
         if (!empty($label_ids)) {
             $sql->where('id_label IN(' . implode(',', $label_ids) . ')');
@@ -462,7 +462,7 @@ class OrderLabel extends \ObjectModel
         $qb->select('od.product_id, pc.value , od.product_quantity, od.product_name, od.product_weight');
         $qb->select('od.unit_price_tax_incl');
         $qb->from('order_detail', 'od');
-        $qb->leftJoin('myparcel_product_configuration', 'pc', 'od.product_id = pc.id_product');
+        $qb->leftJoin('myparcelbe_product_configuration', 'pc', 'od.product_id = pc.id_product');
         $qb->where('od.id_order = ' . $id_order);
         $qb->where('pc.name = "' . pSQL(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) . '"');
 

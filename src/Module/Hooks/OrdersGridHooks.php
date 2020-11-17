@@ -20,7 +20,7 @@ trait OrdersGridHooks
         );
         $searchQueryBuilder->leftJoin(
             'o',
-            _DB_PREFIX_ . 'myparcel_order_label',
+            _DB_PREFIX_ . 'myparcelbe_order_label',
             'mol',
             'o.id_order = mol.id_order'
         );

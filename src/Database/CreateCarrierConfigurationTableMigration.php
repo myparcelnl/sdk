@@ -7,7 +7,7 @@ class CreateCarrierConfigurationTableMigration implements Migration
     public static function up(): bool
     {
         $sql = <<<'SQL'
-                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcel_carrier_configuration` (
+                CREATE TABLE IF NOT EXISTS `{PREFIX}myparcelbe_carrier_configuration` (
   `id_configuration` int(11) NOT NULL AUTO_INCREMENT,
   `id_carrier` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -25,7 +25,7 @@ SQL;
     {
         $sql =
             <<<'SQL'
-                DROP TABLE IF EXISTS {PREFIX}myparcel_carrier_configuration;
+                DROP TABLE IF EXISTS {PREFIX}myparcelbe_carrier_configuration;
 SQL;
 
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)

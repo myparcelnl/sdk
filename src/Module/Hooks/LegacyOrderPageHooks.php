@@ -95,7 +95,7 @@ trait LegacyOrderPageHooks
         }
         $sql = new \DbQuery();
         $sql->select('*');
-        $sql->from('myparcel_order_label');
+        $sql->from('myparcelbe_order_label');
         $sql->where('id_order = "' . pSQL($params['id_order']) . '" ');
         $result = \Db::getInstance()->executeS($sql);
         $link = $this->context->link;

@@ -27,7 +27,7 @@ trait FrontHooks
         }
         if (Tools::isSubmit('confirmDeliveryOption') && !empty($options)) {
             Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
-                'myparcel_delivery_settings',
+                'myparcelbe_delivery_settings',
                 ['id_cart' => $params['cart']->id, 'delivery_settings' => $options],
                 false,
                 true,
@@ -44,7 +44,7 @@ trait FrontHooks
             if (Validate::isLoadedObject($carrier)) {
                 $optionsObj->carrier = str_replace(' ', '', strtolower($carrier->name));
                 Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
-                    'myparcel_delivery_settings',
+                    'myparcelbe_delivery_settings',
                     ['id_cart' => $params['cart']->id, 'delivery_settings' => json_encode($optionsObj)],
                     false,
                     true,

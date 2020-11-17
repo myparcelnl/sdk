@@ -27,7 +27,7 @@ class PackageTypeCalculator
         $sql = new \DbQueryCore();
         $sql->select('mpc.*');
         $sql->from('order_detail', 'od');
-        $sql->innerJoin('myparcel_product_configuration', 'mpc', 'od.product_id = mpc.id_product');
+        $sql->innerJoin('myparcelbe_product_configuration', 'mpc', 'od.product_id = mpc.id_product');
         $sql->where('id_order = "' . pSQL($id_order) . '" ');
         $result = \Db::getInstance()->executeS($sql);
         $package_types = [];

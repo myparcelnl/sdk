@@ -26,7 +26,7 @@ admin_productmyparcel_save:
 #        _legacy_controller: AdminMyParcelBELabelController
 #        _legacy_link: AdminMyParcelBELabel:downloadLabelsBulk
 
-#admin_myparcel_order_label_create:
+#admin_myparcelbe_order_label_create:
 #    path: /create-label
 #    methods: [POST]
 #    defaults:
@@ -35,7 +35,7 @@ admin_productmyparcel_save:
 #        _legacy_link: AdminMyParcelBELabel:createLabel
 
 
-#admin_myparcel_order_label_download:
+#admin_myparcelbe_order_label_download:
 #    path: /download-label
 #    methods: [POST]
 #    defaults:
@@ -43,7 +43,7 @@ admin_productmyparcel_save:
 #        _legacy_controller: AdminMyParcelBELabelController
 #        _legacy_link: AdminMyParcelBELabel:downloadLabel
 
-#admin_myparcel_order_label_refresh:
+#admin_myparcelbe_order_label_refresh:
 #    path: /refresh-label/{labelId}
 #    methods: [GET]
 #    defaults:

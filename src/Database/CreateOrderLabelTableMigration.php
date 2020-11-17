@@ -7,7 +7,7 @@ class CreateOrderLabelTableMigration implements Migration
     public static function up(): bool
     {
         $sql = <<<'SQL'
-        CREATE TABLE IF NOT EXISTS `{PREFIX}myparcel_order_label` (
+        CREATE TABLE IF NOT EXISTS `{PREFIX}myparcelbe_order_label` (
           `id_order_label` int(11) NOT NULL AUTO_INCREMENT,
           `id_order` int(11) NOT NULL,
           `status` varchar (60) NOT NULL,
@@ -37,7 +37,7 @@ SQL;
     {
         $sql =
             <<<'SQL'
-                DROP TABLE IF EXISTS {PREFIX}myparcel_order_label;
+                DROP TABLE IF EXISTS {PREFIX}myparcelbe_order_label;
 SQL;
 
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)
