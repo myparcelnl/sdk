@@ -304,7 +304,7 @@ $barcode = $consignment->getBarcode();
 The Track & Trace url is available after `downloadPdfOfLabels()` and `getLinkOfLabels()`
 ```php
 $consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment());
-echo $consignment->getBarcodeUrl(3SMYPA123456789, '2231JE', 'NL'); // Barcode , Postal code, Country
+echo $consignment->getBarcodeUrl('3SMYPA123456789', '2231JE', 'NL'); // Barcode , Postal code, Country
 ```
 
 ### Create and download label(s)
