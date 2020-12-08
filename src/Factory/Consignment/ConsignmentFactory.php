@@ -98,8 +98,8 @@ class ConsignmentFactory
                 $label['ALLOW_RETURN_FORM'] = $carrierSettings['return']['ALLOW_FORM'];
             }
         }
-        if (isset($this->request['MY_PARCEL_PACKAGE_TYPE'])) {
-            $packageType = $this->request['MY_PARCEL_PACKAGE_TYPE'];
+        if (isset($this->request['MYPARCELBE_PACKAGE_TYPE'])) {
+            $packageType = $this->request['MYPARCELBE_PACKAGE_TYPE'];
         } else {
             $packageType = PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']);
         }
@@ -213,7 +213,7 @@ class ConsignmentFactory
         return $consignment;
     }
 
-    private function MY_PARCEL_RECIPIENT_ONLY(AbstractConsignment $consignment)
+    private function MYPARCELBE_RECIPIENT_ONLY(AbstractConsignment $consignment)
     {
         if ($consignment instanceof PostNLConsignment) {
             return $consignment->setOnlyRecipient(true);
@@ -222,17 +222,17 @@ class ConsignmentFactory
         return false;
     }
 
-    private function MY_PARCEL_AGE_CHECK(AbstractConsignment $consignment)
+    private function MYPARCELBE_AGE_CHECK(AbstractConsignment $consignment)
     {
         return $consignment->setAgeCheck(true);
     }
 
-    private function MY_PARCEL_PACKAGE_TYPE(AbstractConsignment $consignment)
+    private function MYPARCELBE_PACKAGE_TYPE(AbstractConsignment $consignment)
     {
         return $consignment->setPackageType($this->request['packageType']);
     }
 
-    private function MY_PARCEL_INSURANCE(AbstractConsignment $consignment)
+    private function MYPARCELBE_INSURANCE(AbstractConsignment $consignment)
     {
         $insuranceValue = 0;
         if (isset($postValues['insuranceAmount'])) {
@@ -268,12 +268,12 @@ class ConsignmentFactory
         return $consignment->setInsurance($insuranceValue);
     }
 
-    private function MY_PARCEL_RETURN_PACKAGE(AbstractConsignment $consignment)
+    private function MYPARCELBE_RETURN_PACKAGE(AbstractConsignment $consignment)
     {
         return $consignment->setReturn(true);
     }
 
-    private function MY_PARCEL_SIGNATURE_REQUIRED(AbstractConsignment $consignment)
+    private function MYPARCELBE_SIGNATURE_REQUIRED(AbstractConsignment $consignment)
     {
         if (!$consignment instanceof DPDConsignment) {
             return $consignment->setSignature(true);
@@ -282,7 +282,7 @@ class ConsignmentFactory
         return false;
     }
 
-    private function MY_PARCEL_PACKAGE_FORMAT(AbstractConsignment $consignment)
+    private function MYPARCELBE_PACKAGE_FORMAT(AbstractConsignment $consignment)
     {
         return $consignment->setLargeFormat($this->request['packageFormat'] == 2);
     }
@@ -338,15 +338,15 @@ class ConsignmentFactory
         if (!\Validate::isLoadedObject($carrier)) {
             throw new \Exception('No carrier found.');
         }
-        if ($carrier->id_reference == $this->configuration::get('MYPARCEL_POSTNL')) {
+        if ($carrier->id_reference == $this->configuration::get(Constant::POSTNL_CONFIGURATION_NAME)) {
             return PostNLConsignment::CARRIER_ID;
         }
 
-        if ($carrier->id_reference == $this->configuration::get('MYPARCEL_BPOST')) {
+        if ($carrier->id_reference == $this->configuration::get(Constant::BPOST_CONFIGURATION_NAME)) {
             return BpostConsignment::CARRIER_ID;
         }
 
-        if ($carrier->id_reference == $this->configuration::get('MYPARCEL_DPD')) {
+        if ($carrier->id_reference == $this->configuration::get(Constant::DPD_CONFIGURATION_NAME)) {
             return DPDConsignment::CARRIER_ID;
         }
 

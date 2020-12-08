@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   changeInsuranceHigherAmount();
 
-  if ($('#MY_PARCEL_LABEL_SIZE').val() == 'a6') {
+  if ($('#MYPARCELBE_LABEL_SIZE').val() == 'a6') {
     $('.label_position').hide();
   }
-  $('#MY_PARCEL_LABEL_SIZE').change(function() {
+  $('#MYPARCELBE_LABEL_SIZE').change(function() {
     if ($(this).val() == 'a6') {
       $('.label_position').hide();
     } else {

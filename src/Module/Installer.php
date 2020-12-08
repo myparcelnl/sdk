@@ -15,11 +15,11 @@ class Installer
     private $module;
 
     private static $carriers_nl = [
-        ['name' => 'Post NL', 'image' => 'postnl.jpg', 'configuration_name' => 'MYPARCEL_POSTNL'],
+        ['name' => 'Post NL', 'image' => 'postnl.jpg', 'configuration_name' => Constant::POSTNL_CONFIGURATION_NAME],
     ];
     private static $carriers_be = [
-        ['name' => 'Bpost', 'image' => 'bpost.jpg', 'configuration_name' => 'MYPARCEL_BPOST'],
-        ['name' => 'DPD', 'image' => 'dpd.jpg', 'configuration_name' => 'MYPARCEL_DPD'],
+        ['name' => 'Bpost', 'image' => 'bpost.jpg', 'configuration_name' => Constant::BPOST_CONFIGURATION_NAME],
+        ['name' => 'DPD', 'image' => 'dpd.jpg', 'configuration_name' => Constant::DPD_CONFIGURATION_NAME],
     ];
 
     public function __construct(\Module $module)

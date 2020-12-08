@@ -32,7 +32,7 @@ class PackageTypeCalculator
         $result = \Db::getInstance()->executeS($sql);
         $package_types = [];
         foreach ($result as $item) {
-            if ($item['name'] == 'MY_PARCEL_PACKAGE_TYPE' && $item['value']) {
+            if ($item['name'] == 'MYPARCELBE_PACKAGE_TYPE' && $item['value']) {
                 $package_types[$item['id_product']] = $item['value'];
             }
         }
