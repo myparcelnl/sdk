@@ -309,7 +309,7 @@ class MyParcelBE extends CarrierModule
 
     public function getModuleCountry()
     {
-        return $this->name === 'myparcelbe' ? 'BE' : 'NL';
+        return (strpos($this->name, 'be') !== false) ? 'BE' : 'NL';
     }
 
     public function isNL()
