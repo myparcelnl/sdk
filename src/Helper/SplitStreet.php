@@ -77,6 +77,8 @@ class SplitStreet
             foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
                 $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
             }
+
+            $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         }
 
         if ($destination === AbstractConsignment::CC_BE) {
