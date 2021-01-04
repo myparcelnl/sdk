@@ -72,23 +72,21 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
-        // Replace house number suffix by an abbreviation, only possible for the Netherlands
-        if ($destination === AbstractConsignment::CC_NL) {
-            foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
-                $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
+        if ($destination === AbstractConsignment::CC_NL
+            || $destination === AbstractConsignment::CC_BE) {
+            // Replace house number suffix by an abbreviation, only possible for the Netherlands
+            if ($destination === AbstractConsignment::CC_NL) {
+                foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
+                    $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
+                }
+            } else {
+                // Replace box variants to bus
+                $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
+                // When a caracter is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must replaced by bus
+                foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
+                    $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . '$1', $fullStreet);
+                }
             }
-
-            $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
-        }
-
-        if ($destination === AbstractConsignment::CC_BE) {
-            // Replace box variants to bus
-            $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
-            // When a caracter is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must replaced by bus
-            foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
-                $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . '$1', $fullStreet);
-            }
-
             $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         }
 
