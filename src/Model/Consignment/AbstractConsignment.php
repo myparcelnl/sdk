@@ -68,7 +68,7 @@ class AbstractConsignment
     ];
 
     public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
-    public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD;
+    public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD_NAME;
 
     /**
      * Customs declaration types
@@ -837,8 +837,8 @@ class AbstractConsignment
         $fullStreet = SplitStreet::splitStreet($fullStreet, $this->local_cc, $this->getCountry());
         $this->setStreet($fullStreet->getStreet());
         $this->setNumber($fullStreet->getNumber());
-        $this->setNumberSuffix($fullStreet->getNumberSuffix());
         $this->setBoxNumber($fullStreet->getBoxNumber());
+        $this->setNumberSuffix($fullStreet->getNumberSuffix());
 
         return $this;
     }
@@ -921,9 +921,7 @@ class AbstractConsignment
      */
     public function setNumberSuffix(?string $numberSuffix): self
     {
-        if ($numberSuffix) {
-            throw new \BadMethodCallException('Number suffix has to be empty in ' . static::class);
-        }
+        $this->number_suffix = $numberSuffix;
 
         return $this;
     }
@@ -940,15 +938,13 @@ class AbstractConsignment
      * Street number suffix.
      * Required: no
      *
-     * @param string $boxNumber
+     * @param string|null $boxNumber
      *
      * @return $this
      */
     public function setBoxNumber(?string $boxNumber): self
     {
-        if ($boxNumber) {
-            throw new \BadMethodCallException('Box number has to be empty in ' . static::class);
-        }
+        $this->box_number = $boxNumber;
 
         return $this;
     }
@@ -1581,7 +1577,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupStreet(): string
+    public function getPickupStreet(): ?string
     {
         return $this->pickup_street;
     }
@@ -1605,7 +1601,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupCity(): string
+    public function getPickupCity(): ?string
     {
         return $this->pickup_city;
     }
@@ -1629,7 +1625,7 @@ class AbstractConsignment
     /**
      * @return string|null
      */
-    public function getPickupNumber(): string
+    public function getPickupNumber(): ?string
     {
         return $this->pickup_number;
     }

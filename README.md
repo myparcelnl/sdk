@@ -1,3 +1,9 @@
+<p align="center">
+    <a href="https://packagist.org/packages/myparcelnl/sdk"><img src="https://img.shields.io/packagist/dt/myparcelnl/sdk" alt="Total Downloads"></a>
+    <a href="https://github.com/myparcelnl/sdk/releases"><img src="https://img.shields.io/packagist/v/myparcelnl/sdk" alt="Latest Stable Version"></a>
+    <a href="https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM"> <img src="https://img.shields.io/badge/Slack-Chat%20with%20us-white?logo=slack&labelColor=blue" alt="Slack support" target="_black"></a>	
+</p>
+
 # MyParcel SDK
 This SDK connects to the MyParcel API using PHP.
 
@@ -91,7 +97,7 @@ This example creates multiple consignments by adding them to one ```MyParcelColl
 ```php
 // Create the collection before the loop
 $consignments = (new MyParcelCollection())
-    ->setUserAgent('name_of_cms', '1.0'); 
+    ->setUserAgents(['name_of_cms', '1.0']); 
 
 // Loop through your shipments, adding each to the same MyParcelCollection()
 foreach ($yourShipments as $yourShipment) {
@@ -298,7 +304,7 @@ $barcode = $consignment->getBarcode();
 The Track & Trace url is available after `downloadPdfOfLabels()` and `getLinkOfLabels()`
 ```php
 $consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment());
-echo $consignment->getBarcodeUrl(3SMYPA123456789, '2231JE', 'NL'); // Barcode , Postal code, Country
+echo $consignment->getBarcodeUrl('3SMYPA123456789', '2231JE', 'NL'); // Barcode , Postal code, Country
 ```
 
 ### Create and download label(s)
@@ -524,7 +530,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     // To give us insight into which CMS system you're connecting from, you should send a User-Agent. 
     // If you're using a known CMS system it's required. 
     // You must send the name of the CMS system (required) followed by a version number (optional).
-    ->setUserAgent('name_of_cms', '1.0')
+    ->setUserAgents(['name_of_cms', '1.0'])
     ->getUserAgent()
 ```
 
