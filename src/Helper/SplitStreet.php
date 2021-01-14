@@ -72,6 +72,8 @@ class SplitStreet
      */
     public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
     {
+        $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
+
         // Replace house number suffix by an abbreviation, only possible for the Netherlands
         if ($destination === AbstractConsignment::CC_NL) {
             foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
@@ -86,8 +88,6 @@ class SplitStreet
             foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
                 $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . '$1', $fullStreet);
             }
-
-            $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
         }
 
         $regex = ValidateStreet::getStreetRegexByCountry($local, $destination);
