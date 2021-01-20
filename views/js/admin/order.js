@@ -444,10 +444,16 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .on('click', '.order-label-action-print', function(e) {
       e.preventDefault();
-      var $form = $(this).closest('form');
       var $tr = $(this).closest('tr');
-      var jsonData = {labelIds: [$tr.data('labelId')]};
-      printLabel(jsonData);
+      if (!$(this).hasClass('label-modal')) {
+        var jsonData = {labelIds: [$tr.data('labelId')]};
+        printLabel(jsonData);
+      } else {
+        var $printForm = $('#print_label_form');
+        var labelId = $tr.data('labelId');
+        $('.bulk-label-id', $printForm).remove();
+        $printForm.append('<input type="hidden" name="label_id[]" value="' + labelId + '" class="bulk-label-id">');
+      }
     })
     .on('click', '.order-label-action-refresh', function(e) {
       e.preventDefault();
@@ -496,7 +502,11 @@ document.addEventListener("DOMContentLoaded", () => {
           $printForm.append('<input type="hidden" name="label_id[]" value="' + labelId + '" class="bulk-label-id">');
         });
         if ($('input[name="labelBox[]"]:checked', $form).length) {
-          $('#printLabelModal').modal('show');
+          if (typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
+            $('#printLabelModal').modal('show');
+          } else {
+            $('#button_print_label').trigger('click');
+          }
         }
         return;
       }

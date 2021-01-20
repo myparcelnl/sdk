@@ -13,10 +13,8 @@ use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
 use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
-use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Order;
-use PrestaShop\PrestaShop\Adapter\Presenter\Object\ObjectPresenter;
 use Validate;
 
 trait LegacyOrderPageHooks
@@ -233,7 +231,10 @@ trait LegacyOrderPageHooks
         $labelList = (new OrderLabelProvider($this))->provideLabels($order->id, []);
 
         $labelListHtml = $this->context->smarty->createData($this->context->smarty);
-        $labelListHtml->assign(['labelList' => $labelList]);
+        $labelListHtml->assign([
+            'labelList' => $labelList,
+            'promptForLabelPosition' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+        ]);
         $labelListHtmlTpl = $this->context->smarty->createTemplate(
             $this->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
             $labelListHtml

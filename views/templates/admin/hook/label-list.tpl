@@ -33,7 +33,12 @@
           <td>{dateFormat date=$label.date_upd full=true}</td>
           <td class="order-label-action text-right">
             <div class="btn-group" id="btn_group_action">
-              <button type="button" class="btn btn-default order-label-action-print">
+              <button
+                      type="button"
+                      class="btn btn-default order-label-action-print{if $promptForLabelPosition} label-modal{/if}"
+                      {if $promptForLabelPosition}data-target="#printLabelModal"{/if}
+                      {if $promptForLabelPosition}data-toggle="modal"{/if}
+              >
                 <i class="icon-print"></i> {l s='Print' mod='myparcelbe'}
               </button>
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
