@@ -13,7 +13,7 @@ class ValidateStreet
      * Contains php keys to store the data in an array
      */
     const SPLIT_STREET_REGEX_NL =
-        '~(?P<street>.{2,78}?)' .         // The rest belongs to the street
+        '~(?P<street>.{1,78}?)' .         // The rest belongs to the street
         '\s' .                            // Separator between street and number
         '(?P<number>\d{1,4})' .           // Number can contain a maximum of 4 numbers
         '[/\s\-]{0,2}' .                  // Separators between number and addition
