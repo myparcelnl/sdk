@@ -1533,7 +1533,7 @@ class AbstractConsignment
     /**
      * @return string
      */
-    public function getPickupCountry(): string
+    public function getPickupCountry(): ?string
     {
         return $this->pickup_cc;
     }
