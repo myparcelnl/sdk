@@ -1531,7 +1531,7 @@ class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickupCountry(): ?string
     {
