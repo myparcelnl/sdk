@@ -30,4 +30,10 @@ class OrderLabelProvider
 
         return $labels;
     }
+
+    public function provideOrderId(int $labelId): int
+    {
+        return OrderLabel::getOrderIdByLabelId($labelId);
+    }
+
 }

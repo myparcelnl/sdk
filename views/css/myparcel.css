@@ -257,6 +257,9 @@ form.myparcel-delivery-options button + button {
 	padding-bottom: 0.5rem;
 	display: inline-block;
 }
+label[for="myparcel-delivery-options__deliveryMoment--standard"] .myparcel-delivery-options__float--right {
+	display: none;
+}
 /* vue styles end */
 
 @keyframes mypa-spin {

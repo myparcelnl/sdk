@@ -497,4 +497,14 @@ class OrderLabel extends \ObjectModel
 
         return 0;
     }
+
+    public static function getOrderIdByLabelId(int $labelId): int
+    {
+        $sql = new DbQuery();
+        $sql->select('id_order');
+        $sql->from('myparcelbe_order_label');
+        $sql->where('id_label = ' . (int) $labelId);
+
+        return (int) Db::getInstance()->getValue($sql);
+    }
 }

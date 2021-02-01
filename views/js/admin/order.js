@@ -178,6 +178,10 @@ document.addEventListener("DOMContentLoaded", () => {
     $.scrollTo(0);
   }
   function displayOrderAjaxFailErrors(error) {
+    if (typeof error.responseJSON !== 'undefined' && typeof error.responseJSON.hasError !== 'undefined') {
+      displayOrderAjaxErrors(error.responseJSON);
+      return;
+    }
     $('#content > .alert.alert-danger').remove();
     $('#ajax_confirmation').before(
       '<div class="alert alert-danger">' +
@@ -185,6 +189,27 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     $.scrollTo(0);
   }
+  function checkDownloadPdfCookie() {
+    var key = 'downloadPdfLabel';
+
+    // To prevent the for loop in the first place assign an empty array
+    // in case there are no cookies at all.
+    var cookies = document.cookie ? document.cookie.split('; ') : [];
+    var jar = {};
+    for (var i = 0; i < cookies.length; i++) {
+      var parts = cookies[i].split('=');
+      var value = parts.slice(1).join('=');
+      var foundKey = parts[0];
+      jar[foundKey] = value;
+
+      if (key === foundKey) {
+        break;
+      }
+    }
+
+    return typeof jar[key] !== 'undefined' ? jar[key] : null;
+  }
+
 
   $('button.btn-print-label').click(function(){
     var id = $(this).data('label-id');
@@ -198,12 +223,13 @@ document.addEventListener("DOMContentLoaded", () => {
       options = $(this).data('label-options');
     $('#order_id').val(id);
     $('#packageType').val(options.package_type);
+    $('#packageFormat').val(options.package_format);
     if ($(this).data('allowSetOnlyRecipient') === 0) {
       $('#onlyRecipient').prop('checked', false).prop('disabled', true);
     } else {
       $('#onlyRecipient').prop('disabled', false);
     }
-    if (options.only_to_recepient == true && $(this).data('allowSetOnlyRecipient') === 1) {
+    if (options.only_to_recipient == true && $(this).data('allowSetOnlyRecipient') === 1) {
       $('#onlyRecipient').prop('checked', true);
     }
     if (options.age_check == true) {
@@ -222,6 +248,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   $('#print_button').click(function () {
+    var intervalLimit = 100;
+    var intervalHandle = setInterval(function() {
+      if (checkDownloadPdfCookie() !== null || intervalLimit <= 0) {
+        document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        clearInterval(intervalHandle);
+        $('#print').modal('hide');
+      }
+      intervalLimit--;
+    }, 1000);
     $('#print-form').submit();
   });
   $('#print-bulk-button').click(function () {
@@ -233,29 +268,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $('#export-print-bulk-form').on('submit', function(e) {
     $('#export-print-bulk-button').attr('disabled', 'disabled');
-    function checkCookie() {
-      var key = 'downloadPdfLabel';
-
-      // To prevent the for loop in the first place assign an empty array
-      // in case there are no cookies at all.
-      var cookies = document.cookie ? document.cookie.split('; ') : [];
-      var jar = {};
-      for (var i = 0; i < cookies.length; i++) {
-        var parts = cookies[i].split('=');
-        var value = parts.slice(1).join('=');
-        var foundKey = parts[0];
-        jar[foundKey] = value;
-
-        if (key === foundKey) {
-          break;
-        }
-      }
-
-      return typeof jar[key] !== 'undefined' ? jar[key] : null;
-    }
     var intervalLimit = 100;
     var intervalHandle = setInterval(function() {
-      if (checkCookie() !== null || intervalLimit <= 0) {
+      if (checkDownloadPdfCookie() !== null || intervalLimit <= 0) {
         document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
         clearInterval(intervalHandle);
         window.location.reload();

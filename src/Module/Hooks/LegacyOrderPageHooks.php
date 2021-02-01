@@ -246,12 +246,18 @@ trait LegacyOrderPageHooks
         $carrierSettingsProvider = new CarrierSettingsProvider($this);
         $deliveryAddress = new Address($order->id_address_delivery);
         $customer = new Customer($order->id_customer);
+        $labelOptionsResolver = new LabelOptionsResolver();
 
         $labelConceptHtml->assign([
             'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
             'carrierSettings' => $carrierSettingsProvider->provide($order->id_carrier),
             'date_warning_display' => $deliveryOptionsProvider->provideWarningDisplay($order->id),
             'isBE' => $this->isBE(),
+            'currencySign' => $currency->getSign(),
+            'labelOptions' => json_decode($labelOptionsResolver->getLabelOptions([
+                'id_order' => (int) $order->id,
+                'id_carrier' => (int) $order->id_carrier,
+            ]), true),
         ]);
         $labelReturnHtml->assign([
             'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),

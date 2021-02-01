@@ -7,9 +7,11 @@ use Country;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\OrderLabel;
+use Gett\MyparcelBE\Service\Order\OrderTotalWeight;
 use Module;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
+use Order;
 use Symfony\Component\HttpFoundation\Request;
 use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -98,12 +100,12 @@ class ConsignmentFactory
                 $label['ALLOW_RETURN_FORM'] = $carrierSettings['return']['ALLOW_FORM'];
             }
         }
-        if (isset($this->request['MYPARCELBE_PACKAGE_TYPE'])) {
-            $packageType = $this->request['MYPARCELBE_PACKAGE_TYPE'];
+        if (isset($this->request['packageType'])) {
+            $packageType = $this->request['packageType'];
         } else {
             $packageType = PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']);
         }
-        if (empty($carrierSettings[Constant::PACKAGE_TYPE_CONFIGURATION_NAME][$countryCode][(int) $packageType])) {
+        if (empty($carrierSettings['delivery']['packageType'][(int) $packageType])) {
             $packageType = 1; // TODO: for NL the DPD and Bpost don't allow any.
         }
         $consignment->setPackageType((int) $packageType);
@@ -178,6 +180,9 @@ class ConsignmentFactory
         $consignment->setLabelDescription(
             $this->getLabelParams($order, Configuration::get(Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME))
         );
+        if ((int) $consignment->getPackageType() === AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
+            $consignment->setTotalWeight((new OrderTotalWeight)->provide((int) $order['id_order']));
+        }
 
         if (Country::getIdZone($order['id_country']) != 1
             && $this->configuration::get(Constant::CUSTOMS_FORM_CONFIGURATION_NAME) != 'No') { //NON EU zone

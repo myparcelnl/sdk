@@ -7,8 +7,10 @@ use Gett\MyparcelBE\Logger\Logger;
 use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
+use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Gett\MyparcelBE\Service\Consignment\Download;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
+use Gett\MyparcelBE\Service\Order\OrderTotalWeight;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory as ConsignmentFactorySdk;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -126,7 +128,10 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                 } else {
                     $consignment->setPackageType(1);
                 }
-                if ($options->only_to_recepient == 1 && $consignment instanceof PostNLConsignment) {
+                if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
+                    $consignment->setTotalWeight((new OrderTotalWeight)->provide((int) $orderId));
+                }
+                if ($options->only_to_recipient == 1 && $consignment instanceof PostNLConsignment) {
                     $consignment->setOnlyRecipient(true);
                 } else {
                     $consignment->setOnlyRecipient(false);
@@ -161,6 +166,19 @@ class AdminMyParcelBELabelController extends ModuleAdminController
 
         $status_provider = new MyparcelStatusProvider();
         foreach ($collection as $consignment) {
+            if ($consignment->isCdCountry()) {
+                $products = OrderLabel::getCustomsOrderProducts((int) $consignment->getReferenceId());
+                if ($products) {
+                    $orderObject = new Order();
+                    if (!$orderObject->hasInvoice()) {
+                        $this->errors[] = sprintf(
+                            $this->module->l('International order ID#%s must have invoice.', 'adminlabelcontroller'),
+                            $consignment->getReferenceId()
+                        );
+                        continue;
+                    }
+                }
+            }
             try {
                 OrderLabel::createFromConsignment($consignment, $status_provider);
             } catch (Exception $e) {
@@ -271,6 +289,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
 
     public function processDownloadLabel()
     {
+        setcookie('downloadPdfLabel', 1);
         $service = new Download(
             Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             Tools::getAllValues(),
@@ -282,10 +301,10 @@ class AdminMyParcelBELabelController extends ModuleAdminController
 
     public function fixSignature(AbstractConsignment $consignment)
     {
-        if ($consignment->getCountry() === 'NL' && $this->module->isBE()) {
+        if ($consignment->getCountry() === AbstractConsignment::CC_NL && $this->module->isBE()) {
             $consignment->signature = 0;
         }
-        if ($consignment->getCountry() === 'BE' && $this->module->isNL()) {
+        if ($consignment->getCountry() === AbstractConsignment::CC_BE && $this->module->isNL()) {
             $consignment->signature = 0;
         }
     }
@@ -305,8 +324,8 @@ class AdminMyParcelBELabelController extends ModuleAdminController
     public function sanitizePackageType(AbstractConsignment $consignment)
     {
         if ($this->module->isBE()) {
-            if ($consignment->package_type !== 1) {
-                $consignment->package_type = 1;
+            if ($consignment->package_type !== AbstractConsignment::PACKAGE_TYPE_PACKAGE) {
+                $consignment->package_type = AbstractConsignment::PACKAGE_TYPE_PACKAGE;
             }
         }
     }
@@ -315,6 +334,18 @@ class AdminMyParcelBELabelController extends ModuleAdminController
     {
         $collection = $this->processCreateb();
         setcookie('downloadPdfLabel', 1);
+        if (!is_string($collection->getLabelPdf())) {
+            $redirectParams = [];
+            $idOrder = (new OrderLabelProvider($this))->provideOrderId((int) Tools::getValue('label_id'));
+            if ($idOrder) {
+                $redirectParams['vieworder'] = '';
+                $redirectParams['id_order'] = $idOrder;
+            }
+
+            Tools::redirectAdmin(
+                $this->context->link->getAdminLink('AdminOrders', true, [], $redirectParams)
+            );
+        }
         $collection->downloadPdfOfLabels(Configuration::get(
             Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
             false
@@ -408,6 +439,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             );
             $labelListHtml->assign([
                 'labelList' => $labelList,
+                'promptForLabelPosition' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
             ]);
 
             $labelListHtmlTpl = $this->context->smarty->createTemplate(
@@ -449,7 +481,21 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             $collection = $factory->fromOrder($order);
             $consignments = $collection->getConsignments();
             if (!empty($consignments)) {
-                foreach ($consignments as &$consignment) {
+                foreach ($consignments as $consignmentKey => &$consignment) {
+                    if ($consignment->isCdCountry()) {
+                        $products = OrderLabel::getCustomsOrderProducts($order['id_order']);
+                        if ($products) {
+                            $orderObject = new Order();
+                            if (!$orderObject->hasInvoice()) {
+                                unset($consignments[$consignmentKey]);
+                                $this->errors[] = sprintf(
+                                    $this->module->l('International order ID#%s must have invoice.', 'adminlabelcontroller'),
+                                    $order['id_order']
+                                );
+                                continue;
+                            }
+                        }
+                    }
                     $consignment->delivery_date = $this->fixPastDeliveryDate($consignment->delivery_date);
                     $this->fixSignature($consignment);
                     $this->sanitizeDeliveryType($consignment);
@@ -459,8 +505,8 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             Logger::addLog($collection->toJson());
             $collection->setLinkOfLabels();
             if ($this->module->isNL()
-                && $postValues[Constant::RETURN_PACKAGE_CONFIGURATION_NAME]) {
-                $collection->sendReturnLabelMails();
+                && ($postValues[Constant::RETURN_PACKAGE_CONFIGURATION_NAME] ?? 0)) {
+                $collection->generateReturnConsignments(true);
             }
         } catch (InvalidConsignmentException $e) {
             Logger::addLog($this->module->l(
@@ -584,6 +630,8 @@ class AdminMyParcelBELabelController extends ModuleAdminController
         $deliveryOptionsProvider = new DeliveryOptionsProvider();
         $deliveryOptions = $deliveryOptionsProvider->provide($order->id);
         $carrierSettingsProvider = new CarrierSettingsProvider($this->module);
+        $currency = Currency::getDefaultCurrency();
+        $labelOptionsResolver = new LabelOptionsResolver();
 
         $labelConceptHtml = $this->context->smarty->createData($this->context->smarty);
         $labelConceptHtml->assign([
@@ -591,6 +639,11 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             'carrierSettings' => $carrierSettingsProvider->provide($order->id_carrier),
             'date_warning_display' => $deliveryOptionsProvider->provideWarningDisplay($order->id),
             'isBE' => $this->module->isBE(),
+            'currencySign' => $currency->getSign(),
+            'labelOptions' => $labelOptionsResolver->getLabelOptions([
+                'id_order' => (int) $order->id,
+                'id_carrier' => (int) $order->id_carrier,
+            ]),
         ]);
         $labelConceptHtmlTpl = $this->context->smarty->createTemplate(
             $this->module->getTemplatePath('views/templates/admin/hook/label-concept.tpl'),

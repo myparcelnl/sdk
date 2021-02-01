@@ -4,16 +4,16 @@
   <div class="col-lg-3">
     <select name="packageType" class="form-control custom-select">
       {if !empty($carrierSettings.delivery.packageType[1])}
-        <option value="1">{l s='Parcel' mod='myparcelbe'}</option>
+        <option value="1"{if !empty($labelOptions.package_type) && $labelOptions.package_type eq 1} selected{/if}>{l s='Parcel' mod='myparcelbe'}</option>
       {/if}
       {if !empty($carrierSettings.delivery.packageType[2])}
-        <option value="2">{l s='Mailbox package' mod='myparcelbe'}</option>
+        <option value="2"{if !empty($labelOptions.package_type) && $labelOptions.package_type eq 2} selected{/if}>{l s='Mailbox package' mod='myparcelbe'}</option>
       {/if}
       {if !empty($carrierSettings.delivery.packageType[3])}
-        <option value="3">{l s='Letter' mod='myparcelbe'}</option>
+        <option value="3"{if !empty($labelOptions.package_type) && $labelOptions.package_type eq 3} selected{/if}>{l s='Letter' mod='myparcelbe'}</option>
       {/if}
       {if !empty($carrierSettings.delivery.packageType[4])}
-        <option value="4">{l s='Digital stamp' mod='myparcelbe'}</option>
+        <option value="4"{if !empty($labelOptions.package_type) && $labelOptions.package_type eq 4} selected{/if}>{l s='Digital stamp' mod='myparcelbe'}</option>
       {/if}
     </select>
   </div>
@@ -23,13 +23,13 @@
   <div class="col-lg-3">
     <select name="packageFormat" class="form-control custom-select">
       {if !empty($carrierSettings.delivery.packageFormat[1])}
-        <option value="1">{l s='Normal' mod='myparcelbe'}</option>
+        <option value="1"{if !empty($labelOptions.package_format) && $labelOptions.package_format eq 1} selected{/if}>{l s='Normal' mod='myparcelbe'}</option>
       {/if}
       {if !empty($carrierSettings.delivery.packageFormat[2])}
-        <option value="2">{l s='Large' mod='myparcelbe'}</option>
+        <option value="2"{if !empty($labelOptions.package_format) && $labelOptions.package_format eq 2} selected{/if}>{l s='Large' mod='myparcelbe'}</option>
       {/if}
       {if !empty($carrierSettings.delivery.packageFormat[3])}
-        <option value="3">{l s='Automatic' mod='myparcelbe'}</option>
+        <option value="3"{if !empty($labelOptions.package_format) && $labelOptions.package_format eq 3} selected{/if}>{l s='Automatic' mod='myparcelbe'}</option>
       {/if}
     </select>
   </div>

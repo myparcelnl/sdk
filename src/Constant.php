@@ -34,7 +34,7 @@ class Constant
     const CUSTOMS_AGE_CHECK_CONFIGURATION_NAME = 'MYPARCELBE_CUSTOMS_AGE_CHECK';
 
     const SINGLE_LABEL_CREATION_OPTIONS = [
-        'packageType'=> self::PACKAGE_TYPE_CONFIGURATION_NAME,
+        'packageType' => self::PACKAGE_TYPE_CONFIGURATION_NAME,
         'packageFormat' => self::PACKAGE_FORMAT_CONFIGURATION_NAME,
         'onlyRecipient' => self::ONLY_RECIPIENT_CONFIGURATION_NAME,
         'ageCheck' => self::AGE_CHECK_CONFIGURATION_NAME,
@@ -44,7 +44,7 @@ class Constant
     ];
 
     const SINGLE_LABEL_RETURN_OPTIONS = [
-        'packageType'=> 'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME,
+        'packageType' => 'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME,
         'packageFormat' => 'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME,
         'onlyRecipient' => 'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME,
         'ageCheck' => 'return_' . self::AGE_CHECK_CONFIGURATION_NAME,
@@ -67,6 +67,7 @@ class Constant
         2 => 'large',
         3 => 'automatic',
     ];
+    const PACKAGE_FORMAT_LARGE_INDEX = 2;
 
     const SHARE_CUSTOMER_EMAIL_CONFIGURATION_NAME = 'MYPARCELBE_SHARE_CUSTOMER_EMAIL';
     const SHARE_CUSTOMER_PHONE_CONFIGURATION_NAME = 'MYPARCELBE_SHARE_CUSTOMER_PHONE';

@@ -2,9 +2,10 @@
 
 namespace Gett\MyparcelBE\Label;
 
+use Gett\MyparcelBE\Carrier\PackageFormatCalculator;
+use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\OrderLabel;
-use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use Gett\MyparcelBE\Service\CarrierConfigurationProvider;
 use Gett\MyparcelBE\Service\ProductConfigurationProvider;
 
@@ -18,7 +19,8 @@ class LabelOptionsResolver
 
         return json_encode([
             'package_type' => PackageTypeCalculator::getOrderPackageType($params['id_order'], $params['id_carrier']),
-            'only_to_recepient' => $this->getOnlyToReciepient($delivery_settings, $order_products, $params['id_carrier']),
+            'package_format' => PackageFormatCalculator::getOrderPackageFormat($params['id_order'], $params['id_carrier']),
+            'only_to_recipient' => $this->getOnlyToReciepient($delivery_settings, $order_products, $params['id_carrier']),
             'age_check' => $this->getAgeCheck($order_products, $params['id_carrier']),
             'signature' => $this->getSignature($delivery_settings, $order_products, $params['id_carrier']),
             'insurance' => $this->getInsurance($order_products, $params['id_carrier']),

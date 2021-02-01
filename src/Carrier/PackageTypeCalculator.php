@@ -15,7 +15,7 @@ class PackageTypeCalculator
             return min($package_types);
         }
 
-        $packageType = CarrierConfigurationProvider::get(
+        $packageType = (int) CarrierConfigurationProvider::get(
             $id_carrier, Constant::PACKAGE_TYPE_CONFIGURATION_NAME
         );
 
@@ -33,7 +33,7 @@ class PackageTypeCalculator
         $package_types = [];
         foreach ($result as $item) {
             if ($item['name'] == 'MYPARCELBE_PACKAGE_TYPE' && $item['value']) {
-                $package_types[$item['id_product']] = $item['value'];
+                $package_types[$item['id_product']] = (int) $item['value'];
             }
         }
 

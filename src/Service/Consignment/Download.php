@@ -3,11 +3,13 @@
 namespace Gett\MyparcelBE\Service\Consignment;
 
 use Configuration;
+use Context;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Logger\Logger;
 use Symfony\Component\HttpFoundation\Request;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
+use Tools;
 
 class Download
 {
@@ -35,12 +37,23 @@ class Download
         try {
             $collection = MyParcelCollection::findMany($id_labels, $this->api_key);
             if (!empty($collection->getConsignments())) {
-                $collection
-                    ->setPdfOfLabels($this->fetchPositions())
-                    ->downloadPdfOfLabels($this->configuration::get(Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME, false));
+                $collection->setPdfOfLabels($this->fetchPositions());
+                $isPdf = is_string($collection->getLabelPdf());
+                if ($isPdf) {
+                    $collection->downloadPdfOfLabels($this->configuration::get(
+                        Constant::LABEL_OPEN_DOWNLOAD_CONFIGURATION_NAME,
+                        false,
+                        null,
+                        null,
+                        false
+                    ));
+                }
                 Logger::addLog($collection->toJson());
+                if (!$isPdf) {
+                    Tools::redirectAdmin(Context::getContext()->link->getAdminLink('AdminOrders'));
+                }
             } else {
-                \Tools::redirectAdmin(\Context::getContext()->link->getAdminLink('AdminOrders'));
+                Tools::redirectAdmin(Context::getContext()->link->getAdminLink('AdminOrders'));
             }
         } catch (\Exception $e) {
             Logger::addLog($e->getMessage(), true, true);
