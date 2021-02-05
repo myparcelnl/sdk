@@ -500,6 +500,21 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                     $this->fixSignature($consignment);
                     $this->sanitizeDeliveryType($consignment);
                     $this->sanitizePackageType($consignment);
+                    if (isset($postValues['insurance'])) {
+                        $insuranceValue = $postValues['insuranceAmount'] ?? 0;
+                        if (strpos($insuranceValue, 'amount') !== false) {
+                            $insuranceValue = (int) str_replace(
+                                'amount',
+                                '',
+                                $insuranceValue
+                            );
+                        }
+                        if ((int) $insuranceValue == -1) {
+                            $insuranceValue = $postValues['insurance-amount-custom-value'] ?? 0;
+                        }
+                        $consignment->setInsurance((int) $insuranceValue);
+                    }
+
                 }
             }
             Logger::addLog($collection->toJson());

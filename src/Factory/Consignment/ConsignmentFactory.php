@@ -243,7 +243,7 @@ class ConsignmentFactory
         if (isset($postValues['insuranceAmount'])) {
             if (strpos($postValues['insuranceAmount'], 'amount') !== false) {
                 $insuranceValue = (int) str_replace(
-                    'amount-',
+                    'amount',
                     '',
                     $postValues['insuranceAmount']
                 );
