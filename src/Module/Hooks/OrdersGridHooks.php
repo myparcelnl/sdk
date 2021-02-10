@@ -82,40 +82,6 @@ trait OrdersGridHooks
                     'material_icon' => 'download',
                 ])
         );
-//
-//        $definition->getBulkActions()->add(
-//            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('create_label'))
-//                ->setName($this->l('Export label', 'ordersgridhooks'))
-//                ->setOptions([
-//                    'submit_route' => 'admin_myparcel_orders_label_bulk_create',
-//                ])
-//        );
-//        $definition->getBulkActions()->add(
-//            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\ModalFormSubmitBulkAction('print_label'))
-//                ->setName($this->l('Print labels', 'ordersgridhooks'))
-//                ->setOptions([
-//                    'submit_route' => 'admin_myparcel_orders_label_bulk_print',
-//                    'modal_id' => 'bulk-print-modal',
-//                ])
-//        );
-//        $definition->getBulkActions()->add(
-//            (new \PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction('refresh_labels'))
-//                ->setName($this->l('Refresh labels', 'ordersgridhooks'))
-//                ->setOptions([
-//                    'submit_route' => 'admin_myparcel_orders_label_bulk_refresh',
-//                ])
-//        );
-//        $definition
-//            ->getColumns()
-//            ->addAfter(
-//                'osname',
-//                (new \Gett\MyparcelBE\Grid\Column\BarcodeTypeColumn('barcode'))
-//                    ->setName($this->l('Barcode', 'ordersgridhooks'))
-//                    ->setOptions([
-//                        'barcode' => 'Barcode Example',
-//                    ])
-//            )
-//        ;
     }
 
     public function hookActionOrderGridPresenterModifier(array &$params)
