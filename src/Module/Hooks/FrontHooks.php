@@ -83,7 +83,7 @@ trait FrontHooks
                 if ($display_taxes_label) {
                     $shipping_cost = $this->context->getTranslator()->trans(
                         '%price% tax incl.',
-                        array('%price%' => $shipping_cost),
+                        ['%price%' => $shipping_cost],
                         'Shop.Theme.Checkout'
                     );
                 }
@@ -91,7 +91,7 @@ trait FrontHooks
                 if ($display_taxes_label) {
                     $shipping_cost = $this->context->getTranslator()->trans(
                         '%price% tax excl.',
-                        array('%price%' => $shipping_cost),
+                        ['%price%' => $shipping_cost],
                         'Shop.Theme.Checkout'
                     );
                 }

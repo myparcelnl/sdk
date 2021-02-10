@@ -14,6 +14,7 @@ use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Module;
 use Order;
+use Validate;
 
 class AdminOrderView extends AbstractAdminOrder
 {
@@ -42,8 +43,12 @@ class AdminOrderView extends AbstractAdminOrder
     public function display(): string
     {
         $order = new Order($this->idOrder);
-        if (!\Validate::isLoadedObject($order)) {
+        if (!Validate::isLoadedObject($order)) {
             return '';
+        }
+        $psVersion = '';
+        if (version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
+            $psVersion = '-177';
         }
 
         $currency = Currency::getDefaultCurrency();
@@ -61,7 +66,7 @@ class AdminOrderView extends AbstractAdminOrder
             'printLabels' => [
                 'text' => $this->module->l('Print', 'orderview'),
                 'icon' => 'icon-print',
-            ]
+            ],
         ];
         $deliveryOptionsProvider = new DeliveryOptionsProvider();
         $deliveryOptions = $deliveryOptionsProvider->provide($order->id);
@@ -73,7 +78,7 @@ class AdminOrderView extends AbstractAdminOrder
             'promptForLabelPosition' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
         ]);
         $labelListHtmlTpl = $this->context->smarty->createTemplate(
-            $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
+            $this->module->getTemplatePath('views/templates/admin/hook/label-list' . $psVersion . '.tpl'),
             $labelListHtml
         );
 
@@ -109,16 +114,13 @@ class AdminOrderView extends AbstractAdminOrder
             'labelUrl' => $labelUrl,
         ]);
         $labelConceptHtmlTpl = $this->context->smarty->createTemplate(
-            $this->module->getTemplatePath('views/templates/admin/hook/label-concept.tpl'),
+            $this->module->getTemplatePath('views/templates/admin/hook/label-concept' . $psVersion . '.tpl'),
             $labelConceptHtml
         );
         $labelReturnHtmlTpl = $this->context->smarty->createTemplate(
-            $this->module->getTemplatePath('views/templates/admin/hook/label-return-form.tpl'),
+            $this->module->getTemplatePath('views/templates/admin/hook/label-return-form' . $psVersion . '.tpl'),
             $labelReturnHtml
         );
-
-        $this->context->controller->addCss($this->module->getPathUri() . 'views/css/myparcel.css');
-        $this->context->controller->addJs($this->module->getPathUri() . 'views/dist/myparcel.js');
 
         $this->context->smarty->assign([
             'modulePathUri' => $this->module->getPathUri(),
@@ -149,7 +151,10 @@ class AdminOrderView extends AbstractAdminOrder
             'labelConfiguration' => $this->getLabelDefaultConfiguration(),
         ]);
 
-        return $this->module->display($this->module->name, 'views/templates/admin/hook/order-label-block.tpl');
+        return $this->module->display(
+            $this->module->name,
+            'views/templates/admin/hook/order-label-block' . $psVersion . '.tpl'
+        );
     }
 
     public function getLabels()

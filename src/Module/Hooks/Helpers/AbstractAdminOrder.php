@@ -4,6 +4,7 @@ namespace Gett\MyparcelBE\Module\Hooks\Helpers;
 
 use Configuration;
 use Gett\MyparcelBE\Constant;
+use Media;
 
 abstract class AbstractAdminOrder
 {

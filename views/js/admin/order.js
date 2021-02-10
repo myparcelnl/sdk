@@ -610,7 +610,7 @@ $(function() {
     }
 
     $.ajax({
-      url: '/index.php?fc=module&module=myparcelbe&controller=checkout&id_carrier=' + carrierId,
+      url: delivery_settings_route + '&id_carrier=' + carrierId,
       dataType: "json",
       success: function (data) {
         window.MyParcelConfig = data;

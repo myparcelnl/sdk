@@ -42,7 +42,7 @@ class MyParcelBE extends CarrierModule
         \Gett\MyparcelBE\Constant::IGNORE_ORDER_STATUS_CONFIGURATION_NAME,
         \Gett\MyparcelBE\Constant::WEBHOOK_ID_CONFIGURATION_NAME,
 
-        \Gett\MyparcelBE\Constant::API_LOGGING_CONFIGURATION_NAME,// Keep the API key
+        \Gett\MyparcelBE\Constant::API_LOGGING_CONFIGURATION_NAME, // Keep the API key
 
         \Gett\MyparcelBE\Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
         \Gett\MyparcelBE\Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
@@ -93,7 +93,7 @@ class MyParcelBE extends CarrierModule
         'displayInvoice',
         'displayAdminAfterHeader',
     ];
-    /** @var string $baseUrlWithoutToken */
+    /** @var string */
     protected $baseUrlWithoutToken;
 
     public function __construct()
@@ -197,7 +197,7 @@ class MyParcelBE extends CarrierModule
             $deliveryType = (isset($deliverySettings['deliveryType'])) ? $deliverySettings['deliveryType'] : 'standard';
             if ($deliveryType !== 'standard') {
                 $priceHourInterval = 'price' . ucfirst($deliveryType) . 'Delivery';
-                $myParcelCost += (float)\Gett\MyparcelBE\Service\CarrierConfigurationProvider::get(
+                $myParcelCost += (float) \Gett\MyparcelBE\Service\CarrierConfigurationProvider::get(
                     $cart->id_carrier,
                     $priceHourInterval
                 );
@@ -250,67 +250,6 @@ class MyParcelBE extends CarrierModule
         return $this->mypa_stringify_url($url);
     }
 
-    public static function updateStatus($idShipment, $barcode, $statusCode, $date = null)
-    {
-        throw new Exception('Duplicate function trap: MyParcel::updateStatus(). Require delete.');
-        if (!$date) {
-            $date = date('Y-m-d H:i:s');
-        }
-
-        $order = static::getOrderByShipmentId($idShipment);
-
-        if (!$order->shipping_number) {
-            // Checking a legacy field is allowed in this case
-            static::updateOrderTrackingNumber($order, $barcode);
-        }
-
-        if ($statusCode === 14) {
-            if (Configuration::get(MyParcel::DIGITAL_STAMP_USE_SHIPPED_STATUS)) {
-                MyParcelOrderHistory::setShipped($idShipment, false);
-            } else {
-                MyParcelOrderHistory::setPrinted($idShipment, false);
-            }
-        } else {
-            if ($statusCode >= 2) {
-                MyParcelOrderHistory::setPrinted($idShipment);
-            }
-            if ($statusCode >= 3) {
-                MyParcelOrderHistory::setShipped($idShipment);
-            }
-            if ($statusCode >= 7 && $statusCode <= 11) {
-                MyParcelOrderHistory::setReceived($idShipment);
-            }
-        }
-
-        MyParcelOrderHistory::log($idShipment, $statusCode, $date);
-
-        return (bool) Db::getInstance()->update(
-            bqSQL(static::$definition['table']),
-            [
-                'tracktrace' => pSQL($barcode),
-                'postnl_status' => (int) $statusCode,
-                'date_upd' => pSQL($date),
-            ],
-            'id_shipment = ' . (int) $idShipment
-        );
-    }
-
-    public static function getOrderByShipmentId(int $id_shipment)
-    {
-        $sql = new \DbQuery();
-        $sql->select('*');
-        $sql->from('myparcelbe_order_label', 'mol');
-        $sql->where('mol.`id_label` = ' . $id_shipment);
-
-        $shipment = Db::getInstance()->getRow($sql);
-
-        if ($shipment) {
-            return $shipment;
-        }
-
-        return false;
-    }
-
     public function getModuleCountry()
     {
         return (strpos($this->name, 'be') !== false) ? 'BE' : 'NL';
@@ -325,17 +264,6 @@ class MyParcelBE extends CarrierModule
     {
         return $this->getModuleCountry() === 'BE';
     }
-
-//    public function getCarriers()
-//    {
-//        $carriers = ['postnl'];
-//        if ($this->isBE()) {
-//            $carriers[] = 'bpost';
-//            $carriers[] = 'dpd';
-//        }
-//
-//        return $carriers;
-//    }
 
     private function mypa_stringify_url($parsedUrl)
     {

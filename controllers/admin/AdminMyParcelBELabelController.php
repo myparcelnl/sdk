@@ -9,14 +9,15 @@ use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Gett\MyparcelBE\Service\Consignment\Download;
+use Gett\MyparcelBE\Service\DeliverySettingsProvider;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 use Gett\MyparcelBE\Service\Order\OrderTotalWeight;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory as ConsignmentFactorySdk;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 if (file_exists(_PS_MODULE_DIR_ . 'myparcelbe/vendor/autoload.php')) {
     require_once _PS_MODULE_DIR_ . 'myparcelbe/vendor/autoload.php';
@@ -112,7 +113,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             foreach ($orderIds as $orderId) {
                 $orderLabelParams = [
                     'id_order' => (int) $orderId,
-                    'id_carrier' => 0
+                    'id_carrier' => 0,
                 ];
                 foreach ($orders as $orderRow) {
                     if ((int) $orderRow['id_order'] === (int) $orderId) {
@@ -129,7 +130,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                     $consignment->setPackageType(1);
                 }
                 if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
-                    $consignment->setTotalWeight((new OrderTotalWeight)->provide((int) $orderId));
+                    $consignment->setTotalWeight((new OrderTotalWeight())->provide((int) $orderId));
                 }
                 if ($options->only_to_recipient == 1 && $consignment instanceof PostNLConsignment) {
                     $consignment->setOnlyRecipient(true);
@@ -191,7 +192,6 @@ class AdminMyParcelBELabelController extends ModuleAdminController
 
     public function processRefresh()
     {
-
         $id_labels = OrderLabel::getOrdersLabels(Tools::getValue('order_ids'));
         if (empty($id_labels)) {
             header('HTTP/1.1 500 Internal Server Error', true, 500);
@@ -402,7 +402,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                                 } else {
                                     $insuranceValue = (int) $postValues['insurance-amount-custom-value'] ?? 0;
                                 }
-                                $deliveryOptions->shipmentOptions->insurance->amount = $insuranceValue * 100;// cents
+                                $deliveryOptions->shipmentOptions->insurance->amount = $insuranceValue * 100; // cents
                                 $deliveryOptions->shipmentOptions->insurance->currency = $currency->iso_code;
                             }
                             break;
@@ -433,7 +433,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
         }
 
         if ($idOrder) {
-            $labelList = OrderLabel::getOrderLabels((int)$idOrder, []);
+            $labelList = OrderLabel::getOrderLabels((int) $idOrder, []);
             $labelListHtml = $this->context->smarty->createData(
                 $this->context->smarty
             );
@@ -514,7 +514,6 @@ class AdminMyParcelBELabelController extends ModuleAdminController
                         }
                         $consignment->setInsurance((int) $insuranceValue);
                     }
-
                 }
             }
             Logger::addLog($collection->toJson());
@@ -847,5 +846,17 @@ class AdminMyParcelBELabelController extends ModuleAdminController
         }
 
         $this->returnAjaxResponse([], (int) $idOrder);
+    }
+
+    public function ajaxProcessGetDeliverySettings()
+    {
+        $id_carrier = (int) Tools::getValue('id_carrier');
+        $params = (new DeliverySettingsProvider($this->module, $id_carrier, $this->context))
+            ->setOrderId((int) Tools::getValue('id_order'))
+            ->get()
+        ;
+
+        echo json_encode($params);
+        exit;
     }
 }

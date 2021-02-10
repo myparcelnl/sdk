@@ -2,20 +2,12 @@
 
 namespace Gett\MyparcelBE\Module\Hooks;
 
-use Address;
-use AddressFormat;
-use Carrier;
 use Configuration;
-use Currency;
-use Customer;
 use Dispatcher;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
-use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
-use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
 use Gett\MyparcelBE\Module\Hooks\Helpers\AdminOrderList;
 use Gett\MyparcelBE\Module\Hooks\Helpers\AdminOrderView;
-use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Order;
 use Validate;
 
@@ -26,41 +18,15 @@ trait LegacyOrderPageHooks
     public function hookDisplayAdminListBefore()
     {
         if ($this->context->controller instanceof \AdminOrdersController) {
-            \Media::addJsDefL('print_labels_text', $this->l('Print labels', 'legacyorderpagehooks'));
-            \Media::addJsDefL('refresh_labels_text', $this->l('Refresh labels', 'legacyorderpagehooks'));
-            \Media::addJsDefL('export_labels_text', $this->l('Export labels', 'legacyorderpagehooks'));
-            \Media::addJsDefL(
-                'export_and_print_label_text',
-                $this->l('Export and print labels', 'legacyorderpagehooks')
-            );
-            $this->context->controller->addJS(
-                $this->_path . 'views/js/admin/order.js'
-            );
+            $adminOrderList = new AdminOrderList($this);
 
-            $link = $this->context->link;
-            $this->context->smarty->assign([
-                'action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel']),
-                'download_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'downloadLabel']),
-                'print_bulk_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'print']),
-                'export_print_bulk_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'exportPrint']),
-                'isBE' => $this->isBE(),
-                'labelConfiguration' => $this->getLabelDefaultConfiguration(),
-                'PACKAGE_TYPE' => Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
-                'ONLY_RECIPIENT' => Constant::ONLY_RECIPIENT_CONFIGURATION_NAME,
-                'AGE_CHECK' => Constant::AGE_CHECK_CONFIGURATION_NAME,
-                'PACKAGE_FORMAT' => Constant::PACKAGE_FORMAT_CONFIGURATION_NAME,
-                'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
-                'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
-                'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
-            ]);
-
-            return $this->display($this->name, 'views/templates/admin/hook/orders_popups.tpl');
+            return $adminOrderList->getAdminAfterHeader();
         }
 
         return '';
     }
 
-    public function hookActionAdminOrdersListingFieldsModifier($params)
+    public function hookActionAdminOrdersListingFieldsModifier(&$params)
     {
         if (!isset($params['select'])) {
             $params['select'] = '';
@@ -132,23 +98,8 @@ trait LegacyOrderPageHooks
     {
         if ($this->context->controller instanceof \AdminOrdersController
             || $this->context->controller->php_self == 'AdminOrders') {
-            $link = $this->context->link;
-            \Media::addJsDef(
-                [
-                    'default_label_size' => Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME) == false ? 'a4' : Configuration::get(Constant::LABEL_SIZE_CONFIGURATION_NAME),
-                    'default_label_position' => Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME) == false ? '1' : Configuration::get(Constant::LABEL_POSITION_CONFIGURATION_NAME),
-                    'prompt_for_label_position' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME) == false ? '0' : Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
-                    'create_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createb']),
-                    'refresh_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'refresh']),
-                    'create_label_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel', 'listingPage' => true]),
-                    'create_label_error' => $this->l('Cannot create label for orders', 'legacyorderpagehooks'),
-                    'no_order_selected_error' => $this->l('Please select at least one order first.', 'legacyorderpagehooks'),
-                ]
-            );
-
-            $this->context->controller->addJS(
-                $this->_path . 'views/js/admin/order.js'
-            );
+            $adminOrder = new AdminOrderList($this);
+            $adminOrder->setHeaderContent();
         }
     }
 
@@ -163,14 +114,6 @@ trait LegacyOrderPageHooks
             Configuration::get(Constant::DPD_CONFIGURATION_NAME),
             Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
             Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
-        ]);
-    }
-    
-    public function getLabelDefaultConfiguration(): array
-    {
-        return Configuration::getMultiple([
-            Constant::LABEL_SIZE_CONFIGURATION_NAME,
-            Constant::LABEL_POSITION_CONFIGURATION_NAME,
         ]);
     }
 
