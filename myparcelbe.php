@@ -82,13 +82,16 @@ class MyParcelBE extends CarrierModule
         'actionOrderGridDefinitionModifier',
         'actionAdminControllerSetMedia',
         'actionOrderGridQueryBuilderModifier',
+        'actionOrderGridPresenterModifier',
         'actionAdminOrdersListingFieldsModifier',
         'displayAdminListBefore',
         'actionAdminControllerSetMedia',
         'displayAdminOrderMainBottom',
+        'displayAdminOrderMain',
         'actionObjectGettMyParcelBEOrderLabelAddAfter',
         'actionObjectGettMyParcelBEOrderLabelUpdateAfter',
         'displayInvoice',
+        'displayAdminAfterHeader',
     ];
     /** @var string $baseUrlWithoutToken */
     protected $baseUrlWithoutToken;
@@ -128,6 +131,7 @@ class MyParcelBE extends CarrierModule
         $this->description = $this->l('PrestaShop module to intergratie with MyParcel NL and MyParcel BE');
 
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
+        $this->registerHook('displayAdminOrderMain');
     }
 
     public function getAdminLink(string $controller, bool $withToken = true, array $params = [])

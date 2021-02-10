@@ -1,40 +1,118 @@
-window.addEventListener('load', function() {
-  let bulk = document.querySelector('.adminorders .bulk-actions .dropdown-menu:not(.label-dropdown)');
-  if (!bulk) {
-    return
+$(function() {
+  let ps177 = false;
+  // Bulk actions
+  let bulk = $('.adminorders .bulk-actions .dropdown-menu:not(.label-dropdown)');
+  if (!bulk.length) {
+    let existingButton = $('.adminorders #order_grid #order_grid_bulk_action_change_order_status');
+    if (!existingButton.length) {
+      return;
+    }
+    bulk = existingButton.closest('.dropdown-menu');
+    ps177 = true;
   }
 
 
-  let addBulkOption = function(link) {
-    let item = document.createElement('li');
-    item.appendChild(link);
-    bulk.appendChild(item);
+  let addBulkOption = function (link) {
+    if (ps177) {
+      return;
+    }
+    let item = $('<li/>');
+    item.append(link);
+    bulk.append(item);
   };
 
-  let addBulkCreateLabel = function() {
-    let link = document.createElement('a');
+  let addBulkCreateLabel = function () {
+    addBulkButton(
+      'order_grid_bulk_action_create_label',
+      (typeof export_labels_text !== 'undefined' ? export_labels_text : ''),
+      no_order_selected_error,
+      create_labels_bulk_route
+    );
+  };
 
-    link.innerHTML = '<i class="icon-download"></i> ' + export_labels_text;
-    link.href = '#';
-    link.addEventListener('click', function(e) {
+  let addBulkRefreshLabel = function () {
+    addBulkButton(
+      'order_grid_bulk_action_refresh_label',
+      (typeof refresh_labels_text !== 'undefined' ? refresh_labels_text : ''),
+      no_order_selected_error,
+      refresh_labels_bulk_route
+    );
+  };
+
+  let addBulkPrintLabel = function () {
+    addModalBulkButton(
+      'order_grid_bulk_action_print_label',
+      (typeof print_labels_text !== 'undefined' ? print_labels_text : ''),
+      'bulk-print',
+      'print-bulk-form',
+      'print-bulk-button'
+    );
+  };
+
+  let addBulkExportPrintLabel = function () {
+    addModalBulkButton(
+      'order_grid_bulk_action_create_print_label',
+      (typeof export_and_print_label_text !== 'undefined' ? export_and_print_label_text : ''),
+      'bulk-export-print',
+      'export-print-bulk-form',
+      'export-print-bulk-button'
+    );
+  };
+
+  let addModalBulkButton = function(buttonId, labelText, modalId, formId, formButtonId) {
+    let link = getBulkButton(buttonId, labelText, true, modalId);
+
+    link.on('click', function (e) {
+      e.preventDefault();
+      let $form = $('#' + formId);
+      $form.find('input[name="order_ids[]"]').remove();
+      $('input[name="orderBox[]"]:checked, .js-bulk-action-checkbox[name="order_orders_bulk[]"]:checked').each(function(e) {
+        let idOrder = parseInt($(this).val());
+        if (isNaN(idOrder) || idOrder <= 0) {
+          return true; // skip this element
+        }
+        if (!$('button[data-order-id="' + idOrder + '"]').length) {
+          return true; // skip this element
+        }
+        let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + idOrder + '">');
+        $labelIdInput.prependTo($form);
+      });
+      let $formButton = $('#' + formButtonId);
+      $formButton.attr('disabled', false);
+      if (link.data('toggle') !== 'modal' && link.data('modalId') !== modalId) {
+        $formButton.trigger('click');
+      }
+    });
+
+    addBulkOption(link);
+  }
+
+  let addBulkButton = function(buttonId, labelText, errorText, route) {
+    let link = getBulkButton(buttonId, labelText, false);
+
+    link.on('click', function (e) {
       e.preventDefault();
       let idsArray = [];
-      document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
-        if (document.querySelector('button[data-order-id="'+e.value+'"]')){
-          idsArray.push(e.value);
+      $('input[name="orderBox[]"]:checked, .js-bulk-action-checkbox[name="order_orders_bulk[]"]:checked').each(function(e) {
+        let idOrder = parseInt($(this).val());
+        if (isNaN(idOrder) || idOrder <= 0) {
+          return true; // skip this element
+        }
+        if ($('button[data-order-id="' + idOrder + '"]').length) {
+          idsArray.push(idOrder);
         }
       });
       if (!idsArray.length) {
         $('#ajax_confirmation').before(
           '<div class="alert alert-danger">' +
-          '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
+          '<button type="button" class="close" data-dismiss="alert">×</button>' + errorText + '</div>'
         );
-        $.scrollTo(0);
+        $('html').animate({scrollTop: 0}, 400);
         return;
       }
       $.ajax({
         method: "POST",
-        url: create_labels_bulk_route,
+        url: route,
         data: {
           order_ids: idsArray
         }
@@ -43,104 +121,34 @@ window.addEventListener('load', function() {
       }).fail((error) => {
         $('#ajax_confirmation').before(
           '<div class="alert alert-danger">' +
-          '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
+          '<button type="button" class="close" data-dismiss="alert">×</button>' + error.responseText + '</div>'
         )
       });
     });
 
     addBulkOption(link);
-  };
+  }
 
-  let addBulkRefreshLabel = function() {
-    let link = document.createElement('a');
-
-    link.innerHTML = '<i class="icon-download"></i> ' + refresh_labels_text;
-    link.href = '#';
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      let ids = [];
-      document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(e => {
-        ids.push(e.value);
+  let getBulkButton = function(buttonId, labelText, hasModal, modalId) {
+    let link;
+    if (ps177) {
+      link = $('#' + buttonId);
+    } else {
+      link = $('<a/>', {
+        href: '#',
+        title: ''
       });
-
-      if (!ids.length) {
-        $('#ajax_confirmation').before(
-          '<div class="alert alert-danger">' +
-          '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
-        );
-        $.scrollTo(0);
-        return false;
+      link.html('<i class="icon-download"></i> ' + labelText);
+      if (hasModal && typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
+        link.prop('data-toggle', 'modal');
+        link.prop('data-target', '#' + modalId);
       }
-
-      $.ajax({
-        method: "POST",
-        url: refresh_labels_bulk_route,
-        data: {
-          order_ids: ids
-        }
-      }).done((result) => {
-        window.location.reload();
-      }).fail((error) => {
-        $('#ajax_confirmation').before(
-          '<div class="alert alert-danger">' +
-          '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
-        )
-      });
-    });
-
-    addBulkOption(link);
-  };
-
-  let addBulkPrintLabel = function() {
-    let link = document.createElement('a');
-
-    link.innerHTML = '<i class="icon-download"></i> ' + print_labels_text;
-    if (typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
-      link.setAttribute('data-toggle', 'modal');
-      link.setAttribute('data-target', '#bulk-print');
     }
-    link.href = '#';
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      $('#print-bulk-form').find('input[name="order_ids[]"]').remove();
-      document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
-        let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
-        $labelIdInput.prependTo('#bulk-print form');
-      });
-      if (typeof prompt_for_label_position === 'undefined' || parseInt(prompt_for_label_position) !== 1) {
-        $('#print-bulk-button').trigger('click');
-      }
-    });
 
-    addBulkOption(link);
-  };
+    return link;
+  }
 
-  let addBulkExportPrintLabel = function() {
-    let link = document.createElement('a');
-
-    link.innerHTML = '<i class="icon-download"></i> ' + export_and_print_label_text;
-    if (typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
-      link.setAttribute('data-toggle', 'modal');
-      link.setAttribute('data-target', '#bulk-export-print');
-    }
-    link.href = '#';
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      $('#export-print-bulk-form').find('input[name="order_ids[]"]').remove();
-      document.querySelectorAll('input[name="orderBox[]"]:checked').forEach(function(e) {
-        let $labelIdInput = $('<input type="hidden" name="order_ids[]" value="' + e.value + '">');
-        $labelIdInput.prependTo('#bulk-export-print form');
-      });
-      $('#export-print-bulk-button').attr('disabled', false);
-      if (typeof prompt_for_label_position === 'undefined' || parseInt(prompt_for_label_position) !== 1) {
-        $('#export-print-bulk-button').trigger('click');
-      }
-    });
-
-    addBulkOption(link);
-  };
-
-  $(document).on('change', '.page-format-radio', function() {
+  $(document).on('change', '.page-format-radio', function () {
     if ($(this).hasClass('page-format-a4') && $(this).is(':checked')) {
       $(this).closest('form').find('.positions-block').show();
     }
@@ -161,7 +169,8 @@ window.addEventListener('load', function() {
   addBulkExportPrintLabel();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+$(function() {
+  // General actions
   function displayOrderAjaxErrors(jsonData) {
     var errorText = '';
     if (typeof jsonData.errors === 'string') {
@@ -175,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
       '<div class="alert alert-danger">' +
       '<button type="button" class="close" data-dismiss="alert">×</button>'+errorText+'</div>'
     );
-    $.scrollTo(0);
+    $('html').animate({ scrollTop: 0 }, 400);
   }
   function displayOrderAjaxFailErrors(error) {
     if (typeof error.responseJSON !== 'undefined' && typeof error.responseJSON.hasError !== 'undefined') {
@@ -187,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
       '<div class="alert alert-danger">' +
       '<button type="button" class="close" data-dismiss="alert">×</button>'+error.responseText+'</div>'
     );
-    $.scrollTo(0);
+    $('html').animate({ scrollTop: 0 }, 400);
   }
   function checkDownloadPdfCookie() {
     var key = 'downloadPdfLabel';
@@ -288,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
       async: true,
       cache: false,
       headers: { 'cache-control': 'no-cache' }
-    }).success(function(jsonData) {
+    }).done(function(jsonData) {
       if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
         window.location.reload();
       } else {
@@ -310,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         '<button type="button" class="close" data-dismiss="alert">×</button>'+no_order_selected_error+'</div>'
       );
       $(this).closest('.modal').modal('hide');
-      $.scrollTo(0);
+      $('html').animate({ scrollTop: 0 }, 400);
     }
   });
 
@@ -341,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
       async: true,
       cache: false,
       headers: { 'cache-control': 'no-cache' }
-    }).success(function(jsonData) {
+    }).done(function(jsonData) {
       if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
         $('#content > .alert.alert-danger').remove();
       } else {
@@ -362,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
       async: true,
       cache: false,
       headers: { 'cache-control': 'no-cache' }
-    }).success(function(jsonData) {
+    }).done(function(jsonData) {
       if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
         if (typeof reload !== 'undefined' && reload) {
           window.location.reload();
@@ -445,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
         async: true,
         cache: false,
         headers: { 'cache-control': 'no-cache' }
-      }).success(function(jsonData) {
+      }).done(function(jsonData) {
         $('#content > .alert.alert-danger').remove();
         if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
           $tr.remove();
@@ -482,7 +491,7 @@ document.addEventListener("DOMContentLoaded", () => {
         async: true,
         cache: false,
         headers: { 'cache-control': 'no-cache' }
-      }).success(function(jsonData) {
+      }).done(function(jsonData) {
         $('#content > .alert.alert-danger').remove();
         if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
           if (typeof jsonData.labelsHtml !== 'undefined') {
@@ -536,7 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
         async: true,
         cache: false,
         headers: { 'cache-control': 'no-cache' }
-      }).success(function(jsonData) {
+      }).done(function(jsonData) {
         $('#content > .alert.alert-danger').remove();
         if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
           if (typeof jsonData.labelsHtml !== 'undefined') {
@@ -567,7 +576,7 @@ document.addEventListener("DOMContentLoaded", () => {
       async: true,
       cache: false,
       headers: { 'cache-control': 'no-cache' }
-    }).success(function(jsonData) {
+    }).done(function(jsonData) {
       $('#content > .alert.alert-danger').remove();
       if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
         if (typeof jsonData.labelsHtml !== 'undefined') {
@@ -652,7 +661,7 @@ document.addEventListener("DOMContentLoaded", () => {
       async: true,
       cache: false,
       headers: { 'cache-control': 'no-cache' }
-    }).success(function(jsonData) {
+    }).done(function(jsonData) {
       if (typeof jsonData.hasError === 'undefined' || !jsonData.hasError) {
         if (typeof jsonData.labelConceptHtml !== 'undefined') {
           $('.concept-label-wrapper').html(jsonData.labelConceptHtml);
@@ -666,9 +675,7 @@ document.addEventListener("DOMContentLoaded", () => {
       displayOrderAjaxFailErrors(error);
     });
   });
-});
 
-$(function() {
   let initOrderPageLabelPanel = function() {
     let $panel = $('#myparcel-order-panel');
     if (!$panel.length) {

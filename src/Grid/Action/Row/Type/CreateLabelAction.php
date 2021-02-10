@@ -21,7 +21,7 @@ class CreateLabelAction extends \PrestaShop\PrestaShop\Core\Grid\Action\Row\Abst
     {
         $resolver
             ->setDefaults([
-                'submit_route' => 'admin_myparcel_orders_label_bulk_create',
+                'submit_route' => 'admin_myparcelbe_order_label_create',
                 'use_inline_display' => true,
             ])
         ;

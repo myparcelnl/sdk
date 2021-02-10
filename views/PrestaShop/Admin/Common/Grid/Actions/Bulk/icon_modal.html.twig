@@ -1,0 +1,11 @@
+<button id="{{ '%s_grid_bulk_action_%s'|format(grid.id, action.id) }}"
+        class="dropdown-item js-bulk-modal-form-submit-btn"
+        type="button"
+        data-form-submit-url="{% if action.options.submit_route != '' %}{{ path(action.options.submit_route) }}{% else %}#{% endif %}"
+        {% if action.options.modal_id != '' %}
+          data-modal-id="{{ action.options.modal_id }}"
+        {% endif %}
+>
+  <i class="material-icons">{{ action.options.material_icon }}</i>
+  {{ action.name }}
+</button>
