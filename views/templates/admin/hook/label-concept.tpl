@@ -150,7 +150,7 @@
               <input
                       name="insuranceAmount"
                       type="radio"
-                      id="insurance_amount_more"
+                      id="insurance_amount_custom"
                       value="-1"
                       {if !empty($deliveryOptions.shipmentOptions.insurance.amount)
                       && !in_array($deliveryOptions.shipmentOptions.insurance.amount, ['10000', '25000', '50000'])

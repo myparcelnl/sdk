@@ -338,6 +338,16 @@ $(function() {
   $('input[name="insurance"]').each(function() {
     toggleInsuranceValuesDisplay($(this));
   });
+  $('input[name="insurance-amount-custom-value"]').on('focus', function() {
+    let $parent = $(this).closest('.insurance-amount-custom');
+    if ($parent.length) {
+      $parent.find('input[type="radio"]').prop('checked', 'checked');
+    }
+    $parent = $(this).closest('.return-insurance-amount-custom');
+    if ($parent.length) {
+      $parent.find('input[type="radio"]').prop('checked', 'checked');
+    }
+  });
 
   // Save order label new settings
   $('#submitCreateConcept').on('click', function (e) {
@@ -414,11 +424,11 @@ $(function() {
     var $container = $('.shipment-labels-wrapper');
     var labelCount = $('tbody > tr.tr-label-item', $container).length;
     if (labelCount) {
-      $('tbody > tr.tr-empty-notice', $container).addClass('hidden');
+      $('tbody > tr.tr-empty-notice', $container).addClass('hidden d-none');
       $('.shipment-labels-bulk-actions > .btn.dropdown-toggle', $container).attr('disabled', false);
       return;
     }
-    $('tbody > tr.tr-empty-notice', $container).removeClass('hidden');
+    $('tbody > tr.tr-empty-notice', $container).removeClass('hidden d-none');
     $('.shipment-labels-bulk-actions > .btn.dropdown-toggle', $container).attr('disabled', true);
   }
   $('#submitCreateLabel').on('click', function (e) {

@@ -86,7 +86,8 @@
   border-top: 1px solid #dedede;
   padding-top: 15px;
 }
-#myparcel-order-panel.panel .panel-heading img {
+#myparcel-order-panel.panel .panel-heading img,
+#myparcel-order-panel.card .card-header-title img {
   height: 16px;
   width: 16px;
 }
@@ -159,4 +160,8 @@ td.ui-state-danger {
 }
 .datepicker-row .datepicker-exceptions {
   flex-grow: 1;
+}
+.delivery-options-span .material-icons {
+  color: inherit;
+  font-size: inherit;
 }

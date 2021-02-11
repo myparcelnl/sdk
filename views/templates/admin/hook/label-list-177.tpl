@@ -9,10 +9,10 @@
   </tr>
   </thead>
   <tbody>
-  <tr class="tr-empty-notice{if !empty($labelList)} hidden{/if}">
+  <tr class="tr-empty-notice{if !empty($labelList)} hidden d-none{/if}">
     <td class="list-empty hidden-print" colspan="5">
-      <div class="list-empty-msg">
-        <i class="icon-exclamation-triangle"></i>
+      <div class="list-empty-msg text-center">
+        <span class="material-icons">warning</span>
         <div>{l s='There are no shipments' mod='myparcelbe'}</div>
       </div>
     </td>
@@ -35,35 +35,38 @@
             <div class="btn-group" id="btn_group_action">
               <button
                       type="button"
-                      class="btn btn-default order-label-action-print{if $promptForLabelPosition} label-modal{/if}"
+                      class="btn btn-primary btn-sm order-label-action-print{if $promptForLabelPosition} label-modal{/if}"
                       {if $promptForLabelPosition}data-target="#printLabelModal"{/if}
                       {if $promptForLabelPosition}data-toggle="modal"{/if}
               >
-                <i class="icon-print"></i> {l s='Print' mod='myparcelbe'}
+                <span class="material-icons">local_printshop</span> {l s='Print' mod='myparcelbe'}
               </button>
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
+              <button
+                      type="button"
+                      class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+              >
+                <span class="sr-only">{l s='Toggle Dropdown' mod='myparcelbe'}</span>
               </button>
-              <ul class="dropdown-menu" role="menu">
-                <li>
-                  <a href="#" class="order-label-action-refresh">
-                    <i class="icon-refresh"></i> {l s='Refresh' mod='myparcelbe'}
-                  </a>
-                </li>
+              <div class="dropdown-menu">
+                <a href="#" class="order-label-action-refresh dropdown-item">
+                  <span class="material-icons">refresh</span>
+                  {l s='Refresh' mod='myparcelbe'}
+                </a>
                 {if !empty($label.ALLOW_RETURN_FORM)}
-                  <li>
-                    <a href="#" class="order-label-action-return{if !empty($label.return_disabled)} disabled{/if}">
-                      <i class="icon-reply"></i> {l s='Create return label' mod='myparcelbe'}
-                    </a>
-                  </li>
-                {/if}
-                <li class="divider"></li>
-                <li>
-                  <a href="#" class="order-label-action-delete">
-                    <i class="icon-trash"></i> {l s='Delete' d='Admin.Actions'}
+                  <a href="#" class="order-label-action-return dropdown-item{if !empty($label.return_disabled)} disabled{/if}">
+                    <span class="material-icons">reply</span>
+                    {l s='Create return label' mod='myparcelbe'}
                   </a>
-                </li>
-              </ul>
+                {/if}
+                <div class="dropdown-divider"></div>
+                <a href="#" class="order-label-action-delete dropdown-item">
+                  <span class="material-icons">delete</span>
+                  {l s='Delete' d='Admin.Actions'}
+                </a>
+              </div>
             </div>
           </td>
         </tr>

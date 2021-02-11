@@ -433,6 +433,10 @@ class AdminMyParcelBELabelController extends ModuleAdminController
         }
 
         if ($idOrder) {
+            $psVersion = '';
+            if (version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
+                $psVersion = '-177';
+            }
             $labelList = OrderLabel::getOrderLabels((int) $idOrder, []);
             $labelListHtml = $this->context->smarty->createData(
                 $this->context->smarty
@@ -443,7 +447,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             ]);
 
             $labelListHtmlTpl = $this->context->smarty->createTemplate(
-                $this->module->getTemplatePath('views/templates/admin/hook/label-list.tpl'),
+                $this->module->getTemplatePath('views/templates/admin/hook/label-list' . $psVersion . '.tpl'),
                 $labelListHtml
             );
 
@@ -622,6 +626,10 @@ class AdminMyParcelBELabelController extends ModuleAdminController
 
     public function ajaxProcessUpdateDeliveryOptions()
     {
+        $psVersion = '';
+        if (version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
+            $psVersion = '-177';
+        }
         $postValues = Tools::getAllValues();
         $options = $postValues['myparcel-delivery-options'] ?? null;
         $action = $postValues['action'] ?? null;
@@ -660,7 +668,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             ]),
         ]);
         $labelConceptHtmlTpl = $this->context->smarty->createTemplate(
-            $this->module->getTemplatePath('views/templates/admin/hook/label-concept.tpl'),
+            $this->module->getTemplatePath('views/templates/admin/hook/label-concept' . $psVersion . '.tpl'),
             $labelConceptHtml
         );
 

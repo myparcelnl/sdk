@@ -1,96 +1,136 @@
-<div id="myparcel-order-panel" class="panel" data-url="{$labelUrl}">
-  <div class="panel-heading">
-    <img src="{$modulePathUri}views/images/myparcelnl-grayscale.png" alt="" /> {l s='MyParcel' mod='myparcelbe'}
+<div id="myparcel-order-panel" class="card" data-url="{$labelUrl}">
+  <div class="card-header">
+    <h3 class="card-header-title">
+      <img src="{$modulePathUri}views/images/myparcelnl-grayscale.png" alt="" />
+      {l s='MyParcel' mod='myparcelbe'}
+    </h3>
   </div>
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="panel form-horizontal">
-        <div class="panel-heading">
-          <i class="icon-file-text"></i> {l s='Concept' mod='myparcelbe'}
-          <button class="badge badge-concept-date">
-            <div class="concept-date">
-              <span class="delivery-options-span" data-toggle="modal" data-target="#deliveryDateModal">
-                {dateFormat date=$deliveryOptions.date full=false}
-                <i class="icon-pencil"></i>
-              </span>
-            </div>
-          </button>
-        </div>
-        <div class="concept-label-wrapper form-wrapper">
-          {$labelConceptHtml}
-        </div>
-        <div class="concept-label-address">
-          <div class="well">
-            <a class="btn btn-default pull-right" href="{$addressEditUrl}">
-              <i class="icon-pencil"></i> {l s='Edit' d='Admin.Actions'}
-            </a>
-            {$delivery_address_formatted}
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card form-horizontal">
+          <div class="card-header">
+            <span class="material-icons">
+              article
+            </span>
+            {l s='Concept' mod='myparcelbe'}
+            <button class="btn btn-info btn-sm badge-concept-date ml-2">
+              <div class="concept-date">
+                <span
+                        class="delivery-options-span d-flex align-items-center"
+                        data-toggle="modal"
+                        data-target="#deliveryDateModal"
+                >
+                  {dateFormat date=$deliveryOptions.date full=false}
+                  <span class="material-icons ml-2">
+                    create
+                  </span>
+                </span>
+              </div>
+            </button>
           </div>
-        </div>
-        <div class="panel-footer-wrapper">
-          <button type="submit" name="submitCreateConcept" class="btn btn-default" id="submitCreateConcept">
-            <i class="icon-save"></i> {l s='Save' mod='myparcelbe'}
-          </button>
-          <div class="btn-group">
-            <button class="btn btn-default" type="button" name="submitCreateLabel" id="submitCreateLabel">
-              <i class="icon-plus"></i> {l s='New shipment' mod='myparcelbe'}
+          <div class="card-body">
+            <div class="row">
+              <div class="concept-label-wrapper form-wrapper col-sm-12 col-xl-6">
+                {$labelConceptHtml}
+              </div>
+              <div class="concept-label-address col-sm-12 col-xl-6">
+                <div class="card mb-0">
+                  <div class="card-body">
+                    <a class="btn btn-outline-secondary float-right" href="{$addressEditUrl}">
+                      <span class="material-icons">create</span>
+                      {l s='Edit' d='Admin.Actions'}
+                    </a>
+                    {$delivery_address_formatted}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <button type="submit" name="submitCreateConcept" class="btn btn-outline-primary" id="submitCreateConcept">
+              <span class="material-icons">save_alt</span>
+              {l s='Save' mod='myparcelbe'}
             </button>
-            <button
-                    class="btn btn-default"
-                    type="button"
-                    name="submitCreateLabelPrint"
-                    id="submitCreateLabelPrint"
-                    data-toggle="modal"
-                    data-target="#printLabelModal"
-            >
-              <i class="icon-plus"></i> <i class="icon-print"></i> {l s='New shipment & print' mod='myparcelbe'}
-            </button>
+            <div class="btn-group">
+              <button class="btn btn-outline-primary" type="button" name="submitCreateLabel" id="submitCreateLabel">
+                <span class="material-icons">add</span>
+                {l s='New shipment' mod='myparcelbe'}
+              </button>
+              <button
+                      class="btn btn-outline-primary"
+                      type="button"
+                      name="submitCreateLabelPrint"
+                      id="submitCreateLabelPrint"
+                      data-toggle="modal"
+                      data-target="#printLabelModal"
+              >
+                <span class="material-icons">add</span>
+                <span class="material-icons">local_printshop</span>
+                {l s='New shipment & print' mod='myparcelbe'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="panel">
-        <div class="panel-heading">
-          <i class="icon-truck"></i> {l s='Shipments' mod='myparcelbe'}
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <span class="material-icons">local_shipping</span>
+            {l s='Shipments' mod='myparcelbe'}
+          </div>
+          <div class="card-body">
+            <form class="shipment-labels-wrapper" action="{$labelUrl}" method="post">
+              <div class="table-responsive">
+                {$labelListHtml}
+              </div>
+              <div class="btn-group bulk-actions dropup shipment-labels-bulk-actions">
+                <button
+                        type="button"
+                        class="btn btn-primary btn-sm dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        {if empty($labelList)} disabled{/if}
+                >
+                  {l s='Bulk actions' d='Admin.Global'}
+                </button>
+                <ul class="dropdown-menu label-dropdown">
+                  <a
+                          class="dropdown-item"
+                          href="#"
+                          onclick="javascript:checkDelBoxes($(this).closest('.shipment-labels-wrapper').get(0), 'labelBox[]', true);return false;"
+                  >
+                    <span class="material-icons">check_box</span>
+                    {l s='Select all'}
+                  </a>
+                  <a
+                          class="dropdown-item"
+                          href="#"
+                          onclick="javascript:checkDelBoxes($(this).closest('.shipment-labels-wrapper').get(0), 'labelBox[]', false);return false;"
+                  >
+                    <span class="material-icons">check_box_outline_blank</span>
+                    {l s='Unselect all'}
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  {foreach $bulk_actions as $key => $params}
+                    {if $params.text == 'divider'}<div class="dropdown-divider"></div>{/if}
+                    {if $params.text != 'divider'}
+                      <a
+                              class="bulk-actions-links dropdown-item"
+                              href="#"
+                              data-action="bulkAction{$key|ucfirst}"
+                              data-ajax="{if isset($params.ajax)}{$params.ajax|intval}{else}0{/if}"
+                      >
+                        {if isset($params.icon)}<i class="{$params.icon}"></i>{/if}&nbsp;{$params.text}
+                      </a>
+                    {/if}
+                  {/foreach}
+                </ul>
+              </div>
+            </form>
+          </div>
         </div>
-        <form class="shipment-labels-wrapper" action="{$labelUrl}" method="post">
-          <div class="table-responsive">
-            {$labelListHtml}
-          </div>
-          <div class="btn-group bulk-actions dropup shipment-labels-bulk-actions">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"{if empty($labelList)} disabled{/if}>
-                {l s='Bulk actions' d='Admin.Global'} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu label-dropdown">
-              <li>
-                <a href="#" onclick="javascript:checkDelBoxes($(this).closest('.shipment-labels-wrapper').get(0), 'labelBox[]', true);return false;">
-                  <i class="icon-check-sign"></i>&nbsp;{l s='Select all'}
-                </a>
-              </li>
-              <li>
-                <a href="#" onclick="javascript:checkDelBoxes($(this).closest('.shipment-labels-wrapper').get(0), 'labelBox[]', false);return false;">
-                  <i class="icon-check-empty"></i>&nbsp;{l s='Unselect all'}
-                </a>
-              </li>
-              <li class="divider"></li>
-                {foreach $bulk_actions as $key => $params}
-                  <li{if $params.text == 'divider'} class="divider"{/if}>
-                      {if $params.text != 'divider'}
-                        <a
-                                class="bulk-actions-links"
-                                href="#"
-                                data-action="bulkAction{$key|ucfirst}"
-                                data-ajax="{if isset($params.ajax)}{$params.ajax|intval}{else}0{/if}"
-                        >
-                            {if isset($params.icon)}<i class="{$params.icon}"></i>{/if}&nbsp;{$params.text}
-                        </a>
-                      {/if}
-                  </li>
-                {/foreach}
-            </ul>
-          </div>
-        </form>
       </div>
     </div>
   </div>
