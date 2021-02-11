@@ -5,6 +5,7 @@
 .myparcel-radio-container {
   display: inline-block;
   padding: 0 20px;
+  vertical-align: middle;
 }
 .myparcel-radio {
   display: none;
@@ -64,6 +65,7 @@
 }
 .money-input-wrapper {
   display: inline-block;
+  vertical-align: middle;
 }
 
 .pointer-myparcel-labels label {
@@ -134,8 +136,8 @@
   display: flex;
   align-items: center;
 }
-.insurance-amount-custom > span,
-.insurance-amount-custom > div {
+.concept-label-wrapper .insurance-amount-custom > span,
+.concept-label-wrapper .insurance-amount-custom > div {
   padding-left: 4px;
 }
 .insurance-amount-custom .input-group {

@@ -250,15 +250,15 @@
                         </div>
                     </div>
                     {if !$isBE}
-                        <div class="form-group">
+                        <div class="form-group insurance-amount-custom">
                             <div class="myparcel-radio-container">
                                 <input id="heigherthen500" type="radio" value="-1" class="myparcel-radio" name="insuranceAmount">
                                 <label for="heigherthen500">{l s='Higher than € 500' mod='myparcelbe'}</label>
                             </div>
                             <div class="money-input-wrapper">
                                 <div class="input-group money-type">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">€ </span>
+                                    <div class="input-group-addon input-group-prepend">
+                                        <span class="input-group-prefix input-group-text">{$currencySign}</span>
                                     </div>
                                     <input
                                             type="text"

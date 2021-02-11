@@ -4,6 +4,7 @@ namespace Gett\MyparcelBE\Module\Hooks\Helpers;
 
 use Configuration;
 use Context;
+use Currency;
 use Gett\MyparcelBE\Constant;
 use Media;
 use Module;
@@ -36,6 +37,8 @@ class AdminOrderList extends AbstractAdminOrder
     public function getAdminAfterHeader(): string
     {
         $link = $this->context->link;
+        $currency = Currency::getDefaultCurrency();
+        $currencySign = $currency->getSign();
         $this->context->smarty->assign([
             'action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel']),
             'download_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'downloadLabel']),
@@ -50,6 +53,7 @@ class AdminOrderList extends AbstractAdminOrder
             'RETURN_PACKAGE' => Constant::RETURN_PACKAGE_CONFIGURATION_NAME,
             'SIGNATURE_REQUIRED' => Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME,
             'INSURANCE' => Constant::INSURANCE_CONFIGURATION_NAME,
+            'currencySign' => $currencySign,
         ]);
 
         return $this->module->display($this->module->name, 'views/templates/admin/hook/orders_popups.tpl');
