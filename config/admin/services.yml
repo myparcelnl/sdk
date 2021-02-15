@@ -1,5 +1,0 @@
-parameters:
-  configuration.api_key_name: !php/const Gett\MyparcelBE\Constant::API_KEY_CONFIGURATION_NAME
-
-imports:
-  - { resource: ../common.yml }
