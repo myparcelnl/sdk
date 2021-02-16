@@ -24,6 +24,7 @@ class LabelOptionsResolver
             'age_check' => $this->getAgeCheck($order_products, $params['id_carrier']),
             'signature' => $this->getSignature($delivery_settings, $order_products, $params['id_carrier']),
             'insurance' => $this->getInsurance($order_products, $params['id_carrier']),
+            'return_undelivered' => $this->getReturnUndelivered($order_products, $params['id_carrier']),
         ]);
     }
 
@@ -80,5 +81,16 @@ class LabelOptionsResolver
         }
 
         return CarrierConfigurationProvider::get($id_carrier, Constant::INSURANCE_CONFIGURATION_NAME, false);
+    }
+
+    private function getReturnUndelivered(array $products, int $id_carrier)
+    {
+        foreach ($products as $product) {
+            if (ProductConfigurationProvider::get($product['product_id'], Constant::RETURN_PACKAGE_CONFIGURATION_NAME)) {
+                return true;
+            }
+        }
+
+        return CarrierConfigurationProvider::get($id_carrier, Constant::RETURN_PACKAGE_CONFIGURATION_NAME, false);
     }
 }

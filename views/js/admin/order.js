@@ -244,6 +244,9 @@ $(function() {
     if (options.age_check == true) {
       $('#ageCheck').prop('checked', true)
     }
+    if (options.return_undelivered == true) {
+      $('#returnUndelivered').prop('checked', true)
+    }
     if ($(this).data('allowSetSignature') === 0) {
       $('#signatureRequired').prop('checked', false).prop('disabled', true);
     } else {

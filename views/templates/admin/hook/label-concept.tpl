@@ -51,7 +51,7 @@
                   type="checkbox"
                   id="label_recipient_only"
                   value="1"
-                  {if !empty($deliveryOptions.shipmentOptions.only_recipient)}checked{/if}
+                  {if !empty($deliveryOptions.shipmentOptions.only_recipient) || !empty($labelOptions.only_to_recipient)}checked{/if}
           />
         </label>
       </p>
@@ -65,7 +65,7 @@
                   type="checkbox"
                   id="label_require_signature"
                   value="1"
-                  {if !empty($deliveryOptions.shipmentOptions.signature)}checked{/if}
+                  {if !empty($deliveryOptions.shipmentOptions.signature) || !empty($labelOptions.signature)}checked{/if}
           />
         </label>
       </p>
@@ -79,7 +79,7 @@
                   type="checkbox"
                   id="label_return"
                   value="1"
-                  {if !empty($deliveryOptions.shipmentOptions.return)}checked{/if}
+                  {if !empty($deliveryOptions.shipmentOptions.return) || !empty($labelOptions.return_undelivered)}checked{/if}
           />
         </label>
       </p>
@@ -93,7 +93,7 @@
                   type="checkbox"
                   id="label_age_check"
                   value="1"
-                  {if !empty($deliveryOptions.shipmentOptions.age_check)}checked{/if}
+                  {if !empty($deliveryOptions.shipmentOptions.age_check) || !empty($labelOptions.age_check)}checked{/if}
           />
         </label>
       </p>
@@ -107,7 +107,7 @@
                   type="checkbox"
                   id="label_insurance"
                   value="1"
-                  {if !empty($deliveryOptions.shipmentOptions.insurance)}checked{/if}
+                  {if !empty($deliveryOptions.shipmentOptions.insurance) || !empty($labelOptions.insurance)}checked{/if}
           />
         </label>
       </p>
@@ -119,7 +119,8 @@
                   id="insurance_amount_100"
                   value="amount100"
                   {if !empty($deliveryOptions.shipmentOptions.insurance.amount)
-                  && $deliveryOptions.shipmentOptions.insurance.amount eq 10000}checked{/if}
+                  && $deliveryOptions.shipmentOptions.insurance.amount eq 10000
+                  || (empty($deliveryOptions.shipmentOptions.insurance) && !empty($labelOptions.insurance))}checked{/if}
           />
           {l s='Up to € 100' mod='myparcelbe'}
         </label>
