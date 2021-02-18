@@ -6,6 +6,7 @@ use Gett\MyparcelBE\Label\LabelOptionsResolver;
 use Gett\MyparcelBE\Logger\Logger;
 use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\Module\Carrier\Provider\DeliveryOptionsProvider;
+use Gett\MyparcelBE\Module\Tools\Tools;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Gett\MyparcelBE\Service\Consignment\Download;
@@ -289,7 +290,16 @@ class AdminMyParcelBELabelController extends ModuleAdminController
 
     public function processDownloadLabel()
     {
-        setcookie('downloadPdfLabel', 1);
+        Tools::setCookieSameSite(
+            'downloadPdfLabel',
+            1,
+            0,
+            '/',
+            '',
+            false,
+            false,
+            'Strict'
+        );
         $service = new Download(
             Configuration::get(Constant::API_KEY_CONFIGURATION_NAME),
             Tools::getAllValues(),
@@ -333,7 +343,16 @@ class AdminMyParcelBELabelController extends ModuleAdminController
     public function processExportPrint()
     {
         $collection = $this->processCreateb();
-        setcookie('downloadPdfLabel', 1);
+        Tools::setCookieSameSite(
+            'downloadPdfLabel',
+            1,
+            0,
+            '/',
+            '',
+            false,
+            false,
+            'Strict'
+        );
         if (!is_string($collection->getLabelPdf())) {
             $redirectParams = [];
             $idOrder = (new OrderLabelProvider($this))->provideOrderId((int) Tools::getValue('label_id'));

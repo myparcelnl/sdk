@@ -263,7 +263,7 @@ $(function() {
     var intervalLimit = 100;
     var intervalHandle = setInterval(function() {
       if (checkDownloadPdfCookie() !== null || intervalLimit <= 0) {
-        document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;samesite=strict';
         clearInterval(intervalHandle);
         $('#print').modal('hide');
       }
@@ -283,7 +283,7 @@ $(function() {
     var intervalLimit = 100;
     var intervalHandle = setInterval(function() {
       if (checkDownloadPdfCookie() !== null || intervalLimit <= 0) {
-        document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;samesite=strict';
         clearInterval(intervalHandle);
         window.location.reload();
       }
