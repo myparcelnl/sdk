@@ -40,7 +40,7 @@
                     type="button"
                     name="submitCreateLabelPrint"
                     id="submitCreateLabelPrint"
-                    data-toggle="modal"
+                    data-toggle="{if empty($promptForLabelPosition)}no-{/if}modal"
                     data-target="#printLabelModal"
             >
               <i class="icon-plus"></i> <i class="icon-print"></i> {l s='New shipment & print' mod='myparcelbe'}

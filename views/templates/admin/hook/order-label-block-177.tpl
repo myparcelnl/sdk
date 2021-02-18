@@ -62,7 +62,7 @@
                       type="button"
                       name="submitCreateLabelPrint"
                       id="submitCreateLabelPrint"
-                      data-toggle="modal"
+                      data-toggle="{if empty($promptForLabelPosition)}no-{/if}modal"
                       data-target="#printLabelModal"
               >
                 <span class="material-icons">add</span>

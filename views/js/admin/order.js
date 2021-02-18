@@ -134,15 +134,16 @@ $(function() {
     if (ps177) {
       link = $('#' + buttonId);
     } else {
-      link = $('<a/>', {
+      let linkProps = {
         href: '#',
         title: ''
-      });
-      link.html('<i class="icon-download"></i> ' + labelText);
+      };
       if (hasModal && typeof prompt_for_label_position !== 'undefined' && parseInt(prompt_for_label_position) === 1) {
-        link.prop('data-toggle', 'modal');
-        link.prop('data-target', '#' + modalId);
+        linkProps['data-toggle'] = 'modal';
+        linkProps['data-target'] = '#' + modalId;
       }
+      link = $('<a/>', linkProps);
+      link.html('<i class="icon-download"></i> ' + labelText);
     }
 
     return link;
@@ -447,6 +448,10 @@ $(function() {
   // Create new shipment label for the current order and print it
   $('#submitCreateLabelPrint').on('click', function (e) {
     e.preventDefault();
+    var $button = $('#button_print_label');
+    if ($(this).data('toggle') === 'no-modal' && $button.length) {
+      $button.trigger('click');
+    }
   });
   $('#button_print_label').click(function () {
     $(this).prepend('<i class="icon-refresh icon-spin icon-fw"></i>');

@@ -149,6 +149,7 @@ class AdminOrderView extends AbstractAdminOrder
             'deliveryOptions' => json_decode(json_encode($deliveryOptions), true),
             'currencySign' => $currencySign,
             'labelConfiguration' => $this->getLabelDefaultConfiguration(),
+            'promptForLabelPosition' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
         ]);
 
         return $this->module->display(
