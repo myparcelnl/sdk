@@ -157,11 +157,11 @@ $(function() {
     }
   });
 
-  $('#bulk-export-print').on('hidden.bs.modal', function (e) {
-    if (!$('.error-bulk-action').length) {
-      window.location.reload();
-    }
-  });
+  // $('#bulk-export-print').on('hidden.bs.modal', function (e) {
+  //   if (!$('.error-bulk-action').length) {
+  //     window.location.reload();
+  //   }
+  // });
 
   addBulkPrintLabel();
   addBulkRefreshLabel();
@@ -282,10 +282,13 @@ $(function() {
     $('#export-print-bulk-button').attr('disabled', 'disabled');
     var intervalLimit = 100;
     var intervalHandle = setInterval(function() {
-      if (checkDownloadPdfCookie() !== null || intervalLimit <= 0) {
+      var cookieStatus = checkDownloadPdfCookie();
+      if (cookieStatus !== null || intervalLimit <= 0) {
         document.cookie = 'downloadPdfLabel=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;samesite=strict';
         clearInterval(intervalHandle);
-        window.location.reload();
+        if (cookieStatus !== null) {
+          window.location.reload();
+        }
       }
       intervalLimit--;
     }, 1000);
