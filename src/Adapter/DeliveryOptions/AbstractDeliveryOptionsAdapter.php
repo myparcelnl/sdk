@@ -124,8 +124,8 @@ abstract class AbstractDeliveryOptionsAdapter
             "deliveryType"    => $this->getDeliveryType(),
             "packageType"     => $this->getPackageType(),
             "isPickup"        => $this->isPickup(),
-            "pickupLocation"  => $this->getPickupLocation(),
-            "shipmentOptions" => $this->getShipmentOptions()->toArray(),
+            "pickupLocation"  => $this->getPickupLocation() ? $this->getPickupLocation()->toArray() : null,
+            "shipmentOptions" => $this->getShipmentOptions() ? $this->getShipmentOptions()->toArray() : null,
         ];
     }
 }
