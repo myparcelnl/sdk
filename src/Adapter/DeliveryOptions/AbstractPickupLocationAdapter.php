@@ -118,10 +118,27 @@ class AbstractPickupLocationAdapter
     }
 
     /**
-     * @param string $cc
+     * @param  string $cc
      */
     public function setCountry(string $cc): void
     {
         $this->cc = $cc;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'location_name'     => $this->getLocationName(),
+            'location_code'     => $this->getLocationCode(),
+            'retail_network_id' => $this->getRetailNetworkId(),
+            'street'            => $this->getStreet(),
+            'number'            => $this->getNumber(),
+            'postal_code'       => $this->getPostalCode(),
+            'city'              => $this->getCity(),
+            'cc'                => $this->getCountry(),
+        ];
     }
 }
