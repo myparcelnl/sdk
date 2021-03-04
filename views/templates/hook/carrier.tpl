@@ -1,5 +1,6 @@
-<div class="myparcel-delivery-options-wrapper">
-</div>
+{if !empty($enableDeliveryOptions)}
+<div class="myparcel-delivery-options-wrapper"></div>
+{/if}
 <script type="application/javascript">
   var deliverySettingsMP = null;
   {if !empty($delivery_settings)}

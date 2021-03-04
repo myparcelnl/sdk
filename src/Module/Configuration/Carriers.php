@@ -3,9 +3,9 @@
 namespace Gett\MyparcelBE\Module\Configuration;
 
 use Carrier;
+use Configuration;
 use Currency;
 use Db;
-use Configuration;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Module\Tools\Tools;
 
@@ -144,7 +144,7 @@ class Carriers extends AbstractForm
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-save',
                     ],
-                ]
+                ],
             ],
         ];
 
@@ -253,7 +253,6 @@ class Carriers extends AbstractForm
         $returnTabFields = $this->getExtraTabFields($carrier, $packageTypeOptions, $packageFormatOptions, 'return');
 
         return array_merge($fields, $formTabFields, $deliveryTabFields, $returnTabFields);
-
     }
 
     private function getFormTabFields(Carrier $carrier, Currency $currency)
@@ -265,34 +264,34 @@ class Carriers extends AbstractForm
             return $fields;
         }
 
-        $deliveryDaysOptions = array(
-            array(
-                'id'   => -1,
+        $deliveryDaysOptions = [
+            [
+                'id' => -1,
                 'name' => $this->module->l('Hide days', 'carriers'),
-            ),
-        );
-        for ($i = 1; $i < 15; $i++) {
-            $deliveryDaysOptions[] = array(
-                'id'   => $i,
+            ],
+        ];
+        for ($i = 1; $i < 15; ++$i) {
+            $deliveryDaysOptions[] = [
+                'id' => $i,
                 'name' => sprintf($this->module->l('%d days', 'carriers'), $i),
-            );
+            ];
         }
 
-        $dropOffDelayOptions = array(
-            array(
-                'id'   => 0,
+        $dropOffDelayOptions = [
+            [
+                'id' => 0,
                 'name' => $this->module->l('No delay', 'carriers'),
-            ),
-            array(
-                'id'   => 1,
+            ],
+            [
+                'id' => 1,
                 'name' => $this->module->l('1 day', 'carriers'),
-            ),
-        );
-        for ($i = 2; $i < 15; $i++) {
-            $dropOffDelayOptions[] = array(
-                'id'   => $i,
+            ],
+        ];
+        for ($i = 2; $i < 15; ++$i) {
+            $dropOffDelayOptions[] = [
+                'id' => $i,
                 'name' => sprintf($this->module->l('%d days', 'carriers'), $i),
-            );
+            ];
         }
         $cutoffTimeValues = [];
         foreach (Constant::WEEK_DAYS as $index => $day) {
@@ -365,11 +364,11 @@ class Carriers extends AbstractForm
             'type' => 'select',
             'label' => $this->module->l('Delivery days window', 'carriers'),
             'name' => 'deliveryDaysWindow',
-            'options'  => array(
+            'options' => [
                 'query' => $deliveryDaysOptions,
-                'id'    => 'id',
-                'name'  => 'name',
-            ),
+                'id' => 'id',
+                'name' => 'name',
+            ],
             'desc' => sprintf($this->module->l(
                 'This option allows the Merchant to set the number of days into the future for which he wants to 
                 show his consumers delivery options. For example; If set to 3 (days) in his checkout, a consumer 
@@ -384,11 +383,11 @@ class Carriers extends AbstractForm
             'label' => $this->module->l('Drop off delay', 'carriers'),
             'name' => 'dropOffDelay',
             'tab' => 'form',
-            'options'  => array(
+            'options' => [
                 'query' => $dropOffDelayOptions,
-                'id'    => 'id',
-                'name'  => 'name',
-            ),
+                'id' => 'id',
+                'name' => 'name',
+            ],
             'desc' => sprintf($this->module->l(
                 'This option allows the Merchant to set the number of days it takes him to pick, pack and hand in 
                 his parcel at %s when ordered before the cutoff time. By default this is 0 and max. is 14.',
@@ -431,12 +430,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowMondayDelivery_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowMondayDelivery_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'form_group_class' => 'toggle-parent-field',
@@ -461,12 +460,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowMorningDelivery_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowMorningDelivery_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Allow morning delivery', 'carriers'),
@@ -514,12 +513,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowEveningDelivery_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowEveningDelivery_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'form_group_class' => 'toggle-parent-field',
@@ -556,12 +555,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowSaturdayDelivery_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowSaturdayDelivery_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Allow Saturday delivery', 'carriers'),
@@ -608,12 +607,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowSignature_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowSignature_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'form_group_class' => 'toggle-parent-field',
@@ -648,12 +647,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowOnlyRecipient_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowOnlyRecipient_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'form_group_class' => 'toggle-parent-field',
@@ -688,12 +687,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowPickupPoints_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowPickupPoints_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'form_group_class' => 'toggle-parent-field',
@@ -734,12 +733,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => 'allowPickupExpress_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => 'allowPickupExpress_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'form_group_class' => 'toggle-parent-field',
@@ -844,12 +843,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => $prefix . Constant::ONLY_RECIPIENT_CONFIGURATION_NAME . '_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => $prefix . Constant::ONLY_RECIPIENT_CONFIGURATION_NAME . '_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Deliver only to recipient', 'carriers'),
@@ -869,12 +868,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => $prefix . Constant::AGE_CHECK_CONFIGURATION_NAME . '_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => $prefix . Constant::AGE_CHECK_CONFIGURATION_NAME . '_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Age check', 'carriers'),
@@ -894,12 +893,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => $prefix . Constant::RETURN_PACKAGE_CONFIGURATION_NAME . '_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => $prefix . Constant::RETURN_PACKAGE_CONFIGURATION_NAME . '_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Return package when recipient is not home', 'carriers'),
@@ -919,12 +918,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => $prefix . Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME . '_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => $prefix . Constant::SIGNATURE_REQUIRED_CONFIGURATION_NAME . '_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Recipient need to sign', 'carriers'),
@@ -944,12 +943,12 @@ class Carriers extends AbstractForm
                     [
                         'id' => $prefix . Constant::INSURANCE_CONFIGURATION_NAME . '_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes', 'carriers')
+                        'label' => $this->module->l('Yes', 'carriers'),
                     ],
                     [
                         'id' => $prefix . Constant::INSURANCE_CONFIGURATION_NAME . '_off',
                         'value' => 0,
-                        'label' => $this->module->l('No', 'carriers')
+                        'label' => $this->module->l('No', 'carriers'),
                     ],
                 ],
                 'label' => $this->module->l('Package with insurance', 'carriers'),

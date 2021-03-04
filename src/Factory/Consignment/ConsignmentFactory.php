@@ -4,22 +4,22 @@ namespace Gett\MyparcelBE\Factory\Consignment;
 
 use Configuration;
 use Country;
+use DateTime;
+use Exception;
+use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Module\Carrier\Provider\CarrierSettingsProvider;
 use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Service\Order\OrderTotalWeight;
+use Gett\MyparcelBE\Service\ProductConfigurationProvider;
 use Module;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
-use Order;
-use Symfony\Component\HttpFoundation\Request;
-use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use PrestaShop\PrestaShop\Core\ConfigurationInterface;
-use Gett\MyparcelBE\Service\ProductConfigurationProvider;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use Tools;
 
 class ConsignmentFactory
 {
@@ -103,7 +103,7 @@ class ConsignmentFactory
         if (isset($this->request['packageType'])) {
             $packageType = $this->request['packageType'];
         } else {
-            $packageType = PackageTypeCalculator::getOrderPackageType($order['id_order'], $order['id_carrier']);
+            $packageType = (new PackageTypeCalculator())->getOrderPackageType($order['id_order'], $order['id_carrier']);
         }
         if (empty($carrierSettings['delivery']['packageType'][(int) $packageType])) {
             $packageType = 1; // TODO: for NL the DPD and Bpost don't allow any.
@@ -119,7 +119,7 @@ class ConsignmentFactory
         }
         $delivery_setting = json_decode($order['delivery_settings']);
         if (!empty($delivery_setting->date)) {
-            $deliveryDate = new \DateTime($delivery_setting->date);
+            $deliveryDate = new DateTime($delivery_setting->date);
             $consignment->setDeliveryDate($deliveryDate->format('Y-m-d H:i:s'));
         }
 
@@ -151,8 +151,7 @@ class ConsignmentFactory
                     $consignment->setPickupCity($pickupLocation->city);
                 }
                 if (!empty($pickupLocation->number)) {
-                    $consignment->setPickupNumber($pickupLocation->number
-                        . ($pickupLocation->number_suffix ?? ''));
+                    $consignment->setPickupNumber($pickupLocation->number . ($pickupLocation->number_suffix ?? ''));
                 }
                 if (!empty($pickupLocation->location_name)) {
                     $consignment->setPickupLocationName($pickupLocation->location_name);
@@ -181,7 +180,7 @@ class ConsignmentFactory
             $this->getLabelParams($order, Configuration::get(Constant::LABEL_DESCRIPTION_CONFIGURATION_NAME))
         );
         if ((int) $consignment->getPackageType() === AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
-            $consignment->setTotalWeight((new OrderTotalWeight)->provide((int) $order['id_order']));
+            $consignment->setTotalWeight((new OrderTotalWeight())->provide((int) $order['id_order']));
         }
 
         if (Country::getIdZone($order['id_country']) != 1
@@ -208,7 +207,7 @@ class ConsignmentFactory
                     );
 
                     $item->setDescription($product['product_name']);
-                    $item->setItemValue(\Tools::ps_round($product['unit_price_tax_incl'] * 100));// cents
+                    $item->setItemValue(Tools::ps_round($product['unit_price_tax_incl'] * 100)); // cents
                     $item->setWeight($product['product_weight']);
                     $consignment->addItem($item);
                 }
@@ -250,7 +249,7 @@ class ConsignmentFactory
             } else {
                 $insuranceValue = (int) $postValues['insurance-amount-custom-value'] ?? 0;
                 if (empty($insuranceValue)) {
-                    throw new \Exception('Insurance value cannot be empty');
+                    throw new Exception('Insurance value cannot be empty');
                 }
             }
         }
@@ -260,14 +259,14 @@ class ConsignmentFactory
                 'Insurance value cannot more than € 500',
                 'consignmentfactory'
             );
-            throw new \Exception('Insurance value cannot more than € 500');
+            throw new Exception('Insurance value cannot more than € 500');
         }
         if ($this->module->isNL() && $insuranceValue > 5000) {
             $this->module->controller->errors[] = $this->module->l(
                 'Insurance value cannot more than € 5000',
                 'consignmentfactory'
             );
-            throw new \Exception('Insurance value cannot more than € 5000');
+            throw new Exception('Insurance value cannot more than € 5000');
         }
 
         return $consignment->setInsurance($insuranceValue);
@@ -337,11 +336,11 @@ class ConsignmentFactory
         return trim($labelParams);
     }
 
-    public function getMyParcelCarrierId(int $id_carrier):int
+    public function getMyParcelCarrierId(int $id_carrier): int
     {
         $carrier = new \Carrier($id_carrier);
         if (!\Validate::isLoadedObject($carrier)) {
-            throw new \Exception('No carrier found.');
+            throw new Exception('No carrier found.');
         }
         if ($carrier->id_reference == $this->configuration::get(Constant::POSTNL_CONFIGURATION_NAME)) {
             return PostNLConsignment::CARRIER_ID;
@@ -355,6 +354,6 @@ class ConsignmentFactory
             return DPDConsignment::CARRIER_ID;
         }
 
-        throw new \Exception('Undefined carrier');
+        throw new Exception('Undefined carrier');
     }
 }

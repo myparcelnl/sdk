@@ -2,9 +2,9 @@
 
 namespace Gett\MyparcelBE\Module\Carrier;
 
+use Carrier;
 use Configuration;
 use Gett\MyparcelBE\Constant;
-use Carrier;
 
 class ExclusiveField
 {
@@ -13,6 +13,7 @@ class ExclusiveField
      * @param string $carrierType Expected values: 'BPOST', 'DPD', 'POSTNL'
      * @param string $field As declared in Constant::CARRIER_CONFIGURATION_FIELDS
      * @param int|null $key When $field is array checks the available options by key index
+     *
      * @return bool
      */
     public function isAvailable(string $countryIso, string $carrierType, string $field, int $key = null): bool

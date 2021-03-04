@@ -6,6 +6,7 @@ use Address;
 use Configuration;
 use Currency;
 use Db;
+use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use Product;
 use Tools;
 use Validate;
@@ -102,6 +103,8 @@ trait FrontHooks
                 'delivery_settings' => $this->getDeliverySettingsByCart((int) $this->context->cart->id),
                 'shipping_cost' => $shipping_cost,
                 'carrier' => $params['carrier'],
+                'enableDeliveryOptions' => (new PackageTypeCalculator())
+                    ->allowDeliveryOptions($this->context->cart, $this->getModuleCountry()),
             ]);
 
             return $this->display($this->name, 'views/templates/hook/carrier.tpl');

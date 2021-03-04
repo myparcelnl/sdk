@@ -2,8 +2,6 @@
 
 namespace Gett\MyparcelBE;
 
-use Configuration;
-
 class Constant
 {
     const POSTNL_DEFAULT_CARRIER = 'MYPARCELBE_DEFAULT_CARRIER';
@@ -56,12 +54,17 @@ class Constant
 
     const CUTOFF_EXCEPTIONS = 'cutoff_exceptions';
 
+    const PACKAGE_TYPE_PACKAGE = 1;
+    const PACKAGE_TYPE_MAILBOX = 2;
+    const PACKAGE_TYPE_LETTER = 3;
+    const PACKAGE_TYPE_DIGITAL_STAMP = 4;
     const PACKAGE_TYPES = [
-        1 => 'package',
-        2 => 'mailbox package',
-        3 => 'letter',
-        4 => 'digital stamp',
+        self::PACKAGE_TYPE_PACKAGE => 'package',
+        self::PACKAGE_TYPE_MAILBOX => 'mailbox package',
+        self::PACKAGE_TYPE_LETTER => 'letter',
+        self::PACKAGE_TYPE_DIGITAL_STAMP => 'digital stamp',
     ];
+    const PACKAGE_TYPE_WEIGHT_LIMIT = 2; // Kg
     const PACKAGE_FORMATS = [
         1 => 'normal',
         2 => 'large',
@@ -197,7 +200,7 @@ class Constant
             'ALLOW_DELIVERY_FORM' => ['BE' => true, 'NL' => true],
             self::PACKAGE_TYPE_CONFIGURATION_NAME => [
                 'BE' => [1 => true],
-                'NL' => [1 => true, 2 => true, 3 => true, 4 => true]
+                'NL' => [1 => true, 2 => true, 3 => true, 4 => true],
             ],
             self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => true, 'NL' => true],
             self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true, 2 => true], 'NL' => [1 => true, 2 => true]],
@@ -209,7 +212,7 @@ class Constant
             'ALLOW_RETURN_FORM' => ['BE' => false, 'NL' => true],
             'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
                 'BE' => false,
-                'NL' => [1 => true, 2 => true, 3 => true, 4 => true]
+                'NL' => [1 => true, 2 => true, 3 => true, 4 => true],
             ],
             'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => true],
             'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => false, 'NL' => [1 => true, 2 => true]],
@@ -244,7 +247,7 @@ class Constant
             'ALLOW_DELIVERY_FORM' => ['BE' => true, 'NL' => true],
             self::PACKAGE_TYPE_CONFIGURATION_NAME => [
                 'BE' => [1 => true],
-                'NL' => false
+                'NL' => false,
             ],
             self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
             self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => false],
@@ -256,7 +259,7 @@ class Constant
             'ALLOW_RETURN_FORM' => ['BE' => true, 'NL' => false],
             'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
                 'BE' => [1 => true],
-                'NL' => false
+                'NL' => false,
             ],
             'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
             'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => false],
@@ -291,7 +294,7 @@ class Constant
             'ALLOW_DELIVERY_FORM' => ['BE' => true, 'NL' => true],
             self::PACKAGE_TYPE_CONFIGURATION_NAME => [
                 'BE' => [1 => true],
-                'NL' => false
+                'NL' => false,
             ],
             self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
             self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => [1 => true], 'NL' => false],
@@ -303,7 +306,7 @@ class Constant
             'ALLOW_RETURN_FORM' => ['BE' => false, 'NL' => false],
             'return_' . self::PACKAGE_TYPE_CONFIGURATION_NAME => [
                 'BE' => false,
-                'NL' => false
+                'NL' => false,
             ],
             'return_' . self::ONLY_RECIPIENT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
             'return_' . self::PACKAGE_FORMAT_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
@@ -311,6 +314,6 @@ class Constant
             'return_' . self::INSURANCE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
             'return_' . self::AGE_CHECK_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
             'return_' . self::RETURN_PACKAGE_CONFIGURATION_NAME => ['BE' => false, 'NL' => false],
-        ]
+        ],
     ];
 }
