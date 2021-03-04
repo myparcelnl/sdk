@@ -24,13 +24,14 @@ trait OrdersGridHooks
         /** @var \Doctrine\DBAL\Query\QueryBuilder $searchQueryBuilder */
         $searchQueryBuilder = $params['search_query_builder'];
 
-        $searchQueryBuilder->addSelect('IF(car.id_reference IN(' . $carrierIds . '), 1, 0) AS labels');
-        $searchQueryBuilder->addSelect('o.id_carrier, car.id_reference AS id_carrier_reference');
+        $prefix = 'car' . $this->id;
+        $searchQueryBuilder->addSelect('IF(' . $prefix . '.id_reference IN(' . $carrierIds . '), 1, 0) AS labels');
+        $searchQueryBuilder->addSelect('o.id_carrier, ' . $prefix . '.id_reference AS id_carrier_reference');
         $searchQueryBuilder->leftJoin(
             'o',
             _DB_PREFIX_ . 'carrier',
-            'car',
-            'o.id_carrier = car.id_carrier'
+            $prefix,
+            'o.id_carrier = ' . $prefix . '.id_carrier'
         );
     }
 
