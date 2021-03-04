@@ -42,7 +42,7 @@
                                 type="checkbox"
                                 value="1"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 1}checked="checked"{/if}
+                                {if 1 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="top-left">{l s='Top-left' mod='myparcelbe'}</label>
                         <br>
@@ -51,7 +51,7 @@
                                 type="checkbox"
                                 value="2"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 2}checked="checked"{/if}
+                                {if 2 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="top-right">{l s='Top-right' mod='myparcelbe'}</label>
                         <br>
@@ -60,7 +60,7 @@
                                 type="checkbox"
                                 value="3"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 3}checked="checked"{/if}
+                                {if 3 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="bottom-left">{l s='Bottom-left' mod='myparcelbe'}</label>
                         <br>
@@ -69,7 +69,7 @@
                                 type="checkbox"
                                 value="4"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 4}checked="checked"{/if}
+                                {if 4 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="bottom-right">{l s='Bottom-right' mod='myparcelbe'}</label>
                     </div>
@@ -124,7 +124,7 @@
                                 type="checkbox"
                                 value="1"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 1}checked="checked"{/if}
+                                {if 1 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="top-left-bulk">{l s='Top-left' mod='myparcelbe'}</label>
                         <br>
@@ -133,7 +133,7 @@
                                 type="checkbox"
                                 value="2"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 2}checked="checked"{/if}
+                                {if 2 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="top-right-bulk">{l s='Top-right' mod='myparcelbe'}</label>
                         <br>
@@ -142,16 +142,16 @@
                                 type="checkbox"
                                 value="3"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 3}checked="checked"{/if}
+                                {if 3 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
-                        <label for="bottom-left-bulk">{l s='Print' mod='myparcelbe'}</label>
+                        <label for="bottom-left-bulk">{l s='Bottom-left' mod='myparcelbe'}</label>
                         <br>
                         <input
                                 id="bottom-right-bulk"
                                 type="checkbox"
                                 value="4"
                                 name="position[]"
-                                {if $labelConfiguration.MYPARCELBE_LABEL_POSITION eq 4}checked="checked"{/if}
+                                {if 4 / $labelConfiguration.MYPARCELBE_LABEL_POSITION >= 1}checked="checked"{/if}
                         >
                         <label for="bottom-right-bulk">{l s='Bottom-right' mod='myparcelbe'}</label>
                     </div>
