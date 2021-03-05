@@ -97,7 +97,8 @@ class PackageTypeCalculator extends AbstractPackageCalculator
             if ($exclusiveField->isAvailable(
                 $countryIso,
                 $carrierType,
-                Constant::PACKAGE_TYPE_CONFIGURATION_NAME
+                Constant::PACKAGE_TYPE_CONFIGURATION_NAME,
+                $packageType
             )) {
                 $packageTypes[] = $packageType;
             }

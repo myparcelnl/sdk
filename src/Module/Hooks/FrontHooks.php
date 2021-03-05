@@ -43,6 +43,10 @@ trait FrontHooks
             }
             $carrier = new \Carrier($id_carrier);
             if (Validate::isLoadedObject($carrier)) {
+                $optionsObj = json_decode($options);
+                if ($optionsObj === null) {
+                    $optionsObj = new \StdClass();
+                }
                 $optionsObj->carrier = str_replace(' ', '', strtolower($carrier->name));
                 Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                     'myparcelbe_delivery_settings',
