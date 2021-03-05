@@ -8,6 +8,7 @@ use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Module\Carrier\ExclusiveField;
 use Gett\MyparcelBE\Service\CarrierConfigurationProvider;
 use Gett\MyparcelBE\Service\ProductConfigurationProvider;
+use Order;
 
 class PackageTypeCalculator extends AbstractPackageCalculator
 {
@@ -15,8 +16,12 @@ class PackageTypeCalculator extends AbstractPackageCalculator
     {
         $package_types = array_unique($this->getOrderProductsPackageTypes($id_order));
 
-        if ($package_types) {
-            return min($package_types);
+        if (!empty($package_types)) {
+            $order = new Order($id_order);
+            $cart = new Cart($order->id_cart);
+            $weight = $cart->getTotalWeight();
+
+            return $this->getProductsPackageType($package_types, $weight);
         }
 
         $packageType = (int) CarrierConfigurationProvider::get(
@@ -120,5 +125,33 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         }
 
         return $types;
+    }
+
+    private function getProductsPackageType(array $productsPackageTypes, $weight)
+    {
+        // 1. At least 1 product in cart is of type parcel, regardless of weight: order is considered parcel
+        if (in_array(Constant::PACKAGE_TYPE_PACKAGE, $productsPackageTypes)) {
+            return Constant::PACKAGE_TYPE_PACKAGE;
+        }
+
+        // 2. Only products in cart of type letter, regardless of total weight: order is considered letter
+        if (count($productsPackageTypes) === 1 && in_array(Constant::PACKAGE_TYPE_LETTER, $productsPackageTypes)) {
+            return Constant::PACKAGE_TYPE_LETTER;
+        }
+
+        // 3. Total weight is above 2 Kg, regardless of package types, order is considered parcel
+        if ($weight >= Constant::PACKAGE_TYPE_WEIGHT_LIMIT) {
+            return Constant::PACKAGE_TYPE_PACKAGE;
+        }
+
+        // 4. At least 1 product in cart is of type mailbox package AND total weight is less than 2 Kg: order is considered mailbox package
+        if (in_array(Constant::PACKAGE_TYPE_MAILBOX, $productsPackageTypes)) {
+            return Constant::PACKAGE_TYPE_MAILBOX;
+        }
+
+        // 5. At least 1 product in cart is of type digital stamp AND total weight is less than 2 Kg: order is considered digital stamp
+        if (in_array(Constant::PACKAGE_TYPE_DIGITAL_STAMP, $productsPackageTypes)) {
+            return Constant::PACKAGE_TYPE_DIGITAL_STAMP;
+        }
     }
 }
