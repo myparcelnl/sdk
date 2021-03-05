@@ -192,7 +192,7 @@ class DeliverySettingsProvider
                 'cc' => strtoupper(Country::getIsoById($address->id_country)),
                 'city' => $address->city,
                 'postalCode' => $address->postcode,
-                'number' => $address->address1,
+                'number' => !empty(trim($address->address2)) ? $address->address2 : $address->address1,
             ],
             'delivery_settings' => $this->module->getDeliverySettingsByCart((int) $this->context->cart->id),
         ];
