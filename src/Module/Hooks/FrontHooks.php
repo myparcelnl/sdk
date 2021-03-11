@@ -102,10 +102,8 @@ trait FrontHooks
                 }
             }
 
-            if (empty($this->context->cart->id_carrier)
-                && method_exists($this->context->controller, 'getCheckoutSession')) {
-                $checkoutSession = $this->context->controller->getCheckoutSession();
-                $selectedDeliveryOption = $checkoutSession->getSelectedDeliveryOption();
+            if (empty($this->context->cart->id_carrier)) {
+                $selectedDeliveryOption = current($this->context->cart->getDeliveryOption(null, false, false));
                 $this->context->cart->id_carrier = (int) $selectedDeliveryOption;
             }
 
