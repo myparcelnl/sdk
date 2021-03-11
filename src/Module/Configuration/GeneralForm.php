@@ -54,6 +54,25 @@ class GeneralForm extends AbstractForm
                     ],
                 ],
             ],
+            Constant::USE_ADDRESS2_AS_STREET_NUMBER_CONFIGURATION_NAME => [
+                'type' => 'switch',
+                'label' => $this->module->l('Use second address field in checkout as street number', 'generalform'),
+                'name' => Constant::USE_ADDRESS2_AS_STREET_NUMBER_CONFIGURATION_NAME,
+                'required' => false,
+                'is_bool' => true,
+                'values' => [
+                    [
+                        'id' => 'active_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled', 'generalform'),
+                    ],
+                    [
+                        'id' => 'active_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled', 'generalform'),
+                    ],
+                ],
+            ],
         ];
     }
 }
