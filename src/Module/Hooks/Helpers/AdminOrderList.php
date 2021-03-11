@@ -74,18 +74,18 @@ class AdminOrderList extends AbstractAdminOrder
                 'create_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createb']),
                 'refresh_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'refresh']),
                 'create_label_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel', 'listingPage' => true]),
-                'create_label_error' => $this->module->l('Cannot create label for orders', 'abstractadminorder'),
-                'no_order_selected_error' => $this->module->l('Please select at least one order that has MyParcel carrier.', 'abstractadminorder'),
+                'create_label_error' => $this->module->l('Cannot create label for orders', 'adminorderlist'),
+                'no_order_selected_error' => $this->module->l('Please select at least one order that has MyParcel carrier.', 'adminorderlist'),
             ]
         );
         $this->context->controller->addJqueryPlugin(['scrollTo']);
 
-        Media::addJsDefL('print_labels_text', $this->module->l('Print labels', 'abstractadminorder'));
-        Media::addJsDefL('refresh_labels_text', $this->module->l('Refresh labels', 'abstractadminorder'));
-        Media::addJsDefL('export_labels_text', $this->module->l('Export labels', 'abstractadminorder'));
+        Media::addJsDefL('print_labels_text', $this->module->l('Print labels', 'adminorderlist'));
+        Media::addJsDefL('refresh_labels_text', $this->module->l('Refresh labels', 'adminorderlist'));
+        Media::addJsDefL('export_labels_text', $this->module->l('Export labels', 'adminorderlist'));
         Media::addJsDefL(
             'export_and_print_label_text',
-            $this->module->l('Export and print labels', 'abstractadminorder')
+            $this->module->l('Export and print labels', 'adminorderlist')
         );
 
         $this->context->controller->addCss($this->module->getPathUri() . 'views/css/myparcel.css');

@@ -59,12 +59,12 @@ class AdminOrderView extends AbstractAdminOrder
         $deliveryAddressFormatted = \AddressFormat::generateAddress($deliveryAddress, [], '<br />');
         $bulk_actions = [
             'refreshLabels' => [
-                'text' => $this->module->l('Refresh', 'orderview'),
+                'text' => $this->module->l('Refresh', 'adminorderview'),
                 'icon' => 'icon-refresh',
                 'ajax' => 1,
             ],
             'printLabels' => [
-                'text' => $this->module->l('Print', 'orderview'),
+                'text' => $this->module->l('Print', 'adminorderview'),
                 'icon' => 'icon-print',
             ],
         ];
