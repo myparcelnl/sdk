@@ -75,7 +75,7 @@ class AdminOrderList extends AbstractAdminOrder
                 'refresh_labels_bulk_route' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'refresh']),
                 'create_label_action' => $link->getAdminLink('AdminMyParcelBELabel', true, [], ['action' => 'createLabel', 'listingPage' => true]),
                 'create_label_error' => $this->module->l('Cannot create label for orders', 'abstractadminorder'),
-                'no_order_selected_error' => $this->module->l('Please select at least one order first.', 'abstractadminorder'),
+                'no_order_selected_error' => $this->module->l('Please select at least one order that has MyParcel carrier.', 'abstractadminorder'),
             ]
         );
         $this->context->controller->addJqueryPlugin(['scrollTo']);

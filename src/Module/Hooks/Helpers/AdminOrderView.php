@@ -43,7 +43,7 @@ class AdminOrderView extends AbstractAdminOrder
     public function display(): string
     {
         $order = new Order($this->idOrder);
-        if (!Validate::isLoadedObject($order)) {
+        if (!Validate::isLoadedObject($order) || !$this->isMyParcelCarrier($order->id_carrier)) {
             return '';
         }
         $psVersion = '';
@@ -161,5 +161,16 @@ class AdminOrderView extends AbstractAdminOrder
     public function getLabels()
     {
         return (new OrderLabelProvider($this->module))->provideLabels($this->idOrder, []);
+    }
+
+    public function isMyParcelCarrier(int $idCarrier)
+    {
+        $allowedCarriers = array_map('intval', [
+            Configuration::get(Constant::DPD_CONFIGURATION_NAME),
+            Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
+            Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
+        ]);
+
+        return in_array($idCarrier, $allowedCarriers);
     }
 }
