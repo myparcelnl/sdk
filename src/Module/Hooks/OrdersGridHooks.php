@@ -7,6 +7,7 @@ use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Grid\Action\Bulk\IconBulkAction;
 use Gett\MyparcelBE\Grid\Action\Bulk\IconModalBulkAction;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
+use Gett\MyparcelBE\Module\Hooks\Helpers\AdminOrderList;
 use Gett\MyparcelBE\Module\Hooks\Helpers\AdminOrderView;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
 use PrestaShop\PrestaShop\Core\Grid\Record\RecordCollection;
@@ -27,6 +28,8 @@ trait OrdersGridHooks
         $prefix = 'car' . $this->id;
         $searchQueryBuilder->addSelect('IF(' . $prefix . '.id_reference IN(' . $carrierIds . '), 1, 0) AS labels');
         $searchQueryBuilder->addSelect('o.id_carrier, ' . $prefix . '.id_reference AS id_carrier_reference');
+        $searchQueryBuilder->addSelect('IFNULL(' . $prefix . '.name, \'\') AS delivery_info');
+        $searchQueryBuilder->addSelect('o.id_cart');
         $searchQueryBuilder->leftJoin(
             'o',
             _DB_PREFIX_ . 'carrier',
@@ -49,6 +52,14 @@ trait OrdersGridHooks
                 'clickable' => false,
             ])
         );
+        $definition
+            ->getColumns()
+            ->addBefore('labels', (new DataColumn('delivery_info'))
+                ->setName($this->l('Carrier', 'ordersgridhooks'))
+                ->setOptions([
+                    'field' => 'delivery_info',
+                ])
+            );
         $definition->getBulkActions()->add(
             (new IconModalBulkAction('print_label'))
                 ->setName('Print labels')
@@ -125,6 +136,30 @@ trait OrdersGridHooks
             );
 
             $row['labels'] = $labelsHtml . $createButtonHtml;
+        }
+        foreach ($rows as &$row) {
+            $adminOrderList = new AdminOrderList($this);
+            if (!$adminOrderList->isMyParcelCarrier($row['id_carrier_reference'])) {
+                $row['delivery_info'] = '';
+                continue;
+            }
+            if ($row['delivery_info'] === '0') {
+                $row['delivery_info'] = '';
+                continue;
+            }
+
+            $deliverySettings = $this->getDeliverySettingsByCart($row['id_cart']);
+            try {
+                if (empty($deliverySettings['date'])) {
+                    continue;
+                }
+                $date = new \DateTime($deliverySettings['date']);
+                $dateFormatted = $date->format($this->context->language->date_format_lite);
+                if (!empty($dateFormatted)) {
+                    $row['delivery_info'] = sprintf('[%s] %s', $dateFormatted, $row['delivery_info']);
+                }
+            } catch (\Exception $exception) {
+            }
         }
         $params['presented_grid']['data']['records'] = new RecordCollection($rows);
     }

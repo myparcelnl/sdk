@@ -47,4 +47,15 @@ abstract class AbstractAdminOrder
 
         return $allowSetOnlyRecipient;
     }
+
+    public function isMyParcelCarrier(int $idCarrier): bool
+    {
+        $allowedCarriers = array_map('intval', [
+            Configuration::get(Constant::DPD_CONFIGURATION_NAME),
+            Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
+            Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
+        ]);
+
+        return in_array($idCarrier, $allowedCarriers);
+    }
 }

@@ -162,15 +162,4 @@ class AdminOrderView extends AbstractAdminOrder
     {
         return (new OrderLabelProvider($this->module))->provideLabels($this->idOrder, []);
     }
-
-    public function isMyParcelCarrier(int $idCarrier)
-    {
-        $allowedCarriers = array_map('intval', [
-            Configuration::get(Constant::DPD_CONFIGURATION_NAME),
-            Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
-            Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
-        ]);
-
-        return in_array($idCarrier, $allowedCarriers);
-    }
 }
