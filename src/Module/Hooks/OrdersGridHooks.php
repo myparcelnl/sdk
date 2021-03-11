@@ -55,7 +55,7 @@ trait OrdersGridHooks
         $definition
             ->getColumns()
             ->addBefore('labels', (new DataColumn('delivery_info'))
-                ->setName($this->l('Carrier', 'ordersgridhooks'))
+                ->setName($this->l('Delivery date', 'ordersgridhooks'))
                 ->setOptions([
                     'field' => 'delivery_info',
                 ])

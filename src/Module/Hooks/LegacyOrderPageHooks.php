@@ -36,16 +36,16 @@ trait LegacyOrderPageHooks
         }
         $prefix = 'car' . $this->id;
 
-        $params['select'] .= ',1 as `myparcel_void_1` ,1 as `myparcel_void_2`, a.id_carrier';
-        $params['select'] .= ',o.id_cart` , \'\' AS myparcel_void_0';
-        $params['select'] .= $prefix . '.id_reference AS id_carrier_reference';
-        $params['select'] .= $prefix . '.name AS carrier_name';
+        $params['select'] .= ', 1 as `myparcel_void_1`, 1 as `myparcel_void_2`, a.`id_carrier`';
+        $params['select'] .= ', a.`id_cart` , \'\' AS myparcel_void_0';
+        $params['select'] .= ', ' . $prefix . '.`id_reference` AS id_carrier_reference';
+        $params['select'] .= ', ' . $prefix . '.`name` AS carrier_name';
 
         $params['join'] .= '
-            LEFT JOIN ' . _DB_PREFIX_ . 'carrier ' . $prefix . ' ON (o.id_carrier = ' . $prefix . '.id_carrier)';
+            LEFT JOIN ' . _DB_PREFIX_ . 'carrier ' . $prefix . ' ON (a.id_carrier = ' . $prefix . '.id_carrier)';
 
         $params['fields']['myparcel_void_0'] = [
-            'title' => $this->l('Carrier', 'legacyorderpagehooks'),
+            'title' => $this->l('Delivery date', 'legacyorderpagehooks'),
             'callback' => 'printMyParcelDeliveryInfo',
             'search' => false,
             'orderby' => false,
@@ -102,7 +102,7 @@ trait LegacyOrderPageHooks
 
         $labelOptionsResolver = new LabelOptionsResolver();
         $carrierReference = (int) $this->carrierList[(int) $params['id_carrier']];
-        $orderHelper = new AdminOrderList();
+        $orderHelper = new AdminOrderList($this);
 
         $this->context->smarty->assign([
             'label_options' => $labelOptionsResolver->getLabelOptions($params),
@@ -158,6 +158,9 @@ trait LegacyOrderPageHooks
 
     public function printMyParcelDeliveryInfo($id, $row)
     {
+        if (empty($row['id_carrier_reference'])) {
+            return '';
+        }
         $adminOrderList = new AdminOrderList($this);
         if (!$adminOrderList->isMyParcelCarrier($row['id_carrier_reference'])) {
             return '';
