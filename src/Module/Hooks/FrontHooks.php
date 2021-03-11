@@ -102,6 +102,13 @@ trait FrontHooks
                 }
             }
 
+            if (empty($this->context->cart->id_carrier)
+                && method_exists($this->context->controller, 'getCheckoutSession')) {
+                $checkoutSession = $this->context->controller->getCheckoutSession();
+                $selectedDeliveryOption = $checkoutSession->getSelectedDeliveryOption();
+                $this->context->cart->id_carrier = (int) $selectedDeliveryOption;
+            }
+
             $this->context->smarty->assign([
                 'address' => $address,
                 'delivery_settings' => $this->getDeliverySettingsByCart((int) $this->context->cart->id),
