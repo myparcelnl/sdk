@@ -43,7 +43,7 @@ class AdminOrderView extends AbstractAdminOrder
     public function display(): string
     {
         $order = new Order($this->idOrder);
-        if (!Validate::isLoadedObject($order) || !$this->isMyParcelCarrier($order->id_carrier)) {
+        if (!Validate::isLoadedObject($order) || !$this->isMyParcelCarrier((int) $order->id_carrier)) {
             return '';
         }
         $psVersion = '';

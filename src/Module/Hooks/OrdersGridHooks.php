@@ -139,7 +139,7 @@ trait OrdersGridHooks
         }
         foreach ($rows as &$row) {
             $adminOrderList = new AdminOrderList($this);
-            if (!$adminOrderList->isMyParcelCarrier($row['id_carrier_reference'])) {
+            if (!$adminOrderList->isMyParcelCarrier((int) $row['id_carrier_reference'])) {
                 $row['delivery_info'] = '';
                 continue;
             }

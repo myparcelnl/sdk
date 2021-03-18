@@ -162,7 +162,7 @@ trait LegacyOrderPageHooks
             return '';
         }
         $adminOrderList = new AdminOrderList($this);
-        if (!$adminOrderList->isMyParcelCarrier($row['id_carrier_reference'])) {
+        if (!$adminOrderList->isMyParcelCarrier((int) $row['id_carrier_reference'])) {
             return '';
         }
         $deliverySettings = $this->getDeliverySettingsByCart($row['id_cart']);
