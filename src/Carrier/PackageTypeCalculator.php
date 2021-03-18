@@ -24,7 +24,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         return in_array($idCarrier, $allowedCarriers);
     }
 
-    public function getOrderPackageType(int $id_order, int $id_carrier)
+    public function getOrderPackageType(int $id_order, int $id_carrier): int
     {
         $package_types = array_unique($this->getOrderProductsPackageTypes($id_order));
 
