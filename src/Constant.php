@@ -165,6 +165,10 @@ class Constant
     const BPOST_CONFIGURATION_NAME = 'MYPARCELBE_BPOST';
     const DPD_CONFIGURATION_NAME = 'MYPARCELBE_DPD';
 
+    const POSTNL_CARRIER_NAME = 'postnl';
+    const BPOST_CARRIER_NAME = 'bpost';
+    const DPD_CARRIER_NAME = 'dpd';
+
     const CONCEPT_STATUS = 1;
     const SCANNED_STATUS = 3;
     const DELIVERED_STATUS = 7;

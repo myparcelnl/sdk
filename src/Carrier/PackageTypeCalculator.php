@@ -4,6 +4,7 @@ namespace Gett\MyparcelBE\Carrier;
 
 use Carrier;
 use Cart;
+use Configuration;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Module\Carrier\ExclusiveField;
 use Gett\MyparcelBE\Service\CarrierConfigurationProvider;
@@ -12,6 +13,17 @@ use Order;
 
 class PackageTypeCalculator extends AbstractPackageCalculator
 {
+    public function isMyParcelCarrier(int $idCarrier): bool
+    {
+        $allowedCarriers = array_map('intval', [
+            Configuration::get(Constant::DPD_CONFIGURATION_NAME),
+            Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
+            Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
+        ]);
+
+        return in_array($idCarrier, $allowedCarriers);
+    }
+
     public function getOrderPackageType(int $id_order, int $id_carrier)
     {
         $package_types = array_unique($this->getOrderProductsPackageTypes($id_order));
@@ -31,7 +43,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         return $packageType ?: 1;
     }
 
-    public function allowDeliveryOptions(Cart $cart, string $countryIso)
+    public function allowDeliveryOptions(Cart $cart, string $countryIso): bool
     {
         if (empty($cart->id) || empty($cart->id_carrier)) {
             return false;
@@ -50,7 +62,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
             return true;
         }
 
-        $productsPackageTypes = $this->getProductsPackageTypes($cart, $countryIso);
+        $productsPackageTypes = $this->getProductsPackageTypes($cart);
         if (empty($productsPackageTypes)) {
             return true;
         }
@@ -75,7 +87,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         return false; // no delivery options
     }
 
-    private function getOrderProductsPackageTypes(int $id_order)
+    private function getOrderProductsPackageTypes(int $id_order): array
     {
         $result = $this->getOrderProductsConfiguration($id_order);
         $package_types = [];
@@ -88,7 +100,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         return $package_types;
     }
 
-    private function getCarrierPackageTypes(Carrier $carrier, string $countryIso)
+    private function getCarrierPackageTypes(Carrier $carrier, string $countryIso): array
     {
         $exclusiveField = new ExclusiveField();
         $carrierType = $exclusiveField->getCarrierType($carrier);
@@ -107,7 +119,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         return $packageTypes;
     }
 
-    private function getProductsPackageTypes(Cart $cart, string $countryIso)
+    private function getProductsPackageTypes(Cart $cart): array
     {
         $products = $cart->getProducts();
         if (empty($products)) {
@@ -128,7 +140,7 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         return $types;
     }
 
-    private function getProductsPackageType(array $productsPackageTypes, $weight)
+    private function getProductsPackageType(array $productsPackageTypes, $weight): int
     {
         // 1. At least 1 product in cart is of type parcel, regardless of weight: order is considered parcel
         if (in_array(Constant::PACKAGE_TYPE_PACKAGE, $productsPackageTypes)) {
@@ -154,5 +166,8 @@ class PackageTypeCalculator extends AbstractPackageCalculator
         if (in_array(Constant::PACKAGE_TYPE_DIGITAL_STAMP, $productsPackageTypes)) {
             return Constant::PACKAGE_TYPE_DIGITAL_STAMP;
         }
+
+        // Fall back to Package
+        return Constant::PACKAGE_TYPE_PACKAGE;
     }
 }

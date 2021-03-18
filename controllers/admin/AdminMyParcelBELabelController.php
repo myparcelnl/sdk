@@ -11,6 +11,7 @@ use Gett\MyparcelBE\OrderLabel;
 use Gett\MyparcelBE\Provider\OrderLabelProvider;
 use Gett\MyparcelBE\Service\Consignment\Download;
 use Gett\MyparcelBE\Service\DeliverySettingsProvider;
+use Gett\MyparcelBE\Service\ErrorMessage;
 use Gett\MyparcelBE\Service\MyparcelStatusProvider;
 use Gett\MyparcelBE\Service\Order\OrderTotalWeight;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
@@ -563,10 +564,14 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             Logger::addLog($e->getFile(), true, true);
             Logger::addLog($e->getLine(), true, true);
             header('HTTP/1.1 500 Internal Server Error', true, 500);
-            $this->errors[] = $this->module->l(
-                'An error occurred in MyParcel module, please try again.',
-                'adminlabelcontroller'
-            );
+            $parsedErrorMessage = (new ErrorMessage($this->module))->get($e->getMessage());
+            if (empty($parsedErrorMessage)) {
+                $parsedErrorMessage = $this->module->l(
+                    'An error occurred in MyParcel module, please try again.',
+                    'adminlabelcontroller'
+                );
+            }
+            $this->errors[] = $parsedErrorMessage;
             $this->returnAjaxResponse();
         }
         if ($collection === null) {

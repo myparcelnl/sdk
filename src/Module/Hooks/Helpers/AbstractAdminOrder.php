@@ -3,6 +3,7 @@
 namespace Gett\MyparcelBE\Module\Hooks\Helpers;
 
 use Configuration;
+use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use Gett\MyparcelBE\Constant;
 use Media;
 
@@ -50,12 +51,6 @@ abstract class AbstractAdminOrder
 
     public function isMyParcelCarrier(int $idCarrier): bool
     {
-        $allowedCarriers = array_map('intval', [
-            Configuration::get(Constant::DPD_CONFIGURATION_NAME),
-            Configuration::get(Constant::BPOST_CONFIGURATION_NAME),
-            Configuration::get(Constant::POSTNL_CONFIGURATION_NAME),
-        ]);
-
-        return in_array($idCarrier, $allowedCarriers);
+        return (new PackageTypeCalculator())->isMyParcelCarrier($idCarrier);
     }
 }
