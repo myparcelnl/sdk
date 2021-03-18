@@ -18,7 +18,7 @@ class Tracktrace
     {
         $extraInfo = $withDeliveryMoment ? '?extra_info=delivery_moment' : '';
         $request = (new MyParcelRequest())
-            ->setUserAgent()
+            ->setUserAgent('prestashop' . '/' . _PS_VERSION_)
             ->setRequestParameters(
                 $this->api_key,
                 '',

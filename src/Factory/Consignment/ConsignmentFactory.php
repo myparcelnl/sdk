@@ -39,7 +39,7 @@ class ConsignmentFactory
     public function fromOrders(array $orders): MyParcelCollection
     {
         $myParcelCollection = (new MyParcelCollection())
-            ->setUserAgent('prestashop', '1.0')
+            ->setUserAgents(['prestashop' => _PS_VERSION_])
         ;
 
         foreach ($orders as $order) {
@@ -54,7 +54,7 @@ class ConsignmentFactory
     public function fromOrder(array $order)
     {
         $myParcelCollection = (new MyParcelCollection())
-            ->setUserAgent('prestashop', '1.0')
+            ->setUserAgents(['prestashop' => _PS_VERSION_])
         ;
 
         for ($i = 0; $i < $this->request['label_amount']; ++$i) {

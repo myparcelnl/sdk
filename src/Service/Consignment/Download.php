@@ -26,10 +26,6 @@ class Download
 
     public function downloadLabel(array $id_labels)
     {
-
-        $myParcelCollection = (new MyParcelCollection())
-            ->setUserAgent('prestashop', '1.0')
-        ;
         if (\Configuration::get(Constant::ORDER_NOTIFICATION_AFTER_CONFIGURATION_NAME == 'printed')) {
             //TODO send notification
         }
@@ -37,7 +33,8 @@ class Download
         try {
             $collection = MyParcelCollection::findMany($id_labels, $this->api_key);
             if (!empty($collection->getConsignments())) {
-                $collection->setPdfOfLabels($this->fetchPositions());
+                $collection->setUserAgents(['prestashop' => _PS_VERSION_])
+                    ->setPdfOfLabels($this->fetchPositions());
                 $isPdf = is_string($collection->getLabelPdf());
                 if ($isPdf) {
                     $collection->downloadPdfOfLabels($this->configuration::get(

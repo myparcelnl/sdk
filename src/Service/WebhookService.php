@@ -19,7 +19,7 @@ class WebhookService
     public function addSubscription(Subscription $subscription)
     {
         $request = (new MyParcelRequest())
-            ->setUserAgent()
+            ->setUserAgent('prestashop' . '/' . _PS_VERSION_)
             ->setRequestParameters(
                 $this->api_key,
                 $subscription->encode(),
