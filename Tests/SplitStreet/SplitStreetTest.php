@@ -65,16 +65,6 @@ class SplitStreetTest extends TestCase
     public function additionProvider()
     {
         return [
-//            [
-//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
-//                'country'           => 'NL',
-//                'full_street_input' => 'Amperelaan 7 8',
-//                'full_street'       => 'Amperelaan 7 8',
-//                'street'            => 'Amperelaan',
-//                'number'            => 7,
-//                'number_suffix'     => '8',
-//                'box_number'        => null,
-//            ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'country'           => 'NL',
