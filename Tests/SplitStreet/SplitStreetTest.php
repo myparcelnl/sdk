@@ -7,14 +7,14 @@ namespace MyParcelNL\Sdk\src\tests\CreateConsignments\SplitStreetTest;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use PHPUnit\Framework\TestCase;
 
 
 /**
  * Class SplitStreetTest
  */
-class SplitStreetTest extends \PHPUnit\Framework\TestCase
+class SplitStreetTest extends TestCase
 {
-
     /**
      * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::setFullStreet
      * @dataProvider additionProvider()
@@ -65,6 +65,26 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
     public function additionProvider()
     {
         return [
+//            [
+//                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+//                'country'           => 'NL',
+//                'full_street_input' => 'Amperelaan 7 8',
+//                'full_street'       => 'Amperelaan 7 8',
+//                'street'            => 'Amperelaan',
+//                'number'            => 7,
+//                'number_suffix'     => '8',
+//                'box_number'        => null,
+//            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Charles Petitweg 7 A-2',
+                'full_street'       => 'Charles Petitweg 7 A-2',
+                'street'            => 'Charles Petitweg',
+                'number'            => 7,
+                'number_suffix'     => 'A-2',
+                'box_number'        => null,
+            ],
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'country'           => 'NL',
@@ -133,6 +153,16 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Laan 1940-1945',
                 'number'            => 103,
                 'number_suffix'     => null,
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Wijk 1 20',
+                'full_street'       => 'Wijk 1 20',
+                'street'            => 'Wijk 1',
+                'number'            => 20,
+                'number_suffix'     => '',
                 'box_number'        => null,
             ],
             [
