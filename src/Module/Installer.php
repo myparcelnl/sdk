@@ -15,7 +15,7 @@ class Installer
     private $module;
 
     private static $carriers_nl = [
-        ['name' => 'Post NL', 'image' => 'postnl.jpg', 'configuration_name' => Constant::POSTNL_CONFIGURATION_NAME],
+        ['name' => 'PostNL', 'image' => 'postnl.jpg', 'configuration_name' => Constant::POSTNL_CONFIGURATION_NAME],
     ];
     private static $carriers_be = [
         ['name' => 'Bpost', 'image' => 'bpost.jpg', 'configuration_name' => Constant::BPOST_CONFIGURATION_NAME],
