@@ -1,6 +1,6 @@
 {
   "name": "gett/myparcelbe",
-  "description": "PrestaShop module to intergratie with MyParcel NL and\nMyParcel BE",
+  "description": "PrestaShop module to integrate with MyParcel NL and\nMyParcel BE",
   "require": {
     "php": ">=7.2.0",
     "myparcelnl/sdk": "^5.2"
