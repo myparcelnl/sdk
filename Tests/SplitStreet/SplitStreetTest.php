@@ -68,6 +68,16 @@ class SplitStreetTest extends TestCase
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'country'           => 'NL',
+                'full_street_input' => 'Graan voor Visch 19905',
+                'full_street'       => 'Graan voor Visch 19905',
+                'street'            => 'Graan voor Visch',
+                'number'            => 19905,
+                'number_suffix'     => null,
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => 'Charles Petitweg 7 A-2',
                 'full_street'       => 'Charles Petitweg 7 A-2',
                 'street'            => 'Charles Petitweg',
