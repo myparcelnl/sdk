@@ -15,7 +15,7 @@ class ValidateStreet
     const SPLIT_STREET_REGEX_NL =
         '~(?P<street>.{1,78}?)' .         // The rest belongs to the street
         '\s' .                            // Separator between street and number
-        '(?P<number>\d{1,4})' .           // Number can contain a maximum of 4 numbers
+        '(?P<number>\d{1,5})' .           // Number can contain a maximum of 5 numbers
         '[/\s\-]{0,2}' .                  // Separators between number and addition
         '(?P<number_suffix>' .
         '[a-z]{1}-?\d{1,3}|' .            // Numbers suffix starts with a letter with optional - followed by numbers or
