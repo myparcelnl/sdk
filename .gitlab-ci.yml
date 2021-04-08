@@ -36,6 +36,8 @@ preparation:nl:
     paths:
       - vendor/
       - node_modules/
+  only:
+    - tags
 
 preparation:be:
   stage: preparation
@@ -51,6 +53,8 @@ preparation:be:
     paths:
       - vendor/
       - node_modules/
+  only:
+    - tags
 
 building:nl:
   stage: building
