@@ -1,0 +1,101 @@
+stages:
+  - preparation
+  - building
+  - packaging
+
+image: registry.gitlab.com/gettbv-general/prestashop/modules/myparcel-nl-be:latest
+
+cache:
+  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+
+.script:
+  prepare:
+    - php -v
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - npm --version
+    - npm ci
+  build:
+    - npm --version
+    - npm run build
+  packaging:
+    - rm -rf .git/ .gitignore .gitlab-ci.yml Dockerfile .babelrc composer.json composer.lock package.json package-lock.json webpack.config.js readme.md node_modules/
+
+preparation:nl:
+  stage: preparation
+  script:
+    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i '' -e "s/myparcelbe/myparcelbe/" {} \;
+    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i '' -e "s/MyparcelBE/MyparcelNL/" {} \;
+    - !reference [.script, prepare]
+  artifacts:
+    paths:
+      - vendor/
+      - node_modules/
+    expire_in: 1 days
+    when: always
+  cache:
+    paths:
+      - vendor/
+      - node_modules/
+
+preparation:be:
+  stage: preparation
+  script:
+    - !reference [.script, prepare]
+  artifacts:
+    paths:
+      - vendor/
+      - node_modules/
+    expire_in: 1 days
+    when: always
+  cache:
+    paths:
+      - vendor/
+      - node_modules/
+
+building:nl:
+  stage: building
+  dependencies:
+    - preparation:nl
+  script:
+    - !reference [.script, build]
+  artifacts:
+    paths:
+      - views/dist/
+    expire_in: 1 days
+    when: always
+
+building:be:
+  stage: building
+  dependencies:
+    - preparation:be
+  script:
+    - !reference [.script, build]
+  artifacts:
+    paths:
+      - views/dist/
+    expire_in: 1 days
+    when: always
+
+packaging:nl:
+  stage: packaging
+  dependencies:
+    - preparation:nl
+    - building:nl
+  script:
+    - !reference [.script, packaging]
+  artifacts:
+      name: "MyParcelNL-v$CI_COMMIT_TAG"
+      paths:
+          - ./
+
+packaging:be:
+  stage: packaging
+  dependencies:
+    - preparation:be
+    - building:be
+  script:
+    - !reference [.script, packaging]
+  artifacts:
+      name: "MyParcelBE-v$CI_COMMIT_TAG"
+      paths:
+          - ./
