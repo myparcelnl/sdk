@@ -67,6 +67,8 @@ building:nl:
       - views/dist/
     expire_in: 1 days
     when: always
+  only:
+    - tags
 
 building:be:
   stage: building
@@ -79,6 +81,8 @@ building:be:
       - views/dist/
     expire_in: 1 days
     when: always
+  only:
+    - tags
 
 packaging:nl:
   stage: packaging
@@ -91,6 +95,8 @@ packaging:nl:
       name: "MyParcelNL-v$CI_COMMIT_TAG"
       paths:
           - ./
+  only:
+    - tags
 
 packaging:be:
   stage: packaging
@@ -103,3 +109,5 @@ packaging:be:
       name: "MyParcelBE-v$CI_COMMIT_TAG"
       paths:
           - ./
+  only:
+    - tags
