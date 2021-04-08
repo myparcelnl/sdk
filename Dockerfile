@@ -1,11 +1,11 @@
 # Set the base image for subsequent instructions
-FROM php:7.1
+FROM php:7.2
 
 # Update packages
 RUN apt-get update
 
 # Install PHP and composer dependencies
-RUN apt-get install -qq git curl libzip-dev
+RUN apt-get install -qq git unzip curl libzip-dev nodejs npm
 
 # Clear out the local repository of retrieved package files
 RUN apt-get clean
