@@ -25,6 +25,7 @@ preparation:nl:
   script:
     - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/myparcelbe/myparcelnl/" {} \;
     - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MyparcelBE/MyparcelNL/" {} \;
+    - mv myparcelbe.php myparcelnl.php
     - !reference [.script, prepare]
   artifacts:
     paths:
