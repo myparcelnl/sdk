@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
 
         $.ajax({
-            url: '/index.php?fc=module&module=myparcelbe&controller=checkout&id_carrier=' + carrierId,
+            url: myparcel_carrier_init_url + '?id_carrier=' + carrierId,
             dataType: "json",
             success: function (data) {
                 window.MyParcelConfig = data;
