@@ -9,6 +9,10 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 .script:
+  rename:
+    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/myparcelbe/myparcelnl/" {} \;
+    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MyparcelBE/MyparcelNL/" {} \;
+    - mv myparcelbe.php myparcelnl.php
   prepare:
     - php -v
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
@@ -23,9 +27,7 @@ cache:
 preparation:nl:
   stage: preparation
   script:
-    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/myparcelbe/myparcelnl/" {} \;
-    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MyparcelBE/MyparcelNL/" {} \;
-    - mv myparcelbe.php myparcelnl.php
+    - !reference [.script, rename]
     - !reference [.script, prepare]
   artifacts:
     paths:
@@ -62,6 +64,7 @@ building:nl:
   dependencies:
     - preparation:nl
   script:
+    - !reference [.script, rename]
     - !reference [.script, build]
   artifacts:
     paths:
@@ -91,6 +94,7 @@ packaging:nl:
     - preparation:nl
     - building:nl
   script:
+    - !reference [.script, rename]
     - !reference [.script, packaging]
   artifacts:
       name: "MyParcelNL-v$CI_COMMIT_TAG"
