@@ -23,7 +23,7 @@ cache:
 preparation:nl:
   stage: preparation
   script:
-    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/myparcelbe/myparcelbe/" {} \;
+    - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/myparcelbe/myparcelnl/" {} \;
     - find ./ -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MyparcelBE/MyparcelNL/" {} \;
     - !reference [.script, prepare]
   artifacts:
