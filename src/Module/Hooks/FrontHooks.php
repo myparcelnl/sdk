@@ -10,6 +10,7 @@ use Gett\MyparcelBE\Carrier\PackageTypeCalculator;
 use Product;
 use Tools;
 use Validate;
+use Media;
 
 trait FrontHooks
 {
@@ -65,6 +66,7 @@ trait FrontHooks
             $this->context->controller->addCss($this->_path . 'views/css/myparcel.css');
             $this->context->controller->addJs($this->_path . 'views/dist/myparcel.js');
             $this->context->controller->addJs($this->_path . 'views/dist/front.js');
+            Media::addJsDefL('myparcel_carrier_init_url', $this->context->link->getModuleLink($this->name, 'checkout', [], null, null, null, true));
         }
     }
 
