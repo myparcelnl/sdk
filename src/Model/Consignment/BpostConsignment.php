@@ -247,8 +247,8 @@ class BpostConsignment extends AbstractConsignment
      */
     public function validate(): bool
     {
-        if ($this->getTotalWeight() < 50) {
-            throw new InvalidConsignmentException('It is necessary to at a minimum weight of 50 grams');
+        if ($this->getTotalWeight() < 1) {
+            throw new InvalidConsignmentException('It is necessary to at a minimum weight of 1 grams');
         }
 
         /** @var \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item */

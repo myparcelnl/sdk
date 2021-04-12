@@ -20,7 +20,7 @@ class SplitStreet
 {
     const BOX_NL                 = 'bus';
     const BOX_SEPARATOR          = ['boîte', 'box', 'bte', 'Bus'];
-    const BOX_SEPARATOR_BY_REGEX = ['\/','-'];
+    const BOX_SEPARATOR_BY_REGEX = ['\/','-', 'B'];
 
     public const NUMBER_SUFFIX_ABBREVIATION = [
         'apartment'  => '',
@@ -86,7 +86,7 @@ class SplitStreet
             $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
             // When a caracter is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must replaced by bus
             foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
-                $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . '$1', $fullStreet);
+                $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . ' ' . ltrim('$1'), $fullStreet);
             }
         }
 

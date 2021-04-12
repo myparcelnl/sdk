@@ -7,14 +7,14 @@ namespace MyParcelNL\Sdk\src\tests\CreateConsignments\SplitStreetTest;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use PHPUnit\Framework\TestCase;
 
 
 /**
  * Class SplitStreetTest
  */
-class SplitStreetTest extends \PHPUnit\Framework\TestCase
+class SplitStreetTest extends TestCase
 {
-
     /**
      * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::setFullStreet
      * @dataProvider additionProvider()
@@ -68,6 +68,56 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
             [
                 'carrier_id'        => PostNLConsignment::CARRIER_ID,
                 'country'           => 'NL',
+                'full_street_input' => 'Graan voor Visch 19905',
+                'full_street'       => 'Graan voor Visch 19905',
+                'street'            => 'Graan voor Visch',
+                'number'            => 19905,
+                'number_suffix'     => null,
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Charles Petitweg 7 A-2',
+                'full_street'       => 'Charles Petitweg 7 A-2',
+                'street'            => 'Charles Petitweg',
+                'number'            => 7,
+                'number_suffix'     => 'A-2',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'overtoom 452-2',
+                'full_street'       => 'overtoom 452 -2',
+                'street'            => 'overtoom',
+                'number'            => '452',
+                'number_suffix'     => '-2',
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => BpostConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'avenue roger lallemand 13 B13',
+                'full_street'       => 'avenue roger lallemand 13 bus 13',
+                'street'            => 'avenue roger lallemand',
+                'number'            => '13',
+                'number_suffix'     => null,
+                'box_number'        => '13',
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'BE',
+                'full_street_input' => 'avenue roger lallemand 13 B13',
+                'full_street'       => 'avenue roger lallemand 13 bus 13',
+                'street'            => 'avenue roger lallemand 13 bus 13',
+                'number'            => null,
+                'number_suffix'     => null,
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
                 'full_street_input' => 'A 109',
                 'full_street'       => 'A 109',
                 'street'            => 'A',
@@ -103,6 +153,16 @@ class SplitStreetTest extends \PHPUnit\Framework\TestCase
                 'street'            => 'Laan 1940-1945',
                 'number'            => 103,
                 'number_suffix'     => null,
+                'box_number'        => null,
+            ],
+            [
+                'carrier_id'        => PostNLConsignment::CARRIER_ID,
+                'country'           => 'NL',
+                'full_street_input' => 'Wijk 1 20',
+                'full_street'       => 'Wijk 1 20',
+                'street'            => 'Wijk 1',
+                'number'            => 20,
+                'number_suffix'     => '',
                 'box_number'        => null,
             ],
             [
