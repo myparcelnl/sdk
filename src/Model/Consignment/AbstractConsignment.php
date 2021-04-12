@@ -156,7 +156,6 @@ class AbstractConsignment
         'XK',
     ];
 
-
     /**
      * @var array
      */
