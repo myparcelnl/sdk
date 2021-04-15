@@ -127,6 +127,35 @@ class AbstractConsignment
     public const CC_NL = 'NL';
     public const CC_BE = 'BE';
 
+    public const EURO_COUNTRIES = [
+        'NL',
+        'BE',
+        'AT',
+        'BG',
+        'CZ',
+        'CY',
+        'DK',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'GR',
+        'HU',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'PL',
+        'PT',
+        'RO',
+        'SK',
+        'SI',
+        'ES',
+        'SE',
+        'XK',
+    ];
+
     /**
      * @var array
      */
@@ -652,38 +681,11 @@ class AbstractConsignment
      * @return bool
      * @todo move to hasCountry
      */
-    public function isEuCountry()
+    public function isEuCountry(): bool
     {
         return in_array(
             $this->getCountry(),
-            [
-                'NL',
-                'BE',
-                'AT',
-                'BG',
-                'CZ',
-                'CY',
-                'DK',
-                'EE',
-                'FI',
-                'FR',
-                'DE',
-                'GR',
-                'HU',
-                'IE',
-                'IT',
-                'LV',
-                'LT',
-                'LU',
-                'PL',
-                'PT',
-                'RO',
-                'SK',
-                'SI',
-                'ES',
-                'SE',
-                'XK',
-            ]
+            self::EURO_COUNTRIES
         );
     }
 
