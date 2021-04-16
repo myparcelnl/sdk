@@ -13,6 +13,7 @@ cache:
     - find . -type d \( -name node_modules -o -name .git -o -name vendor \) -prune -false -o -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/myparcelbe/myparcelnl/" {} \;
     - find . -type d \( -name node_modules -o -name .git -o -name vendor \) -prune -false -o -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MyparcelBE/MyparcelNL/" {} \;
     - find . -type d \( -name node_modules -o -name .git -o -name vendor \) -prune -false -o -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MyParcelBE/MyParcelNL/" {} \;
+    - find . -type d \( -name node_modules -o -name .git -o -name vendor \) -prune -false -o -type f \( ! -iname "*.png" ! -iname "*.jpg" \) -exec sed -i "s/MYPARCELBE/MYPARCELNL/" {} \;
     - mv myparcelbe.php myparcelnl.php
   prepare:
     - php -v
