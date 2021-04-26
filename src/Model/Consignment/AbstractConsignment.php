@@ -9,6 +9,7 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
+use MyParcelNL\Sdk\src\Helper\ValidateStreet;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Helpers;
 
@@ -1811,9 +1812,23 @@ class AbstractConsignment
 
     /**
      * @return bool
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function validate(): bool
     {
+        $country = $this->getCountry();
+        if (! $country)
+        {
+            throw new MissingFieldException('Missing country');
+        }
+        if (! ValidatePostalCode::validate($this->getPostalCode(), $country))
+        {
+            throw new MissingFieldException('Invalid postal code');
+        }
+        if (in_array($country, [self::CC_BE, self::CC_NL]) && ! $this->getNumber())
+        {
+            throw new MissingFieldException('Missing number');
+        }
         return true;
     }
 }
