@@ -1,0 +1,41 @@
+{% if record.myparcel is defined %}
+    {% for label in record.myparcel.labels %}
+        <div class="order-row-label-list card p-1">
+            <label>{{ label.status }}</label>
+            <div class="order-row-label-information d-flex text-nowrap align-items-center">
+                <a class="_blank" href="{{ label.track_link }}">{{ label.barcode }}</a>
+                <button
+                        class="btn btn-link btn-print-label{% if record.myparcel.promptForLabelPosition %} label-modal{% endif %}"
+                        type="button"
+                        {% if record.myparcel.promptForLabelPosition %}data-target="#print" data-toggle="modal"{% endif %}
+                        data-label-id="{{ label.id_label }}"
+                >
+                    <i class="material-icons">
+                        print
+                    </i>
+                </button>
+                <a
+                        href="{{ getAdminLink('AdminMyParcelBELabel', true, {'action': 'updateLabel', 'labelId': label.id_label}) }}"
+                        class="btn btn-link"
+                >
+                    <i class="material-icons">
+                        refresh
+                    </i>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+
+    <button class="btn btn-outline-secondary addLabel"
+            type="button"
+            data-toggle="modal"
+            data-order-id="{{ record.id_order }}"
+            data-label-options='{{ record.myparcel.options|raw }}'{# Single quotes to allow json format #}
+            data-allow-set-only-recipient="{{ record.myparcel.allowSetOnlyRecipient|number_format }}"
+            data-allow-set-signature="{{ record.myparcel.allowSetSignature|number_format }}"
+            data-target="#create"
+    >
+        <i class="material-icons"> label</i>
+        {{ 'Create'|trans({}, 'Admin.Actions') }}
+    </button>
+{% endif %}
