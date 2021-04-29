@@ -3,9 +3,12 @@
 namespace Gett\MyparcelBE\Module\Hooks;
 
 use Configuration;
+use DateTime;
+use Exception;
 use Gett\MyparcelBE\Constant;
 use Gett\MyparcelBE\Grid\Action\Bulk\IconBulkAction;
 use Gett\MyparcelBE\Grid\Action\Bulk\IconModalBulkAction;
+use Gett\MyparcelBE\Grid\Column\LabelsColumn;
 use Gett\MyparcelBE\Label\LabelOptionsResolver;
 use Gett\MyparcelBE\Module\Hooks\Helpers\AdminOrderList;
 use Gett\MyparcelBE\Module\Hooks\Helpers\AdminOrderView;
@@ -41,17 +44,19 @@ trait OrdersGridHooks
     public function hookActionOrderGridDefinitionModifier(array $params)
     {
         $promptForLabelPosition = Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME);
+
         /** @var \PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinitionInterface $definition */
         $definition = $params['definition'];
+
         $definition
             ->getColumns()
-            ->addBefore('actions', (new DataColumn('labels'))
-            ->setName($this->l('Labels', 'ordersgridhooks'))
-            ->setOptions([
-                'field' => 'labels',
-                'clickable' => false,
-            ])
-        );
+            ->addBefore('actions', (new LabelsColumn('labels'))
+                ->setName($this->l('Labels', 'ordersgridhooks'))
+                ->setOptions([
+                    'sortable' => false,
+                ])
+            )
+        ;
         $definition
             ->getColumns()
             ->addBefore('labels', (new DataColumn('delivery_info'))
@@ -59,7 +64,8 @@ trait OrdersGridHooks
                 ->setOptions([
                     'field' => 'delivery_info',
                 ])
-            );
+            )
+        ;
         $definition->getBulkActions()->add(
             (new IconModalBulkAction('print_label'))
                 ->setName('Print labels')
@@ -99,68 +105,43 @@ trait OrdersGridHooks
     public function hookActionOrderGridPresenterModifier(array &$params)
     {
         $rows = $params['presented_grid']['data']['records']->all();
+
         foreach ($rows as &$row) {
-            if ($row['labels'] === '0') {
-                $row['labels'] = '';
+            if (!(new AdminOrderList($this))->isMyParcelCarrier((int) $row['id_carrier_reference'])) {
+                $row['delivery_info'] = null;
                 continue;
             }
-            $idOrder = (int) ($row['id_order'] ?? 0);
-            if (!$idOrder) {
-                continue;
-            }
+
             $orderHelper = new AdminOrderView($this, (int) $row['id_order'], $this->context);
-            $labelOptionsResolver = new LabelOptionsResolver();
-            $promptForLabelPosition = Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME);
 
-            $labelList = $orderHelper->getLabels();
-            $labelsHtml = '';
-            if (!empty($labelList)) {
-                $labelsHtml = $this->get('twig')->render(
-                    '@Modules/' . $this->name . '/views/PrestaShop/Admin/Common/Grid/Columns/Content/label_list.html.twig',
-                    [
-                        'labels' => $labelList,
-                        'link' => $this->context->link,
-                        'promptForLabelPosition' => $promptForLabelPosition,
-                    ]
-                );
-            }
+            // MyParcel created labels and label settings
+            $row['myparcel'] = [
+                'labels' => $orderHelper->getLabels(),
+                'options' => (new LabelOptionsResolver())->getLabelOptions($row),
+                'allowSetOnlyRecipient' => $orderHelper->allowSetOnlyRecipient((int) $row['id_carrier_reference']),
+                'allowSetSignature' => $orderHelper->allowSetSignature((int) $row['id_carrier_reference']),
+                'promptForLabelPosition' => Configuration::get(Constant::LABEL_PROMPT_POSITION_CONFIGURATION_NAME),
+            ];
 
-            $createButtonHtml = $this->get('twig')->render(
-                '@Modules/' . $this->name . '/views/PrestaShop/Admin/Common/Grid/Columns/Content/create_label.html.twig',
-                [
-                    'idOrder' => $idOrder,
-                    'labelOptions' => $labelOptionsResolver->getLabelOptions($row),
-                    'allowSetOnlyRecipient' => $orderHelper->allowSetOnlyRecipient((int) $row['id_carrier_reference']),
-                    'allowSetSignature' => $orderHelper->allowSetSignature((int) $row['id_carrier_reference']),
-                ]
-            );
-
-            $row['labels'] = $labelsHtml . $createButtonHtml;
-        }
-        foreach ($rows as &$row) {
-            $adminOrderList = new AdminOrderList($this);
-            if (!$adminOrderList->isMyParcelCarrier((int) $row['id_carrier_reference'])) {
-                $row['delivery_info'] = '';
-                continue;
-            }
-            if ($row['delivery_info'] === '0') {
-                $row['delivery_info'] = '';
-                continue;
-            }
-
+            // Delivery date
             $deliverySettings = $this->getDeliverySettingsByCart($row['id_cart']);
+            if (empty($deliverySettings['date'])) {
+                $row['delivery_info'] = null;
+                continue;
+            }
+
             try {
-                if (empty($deliverySettings['date'])) {
-                    continue;
-                }
-                $date = new \DateTime($deliverySettings['date']);
-                $dateFormatted = $date->format($this->context->language->date_format_lite);
-                if (!empty($dateFormatted)) {
-                    $row['delivery_info'] = sprintf('[%s] %s', $dateFormatted, $row['delivery_info']);
-                }
-            } catch (\Exception $exception) {
+                $row['delivery_info'] = sprintf(
+                    '[%s] %s',
+                    (new DateTime($deliverySettings['date']))
+                        ->format($this->context->language->date_format_lite),
+                    $row['delivery_info']
+                );
+            } catch (Exception $e) {
+                $row['delivery_info'] = null;
             }
         }
+
         $params['presented_grid']['data']['records'] = new RecordCollection($rows);
     }
 
