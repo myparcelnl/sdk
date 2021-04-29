@@ -50,17 +50,21 @@ trait OrdersGridHooks
 
         $definition
             ->getColumns()
-            ->addBefore('actions', (new LabelsColumn('labels'))
-                ->setName($this->l('Labels', 'ordersgridhooks'))
+            ->addBefore(
+                'actions',
+                (new LabelsColumn('labels'))
+                    ->setName($this->l('Labels', 'ordersgridhooks'))
             )
         ;
         $definition
             ->getColumns()
-            ->addBefore('labels', (new DataColumn('delivery_info'))
-                ->setName($this->l('Delivery date', 'ordersgridhooks'))
-                ->setOptions([
-                    'field' => 'delivery_info',
-                ])
+            ->addBefore(
+                'labels',
+                (new DataColumn('delivery_info'))
+                    ->setName($this->l('Delivery date', 'ordersgridhooks'))
+                    ->setOptions([
+                        'field' => 'delivery_info',
+                    ])
             )
         ;
         $definition->getBulkActions()->add(
