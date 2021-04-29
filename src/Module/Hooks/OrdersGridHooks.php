@@ -52,9 +52,6 @@ trait OrdersGridHooks
             ->getColumns()
             ->addBefore('actions', (new LabelsColumn('labels'))
                 ->setName($this->l('Labels', 'ordersgridhooks'))
-                ->setOptions([
-                    'sortable' => false,
-                ])
             )
         ;
         $definition

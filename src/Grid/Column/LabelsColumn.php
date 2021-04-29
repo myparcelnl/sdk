@@ -22,7 +22,7 @@ final class LabelsColumn extends AbstractColumn
     {
         $resolver
             ->setDefaults([
-                'sortable' => true,
+                'sortable' => false,
                 'clickable' => false,
             ])
         ;
