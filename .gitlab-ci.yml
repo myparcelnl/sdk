@@ -26,6 +26,7 @@ cache:
     - npm --version
     - npm run build
   packaging:
+    - shopt -s extglob
     - rm -rf .git/ .gitignore .gitlab-ci.yml Dockerfile .babelrc composer.json composer.lock package.json package-lock.json webpack.config.js readme.md node_modules/
 
 preparation:nl:
