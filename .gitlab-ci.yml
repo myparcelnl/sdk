@@ -100,6 +100,8 @@ packaging:nl:
   script:
     - !reference [.script, rename]
     - !reference [.script, packaging]
+    - mkdir myparcelnl
+    - mv ./*(DN) myparcelnl/ &> /dev/null
   artifacts:
       name: "MyParcelNL-v$CI_COMMIT_TAG"
       paths:
@@ -114,6 +116,8 @@ packaging:be:
     - building:be
   script:
     - !reference [.script, packaging]
+    - mkdir myparcelbe
+    - mv ./*(DN) myparcelbe/ &> /dev/null
   artifacts:
       name: "MyParcelBE-v$CI_COMMIT_TAG"
       paths:
