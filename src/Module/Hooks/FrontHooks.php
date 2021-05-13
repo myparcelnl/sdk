@@ -30,7 +30,7 @@ trait FrontHooks
         if (Tools::isSubmit('confirmDeliveryOption') && !empty($options)) {
             Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                 'myparcelbe_delivery_settings',
-                ['id_cart' => $params['cart']->id, 'delivery_settings' => $options],
+                ['id_cart' => $params['cart']->id, 'delivery_settings' => pSQL($options)],
                 false,
                 true,
                 Db::REPLACE
@@ -51,7 +51,7 @@ trait FrontHooks
                 $optionsObj->carrier = str_replace(' ', '', strtolower($carrier->name));
                 Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                     'myparcelbe_delivery_settings',
-                    ['id_cart' => $params['cart']->id, 'delivery_settings' => json_encode($optionsObj)],
+                    ['id_cart' => $params['cart']->id, 'delivery_settings' => pSQL(json_encode($optionsObj))],
                     false,
                     true,
                     Db::REPLACE
