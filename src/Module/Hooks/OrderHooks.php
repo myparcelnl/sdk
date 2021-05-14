@@ -50,7 +50,7 @@ trait OrderHooks
         try {
             Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                 'myparcelbe_delivery_settings',
-                ['id_cart' => (int) $order->id_cart, 'delivery_settings' => $options],
+                ['id_cart' => (int) $order->id_cart, 'delivery_settings' => pSQL($options)],
                 false,
                 true,
                 Db::REPLACE

@@ -434,7 +434,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
             }
             Db::getInstance(_PS_USE_SQL_SLAVE_)->update(
                 'myparcelbe_delivery_settings',
-                ['delivery_settings' => json_encode($deliveryOptions)],
+                ['delivery_settings' => pSQL(json_encode($deliveryOptions))],
                 'id_cart = ' . (int) $order->id_cart
             );
         } catch (Exception $e) {
@@ -662,7 +662,7 @@ class AdminMyParcelBELabelController extends ModuleAdminController
         if ($action === 'updateDeliveryOptions' && !empty($options) && !empty($order->id_cart)) {
             Db::getInstance(_PS_USE_SQL_SLAVE_)->insert(
                 'myparcelbe_delivery_settings',
-                ['id_cart' => $order->id_cart, 'delivery_settings' => $options],
+                ['id_cart' => $order->id_cart, 'delivery_settings' => pSQL($options)],
                 false,
                 true,
                 Db::REPLACE
