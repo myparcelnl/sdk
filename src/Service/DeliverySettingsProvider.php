@@ -119,28 +119,23 @@ class DeliverySettingsProvider
                 break;
             }
         }
-        // Trigger the $module->getOrderShippingCost() method then use the calculated carrier shipping cost
-        $this->context->cart->getCarrierCost(
-            $this->idCarrier,
-            true,
-            new Country($address->id_country)
-        );
-        $priceStandardDelivery = Tools::ps_round($this->module->cartCarrierStandardShippingCost, 2);
-        if (!empty($this->module->carrierStandardShippingCost[(int) $this->idCarrier])) {
-            $priceStandardDelivery = $this->module->carrierStandardShippingCost[$this->idCarrier];
-        }
+        
+        $shippingOptions = $this->module->getShippingOptions($this->idCarrier, $address);
+
+        // $priceStandardDelivery = $this->module->cartCarrierStandardShippingCost * $shippingOptions['tax_rate'];
+        $taxRate = $shippingOptions['tax_rate'];
 
         return [
             'config' => [
                 'platform' => ($this->module->isBE() ? 'belgie' : 'myparcel'),
                 'carrierSettings' => $carrierSettings,
 
-                'priceMorningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceMorningDelivery'), 2),
-                'priceStandardDelivery' => Tools::ps_round($priceStandardDelivery, 2),
-                'priceEveningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceEveningDelivery'), 2),
-                'priceSignature' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceSignature'), 2),
-                'priceOnlyRecipient' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceOnlyRecipient'), 2),
-                'pricePickup' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'pricePickup'), 2),
+                'priceMorningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceMorningDelivery') * $taxRate, 2),
+                // 'priceStandardDelivery' => Tools::ps_round($priceStandardDelivery, 2),
+                'priceEveningDelivery' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceEveningDelivery') * $taxRate, 2),
+                'priceSignature' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceSignature') * $taxRate, 2),
+                'priceOnlyRecipient' => Tools::ps_round(CarrierConfigurationProvider::get($this->idCarrier, 'priceOnlyRecipient') * $taxRate, 2),
+                'pricePickup' => Tools::ps_round((CarrierConfigurationProvider::get($this->idCarrier, 'pricePickup') * $taxRate), 2),
 
                 //'allowMondayDelivery' => (int) CarrierConfigurationProvider::get($this->idCarrier, 'allowMondayDelivery'),
                 //'allowMorningDelivery' => (int) CarrierConfigurationProvider::get($this->idCarrier, 'allowMorningDelivery'),
