@@ -167,15 +167,12 @@ class MyParcelBE extends CarrierModule
 
     public function getOrderShippingCost($cart, $shipping_cost)
     {
-        $this->carrierStandardShippingCost[(int) $this->id_carrier] = Tools::ps_round($shipping_cost, 2);
         if ($this->id_carrier != $cart->id_carrier) {
             return $shipping_cost;
         }
         if (!empty($this->context->controller->requestOriginalShippingCost)) {
             return $shipping_cost;
         }
-
-        $this->cartCarrierStandardShippingCost = Tools::ps_round($shipping_cost, 2);
 
         $myParcelCost = 0;
         $deliverySettings = Tools::getValue('myparcel-delivery-options', false);
@@ -295,5 +292,22 @@ class MyParcelBE extends CarrierModule
         }
 
         return json_decode($deliverySettings, true);
+    }
+
+    public function getShippingOptions($id_carrier, $address)
+    {
+        $carrier = new Carrier($id_carrier);
+
+        $taxRate = ($carrier->getTaxesRate($address) / 100) + 1;
+
+        $includeTax = !Product::getTaxCalculationMethod((int) $this->context->cart->id_customer)
+                && (int) Configuration::get('PS_TAX');
+        $displayTaxLabel = (Configuration::get('PS_TAX') && !Configuration::get('AEUC_LABEL_TAX_INC_EXC'));
+
+        return [
+            'tax_rate' => ($includeTax)? $taxRate : 1,
+            'include_tax' => $includeTax,
+            'display_tax_label' => $displayTaxLabel,
+        ];
     }
 }
