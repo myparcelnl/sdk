@@ -76,18 +76,17 @@ trait FrontHooks
         if (Validate::isLoadedObject($address)) {
             $address->address1 = preg_replace('/[^0-9]/', '', $address->address1);
 
-            $include_taxes = !Product::getTaxCalculationMethod((int) $this->context->cart->id_customer)
-                && (int) Configuration::get('PS_TAX');
-            $display_taxes_label = (Configuration::get('PS_TAX') && !Configuration::get('AEUC_LABEL_TAX_INC_EXC'));
+            $shippingOptions = $this->getShippingOptions($params['carrier']['id'], $address);
+            $cost = ($shippingOptions['include_tax'])? $params['carrier']['price_with_tax'] : $params['carrier']['price_without_tax'];
 
             $shipping_cost = Tools::displayPrice(
-                $this->carrierStandardShippingCost[$params['carrier']['id']] ?? $this->cartCarrierStandardShippingCost,
+                $cost,
                 Currency::getCurrencyInstance((int) $this->context->cart->id_currency),
                 false
             );
 
-            if ($include_taxes) {
-                if ($display_taxes_label) {
+            if ($shippingOptions['include_tax']) {
+                if ($shippingOptions['display_tax_label']) {
                     $shipping_cost = $this->context->getTranslator()->trans(
                         '%price% tax incl.',
                         ['%price%' => $shipping_cost],
@@ -95,7 +94,7 @@ trait FrontHooks
                     );
                 }
             } else {
-                if ($display_taxes_label) {
+                if ($shippingOptions['display_tax_label']) {
                     $shipping_cost = $this->context->getTranslator()->trans(
                         '%price% tax excl.',
                         ['%price%' => $shipping_cost],
