@@ -1,48 +1,46 @@
 <?php declare(strict_types=1);
-/**
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2020 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v2.0.0
- */
 
 namespace MyParcelNL\Sdk\src\Helper;
 
+/**
+ * @since v2.0.0
+ */
 class RequestError
 {
     /**
-     * @param $error
-     * @param array $result
+     * @param        $error
+     * @param  array $result
      *
      * @return string
      */
-    public static function getTotalMessage($error, $result)
+    public static function getTotalMessage($error, array $result): string
     {
-        return
-            self::getErrorCode($error) . ' - ' .
-            self::getErrorHumanMessage($error) . ' - ' .
-            self::getErrorMessage($error, $result);
+        return implode(
+            ' - ',
+            [
+                self::getErrorCode($error),
+                self::getErrorHumanMessage($error),
+                self::getErrorMessage($error, $result),
+            ]
+        );
     }
 
     /**
      * @param $error
      *
-     * @return string
+     * @return int
      */
-    private static function getErrorCode($error)
+    private static function getErrorCode($error): int
     {
         $code = '';
-        if (key_exists('code', $error)) {
+
+        if (array_key_exists('code', $error)) {
             $code = $error['code'];
-        } elseif (key_exists('fields', $error)) {
+        } elseif (array_key_exists('fields', $error)) {
             $code = $error['fields'][0];
         }
 
-        return $code;
+        return (int) $code;
     }
 
     /**
@@ -50,24 +48,22 @@ class RequestError
      *
      * @return string
      */
-    private static function getErrorHumanMessage($error)
+    private static function getErrorHumanMessage($error): string
     {
-        $humanMessage = key_exists('human', $error) ? $error['human'][0] : '';
-
-        return $humanMessage;
+        return array_key_exists('human', $error) ? $error['human'][0] : '';
     }
 
     /**
-     * @param $error
-     * @param array $result
+     * @param        $error
+     * @param  array $result
      *
      * @return string
      */
-    private static function getErrorMessage($error, $result)
+    private static function getErrorMessage($error, array $result): string
     {
-        if (key_exists('message', $result)) {
+        if (array_key_exists('message', $result)) {
             $message = $result['message'];
-        } elseif (key_exists('message', $error)) {
+        } elseif (array_key_exists('message', $error)) {
             $message = $error['message'];
         } else {
             $message = 'Unknown error: ' . json_encode($error) . '. Please contact MyParcel.';

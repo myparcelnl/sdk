@@ -2,14 +2,14 @@
 
 namespace MyParcelNL\Sdk\src\Support;
 
-use stdClass;
-use Countable;
-use Exception;
 use ArrayAccess;
-use Traversable;
 use ArrayIterator;
 use CachingIterator;
+use Countable;
+use Exception;
 use IteratorAggregate;
+use stdClass;
+use Traversable;
 
 /**
  * @property-read HigherOrderCollectionProxy $average
@@ -1708,14 +1708,38 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return array_map(function ($value) {
+        return array_map(
+            static function ($value) {
             if (method_exists($value, 'toArray')) {
                 return $value->toArray();
             }
             return $value;
         }, $this->items);
+    }
+
+    /**
+     * Get the collection of items as a plain array. Ignores null values in children if possible.
+     *
+     * @return array
+     */
+    public function toArrayWithoutNull(): array
+    {
+        return array_map(
+            static function ($value) {
+                if (method_exists($value, 'toArrayWithoutNull')) {
+                    return $value->toArrayWithoutNull();
+                }
+
+                if (method_exists($value, 'toArray')) {
+                    return $value->toArray();
+                }
+
+                return $value;
+            },
+            $this->items
+        );
     }
 
     /**

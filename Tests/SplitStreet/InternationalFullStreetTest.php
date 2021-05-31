@@ -27,7 +27,6 @@ class InternationalFullStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::getFullStreet
      * @dataProvider additionProvider()
      *
      * @param $carrierId

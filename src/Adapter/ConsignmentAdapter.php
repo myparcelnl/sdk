@@ -27,10 +27,10 @@ class ConsignmentAdapter
     /**
      * ConsignmentDecode constructor.
      *
-     * @param array                                                     $data
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param  array                                                     $data
+     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
      *
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function __construct(array $data, AbstractConsignment $consignment)
     {
@@ -60,7 +60,6 @@ class ConsignmentAdapter
         $recipient = $this->data['recipient'];
         $options   = $this->data['options'];
 
-        /** @noinspection PhpInternalEntityUsedInspection */
         $this->consignment
             ->setConsignmentId($this->data['id'])
             ->setShopId($this->data['shop_id'])
@@ -85,10 +84,10 @@ class ConsignmentAdapter
     }
 
     /**
-     * @return $this
-     * @throws \Exception
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function extraOptions()
+    private function extraOptions(): self
     {
         $options = $this->data['options'];
         $fields  = [
@@ -100,7 +99,6 @@ class ConsignmentAdapter
             'delivery_date'  => null,
             'delivery_type'  => AbstractConsignment::DEFAULT_DELIVERY_TYPE,
         ];
-        /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);
 
         if (! empty($options['only_recipient'])) {
@@ -127,7 +125,7 @@ class ConsignmentAdapter
             $this->consignment->setDeliveryDate($options['delivery_date']);
         }
 
-        if (key_exists('insurance', $options)) {
+        if (array_key_exists('insurance', $options)) {
             $insuranceAmount = $options['insurance']['amount'];
             $this->consignment->setInsurance($insuranceAmount / 100);
         }
@@ -150,7 +148,6 @@ class ConsignmentAdapter
             'number_suffix' => '',
 
         ];
-        /** @noinspection PhpInternalEntityUsedInspection */
         $this->clearFields($fields);
 
         $methods = [
@@ -158,7 +155,6 @@ class ConsignmentAdapter
             'Number'       => 'number',
             'NumberSuffix' => 'number_suffix',
         ];
-        /** @noinspection PhpInternalEntityUsedInspection */
         $this->setByMethods($this->data['recipient'], $methods);
 
         return $this;
@@ -170,8 +166,7 @@ class ConsignmentAdapter
     private function pickup()
     {
         // Set pickup
-        if (key_exists('pickup', $this->data) && $this->data['pickup'] !== null) {
-
+        if (array_key_exists('pickup', $this->data) && $this->data['pickup'] !== null) {
             $methods = [
                 'PickupPostalCode'   => 'postal_code',
                 'PickupStreet'       => 'street',
@@ -181,10 +176,8 @@ class ConsignmentAdapter
                 'PickupLocationCode' => 'location_code',
                 'PickupNetworkId'    => 'network_id',
             ];
-            /** @noinspection PhpInternalEntityUsedInspection */
             $this->setByMethods($this->data['pickup'], $methods);
         } else {
-
             $fields = [
                 'pickup_postal_code'   => null,
                 'pickup_street'        => null,
@@ -195,7 +188,6 @@ class ConsignmentAdapter
                 'retail_network_id'    => '',
 
             ];
-            /** @noinspection PhpInternalEntityUsedInspection */
             $this->clearFields($fields);
         }
 

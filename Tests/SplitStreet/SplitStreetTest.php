@@ -16,7 +16,6 @@ use PHPUnit\Framework\TestCase;
 class SplitStreetTest extends TestCase
 {
     /**
-     * @covers       \MyParcelNL\Sdk\src\Model\AbstractConsignment::setFullStreet
      * @dataProvider additionProvider()
      *
      * @param $carrierId

@@ -26,7 +26,6 @@ class SplitLongStreetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers       \MyParcelNL\Sdk\src\Model\ConsignmentFactory::setFullStreet
      * @dataProvider additionProvider()
      *
      * @param $carrierId

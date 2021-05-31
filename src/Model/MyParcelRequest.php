@@ -1,21 +1,11 @@
-<?php declare(strict_types=1);
-/** @noinspection PhpInternalEntityUsedInspection */
+<?php
 
-/**
- * This model represents one request
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2020 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Concerns\HasApiKey;
+use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -27,49 +17,57 @@ use MyParcelNL\Sdk\src\Support\Arr;
 
 class MyParcelRequest
 {
-    /**
-     * API URL
-     */
-    const REQUEST_URL = 'https://api.myparcel.nl';
+    use HasApiKey;
+    use HasUserAgent;
 
     /**
      * Supported request types.
      */
-    const REQUEST_TYPE_SHIPMENTS               = 'shipments';
-    const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
-    const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
+    public const REQUEST_TYPE_SHIPMENTS               = 'shipments';
+    public const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
+    public const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
+    public const REQUEST_TYPE_ORDERS                  = 'fulfilment/orders';
 
-    const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
-
-    /**
-     * API headers
-     */
-    const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
-    const REQUEST_HEADER_RETRIEVE_SHIPMENT   = 'Accept: application/json; charset=utf8';
-    const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
-    const REQUEST_HEADER_RETRIEVE_LABEL_PDF  = 'Accept: application/pdf';
-    const REQUEST_HEADER_RETURN              = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
-    const REQUEST_HEADER_DELETE              = 'Accept: application/json; charset=utf8';
+    public const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
     /**
-     * Error codes
+     * API headers.
      */
-    const ERROR_CODE_ACCOUNT_NOT_ACTIVATED = 3716;
+    public const HEADER_CONTENT_TYPE_SHIPMENT        = [
+        'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
+    ];
+    public const HEADER_ACCEPT_APPLICATION_PDF       = ['Accept' => 'application/pdf'];
+    public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
 
     /**
-     * @var string
+     * API URL.
      */
-    private $api_key = '';
-    private $header = [];
+    public const REQUEST_URL = 'https://api.myparcel.nl';
+
+    /**
+     * Error codes.
+     */
+    private const ERROR_CODE_ACCOUNT_NOT_ACTIVATED = 3716;
 
     /**
      * @var string|null
      */
-    private $body       = '';
-    private $error      = null;
+    private $body;
+
+    /**
+     * @var string|null
+     */
+    private $error;
+
+    /**
+     * @var array
+     */
     private $errorCodes = [];
-    private $result     = null;
-    private $userAgent  = null;
+
+    /**
+     * @var array
+     */
+    private $headers = [];
 
     /**
      * @var array|null
@@ -77,168 +75,40 @@ class MyParcelRequest
     private $query;
 
     /**
-     * Get an item from tje result using "dot" notation.
-     *
-     * @param string $key
-     * @param string $pluck
-     *
-     * @return mixed
+     * @var array|false|mixed
      */
-    public function getResult($key = null, $pluck = null)
-    {
-        if (null === $key) {
-            return $this->result;
-        }
-
-        $result = Arr::get($this->result, $key);
-        if ($pluck) {
-            $result = Arr::pluck($result, $pluck);
-        }
-
-        return $result;
-    }
+    private $response;
 
     /**
-     * @return string
+     * @var mixed
      */
-    public function getError()
+    private $result;
+
+    /**
+     * @return string|null
+     */
+    public function getError(): ?string
     {
         return $this->error;
     }
 
     /**
-     * Sets the parameters for an API call based on a string with all required request parameters and the requested API
-     * method.
-     *
-     * @param string      $apiKey
-     * @param string|null $body
-     * @param string      $requestHeader
-     *
-     * @return $this
+     * @return array
+     * @throws \Exception
      */
-    public function setRequestParameters(string $apiKey, ?string $body, string $requestHeader): MyParcelRequest
+    public function getHeaders(): array
     {
-        $this->api_key = $apiKey;
-        $this->body    = $body;
-
-        $header[] = $requestHeader;
-        $header[] = 'Authorization: basic ' . base64_encode($this->api_key);
-        $header[] = 'User-Agent: ' . $this->getUserAgent();
-        $this->header = $header;
-
-        return $this;
+        return array_merge($this->getDefaultHeaders(), $this->headers);
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return \MyParcelNL\Sdk\src\Model\MyParcelRequest
-     */
-    public function setQuery(array $parameters)
-    {
-        $this->query = $parameters;
-
-        return $this;
-    }
-
-    /**
-     * send the created request to MyParcel
-     *
-     * @param string $method
-     * @param string $uri
-     *
-     * @return MyParcelRequest|array|false|string
-     * @throws ApiException
-     * @throws MissingFieldException
-     */
-    public function sendRequest($method = 'POST', $uri = self::REQUEST_TYPE_SHIPMENTS)
-    {
-        if (! $this->checkConfigForRequest()) {
-            return false;
-        }
-
-        $request = $this->instantiateCurl();
-
-        $this->setUserAgent();
-
-        $header = $this->header;
-        $url    = $this->getRequestUrl($uri);
-        if ($method !== 'POST' && $this->body) {
-            $url .= '/' . $this->body;
-        }
-
-        if ($this->query) {
-            $url .= '?' . http_build_query($this->query);
-        }
-
-        $request->write($method, $url, $header, $this->body);
-        $this->setResult($request);
-        $request->close();
-
-        if ($this->getError()) {
-            switch (Arr::first($this->errorCodes)) {
-                case self::ERROR_CODE_ACCOUNT_NOT_ACTIVATED:
-                    throw new AccountNotActiveException('Error ' . Arr::first($this->errorCodes) . ' Your account needs to be activated by MyParcel.');
-                default:
-                    throw new ApiException('Error in MyParcel API request: ' . $this->getError() . ' Url: ' . $url . ' Request: ' . $this->body);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return $this->userAgent;
-    }
-
-    /**
-     * @param string $userAgent
-     *
-     * @return $this
-     */
-    public function setUserAgent($userAgent = null)
-    {
-        if ($userAgent) {
-            $this->userAgent = $userAgent;
-        }
-        if ($this->getUserAgent() == null && $this->getUserAgentFromComposer() !== null) {
-            $this->userAgent = trim($this->getUserAgent() . ' ' . $this->getUserAgentFromComposer());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get version of SDK from composer file
-     */
-    public function getUserAgentFromComposer()
-    {
-        $composerData = $this->getComposerContents();
-
-        if ($composerData && ! empty($composerData['name'])
-            && $composerData['name'] == 'myparcelnl/sdk'
-            && ! empty($composerData['version'])
-        ) {
-            $version = str_replace('v', '', $composerData['version']);
-        } else {
-            $version = 'unknown';
-        }
-
-        return 'MyParcelNL-SDK/' . $version;
-    }
-
-    /**
-     * @param                    $size
-     * @param MyParcelCollection $collection
-     * @param                    $key
+     * @param                     $size
+     * @param  MyParcelCollection $collection
+     * @param                     $key
      *
      * @return string|null
      */
-    public function getLatestDataParams($size, $collection, &$key)
+    public function getLatestDataParams($size, MyParcelCollection $collection, &$key): ?string
     {
         $params         = null;
         $consignmentIds = $collection->getConsignmentIds($key);
@@ -256,47 +126,138 @@ class MyParcelRequest
     }
 
     /**
-     * Check if MyParcel gives an error
-     *
-     * @return $this|void
-     */
-    private function checkMyParcelErrors()
-    {
-        if (! is_array($this->result) || empty($this->result['errors'])) {
-            return;
-        }
-
-        $error = reset($this->result['errors']);
-        $this->errorCodes = array_keys($error);
-        if ((int) key($error) > 0) {
-            $error = current($error);
-        }
-        $this->error = RequestError::getTotalMessage($error, $this->result);
-    }
-
-    /**
-     * Get request url
-     *
-     * @param string $uri
+     * Get request url.
      *
      * @return string
      */
-    private function getRequestUrl($uri)
+    public function getRequestUrl(): string
     {
-        $url = self::REQUEST_URL . '/' . $uri;
-
-        return $url;
+        return getenv('API_BASE_URL') ?: self::REQUEST_URL;
     }
 
     /**
-     * Checks if all the requirements are set to send a request to MyParcel
+     * Get an item from the result using dot notation.
+     *
+     * @param  string|null $key
+     * @param  string|null $pluck
+     *
+     * @return mixed
+     */
+    public function getResult(string $key = null, string $pluck = null)
+    {
+        if (null === $key) {
+            return $this->result;
+        }
+
+        $result = Arr::get($this->result, $key);
+
+        if ($pluck) {
+            $result = Arr::pluck($result, $pluck);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Send the created request to MyParcel.
+     *
+     * @param  string $method
+     * @param  string $uri
+     *
+     * @return self|bool
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function sendRequest(string $method = 'POST', string $uri = self::REQUEST_TYPE_SHIPMENTS)
+    {
+        if (! $this->checkConfigForRequest()) {
+            return false;
+        }
+
+        $url     = $this->createRequestUrl($uri, $method);
+        $request = $this->instantiateCurl();
+
+        $request->write($method, $url, $this->getHeaders(), $this->getRequestBody());
+        $this->setResult($request);
+        $request->close();
+
+        $this->handleErrors($url);
+
+        return $this;
+    }
+
+    /**
+     * @param  string|array $requestHeaders
+     *
+     * @return self
+     */
+    public function setHeaders($requestHeaders): self
+    {
+        if (is_array($requestHeaders)) {
+            $this->headers = $requestHeaders;
+        } else {
+            $this->headers[] = $requestHeaders;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  array $parameters
+     *
+     * @return self
+     */
+    public function setQuery(array $parameters): self
+    {
+        $this->query = $parameters;
+        return $this;
+    }
+
+    /**
+     * @param  \MyParcelNL\Sdk\src\Model\RequestBody|array|string|null $body
+     *
+     * @return self
+     */
+    public function setRequestBody($body): self
+    {
+        if (is_a($body, RequestBody::class)) {
+            $body = $body->toJson();
+        }
+
+        if ($body && ! is_string($body)) {
+            $body = json_encode($body);
+        }
+
+        $this->body = $body;
+        return $this;
+    }
+
+    /**
+     * Sets the parameters for an API call based on a string with all required request parameters and the requested API
+     * method.
+     *
+     * @param  string            $apiKey
+     * @param  array|string|null $body
+     * @param  string|array      $requestHeaders
+     *
+     * @return $this
+     */
+    public function setRequestParameters(string $apiKey, $body = null, $requestHeaders = []): self
+    {
+        return $this->setApiKey($apiKey)->setRequestBody($body)->setHeaders($requestHeaders);
+    }
+
+    /**
+     * Checks if all the requirements are set to send a request to MyParcel.
      *
      * @return bool
      * @throws MissingFieldException
      */
-    private function checkConfigForRequest()
+    private function checkConfigForRequest(): bool
     {
-        if (empty($this->api_key)) {
+        if (empty($this->getApiKey())) {
             throw new MissingFieldException('api_key not found');
         }
 
@@ -304,37 +265,61 @@ class MyParcelRequest
     }
 
     /**
-     * Get composer.json
+     * Check if MyParcel gives an error.
      *
-     * @return string|null
+     * @return void
      */
-    private function getComposerContents()
+    private function checkMyParcelErrors(): void
     {
-        $composer_locations = [
-            'vendor/myparcelnl/sdk/composer.json',
-            './composer.json'
-        ];
-
-        foreach ($composer_locations as $composerFile) {
-            if (file_exists($composerFile)) {
-                return json_decode(file_get_contents($composerFile), true);
-            }
+        if (! is_array($this->result) || empty($this->result['errors'])) {
+            return;
         }
 
-        return null;
+        $error            = reset($this->result['errors']);
+        $this->errorCodes = array_keys($error);
+
+        if ((int) key($error) > 0) {
+            $error = current($error);
+        }
+
+        $this->error = RequestError::getTotalMessage($error, $this->result);
     }
 
     /**
-     * Get all consignment ids
+     * @param  string $uri
+     * @param  string $method
      *
-     * @param MyParcelCollection|AbstractConsignment[] $consignments
-     * @param                                          $key
+     * @return string
+     */
+    private function createRequestUrl(string $uri, string $method): string
+    {
+        $url         = $this->getRequestUrl();
+        $url         .= "/$uri";
+        $requestBody = $this->getRequestBody();
+
+        if ($method !== 'POST' && $requestBody) {
+            $url .= '/' . $requestBody;
+        }
+
+        if ($this->query) {
+            $url .= '?' . http_build_query($this->query);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Get all consignment ids.
+     *
+     * @param  MyParcelCollection|AbstractConsignment[] $consignments
+     * @param                                           $key
      *
      * @return array
      */
-    private function getConsignmentReferenceIds($consignments, &$key)
+    private function getConsignmentReferenceIds($consignments, &$key): array
     {
         $referenceIds = [];
+
         foreach ($consignments as $consignment) {
             if ($consignment->getReferenceId()) {
                 $referenceIds[] = $consignment->getReferenceId();
@@ -346,38 +331,94 @@ class MyParcelRequest
     }
 
     /**
-     * @param MyParcelCurl $request
+     * @return array
+     * @throws \Exception
      */
-    private function setResult($request)
+    private function getDefaultHeaders(): array
     {
-        $response = $request->read();
-        if (preg_match("/^%PDF-1./", $response)) {
-            $this->result = $response;
-        } else {
-            $this->result = json_decode($response, true);
+        return [
+            'Accept'        => 'application/json;charset=utf8',
+            'Authorization' => 'basic ' . $this->getEncodedApiKey(),
+            'Content-Type'  => 'application/json;charset=utf8',
+            'User-Agent'    => $this->getUserAgentHeader(),
+        ];
+    }
 
-            if ($response === false) {
-                $this->error = $request->getError();
+    /**
+     * @return string|null
+     */
+    private function getRequestBody(): ?string
+    {
+        return $this->body;
+    }
+
+    /**
+     * @param  string $url
+     *
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     */
+    private function handleErrors(string $url): void
+    {
+        if ($this->getError()) {
+            switch (Arr::first($this->errorCodes)) {
+                case self::ERROR_CODE_ACCOUNT_NOT_ACTIVATED:
+                    throw new AccountNotActiveException(
+                        sprintf(
+                            'Error %s Your account needs to be activated by MyParcel.',
+                            Arr::first($this->errorCodes)
+                        )
+                    );
+                default:
+                    throw new ApiException(
+                        json_encode($this->getError(), JSON_PRETTY_PRINT)
+                    );
             }
-            $this
-                ->checkMyParcelErrors();
         }
     }
 
     /**
      * @return MyParcelCurl
      */
-    private function instantiateCurl()
+    private function instantiateCurl(): MyParcelCurl
     {
-        return (new MyParcelCurl())
-            ->setConfig([
+        return (new MyParcelCurl())->setConfig(
+            [
                 'header'  => 0,
                 'timeout' => 60,
-            ])
-            ->addOptions([
+            ]
+        )->addOptions(
+            [
                 CURLOPT_POST           => true,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_AUTOREFERER    => true,
-            ]);
+            ]
+        );
+    }
+
+    /**
+     * @param  MyParcelCurl $request
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function setResult(MyParcelCurl $request): array
+    {
+        $response = $request->getResponse();
+
+        if (preg_match('/^%PDF-1./', $response['response'])) {
+            $this->result = $response;
+        } else {
+            $response['response'] = json_decode($response['response'], true);
+            $this->result         = $response['response'];
+
+            if ($this->result === false) {
+                $this->error = $request->getError();
+            }
+
+            $this->checkMyParcelErrors();
+        }
+
+        return $response;
     }
 }
