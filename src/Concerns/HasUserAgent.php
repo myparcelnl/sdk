@@ -72,7 +72,7 @@ trait HasUserAgent
         $composerData = $this->getComposerContents();
 
         if ($composerData && ! empty($composerData['name'])
-            && $composerData['name'] === 'myparcelnl/sdk'
+            && 'myparcelnl/sdk' === $composerData['name']
             && ! empty($composerData['version'])) {
             $version = str_replace('v', '', $composerData['version']);
         } else {

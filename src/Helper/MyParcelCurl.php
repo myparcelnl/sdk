@@ -132,7 +132,7 @@ class MyParcelCurl
         $code = self::extractCode($response);
 
         // Remove 100 and 101 responses headers
-        if ($code === 100 || $code === 101) {
+        if (in_array($code, [100, 101])) {
             $response = preg_split('/^\r?$/m', $response, 2);
             $response = trim($response[1]);
         }

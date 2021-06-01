@@ -17,6 +17,19 @@ use PHPUnit\Framework\TestCase;
 class OrderCollectionTest extends TestCase
 {
     /**
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     */
+    public function testQuery(): void
+    {
+        $apiKey     = getenv('API_KEY');
+        $collection = OrderCollection::query($apiKey);
+
+        self::assertNotEmpty($collection->toArray());
+    }
+
+    /**
      * Create 3 Orders, each with 3 filled in OrderLines, put them in an OrderCollection and save them.
      *
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -148,19 +161,6 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     */
-    public function testQuery(): void
-    {
-        $apiKey     = getenv('API_KEY');
-        $collection = OrderCollection::query($apiKey);
-
-        self::assertNotEmpty($collection->toArray());
-    }
-
-    /**
      * Compares two arrays but ignores order of keys.
      *
      * @param  array       $array1
@@ -172,6 +172,6 @@ class OrderCollectionTest extends TestCase
         ksort($array1);
         ksort($array2);
 
-        self::assertSame($array1, $array2,$message);
+        self::assertSame($array1, $array2, $message);
     }
 }

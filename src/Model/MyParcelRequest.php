@@ -242,7 +242,7 @@ class MyParcelRequest
      * @param  array|string|null $body
      * @param  string|array      $requestHeaders
      *
-     * @return $this
+     * @return self
      */
     public function setRequestParameters(string $apiKey, $body = null, $requestHeaders = []): self
     {

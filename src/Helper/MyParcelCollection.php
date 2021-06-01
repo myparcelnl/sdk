@@ -174,7 +174,7 @@ class MyParcelCollection extends Collection
     /**
      * @param  AbstractConsignment $consignment
      *
-     * @return $this
+     * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function addConsignment(AbstractConsignment $consignment): self
@@ -337,7 +337,7 @@ class MyParcelCollection extends Collection
      *
      * @param  int $size
      *
-     * @return $this
+     * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -373,7 +373,7 @@ class MyParcelCollection extends Collection
      * @param      $key
      * @param  int $size
      *
-     * @return $this
+     * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -443,7 +443,7 @@ class MyParcelCollection extends Collection
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @return $this
+     * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -556,7 +556,7 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @return $this
+     * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -732,7 +732,7 @@ class MyParcelCollection extends Collection
     /**
      * @param \MyParcelNL\Sdk\src\Helper\MyParcelCollection|\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $sortedCollection
      *
-     * @return $this
+     * @return self
      */
     public function sortByCollection(MyParcelCollection $sortedCollection): self
     {
@@ -760,7 +760,7 @@ class MyParcelCollection extends Collection
      *
      * @param int|array|null $positions
      *
-     * @return $this
+     * @return self
      */
     private function setLabelFormat($positions): self
     {
