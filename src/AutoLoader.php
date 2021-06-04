@@ -25,6 +25,7 @@ require_once(__DIR__ . '/Services/ConsignmentEncode.php');
 require_once(__DIR__ . '/Services/CollectionEncode.php');
 require_once(__DIR__ . '/Model/BaseModel.php');
 require_once(__DIR__ . '/Model/MyParcelRequest.php');
+require_once(__DIR__ . '/Model/Recipient.php');
 require_once(__DIR__ . '/Adapter/ConsignmentAdapter.php');
 require_once(__DIR__ . '/Adapter/DeliveryOptions/AbstractDeliveryOptionsAdapter.php');
 require_once(__DIR__ . '/Adapter/DeliveryOptions/AbstractPickupLocationAdapter.php');
