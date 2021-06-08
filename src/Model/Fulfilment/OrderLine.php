@@ -9,36 +9,50 @@ use MyParcelNL\Sdk\src\Model\BaseModel;
 class OrderLine extends BaseModel
 {
     /**
+     * Arbitrary key/value instructions
+     *
      * @var array
      */
     private $instructions;
 
     /**
+     * Full price in cents, regardless of quantity, excluding VAT.
+     *
      * @var int|null
      */
     private $price;
 
     /**
+     * Full price in cents, regardless of quantity, including VAT.
+     *
      * @var int|null
      */
     private $price_after_vat;
 
     /**
+     * The product in this OrderLine.
+     *
      * @var \MyParcelNL\Sdk\src\Model\Fulfilment\Product
      */
     private $product;
 
     /**
+     * Amount of Products in this OrderLine.
+     *
      * @var int|null
      */
     private $quantity;
 
     /**
+     * Unique identifier from our API. Set after saving the order this OrderLine belongs to.
+     *
      * @var string|null
      */
     private $uuid;
 
     /**
+     * VAT in cents.
+     *
      * @var int|null
      */
     private $vat;

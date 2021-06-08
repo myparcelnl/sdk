@@ -9,51 +9,73 @@ use MyParcelNL\Sdk\src\Model\BaseModel;
 class Product extends BaseModel
 {
     /**
+     * Additional product description.
+     *
      * @var string|null
      */
     private $description;
 
     /**
+     * International Article Number, currently unused.
+     *
+     * @see https://en.wikipedia.org/wiki/International_Article_Number
      * @var string|null
      */
     private $ean;
 
     /**
+     * The unique identifier of the product in your webshop.
+     *
      * @var string|null
      */
     private $external_identifier;
 
     /**
+     * Product height in millimeters
+     *
      * @var int|null
      */
     private $height;
 
     /**
+     * Product length in millimeters.
+     *
      * @var int|null
      */
     private $length;
 
     /**
+     * Product name. Max 40 characters.
+     *
      * @var string|null
      */
     private $name;
 
     /**
+     * Stock Keeping Unit of the product.
+     *
+     * @see https://en.wikipedia.org/wiki/Stock_keeping_unit
      * @var string|null
      */
     private $sku;
 
     /**
+     * Unique identifier from our API.
+     *
      * @var string|null
      */
     private $uuid;
 
     /**
+     * Product weight in grams.
+     *
      * @var int|null
      */
     private $weight;
 
     /**
+     * Product width in millimeters.
+     *
      * @var int|null
      */
     private $width;

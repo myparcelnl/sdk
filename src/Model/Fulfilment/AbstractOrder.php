@@ -15,11 +15,15 @@ class AbstractOrder extends BaseModel
     public const DATE_FORMAT_FULL = 'Y-m-d H:i:s';
 
     /**
+     * The selected delivery options for this order.
+     *
      * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
      */
     protected $delivery_options;
 
     /**
+     * The unique identifier of the order in your webshop.
+     *
      * @var string|null
      */
     protected $external_identifier;
@@ -30,6 +34,8 @@ class AbstractOrder extends BaseModel
     protected $fulfilment_partner_identifier;
 
     /**
+     * Invoice/billing address of the customer.
+     *
      * @var \MyParcelNL\Sdk\src\Model\Recipient
      */
     protected $invoice_address;
@@ -40,6 +46,8 @@ class AbstractOrder extends BaseModel
     protected $language;
 
     /**
+     * The date when the order was placed. Can be a DateTime object or a string in Y-M-d H:i:s format.
+     *
      * @var DateTime|null
      */
     protected $order_date;
@@ -50,6 +58,8 @@ class AbstractOrder extends BaseModel
     protected $order_lines;
 
     /**
+     * Shipping address of the customer.
+     *
      * @var \MyParcelNL\Sdk\src\Model\Recipient
      */
     protected $recipient;
@@ -65,6 +75,8 @@ class AbstractOrder extends BaseModel
     protected $type;
 
     /**
+     * Unique identifier from our API. Set after saving the order.
+     *
      * @var string|null
      */
     protected $uuid;
@@ -239,6 +251,7 @@ class AbstractOrder extends BaseModel
         if (is_string($orderDate)) {
             $orderDate = new DateTime($orderDate);
         }
+
         $this->order_date = $orderDate;
         return $this;
     }
