@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Collection\Fulfilment;
 
+use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
@@ -78,7 +79,7 @@ class OrderCollection extends Collection
                 return [
                     'external_identifier'           => $order->getExternalIdentifier(),
                     'fulfilment_partner_identifier' => $order->getFulfilmentPartnerIdentifier(),
-                    'order_date'                    => $order->getOrderDate()->format(AbstractOrder::DATE_FORMAT_FULL),
+                    'order_date'                    => $order->getOrderDateString(),
                     'invoice_address'               => $order->getInvoiceAddress()->toArrayWithoutNull(),
                     'order_lines'                   => $order->getOrderLines()->toArrayWithoutNull(),
                     'shipment'                      => [
@@ -92,15 +93,21 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
      *
      * @return array
+     * @throws \Exception
      */
     private function getShipmentOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): array
     {
+        $dateTime     = new DateTime($deliveryOptions->getDate());
+        $deliveryDate = $deliveryOptions->getDate()
+            ? $dateTime->format(AbstractOrder::DATE_FORMAT_FULL)
+            : null;
+
         $options = [
             'package_type'  => $deliveryOptions->getPackageTypeId(),
-            'delivery_date' => $deliveryOptions->getDate(),
+            'delivery_date' => $deliveryDate,
         ];
 
         $shipmentOptions = $deliveryOptions->getShipmentOptions();

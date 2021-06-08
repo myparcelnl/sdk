@@ -36,7 +36,7 @@ class CarrierFactory
     {
         switch ($carrierId) {
             case PostNLConsignment::CARRIER_ID:
-                return new PostNLCarrier();
+                return new CarrierPostNL();
             case DPDConsignment::CARRIER_ID:
                 return new CarrierDPD();
             case BpostConsignment::CARRIER_ID:
@@ -56,7 +56,7 @@ class CarrierFactory
     {
         switch ($carrierName) {
             case PostNLConsignment::CARRIER_NAME:
-                return new PostNLCarrier();
+                return new CarrierPostNL();
             case DPDConsignment::CARRIER_NAME:
                 return new CarrierDPD();
             case BpostConsignment::CARRIER_NAME:

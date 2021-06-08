@@ -75,7 +75,7 @@ class MyParcelRequest
     private $query;
 
     /**
-     * @var array|false|mixed
+     * @var array
      */
     private $response;
 
@@ -83,6 +83,14 @@ class MyParcelRequest
      * @var mixed
      */
     private $result;
+
+    /**
+     * @return array
+     */
+    public function getResponse(): array
+    {
+        return $this->response;
+    }
 
     /**
      * @return string|null
@@ -271,18 +279,18 @@ class MyParcelRequest
      */
     private function checkMyParcelErrors(): void
     {
-        if (! is_array($this->result) || empty($this->result['errors'])) {
+        if (! is_array($this->response['response']) || empty($this->response['response']['errors'])) {
             return;
         }
 
         $error            = reset($this->result['errors']);
-        $this->errorCodes = array_keys($error);
+        $this->errorCodes = Arr::pluck($this->response['response']['errors'], 'code');
 
         if ((int) key($error) > 0) {
             $error = current($error);
         }
 
-        $this->error = RequestError::getTotalMessage($error, $this->result);
+        $this->error = RequestError::getTotalMessage($error, $this->response);
     }
 
     /**
@@ -382,18 +390,14 @@ class MyParcelRequest
      */
     private function instantiateCurl(): MyParcelCurl
     {
-        return (new MyParcelCurl())->setConfig(
-            [
+        return (new MyParcelCurl())->setConfig([
                 'header'  => 0,
                 'timeout' => 60,
-            ]
-        )->addOptions(
-            [
+            ])->addOptions([
                 CURLOPT_POST           => true,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_AUTOREFERER    => true,
-            ]
-        );
+            ]);
     }
 
     /**
@@ -406,10 +410,12 @@ class MyParcelRequest
     {
         $response = $request->getResponse();
 
-        if (preg_match('/^%PDF-1./', $response['response'])) {
-            $this->result = $response;
+        if (preg_match('/^%PDF-\d+\.\d+/', $response['response'])) {
+            $this->result   = $response['response'];
+            $this->response = $response;
         } else {
             $response['response'] = json_decode($response['response'], true);
+            $this->response       = $response;
             $this->result         = $response['response'];
 
             if ($this->result === false) {

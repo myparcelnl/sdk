@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\src\Model\Carrier;
 
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
-class PostNLCarrier extends AbstractCarrier
+class CarrierPostNL extends AbstractCarrier
 {
     /**
      * @return int

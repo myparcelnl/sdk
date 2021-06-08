@@ -12,7 +12,7 @@ use MyParcelNL\Sdk\src\Support\Collection;
 
 class AbstractOrder extends BaseModel
 {
-    public const DATE_FORMAT_FULL = 'Y-m-d';
+    public const DATE_FORMAT_FULL = 'Y-m-d H:i:s';
 
     /**
      * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
@@ -115,6 +115,22 @@ class AbstractOrder extends BaseModel
     public function getOrderDate(): ?DateTime
     {
         return $this->order_date;
+    }
+
+    /**
+     * Transform the order date to a string.
+     *
+     * @return string|null
+     */
+    public function getOrderDateString(): ?string
+    {
+        $orderDate = $this->getOrderDate();
+
+        if ($orderDate) {
+            return $orderDate->format(self::DATE_FORMAT_FULL);
+        }
+
+        return null;
     }
 
     /**
@@ -279,7 +295,7 @@ class AbstractOrder extends BaseModel
         return [
             'external_identifier'           => $this->getExternalIdentifier(),
             'fulfilment_partner_identifier' => $this->getFulfilmentPartnerIdentifier(),
-            'order_date'                    => $this->getOrderDate() ? $this->getOrderDate()->format(self::DATE_FORMAT_FULL) : null,
+            'order_date'                    => $this->getOrderDateString(),
             'recipient'                     => $this->getRecipient()->toArray(),
             'invoice_address'               => $this->getInvoiceAddress()->toArray(),
             'order_lines'                   => $this->getOrderLines()->toArray(),

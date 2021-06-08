@@ -121,6 +121,12 @@ class MyParcelCurl
         }
 
         $resource = $this->_getResource();
+
+        $headers  = [];
+        curl_setopt($resource, CURLOPT_HEADERFUNCTION, function ($curl, $headerLine) use (&$headers) {
+            return $this->handleHeaderLine($curl, $headerLine, $headers);
+        });
+
         $response = curl_exec($resource);
 
         // Check the return value of curl_exec()
@@ -143,6 +149,7 @@ class MyParcelCurl
 
         $this->response = [
             'response' => $response,
+            'headers'  => $headers,
             'code'     => curl_getinfo($resource, CURLINFO_RESPONSE_CODE),
         ];
 
@@ -187,6 +194,29 @@ class MyParcelCurl
         curl_multi_close($multihandle);
 
         return $result;
+    }
+
+    /**
+     * @param $curl
+     * @param $header
+     * @param $headers
+     *
+     * @return int
+     * @see https://stackoverflow.com/a/41135574/10225966
+     */
+    public function handleHeaderLine($curl, $header, &$headers): int
+    {
+        $length = strlen($header);
+        $header = explode(':', $header, 2);
+
+        if (count($header) < 2) {
+            return $length;
+        }
+
+        /** @noinspection OffsetOperationsInspection */
+        $headers[strtolower(trim($header[0]))][] = trim($header[1]);
+
+        return $length;
     }
 
     /**
@@ -261,7 +291,7 @@ class MyParcelCurl
         $header  = $this->_config['header'] ?? true;
         $options = [
             CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_HEADER         => $header,
             CURLOPT_FOLLOWLOCATION => 1,
         ];
