@@ -13,6 +13,7 @@ use MyParcelNL\Sdk\src\Support\Collection;
 class AbstractOrder extends BaseModel
 {
     public const DATE_FORMAT_FULL = 'Y-m-d H:i:s';
+    public const DATE_FORMAT_DATE = 'Y-m-d';
 
     /**
      * The selected delivery options for this order.
@@ -132,14 +133,16 @@ class AbstractOrder extends BaseModel
     /**
      * Transform the order date to a string.
      *
+     * @param string $format default DATE_FORMAT_FULL, must be a valid datetime format string
+     *
      * @return string|null
      */
-    public function getOrderDateString(): ?string
+    public function getOrderDateString(string $format = self::DATE_FORMAT_FULL): ?string
     {
         $orderDate = $this->getOrderDate();
 
         if ($orderDate) {
-            return $orderDate->format(self::DATE_FORMAT_FULL);
+            return $orderDate->format($format);
         }
 
         return null;
