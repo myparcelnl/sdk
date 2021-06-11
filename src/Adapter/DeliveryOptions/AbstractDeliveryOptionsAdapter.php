@@ -2,24 +2,35 @@
 
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 abstract class AbstractDeliveryOptionsAdapter
 {
     /**
-     * @var string
+     * @var string|null
+     */
+    protected $carrier;
+
+    /**
+     * @var string|null
      */
     protected $date;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $deliveryType;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $packageType;
+
+    /**
+     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter
+     */
+    protected $pickupLocation;
 
     /**
      * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractShipmentOptionsAdapter|null
@@ -27,14 +38,27 @@ abstract class AbstractDeliveryOptionsAdapter
     protected $shipmentOptions;
 
     /**
-     * @var string|null
+     * @return string
      */
-    protected $carrier;
+    public function getCarrier(): ?string
+    {
+        return $this->carrier;
+    }
 
     /**
-     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter
+     * @return int|null
+     * @throws \Exception
      */
-    protected $pickupLocation;
+    public function getCarrierId(): ?int
+    {
+        if ($this->carrier === null) {
+            return null;
+        }
+
+        $carrier = CarrierFactory::createFromName($this->carrier);
+
+        return $carrier::getId();
+    }
 
     /**
      * @return string
@@ -53,14 +77,6 @@ abstract class AbstractDeliveryOptionsAdapter
     }
 
     /**
-     * @return string
-     */
-    public function getPackageType(): ?string
-    {
-        return $this->packageType;
-    }
-
-    /**
      * @return int|null
      */
     public function getDeliveryTypeId(): ?int
@@ -73,19 +89,23 @@ abstract class AbstractDeliveryOptionsAdapter
     }
 
     /**
-     * @return AbstractShipmentOptionsAdapter|null
+     * @return string
      */
-    public function getShipmentOptions(): ?AbstractShipmentOptionsAdapter
+    public function getPackageType(): ?string
     {
-        return $this->shipmentOptions;
+        return $this->packageType;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getCarrier(): ?string
+    public function getPackageTypeId(): ?int
     {
-        return $this->carrier;
+        if ($this->packageType === null) {
+            return null;
+        }
+
+        return AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType];
     }
 
     /**
@@ -94,6 +114,14 @@ abstract class AbstractDeliveryOptionsAdapter
     public function getPickupLocation(): ?AbstractPickupLocationAdapter
     {
         return $this->pickupLocation;
+    }
+
+    /**
+     * @return AbstractShipmentOptionsAdapter|null
+     */
+    public function getShipmentOptions(): ?AbstractShipmentOptionsAdapter
+    {
+        return $this->shipmentOptions;
     }
 
     /**
@@ -106,7 +134,8 @@ abstract class AbstractDeliveryOptionsAdapter
         }
 
         return in_array(
-            $this->deliveryType, [
+            $this->deliveryType,
+            [
                 AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
                 AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
             ]

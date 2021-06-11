@@ -22,7 +22,6 @@ class TrackTraceUrlTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @covers \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment::TrackTraceUrl
      * @dataProvider additionProvider()
      *
      * @param $barcode
