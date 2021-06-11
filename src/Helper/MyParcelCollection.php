@@ -14,10 +14,11 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use Exception;
-use http\Exception\BadMethodCallException;
+use BadMethodCallException;
+use Closure;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
+use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
@@ -32,12 +33,14 @@ use MyParcelNL\Sdk\src\Support\Str;
 /**
  * Stores all data to communicate with the MyParcel API
  *
- * Class MyParcelCollection
+ * @property \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $items
  */
 class MyParcelCollection extends Collection
 {
-    const PREFIX_PDF_FILENAME = 'myparcel-label-';
-    const DEFAULT_A4_POSITION = 1;
+    use HasUserAgent;
+
+    private const PREFIX_PDF_FILENAME = 'myparcel-label-';
+    private const DEFAULT_A4_POSITION = 1;
 
     /**
      * @var string
@@ -71,11 +74,6 @@ class MyParcelCollection extends Collection
     private $label_pdf;
 
     /**
-     * @var string
-     */
-    private static $user_agent;
-
-    /**
      * @param bool $keepKeys
      *
      * @return AbstractConsignment[]
@@ -93,7 +91,6 @@ class MyParcelCollection extends Collection
      * Get one consignment
      * @return mixed
      *
-     * @throws BadMethodCallException
      */
     public function getOneConsignment()
     {
@@ -107,10 +104,9 @@ class MyParcelCollection extends Collection
     /**
      * @param string|null $id
      *
-     * @return MyParcelCollection
-     * @throws InvalidArgumentException
+     * @return self
      */
-    public function getConsignmentsByReferenceId($id): MyParcelCollection
+    public function getConsignmentsByReferenceId($id): self
     {
         if ($id === null) {
             throw new InvalidArgumentException('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
@@ -126,9 +122,9 @@ class MyParcelCollection extends Collection
     /**
      * @param $groupId
      *
-     * @return MyParcelCollection
+     * @return self
      */
-    public function getConsignmentsByReferenceIdGroup($groupId): MyParcelCollection
+    public function getConsignmentsByReferenceIdGroup($groupId): self
     {
         return $this->findByReferenceIdGroup($groupId);
     }
@@ -139,7 +135,6 @@ class MyParcelCollection extends Collection
      * @param $id
      *
      * @return mixed
-     * @throws Exception
      * @deprecated Use getConsignmentsByReferenceId()->first() instead
      *
      */
@@ -177,12 +172,12 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param AbstractConsignment $consignment
+     * @param  AbstractConsignment $consignment
      *
-     * @return $this
-     * @throws MissingFieldException
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignment(AbstractConsignment $consignment)
+    public function addConsignment(AbstractConsignment $consignment): self
     {
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
@@ -196,13 +191,13 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param int[]  $ids
-     * @param string $apiKey
+     * @param  int[]  $ids
+     * @param  string $apiKey
      *
      * @return self
-     * @throws Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignmentByConsignmentIds($ids, $apiKey)
+    public function addConsignmentByConsignmentIds($ids, $apiKey): self
     {
         foreach ($ids as $consignmentId) {
             $consignment = (new AbstractConsignment())
@@ -216,13 +211,13 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param string[] $ids
-     * @param string   $apiKey
+     * @param  string[] $ids
+     * @param  string   $apiKey
      *
      * @return self
-     * @throws Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function addConsignmentByReferenceIds($ids, $apiKey)
+    public function addConsignmentByReferenceIds($ids, $apiKey): self
     {
         foreach ($ids as $referenceId) {
             $consignment = (new AbstractConsignment())
@@ -239,23 +234,20 @@ class MyParcelCollection extends Collection
      * @param AbstractConsignment $consignment
      * @param                     $amount
      *
-     * @return MyParcelCollection
+     * @return self
      */
     public function addMultiCollo(AbstractConsignment $consignment, $amount): self
     {
-        $i = 1;
-
         if ($amount > 1) {
             $consignment->setMultiCollo();
         }
 
-        if ($consignment->isPartOfMultiCollo() && null == $consignment->getReferenceId()) {
-            $consignment->setReferenceId('random_multi_collo_' . uniqid());
+        if ($consignment->isPartOfMultiCollo() && ! $consignment->getReferenceId()) {
+            $consignment->setReferenceId('random_multi_collo_' . uniqid('', true));
         }
 
-        while ($i <= $amount) {
+        for ($i = 1; $i <= $amount; $i++) {
             $this->push($consignment);
-            $i++;
         }
 
         return $this;
@@ -265,23 +257,24 @@ class MyParcelCollection extends Collection
      * Create concepts in MyParcel.
      *
      * @return  $this
-     * @throws MissingFieldException
-     * @throws ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function createConcepts(): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
 
-        /* @var $consignments MyParcelCollection */
+        /* @var MyParcelCollection $consignments */
         foreach ($this->where('consignment_id', null)->groupBy('api_key') as $consignments) {
             $data    = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
-                ->setUserAgent($this->getUserAgent())
+                ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
-                    $consignments->first()->api_key,
+                    $consignments->first()->apiKey,
                     $data,
-                    MyParcelRequest::REQUEST_HEADER_SHIPMENT
+                    MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT
                 )
                 ->sendRequest();
 
@@ -316,19 +309,20 @@ class MyParcelCollection extends Collection
      * Delete concepts in MyParcel
      *
      * @return  $this
-     * @throws  Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function deleteConcepts()
+    public function deleteConcepts(): self
     {
-        /* @var $consignments AbstractConsignment[] */
+        /* @var AbstractConsignment[] $consignments */
         foreach ($this->groupBy('api_key')->where('consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
                 (new MyParcelRequest())
-                    ->setUserAgent($this->getUserAgent())
+                    ->setUserAgents($this->getUserAgent())
                     ->setRequestParameters(
                         $key,
-                        (string) $consignment->getConsignmentId(),
-                        MyParcelRequest::REQUEST_HEADER_DELETE
+                        (string) $consignment->getConsignmentId()
                     )
                     ->sendRequest('DELETE');
             }
@@ -339,25 +333,25 @@ class MyParcelCollection extends Collection
 
     /**
      * Get all current data
-     *
      * Set id and run this function to update all the information about this shipment
      *
-     * @param int $size
+     * @param  int $size
      *
-     * @return $this
-     * @throws Exception
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setLatestData($size = 300)
+    public function setLatestData($size = 300): self
     {
         $myParcelRequest = new MyParcelRequest();
         $params          = $myParcelRequest->getLatestDataParams($size, $this, $key);
 
         $request = $myParcelRequest
-            ->setUserAgent($this->getUserAgent())
+            ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
                 $key,
-                $params,
-                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
+                $params
             )
             ->sendRequest('GET');
 
@@ -376,16 +370,16 @@ class MyParcelCollection extends Collection
     /**
      * Get all the information about the last created shipments
      *
-     * @param     $key
-     * @param int $size
+     * @param      $key
+     * @param  int $size
      *
-     * @return $this
-     * @throws ApiException
-     * @throws MissingFieldException
-     * @throws Exception
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
      */
-    public function setLatestDataWithoutIds($key, $size = 300)
+    public function setLatestDataWithoutIds($key, $size = 300): self
     {
         $params = ['size' => $size];
 
@@ -395,16 +389,18 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param int $positions The position of the label on an A4 sheet. Set to false to create an A6 sheet.
+     * @param  int $positions           The position of the label on an A4 sheet. Set to false to create an A6 sheet.
      *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
      *                                  not specify an array, but specify a number, the following labels will fill the
      *                                  ascending positions. Positioning is only applied on the first page with labels.
      *                                  All subsequent pages will use the default positioning [1,2,3,4].
      *
-     * @return $this
-     * @throws Exception
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION)
+    public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
         $urlLocation = 'pdfs';
 
@@ -422,11 +418,10 @@ class MyParcelCollection extends Collection
 
         if ($key) {
             $request = (new MyParcelRequest())
-                ->setUserAgent($this->getUserAgent())
+                ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    implode(';', $conceptIds) . '/' . $this->getRequestBody(),
-                    MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_LINK
+                    implode(';', $conceptIds) . '/' . $this->getRequestBody()
                 )
                 ->sendRequest('GET', $requestType);
 
@@ -440,19 +435,20 @@ class MyParcelCollection extends Collection
 
     /**
      * Receive label PDF
-     *
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param int $positions The position of the label on an A4 sheet. You can specify multiple positions by
+     * @param  int $positions           The position of the label on an A4 sheet. You can specify multiple positions by
      *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
      *                                  number, the following labels will fill the ascending positions. Positioning is
      *                                  only applied on the first page with labels. All subsequent pages will use the
      *                                  default positioning [1,2,3,4].
      *
-     * @return $this
-     * @throws Exception
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION)
+    public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
         /** If $positions is not false, set paper size to A4 */
         $this
@@ -462,16 +458,17 @@ class MyParcelCollection extends Collection
 
         if ($key) {
             $request = (new MyParcelRequest())
-                ->setUserAgent($this->getUserAgent())
+                ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
                     implode(';', $conceptIds) . '/' . $this->getRequestBody(),
-                    MyParcelRequest::REQUEST_HEADER_RETRIEVE_LABEL_PDF
+                    MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
                 ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
             $this->label_pdf = $request->getResult();
         }
+
         $this->setLatestData();
 
         return $this;
@@ -480,15 +477,17 @@ class MyParcelCollection extends Collection
     /**
      * Download labels
      *
-     * @param bool $inline_download
+     * @param  bool $inline_download
      *
      * @return void
-     * @throws Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function downloadPdfOfLabels($inline_download = false)
+    public function downloadPdfOfLabels($inline_download = false): void
     {
-        if ($this->label_pdf == null) {
-            throw new MissingFieldException('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
+        if (! $this->label_pdf) {
+            throw new MissingFieldException(
+                'First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()'
+            );
         }
 
         header('Content-Type: application/pdf');
@@ -505,14 +504,15 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @param bool          $sendMail
-     * @param \Closure|null $modifier
+     * @param  bool          $sendMail
+     * @param  \Closure|null $modifier
      *
-     * @return $this
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function generateReturnConsignments(bool $sendMail, \Closure $modifier = null): self
+    public function generateReturnConsignments(bool $sendMail, Closure $modifier = null): self
     {
         // Be sure consignments are created
         $this->createConcepts();
@@ -522,17 +522,16 @@ class MyParcelCollection extends Collection
 
         $data        = $this->apiEncodeReturnShipments($returnConsignments);
         $apiKey      = $returnConsignments[0]->getApiKey();
-        $requestType = MyParcelRequest::REQUEST_TYPE_SHIPMENTS;
 
         $request = (new MyParcelRequest())
-            ->setUserAgent($this->getUserAgent())
+            ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
                 $apiKey,
                 $data,
-                MyParcelRequest::REQUEST_HEADER_RETURN
+                MyParcelRequest::HEADER_CONTENT_TYPE_RETURN_SHIPMENT
             )
             ->setQuery(['send_return_mail' => (int) $sendMail])
-            ->sendRequest('POST', $requestType);
+            ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_SHIPMENTS);
 
         $result = $request->getResult();
 
@@ -557,9 +556,10 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @return $this
-     * @throws ApiException
-     * @throws MissingFieldException
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @deprecated Use generateReturnConsignments instead
      */
     public function sendReturnLabelMails(): self
@@ -591,67 +591,17 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getRequestBody()
-    {
-        $body = $this->paper_size == 'A4' ? '?format=A4&positions=' . $this->label_position : '?format=A6';
-
-        return $body;
-    }
-
-    /**
      * @return string
      */
-    public function getUserAgent()
+    public function getRequestBody(): string
     {
-        return $this::$user_agent;
-    }
-
-    /**
-     * @param string      $platform
-     * @param string|null $version
-     *
-     * @return self
-     * @internal param string $user_agent
-     * @deprecated Use setCustomUserAgent instead
-     */
-    public function setUserAgent(string $platform, string $version = null): self
-    {
-        $this::$user_agent = 'MyParcel-' . $platform;
-        if ($version !== null) {
-            $this::$user_agent .= '/' . str_replace('v', '', $version);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param  array $userAgentMap
-     *
-     * @return self
-     */
-    public function setUserAgents(array $userAgentMap): self
-    {
-        $userAgents = [];
-
-        foreach ($userAgentMap as $key => $value) {
-            if (Str::startsWith($value, 'v')) {
-                $value = str_replace('v', '', $value);
-            }
-
-            $userAgents[] = $key . '/' . $value;
-        }
-
-        self::$user_agent = implode(' ', $userAgents);
-
-        return $this;
+        return $this->paper_size === 'A4' ? '?format=A4&positions=' . $this->label_position : '?format=A6';
     }
 
     /**
      * Clear this collection
      */
-    public function clearConsignmentsCollection()
+    public function clearConsignmentsCollection(): void
     {
         $this->items = [];
     }
@@ -659,19 +609,19 @@ class MyParcelCollection extends Collection
     /**
      * To search and filter consignments by certain values
      *
-     * @param string $apiKey
-     * @param mixed  $parameters May be an array or object containing properties.
-     *                           If query_data is an array, it may be a simple one-dimensional structure,
-     *                           or an array of arrays (which in turn may contain other arrays).
-     *                           If query_data is an object, then only public properties will be incorporated
-     *                           into the result.
+     * @param  string $apiKey
+     * @param  mixed  $parameters May be an array or object containing properties.
+     *                            If query_data is an array, it may be a simple one-dimensional structure,
+     *                            or an array of arrays (which in turn may contain other arrays).
+     *                            If query_data is an object, then only public properties will be incorporated
+     *                            into the result.
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \Exception
      */
-    public static function query(string $apiKey, $parameters): MyParcelCollection
+    public static function query(string $apiKey, $parameters): self
     {
         $collection = new static();
 
@@ -683,11 +633,7 @@ class MyParcelCollection extends Collection
         }
 
         $request = (new MyParcelRequest())
-            ->setRequestParameters(
-                $apiKey,
-                null,
-                MyParcelRequest::REQUEST_HEADER_RETRIEVE_SHIPMENT
-            )
+            ->setRequestParameters($apiKey)
             ->setQuery($parameters)
             ->sendRequest('GET');
 
@@ -704,25 +650,29 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param int    $id
-     * @param string $apiKey
+     * @param  int    $id
+     * @param  string $apiKey
      *
-     * @return MyParcelCollection
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public static function find(int $id, string $apiKey): MyParcelCollection
+    public static function find(int $id, string $apiKey): self
     {
         return self::findMany([$id], $apiKey);
     }
 
     /**
-     * @param array  $consignmentIds
-     * @param string $apiKey
+     * @param  array  $consignmentIds
+     * @param  string $apiKey
      *
-     * @return MyParcelCollection
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public static function findMany(array $consignmentIds, string $apiKey): MyParcelCollection
+    public static function findMany(array $consignmentIds, string $apiKey): self
     {
         $collection = new static();
 
@@ -740,25 +690,29 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param string $id
-     * @param string $apiKey
+     * @param  string $id
+     * @param  string $apiKey
      *
-     * @return MyParcelCollection
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public static function findByReferenceId(string $id, string $apiKey): MyParcelCollection
+    public static function findByReferenceId(string $id, string $apiKey): self
     {
         return self::findManyByReferenceId([$id], $apiKey);
     }
 
     /**
-     * @param array  $referenceIds
-     * @param string $apiKey
+     * @param  array  $referenceIds
+     * @param  string $apiKey
      *
-     * @return MyParcelCollection
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public static function findManyByReferenceId(array $referenceIds, string $apiKey): MyParcelCollection
+    public static function findManyByReferenceId(array $referenceIds, string $apiKey): self
     {
         $collection = new static();
 
@@ -778,9 +732,9 @@ class MyParcelCollection extends Collection
     /**
      * @param \MyParcelNL\Sdk\src\Helper\MyParcelCollection|\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $sortedCollection
      *
-     * @return $this
+     * @return self
      */
-    public function sortByCollection(MyParcelCollection $sortedCollection): MyParcelCollection
+    public function sortByCollection(MyParcelCollection $sortedCollection): self
     {
         $result = new MyParcelCollection();
 
@@ -806,9 +760,9 @@ class MyParcelCollection extends Collection
      *
      * @param int|array|null $positions
      *
-     * @return $this
+     * @return self
      */
-    private function setLabelFormat($positions)
+    private function setLabelFormat($positions): self
     {
         /** If $positions is not false, set paper size to A4 */
         if (is_numeric($positions)) {
@@ -858,10 +812,10 @@ class MyParcelCollection extends Collection
     /**
      * @param $result
      *
-     * @return MyParcelCollection
-     * @throws Exception
+     * @return self
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function getNewCollectionFromResult($result)
+    private function getNewCollectionFromResult($result): self
     {
         $newCollection = new static();
         /** @var AbstractConsignment $consignment */
@@ -891,8 +845,8 @@ class MyParcelCollection extends Collection
     private function addMissingReferenceId(): void
     {
         $this->transform(function (AbstractConsignment $consignment) {
-            if (null == $consignment->getReferenceId()) {
-                $consignment->setReferenceId('random_' . uniqid());
+            if (!$consignment->getReferenceId()) {
+                $consignment->setReferenceId('random_' . uniqid('', true));
             }
 
             return $consignment;
@@ -902,9 +856,9 @@ class MyParcelCollection extends Collection
     /**
      * @param mixed $id
      *
-     * @return MyParcelCollection
+     * @return self
      */
-    private function findByReferenceIdGroup($id): MyParcelCollection
+    private function findByReferenceIdGroup($id): self
     {
         return $this->filter(function ($consignment) use ($id) {
             /**
@@ -922,7 +876,7 @@ class MyParcelCollection extends Collection
      *
      * @return array|AbstractConsignment[]
      */
-    private function getReturnConsignments(array $parentConsignments, ?\Closure $modifier): array
+    private function getReturnConsignments(array $parentConsignments, ?Closure $modifier): array
     {
         $returnConsignments = [];
 
