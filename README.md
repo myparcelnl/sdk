@@ -1,8 +1,6 @@
-<p align="center">
-    <a href="https://packagist.org/packages/myparcelnl/sdk"><img src="https://img.shields.io/packagist/dt/myparcelnl/sdk" alt="Total Downloads"></a>
-    <a href="https://github.com/myparcelnl/sdk/releases"><img src="https://img.shields.io/packagist/v/myparcelnl/sdk" alt="Latest Stable Version"></a>
-    <a href="https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM"> <img src="https://img.shields.io/badge/Slack-Chat%20with%20us-white?logo=slack&labelColor=blue" alt="Slack support" target="_black"></a>	
-</p>
+<a href="https://packagist.org/packages/myparcelnl/sdk" target="_blank"><img src="https://img.shields.io/packagist/dt/myparcelnl/sdk" alt="Total Downloads"></a>
+<a href="https://github.com/myparcelnl/sdk/releases" target="_blank"><img src="https://img.shields.io/packagist/v/myparcelnl/sdk" alt="Latest Stable Version"></a>
+<a href="https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM" target="_blank"><img src="https://img.shields.io/badge/Slack-Chat%20with%20us-white?logo=slack&labelColor=blue" alt="Slack support"></a>	
 
 # MyParcel SDK
 This SDK connects to the MyParcel API using PHP.
@@ -26,6 +24,8 @@ Do you want to be kept informed of new functionalities or do you just need help?
     - [Query consignments](#query-consignments)
     - [Retrieve data from a consignment](#retrieve-data-from-a-consignment)
     - [Create and download label(s)](#create-and-download-labels)
+    - [Orders](#orders)
+      - [Create and save orders](#create-and-save-orders)
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
     - [Helpers](#helpers)
@@ -334,6 +334,169 @@ Instead of `findByReferenceId()` you can also use `findManyByReferenceId()`, `fi
 
 More information: https://myparcelnl.github.io/api/#6_F
 
+### Orders
+
+#### Create and save orders
+Start by creating an `OrderCollection` and setting your API key:
+```php
+use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderCollection;
+
+$orderCollection = (new OrderCollection())
+    ->setApiKey('api_key_from_MyParcel_backoffice');
+```
+
+Define the billing and shipping addresses of the order with the `Recipient` class.
+```php
+use MyParcelNL\Sdk\src\Model\Recipient;
+
+$address = (new Recipient())
+    ->setCompany('MyParcel')
+    ->setPerson('Ms. Parcel')
+    ->setEmail('ms@myparcel.nl')
+    ->setPhone('0233030315')
+    // Note: This field includes house number and number suffix.
+    ->setStreet('Antareslaan 31')
+    ->setPostalCode('2132JE')
+    ->setCity('Hoofddorp')
+    ->setCc('NL');
+```
+
+Create an `Order`:
+```php
+use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
+
+$order = (new Order())
+    // The unique identifier of the order in your webshop.
+    ->setExternalIdentifier('set_external_identifier')
+    // Shipping address of the customer.
+    ->setRecipient($shippingAddress)
+    // Invoice/billing address of the customer.
+    ->setInvoiceAddress($billingAddress)
+    // The delivery options. Must be an instance of AbstractDeliveryOptionsAdapter.
+    ->setDeliveryOptions($deliveryOptions)
+    // The date when the order was placed. Can be a DateTime object or a string in Y-M-d H:i:s format.
+    ->setOrderDate(new DateTime());
+```
+
+To create order lines, you'll probably want to loop over the order lines from the order in your webshop. Every Order should contain one or more order lines.
+```php
+use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
+
+$orderLine = (new OrderLine())
+    // Full price in cents, regardless of quantity, excluding VAT.
+    ->setPrice(1972)
+    // Full price in cents, regardless of quantity, including VAT.
+    ->setPriceAfterVat(2495)
+    // VAT in cents.
+    ->setVat(523)
+    // Amount of Products in this OrderLine.
+    ->setQuantity(3)
+    // Arbitrary key/value instructions. Currently unused.
+    ->setInstructions([
+        'wrapping' => 'the blue one with kittens on it'
+    ]);
+```
+
+An order line stores its product data in `Product`. You can set product data in two different ways:
+
+By getting the `Product` and setting properties on there. When an `OrderLine` is created an empty `Product` is always created:
+```php
+$orderLine->getProduct()
+     // Product name.
+    ->setName('Long Sleeved Button Up Shirt')
+    // Additional product description.
+    ->setDescription('White and blue')
+    // Stock Keeping Unit of the product.
+    ->setSku('MYPA-0012345')
+    // The unique identifier of the product in your webshop software.
+    ->setExternalIdentifier('#0001394')
+    // Weight in grams
+    ->setWeight(0)
+    // Height in millimeters
+    ->setHeight(0)
+    // Length in millimeters
+    ->setLength(0)
+    // Width in millimeters
+    ->setWidth(0);
+```
+
+Or by creating a `Product` separately and using `OrderLine::setProduct()`.
+```php
+use MyParcelNL\Sdk\src\Model\Fulfilment\Product;
+
+$product = new Product();
+// You can use the same setters from the example above.
+
+$orderLine->setProduct($product);
+```
+
+Finally, add the created OrderLine to the order:
+```php
+$order->getOrderLines()->push($orderLine);
+```
+
+And add the order to the OrderCollection
+```php
+$orderCollection->push($order);
+```
+
+When the order is complete, save it to our API by using the `save` method.
+```php
+$savedOrderCollection = $orderCollection->save();
+```
+
+##### Full example
+```php
+use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderCollection;
+use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
+use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
+use MyParcelNL\Sdk\src\Model\Recipient;
+
+$orderCollection = (new OrderCollection())
+    ->setApiKey('api_key_from_MyParcel_backoffice');
+
+$customerAddress = (new Recipient())
+    ->setCompany('MyParcel')
+    ->setPerson('Ms. Parcel')
+    ->setEmail('ms@myparcel.nl')
+    ->setPhone('0233030315')
+    ->setStreet('Antareslaan 31')
+    ->setPostalCode('2132JE')
+    ->setCity('Hoofddorp')
+    ->setCc('NL');
+
+$order = (new Order())
+    ->setExternalIdentifier('set_external_identifier')
+    ->setFulfilmentPartnerIdentifier('set_fulfilment_partner_identifier')
+    ->setRecipient($customerAddress)
+    ->setInvoiceAddress($customerAddress)
+    ->setDeliveryOptions($deliveryOptions)
+    ->setOrderDate(new DateTime());
+
+foreach ($orderLines as $orderLineData) {
+    $orderLine = (new OrderLine())
+        ->setPrice(1972)
+        ->setPriceAfterVat(2495)
+        ->setVat(523)
+        ->setQuantity(3)
+        ->setInstructions([
+            'wrapping' => 'the blue one with kittens on it'
+        ]);
+        
+    $orderLine->getProduct()
+        ->setWeight(10)
+        ->setHeight(4)
+        ->setLength(12)
+        ->setWidth(100);
+
+    $order->getOrderLines()->push($orderLine);
+}
+
+$orderCollection->push($order);
+
+$savedOrderCollection = $orderCollection->save();
+```
+
 ## List of classes and their methods
 This is a list of all the classes in this SDK and their available methods.
 
@@ -598,9 +761,9 @@ This SDK is not only useful for communicating with MyParcel. This package also c
 If you use arrays a lot, Collections are usually better to work with. ([documentation](https://laravel.com/docs/5.7/collections))
 \MyParcelNL\Sdk\src\Support\Collection()
 
-### Helpers
-* \MyParcelNL\Sdk\src\Support\Arr ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
-* \MyParcelNL\Sdk\src\Support\Str ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
+### Other helpers
+* `\MyParcelNL\Sdk\src\Support\Arr` ([documentation](https://laravel.com/docs/5.7/helpers#arrays))
+* `\MyParcelNL\Sdk\src\Support\Str` ([documentation](https://laravel.com/docs/5.7/helpers#method-camel-case))
 * `\MyParcelNL\Sdk\src\Helper\SplitStreet::splitStreet('Plein 1940-45 3b'))`
 
 ## Contribute

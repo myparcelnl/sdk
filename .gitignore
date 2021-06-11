@@ -1,4 +1,7 @@
-.idea
 *.DS_Store
-vendor
+.php_cs.cache
 composer.lock
+
+.idea
+coverage
+vendor
