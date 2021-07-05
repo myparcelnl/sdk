@@ -20,7 +20,7 @@ class ValidateStreet
         '(?P<number_suffix>' .
         '[a-z]{1}-?\d{1,3}|' .            // Numbers suffix starts with a letter with optional - followed by numbers or
         '-\d{1,4}|' .                     // starts with - and has up to 4 numbers or
-        '\d{2}\w{1,2}|' .                 // starts with 2 numbers followed by letters or
+        '\d{2}\w{1,2}?|' .                // starts with 2 numbers followed by optional letters or
         '[a-z]{1}[a-z\s]{0,3}' .          // has up to 4 letters with a space
         ')?$~i';
 
