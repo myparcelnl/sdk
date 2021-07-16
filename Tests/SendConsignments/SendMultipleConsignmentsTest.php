@@ -66,7 +66,7 @@ class SendMultipleConsignmentsTest extends TestCase
 
         $this->assertEquals(
             true,
-            preg_match("#^" . MyParcelRequest::REQUEST_URL . "/pdfs#", $myParcelCollection->getLinkOfLabels()),
+            preg_match("#^" . (new MyParcelRequest())->getRequestUrl() . "/pdfs#", $myParcelCollection->getLinkOfLabels()),
             'Can\'t get link of PDF'
         );
 
