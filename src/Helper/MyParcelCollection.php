@@ -425,7 +425,7 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest('GET', $requestType);
 
-            $this->label_link = (new MyParcelRequest())->getRequestUrl(). $request->getResult("data.$urlLocation.url");
+            $this->label_link = (new MyParcelRequest())->getRequestUrl() . $request->getResult("data.$urlLocation.url");
         }
 
         $this->setLatestData();
