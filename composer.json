@@ -5,9 +5,7 @@
   "homepage": "https://www.myparcel.nl",
   "keywords": [
     "MyParcel",
-    "My Parcel",
     "Flespakket",
-    "Post NL",
     "PostNL"
   ],
   "license": "GPL-3.0-or-later",
@@ -35,14 +33,19 @@
     "php": ">=7.1.0"
   },
   "require-dev": {
-    "fakerphp/faker": "^1.15.0",
-    "phpunit/phpunit": "^5.5",
+    "fakerphp/faker": "^v1.16.0",
+    "phpunit/phpunit": "^7.5.20",
     "psr/container": "~1.0.0"
   },
   "autoload": {
     "psr-4": {
       "MyParcelNL\\Sdk\\src\\": "src",
       "MyParcelNL\\Sdk\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MyParcelNL\\Sdk\\Test\\": "Test"
     }
   }
 }

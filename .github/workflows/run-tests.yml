@@ -1,0 +1,45 @@
+name: '🧪 Run tests'
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request: ~
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: myparcelnl/actions/build-docker-image@v1
+        id: docker
+        with:
+          image: myparcel/sdk
+          build_args: --target test
+
+      - name: 'Create .env file'
+        run: |
+          cat << EOF > .env
+          CI=${CI}
+          API_KEY_NL=${{ secrets.API_KEY_NL }}
+          API_KEY_BE=${{ secrets.API_KEY_BE }}
+          EOF
+
+      - name: 'Run tests'
+        run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
+
+  release:
+    name: 'Release'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - test
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: myparcelnl/actions/npm-install@v1
+
+      - name: 'Run semantic release'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
