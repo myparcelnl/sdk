@@ -90,8 +90,8 @@ class MyParcelCollection extends Collection
 
     /**
      * Get one consignment
-     * @return mixed
      *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function getOneConsignment()
     {
