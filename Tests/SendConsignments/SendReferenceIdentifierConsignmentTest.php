@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\tests\SendConsignments\SendReferenceIdentifierConsignme
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 
 /**
@@ -61,9 +62,9 @@ class SendReferenceIdentifierConsignmentTest extends \PHPUnit\Framework\TestCase
             $myParcelCollection->createConcepts();
 
             /**
-             * @var $savedConsignment AbstractConsignment
+             * @var AbstractConsignment $savedConsignment
              */
-            $savedConsignment = (new AbstractConsignment())
+            $savedConsignment = (new BaseConsignment())
                 ->setApiKey($consignmentTest['api_key'])
                 ->setReferenceId($consignmentTest['reference_identifier']);
             $savedCollection  = (new MyParcelCollection())

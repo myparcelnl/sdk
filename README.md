@@ -16,6 +16,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
     - [Installation without Composer](#installation-without-composer)
 - [Quick start and examples](#quick-start-and-examples)
     - [Create a consignment](#create-a-consignment)
+        - [Using multiple carriers](#using-multiple-carriers)
     - [Create multiple consignments](#create-multiple-consignments)
     - [Create return in the box](#create-return-in-the-box)
     - [Label format and position](#label-format-and-position)
@@ -26,6 +27,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
     - [Create and download label(s)](#create-and-download-labels)
     - [Orders](#orders)
       - [Create and save orders](#create-and-save-orders)
+    - [Filling in required drop off point for RedJePakketje](#filling-in-required-drop-off-point-for-redjepakketje)
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
     - [Helpers](#helpers)
@@ -72,8 +74,8 @@ This example uses only the required methods to create a shipment and download it
 
 ```php
 $consignment = (ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
-    ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setReferenceId('order-146')
+    ->setApiKey('api_key_from_backoffice')
+    ->setReferenceIdentifier('order-146')
     ->setCountry('NL')
     ->setPerson('Piet Hier')
     ->setFullStreet('Plein 1945 55b')
@@ -91,6 +93,53 @@ $consignmentId = $consignments->first()->getConsignmentId();
 $consignments->downloadPdfOfLabels();
 ```
 
+### Using multiple carriers
+It is possible to use multiple carriers. The following carriers are supported:
+
+| Name          | Carrier class                        | Consignment class                            | 
+| ---           | ---                                  | ---                                          | 
+| PostNL        | `Model\Carrier\CarrierPostNL`        | `Model\Consignment\PostNLConsignment`        | 
+| Bpost         | `Model\Carrier\CarrierBpost`         | `Model\Consignment\BpostConsignment`         | 
+| DPD           | `Model\Carrier\CarrierDPD`           | `Model\Consignment\DPDConsignment`           | 
+| RedJePakketje | `Model\Carrier\CarrierRedJePakketje` | `Model\Consignment\RedJePakketjeConsignment` | 
+
+Please note, RedJePakketje is only available in the Netherlands as of now, and can only ship to Dutch addresses.
+You can query which carriers are available like so:
+
+```php
+$options = (new CarrierOptionsWebService())
+    ->setApiKey('api_key_from_backoffice')
+    ->getCarrierOptions('shop_id');
+```
+
+You can get the required shop_id from the accounts webservice, the only shop returned will be the shop belonging to the api key that is used.
+Since the shop_id will not change unless the api key changes, we advise you to store the shop_id until the user updates the api key.
+```php
+$shop_id = (new AccountWebService())
+    ->setApiKey('api_key_from_backoffice')
+    ->getAccount()
+    ->getShops()
+    ->first()
+    ->getId();
+```
+
+#### Create a consignment for each carrier manually:
+```php
+$postNLConsignment        = new \MyParcelNL\Sdk\Model\Consignment\PostNLConsignment();
+$bpostConsignment         = new \MyParcelNL\Sdk\Model\Consignment\BpostConsignment();
+$dpdConsignment           = new \MyParcelNL\Sdk\Model\Consignment\DPDConsignment();
+$redJePakketjeConsignment = new \MyParcelNL\Sdk\Model\Consignment\RedJePakketjeConsignment();
+```
+
+Or by using `\MyParcelNL\Sdk\src\Factory\ConsignmentFactory` with a carrier id or name, allowing for it to be dynamic:
+```php
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
+
+$postNLConsignment = ConsignmentFactory::createByCarrierId(CarrierPostNL::getId());
+$bpostConsignment  = ConsignmentFactory::createByCarrierName(CarrierBpost::getName());
+```
+
 ### Create multiple consignments
 This example creates multiple consignments by adding them to one ```MyParcelCollection()``` and then creates and downloads one PDF with all labels.
 
@@ -103,8 +152,8 @@ $consignments = (new MyParcelCollection())
 foreach ($yourShipments as $yourShipment) {
 
     $consignment = ((ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
-        ->setApiKey('api_key_from_MyParcel_backoffice')
-        ->setReferenceId($yourShipment['reference_id'])
+        ->setApiKey('api_key_from_backoffice')
+        ->setReferenceIdentifier($yourShipment['reference_id'])
         ->setPerson($yourShipment['name'])
         ->setPostalCode($yourShipment['postal_code'])
         ->setFullStreet($yourShipment['full_street']) 
@@ -127,7 +176,7 @@ $consignments = new MyParcelCollection();
 foreach ($yourShipments as $yourShipment) {
 
     $consignment = ((ConsignmentFactory::createByCarrierId(PostNLConsignment::CARRIER_ID))
-        ->setApiKey('api_key_from_MyParcel_backoffice')
+        ->setApiKey('api_key_from_backoffice')
         ->setCountry($yourShipment['cc'])
         ->setPerson($yourShipment['person'])
         ->setCompany($yourShipment['company'])
@@ -158,20 +207,6 @@ foreach ($yourShipments as $yourShipment) {
         );
 }
 ```
-
-### Different carriers
-It is possible to use multiple carriers, for this you need to use:\
-`((ConsignmentFactory::createByCarrierId (PostNLConsignment::CARRIER_ID))`
-
-The following carriers are supported:
-- PostNL: `\MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment::CARRIER_ID`
-- bpost: `\MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment::CARRIER_ID`
-- DPD: `\MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment::CARRIER_ID`
-
-For this, you need to add the following lines to your project:
-- PostNL: `use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;`
-- bpost: `use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;`
-- DPD: `use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;`
 
 ### Label format and position
 Choose to output the label as either A4 or A6 when creating a pdf or download link with the argument `$positions` of `setPdfOfLabels($positions)` and `setLinkOfLabels($positions)`.
@@ -244,18 +279,18 @@ After creating consignments, it is often necessary to pick up a specific consign
 ```php
 $consignments = MyParcelCollection::find(432345);
 ```
-Instead of `find()` you can also use `findMany()`, `findByReferenceId()` or `findManyByReferenceId()`.
+Instead of `find()` you can also use `findMany()`, `findByReferenceIdentifier()` or `findManyByReferenceIdentifier()`.
 
 For `reference identifier` you can use a `*` to search smarter:
 ```php
-$consignments = MyParcelCollection::findByReferenceId('order-14*');
+$consignments = MyParcelCollection::findByReferenceIdentifier('order-14*');
 ```
 
 ### Query consignments
 You can search and filter consignments by certain values:
 ```php
 $consignments = MyParcelCollection::query(
-            'api_key_from_MyParcel_backoffice',
+            'api_key_from_backoffice',
             [
                 'q'                    => 'Niels',
                 'reference_identifier' => 'order-1234',
@@ -325,12 +360,12 @@ echo $consignments
 
 If you want to download a label at a later time, you can also use the following to fill the collection:
 ```php
-$consignments = MyParcelCollection::findByReferenceId('order-146', 'api_key_from_MyParcel_backoffice');
+$consignments = MyParcelCollection::findByReferenceIdentifier('order-146', 'api_key_from_backoffice');
 $consignments
     ->setPdfOfLabels()
     ->downloadPdfOfLabels();
 ```
-Instead of `findByReferenceId()` you can also use `findManyByReferenceId()`, `find()` or `findMany()`.
+Instead of `findByReferenceIdentifier()` you can also use `findManyByReferenceIdentifier()`, `find()` or `findMany()`.
 
 More information: https://myparcelnl.github.io/api/#6_F
 
@@ -342,7 +377,7 @@ Start by creating an `OrderCollection` and setting your API key:
 use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderCollection;
 
 $orderCollection = (new OrderCollection())
-    ->setApiKey('api_key_from_MyParcel_backoffice');
+    ->setApiKey('api_key_from_backoffice');
 ```
 
 Define the billing and shipping addresses of the order with the `Recipient` class.
@@ -453,7 +488,7 @@ use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\src\Model\Recipient;
 
 $orderCollection = (new OrderCollection())
-    ->setApiKey('api_key_from_MyParcel_backoffice');
+    ->setApiKey('api_key_from_backoffice');
 
 $customerAddress = (new Recipient())
     ->setCompany('MyParcel')
@@ -497,6 +532,42 @@ $orderCollection->push($order);
 $savedOrderCollection = $orderCollection->save();
 ```
 
+### Filling in required drop off point for RedJePakketje
+
+RedJePakketje requires a drop off point be added to each consignment.
+Get available drop off points from the webservice. It will return an indexed array holding data from drop off points near the supplied postalcode.
+```php
+$dropOffPoints = (new RedJePakketjeDropOffPointWebService())
+      ->setApiKey('api_key_from_backoffice')
+      ->getDropOffPoints('valid_dutch_postal_code');
+```
+You can use these to select a preferred drop off point. The `location_code` field provides a unique identifier.
+
+Please note:
+- The list for a given postalcode may be empty when there are no drop off points available in the vicinity.
+- The user may have indicated a default drop off point in the backoffice, check `default_drop_off_point` field for each drop off point in the array.
+
+Create a DropOffPoint using the relevant fields returned for the selected drop off point.
+Then set it on the consignment, which should be an otherwise valid RedJePakketje consignment.
+```php
+$dropOffPoint = (new DropOffPoint())
+    ->setBoxNumber()                            // unused for dutch addresses
+    ->setCc('NL')                               // country code (field: cc) returned for the drop off point
+    ->setCity('Amsterdam')                      // city (field: city)
+    ->setLocationCode('location_code')          // field: location_code holds a unique id for the drop off point
+    ->setLocationName('location_name')          // name of the drop off point (field: location_name)
+    ->setStreet('Plein 1945')                   // street (field: street)
+    ->setNumber(55)                             // number (field: number)
+    ->setNumberSuffix('b')                      // number suffix (field: number_suffix)
+    ->setPostalCode('2231JE')                   // postal code (field: postal_code)
+    ->setRegion()                               // unused for dutch addresses
+    ->setRetailNetworkId('retail_network_id')   // maybe used later
+    ->setState();                               // unused for dutch addresses
+
+$consignment->setDropOffPoint($dropOffPoint);
+```
+The consignment can now be created, refer to [create a consignment](#create-a-consignment).
+
 ## List of classes and their methods
 This is a list of all the classes in this SDK and their available methods.
 
@@ -506,9 +577,9 @@ This is a list of all the classes in this SDK and their available methods.
 #### PostNLConsignment
 ```MyparcelNL/Sdk/src/Model/Consignment/PostNLConsignment.php```
 ```php
-    $consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment())
-    ->setApiKey('api_key_from_MyParcel_backoffice')
-    ->setReferenceId('order-146') // Not visible on the label
+$consignment = (new \MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment())
+    ->setApiKey('api_key_from_backoffice')
+    ->setReferenceIdentifier('order-146') // Not visible on the label
     
     // Recipient/address: https://myparcelnl.github.io/api/#7_B
     ->setPerson('Piet Hier')    // Name
@@ -518,8 +589,8 @@ This is a list of all the classes in this SDK and their available methods.
     
     ->setFullStreet('Plein 1945 55b') // Street, number and suffix in one line
     // OR send the street data separately:
-    ->setStreet('Plein 1945') / Street
-    ->setNumber((string)55)   // Number
+    ->setStreet('Plein 1945') // Street
+    ->setNumber(55)   // Number
     ->setNumberSuffix('b')    // Suffix
     
     ->setCity('Amsterdam')    // City
@@ -571,7 +642,7 @@ This is a list of all the classes in this SDK and their available methods.
 // Get attributes from consignment
 $consignment
     ->getApiKey()
-    ->getReferenceId()
+    ->getReferenceIdentifier()
     ->getBarcode() // Barcode is available after using setLinkOfLabels() or setPdfOfLabels() on the MyParcelCollection the consignment has been added to
     
     ->getLabelDescription()
@@ -668,7 +739,7 @@ MyParcelCollection also contains almost [all methods](https://laravel.com/docs/5
     // Get consignments from the collection
     ->getConsignments()
     ->getConsignmentByApiId()
-    ->getConsignmentsByReferenceId()
+    ->getConsignmentsByReferenceIdentifier()
 
     // Clear the collection
     ->clearConsignmentsCollection()

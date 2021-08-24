@@ -5,12 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Model\Carrier;
 
 use Exception;
-use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\src\Support\Classes;
 
 class CarrierFactory
 {
+    /**
+     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier[]
+     */
+    public const CARRIER_CLASSES = [
+        CarrierBpost::class,
+        CarrierDPD::class,
+        CarrierPostNL::class,
+        CarrierRedJePakketje::class,
+    ];
+
     /**
      * @param  string|int $carrierNameOrId
      *
@@ -27,6 +35,17 @@ class CarrierFactory
     }
 
     /**
+     * @param  string $carrierClass
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @throws \Exception
+     */
+    public static function createFromClass(string $carrierClass): AbstractCarrier
+    {
+        return Classes::instantiateClass($carrierClass, AbstractCarrier::class);
+    }
+
+    /**
      * @param  int $carrierId
      *
      * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
@@ -34,16 +53,13 @@ class CarrierFactory
      */
     public static function createFromId(int $carrierId): AbstractCarrier
     {
-        switch ($carrierId) {
-            case PostNLConsignment::CARRIER_ID:
-                return new CarrierPostNL();
-            case DPDConsignment::CARRIER_ID:
-                return new CarrierDPD();
-            case BpostConsignment::CARRIER_ID:
-                return new CarrierBpost();
-            default:
-                throw new Exception('No carrier found for id ' . $carrierId);
+        foreach (self::CARRIER_CLASSES as $carrierClass) {
+            if ($carrierId === $carrierClass::getId()) {
+                return new $carrierClass();
+            }
         }
+
+        throw new Exception('No carrier found for id ' . $carrierId);
     }
 
     /**
@@ -54,15 +70,12 @@ class CarrierFactory
      */
     public static function createFromName(string $carrierName): AbstractCarrier
     {
-        switch ($carrierName) {
-            case PostNLConsignment::CARRIER_NAME:
-                return new CarrierPostNL();
-            case DPDConsignment::CARRIER_NAME:
-                return new CarrierDPD();
-            case BpostConsignment::CARRIER_NAME:
-                return new CarrierBpost();
-            default:
-                throw new Exception('No carrier found for name ' . $carrierName);
+        foreach (self::CARRIER_CLASSES as $carrierClass) {
+            if ($carrierName === $carrierClass::getName()) {
+                return new $carrierClass();
+            }
         }
+
+        throw new Exception('No carrier found for name ' . $carrierName);
     }
 }

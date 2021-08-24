@@ -23,6 +23,7 @@ use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
@@ -200,7 +201,7 @@ class MyParcelCollection extends Collection
     public function addConsignmentByConsignmentIds($ids, $apiKey): self
     {
         foreach ($ids as $consignmentId) {
-            $consignment = (new AbstractConsignment())
+            $consignment = (new BaseConsignment())
                 ->setApiKey($apiKey)
                 ->setConsignmentId($consignmentId);
 
@@ -220,7 +221,7 @@ class MyParcelCollection extends Collection
     public function addConsignmentByReferenceIds($ids, $apiKey): self
     {
         foreach ($ids as $referenceId) {
-            $consignment = (new AbstractConsignment())
+            $consignment = (new BaseConsignment())
                 ->setApiKey($apiKey)
                 ->setReferenceId($referenceId);
 
@@ -677,7 +678,7 @@ class MyParcelCollection extends Collection
         $collection = new static();
 
         foreach ($consignmentIds as $id) {
-            $consignment = new AbstractConsignment();
+            $consignment = new BaseConsignment();
             $consignment->setConsignmentId((int) $id);
             $consignment->setApiKey($apiKey);
 
@@ -717,7 +718,7 @@ class MyParcelCollection extends Collection
         $collection = new static();
 
         foreach ($referenceIds as $id) {
-            $consignment = new AbstractConsignment();
+            $consignment = new BaseConsignment();
             $consignment->setReferenceId($id);
             $consignment->setApiKey($apiKey);
 
