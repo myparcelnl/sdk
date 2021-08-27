@@ -24,18 +24,15 @@ class DeliveryOptionsAdapterFactory
      * @param array $deliveryOptionsData
      *
      * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
-     * @throws \Exception
      */
     public static function create(array $deliveryOptionsData): AbstractDeliveryOptionsAdapter
     {
         $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
 
-        if (key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData["time"])) {
+        if (array_key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData['time'])) {
             return new DeliveryOptionsV2Adapter($deliveryOptionsData);
-        } elseif (key_exists('deliveryType', $deliveryOptionsData)) {
-            return new DeliveryOptionsV3Adapter($deliveryOptionsData);
         }
 
-        throw new BadMethodCallException("Can't create DeliveryOptions. No suitable adapter found");
+        return new DeliveryOptionsV3Adapter($deliveryOptionsData);
     }
 }
