@@ -54,7 +54,7 @@ class DPDConsignment extends AbstractConsignment
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
-        if ($this->getCountry() === self::CC_BE) {
+        if (self::CC_BE === $this->getCountry()) {
             return array_merge_recursive($consignmentEncoded, [
                 'recipient' => [
                     'street'                 => $this->getStreet(true),

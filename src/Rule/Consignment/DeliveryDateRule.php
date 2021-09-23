@@ -14,10 +14,15 @@ class DeliveryDateRule extends Rule
      */
     public function validate($validationSubject): void
     {
-        $isDefaultDeliveryType = AbstractConsignment::DEFAULT_DELIVERY_TYPE !== $validationSubject->getDeliveryType();
+        $isDefaultDeliveryType = AbstractConsignment::DEFAULT_DELIVERY_TYPE === $validationSubject->getDeliveryType();
 
-        if ($isDefaultDeliveryType && ! $validationSubject->getDeliveryDate()) {
-            $this->addError('If delivery_type is not 2, delivery_date is required.');
+        if (! $isDefaultDeliveryType && ! $validationSubject->getDeliveryDate()) {
+            $this->addError(
+                sprintf(
+                    'If delivery_type is not %d, delivery_date is required.',
+                    AbstractConsignment::DEFAULT_DELIVERY_TYPE
+                )
+            );
         }
     }
 }
