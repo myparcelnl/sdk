@@ -62,6 +62,17 @@ class CarrierFactory
         throw new Exception('No carrier found for id ' . $carrierId);
     }
 
+    public static function canCreateFromId(int $carrierId): bool
+    {
+        foreach (self::CARRIER_CLASSES as $carrierClass) {
+            if ($carrierId === $carrierClass::getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param  string $carrierName
      *

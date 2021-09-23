@@ -31,6 +31,8 @@ class CarrierConfigurationWebService extends AbstractWebService
             return null;
         }
 
-        return (new CarrierConfiguration($result[0]));
+        $dropOffPointWebService = (new RedJePakketjeDropOffPointWebService())->setApiKey($this->getApiKey());
+
+        return (new CarrierConfiguration($result[0], $dropOffPointWebService));
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Services\Web;
 
 use MyParcelNL\Sdk\src\Model\Account\CarrierOptions;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 class CarrierOptionsWebService extends AbstractWebService
@@ -27,6 +28,12 @@ class CarrierOptionsWebService extends AbstractWebService
             );
 
         $result = $request->getResult('data.carrier_options');
+
+        foreach ($result as $index => $carrierOptions) {
+            if (! CarrierFactory::canCreateFromId($carrierOptions['carrier_id'])) {
+                unset($result[$index]);
+            }
+        }
 
         return (new Collection($result))->mapInto(CarrierOptions::class);
     }

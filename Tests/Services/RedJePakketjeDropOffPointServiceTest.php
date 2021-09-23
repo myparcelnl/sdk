@@ -34,8 +34,8 @@ class RedJePakketjeDropOffPointServiceTest extends TestCase
         $service = (new RedJePakketjeDropOffPointWebService())->setApiKey(getenv('API_KEY'));
         $result  = $service->getDropOffPoint('e02158ab-7307-434b-956c-0aeb60ef1046');
 
-        if (1 === count($result)) {
-            self::assertEquals('e02158ab-7307-434b-956c-0aeb60ef1046', $result[0]['location_code']);
+        if ($result) {
+            self::assertEquals('e02158ab-7307-434b-956c-0aeb60ef1046', $result->getLocationCode());
         } else {
             Throw new \Exception('Not one drop off point returned for external identifier');
         }

@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 
-class RedJePakketjeDropOffPointWebService extends AbstractWebService
+class RedJePakketjeDropOffPointWebService extends AbstractWebService implements CanGetDropOffPoint
 {
     /**
      * @param  string $postalCode
@@ -37,22 +37,29 @@ class RedJePakketjeDropOffPointWebService extends AbstractWebService
     }
 
     /**
-     * @param string $external_identifier which is the location_code belonging tot he drop off point
+     * @param string $externalIdentifier which is the location_code belonging tot the drop off point
      *
-     * @return array (indexed) with zero or one entry
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint|null
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function getDropOffPoint(string $external_identifier): array
+    public function getDropOffPoint(string $externalIdentifier): ?DropOffPoint
     {
         $request = $this->createRequest()
             ->setQuery([
-                'external_identifier' => $external_identifier,
+                'external_identifier' => $externalIdentifier,
                 'carrier_id'  => CarrierRedJePakketje::getId(),
             ])
             ->sendRequest('GET', 'drop_off_points');
 
-        return $request->getResult('data.drop_off_points');
+        $result = $request->getResult('data.drop_off_points');
+
+        if ($result && is_array($result))
+        {
+            return (new DropOffPoint($result[0]));
+        }
+
+        return null;
     }
 }
