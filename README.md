@@ -542,35 +542,35 @@ Use the webhook listener and settings listener to update the stored value when n
 Below is a succinct example of how to get everything associated with a specific apikey:
 
 ```php
-    $apiKey                      = 'api_key_from_backoffice';
-    $accountService              = (new AccountWebService())->setApiKey($apiKey);
-    $carrierOptionsService       = (new CarrierOptionsWebService())->setApiKey($apiKey);
-    $carrierConfigurationService = (new CarrierConfigurationWebService())->setApiKey($apiKey);
+$apiKey                      = 'api_key_from_backoffice';
+$accountService              = (new AccountWebService())->setApiKey($apiKey);
+$carrierOptionsService       = (new CarrierOptionsWebService())->setApiKey($apiKey);
+$carrierConfigurationService = (new CarrierConfigurationWebService())->setApiKey($apiKey);
 
-    $account        = $accountService->getAccount();
-    $shop           = $account->getShops()->first();
-    $shopId         = $shop->getId();
-    $carrierOptions = $carrierOptionsService->getCarrierOptions($shopId);
-    $configurations = [];
+$account        = $accountService->getAccount();
+$shop           = $account->getShops()->first();
+$shopId         = $shop->getId();
+$carrierOptions = $carrierOptionsService->getCarrierOptions($shopId);
+$configurations = [];
 
-    foreach ($carrierOptions as $carrierOption) {
-        if (! $carrierOption->isEnabled()) {
-            continue;
-        }
-        $configuration    = $carrierConfigurationService->getCarrierConfigurations(
-            $shopId,
-            $carrierOption->getCarrier()::getId()
-        );
-        $configurations[] = $configuration;
+foreach ($carrierOptions as $carrierOption) {
+    if (! $carrierOption->isEnabled()) {
+        continue;
     }
+    $configuration    = $carrierConfigurationService->getCarrierConfigurations(
+        $shopId,
+        $carrierOption->getCarrier()::getId()
+    );
+    $configurations[] = $configuration;
+}
 
-    $accountSettings                           = [];
-    $accountSettings['shop']                   = $shop;
-    $accountSettings['account']                = $account;
-    $accountSettings['carrier_options']        = $carrierOptions;
-    $accountSettings['carrier_configurations'] = new Collection($configurations);
+$accountSettings                           = [];
+$accountSettings['shop']                   = $shop;
+$accountSettings['account']                = $account;
+$accountSettings['carrier_options']        = $carrierOptions;
+$accountSettings['carrier_configurations'] = new Collection($configurations);
 
-    return new Collection($accountSettings);
+return new Collection($accountSettings);
 ```
 
 ### Filling in required drop off point for RedJePakketje
