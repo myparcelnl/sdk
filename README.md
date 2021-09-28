@@ -27,6 +27,7 @@ Do you want to be kept informed of new functionalities or do you just need help?
     - [Create and download label(s)](#create-and-download-labels)
     - [Orders](#orders)
       - [Create and save orders](#create-and-save-orders)
+    - [Account settings](#account-settings)
     - [Filling in required drop off point for RedJePakketje](#filling-in-required-drop-off-point-for-redjepakketje)
 - [List of classes and their methods](#list-of-classes-and-their-methods)
     - [Models](#models)
@@ -532,10 +533,55 @@ $orderCollection->push($order);
 $savedOrderCollection = $orderCollection->save();
 ```
 
+### Account settings
+
+Retrieve Account and Shop settings, as well as carrier options and configurations using the supplied webservices.
+It is advisable to store these in your own plugin because fetching them for each request would be a waste of resources.
+Use the webhook listener and settings listener to update the stored value when necessary.
+
+Below is a succinct example of how to get everything associated with a specific apikey:
+
+```php
+    $apiKey                      = 'api_key_from_backoffice';
+    $accountService              = (new AccountWebService())->setApiKey($apiKey);
+    $carrierOptionsService       = (new CarrierOptionsWebService())->setApiKey($apiKey);
+    $carrierConfigurationService = (new CarrierConfigurationWebService())->setApiKey($apiKey);
+
+    $account        = $accountService->getAccount();
+    $shop           = $account->getShops()->first();
+    $shopId         = $shop->getId();
+    $carrierOptions = $carrierOptionsService->getCarrierOptions($shopId);
+    $configurations = [];
+
+    foreach ($carrierOptions as $carrierOption) {
+        if (! $carrierOption->isEnabled()) {
+            continue;
+        }
+        $configuration    = $carrierConfigurationService->getCarrierConfigurations(
+            $shopId,
+            $carrierOption->getCarrier()::getId()
+        );
+        $configurations[] = $configuration;
+    }
+
+    $accountSettings                           = [];
+    $accountSettings['shop']                   = $shop;
+    $accountSettings['account']                = $account;
+    $accountSettings['carrier_options']        = $carrierOptions;
+    $accountSettings['carrier_configurations'] = new Collection($configurations);
+
+    return new Collection($accountSettings);
+```
+
 ### Filling in required drop off point for RedJePakketje
 
 RedJePakketje requires a drop off point be added to each consignment.
-Get available drop off points from the webservice. It will return an indexed array holding data from drop off points near the supplied postalcode.
+
+The user may have indicated a default drop off point in the backoffice. If so, you will find it in their configuration settings.
+These are accessible through the [account settings](#account-settings).
+Access the configurations and then select the carrier. For an example see our WooCommerce plugin, file AccountSettings.php.
+
+You can also get available drop off points from the webservice. It will return an indexed array holding data from drop off points near the supplied postalcode.
 ```php
 $dropOffPoints = (new RedJePakketjeDropOffPointWebService())
       ->setApiKey('api_key_from_backoffice')
@@ -545,10 +591,8 @@ You can use these to select a preferred drop off point. The `location_code` fiel
 
 Please note:
 - The list for a given postalcode may be empty when there are no drop off points available in the vicinity.
-- The user may have indicated a default drop off point in the backoffice, check `default_drop_off_point` field for each drop off point in the array.
 
 Create a DropOffPoint using the relevant fields returned for the selected drop off point.
-Then set it on the consignment, which should be an otherwise valid RedJePakketje consignment.
 ```php
 $dropOffPoint = (new DropOffPoint())
     ->setBoxNumber()                            // unused for dutch addresses
@@ -563,7 +607,18 @@ $dropOffPoint = (new DropOffPoint())
     ->setRegion()                               // unused for dutch addresses
     ->setRetailNetworkId('retail_network_id')   // maybe used later
     ->setState();                               // unused for dutch addresses
+```
 
+If you have a `location_code`, you can get the drop off point like so:
+
+```php
+$dropOffPoint = (new RedJePakketjeDropOffPointWebService())
+      ->setApiKey('api_key_from_backoffice')
+      ->getDropOffPoint('location_code');
+```
+
+When you have the drop off point, set it on the consignment, which should be an otherwise valid RedJePakketje consignment.
+```php
 $consignment->setDropOffPoint($dropOffPoint);
 ```
 The consignment can now be created, refer to [create a consignment](#create-a-consignment).
