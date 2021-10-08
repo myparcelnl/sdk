@@ -1,0 +1,19 @@
+{
+  "extends": "@myparcel/eslint-config/preset-typescript",
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "project": [
+      "tsconfig.eslint.json"
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/.vuepress/components/**/*"
+      ],
+      "extends": "@myparcel/eslint-config/preset-vue-typescript"
+    }
+  ]
+}

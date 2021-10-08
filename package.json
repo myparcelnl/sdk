@@ -1,0 +1,19 @@
+{
+  "name": "@myparcelnl/php-sdk-docs",
+  "repository": "https://github.com/myparcelnl/sdk/@myparcelnl/sdk",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@vue/runtime-core": "^3.2.20",
+    "@vuepress/plugin-register-components": "^2.0.0-beta.26",
+    "vuepress": "^2.0.0-beta.26",
+    "vuepress-bar": "^0.4.4"
+  },
+  "devDependencies": {
+    "@myparcel/eslint-config": "^3.3.0",
+    "@vuepress/plugin-search": "^2.0.0-beta.26"
+  }
+}

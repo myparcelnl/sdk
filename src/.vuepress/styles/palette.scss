@@ -1,0 +1,25 @@
+@import '_font.scss';
+
+:root {
+  // brand colors
+  --c-brand: #0f5c47;
+  --c-brand-light: #083025;
+
+  // transition vars
+  --t-color: 0.2s ease;
+  --t-transform: 0.2s ease;
+
+  // code blocks vars
+  --code-ln-wrapper-width: 2.5rem;
+
+  // font vars
+  --font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+  Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+  // layout vars
+  --navbar-height: 4rem;
+  --navbar-padding-v: 1rem;
+
+  // Regular (non-home) pages
+  --content-width: 960px;
+}
