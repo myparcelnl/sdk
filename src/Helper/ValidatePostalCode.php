@@ -6,27 +6,26 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 class ValidatePostalCode
 {
-    const VALIDATE_POSTAL_CODE_REGEX_NL = '/^[1-9]\d{3}\s?[a-z]{2}$/i';
-    const VALIDATE_POSTAL_CODE_REGEX_BE = '/[1-9]\d{3}$/';
+    private const VALIDATE_POSTAL_CODE_REGEX_NL = '/^[1-9]\d{3}\s?[a-z]{2}$/i';
+    private const VALIDATE_POSTAL_CODE_REGEX_BE = '/[1-9]\d{3}$/';
 
-    public static function validate(string $postalCode, ?string $destinationCountry): bool
+    public static function validate(string $postalCode, string $destinationCountry): bool
     {
-        $validatePostalCode = ValidatePostalCode::getPostalCodeRegexByCountry($destinationCountry);
+        $regex = self::getPostalCodeRegexByCountry($destinationCountry);
 
-        if ($validatePostalCode) {
-            return (bool) preg_match($validatePostalCode, $postalCode);
+        if ($regex) {
+            return (bool) preg_match($regex, $postalCode);
         }
 
         return true;
     }
 
     /**
-     * @param string $local
-     * @param string $destination
+     * @param  string|null $destination
      *
      * @return string
      */
-    public static function getPostalCodeRegexByCountry(string $destination): ?string
+    private static function getPostalCodeRegexByCountry(string $destination): ?string
     {
         switch ($destination) {
             case AbstractConsignment::CC_NL:

@@ -9,6 +9,14 @@ use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 class CarrierDPD extends AbstractCarrier
 {
     /**
+     * @return string
+     */
+    public static function getHuman(): string
+    {
+        return 'DPD';
+    }
+
+    /**
      * @return int
      */
     public static function getId(): int
