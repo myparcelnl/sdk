@@ -101,7 +101,7 @@ class SendAgeCheckTest extends \PHPUnit\Framework\TestCase
 
             /** @var AbstractConsignment $consignment */
             $consignment = $myParcelCollection->getOneConsignment();
-            $this->assertEquals(true, preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
+            $this->assertStringMatchesFormat('3SMYPA', preg_match("#^3SMYPA#", $consignment->getBarcode()), 'Barcode is not set');
         }
     }
 

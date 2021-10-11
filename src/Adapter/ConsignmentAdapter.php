@@ -13,6 +13,7 @@
 namespace MyParcelNL\Sdk\src\Adapter;
 
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 class ConsignmentAdapter
@@ -41,7 +42,8 @@ class ConsignmentAdapter
             ->baseOptions()
             ->extraOptions()
             ->recipient()
-            ->pickup();
+            ->pickup()
+            ->addDropOffPoint();
     }
 
     /**
@@ -55,6 +57,22 @@ class ConsignmentAdapter
     /**
      * @return $this
      */
+    private function addDropOffPoint(): self
+    {
+        $receivedDropOffPoint = $this->data['drop_off_point'] ?? null;
+
+        if (!$receivedDropOffPoint) {
+            return $this;
+        }
+
+        $this->consignment->setDropOffPoint(new DropOffPoint($receivedDropOffPoint));
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     private function baseOptions()
     {
         $recipient = $this->data['recipient'];
@@ -63,7 +81,7 @@ class ConsignmentAdapter
         $this->consignment
             ->setConsignmentId($this->data['id'])
             ->setShopId($this->data['shop_id'])
-            ->setReferenceId($this->data['reference_identifier'])
+            ->setReferenceIdentifier($this->data['reference_identifier'])
             ->setBarcode($this->data['barcode'])
             ->setStatus($this->data['status'])
             ->setCountry($recipient['cc'])
