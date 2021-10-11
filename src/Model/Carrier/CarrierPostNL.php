@@ -9,6 +9,14 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 class CarrierPostNL extends AbstractCarrier
 {
     /**
+     * @return string
+     */
+    public static function getHuman(): string
+    {
+        return 'PostNL';
+    }
+
+    /**
      * @return int
      */
     public static function getId(): int

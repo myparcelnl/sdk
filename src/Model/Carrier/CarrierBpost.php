@@ -8,6 +8,11 @@ use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 
 class CarrierBpost extends AbstractCarrier
 {
+    public static function getHuman(): string
+    {
+        return 'bpost';
+    }
+
     /**
      * @return int
      */
