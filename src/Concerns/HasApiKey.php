@@ -10,6 +10,7 @@ trait HasApiKey
 {
     /**
      * @var string|null
+     * @deprecated This property will lose public access in the future. Use getApiKey() instead.
      */
     public $apiKey;
 

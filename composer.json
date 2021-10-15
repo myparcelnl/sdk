@@ -35,12 +35,14 @@
     "php": ">=7.1.0"
   },
   "require-dev": {
-    "fakerphp/faker": "^1.14",
-    "phpunit/phpunit": "^5.5"
+    "fakerphp/faker": "^1.15.0",
+    "phpunit/phpunit": "^5.5",
+    "psr/container": "~1.0.0"
   },
   "autoload": {
-    "files": [
-      "src/AutoLoader.php"
-    ]
+    "psr-4": {
+      "MyParcelNL\\Sdk\\src\\": "src",
+      "MyParcelNL\\Sdk\\": "src"
+    }
   }
 }
