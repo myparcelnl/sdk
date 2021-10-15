@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model;
 
-abstract class BaseModel
+abstract class BaseModel implements ArrayWithoutNullInterface
 {
     /**
      * @return array
