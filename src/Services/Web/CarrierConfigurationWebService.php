@@ -8,7 +8,7 @@ use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 
 class CarrierConfigurationWebService extends AbstractWebService
 {
-    public const ENDPOINT = "shops/:shopId/carriers/:carrierId/carrier_configuration";
+    public const ENDPOINT = 'shops/:shopId/carriers/:carrierId/carrier_configuration';
 
     /**
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException

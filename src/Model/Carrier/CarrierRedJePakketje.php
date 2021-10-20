@@ -4,31 +4,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Carrier;
 
-use MyParcelNL\Sdk\src\Model\Consignment\RedJePakketjeConsignment;
-
 class CarrierRedJePakketje extends AbstractCarrier
 {
-    /**
-     * @return int
-     */
-    public static function getId(): int
-    {
-        return RedJePakketjeConsignment::CARRIER_ID;
-    }
+    public const HUMAN = 'Red Je Pakketje';
+    public const ID    = 5;
+    public const NAME  = 'redjepakketje';
 
     /**
-     * @return string
+     * @var string
      */
-    public static function getName(): string
-    {
-        return RedJePakketjeConsignment::CARRIER_NAME;
-    }
+    protected $human = self::HUMAN;
 
     /**
-     * @return string
+     * @var int
      */
-    public static function getHuman(): string
-    {
-        return 'Red Je Pakketje';
-    }
+    protected $id = self::ID;
+
+    /**
+     * @var string
+     */
+    protected $name = self::NAME;
 }

@@ -51,13 +51,13 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getCarrierId(): ?int
     {
-        if ($this->carrier === null) {
+        if (null === $this->carrier) {
             return null;
         }
 
         $carrier = CarrierFactory::createFromName($this->carrier);
 
-        return $carrier::getId();
+        return $carrier->getId();
     }
 
     /**
