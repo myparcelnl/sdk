@@ -283,6 +283,8 @@ class MyParcelCurl
      */
     public function write($method, $url, $headers = [], $body = '')
     {
+        $method = strtoupper($method);
+
         if (is_a($url, 'Zend_Uri_Http')) {
             $url = $url->getUri();
         }
@@ -296,11 +298,17 @@ class MyParcelCurl
             CURLOPT_FOLLOWLOCATION => 1,
         ];
 
-        if ($method === 'POST') {
-            $options[CURLOPT_POST]       = true;
-            $options[CURLOPT_POSTFIELDS] = $body;
-        } elseif ($method === 'GET') {
-            $options[CURLOPT_HTTPGET] = true;
+        switch ($method) {
+            case 'POST':
+                $options[CURLOPT_POST]       = true;
+                $options[CURLOPT_POSTFIELDS] = $body;
+                break;
+            case 'GET':
+                $options[CURLOPT_HTTPGET] = true;
+                break;
+            default:
+                $options[CURLOPT_CUSTOMREQUEST] = $method;
+                break;
         }
 
         if (is_array($headers)) {
