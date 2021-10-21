@@ -7,19 +7,43 @@ namespace MyParcelNL\Sdk\src\Model\Carrier;
 abstract class AbstractCarrier
 {
     /**
+     * @var string
+     */
+    protected $human;
+
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * The human-readable name of the carrier.
      *
      * @return string
      */
-    abstract public static function getHuman(): string;
+    public function getHuman(): string
+    {
+        return $this->human;
+    }
 
     /**
      * @return int
      */
-    abstract public static function getId(): int;
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * @return string
      */
-    abstract public static function getName(): string;
+    public function getName(): string
+    {
+        return $this->name;
+    }
 }

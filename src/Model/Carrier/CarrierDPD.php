@@ -4,31 +4,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Carrier;
 
-use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
-
 class CarrierDPD extends AbstractCarrier
 {
-    /**
-     * @return string
-     */
-    public static function getHuman(): string
-    {
-        return 'DPD';
-    }
+    public const HUMAN = 'DPD';
+    public const ID    = 4;
+    public const NAME  = 'dpd';
 
     /**
-     * @return int
+     * @var string
      */
-    public static function getId(): int
-    {
-        return DPDConsignment::CARRIER_ID;
-    }
+    protected $human = self::HUMAN;
 
     /**
-     * @return string
+     * @var int
      */
-    public static function getName(): string
-    {
-        return DPDConsignment::CARRIER_NAME;
-    }
+    protected $id = self::ID;
+
+    /**
+     * @var string
+     */
+    protected $name = self::NAME;
 }
