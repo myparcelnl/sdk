@@ -4,28 +4,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Carrier;
 
-use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
-
 class CarrierBpost extends AbstractCarrier
 {
-    public static function getHuman(): string
-    {
-        return 'bpost';
-    }
+    public const HUMAN = 'bpost';
+    public const ID    = 2;
+    public const NAME  = 'bpost';
 
     /**
-     * @return int
+     * @var string
      */
-    public static function getId(): int
-    {
-        return BpostConsignment::CARRIER_ID;
-    }
+    protected $human = self::HUMAN;
 
     /**
-     * @return string
+     * @var int
      */
-    public static function getName(): string
-    {
-        return BpostConsignment::CARRIER_NAME;
-    }
+    protected $id = self::ID;
+
+    /**
+     * @var string
+     */
+    protected $name = self::NAME;
 }

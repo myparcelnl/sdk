@@ -20,6 +20,22 @@ class CarrierFactory
     ];
 
     /**
+     * @param  int $carrierId
+     *
+     * @return bool
+     */
+    public static function canCreateFromId(int $carrierId): bool
+    {
+        foreach (self::CARRIER_CLASSES as $carrierClass) {
+            if ($carrierId === $carrierClass::ID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param  string|int $carrierNameOrId
      *
      * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
@@ -35,12 +51,12 @@ class CarrierFactory
     }
 
     /**
-     * @param  string $carrierClass
+     * @param  string|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrierClass
      *
      * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
-    public static function createFromClass(string $carrierClass): AbstractCarrier
+    public static function createFromClass($carrierClass): AbstractCarrier
     {
         return Classes::instantiateClass($carrierClass, AbstractCarrier::class);
     }
@@ -54,23 +70,12 @@ class CarrierFactory
     public static function createFromId(int $carrierId): AbstractCarrier
     {
         foreach (self::CARRIER_CLASSES as $carrierClass) {
-            if ($carrierId === $carrierClass::getId()) {
+            if ($carrierId === $carrierClass::ID) {
                 return new $carrierClass();
             }
         }
 
         throw new Exception('No carrier found for id ' . $carrierId);
-    }
-
-    public static function canCreateFromId(int $carrierId): bool
-    {
-        foreach (self::CARRIER_CLASSES as $carrierClass) {
-            if ($carrierId === $carrierClass::getId()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -82,7 +87,7 @@ class CarrierFactory
     public static function createFromName(string $carrierName): AbstractCarrier
     {
         foreach (self::CARRIER_CLASSES as $carrierClass) {
-            if ($carrierName === $carrierClass::getName()) {
+            if ($carrierName === $carrierClass::NAME) {
                 return new $carrierClass();
             }
         }
