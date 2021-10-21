@@ -38,7 +38,7 @@ class CarrierConfigurationWebService extends AbstractWebService
             return null;
         }
 
-        return CarrierConfigurationFactory::create($result[0], $fetchDropOffPoint);
+        return CarrierConfigurationFactory::create($result[0], $fetchDropOffPoint, $this->getApiKey());
     }
 
     /**
@@ -66,7 +66,7 @@ class CarrierConfigurationWebService extends AbstractWebService
                 return $this->carrierIdExists($array['carrier_id']);
             })
             ->map(function (array $data) use ($fetchDropOffPoint) {
-                return CarrierConfigurationFactory::create($data, $fetchDropOffPoint);
+                return CarrierConfigurationFactory::create($data, $fetchDropOffPoint, $this->getApiKey());
             });
     }
 

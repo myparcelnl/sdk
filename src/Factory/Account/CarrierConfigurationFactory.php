@@ -12,18 +12,25 @@ use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
 class CarrierConfigurationFactory
 {
     /**
-     * @param  array $data
-     * @param  bool  $fetchMissingDropOffPoint
+     * @param  array       $data
+     * @param  bool        $fetchMissingDropOffPoint
+     * @param  null|string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
-    public static function create(array $data, bool $fetchMissingDropOffPoint = false): CarrierConfiguration
-    {
+    public static function create(
+        array  $data,
+        bool   $fetchMissingDropOffPoint = false,
+        string $apiKey = null
+    ): CarrierConfiguration {
         $data = self::normalizeCarrier($data);
 
         if (array_key_exists('configuration', $data)) {
-            return self::createFromApi($data, $fetchMissingDropOffPoint);
+            return self::createFromApi($data, $fetchMissingDropOffPoint, $apiKey);
         }
 
         if (array_key_exists('default_drop_off_point', $data) && is_array($data['default_drop_off_point'])) {
@@ -31,21 +38,25 @@ class CarrierConfigurationFactory
         }
 
         if (array_key_exists('default_drop_off_point_identifier', $data)) {
-            return self::createWithDropOffPointIdentifier($data, $fetchMissingDropOffPoint);
+            return self::createWithDropOffPointIdentifier($data, $fetchMissingDropOffPoint, $apiKey);
         }
 
         throw new Exception('Given data is not a valid carrier configuration.');
     }
 
     /**
-     * @param  array $data
-     * @param  bool  $fetchMissingDropOffPoint
+     * @param  array       $data
+     * @param  bool        $fetchMissingDropOffPoint
+     * @param  null|string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration
      * @throws \Exception
      */
-    private static function createFromApi(array $data, bool $fetchMissingDropOffPoint): CarrierConfiguration
-    {
+    private static function createFromApi(
+        array  $data,
+        bool   $fetchMissingDropOffPoint = false,
+        string $apiKey = null
+    ): CarrierConfiguration {
         return self::createWithDropOffPointIdentifier(
             array_merge(
                 $data['configuration'],
@@ -55,27 +66,33 @@ class CarrierConfigurationFactory
                     'default_drop_off_point'            => null,
                 ]
             ),
-            $fetchMissingDropOffPoint
+            $fetchMissingDropOffPoint,
+            $apiKey
         );
     }
 
     /**
-     * @param  array $data
-     * @param  bool  $fetchDropOffPoint
+     * @param  array       $data
+     * @param  bool        $fetchDropOffPoint
+     * @param  null|string $apiKey
      *
      * @return \MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
     private static function createWithDropOffPointIdentifier(
-        array $data,
-        bool  $fetchDropOffPoint = false
+        array  $data,
+        bool   $fetchDropOffPoint = false,
+        string $apiKey = null
     ): CarrierConfiguration {
         $missingDropOffPoint = empty($data['default_drop_off_point']);
         $hasIdentifier       = array_key_exists('default_drop_off_point_identifier', $data);
 
         if ($fetchDropOffPoint && $missingDropOffPoint && $hasIdentifier) {
             $data['default_drop_off_point'] = (new DropOffPointWebService($data['carrier'], false))
-                ->setApiKey(getenv('API_KEY'))
+                ->setApiKey($apiKey)
                 ->getDropOffPoint($data['default_drop_off_point_identifier']);
         }
 

@@ -73,7 +73,7 @@ class CarrierConfigurationFactoryTest extends TestCase
      */
     public function testCreateCarrierConfiguration(array $testData): void
     {
-        $carrierConfiguration = CarrierConfigurationFactory::create($testData, true);
+        $carrierConfiguration = CarrierConfigurationFactory::create($testData, true, getenv('API_KEY'));
 
         self::assertTrue(is_a($carrierConfiguration->getDefaultDropOffPoint(), DropOffPoint::class));
     }
