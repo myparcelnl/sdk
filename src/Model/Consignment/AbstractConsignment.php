@@ -36,7 +36,9 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_ONLY_RECIPIENT = 'only_recipient';
     public const SHIPMENT_OPTION_RETURN         = 'return';
     public const SHIPMENT_OPTION_SIGNATURE      = 'signature';
+
     public const EXTRA_OPTION_DELIVERY_DATE = 'delivery_date';
+
     /**
      * Consignment types.
      */
@@ -44,18 +46,22 @@ abstract class AbstractConsignment
     public const DELIVERY_TYPE_STANDARD = 2;
     public const DELIVERY_TYPE_EVENING  = 3;
     public const DELIVERY_TYPE_PICKUP   = 4;
+
     /**
      * @deprecated Since November 2019 is it no longer possible to use pickup express.
      */
     public const DELIVERY_TYPE_PICKUP_EXPRESS = 5;
+
     public const DELIVERY_TYPE_MORNING_NAME  = 'morning';
     public const DELIVERY_TYPE_STANDARD_NAME = 'standard';
     public const DELIVERY_TYPE_EVENING_NAME  = 'evening';
     public const DELIVERY_TYPE_PICKUP_NAME   = 'pickup';
+
     /**
      * @deprecated Since November 2019 is it no longer possible to use pickup express.
      */
     public const DELIVERY_TYPE_PICKUP_EXPRESS_NAME = 'pickup_express';
+
     public const DELIVERY_TYPES_IDS = [
         self::DELIVERY_TYPE_MORNING,
         self::DELIVERY_TYPE_STANDARD,
@@ -63,6 +69,7 @@ abstract class AbstractConsignment
         self::DELIVERY_TYPE_PICKUP,
         self::DELIVERY_TYPE_PICKUP_EXPRESS,
     ];
+
     public const DELIVERY_TYPES_NAMES = [
         self::DELIVERY_TYPE_MORNING_NAME,
         self::DELIVERY_TYPE_STANDARD_NAME,
@@ -70,6 +77,7 @@ abstract class AbstractConsignment
         self::DELIVERY_TYPE_PICKUP_NAME,
         self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
     ];
+
     public const DELIVERY_TYPES_NAMES_IDS_MAP = [
         self::DELIVERY_TYPE_MORNING_NAME        => self::DELIVERY_TYPE_MORNING,
         self::DELIVERY_TYPE_STANDARD_NAME       => self::DELIVERY_TYPE_STANDARD,
@@ -77,8 +85,10 @@ abstract class AbstractConsignment
         self::DELIVERY_TYPE_PICKUP_NAME         => self::DELIVERY_TYPE_PICKUP,
         self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME => self::DELIVERY_TYPE_PICKUP_EXPRESS,
     ];
+
     public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD_NAME;
+
     /**
      * Customs declaration types.
      */
@@ -87,6 +97,7 @@ abstract class AbstractConsignment
     public const PACKAGE_CONTENTS_DOCUMENTS          = 3;
     public const PACKAGE_CONTENTS_GIFTS              = 4;
     public const PACKAGE_CONTENTS_RETRUN_SHIPMENT    = 5;
+
     /**
      * Package types.
      */
@@ -94,30 +105,36 @@ abstract class AbstractConsignment
     public const PACKAGE_TYPE_MAILBOX       = 2;
     public const PACKAGE_TYPE_LETTER        = 3;
     public const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+
     public const PACKAGE_TYPE_PACKAGE_NAME       = 'package';
     public const PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
     public const PACKAGE_TYPE_LETTER_NAME        = 'letter';
     public const PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
+
     public const PACKAGE_TYPES_IDS = [
         self::PACKAGE_TYPE_PACKAGE,
         self::PACKAGE_TYPE_MAILBOX,
         self::PACKAGE_TYPE_LETTER,
         self::PACKAGE_TYPE_DIGITAL_STAMP,
     ];
+
     public const PACKAGE_TYPES_NAMES = [
         self::PACKAGE_TYPE_PACKAGE_NAME,
         self::PACKAGE_TYPE_MAILBOX_NAME,
         self::PACKAGE_TYPE_LETTER_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
     ];
+
     public const PACKAGE_TYPES_NAMES_IDS_MAP = [
         self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE,
         self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
         self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
     ];
+
     public const DEFAULT_PACKAGE_TYPE      = self::PACKAGE_TYPE_PACKAGE;
     public const DEFAULT_PACKAGE_TYPE_NAME = self::PACKAGE_TYPE_PACKAGE_NAME;
+
     /**
      * Regular expression used to make sure the date is correct.
      */
@@ -125,8 +142,10 @@ abstract class AbstractConsignment
     public const DATE_TIME_REGEX   = '~(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$~';
     public const STATUS_CONCEPT    = 1;
     public const MAX_STREET_LENGTH = 40;
+
     public const CC_NL = 'NL';
     public const CC_BE = 'BE';
+
     public const EURO_COUNTRIES = [
         'NL',
         'BE',
@@ -155,6 +174,7 @@ abstract class AbstractConsignment
         'SE',
         'XK',
     ];
+
     /**
      * @var array
      * @deprecated use getLocalInsurancePossibilities()
