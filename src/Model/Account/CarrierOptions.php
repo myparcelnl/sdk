@@ -39,7 +39,7 @@ class CarrierOptions extends BaseModel
     {
         $this->enabled  = (bool) $options['enabled'];
         $this->optional = (bool) $options['optional'];
-        $this->carrier  = CarrierFactory::createFromId($options['carrier']['id']);
+        $this->carrier  = CarrierFactory::create($options['carrier']['id']);
         $this->label    = $options['label'] ?? $this->carrier->getHuman();
     }
 

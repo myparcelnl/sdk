@@ -8,7 +8,7 @@ use MyParcelNL\Sdk\src\Model\BaseModel;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Services\Web\CanGetDropOffPoint;
+use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
 
 class CarrierConfiguration extends BaseModel
 {
@@ -20,27 +20,60 @@ class CarrierConfiguration extends BaseModel
     /**
      * @var null|string
      */
-    private $defaultDropOffPointIdentifier;
+    private $default_cutoff_time;
 
     /**
      * @var \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
      */
-    private $defaultDropOffPoint;
+    private $default_drop_off_point;
 
     /**
-     * CarrierConfiguration constructor.
-     *
-     * @param array                                               $configurations
-     * @param \MyParcelNL\Sdk\src\Services\Web\CanGetDropOffPoint $dropOffPointWebService
+     * @var null|string
+     */
+    private $default_drop_off_point_identifier;
+
+    /**
+     * @var null|string
+     */
+    private $monday_cutoff_time;
+
+    /**
+     * @param  array $data
      *
      * @throws \Exception
      */
-    public function __construct(array $configurations, CanGetDropOffPoint $dropOffPointWebService)
+    public function __construct(array $data)
     {
-        $this->carrier                       = CarrierFactory::createFromId($configurations['carrier_id']);
-        $this->defaultDropOffPointIdentifier = $configurations['configuration']['default_drop_off_point'] ?? null;
+        $this->carrier                           = CarrierFactory::create($data['carrier']);
+        $this->default_drop_off_point_identifier = $data['default_drop_off_point_identifier'] ?? null;
+        $this->default_drop_off_point            = $this->createDropOffPoint($data['default_drop_off_point'] ?? null);
 
-        $this->fetchDefaultDropOffPoint($dropOffPointWebService);
+        $this->default_cutoff_time = $data['default_cutoff_time'] ?? null;
+        $this->monday_cutoff_time  = $data['monday_cutoff_time'] ?? null;
+    }
+
+    /**
+     * @param  string $apiKey
+     *
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function fetchDefaultDropOffPoint(string $apiKey): void
+    {
+        $dropOffPointWebService = (new DropOffPointWebService($this->carrier))->setApiKey($apiKey);
+
+        if (! $this->getDefaultDropOffPointIdentifier()) {
+            return;
+        }
+
+        $dropOffPoint = $dropOffPointWebService
+            ->getDropOffPoint($this->getDefaultDropOffPointIdentifier());
+
+        if ($dropOffPoint) {
+            $this->default_drop_off_point = $dropOffPoint;
+        }
     }
 
     /**
@@ -52,30 +85,11 @@ class CarrierConfiguration extends BaseModel
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
-    public function getDefaultDropOffPointIdentifier(): ?string
+    public function getDefaultCutoffTime(): ?string
     {
-        return $this->defaultDropOffPointIdentifier;
-    }
-
-    /**
-     * @param \MyParcelNL\Sdk\src\Services\Web\CanGetDropOffPoint $canGetDropOffPoint
-     */
-    private function fetchDefaultDropOffPoint(CanGetDropOffPoint $canGetDropOffPoint): void
-    {
-        if (isset($this->defaultDropOffPoint)) {
-            return;
-        }
-
-        if (null !== $this->getDefaultDropOffPointIdentifier()) {
-            $dropOffPoint = $canGetDropOffPoint
-                ->getDropOffPoint($this->getDefaultDropOffPointIdentifier());
-
-            if ($dropOffPoint) {
-                $this->defaultDropOffPoint = $dropOffPoint;
-            }
-        }
+        return $this->default_cutoff_time;
     }
 
     /**
@@ -83,6 +97,38 @@ class CarrierConfiguration extends BaseModel
      */
     public function getDefaultDropOffPoint(): ?DropOffPoint
     {
-        return $this->defaultDropOffPoint ?? null;
+        return $this->default_drop_off_point ?? null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDefaultDropOffPointIdentifier(): ?string
+    {
+        return $this->default_drop_off_point_identifier;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMondayCutoffTime(): ?string
+    {
+        return $this->monday_cutoff_time;
+    }
+
+    /**
+     * @param  mixed $defaultDropOffPoint
+     *
+     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     */
+    private function createDropOffPoint($defaultDropOffPoint): ?DropOffPoint
+    {
+        if (is_a($defaultDropOffPoint, DropOffPoint::class)) {
+            return $defaultDropOffPoint;
+        }
+
+        return is_array($defaultDropOffPoint)
+            ? new DropOffPoint($defaultDropOffPoint)
+            : null;
     }
 }
