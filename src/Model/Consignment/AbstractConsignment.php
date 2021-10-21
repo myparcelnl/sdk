@@ -365,7 +365,12 @@ abstract class AbstractConsignment
      * @internal
      * @var array
      */
-    public  $items = [];
+    public $items = [];
+
+    /**
+     * @var string|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     */
+    protected $carrierClass;
 
     /**
      * @var null|string
@@ -373,7 +378,7 @@ abstract class AbstractConsignment
     protected $validatorClass;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @var null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      */
     private $carrier;
 
@@ -408,7 +413,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      */
     final public function getCarrier(): ?AbstractCarrier
     {
@@ -475,6 +480,7 @@ abstract class AbstractConsignment
 
         return $this;
     }
+
     /**
      * @param  string|null $referenceIdentifier
      *
@@ -992,7 +998,6 @@ abstract class AbstractConsignment
      * @param  string $fullStreet
      *
      * @return bool
-     *
      * @deprecated Use ValidateStreet::validate()
      */
     public function isCorrectAddress(string $fullStreet): bool
@@ -1626,7 +1631,7 @@ abstract class AbstractConsignment
         return self::PACKAGE_TYPE_PACKAGE === $this->getPackageType();
     }
 
-     /**
+    /**
      * The carrier's local country.
      *
      * @return string
@@ -1689,14 +1694,12 @@ abstract class AbstractConsignment
         return true;
     }
 
-    protected $carrierClass;
-
     /**
      * @return null|int
      */
     final public function getCarrierId(): ?int
     {
-        return $this->carrier ? $this->carrier::getId() : null;
+        return $this->carrier ? $this->carrier->getId() : null;
     }
 
     /**
@@ -1704,6 +1707,6 @@ abstract class AbstractConsignment
      */
     final public function getCarrierName(): ?string
     {
-        return $this->carrier ? $this->carrier::getName() : null;
+        return $this->carrier ? $this->carrier->getName() : null;
     }
 }

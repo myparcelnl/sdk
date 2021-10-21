@@ -9,19 +9,19 @@ use Exception;
 class Classes
 {
     /**
-     * @param  string $class
+     * @param  mixed  $class
      * @param  string $expected
      *
      * @return mixed
      * @throws \Exception
      */
-    public static function instantiateClass(string $class, string $expected)
+    public static function instantiateClass($class, string $expected)
     {
         if (! class_exists($class)) {
             throw new Exception("Class '$class' not found");
         }
 
-        $validatorGroup = new $class;
+        $validatorGroup = new $class();
 
         if (is_a($validatorGroup, $expected)) {
             return $validatorGroup;

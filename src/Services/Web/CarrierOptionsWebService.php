@@ -10,13 +10,15 @@ use MyParcelNL\Sdk\src\Support\Collection;
 
 class CarrierOptionsWebService extends AbstractWebService
 {
-    public const ENDPOINT = "carrier_management/shops/:shopId/carrier_options";
+    public const ENDPOINT = 'carrier_management/shops/:shopId/carrier_options';
 
     /**
+     * @param  int $shopId
+     *
+     * @return \MyParcelNL\Sdk\src\Support\Collection|\MyParcelNL\Sdk\src\Model\Account\CarrierOptions[]
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     * @throws \Exception
      */
     public function getCarrierOptions(int $shopId): Collection
     {
