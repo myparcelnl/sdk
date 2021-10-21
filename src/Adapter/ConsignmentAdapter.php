@@ -83,6 +83,7 @@ class ConsignmentAdapter
             ->setShopId($this->data['shop_id'])
             ->setReferenceIdentifier($this->data['reference_identifier'])
             ->setBarcode($this->data['barcode'])
+            ->setExternalIdentifier($this->data['external_identifier'])
             ->setStatus($this->data['status'])
             ->setCountry($recipient['cc'])
             ->setPerson($recipient['person'])
