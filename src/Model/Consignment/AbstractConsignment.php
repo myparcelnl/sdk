@@ -201,6 +201,12 @@ abstract class AbstractConsignment
 
     /**
      * @internal
+     * @var string|null
+     */
+    public $externalIdentifier;
+
+    /**
+     * @internal
      * @var int
      */
     public $status;
@@ -573,6 +579,27 @@ abstract class AbstractConsignment
     public function setBarcode(?string $barcode): self
     {
         $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExternalIdentifier(): ?string
+    {
+        return $this->externalIdentifier;
+    }
+
+    /**
+     * @param  null|string  $externalIdentifier
+     *
+     * @return self
+     * @internal
+     */
+    public function setExternalIdentifier(?string $externalIdentifier): self
+    {
+        $this->externalIdentifier = $externalIdentifier;
 
         return $this;
     }
