@@ -6,33 +6,51 @@ namespace MyParcelNL\Sdk\src\Services\Web;
 
 use BadMethodCallException;
 use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\src\Support\Collection;
 
-class RedJePakketjeDropOffPointWebService extends AbstractWebService implements CanGetDropOffPoint
+class DropOffPointWebService extends AbstractWebService implements CanGetDropOffPoint
 {
     /**
-     * @param  string $externalIdentifier which is the location_code belonging tot the drop-off point
+     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     */
+    private $carrier;
+
+    /**
+     * @param  string|int|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
+     * @param  bool                                                         $strictCarrier
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint|null
+     * @throws \Exception
+     */
+    public function __construct($carrier, bool $strictCarrier = true)
+    {
+        $this->carrier = CarrierFactory::create($carrier, $strictCarrier);
+    }
+
+    /**
+     * @param  string $externalIdentifier
+     *
+     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function getDropOffPoint(string $externalIdentifier): ?DropOffPoint
     {
         $request = $this->createRequest()
             ->setQuery([
                 'external_identifier' => $externalIdentifier,
-                'carrier_id'          => (new CarrierRedJePakketje())->getId(),
+                'carrier_id'          => $this->carrier->getId(),
             ])
             ->sendRequest('GET', 'drop_off_points');
 
         $result = $request->getResult('data.drop_off_points');
 
         if ($result && is_array($result)) {
-            return (new DropOffPoint($result[0]));
+            return new DropOffPoint($result[0]);
         }
 
         return null;
@@ -41,12 +59,12 @@ class RedJePakketjeDropOffPointWebService extends AbstractWebService implements 
     /**
      * @param  string $postalCode
      *
-     * @return array
+     * @return \MyParcelNL\Sdk\src\Support\Collection|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint[]
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function getDropOffPoints(string $postalCode): array
+    public function getDropOffPoints(string $postalCode): Collection
     {
         if (! ValidatePostalCode::validate($postalCode, AbstractConsignment::CC_NL)) {
             throw new BadMethodCallException('Invalid postal code');
@@ -55,10 +73,12 @@ class RedJePakketjeDropOffPointWebService extends AbstractWebService implements 
         $request = $this->createRequest()
             ->setQuery([
                 'postal_code' => $postalCode,
-                'carrier_id'  => (new CarrierRedJePakketje())->getId(),
+                'carrier_id'  => $this->carrier->getId(),
             ])
             ->sendRequest('GET', 'drop_off_points');
 
-        return $request->getResult('data.drop_off_points');
+        $result = $request->getResult('data.drop_off_points');
+
+        return (new Collection($result ?? []))->mapInto(DropOffPoint::class);
     }
 }

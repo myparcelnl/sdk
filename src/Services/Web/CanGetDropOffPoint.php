@@ -6,7 +6,12 @@ namespace MyParcelNL\Sdk\src\Services\Web;
 
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 
-Interface CanGetDropOffPoint
+interface CanGetDropOffPoint
 {
+    /**
+     * @param  string $externalIdentifier
+     *
+     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     */
     public function getDropOffPoint(string $externalIdentifier): ?DropOffPoint;
 }
