@@ -77,7 +77,7 @@ class DropOffPoint
             ->setCity($receivedDropOffPoint['city'])
             ->setLocationCode($receivedDropOffPoint['location_code'])
             ->setLocationName($receivedDropOffPoint['location_name'])
-            ->setNumber($receivedDropOffPoint['number'])
+            ->setNumber((string) $receivedDropOffPoint['number'])
             ->setNumberSuffix($receivedDropOffPoint['number_suffix'] ?? null)
             ->setPostalCode($receivedDropOffPoint['postal_code'])
             ->setRegion($receivedDropOffPoint['region'] ?? null)

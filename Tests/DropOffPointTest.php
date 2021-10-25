@@ -6,7 +6,7 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Services\Web\RedJePakketjeDropOffPointWebService;
+use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
 use PHPUnit\Framework\TestCase;
 
 class DropOffPointTest extends TestCase
@@ -48,7 +48,7 @@ class DropOffPointTest extends TestCase
             ->setEmail('your_email@test.nl')
             ->setPhone($consignmentTest['phone']);
 
-        $dropOffPoints = (new RedJePakketjeDropOffPointWebService())
+        $dropOffPoints = (new DropOffPointWebService())
             ->setApiKey(getenv('API_KEY'))
             ->getDropOffPoints($consignmentTest['postal_code']);
 
