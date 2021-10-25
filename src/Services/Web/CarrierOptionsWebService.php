@@ -10,6 +10,8 @@ use MyParcelNL\Sdk\src\Support\Collection;
 
 class CarrierOptionsWebService extends AbstractWebService
 {
+    use HasCarrier;
+
     public const ENDPOINT = 'carrier_management/shops/:shopId/carrier_options';
 
     /**
@@ -37,6 +39,10 @@ class CarrierOptionsWebService extends AbstractWebService
             }
         }
 
-        return (new Collection($result))->mapInto(CarrierOptions::class);
+        return (new Collection($result))
+            ->filter(function (array $array) {
+                return $this->carrierIdExists($array['carrier_id']);
+            })
+            ->mapInto(CarrierOptions::class);
     }
 }

@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Support\Classes;
 class CarrierFactory
 {
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier[]
+     * @var class-string[]
      */
     public const CARRIER_CLASSES = [
         CarrierBpost::class,
@@ -36,18 +36,26 @@ class CarrierFactory
     }
 
     /**
-     * @param  string|int $carrierNameOrId
+     * @param  string|int|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
      *
      * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
-    public static function create($carrierNameOrId): AbstractCarrier
+    public static function create($carrier): AbstractCarrier
     {
-        if (is_numeric($carrierNameOrId)) {
-            return self::createFromId((int) $carrierNameOrId);
+        if (is_numeric($carrier)) {
+            return self::createFromId((int) $carrier);
         }
 
-        return self::createFromName($carrierNameOrId);
+        if (is_a($carrier, AbstractCarrier::class)) {
+            return $carrier;
+        }
+
+        if (is_a($carrier, AbstractCarrier::class, true)) {
+            return self::createFromClass($carrier);
+        }
+
+        return self::createFromName($carrier);
     }
 
     /**
