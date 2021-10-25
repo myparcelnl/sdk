@@ -1726,19 +1726,26 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function toArrayWithoutNull(): array
     {
-        return array_filter(
-            $this->items,
-            static function ($value) {
-                if (method_exists($value, 'toArrayWithoutNull')) {
-                    return $value->toArrayWithoutNull();
+        return array_map(
+            static function ($item) {
+                if ($item) {
+                    if (method_exists($item, 'toArrayWithoutNull')) {
+                        /**
+                         * @var \MyParcelNL\Sdk\src\Model\ArrayWithoutNullInterface $item ;
+                         */
+                        return $item->toArrayWithoutNull();
+                    }
+
+                    if (method_exists($item, 'toArray')) {
+                        return $item->toArray();
+                    }
+                } else {
+                    $item = '';
                 }
 
-                if (method_exists($value, 'toArray')) {
-                    return $value->toArray();
-                }
-
-                return $value;
-            }
+                return $item;
+            },
+            $this->items
         );
     }
 
