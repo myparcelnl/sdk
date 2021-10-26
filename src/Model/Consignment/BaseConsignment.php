@@ -15,10 +15,10 @@ class BaseConsignment extends AbstractConsignment
     }
 
     /**
-     * @return int[]
+     * @return string[]
      */
     protected function getValidPackageTypes(): array
     {
-        return self::PACKAGE_TYPES_IDS;
+        return self::PACKAGE_TYPES_NAMES;
     }
 }
