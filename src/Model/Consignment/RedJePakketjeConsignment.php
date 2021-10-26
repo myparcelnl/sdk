@@ -42,7 +42,6 @@ class RedJePakketjeConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_LARGE_FORMAT,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_RETURN,
-            self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }
 
