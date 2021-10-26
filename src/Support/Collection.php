@@ -1726,8 +1726,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function toArrayWithoutNull(): array
     {
-        return array_filter(
-            $this->items,
+        return array_map(
             static function ($value) {
                 if (method_exists($value, 'toArrayWithoutNull')) {
                     return $value->toArrayWithoutNull();
@@ -1737,8 +1736,13 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
                     return $value->toArray();
                 }
 
+                if (is_array($value)) {
+                    return array_filter($value);
+                }
+
                 return $value;
-            }
+            },
+            array_filter($this->items)
         );
     }
 
