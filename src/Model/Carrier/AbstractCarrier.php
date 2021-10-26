@@ -7,6 +7,11 @@ namespace MyParcelNL\Sdk\src\Model\Carrier;
 abstract class AbstractCarrier
 {
     /**
+     * @var class-string
+     */
+    protected $consignmentClass;
+
+    /**
      * @var string
      */
     protected $human;
@@ -20,6 +25,14 @@ abstract class AbstractCarrier
      * @var string
      */
     protected $name;
+
+    /**
+     * @return class-string<\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment>
+     */
+    public function getConsignmentClass(): string
+    {
+        return $this->consignmentClass;
+    }
 
     /**
      * The human-readable name of the carrier.
