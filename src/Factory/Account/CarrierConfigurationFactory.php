@@ -83,12 +83,12 @@ class CarrierConfigurationFactory
      * @throws \Exception
      */
     private static function createWithDropOffPointIdentifier(
-        array  $data,
-        bool   $fetchDropOffPoint = false,
+        array $data,
+        bool $fetchDropOffPoint = false,
         string $apiKey = null
     ): CarrierConfiguration {
         $missingDropOffPoint = empty($data['default_drop_off_point']);
-        $hasIdentifier       = array_key_exists('default_drop_off_point_identifier', $data);
+        $hasIdentifier       = array_key_exists('default_drop_off_point_identifier', $data) && ! empty($data['default_drop_off_point_identifier']);
 
         if ($fetchDropOffPoint && $missingDropOffPoint && $hasIdentifier) {
             $data['default_drop_off_point'] = (new DropOffPointWebService($data['carrier']))
