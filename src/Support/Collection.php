@@ -1712,7 +1712,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         return array_map(
             static function ($value) {
-            if (method_exists($value, 'toArray')) {
+            if ($value && method_exists($value, 'toArray')) {
                 return $value->toArray();
             }
             return $value;
@@ -1726,19 +1726,23 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function toArrayWithoutNull(): array
     {
-        return array_filter(
-            $this->items,
-            static function ($value) {
-                if (method_exists($value, 'toArrayWithoutNull')) {
+        return array_map(
+            function ($value) {
+                if ($value && method_exists($value, 'toArrayWithoutNull')) {
                     return $value->toArrayWithoutNull();
                 }
 
-                if (method_exists($value, 'toArray')) {
+                if ($value && method_exists($value, 'toArray')) {
                     return $value->toArray();
                 }
 
+                if (is_array($value)) {
+                    return $this->filterNull($value);
+                }
+
                 return $value;
-            }
+            },
+            $this->filterNull($this->items)
         );
     }
 
@@ -1914,5 +1918,17 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
         }
 
         return new HigherOrderCollectionProxy($this, $key);
+    }
+
+    /**
+     * @param  array $value
+     *
+     * @return array
+     */
+    private function filterNull(array $value): array
+    {
+        return array_filter($value, static function ($item) {
+            return null !== $item;
+        });
     }
 }
