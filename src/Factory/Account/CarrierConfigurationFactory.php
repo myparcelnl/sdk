@@ -62,7 +62,7 @@ class CarrierConfigurationFactory
                 $data['configuration'],
                 [
                     'carrier'                           => $data['carrier'],
-                    'default_drop_off_point_identifier' => $data['configuration']['default_drop_off_point'],
+                    'default_drop_off_point_identifier' => $data['configuration']['default_drop_off_point'] ?? null,
                     'default_drop_off_point'            => null,
                 ]
             ),
@@ -91,7 +91,7 @@ class CarrierConfigurationFactory
         $hasIdentifier       = array_key_exists('default_drop_off_point_identifier', $data);
 
         if ($fetchDropOffPoint && $missingDropOffPoint && $hasIdentifier) {
-            $data['default_drop_off_point'] = (new DropOffPointWebService($data['carrier'], false))
+            $data['default_drop_off_point'] = (new DropOffPointWebService($data['carrier']))
                 ->setApiKey($apiKey)
                 ->getDropOffPoint($data['default_drop_off_point_identifier']);
         }
