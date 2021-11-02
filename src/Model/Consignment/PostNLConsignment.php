@@ -69,6 +69,19 @@ class PostNLConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
+    public function getAllowedPackageTypes(): array
+    {
+        return [
+            self::PACKAGE_TYPE_PACKAGE_NAME,
+            self::PACKAGE_TYPE_MAILBOX_NAME,
+            self::PACKAGE_TYPE_LETTER_NAME,
+            self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
     public function getAllowedShipmentOptions(): array
     {
         return [
@@ -107,19 +120,6 @@ class PostNLConsignment extends AbstractConsignment
             4000,
             4500,
             5000,
-        ];
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getValidPackageTypes(): array
-    {
-        return [
-            self::PACKAGE_TYPE_PACKAGE,
-            self::PACKAGE_TYPE_MAILBOX,
-            self::PACKAGE_TYPE_LETTER,
-            self::PACKAGE_TYPE_DIGITAL_STAMP,
         ];
     }
 }

@@ -37,6 +37,17 @@ class RedJePakketjeConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
+    public function getAllowedPackageTypes(): array
+    {
+        return [
+            self::PACKAGE_TYPE_PACKAGE_NAME,
+            self::PACKAGE_TYPE_MAILBOX_NAME,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
     public function getAllowedShipmentOptions(): array
     {
         return [
@@ -53,16 +64,5 @@ class RedJePakketjeConsignment extends AbstractConsignment
     public function getLocalCountryCode(): string
     {
         return self::CC_NL;
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getValidPackageTypes(): array
-    {
-        return [
-            self::PACKAGE_TYPE_PACKAGE,
-            self::PACKAGE_TYPE_MAILBOX,
-        ];
     }
 }
