@@ -38,6 +38,7 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_SIGNATURE      = 'signature';
 
     public const EXTRA_OPTION_DELIVERY_DATE = 'delivery_date';
+    public const EXTRA_OPTION_MULTI_COLLO   = 'multi_collo';
 
     /**
      * Consignment types.
@@ -424,6 +425,36 @@ abstract class AbstractConsignment
     final public function getCarrier(): ?AbstractCarrier
     {
         return $this->carrier;
+    }
+
+    /**
+     * @param  string $deliveryMoment
+     *
+     * @return bool
+     */
+    public function canHaveDeliveryMoment(string $deliveryMoment): bool
+    {
+        return in_array($deliveryMoment, $this->getAllowedDeliveryMoments(), true);
+    }
+
+    /**
+     * @param  string $option
+     *
+     * @return bool
+     */
+    public function canHaveExtraOption(string $option): bool
+    {
+        return in_array($option, $this->getAllowedExtraOptions(), true);
+    }
+
+    /**
+     * @param  string $option
+     *
+     * @return bool
+     */
+    public function canHaveShipmentOption(string $option): bool
+    {
+        return in_array($option, $this->getAllowedShipmentOptions(), true);
     }
 
     /**
@@ -1190,7 +1221,9 @@ abstract class AbstractConsignment
      */
     public function setPackageType(int $packageType): self
     {
-        if (! in_array($packageType, $this->getValidPackageTypes(), true)) {
+        $packageTypeMap = array_flip(self::DELIVERY_TYPES_NAMES_IDS_MAP);
+
+        if (! in_array($packageTypeMap[$packageType], $this->getValidPackageTypes(), true)) {
             throw new Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
@@ -1338,11 +1371,10 @@ abstract class AbstractConsignment
      * @param  bool $return
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setReturn(bool $return): self
     {
-        $this->return = $return && $this->shipmentOptionIsAllowed(self::SHIPMENT_OPTION_RETURN);
+        $this->return = $return && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_RETURN);
 
         return $this;
     }
@@ -1455,7 +1487,7 @@ abstract class AbstractConsignment
      */
     public function setInsurance(?int $insurance): self
     {
-        if (! $insurance || ! $this->shipmentOptionIsAllowed(self::SHIPMENT_OPTION_INSURANCE)) {
+        if (! $insurance || ! $this->canHaveShipmentOption(self::SHIPMENT_OPTION_INSURANCE)) {
             $this->insurance = 0;
             return $this;
         }
@@ -1634,18 +1666,6 @@ abstract class AbstractConsignment
     }
 
     /**
-     * Only package type 1 can have extra options.
-     *
-     * @param  string $option
-     *
-     * @return bool
-     */
-    protected function shipmentOptionIsAllowed(string $option): bool
-    {
-        return in_array($option, $this->getAllowedShipmentOptions(), true);
-    }
-
-    /**
      * @return bool
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
@@ -1666,14 +1686,30 @@ abstract class AbstractConsignment
     abstract public function getLocalCountryCode(): string;
 
     /**
-     * @return int[]
+     * @return string[]
      */
-    abstract protected function getValidPackageTypes(): array;
+    protected function getValidPackageTypes(): array
+    {
+        return [
+            self::PACKAGE_TYPE_PACKAGE_NAME,
+        ];
+    }
 
     /**
      * @return string[]
      */
-    protected function getAllowedExtraOptions(): array
+    public function getAllowedDeliveryMoments(): array
+    {
+        return [
+            self::DELIVERY_TYPE_STANDARD_NAME,
+            self::DELIVERY_TYPE_PICKUP_NAME,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedExtraOptions(): array
     {
         return [];
     }
@@ -1697,16 +1733,6 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $option
-     *
-     * @return bool
-     */
-    private function canHaveExtraOption(string $option): bool
-    {
-        return in_array($option, $this->getAllowedExtraOptions(), true);
-    }
-
-    /**
      * @param  string $shipmentOption
      *
      * @return bool
@@ -1714,7 +1740,7 @@ abstract class AbstractConsignment
      */
     private function validateShipmentOption(string $shipmentOption): bool
     {
-        if (! $this->shipmentOptionIsAllowed($shipmentOption)) {
+        if (! $this->canHaveShipmentOption($shipmentOption)) {
             throw new InvalidConsignmentException("$shipmentOption is not allowed in " . static::class);
         }
 

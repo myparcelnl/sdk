@@ -62,12 +62,23 @@ class BpostConsignment extends AbstractConsignment
         return parent::encodeStreet($consignmentEncoded);
     }
 
+
     /**
      * @return string
      */
     public function getLocalCountryCode(): string
     {
         return self::CC_BE;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedExtraOptions(): array
+    {
+        return [
+            self::EXTRA_OPTION_MULTI_COLLO,
+        ];
     }
 
     /**
@@ -87,15 +98,5 @@ class BpostConsignment extends AbstractConsignment
     protected function getLocalInsurancePossibilities(): array
     {
         return [500, 1000, 1500, 2000];
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getValidPackageTypes(): array
-    {
-        return [
-            self::PACKAGE_TYPE_PACKAGE,
-        ];
     }
 }
