@@ -79,28 +79,20 @@ class DPDConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
-    public function getAllowedShipmentOptions(): array
+    public function getAllowedExtraOptions(): array
     {
         return [
-            self::SHIPMENT_OPTION_SIGNATURE,
+            self::EXTRA_OPTION_MULTI_COLLO,
         ];
     }
 
     /**
-     * @return int[]
+     * @return string[]
      */
-    protected function getLocalInsurancePossibilities(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getValidPackageTypes(): array
+    public function getAllowedShipmentOptions(): array
     {
         return [
-            self::PACKAGE_TYPE_PACKAGE,
+            self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }
 }
