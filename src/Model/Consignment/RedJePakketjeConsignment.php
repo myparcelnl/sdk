@@ -25,11 +25,13 @@ class RedJePakketjeConsignment extends AbstractConsignment
     protected $validatorClass = RedJePakketjeConsignmentValidator::class;
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getLocalCountryCode(): string
+    public function getAllowedDeliveryMoments(): array
     {
-        return self::CC_NL;
+        return [
+            self::DELIVERY_TYPE_STANDARD_NAME,
+        ];
     }
 
     /**
@@ -43,6 +45,14 @@ class RedJePakketjeConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_RETURN,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocalCountryCode(): string
+    {
+        return self::CC_NL;
     }
 
     /**

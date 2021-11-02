@@ -43,20 +43,26 @@ class PostNLConsignment extends AbstractConsignment
     protected $validatorClass = PostNLConsignmentValidator::class;
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getLocalCountryCode(): string
+    public function getAllowedDeliveryMoments(): array
     {
-        return self::CC_NL;
+        return [
+            self::DELIVERY_TYPE_MORNING_NAME,
+            self::DELIVERY_TYPE_STANDARD_NAME,
+            self::DELIVERY_TYPE_EVENING_NAME,
+            self::DELIVERY_TYPE_PICKUP_NAME,
+        ];
     }
 
     /**
      * @return string[]
      */
-    protected function getAllowedExtraOptions(): array
+    public function getAllowedExtraOptions(): array
     {
         return [
             self::EXTRA_OPTION_DELIVERY_DATE,
+            self::EXTRA_OPTION_MULTI_COLLO,
         ];
     }
 
@@ -73,6 +79,14 @@ class PostNLConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_RETURN,
             self::SHIPMENT_OPTION_SIGNATURE,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocalCountryCode(): string
+    {
+        return self::CC_NL;
     }
 
     /**
