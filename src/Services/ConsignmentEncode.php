@@ -14,6 +14,7 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -91,9 +92,12 @@ class ConsignmentEncode
         }
 
         if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
+            $allowedOptions = ConsignmentFactory::createFromCarrier($consignment->getCarrier())
+                ->getAllowedShipmentOptions();
+
             $consignmentEncoded['options']['age_check']      = 1;
-            $consignmentEncoded['options']['only_recipient'] = 1;
-            $consignmentEncoded['options']['signature']      = 1;
+            $consignmentEncoded['options']['only_recipient'] = in_array('only_recipient', $allowedOptions) ? 1 : 0;
+            $consignmentEncoded['options']['signature']      = in_array('signature', $allowedOptions) ? 1 : 0;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
         }
