@@ -234,6 +234,12 @@ abstract class AbstractConsignment
      * @internal
      * @var string
      */
+    public $region;
+
+    /**
+     * @internal
+     * @var string
+     */
     public $street;
 
     /**
@@ -778,6 +784,26 @@ abstract class AbstractConsignment
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param  string  $region
+     *
+     * @return self
+     */
+    public function setRegion(string $region): self
+    {
+        $this->region = $region;
+
+        return $this;
     }
 
     /**
