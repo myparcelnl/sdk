@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\src\Model\Consignment;
 
 use BadMethodCallException;
 use Exception;
+use Magento\Tests\NamingConvention\true\string;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
@@ -229,6 +230,12 @@ abstract class AbstractConsignment
      * @var string
      */
     public $city;
+
+    /**
+     * @internal
+     * @var string
+     */
+    public $region;
 
     /**
      * @internal
@@ -778,6 +785,26 @@ abstract class AbstractConsignment
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param  string $region
+     *
+     * @return self
+     */
+    public function setRegion(string $region): self
+    {
+        $this->region = $region;
+
+        return $this;
     }
 
     /**
