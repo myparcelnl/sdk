@@ -138,6 +138,7 @@ class ConsignmentEncode
                 'person'      => $consignment->getPerson(),
                 'postal_code' => $consignment->getPostalCode(),
                 'city'        => (string) $consignment->getCity(),
+                'region'      => (string) $consignment->getRegion(),
                 'email'       => (string) $consignment->getEmail(),
                 'phone'       => (string) $consignment->getPhone(),
             ],
