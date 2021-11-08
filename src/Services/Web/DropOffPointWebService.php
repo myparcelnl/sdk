@@ -20,13 +20,12 @@ class DropOffPointWebService extends AbstractWebService implements CanGetDropOff
 
     /**
      * @param  string|int|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
-     * @param  bool                                                         $strictCarrier
      *
      * @throws \Exception
      */
-    public function __construct($carrier, bool $strictCarrier = true)
+    public function __construct($carrier)
     {
-        $this->carrier = CarrierFactory::create($carrier, $strictCarrier);
+        $this->carrier = CarrierFactory::create($carrier);
     }
 
     /**
