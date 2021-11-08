@@ -448,6 +448,16 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @param  string $packageType
+     *
+     * @return bool
+     */
+    public function canHavePackageType(string $packageType): bool
+    {
+        return in_array($packageType, $this->getAllowedPackageTypes(), true);
+    }
+
+    /**
      * @param  string $option
      *
      * @return bool
@@ -1221,9 +1231,9 @@ abstract class AbstractConsignment
      */
     public function setPackageType(int $packageType): self
     {
-        $packageTypeMap = array_flip(self::DELIVERY_TYPES_NAMES_IDS_MAP);
+        $packageTypeMap = array_flip(self::PACKAGE_TYPES_NAMES_IDS_MAP);
 
-        if (! in_array($packageTypeMap[$packageType], $this->getValidPackageTypes(), true)) {
+        if (! in_array($packageTypeMap[$packageType], $this->getAllowedPackageTypes(), true)) {
             throw new Exception('Use the correct package type for shipment:' . $this->consignment_id);
         }
 
@@ -1244,12 +1254,11 @@ abstract class AbstractConsignment
      * The delivery type for the package
      * Required: Yes if delivery_date has been specified.
      *
-     * @param  int  $deliveryType
-     * @param  bool $needDeliveryDate
+     * @param  int $deliveryType
      *
      * @return self
      */
-    public function setDeliveryType(int $deliveryType, bool $needDeliveryDate = false): self
+    public function setDeliveryType(int $deliveryType): self
     {
         $this->delivery_type = $deliveryType;
 
@@ -1688,16 +1697,6 @@ abstract class AbstractConsignment
     /**
      * @return string[]
      */
-    protected function getValidPackageTypes(): array
-    {
-        return [
-            self::PACKAGE_TYPE_PACKAGE_NAME,
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
     public function getAllowedDeliveryMoments(): array
     {
         return [
@@ -1712,6 +1711,16 @@ abstract class AbstractConsignment
     public function getAllowedExtraOptions(): array
     {
         return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedPackageTypes(): array
+    {
+        return [
+            self::PACKAGE_TYPE_PACKAGE_NAME,
+        ];
     }
 
     /**

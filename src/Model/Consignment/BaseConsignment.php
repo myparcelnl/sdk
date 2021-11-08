@@ -17,7 +17,7 @@ class BaseConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
-    protected function getValidPackageTypes(): array
+    public function getAllowedPackageTypes(): array
     {
         return self::PACKAGE_TYPES_NAMES;
     }
