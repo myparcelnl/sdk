@@ -795,11 +795,11 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string  $region
+     * @param  string|null  $region
      *
      * @return self
      */
-    public function setRegion(string $region): self
+    public function setRegion(?string $region): self
     {
         $this->region = $region;
 
