@@ -795,7 +795,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string  $region
+     * @param  string|null  $region
      *
      * @return self
      */
