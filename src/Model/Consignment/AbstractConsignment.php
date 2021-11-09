@@ -799,7 +799,7 @@ abstract class AbstractConsignment
      *
      * @return self
      */
-    public function setRegion(string $region): self
+    public function setRegion(?string $region): self
     {
         $this->region = $region;
 
