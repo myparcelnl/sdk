@@ -39,6 +39,19 @@ class MyParcelRequest
     public const HEADER_ACCEPT_APPLICATION_PDF       = ['Accept' => 'application/pdf'];
     public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
 
+    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
+    public const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
+    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
+    public const REQUEST_HEADER_RETRIEVE_SHIPMENT   = 'Accept: application/json; charset=utf8';
+    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
+    public const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
+    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
+    public const REQUEST_HEADER_RETRIEVE_LABEL_PDF  = 'Accept: application/pdf';
+    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
+    public const REQUEST_HEADER_RETURN              = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
+    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
+    public const REQUEST_HEADER_DELETE              = 'Accept: application/json; charset=utf8';
+
     /**
      * API URL.
      */
