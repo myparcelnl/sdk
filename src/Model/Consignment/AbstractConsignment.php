@@ -434,13 +434,13 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $deliveryMoment
+     * @param  string $deliveryType
      *
      * @return bool
      */
-    public function canHaveDeliveryMoment(string $deliveryMoment): bool
+    public function canHaveDeliveryType(string $deliveryType): bool
     {
-        return in_array($deliveryMoment, $this->getAllowedDeliveryMoments(), true);
+        return in_array($deliveryType, $this->getAllowedDeliveryTypes(), true);
     }
 
     /**
@@ -1723,7 +1723,7 @@ abstract class AbstractConsignment
     /**
      * @return string[]
      */
-    public function getAllowedDeliveryMoments(): array
+    public function getAllowedDeliveryTypes(): array
     {
         return [
             self::DELIVERY_TYPE_STANDARD_NAME,
