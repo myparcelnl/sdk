@@ -77,6 +77,7 @@ class BpostConsignment extends AbstractConsignment
     public function getAllowedExtraOptions(): array
     {
         return [
+            self::EXTRA_OPTION_DELIVERY_SATURDAY,
             self::EXTRA_OPTION_MULTI_COLLO,
         ];
     }

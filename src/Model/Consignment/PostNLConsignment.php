@@ -62,6 +62,7 @@ class PostNLConsignment extends AbstractConsignment
     {
         return [
             self::EXTRA_OPTION_DELIVERY_DATE,
+            self::EXTRA_OPTION_DELIVERY_MONDAY,
             self::EXTRA_OPTION_MULTI_COLLO,
         ];
     }
