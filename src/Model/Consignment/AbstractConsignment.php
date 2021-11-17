@@ -37,8 +37,10 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_RETURN         = 'return';
     public const SHIPMENT_OPTION_SIGNATURE      = 'signature';
 
-    public const EXTRA_OPTION_DELIVERY_DATE = 'delivery_date';
-    public const EXTRA_OPTION_MULTI_COLLO   = 'multi_collo';
+    public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
+    public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
+    public const EXTRA_OPTION_DELIVERY_SATURDAY = 'delivery_saturday';
+    public const EXTRA_OPTION_MULTI_COLLO       = 'multi_collo';
 
     /**
      * Consignment types.
