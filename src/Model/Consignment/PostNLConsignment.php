@@ -45,7 +45,7 @@ class PostNLConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
-    public function getAllowedDeliveryMoments(): array
+    public function getAllowedDeliveryTypes(): array
     {
         return [
             self::DELIVERY_TYPE_MORNING_NAME,
