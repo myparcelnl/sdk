@@ -31,6 +31,11 @@ class DPDConsignment extends AbstractConsignment
     public const DEFAULT_WEIGHT = 3000;
 
     /**
+     * @var int
+     */
+    public const DESCRIPTION_MAX_LENGTH = 47;
+
+    /**
      * @internal
      * @var int
      */
