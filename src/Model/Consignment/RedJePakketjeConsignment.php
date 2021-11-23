@@ -15,11 +15,6 @@ class RedJePakketjeConsignment extends AbstractConsignment
     public const CARRIER_NAME = 'redjepakketje';
 
     /**
-     * @var int
-     */
-    public const DESCRIPTION_MAX_LENGTH = 47;
-
-    /**
      * @var string
      */
     protected $carrierClass = CarrierRedJePakketje::class;

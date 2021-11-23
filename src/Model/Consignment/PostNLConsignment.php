@@ -33,11 +33,6 @@ class PostNLConsignment extends AbstractConsignment
     ];
 
     /**
-     * @var int
-     */
-    public const DESCRIPTION_MAX_LENGTH = 47;
-
-    /**
      * @var string
      */
     protected $carrierClass = CarrierPostNL::class;
