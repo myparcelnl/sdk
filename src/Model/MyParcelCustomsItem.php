@@ -32,8 +32,6 @@ use MyParcelNL\Sdk\src\Support\Str;
 class MyParcelCustomsItem
 {
 
-    public const DEFAULT_DESCRIPTION_MAX_LENGTH = 30;
-
     private $description;
     private $amount;
     private $weight;
@@ -62,7 +60,7 @@ class MyParcelCustomsItem
      */
     public function setDescription($description, ?string $carrierName = null): self
     {
-        $maxLength = self::DEFAULT_DESCRIPTION_MAX_LENGTH;
+        $maxLength = AbstractConsignment::DESCRIPTION_MAX_LENGTH;
 
         if ($carrierName) {
             $carrier   = ConsignmentFactory::createByCarrierName($carrierName);
