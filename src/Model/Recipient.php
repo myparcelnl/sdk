@@ -143,7 +143,6 @@ class Recipient extends BaseModel
     public function getNumber(): ?string
     {
         return $this->number;
-
     }
 
     /**
