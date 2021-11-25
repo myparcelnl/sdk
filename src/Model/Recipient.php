@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Helper\SplitStreet;
+
 class Recipient extends BaseModel
 {
     /**
@@ -57,7 +59,14 @@ class Recipient extends BaseModel
     private $number_suffix;
 
     /**
-     * @param  array  $data
+     * @var string|null
+     */
+    private $box_number;
+
+    /**
+     * @param array $data
+     *
+     * @throws \Exception
      */
     public function __construct(array $data = [])
     {
@@ -71,6 +80,7 @@ class Recipient extends BaseModel
         $this->street        = $data['street'] ?? null;
         $this->number        = $data['number'] ?? null;
         $this->number_suffix = $data['number_suffix'] ?? null;
+        $this->box_number    = $data['box_number'] ?? null;
     }
 
     /**
@@ -142,7 +152,7 @@ class Recipient extends BaseModel
      */
     public function getNumber(): ?string
     {
-        return $this->number;
+        return (string) $this->number;
     }
 
     /**
@@ -151,6 +161,22 @@ class Recipient extends BaseModel
     public function getNumberSuffix(): ?string
     {
         return $this->number_suffix;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBoxNumber(): ?string
+    {
+        return $this->box_number;
+    }
+
+    /**
+     * @param string|null $box_number
+     */
+    public function setBoxNumber(?string $box_number): void
+    {
+        $this->box_number = $box_number;
     }
 
     /**
@@ -276,6 +302,7 @@ class Recipient extends BaseModel
             'street'        => $this->getStreet(),
             'number'        => $this->getNumber(),
             'number_suffix' => $this->getNumberSuffix(),
+            'box_number'    => $this->getBoxNumber(),
             'person'        => $this->getPerson(),
             'phone'         => $this->getPhone(),
             'postal_code'   => $this->getPostalCode(),
