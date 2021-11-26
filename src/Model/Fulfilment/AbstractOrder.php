@@ -67,7 +67,7 @@ class AbstractOrder extends BaseModel
     protected $recipient;
 
     /**
-     * Shipping address of the customer.
+     * Data from the pickup location.
      *
      * @var \MyParcelNL\Sdk\src\Model\PickupLocation|null
      */
