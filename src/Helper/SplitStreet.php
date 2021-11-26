@@ -101,7 +101,7 @@ class SplitStreet
 
         return new FullStreet(
             $matches['street'] ?? $fullStreet,
-            (int) ($matches['number'] ?? null),
+            (int) $matches['number'] ?? null,
             $matches['number_suffix'] ?? null,
             $matches['box_number'] ?? null
         );
