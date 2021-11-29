@@ -19,12 +19,12 @@ class PickupLocation extends BaseModel
     /**
      * @var string|null
      */
-    private $postal_code;
+    private $location_code;
 
     /**
      * @var string|null
      */
-    private $street;
+    private $location_name;
 
     /**
      * @var string|null
@@ -39,12 +39,7 @@ class PickupLocation extends BaseModel
     /**
      * @var string|null
      */
-    private $location_name;
-
-    /**
-     * @var string|null
-     */
-    private $location_code;
+    private $postal_code;
 
     /**
      * @var string|null
@@ -52,7 +47,12 @@ class PickupLocation extends BaseModel
     private $retail_network_id;
 
     /**
-     * @param  array  $data
+     * @var string|null
+     */
+    private $street;
+
+    /**
+     * @param  array $data
      */
     public function __construct(array $data = [])
     {
@@ -84,36 +84,11 @@ class PickupLocation extends BaseModel
     }
 
     /**
-     * @return string|null
-     */
-    public function getPostalCode(): ?string
-    {
-        return $this->postal_code;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getStreet(): ?string
-    {
-        return $this->street;
-    }
-
-    /**
      * @return null|string
      */
-    public function getNumber(): ?string
+    public function getLocationCode(): ?string
     {
-        return $this->number;
-
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNumberSuffix(): ?string
-    {
-        return $this->number_suffix;
+        return $this->location_code;
     }
 
     /**
@@ -127,9 +102,25 @@ class PickupLocation extends BaseModel
     /**
      * @return null|string
      */
-    public function getLocationCode(): ?string
+    public function getNumber(): ?string
     {
-        return $this->location_code;
+        return $this->number;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNumberSuffix(): ?string
+    {
+        return $this->number_suffix;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->postal_code;
     }
 
     /**
@@ -141,7 +132,15 @@ class PickupLocation extends BaseModel
     }
 
     /**
-     * @param  string|null  $cc
+     * @return string|null
+     */
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param  string|null $cc
      *
      * @return self
      */
@@ -152,7 +151,7 @@ class PickupLocation extends BaseModel
     }
 
     /**
-     * @param  string|null  $city
+     * @param  string|null $city
      *
      * @return self
      */
@@ -163,62 +162,7 @@ class PickupLocation extends BaseModel
     }
 
     /**
-     * @param  string|null  $postalCode
-     *
-     * @return self
-     */
-    public function setPostalCode(?string $postalCode): self
-    {
-        $this->postal_code = $postalCode;
-        return $this;
-    }
-
-    /**
-     * @param  string|null  $street
-     *
-     * @return self
-     */
-    public function setStreet(?string $street): self
-    {
-        $this->street = $street;
-        return $this;
-    }
-
-    /**
-     * @param  string|null  $number
-     *
-     * @return self
-     */
-    public function setNumber(?string $number): self
-    {
-        $this->number = $number;
-        return $this;
-    }
-
-    /**
-     * @param  string|null  $numberSuffix
-     *
-     * @return self
-     */
-    public function setNumberSuffix(?string $numberSuffix): self
-    {
-        $this->number_suffix = $numberSuffix;
-        return $this;
-    }
-
-    /**
-     * @param  string|null  $locationName
-     *
-     * @return self
-     */
-    public function setLocationName(?string $locationName): self
-    {
-        $this->location_name = $locationName;
-        return $this;
-    }
-
-    /**
-     * @param  string|null  $locationCode
+     * @param  string|null $locationCode
      *
      * @return self
      */
@@ -229,13 +173,68 @@ class PickupLocation extends BaseModel
     }
 
     /**
-     * @param  string|null  $retailNetworkId
+     * @param  string|null $locationName
+     *
+     * @return self
+     */
+    public function setLocationName(?string $locationName): self
+    {
+        $this->location_name = $locationName;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $number
+     *
+     * @return self
+     */
+    public function setNumber(?string $number): self
+    {
+        $this->number = $number;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $numberSuffix
+     *
+     * @return self
+     */
+    public function setNumberSuffix(?string $numberSuffix): self
+    {
+        $this->number_suffix = $numberSuffix;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $postalCode
+     *
+     * @return self
+     */
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postal_code = $postalCode;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $retailNetworkId
      *
      * @return self
      */
     public function setRetailNetworkId(?string $retailNetworkId): self
     {
         $this->retail_network_id = $retailNetworkId;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $street
+     *
+     * @return self
+     */
+    public function setStreet(?string $street): self
+    {
+        $this->street = $street;
         return $this;
     }
 
