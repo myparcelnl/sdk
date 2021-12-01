@@ -442,7 +442,12 @@ abstract class AbstractConsignment
      */
     public function canHaveDeliveryType(string $deliveryType): bool
     {
-        return in_array($deliveryType, $this->getAllowedDeliveryTypes(), true);
+        $allowedDeliveryTypes = $this->getAllowedDeliveryTypes();
+        if (self::PACKAGE_TYPE_PACKAGE !== $this->getPackageType()) {
+            $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD];
+        }
+
+        return in_array($deliveryType, $allowedDeliveryTypes, true);
     }
 
     /**
@@ -472,7 +477,9 @@ abstract class AbstractConsignment
      */
     public function canHaveShipmentOption(string $option): bool
     {
-        return in_array($option, $this->getAllowedShipmentOptions(), true);
+        $isPackage         = $this->getPackageType() === self::PACKAGE_TYPE_PACKAGE;
+        $optionIsAvailable = in_array($option, $this->getAllowedShipmentOptions(), true);
+        return $isPackage && $optionIsAvailable;
     }
 
     /**
