@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
-use MyParcelNL\Sdk\src\Validator\Consignment\RedJePakketjeConsignmentValidator;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
+use MyParcelNL\Sdk\src\Validator\Consignment\InstaboxConsignmentValidator;
 
-class RedJePakketjeConsignment extends AbstractConsignment
+class InstaboxConsignment extends AbstractConsignment
 {
     /** @deprecated use $this->getCarrierId() */
     public const CARRIER_ID = 5;
     /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = 'redjepakketje';
+    public const CARRIER_NAME = 'instabox';
 
     /**
      * @var string
      */
-    protected $carrierClass = CarrierRedJePakketje::class;
+    protected $carrierClass = CarrierInstabox::class;
 
     /**
      * @var string
      */
-    protected $validatorClass = RedJePakketjeConsignmentValidator::class;
+    protected $validatorClass = InstaboxConsignmentValidator::class;
 
     /**
      * @return string[]

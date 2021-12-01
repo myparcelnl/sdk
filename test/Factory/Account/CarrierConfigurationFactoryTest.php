@@ -33,7 +33,7 @@ class CarrierConfigurationFactoryTest extends TestCase
                         'cc'                => 'NL',
                         'city'              => 'Arnhem',
                         'location_code'     => '73658f70-417a-48d2-82bb-291f3dccce93',
-                        'location_name'     => 'Red je Pakketje',
+                        'location_name'     => 'Instabox',
                         'number'            => '24',
                         'number_suffix'     => 'K',
                         'postal_code'       => '6827DE',
