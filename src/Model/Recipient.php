@@ -41,7 +41,7 @@ class Recipient extends BaseModel
     /**
      * @var string|null
      */
-    private $postal_code;
+    private $postalCode;
 
     /**
      * @var string|null
@@ -56,31 +56,49 @@ class Recipient extends BaseModel
     /**
      * @var string|null
      */
-    private $number_suffix;
+    private $fullStreet;
 
     /**
      * @var string|null
      */
-    private $box_number;
+    private $streetAdditionalInfo;
 
     /**
-     * @param array $data
+     * @var string|null
+     */
+    private $boxNumber;
+
+    /**
+     * @var string|null
+     */
+    private $numberSuffix;
+
+    /**
+     * @param  array       $data
+     * @param  string|null $originCountry
      *
      * @throws \Exception
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], ?string $originCountry = null)
     {
-        $this->cc            = $data['cc'] ?? null;
-        $this->city          = $data['city'] ?? null;
-        $this->company       = $data['company'] ?? null;
-        $this->email         = $data['email'] ?? null;
-        $this->person        = $data['person'] ?? null;
-        $this->phone         = $data['phone'] ?? null;
-        $this->postal_code   = $data['postal_code'] ?? null;
-        $this->street        = $data['street'] ?? null;
-        $this->number        = $data['number'] ?? null;
-        $this->number_suffix = $data['number_suffix'] ?? null;
-        $this->box_number    = $data['box_number'] ?? null;
+        $this->cc                   = $data['cc'] ?? null;
+        $this->city                 = $data['city'] ?? null;
+        $this->company              = $data['company'] ?? null;
+        $this->email                = $data['email'] ?? null;
+        $this->person               = $data['person'] ?? null;
+        $this->phone                = $data['phone'] ?? null;
+        $this->postalCode           = $data['postal_code'] ?? null;
+        $this->streetAdditionalInfo = $data['street_additional_info'] ?? null;
+        $this->street               = $data['street'] ?? null;
+        $this->fullStreet           = $data['full_street'] ?? null;
+
+        if ($this->fullStreet && $originCountry) {
+            $this->setFullStreet($originCountry);
+        }
+
+        $this->number       = $data['number'] ?? null;
+        $this->numberSuffix = $data['number_suffix'] ?? null;
+        $this->boxNumber    = $data['box_number'] ?? null;
     }
 
     /**
@@ -136,7 +154,7 @@ class Recipient extends BaseModel
      */
     public function getPostalCode(): ?string
     {
-        return $this->postal_code;
+        return $this->postalCode;
     }
 
     /**
@@ -148,19 +166,19 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getNumber(): ?string
     {
-        return (string) $this->number;
+        return $this->number;
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
-    public function getNumberSuffix(): ?string
+    public function getStreetAdditionalInfo(): ?string
     {
-        return $this->number_suffix;
+        return $this->streetAdditionalInfo;
     }
 
     /**
@@ -168,19 +186,19 @@ class Recipient extends BaseModel
      */
     public function getBoxNumber(): ?string
     {
-        return $this->box_number;
+        return $this->boxNumber;
     }
 
     /**
-     * @param string|null $box_number
+     * @return string|null
      */
-    public function setBoxNumber(?string $box_number): void
+    public function getNumberSuffix(): ?string
     {
-        $this->box_number = $box_number;
+        return $this->numberSuffix;
     }
 
     /**
-     * @param  string|null  $cc
+     * @param  string|null $cc
      *
      * @return self
      */
@@ -191,7 +209,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $city
+     * @param  string|null $city
      *
      * @return self
      */
@@ -202,7 +220,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $company
+     * @param  string|null $company
      *
      * @return self
      */
@@ -213,7 +231,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $email
+     * @param  string|null $email
      *
      * @return self
      */
@@ -224,7 +242,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $person
+     * @param  string|null $person
      *
      * @return self
      */
@@ -235,7 +253,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $phone
+     * @param  string|null $phone
      *
      * @return self
      */
@@ -246,18 +264,18 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $postalCode
+     * @param  string|null $postalCode
      *
      * @return self
      */
     public function setPostalCode(?string $postalCode): self
     {
-        $this->postal_code = $postalCode;
+        $this->postalCode = $postalCode;
         return $this;
     }
 
     /**
-     * @param  string|null  $street
+     * @param  string|null $street
      *
      * @return self
      */
@@ -268,7 +286,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $number
+     * @param  string|null $number
      *
      * @return self
      */
@@ -279,13 +297,41 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null  $numberSuffix
+     * @param  string|null $boxNumber
+     *
+     * @return self
+     */
+    public function setBoxNumber(?string $boxNumber): self
+    {
+        $this->boxNumber = $boxNumber;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $numberSuffix
      *
      * @return self
      */
     public function setNumberSuffix(?string $numberSuffix): self
     {
-        $this->number_suffix = $numberSuffix;
+        $this->numberSuffix = $numberSuffix;
+        return $this;
+    }
+
+    /**
+     * @param  string $originCountry
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function setFullStreet(string $originCountry): self
+    {
+        $splitStreet = SplitStreet::splitStreet($this->fullStreet, $originCountry, $this->getCc());
+        $this->setStreet($splitStreet->getStreet());
+        $this->setNumber((string) $splitStreet->getNumber());
+        $this->setBoxNumber($splitStreet->getBoxNumber());
+        $this->setNumberSuffix($splitStreet->getNumberSuffix());
+
         return $this;
     }
 
@@ -295,17 +341,18 @@ class Recipient extends BaseModel
     public function toArray(): array
     {
         return [
-            'cc'            => $this->getCc(),
-            'city'          => $this->getCity(),
-            'company'       => $this->getCompany(),
-            'email'         => $this->getEmail(),
-            'street'        => $this->getStreet(),
-            'number'        => $this->getNumber(),
-            'number_suffix' => $this->getNumberSuffix(),
-            'box_number'    => $this->getBoxNumber(),
-            'person'        => $this->getPerson(),
-            'phone'         => $this->getPhone(),
-            'postal_code'   => $this->getPostalCode(),
+            'box_number'             => $this->getBoxNumber(),
+            'cc'                     => $this->getCc(),
+            'city'                   => $this->getCity(),
+            'company'                => $this->getCompany(),
+            'email'                  => $this->getEmail(),
+            'number'                 => $this->getNumber(),
+            'number_suffix'          => $this->getNumberSuffix(),
+            'person'                 => $this->getPerson(),
+            'phone'                  => $this->getPhone(),
+            'postal_code'            => $this->getPostalCode(),
+            'street'                 => $this->getStreet(),
+            'street_additional_info' => $this->getStreetAdditionalInfo(),
         ];
     }
 }
