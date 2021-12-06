@@ -51,13 +51,11 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getCarrierId(): ?int
     {
-        if (null === $this->carrier) {
+        if (! $this->carrier) {
             return null;
         }
 
-        $carrier = CarrierFactory::createFromName($this->carrier);
-
-        return $carrier->getId();
+        return CarrierFactory::create($this->carrier)->getId();
     }
 
     /**
@@ -81,11 +79,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getDeliveryTypeId(): ?int
     {
-        if ($this->deliveryType === null) {
-            return null;
-        }
-
-        return AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType];
+        return AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType] ?? null;
     }
 
     /**
@@ -101,11 +95,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getPackageTypeId(): ?int
     {
-        if ($this->packageType === null) {
-            return null;
-        }
-
-        return AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType];
+        return AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$this->deliveryType] ?? null;
     }
 
     /**
