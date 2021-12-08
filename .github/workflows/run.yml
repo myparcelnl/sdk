@@ -26,7 +26,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    environment: production
     steps:
       - uses: actions/checkout@v2
 
