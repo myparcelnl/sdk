@@ -30,6 +30,10 @@ jobs:
       - name: 'Run tests'
         run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
 
+      - uses: myparcelnl/actions/update-coverage@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   release:
     name: 'Release'
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
