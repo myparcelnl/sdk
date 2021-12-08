@@ -1,10 +1,27 @@
-name: '🧪 Run tests'
+name: 'Process changes'
 on:
   push:
     branches:
       - main
       - develop
-  pull_request: ~
+    paths:
+      - .github/workflows/run.yml
+      - Dockerfile
+      - composer.json
+      - composer.lock
+      - docker-compose.yml
+      - src/**/*
+      - test/**/*
+
+  pull_request:
+    paths:
+      - .github/workflows/run.yml
+      - Dockerfile
+      - composer.json
+      - composer.lock
+      - docker-compose.yml
+      - src/**/*
+      - test/**/*
 
 jobs:
   test:
