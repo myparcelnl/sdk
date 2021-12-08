@@ -30,7 +30,7 @@ COPY composer.json composer.lock ./
 RUN composer install
 
 COPY src ./src
-COPY Test ./Test
+COPY test ./test
 COPY phpunit.xml ./
 
 ENTRYPOINT ["/sbin/tini", "--", "vendor/bin/phpunit", "--coverage-clover", "clover.xml"]
