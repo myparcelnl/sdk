@@ -8,9 +8,8 @@ use MyParcelNL\Sdk\src\Rule\Consignment\DeliveryDateRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\DropOffPointRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\MaximumWeightRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\ShipmentOptionsRule;
-use MyParcelNL\Sdk\src\Validator\AbstractValidator;
 
-class PostNLConsignmentValidator extends AbstractValidator
+class PostNLConsignmentValidator extends AbstractConsignmentValidator
 {
     /**
      * @return \MyParcelNL\Sdk\src\Rule\Rule[]
