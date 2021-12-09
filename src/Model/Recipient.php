@@ -19,6 +19,11 @@ class Recipient extends BaseModel
     /**
      * @var string|null
      */
+    private $region;
+
+    /**
+     * @var string|null
+     */
     private $company;
 
     /**
@@ -53,6 +58,7 @@ class Recipient extends BaseModel
     {
         $this->cc          = $data['cc'] ?? null;
         $this->city        = $data['city'] ?? null;
+        $this->region      = $data['region'] ?? null;
         $this->company     = $data['company'] ?? null;
         $this->email       = $data['email'] ?? null;
         $this->person      = $data['person'] ?? null;
@@ -75,6 +81,14 @@ class Recipient extends BaseModel
     public function getCity(): ?string
     {
         return $this->city;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegion(): ?string
+    {
+        return $this->region;
     }
 
     /**
@@ -144,6 +158,17 @@ class Recipient extends BaseModel
     public function setCity(?string $city): self
     {
         $this->city = $city;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $region
+     *
+     * @return self
+     */
+    public function setRegion(?string $region): self
+    {
+        $this->region = $region;
         return $this;
     }
 
@@ -221,6 +246,7 @@ class Recipient extends BaseModel
         return [
             'cc'          => $this->getCc(),
             'city'        => $this->getCity(),
+            'region'      => $this->getRegion(),
             'company'     => $this->getCompany(),
             'email'       => $this->getEmail(),
             'street'      => $this->getStreet(),
