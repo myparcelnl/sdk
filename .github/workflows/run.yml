@@ -33,6 +33,8 @@ jobs:
         id: docker
         with:
           image: myparcel/sdk
+          cache_prefix: php-sdk-
+          hash: ${{ hashFiles('composer.lock', 'Dockerfile') }}
           build_args: --target test
 
       - name: 'Create .env file'
