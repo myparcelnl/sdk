@@ -3,7 +3,7 @@
 *.DS_Store
 *.patch
 *.cache
-clover.xml
+coverage.xml
 
 .idea
 coverage

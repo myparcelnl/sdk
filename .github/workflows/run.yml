@@ -33,7 +33,7 @@ jobs:
         id: docker
         with:
           image: myparcel/sdk
-          key: php-sdk-${{ hashFiles('composer.lock', 'Dockerfile') }}
+          key: php-sdk
           build_args: --target test
 
       - name: 'Create .env file'
@@ -47,9 +47,11 @@ jobs:
       - name: 'Run tests'
         run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
 
-      - uses: myparcelnl/actions/update-coverage@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: 'Get coverage file from container'
+        run: docker cp $(docker ps -alq):/app/coverage.xml .
+
+      - name: Update code coverage
+        uses: codecov/codecov-action@v2
 
   release:
     name: 'Release'
