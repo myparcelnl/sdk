@@ -33,7 +33,7 @@ COPY src ./src
 COPY test ./test
 COPY phpunit.xml ./
 
-ENTRYPOINT ["/sbin/tini", "--", "vendor/bin/phpunit", "--coverage-clover", "clover.xml"]
+ENTRYPOINT ["/sbin/tini", "--", "vendor/bin/phpunit", "--coverage-clover", "coverage.xml"]
 
 
 ###
