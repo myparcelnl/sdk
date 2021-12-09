@@ -6,21 +6,15 @@ namespace MyParcelNL\Sdk\src\Concerns;
 
 use Exception;
 
+/**
+ * @property string|null $apiKey
+ */
 trait HasApiKey
 {
     /**
      * @var string|null
-     * @deprecated This property will lose public access in the future. Use getApiKey() instead.
      */
     public $apiKey;
-
-    /**
-     * @return string|null
-     */
-    public function getApiKey(): ?string
-    {
-        return $this->apiKey;
-    }
 
     /**
      * @throws \Exception
@@ -34,6 +28,14 @@ trait HasApiKey
         }
 
         return $apiKey;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApiKey(): ?string
+    {
+        return $this->apiKey;
     }
 
     /**

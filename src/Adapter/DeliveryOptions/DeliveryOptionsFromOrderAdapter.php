@@ -8,6 +8,8 @@ class DeliveryOptionsFromOrderAdapter extends AbstractDeliveryOptionsAdapter
 {
     /**
      * @param  array $data
+     *
+     * @throws \Exception
      */
     public function __construct(array $data)
     {
@@ -21,5 +23,7 @@ class DeliveryOptionsFromOrderAdapter extends AbstractDeliveryOptionsAdapter
         if ($this->isPickup()) {
             $this->pickupLocation = new PickupLocationV3Adapter($data['pickup'] ?? []);
         }
+
+        parent::__construct();
     }
 }

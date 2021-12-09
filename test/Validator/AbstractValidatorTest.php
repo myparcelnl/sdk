@@ -51,22 +51,15 @@ class AbstractValidatorTest extends TestCase
         $testValidator               = $this->createAbstractValidator();
         $testValidator::$staticRules = $rules;
 
+        // Expecting no error to be thrown
         (new $testValidator())
             ->validateAll(false)
             ->report();
-        // Expecting no error to be thrown
 
-        try {
-            (new $testValidator())
-                ->validateAll(true)
-                ->report();
-        } catch (ValidationException $e) {
-            self::assertSame(['Error', 'Error', 'Error'], $e->getErrors());
-            $this->addToAssertionCount(1);
-        }
-
-        // Make sure the catch assertion has been executed.
-        self::assertEquals(1, $this->getNumAssertions());
+        $this->expectException(ValidationException::class);
+        (new $testValidator())
+            ->validateAll(true)
+            ->report();
     }
 
     /**

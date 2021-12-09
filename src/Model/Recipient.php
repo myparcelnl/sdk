@@ -9,22 +9,7 @@ use MyParcelNL\Sdk\src\Helper\SplitStreet;
 class Recipient extends BaseModel
 {
     /**
-     * @var string|null
-     */
-    private $cc;
-
-    /**
-     * @var string|null
-     */
-    private $city;
-
-    /**
-     * @var string|null
-     */
-    private $company;
-
-    /**
-     * @var string|null
+     * @var string[]
      */
     private $email;
 

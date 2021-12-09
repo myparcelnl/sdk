@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run all tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-    <CommandLine>
+  <configuration default="false" name="All tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+    <CommandLine parameters="-dxdebug.mode=coverage,debug">
       <PhpTestInterpreterSettings>
         <option name="interpreterName" value="php" />
       </PhpTestInterpreterSettings>
     </CommandLine>
-    <TestRunner configuration_file="/app/phpunit.xml" scope="XML" />
+    <TestRunner scope="XML" />
     <method v="2" />
   </configuration>
 </component>

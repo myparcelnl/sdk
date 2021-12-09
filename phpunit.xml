@@ -7,7 +7,7 @@
     executionOrder="depends,defects">
     <testsuites>
         <testsuite name="Unit">
-            <directory>test</directory>
+            <directory>test/Factory</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -18,4 +18,7 @@
     <php>
         <env name="TEST" value="true" />
     </php>
+    <logging>
+        <log type="coverage-html" target="./coverage" />
+    </logging>
 </phpunit>

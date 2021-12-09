@@ -17,11 +17,11 @@ class PostNLConsignmentValidator extends AbstractValidator
      */
     protected function getRules(): array
     {
-        return [
-            new DeliveryDateRule(),
-            new ShipmentOptionsRule(),
-            new DropOffPointRule(),
-            new MaximumWeightRule(),
-        ];
+        return parent::getRules() + [
+                new DeliveryDateRule(),
+                new ShipmentOptionsRule(),
+                new DropOffPointRule(),
+                new MaximumWeightRule(),
+            ];
     }
 }

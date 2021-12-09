@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Support\Collection;
 
 class CarrierOptionsWebService extends AbstractWebService
 {
-    use HasCarrier;
+    use ValidatesCarrier;
 
     public const ENDPOINT = 'carrier_management/shops/:shopId/carrier_options';
 

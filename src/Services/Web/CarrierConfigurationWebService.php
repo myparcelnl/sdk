@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Support\Collection;
 
 class CarrierConfigurationWebService extends AbstractWebService
 {
-    use HasCarrier;
+    use ValidatesCarrier;
 
     private const ENDPOINT_MULTIPLE = 'shops/:shopId/carrier_configurations';
     private const ENDPOINT_SINGLE   = 'shops/:shopId/carriers/:carrierId/carrier_configuration';

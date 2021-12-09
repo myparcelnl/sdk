@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-    <CommandLine>
+    <CommandLine parameters="-dxdebug.mode=coverage,debug">
       <PhpTestInterpreterSettings>
         <option name="interpreterName" value="php" />
       </PhpTestInterpreterSettings>

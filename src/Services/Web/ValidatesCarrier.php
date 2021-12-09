@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\src\Services\Web;
 
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 
-trait HasCarrier
+trait ValidatesCarrier
 {
     /**
      * @param  string|int $carrierId
