@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Model\PickupLocation;
 use MyParcelNL\Sdk\src\Model\Recipient;
 use MyParcelNL\Sdk\src\Support\Collection;
 
@@ -64,6 +65,13 @@ class AbstractOrder extends BaseModel
      * @var \MyParcelNL\Sdk\src\Model\Recipient
      */
     protected $recipient;
+
+    /**
+     * Data from the pickup location.
+     *
+     * @var \MyParcelNL\Sdk\src\Model\PickupLocation|null
+     */
+    protected $pickupLocation;
 
     /**
      * @var string|null
@@ -162,6 +170,14 @@ class AbstractOrder extends BaseModel
     public function getRecipient(): Recipient
     {
         return $this->recipient;
+    }
+
+    /**
+     * @return \MyParcelNL\Sdk\src\Model\PickupLocation|null
+     */
+    public function getPickupLocation(): ?PickupLocation
+    {
+        return $this->pickupLocation;
     }
 
     /**
@@ -278,6 +294,17 @@ class AbstractOrder extends BaseModel
     public function setRecipient(Recipient $recipient): self
     {
         $this->recipient = $recipient;
+        return $this;
+    }
+
+    /**
+     * @param  \MyParcelNL\Sdk\src\Model\PickupLocation|null  $pickupLocation
+     *
+     * @return self
+     */
+    public function setPickupLocation(?PickupLocation $pickupLocation): self
+    {
+        $this->pickupLocation = $pickupLocation;
         return $this;
     }
 
