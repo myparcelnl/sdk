@@ -7,7 +7,7 @@
     executionOrder="depends,defects">
     <testsuites>
         <testsuite name="Unit">
-            <directory>test/Factory</directory>
+            <directory>test</directory>
         </testsuite>
     </testsuites>
     <filter>
