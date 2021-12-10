@@ -1373,11 +1373,10 @@ abstract class AbstractConsignment
      * @param  bool $onlyRecipient
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setOnlyRecipient(bool $onlyRecipient): self
     {
-        $this->only_recipient = $onlyRecipient && $this->isPackage();
+        $this->only_recipient = $onlyRecipient && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_ONLY_RECIPIENT);
 
         return $this;
     }
@@ -1389,11 +1388,10 @@ abstract class AbstractConsignment
      * @param  bool $signature
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setSignature(bool $signature): self
     {
-        $this->signature = $signature && $this->isPackage();
+        $this->signature = $signature && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_SIGNATURE);
 
         return $this;
     }
