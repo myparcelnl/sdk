@@ -86,6 +86,7 @@ class OrderCollection extends Collection
                         'carrier'   => $deliveryOptions->getCarrierId(),
                         'recipient' => $order->getRecipient()->toArrayWithoutNull(),
                         'options'   => $this->getShipmentOptions($deliveryOptions),
+                        'pickup'    => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
                     ],
                 ];
             }
