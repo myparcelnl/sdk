@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Helper\SplitStreet;
+
 class Recipient extends BaseModel
 {
     /**
@@ -47,18 +49,38 @@ class Recipient extends BaseModel
     private $street;
 
     /**
-     * @param  array $data
+     * @var string|null
+     */
+    private $number;
+
+    /**
+     * @var string|null
+     */
+    private $number_suffix;
+
+    /**
+     * @var string|null
+     */
+    private $box_number;
+
+    /**
+     * @param array $data
+     *
+     * @throws \Exception
      */
     public function __construct(array $data = [])
     {
-        $this->cc          = $data['cc'] ?? null;
-        $this->city        = $data['city'] ?? null;
-        $this->company     = $data['company'] ?? null;
-        $this->email       = $data['email'] ?? null;
-        $this->person      = $data['person'] ?? null;
-        $this->phone       = $data['phone'] ?? null;
-        $this->postal_code = $data['postal_code'] ?? null;
-        $this->street      = $data['street'] ?? null;
+        $this->cc            = $data['cc'] ?? null;
+        $this->city          = $data['city'] ?? null;
+        $this->company       = $data['company'] ?? null;
+        $this->email         = $data['email'] ?? null;
+        $this->person        = $data['person'] ?? null;
+        $this->phone         = $data['phone'] ?? null;
+        $this->postal_code   = $data['postal_code'] ?? null;
+        $this->street        = $data['street'] ?? null;
+        $this->number        = $data['number'] ?? null;
+        $this->number_suffix = $data['number_suffix'] ?? null;
+        $this->box_number    = $data['box_number'] ?? null;
     }
 
     /**
@@ -126,7 +148,39 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $cc
+     * @return null|string
+     */
+    public function getNumber(): ?string
+    {
+        return (string) $this->number;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNumberSuffix(): ?string
+    {
+        return $this->number_suffix;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBoxNumber(): ?string
+    {
+        return $this->box_number;
+    }
+
+    /**
+     * @param string|null $box_number
+     */
+    public function setBoxNumber(?string $box_number): void
+    {
+        $this->box_number = $box_number;
+    }
+
+    /**
+     * @param  string|null  $cc
      *
      * @return self
      */
@@ -137,7 +191,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $city
+     * @param  string|null  $city
      *
      * @return self
      */
@@ -148,7 +202,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $company
+     * @param  string|null  $company
      *
      * @return self
      */
@@ -159,7 +213,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $email
+     * @param  string|null  $email
      *
      * @return self
      */
@@ -170,7 +224,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $person
+     * @param  string|null  $person
      *
      * @return self
      */
@@ -181,7 +235,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $phone
+     * @param  string|null  $phone
      *
      * @return self
      */
@@ -192,7 +246,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $postalCode
+     * @param  string|null  $postalCode
      *
      * @return self
      */
@@ -203,7 +257,7 @@ class Recipient extends BaseModel
     }
 
     /**
-     * @param  string|null $street
+     * @param  string|null  $street
      *
      * @return self
      */
@@ -214,19 +268,44 @@ class Recipient extends BaseModel
     }
 
     /**
+     * @param  string|null  $number
+     *
+     * @return self
+     */
+    public function setNumber(?string $number): self
+    {
+        $this->number = $number;
+        return $this;
+    }
+
+    /**
+     * @param  string|null  $numberSuffix
+     *
+     * @return self
+     */
+    public function setNumberSuffix(?string $numberSuffix): self
+    {
+        $this->number_suffix = $numberSuffix;
+        return $this;
+    }
+
+    /**
      * @return string[]
      */
     public function toArray(): array
     {
         return [
-            'cc'          => $this->getCc(),
-            'city'        => $this->getCity(),
-            'company'     => $this->getCompany(),
-            'email'       => $this->getEmail(),
-            'street'      => $this->getStreet(),
-            'person'      => $this->getPerson(),
-            'phone'       => $this->getPhone(),
-            'postal_code' => $this->getPostalCode(),
+            'cc'            => $this->getCc(),
+            'city'          => $this->getCity(),
+            'company'       => $this->getCompany(),
+            'email'         => $this->getEmail(),
+            'street'        => $this->getStreet(),
+            'number'        => $this->getNumber(),
+            'number_suffix' => $this->getNumberSuffix(),
+            'box_number'    => $this->getBoxNumber(),
+            'person'        => $this->getPerson(),
+            'phone'         => $this->getPhone(),
+            'postal_code'   => $this->getPostalCode(),
         ];
     }
 }

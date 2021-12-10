@@ -1728,16 +1728,16 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         return array_map(
             function ($value) {
+                if (is_array($value)) {
+                    return $this->filterNull($value);
+                }
+
                 if ($value && method_exists($value, 'toArrayWithoutNull')) {
                     return $value->toArrayWithoutNull();
                 }
 
                 if ($value && method_exists($value, 'toArray')) {
                     return $value->toArray();
-                }
-
-                if (is_array($value)) {
-                    return $this->filterNull($value);
                 }
 
                 return $value;
