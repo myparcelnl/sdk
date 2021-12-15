@@ -8,6 +8,7 @@ use BadMethodCallException;
 use Exception;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\src\Concerns\HasCountry;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Exception\ValidationException;
@@ -22,6 +23,7 @@ use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 abstract class AbstractConsignment
 {
     use HasCheckoutFields;
+    use HasCountry;
     use HasPickupLocation;
 
     /*
@@ -729,55 +731,25 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return string|null
-     */
-    public function getCountry()
-    {
-        return $this->cc;
-    }
-
-    /**
-     * The address country code
-     * ISO3166-1 alpha2 country code<br>
-     * <br>
-     * Pattern: [A-Z]{2}<br>
-     * Example: NL, BE, CW<br>
-     * Required: Yes.
-     *
-     * @param  string $cc
-     *
-     * @return self
-     */
-    public function setCountry($cc): self
-    {
-        $this->cc = $cc;
-
-        return $this;
-    }
-
-    /**
      * Check if the address is outside the EU.
      *
      * @return bool
-     * @todo move to hasCountry trait maken
+     * @deprecated Use HasCountry::isToRowCountry()
      */
     public function isCdCountry(): bool
     {
-        return false === $this->isEuCountry();
+        return $this->isToRowCountry();
     }
 
     /**
      * Check if the address is inside the EU.
      *
      * @return bool
-     * @todo move to hasCountry
+     * @deprecated Use HasCountry::isToEuCountry()
      */
     public function isEuCountry(): bool
     {
-        return in_array(
-            $this->getCountry(),
-            self::EURO_COUNTRIES
-        );
+       return $this->isToEuCountry();
     }
 
     /**

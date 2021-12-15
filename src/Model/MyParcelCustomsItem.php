@@ -16,6 +16,7 @@ namespace MyParcelNL\Sdk\src\Model;
 
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
@@ -27,12 +28,12 @@ class MyParcelCustomsItem
 {
     const DESCRIPTION_MAX_LENGTH = 47;
 
-    private $description;
-    private $amount;
-    private $weight;
-    private $item_value;
-    private $classification;
-    private $country;
+    public $description;
+    public $amount;
+    public $weight;
+    public $item_value;
+    public $classification;
+    public $country;
 
     /**
      * @return mixed
@@ -138,6 +139,18 @@ class MyParcelCustomsItem
         $this->item_value = (int) $item_value;
         return $this;
     }
+
+    /**
+     * @param array $item_value
+     *
+     * @return $this
+     */
+    public function setItemValueArray(array $item_value): self
+    {
+        $this->item_value = $item_value;
+        return $this;
+    }
+
 
     /**
      * @return int|null

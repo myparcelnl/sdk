@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\src\Collection\Fulfilment;
 use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
+use MyParcelNL\Sdk\src\Concerns\HasCountry;
 use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
@@ -22,6 +23,7 @@ class OrderCollection extends Collection
 {
     use HasUserAgent;
     use HasApiKey;
+    use HasCountry;
 
     /**
      * @param  string $apiKey
@@ -83,9 +85,10 @@ class OrderCollection extends Collection
                     'invoice_address'               => $order->getInvoiceAddress()->toArrayWithoutNull(),
                     'order_lines'                   => $order->getOrderLines()->toArrayWithoutNull(),
                     'shipment'                      => [
-                        'carrier'   => $deliveryOptions->getCarrierId(),
-                        'recipient' => $order->getRecipient()->toArrayWithoutNull(),
-                        'options'   => $this->getShipmentOptions($deliveryOptions),
+                        'carrier'             => $deliveryOptions->getCarrierId(),
+                        'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
+                        'options'             => $this->getShipmentOptions($deliveryOptions),
+                        'customs_declaration' => $order->getCustomsDeclaration(),
                     ],
                 ];
             }
