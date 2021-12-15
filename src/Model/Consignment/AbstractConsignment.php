@@ -187,6 +187,11 @@ abstract class AbstractConsignment
     public const INSURANCE_POSSIBILITIES_LOCAL = [];
 
     /**
+     * @var int
+     */
+    public const DESCRIPTION_MAX_LENGTH = 50;
+
+    /**
      * @internal
      * @var null|string
      */
