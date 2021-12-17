@@ -79,7 +79,7 @@ class OrderCollection extends Collection
                 return [
                     'external_identifier'           => $order->getExternalIdentifier(),
                     'fulfilment_partner_identifier' => $order->getFulfilmentPartnerIdentifier(),
-                    'order_date'                    => $order->getOrderDateString(AbstractOrder::DATE_FORMAT_DATE),
+                    'order_date'                    => $order->getOrderDateString(AbstractOrder::DATE_FORMAT_FULL),
                     'invoice_address'               => $order->getInvoiceAddress()->toArrayWithoutNull(),
                     'order_lines'                   => $order->getOrderLines()->toArrayWithoutNull(),
                     'shipment'                      => [
