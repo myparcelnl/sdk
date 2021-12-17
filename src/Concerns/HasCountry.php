@@ -17,7 +17,7 @@ trait HasCountry
     /**
      * @throws \Exception
      */
-    public function ensureHasCountry(): string
+    public function ensureHasCountry(): bool
     {
         $country = $this->getCountry();
 
@@ -25,7 +25,7 @@ trait HasCountry
             throw new Exception('Country is missing. Please use setCountry(string) first.');
         }
 
-        return $country;
+        return (bool) $country;
     }
 
     /**

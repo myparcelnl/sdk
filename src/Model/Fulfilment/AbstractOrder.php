@@ -359,15 +359,15 @@ class AbstractOrder extends BaseModel
     {
         return array_merge(
             [
-                'external_identifier' => $this->getExternalIdentifier(),
+                'external_identifier'           => $this->getExternalIdentifier(),
                 'fulfilment_partner_identifier' => $this->getFulfilmentPartnerIdentifier(),
-                'order_date' => $this->getOrderDateString(),
-                'recipient' => $this->getRecipient()->toArray(),
-                'invoice_address' => $this->getInvoiceAddress()->toArray(),
-                'order_lines' => $this->getOrderLines()->toArray(),
-                'delivery_options' => $this->getDeliveryOptions()->toArray(),
+                'order_date'                    => $this->getOrderDateString(),
+                'recipient'                     => $this->getRecipient()->toArray(),
+                'invoice_address'               => $this->getInvoiceAddress()->toArray(),
+                'order_lines'                   => $this->getOrderLines()->toArray(),
+                'delivery_options'              => $this->getDeliveryOptions()->toArray(),
             ],
-            ($this->customs_declaration === null)
+            (null === $this->customs_declaration)
                 ? []
                 : ['customs_declaration' => $this->getCustomsDeclaration()->toArray()]
         );
