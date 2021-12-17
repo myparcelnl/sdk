@@ -14,7 +14,6 @@ use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\RequestBody;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 /**
  * @property \MyParcelNL\Sdk\src\Model\Fulfilment\Order[] $items
@@ -119,7 +118,7 @@ class OrderCollection extends Collection
             'return'            => (int) $shipmentOptions->isReturn(),
             'insurance'         => [
                 'amount'    => $shipmentOptions->getInsurance(),
-                'currency'  => ExportRow::CURRENCY_EURO
+                'currency'  => 'EUR'
             ],
             'label_description' => (string) $shipmentOptions->getLabelDescription(),
         ];
