@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\src\Model\PickupLocation;
 use MyParcelNL\Sdk\src\Model\Recipient;
 use MyParcelNL\Sdk\src\Support\Collection;
@@ -89,6 +90,16 @@ class AbstractOrder extends BaseModel
      * @var string|null
      */
     protected $uuid;
+
+    protected $customs_declaration;
+
+    /**
+     * @return null|\MyParcelNL\Sdk\src\Model\CustomsDeclaration
+     */
+    public function getCustomsDeclaration(): ?CustomsDeclaration
+    {
+        return $this->customs_declaration;
+    }
 
     /**
      * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
@@ -202,6 +213,17 @@ class AbstractOrder extends BaseModel
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+
+    /**
+     * @param  CustomsDeclaration $customs_declaration
+     *
+     * @return $this
+     */
+    public function setCustomsDeclaration(CustomsDeclaration $customs_declaration): self
+    {
+        $this->customs_declaration = $customs_declaration;
+        return $this;
     }
 
     /**
@@ -335,14 +357,19 @@ class AbstractOrder extends BaseModel
      */
     public function toArray(): array
     {
-        return [
-            'external_identifier'           => $this->getExternalIdentifier(),
-            'fulfilment_partner_identifier' => $this->getFulfilmentPartnerIdentifier(),
-            'order_date'                    => $this->getOrderDateString(),
-            'recipient'                     => $this->getRecipient()->toArray(),
-            'invoice_address'               => $this->getInvoiceAddress()->toArray(),
-            'order_lines'                   => $this->getOrderLines()->toArray(),
-            'delivery_options'              => $this->getDeliveryOptions()->toArray(),
-        ];
+        return array_merge(
+            [
+                'external_identifier'           => $this->getExternalIdentifier(),
+                'fulfilment_partner_identifier' => $this->getFulfilmentPartnerIdentifier(),
+                'order_date'                    => $this->getOrderDateString(),
+                'recipient'                     => $this->getRecipient()->toArray(),
+                'invoice_address'               => $this->getInvoiceAddress()->toArray(),
+                'order_lines'                   => $this->getOrderLines()->toArray(),
+                'delivery_options'              => $this->getDeliveryOptions()->toArray(),
+            ],
+            (null === $this->customs_declaration)
+                ? []
+                : ['customs_declaration' => $this->getCustomsDeclaration()->toArray()]
+        );
     }
 }

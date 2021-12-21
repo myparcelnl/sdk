@@ -19,6 +19,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 class ConsignmentEncode
 {
@@ -87,7 +88,7 @@ class ConsignmentEncode
             ]
         );
 
-        if ($consignment->isEuCountry()) {
+        if ($consignment->isToEuCountry()) {
             $consignmentEncoded['options']['large_format'] = (int) $consignment->isLargeFormat();
         }
 
@@ -106,7 +107,7 @@ class ConsignmentEncode
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
                 'amount'   => (int) $consignment->getInsurance() * 100,
-                'currency' => 'EUR',
+                'currency' => ExportRow::CURRENCY_EURO,
             ];
         }
 
@@ -230,7 +231,7 @@ class ConsignmentEncode
          * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
-        if ($consignment->isEuCountry()) {
+        if ($consignment->isToEuCountry()) {
             return $this;
         }
 
@@ -271,7 +272,7 @@ class ConsignmentEncode
      *
      * @return array
      */
-    private function encodeCdCountryItem($customsItem, $currency = 'EUR'): array
+    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = ExportRow::CURRENCY_EURO): array
     {
         $item = [
             'description'    => $customsItem->getDescription(),
