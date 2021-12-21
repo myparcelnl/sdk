@@ -19,6 +19,7 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
@@ -29,12 +30,12 @@ use MyParcelNL\Sdk\src\Support\Str;
 class MyParcelCustomsItem
 {
 
-    private $description;
-    private $amount;
-    private $weight;
-    private $item_value;
-    private $classification;
-    private $country;
+    public $description;
+    public $amount;
+    public $weight;
+    public $item_value;
+    public $classification;
+    public $country;
 
     /**
      * @return mixed
@@ -147,6 +148,18 @@ class MyParcelCustomsItem
         $this->item_value = (int) $item_value;
         return $this;
     }
+
+    /**
+     * @param array $item_value
+     *
+     * @return $this
+     */
+    public function setItemValueArray(array $item_value): self
+    {
+        $this->item_value = $item_value;
+        return $this;
+    }
+
 
     /**
      * @return int|null
