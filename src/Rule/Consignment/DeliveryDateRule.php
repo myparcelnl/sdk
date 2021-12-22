@@ -15,8 +15,9 @@ class DeliveryDateRule extends Rule
     public function validate($validationSubject): void
     {
         $isDefaultDeliveryType = AbstractConsignment::DEFAULT_DELIVERY_TYPE === $validationSubject->getDeliveryType();
+        $canHaveDeliveryDate   = $validationSubject->canHaveExtraOption(AbstractConsignment::EXTRA_OPTION_DELIVERY_DATE);
 
-        if (! $isDefaultDeliveryType && ! $validationSubject->getDeliveryDate()) {
+        if (! $isDefaultDeliveryType && $canHaveDeliveryDate && ! $validationSubject->getDeliveryDate()) {
             $this->addError(
                 sprintf(
                     'If delivery_type is not %d, delivery_date is required.',
