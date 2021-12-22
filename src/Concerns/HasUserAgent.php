@@ -27,7 +27,8 @@ trait HasUserAgent
         $userAgentStrings = [];
         $userAgents = array_merge(
             $this->getUserAgent(),
-            $this->getUserAgentFromComposer()
+            $this->getUserAgentFromComposer(),
+            $this->getUserAgentFromPhp()
         );
 
         foreach ($userAgents as $key => $value) {
@@ -90,6 +91,14 @@ trait HasUserAgent
         $this->userAgent = [];
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getUserAgentFromPhp(): array
+    {
+        return ['php' => PHP_VERSION];
     }
 
     /**
