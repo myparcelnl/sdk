@@ -872,11 +872,11 @@ abstract class AbstractConsignment
      * The street additional info
      * Required: No.
      *
-     * @param  string $streetAdditionalInfo
+     * @param  string|null $streetAdditionalInfo
      *
      * @return self
      */
-    public function setStreetAdditionalInfo(string $streetAdditionalInfo): self
+    public function setStreetAdditionalInfo(?string $streetAdditionalInfo): self
     {
         $this->street_additional_info = $streetAdditionalInfo;
 
