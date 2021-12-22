@@ -91,14 +91,13 @@ class Recipient extends BaseModel
         $this->streetAdditionalInfo = $data['street_additional_info'] ?? null;
         $this->street               = $data['street'] ?? null;
         $this->fullStreet           = $data['full_street'] ?? null;
+        $this->number               = $data['number'] ?? null;
+        $this->numberSuffix         = $data['number_suffix'] ?? null;
+        $this->boxNumber            = $data['box_number'] ?? null;
 
         if ($this->fullStreet && $originCountry) {
             $this->setFullStreet($originCountry);
         }
-
-        $this->number       = $data['number'] ?? null;
-        $this->numberSuffix = $data['number_suffix'] ?? null;
-        $this->boxNumber    = $data['box_number'] ?? null;
     }
 
     /**
