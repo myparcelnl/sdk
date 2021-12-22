@@ -1,16 +1,4 @@
 <?php declare(strict_types=1);
-/**
- * This object is embedded in the AbstractConsignment object for global shipments and is
- *
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2020 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v0.1.0
- */
 
 namespace MyParcelNL\Sdk\src\Model;
 
@@ -22,25 +10,66 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
- * This object is embedded in the MyParcelConsignment object for global shipments and is
- * mandatory for non-EU shipments.
- *
- * Class MyParcelCustomsItem
+ * This object is embedded in a Consignment for global shipments and is mandatory for non-EU shipments.
  */
 class MyParcelCustomsItem
 {
-
+    /**
+     * @var null|string
+     */
     public $description;
+
+    /**
+     * @var null|int
+     */
     public $amount;
+
+    /**
+     * @var null|int
+     */
     public $weight;
+
+    /**
+     * @var null|int
+     */
     public $item_value;
+
+    /**
+     * @var null|int
+     */
     public $classification;
+
+    /**
+     * @var null|string
+     */
     public $country;
 
     /**
-     * @return mixed
+     * Encode product for the request
+     *
+     * @param  string $currency
+     *
+     * @return array
      */
-    public function getDescription()
+    public function encode(string $currency): array
+    {
+        return [
+            'description'    => $this->getDescription(),
+            'amount'         => $this->getAmount(),
+            'weight'         => $this->getWeight(),
+            'classification' => $this->getClassification(),
+            'country'        => $this->getCountry(),
+            'item_value'     => [
+                'amount'   => $this->getItemValue(),
+                'currency' => $currency,
+            ],
+        ];
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -73,7 +102,7 @@ class MyParcelCustomsItem
     /**
      * @return int|null
      */
-    public function getAmount()
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
@@ -83,10 +112,10 @@ class MyParcelCustomsItem
      *
      * Required: Yes
      *
-     * @param int $amount
+     * @param int|string $amount
      * @return $this
      */
-    public function setAmount($amount)
+    public function setAmount($amount): self
     {
         $this->amount = (int) $amount;
 
@@ -96,27 +125,21 @@ class MyParcelCustomsItem
     /**
      * @return int|null
      */
-    public function getWeight()
+    public function getWeight(): ?int
     {
         return $this->weight;
     }
 
     /**
      * The total weight for these items in whole grams. Between 0 and 20000 grams.
-     *
      * Required: Yes
      *
-     * @param int $weight
+     * @param  int|string $weight
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setWeight($weight)
+    public function setWeight($weight): self
     {
-        if ($weight == 0) {
-            throw new MissingFieldException('Weight must be set for a MyParcel product');
-        }
-
         $this->weight = (int) $weight;
 
         return $this;
@@ -127,7 +150,7 @@ class MyParcelCustomsItem
      *
      * @return int|null
      */
-    public function getItemValue()
+    public function getItemValue(): ?int
     {
         return $this->item_value;
     }
@@ -139,11 +162,11 @@ class MyParcelCustomsItem
      * separators (in cents).
      * Required: Yes
      *
-     * @param int $item_value
+     * @param int|string $item_value
      *
      * @return $this
      */
-    public function setItemValue($item_value)
+    public function setItemValue($item_value): self
     {
         $this->item_value = (int) $item_value;
         return $this;
@@ -160,11 +183,10 @@ class MyParcelCustomsItem
         return $this;
     }
 
-
     /**
      * @return int|null
      */
-    public function getClassification()
+    public function getClassification(): ?int
     {
         return $this->classification;
     }
@@ -189,7 +211,7 @@ class MyParcelCustomsItem
             throw new MissingFieldException('Classification must be set for a MyParcel product');
         }
 
-        $this->classification = substr("$classification", 0, 5);
+        $this->classification = (int) Str::limit((string) $classification, 5, '');
 
         return $this;
     }
@@ -212,10 +234,10 @@ class MyParcelCustomsItem
      *
      * @link https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
      *
-     * @param string $country
+     * @param string|null $country
      * @return $this
      */
-    public function setCountry($country)
+    public function setCountry($country): self
     {
         $this->country = $country;
 
@@ -228,7 +250,7 @@ class MyParcelCustomsItem
      * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function ensureFilled()
+    public function ensureFilled(): void
     {
         $required = [
             'Description',
@@ -239,7 +261,7 @@ class MyParcelCustomsItem
             'Country',
         ];
         foreach ($required as $methodAlias) {
-            if ($this->{'get' . $methodAlias}() === null) {
+            if (null === $this->{'get' . $methodAlias}()) {
                 throw new MissingFieldException("set$methodAlias() must be set");
             }
         }
