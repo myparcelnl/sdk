@@ -34,7 +34,7 @@ jobs:
         with:
           image: myparcel/sdk
           key: php-sdk
-          build_args: --target test
+          docker_args: --target test
 
       - name: 'Create .env file'
         run: |
@@ -60,7 +60,7 @@ jobs:
       - test
     runs-on: ubuntu-20.04
     steps:
-      - uses: myparcelnl/actions/npm-install@v1
+      - uses: myparcelnl/actions/yarn-install@v1
 
       - name: 'Run semantic release'
         run: npx semantic-release

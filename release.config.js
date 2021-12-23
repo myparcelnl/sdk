@@ -1,9 +1,8 @@
-const { addGitHubPlugin } = require('@myparcel/semantic-release-config/src/plugins/addGitHubPlugin');
-const mainConfig = require('@myparcel/semantic-release-config');
+const mainConfig = require('@myparcel/semantic-release-config/composer');
+const { addComposerPlugin, addGitHubPlugin } = require('@myparcel/semantic-release-config/src/plugins');
 
 module.exports = {
-  ...mainConfig,
-  'extends': '@myparcel/semantic-release-config/npm',
+  'extends': '@myparcel/semantic-release-config/composer',
   'plugins': [
     ...mainConfig.plugins,
     addGitHubPlugin(),
