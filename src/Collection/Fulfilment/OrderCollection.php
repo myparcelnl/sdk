@@ -109,19 +109,22 @@ class OrderCollection extends Collection
             ? $dateTime->format(AbstractOrder::DATE_FORMAT_FULL)
             : null;
 
-        $options = [
-            'package_type'  => $deliveryOptions->getPackageTypeId(),
-            'delivery_date' => $deliveryDate,
-        ];
-
         $shipmentOptions = $deliveryOptions->getShipmentOptions();
 
-        if ($shipmentOptions) {
-            // Map boolean values of shipment options to integers and add them to the options array.
-            foreach ($shipmentOptions as $optionKey => $optionValue) {
-                $options[$optionKey] = (int) $optionValue;
-            }
-        }
+        $options = [
+            'package_type'      => $deliveryOptions->getPackageTypeId(),
+            'delivery_date'     => $deliveryDate,
+            'signature'         => (int) $shipmentOptions->hasSignature(),
+            'only_recipient'    => (int) $shipmentOptions->hasOnlyRecipient(),
+            'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
+            'large_format'      => (int) $shipmentOptions->hasLargeFormat(),
+            'return'            => (int) $shipmentOptions->isReturn(),
+            'insurance'         => [
+                'amount'    => $shipmentOptions->getInsurance(),
+                'currency'  => 'EUR'
+            ],
+            'label_description' => (string) $shipmentOptions->getLabelDescription(),
+        ];
 
         return $options;
     }
