@@ -1,29 +1,20 @@
-<?php declare(strict_types=1);
-/**
- * If you want to add improvements, please create a fork in our GitHub:
- * https://github.com/myparcelnl
- *
- * @author      Reindert Vetter <reindert@myparcel.nl>
- * @copyright   2010-2020 MyParcel
- * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
- * @link        https://github.com/myparcelnl/sdk
- * @since       File available since Release v2.0.0
- */
+<?php
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Adapter;
 
+use MyParcelNL\Sdk\Helper\Utils;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Support\Arr;
 
 class ConsignmentAdapter
 {
-    private $data;
-
     /**
      * @var AbstractConsignment
      */
     private $consignment;
+
+    private $data;
 
     /**
      * ConsignmentDecode constructor.
@@ -39,17 +30,18 @@ class ConsignmentAdapter
         $this->consignment = $consignment;
 
         $this
-            ->baseOptions()
-            ->extraOptions()
-            ->recipient()
-            ->pickup()
+            ->setBaseOptions()
+            ->setPhysicalProperties()
+            ->setExtraOptions()
+            ->setRecipient()
+            ->setPickup()
             ->addDropOffPoint();
     }
 
     /**
      * @return AbstractConsignment
      */
-    public function getConsignment()
+    public function getConsignment(): AbstractConsignment
     {
         return $this->consignment;
     }
@@ -61,7 +53,7 @@ class ConsignmentAdapter
     {
         $receivedDropOffPoint = $this->data['drop_off_point'] ?? null;
 
-        if (!$receivedDropOffPoint) {
+        if (! $receivedDropOffPoint) {
             return $this;
         }
 
@@ -72,31 +64,55 @@ class ConsignmentAdapter
 
     /**
      * @return $this
+     * @throws \Exception
      */
-    private function baseOptions()
+    private function setBaseOptions(): self
     {
-        $recipient = $this->data['recipient'];
-        $options   = $this->data['options'];
+        Utils::fillObject($this->consignment, [
+            'consignment_id'       => $this->data['id'] ?? null,
+            'shop_id'              => $this->data['shop_id'] ?? null,
+            'reference_identifier' => $this->data['reference_identifier'] ?? null,
+            'barcode'              => $this->data['barcode'] ?? null,
+            'status'               => $this->data['status'] ?? null,
+        ]);
 
-        $this->consignment
-            ->setConsignmentId($this->data['id'])
-            ->setShopId($this->data['shop_id'])
-            ->setReferenceIdentifier($this->data['reference_identifier'])
-            ->setBarcode($this->data['barcode'])
-            ->setExternalIdentifier($this->data['external_identifier'])
-            ->setStatus($this->data['status'])
-            ->setCountry($recipient['cc'])
-            ->setPerson($recipient['person'])
-            ->setPostalCode($recipient['postal_code'])
-            ->setStreet($recipient['street'])
-            ->setCity($recipient['city'])
-            ->setEmail(isset($recipient['email']) ? $recipient['email'] : '')
-            ->setPhone(isset($recipient['phone']) ? $recipient['phone'] : '')
-            ->setPackageType($options['package_type'])
-            ->setLabelDescription(isset($options['label_description']) ? $options['label_description'] : '');
+        return $this;
+    }
 
-        if (Arr::get($this->data, 'physical_properties.weight')) {
-            $this->consignment->setTotalWeight($this->data['physical_properties']['weight']);
+    /**
+     * @return self
+     * @throws \Exception
+     */
+    private function setExtraOptions(): self
+    {
+        $options = $this->data['options'];
+
+        if (array_key_exists('insurance', $options)) {
+            $options['insurance']['amount'] /= 100;
+        }
+
+        Utils::fillObject($this->consignment, [
+            'package_type'      => $options['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+            'delivery_date'     => $options['delivery_date'] ?? null,
+            'delivery_type'     => $options['delivery_type'] ?? AbstractConsignment::DEFAULT_DELIVERY_TYPE,
+            'only_recipient'    => (bool) ($options['only_recipient'] ?? false),
+            'large_format'      => (bool) ($options['large_format'] ?? false),
+            'age_check'         => (bool) ($options['age_check'] ?? false),
+            'signature'         => (bool) ($options['signature'] ?? false),
+            'return'            => (bool) ($options['return'] ?? false),
+            'label_description' => $options['label_description'] ?? null,
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @return self
+     */
+    private function setPhysicalProperties(): self
+    {
+        if (isset($this->data['physical_properties'])) {
+            $this->consignment->setPhysicalProperties($this->data['physical_properties']);
         }
 
         return $this;
@@ -104,142 +120,46 @@ class ConsignmentAdapter
 
     /**
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    private function extraOptions(): self
+    private function setPickup(): self
     {
-        $options = $this->data['options'];
-        $fields  = [
-            'only_recipient' => false,
-            'large_format'   => false,
-            'age_check'      => false,
-            'signature'      => false,
-            'return'         => false,
-            'delivery_date'  => null,
-            'delivery_type'  => AbstractConsignment::DEFAULT_DELIVERY_TYPE,
-        ];
-        $this->clearFields($fields);
+        $pickup = $this->data['pickup'] ?? [];
 
-        if (! empty($options['only_recipient'])) {
-            $this->consignment->setOnlyRecipient((bool) $options['only_recipient']);
-        }
-
-        if (! empty($options['large_format'])) {
-            $this->consignment->setLargeFormat((bool) $options['large_format']);
-        }
-
-        if (! empty($options['age_check'])) {
-            $this->consignment->setAgeCheck((bool) $options['age_check']);
-        }
-
-        if (! empty($options['signature'])) {
-            $this->consignment->setSignature((bool) $options['signature']);
-        }
-
-        if (! empty($options['return'])) {
-            $this->consignment->setReturn((bool) $options['return']);
-        }
-
-        if (! empty($options['delivery_date'])) {
-            $this->consignment->setDeliveryDate($options['delivery_date']);
-        }
-
-        if (array_key_exists('insurance', $options)) {
-            $insuranceAmount = $options['insurance']['amount'];
-            $this->consignment->setInsurance($insuranceAmount / 100);
-        }
-
-        if (isset($options['delivery_type'])) {
-            $this->consignment->setDeliveryType($options['delivery_type'], false);
+        if (! empty($pickup)) {
+            Utils::fillObject($this->consignment, [
+                'pickup_city'          => $pickup['city'] ?? null,
+                'pickup_country'       => $pickup['cc'] ?? null,
+                'pickup_location_code' => $pickup['location_code'] ?? null,
+                'pickup_location_name' => $pickup['location_name'] ?? null,
+                'pickup_network_id'    => $pickup['retail_network_id'] ?? null,
+                'pickup_number'        => $pickup['number'] ?? null,
+                'pickup_postal_code'   => $pickup['postal_code'] ?? null,
+                'pickup_street'        => $pickup['street'] ?? null,
+            ]);
         }
 
         return $this;
     }
 
     /**
-     * @return $this
+     * @return self
      */
-    private function recipient()
+    private function setRecipient(): self
     {
-        $fields = [
-            'company'       => '',
-            'number'        => null,
-            'number_suffix' => '',
+        $recipient = $this->data['recipient'];
 
-        ];
-        $this->clearFields($fields);
-
-        $methods = [
-            'Company'      => 'company',
-            'Number'       => 'number',
-            'NumberSuffix' => 'number_suffix',
-        ];
-        $this->setByMethods($this->data['recipient'], $methods);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function pickup()
-    {
-        // Set pickup
-        if (array_key_exists('pickup', $this->data) && $this->data['pickup'] !== null) {
-            $methods = [
-                'PickupPostalCode'   => 'postal_code',
-                'PickupStreet'       => 'street',
-                'PickupCity'         => 'city',
-                'PickupNumber'       => 'number',
-                'PickupLocationName' => 'location_name',
-                'PickupLocationCode' => 'location_code',
-                'PickupNetworkId'    => 'network_id',
-            ];
-            $this->setByMethods($this->data['pickup'], $methods);
-        } else {
-            $fields = [
-                'pickup_postal_code'   => null,
-                'pickup_street'        => null,
-                'pickup_city'          => null,
-                'pickup_number'        => null,
-                'pickup_location_name' => null,
-                'pickup_location_code' => '',
-                'retail_network_id'    => '',
-
-            ];
-            $this->clearFields($fields);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array $data
-     * @param array $methods
-     *
-     * @return $this
-     */
-    private function setByMethods($data, $methods)
-    {
-        foreach ($methods as $method => $value) {
-            if (! empty($data[$value])) {
-                $this->consignment->{'set' . $method}($data[$value]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $fields
-     *
-     * @return $this
-     */
-    private function clearFields($fields)
-    {
-        foreach ($fields as $field => $default) {
-            $this->consignment->{$field} = $default;
-        }
+        Utils::fillObject($this->consignment, [
+            'country'       => $recipient['cc'] ?? null,
+            'city'          => $recipient['city'] ?? null,
+            'company'       => $recipient['company'] ?? null,
+            'email'         => $recipient['email'] ?? null,
+            'number'        => $recipient['number'] ?? null,
+            'number_suffix' => $recipient['number_suffix'] ?? null,
+            'person'        => $recipient['person'] ?? null,
+            'phone'         => $recipient['phone'] ?? null,
+            'postal_code'   => $recipient['postal_code'] ?? null,
+            'street'        => $recipient['street'] ?? null,
+        ]);
 
         return $this;
     }

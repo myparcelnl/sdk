@@ -1,0 +1,68 @@
+name: 'Process changes'
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - .github/workflows/run.yml
+      - Dockerfile
+      - composer.json
+      - composer.lock
+      - docker-compose.yml
+      - src/**/*
+      - test/**/*
+
+  pull_request:
+    paths:
+      - .github/workflows/run.yml
+      - Dockerfile
+      - composer.json
+      - composer.lock
+      - docker-compose.yml
+      - src/**/*
+      - test/**/*
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: myparcelnl/actions/build-docker-image@v1
+        id: docker
+        with:
+          image: myparcel/sdk
+          key: php-sdk
+          docker_args: --target test
+
+      - name: 'Create .env file'
+        run: |
+          cat << EOF > .env
+          CI=${CI}
+          API_KEY_NL=${{ secrets.API_KEY_NL }}
+          API_KEY_BE=${{ secrets.API_KEY_BE }}
+          EOF
+
+      - name: 'Run tests'
+        run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
+
+      - name: 'Get coverage file from container'
+        run: docker cp $(docker ps -alq):/app/coverage.xml .
+
+      - name: Update code coverage
+        uses: codecov/codecov-action@v2
+
+  release:
+    name: 'Release'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - test
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: myparcelnl/actions/yarn-install@v1
+
+      - name: 'Run semantic release'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

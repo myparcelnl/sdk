@@ -1,7 +1,11 @@
+.env
+*.env
 *.DS_Store
-.php_cs.cache
-composer.lock
+*.patch
+*.cache
+coverage.xml
 
 .idea
 coverage
 vendor
+node_modules
