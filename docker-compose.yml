@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  php:
+    image: myparcelnl/php-sdk
+    build: ./
+    working_dir: /app
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
