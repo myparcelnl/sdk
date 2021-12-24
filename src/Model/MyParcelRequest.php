@@ -344,8 +344,9 @@ class MyParcelRequest
         foreach ($consignments as $consignment) {
             if ($consignment->getReferenceId()) {
                 $referenceIds[] = $consignment->getReferenceId();
-                $key            = $consignment->getApiKey();
             }
+
+            $key = $consignment->getApiKey();
         }
 
         return $referenceIds;
