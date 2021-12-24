@@ -46,6 +46,11 @@ class Recipient extends BaseModel
     /**
      * @var string|null
      */
+    private $region;
+
+    /**
+     * @var string|null
+     */
     private $street;
 
     /**
@@ -88,6 +93,7 @@ class Recipient extends BaseModel
         $this->person               = $data['person'] ?? null;
         $this->phone                = $data['phone'] ?? null;
         $this->postalCode           = $data['postal_code'] ?? null;
+        $this->region               = $data['region'] ?? null;
         $this->streetAdditionalInfo = $data['street_additional_info'] ?? null;
         $this->street               = $data['street'] ?? null;
         $this->fullStreet           = $data['full_street'] ?? null;
@@ -154,6 +160,14 @@ class Recipient extends BaseModel
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegion(): ?string
+    {
+        return $this->region;
     }
 
     /**
@@ -274,6 +288,17 @@ class Recipient extends BaseModel
     }
 
     /**
+     * @param  string|null $region
+     *
+     * @return self
+     */
+    public function setRegion(?string $region): self
+    {
+        $this->region = $region;
+        return $this;
+    }
+
+    /**
      * @param  string|null $street
      *
      * @return self
@@ -350,6 +375,7 @@ class Recipient extends BaseModel
             'person'                 => $this->getPerson(),
             'phone'                  => $this->getPhone(),
             'postal_code'            => $this->getPostalCode(),
+            'region'                 => $this->getRegion(),
             'street'                 => $this->getStreet(),
             'street_additional_info' => $this->getStreetAdditionalInfo(),
         ];
