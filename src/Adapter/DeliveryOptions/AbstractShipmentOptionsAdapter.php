@@ -97,7 +97,72 @@ abstract class AbstractShipmentOptionsAdapter
         return $this->label_description;
     }
 
-    public function setLabelDescription(string $labelDescription): void
+    /**
+     * @param  null|bool  $signature
+     *
+     * @return void
+     */
+    public function setSignature(?bool $signature): void
+    {
+        $this->signature = $signature;
+    }
+
+    /**
+     * @param  null|int  $insurance
+     *
+     * @return void
+     */
+    public function setInsurance(?int $insurance): void
+    {
+        $this->insurance = $insurance;
+    }
+
+    /**
+     * @param  null|bool  $ageCheck
+     *
+     * @return void
+     */
+    public function setAgeCheck(?bool $ageCheck): void
+    {
+        $this->age_check = $ageCheck;
+    }
+
+    /**
+     * @param  null|bool  $onlyRecipient
+     *
+     * @return void
+     */
+    public function setOnlyRecipient(?bool $onlyRecipient): void
+    {
+        $this->only_recipient = $onlyRecipient;
+    }
+
+    /**
+     * @param  null|bool  $return
+     *
+     * @return void
+     */
+    public function setReturn(?bool $return): void
+    {
+        $this->return = $return;
+    }
+
+    /**
+     * @param  null|bool  $largeFormat
+     *
+     * @return void
+     */
+    public function setLargeFormat(?bool $largeFormat): void
+    {
+        $this->large_format = $largeFormat;
+    }
+
+    /**
+     * @param  null|string  $labelDescription
+     *
+     * @return void
+     */
+    public function setLabelDescription(?string $labelDescription): void
     {
         $this->label_description = $labelDescription;
     }
