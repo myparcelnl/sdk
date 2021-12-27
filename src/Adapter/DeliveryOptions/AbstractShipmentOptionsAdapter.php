@@ -97,37 +97,7 @@ abstract class AbstractShipmentOptionsAdapter
         return $this->label_description;
     }
 
-    public function setSignature(?bool $signature): void
-    {
-        $this->signature = $signature;
-    }
-
-    public function setInsurance(?int $insurance): void
-    {
-        $this->insurance = $insurance;
-    }
-
-    public function setAgeCheck(?bool $ageCheck): void
-    {
-        $this->age_check = $ageCheck;
-    }
-
-    public function setOnlyRecipient(?bool $onlyRecipient): void
-    {
-        $this->only_recipient = $onlyRecipient;
-    }
-
-    public function setReturn(?bool $return): void
-    {
-        $this->return = $return;
-    }
-
-    public function setLargeFormat(?bool $largeFormat): void
-    {
-        $this->large_format = $largeFormat;
-    }
-
-    public function setLabelDescription(?string $labelDescription): void
+    public function setLabelDescription(string $labelDescription): void
     {
         $this->label_description = $labelDescription;
     }

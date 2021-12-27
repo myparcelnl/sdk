@@ -119,15 +119,12 @@ class OrderCollection extends Collection
             'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
             'large_format'      => (int) $shipmentOptions->hasLargeFormat(),
             'return'            => (int) $shipmentOptions->isReturn(),
+            'insurance'         => [
+                'amount'    => $shipmentOptions->getInsurance(),
+                'currency'  => 'EUR'
+            ],
             'label_description' => (string) $shipmentOptions->getLabelDescription(),
         ];
-
-        if ($shipmentOptions->getInsurance()) {
-            $options['insurance'] = [
-                'amount'   => (int) $shipmentOptions->getInsurance() * 100,
-                'currency' => 'EUR',
-            ];
-        }
 
         return $options;
     }
