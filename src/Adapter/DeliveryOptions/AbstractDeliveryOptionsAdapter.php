@@ -95,7 +95,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getPackageTypeId(): ?int
     {
-        return AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$this->deliveryType] ?? null;
+        return AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType] ?? null;
     }
 
     /**
