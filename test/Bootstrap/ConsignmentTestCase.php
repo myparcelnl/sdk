@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateInterval;
 use DateTime;
-use MyParcelNL\Sdk\Helper\Utils;
+use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
