@@ -17,6 +17,7 @@ namespace MyParcelNL\Sdk\src\Model;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Str;
 
@@ -60,11 +61,11 @@ class MyParcelCustomsItem
         $maxLength = AbstractConsignment::DESCRIPTION_MAX_LENGTH;
 
         if ($carrier) {
-            $carrier   = ConsignmentFactory::createFromCarrier($carrier);
-            $maxLength = $carrier::DESCRIPTION_MAX_LENGTH;
+            $consignment = ConsignmentFactory::createFromCarrier(CarrierFactory::create($carrier));
+            $maxLength   = $consignment::DESCRIPTION_MAX_LENGTH;
         }
 
-        $this->description = Str::limit((string) $description, $maxLength - 3, '...');
+        $this->description = Str::limit((string) $description, $maxLength - 3);
 
         return $this;
     }

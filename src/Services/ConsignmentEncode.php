@@ -14,7 +14,6 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -22,6 +21,8 @@ use MyParcelNL\Sdk\src\Support\Collection;
 
 class ConsignmentEncode
 {
+    private const CURRENCY_EUR = 'EUR';
+
     /**
      * @var array
      */
@@ -105,8 +106,8 @@ class ConsignmentEncode
 
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
-                'amount'   => (int) $consignment->getInsurance() * 100,
-                'currency' => 'EUR',
+                'amount'   => $consignment->getInsurance() * 100,
+                'currency' => self::CURRENCY_EUR,
             ];
         }
 
@@ -271,7 +272,7 @@ class ConsignmentEncode
      *
      * @return array
      */
-    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = ExportRow::CURRENCY_EURO): array
+    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = self::CURRENCY_EUR): array
     {
         $item = [
             'description'    => $customsItem->getDescription(),
