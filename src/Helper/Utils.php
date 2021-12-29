@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\Helper;
+namespace MyParcelNL\Sdk\src\Helper;
 
 use MyParcelNL\Sdk\src\Support\Str;
 
