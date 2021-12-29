@@ -19,7 +19,6 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Str;
-use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is

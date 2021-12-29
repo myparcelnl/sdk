@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Adapter;
 
-use MyParcelNL\Sdk\Helper\Utils;
+use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 
