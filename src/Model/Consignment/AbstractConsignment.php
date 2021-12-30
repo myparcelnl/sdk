@@ -1198,9 +1198,9 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -1209,11 +1209,11 @@ abstract class AbstractConsignment
      * The address email
      * Required: no.
      *
-     * @param  string $email
+     * @param  string|null $email
      *
      * @return self
      */
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
