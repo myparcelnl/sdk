@@ -35,23 +35,24 @@ jobs:
           image: myparcel/sdk
           key: php-sdk
           docker_args: --target test
+          buildkit: true
 
-      - name: 'Create .env file'
-        run: |
-          cat << EOF > .env
-          CI=${CI}
-          API_KEY_NL=${{ secrets.API_KEY_NL }}
-          API_KEY_BE=${{ secrets.API_KEY_BE }}
-          EOF
-
-      - name: 'Run tests'
-        run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
-
-      - name: 'Get coverage file from container'
-        run: docker cp $(docker ps -alq):/app/coverage.xml .
-
-      - name: Update code coverage
-        uses: codecov/codecov-action@v2
+#      - name: 'Create .env file'
+#        run: |
+#          cat << EOF > .env
+#          CI=${CI}
+#          API_KEY_NL=${{ secrets.API_KEY_NL }}
+#          API_KEY_BE=${{ secrets.API_KEY_BE }}
+#          EOF
+#
+#      - name: 'Run tests'
+#        run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
+#
+#      - name: 'Get coverage file from container'
+#        run: docker cp $(docker ps -alq):/app/coverage.xml .
+#
+#      - name: Update code coverage
+#        uses: codecov/codecov-action@v2
 
   release:
     name: 'Release'
