@@ -350,7 +350,7 @@ class ConsignmentTestCase extends TestCase
                 self::REFERENCE_IDENTIFIER   => $this->generateUniqueIdentifier(),
 
                 // Contact information
-                self::PERSON                 => $this->faker->firstName . ' ' . $this->faker->lastName,
+                self::PERSON                 => Str::limit($this->faker->firstName . ' ' . $this->faker->lastName, 50, ''),
                 self::EMAIL                  => 'spam@myparcel.nl',
                 self::PHONE                  => '023 303 0315',
 
@@ -431,7 +431,7 @@ class ConsignmentTestCase extends TestCase
                 $originalProperty = self::getOriginalProperty($property);
 
                 // Don't check for keys used to change the expectations.
-                if ($property !== $originalProperty && array_key_exists($originalProperty, $testData)) {
+                if ($property !== $originalProperty && array_key_exists($originalProperty, $testConsignment)) {
                     continue;
                 }
 
@@ -440,13 +440,13 @@ class ConsignmentTestCase extends TestCase
                     continue;
                 }
 
-                $expectedValue = self::getExpectedValue($originalProperty, $testData) ?? $expectedValue;
-                $getter        = self::createGetter($originalProperty);
+                $finalExpectedValue = self::getExpectedValue($originalProperty, $testConsignment) ?? $expectedValue;
+                $getter             = self::createGetter($originalProperty);
 
                 if (method_exists($consignment, $getter)) {
                     $value = $consignment->{$getter}();
 
-                    self::assertEquals($expectedValue, $value, TestCase::createMessage($getter));
+                    self::assertEquals($finalExpectedValue, $value, TestCase::createMessage($getter));
                 }
             }
         }
@@ -539,12 +539,12 @@ class ConsignmentTestCase extends TestCase
      * If there is a <property>_expected key in the test data, expect the result to be that value instead of the
      * value of the original property.
      *
-     * @param        $property
-     * @param  array $testData
+     * @param  string $property
+     * @param  array  $testData
      *
      * @return mixed
      */
-    private static function getExpectedValue($property, array $testData)
+    private static function getExpectedValue(string $property, array $testData)
     {
         $expectedKey = self::expected($property);
 
