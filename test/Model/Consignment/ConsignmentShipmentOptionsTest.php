@@ -122,24 +122,23 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     public function provideMailboxData(): array
     {
         return $this->createConsignmentProviderDataset([
-            'Mailbox shipment' => [
+            'Mailbox shipment'              => [
                 self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
             ],
-            // todo:
-            //  'Mailbox with shipment options' => [
-            //      self::INSURANCE                      => 250,
-            //      self::LABEL_DESCRIPTION              => 1234,
-            //      self::LARGE_FORMAT                   => true,
-            //      self::ONLY_RECIPIENT                 => true,
-            //      self::PACKAGE_TYPE                   => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
-            //      self::RETURN                         => true,
-            //      self::SIGNATURE                      => true,
-            //      self::expected(self::INSURANCE)      => 0,
-            //      self::expected(self::LARGE_FORMAT)   => false,
-            //      self::expected(self::ONLY_RECIPIENT) => false,
-            //      self::expected(self::RETURN)         => false,
-            //      self::expected(self::SIGNATURE)      => false,
-            //  ],
+            'Mailbox with shipment options' => [
+                self::INSURANCE                      => 250,
+                self::LABEL_DESCRIPTION              => 1234,
+                self::LARGE_FORMAT                   => true,
+                self::ONLY_RECIPIENT                 => true,
+                self::PACKAGE_TYPE                   => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
+                self::RETURN                         => true,
+                self::SIGNATURE                      => true,
+                self::expected(self::INSURANCE)      => 0,
+                self::expected(self::LARGE_FORMAT)   => false,
+                self::expected(self::ONLY_RECIPIENT) => false,
+                self::expected(self::RETURN)         => false,
+                self::expected(self::SIGNATURE)      => false,
+            ],
         ]);
     }
 
