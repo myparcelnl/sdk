@@ -350,7 +350,7 @@ class ConsignmentTestCase extends TestCase
                 self::REFERENCE_IDENTIFIER   => $this->generateUniqueIdentifier(),
 
                 // Contact information
-                self::PERSON                 => $this->faker->firstName . ' ' . $this->faker->lastName,
+                self::PERSON                 => Str::limit($this->faker->firstName . ' ' . $this->faker->lastName, 50, ''),
                 self::EMAIL                  => 'spam@myparcel.nl',
                 self::PHONE                  => '023 303 0315',
 
