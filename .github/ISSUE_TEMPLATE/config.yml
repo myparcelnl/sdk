@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the documentation
+    url: https://myparcelnl.github.io/sdk/
+    about: The SDK documentation contains instructions, usage examples and links to other resources.
+  - name: Contact customer support
+    url: https://www.myparcel.nl/services/contact/
+    about: For issues regarding your account and shipments.
