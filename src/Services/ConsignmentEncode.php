@@ -14,7 +14,6 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -23,6 +22,8 @@ use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 class ConsignmentEncode
 {
+    private const CURRENCY_EUR = 'EUR';
+
     /**
      * @var array
      */
@@ -272,7 +273,7 @@ class ConsignmentEncode
      *
      * @return array
      */
-    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = ExportRow::CURRENCY_EURO): array
+    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = self::CURRENCY_EUR): array
     {
         $item = [
             'description'    => $customsItem->getDescription(),

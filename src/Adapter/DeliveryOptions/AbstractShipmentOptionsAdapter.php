@@ -97,6 +97,11 @@ abstract class AbstractShipmentOptionsAdapter
         return $this->label_description;
     }
 
+    public function setLabelDescription(string $labelDescription): void
+    {
+        $this->label_description = $labelDescription;
+    }
+
     /**
      * @param  null|bool  $signature
      *
