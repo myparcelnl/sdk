@@ -163,16 +163,6 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|string  $labelDescription
-     *
-     * @return void
-     */
-    public function setLabelDescription(?string $labelDescription): void
-    {
-        $this->label_description = $labelDescription;
-    }
-
-    /**
      * @return array
      */
     public function toArray(): array
