@@ -18,7 +18,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\WooCommerce\Helper\ExportRow;
 
 class ConsignmentEncode
 {
@@ -108,7 +107,7 @@ class ConsignmentEncode
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
                 'amount'   => (int) $consignment->getInsurance() * 100,
-                'currency' => ExportRow::CURRENCY_EURO,
+                'currency' => self::CURRENCY_EUR,
             ];
         }
 

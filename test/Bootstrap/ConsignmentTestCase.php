@@ -439,12 +439,13 @@ class ConsignmentTestCase extends TestCase
                 if (self::REFERENCE_IDENTIFIER === $originalProperty && null === $expectedValue) {
                     continue;
                 }
-              
+
                 $finalExpectedValue = self::getExpectedValue($originalProperty, $testConsignment) ?? $expectedValue;
                 $getter             = self::createGetter($originalProperty);
 
                 if (method_exists($consignment, $getter)) {
                     $value = $consignment->{$getter}();
+
                     self::assertEquals($finalExpectedValue, $value, TestCase::createMessage($getter));
                 }
             }
