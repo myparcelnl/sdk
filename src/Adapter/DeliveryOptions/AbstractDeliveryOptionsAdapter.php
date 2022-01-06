@@ -119,7 +119,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function isPickup(): bool
     {
-        if ($this->deliveryType === null) {
+        if (! $this->deliveryType) {
             return false;
         }
 
@@ -128,7 +128,8 @@ abstract class AbstractDeliveryOptionsAdapter
             [
                 AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
                 AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
-            ]
+            ],
+            true
         );
     }
 
@@ -138,13 +139,13 @@ abstract class AbstractDeliveryOptionsAdapter
     public function toArray(): array
     {
         return [
-            "carrier"         => $this->getCarrier(),
-            "date"            => $this->getDate(),
-            "deliveryType"    => $this->getDeliveryType(),
-            "packageType"     => $this->getPackageType(),
-            "isPickup"        => $this->isPickup(),
-            "pickupLocation"  => $this->getPickupLocation() ? $this->getPickupLocation()->toArray() : null,
-            "shipmentOptions" => $this->getShipmentOptions() ? $this->getShipmentOptions()->toArray() : null,
+            'carrier'         => $this->getCarrier(),
+            'date'            => $this->getDate(),
+            'deliveryType'    => $this->getDeliveryType(),
+            'packageType'     => $this->getPackageType(),
+            'isPickup'        => $this->isPickup(),
+            'pickupLocation'  => $this->getPickupLocation() ? $this->getPickupLocation()->toArray() : null,
+            'shipmentOptions' => $this->getShipmentOptions() ? $this->getShipmentOptions()->toArray() : null,
         ];
     }
 }

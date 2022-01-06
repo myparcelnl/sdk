@@ -21,7 +21,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
     {
         $date = (new DateTime())->format('Ymd H:i:s');
         return $this->createProviderDataset([
-            'DeliveryOptionsV2Adapter'                  => [
+            'DeliveryOptionsV2Adapter'                                => [
                 'carrier' => CarrierPostNL::NAME,
                 'date'    => $date,
                 'time'    => [
@@ -35,7 +35,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'insurance'      => 5000,
                 ],
             ],
-            'DeliveryOptionsV2Adapter with pickup'      => [
+            'DeliveryOptionsV2Adapter with pickup'                    => [
                 'carrier'           => CarrierPostNL::NAME,
                 'date'              => $date,
                 'time'              => [
@@ -57,7 +57,17 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                 'retail_network_id' => 'PNPNL-01',
                 'street'            => 'Polderplein',
             ],
-            'DeliveryOptionsV3Adapter'                  => [
+            'DeliveryOptionsV2Adapter with pickup but empty location' => [
+                'carrier' => CarrierPostNL::NAME,
+                'date'    => $date,
+                'time'    => [
+                    [
+                        'type' => AbstractConsignment::DELIVERY_TYPE_PICKUP,
+                    ],
+                ],
+                'options' => [],
+            ],
+            'DeliveryOptionsV3Adapter'                                => [
                 'carrier'         => CarrierPostNL::NAME,
                 'date'            => $date,
                 'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
@@ -73,7 +83,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                 ],
                 'pickupLocation'  => null,
             ],
-            'DeliveryOptionsV3Adapter with pickup'      => [
+            'DeliveryOptionsV3Adapter with pickup'                    => [
                 'carrier'         => CarrierPostNL::NAME,
                 'date'            => $date,
                 'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
@@ -98,13 +108,21 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'city'              => 'Hoofddorp',
                 ],
             ],
-            'DeliveryOptionsV3Adapter with null values' => [
+            'DeliveryOptionsV3Adapter with null values'               => [
                 'carrier'         => null,
                 'date'            => null,
                 'deliveryType'    => null,
                 'packageType'     => null,
                 'shipmentOptions' => null,
                 'pickupLocation'  => null,
+            ],
+            'DeliveryOptionsV3Adapter with pickup but empty location' => [
+                'carrier'         => CarrierPostNL::NAME,
+                'date'            => $date,
+                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+                'packageType'     => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+                'shipmentOptions' => [],
+                'pickupLocation'  => [],
             ],
         ]);
     }
