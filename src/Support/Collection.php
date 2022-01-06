@@ -1778,7 +1778,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      *
      * @return \ArrayIterator
      */
-    public function getIterator(): Traversable
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->items);
     }
