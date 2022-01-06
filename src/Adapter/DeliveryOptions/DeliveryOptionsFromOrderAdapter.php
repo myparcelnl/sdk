@@ -19,7 +19,7 @@ class DeliveryOptionsFromOrderAdapter extends AbstractDeliveryOptionsAdapter
         $this->shipmentOptions = new ShipmentOptionsV3Adapter($data['shipment_options'] ?? []);
 
         if ($this->isPickup()) {
-            $this->pickupLocation = new PickupLocationV3Adapter($data['pickup'] ?? []);
+            $this->pickupLocation = new PickupLocationV2Adapter($data['pickup'] ?? []);
         }
     }
 }
