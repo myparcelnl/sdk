@@ -1778,6 +1778,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->items);
@@ -1799,6 +1800,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->items);
@@ -1820,6 +1822,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      * @param  mixed  $key
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return array_key_exists($key, $this->items);
@@ -1831,6 +1834,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      * @param  mixed  $key
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->items[$key];
@@ -1843,6 +1847,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      * @param  mixed  $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         if (is_null($key)) {
@@ -1858,6 +1863,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      * @param  string  $key
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->items[$key]);
