@@ -1040,4 +1040,37 @@ class Helpers {
     {
         return is_null($callback) ? $value : $callback($value);
     }
+
+    /**
+     * Convert value to int if it's truthy, return null otherwise.
+     *
+     * @param mixed $param
+     *
+     * @return int|null
+     */
+    public static function intOrNull($param): ?int
+    {
+        if ($param) {
+            return (int) $param;
+        }
+
+        return null;
+    }
+
+    /**
+     * Filter null values from an array
+     *
+     * @param  array $array
+     *
+     * @return array
+     */
+    public static function toArrayWithoutNull(array $array): array
+    {
+        return array_filter(
+            $array,
+            static function ($item) {
+                return null !== $item;
+            }
+        );
+    }
 }

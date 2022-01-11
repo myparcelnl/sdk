@@ -32,12 +32,13 @@ abstract class AbstractConsignment
      */
     use HasApiKey;
 
-    public const SHIPMENT_OPTION_AGE_CHECK      = 'age_check';
-    public const SHIPMENT_OPTION_INSURANCE      = 'insurance';
-    public const SHIPMENT_OPTION_LARGE_FORMAT   = 'large_format';
-    public const SHIPMENT_OPTION_ONLY_RECIPIENT = 'only_recipient';
-    public const SHIPMENT_OPTION_RETURN         = 'return';
-    public const SHIPMENT_OPTION_SIGNATURE      = 'signature';
+    public const SHIPMENT_OPTION_AGE_CHECK         = 'age_check';
+    public const SHIPMENT_OPTION_INSURANCE         = 'insurance';
+    public const SHIPMENT_OPTION_LARGE_FORMAT      = 'large_format';
+    public const SHIPMENT_OPTION_ONLY_RECIPIENT    = 'only_recipient';
+    public const SHIPMENT_OPTION_RETURN            = 'return';
+    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
@@ -340,6 +341,12 @@ abstract class AbstractConsignment
      * @var bool|null
      */
     public $return;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
+    public $same_day_delivery;
 
     /**
      * @internal
@@ -1394,6 +1401,27 @@ abstract class AbstractConsignment
     public function setReturn(bool $return): self
     {
         $this->return = $return && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_RETURN);
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isSameDayDelivery(): ?bool
+    {
+        return $this->same_day_delivery;
+    }
+
+    /**
+     * @param bool $sameDay
+     *
+     * @return $this
+     */
+    public function setSameDayDelivery(bool $sameDay): self
+    {
+        $this->same_day_delivery = $sameDay
+            && in_array(self::SHIPMENT_OPTION_SAME_DAY_DELIVERY, $this->getAllowedShipmentOptions(), true);
 
         return $this;
     }

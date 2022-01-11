@@ -201,6 +201,7 @@ class MyParcelRequest
         $request = $this->instantiateCurl();
 
         $request->write($method, $url, $this->getHeaders(), $this->getRequestBody());
+
         $this->setResult($request);
         $request->close();
 

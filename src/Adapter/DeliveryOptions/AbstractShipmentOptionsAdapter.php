@@ -22,6 +22,11 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @var bool|null
      */
+    protected $same_day_delivery;
+
+    /**
+     * @var bool|null
+     */
     protected $large_format;
 
     /**
@@ -79,6 +84,11 @@ abstract class AbstractShipmentOptionsAdapter
     public function isReturn(): ?bool
     {
         return $this->return;
+    }
+
+    public function isSameDayDelivery(): ?bool
+    {
+        return $this->same_day_delivery;
     }
 
     /**
@@ -152,6 +162,11 @@ abstract class AbstractShipmentOptionsAdapter
         $this->return = $return;
     }
 
+    public function setSameDayDelivery(?bool $sameDayDelivery): void
+    {
+        $this->same_day_delivery = $sameDayDelivery;
+    }
+
     /**
      * @param  null|bool  $largeFormat
      *
@@ -173,6 +188,7 @@ abstract class AbstractShipmentOptionsAdapter
             'age_check'         => $this->hasAgeCheck(),
             'only_recipient'    => $this->hasOnlyRecipient(),
             'return'            => $this->isReturn(),
+            'same_day_delivery' => $this->isSameDayDelivery(),
             'large_format'      => $this->hasLargeFormat(),
             'label_description' => $this->getLabelDescription(),
         ];

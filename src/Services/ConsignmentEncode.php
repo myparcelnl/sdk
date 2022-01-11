@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 class ConsignmentEncode
 {
@@ -78,13 +79,14 @@ class ConsignmentEncode
         $consignmentEncoded = array_merge_recursive(
             $consignmentEncoded,
             [
-                'options' => [
+                'options' => Helpers::toArrayWithoutNull([
                     'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
                     'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient'    => (int) $consignment->isOnlyRecipient(),
-                    'signature'         => (int) $consignment->isSignature(),
-                    'return'            => (int) $consignment->isReturn(),
-                ],
+                    'only_recipient'    => Helpers::intOrNull($consignment->isOnlyRecipient()),
+                    'signature'         => Helpers::intOrNull($consignment->isSignature()),
+                    'return'            => Helpers::intOrNull($consignment->isReturn()),
+                    'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                ]),
             ]
         );
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 class Product extends BaseModel
 {
@@ -91,10 +92,10 @@ class Product extends BaseModel
         $this->external_identifier = $data['external_identifier'] ?? null;
         $this->name                = $data['name'] ?? null;
         $this->description         = $data['description'] ?? null;
-        $this->width               = $this->intOrNull($data['width'] ?? null);
-        $this->height              = $this->intOrNull($data['height'] ?? null);
-        $this->length              = $this->intOrNull($data['length'] ?? null);
-        $this->weight              = $this->intOrNull($data['weight'] ?? null);
+        $this->width               = Helpers::intOrNull($data['width'] ?? null);
+        $this->height              = Helpers::intOrNull($data['height'] ?? null);
+        $this->length              = Helpers::intOrNull($data['length'] ?? null);
+        $this->weight              = Helpers::intOrNull($data['weight'] ?? null);
     }
 
     /**
