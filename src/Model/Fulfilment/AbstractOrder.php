@@ -94,6 +94,11 @@ class AbstractOrder extends BaseModel
     protected $customs_declaration;
 
     /**
+     * @var int|null
+     */
+    private $weight;
+
+    /**
      * @return null|\MyParcelNL\Sdk\src\Model\CustomsDeclaration
      */
     public function getCustomsDeclaration(): ?CustomsDeclaration
@@ -200,6 +205,14 @@ class AbstractOrder extends BaseModel
     }
 
     /**
+     * @return null|int
+     */
+    public function getWeight(): ?int
+    {
+        return $this->weight;
+    }
+
+    /**
      * @return string|null
      */
     public function getType(): ?string
@@ -213,6 +226,22 @@ class AbstractOrder extends BaseModel
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWeightOfProducts(): ?int
+    {
+        $weightOfProducts = 0;
+
+        foreach ($this->order_lines as $orderLine) {
+            $weight = $orderLine->getProduct()->getWeight();
+            $quantity = $orderLine->getQuantity();
+            $weightOfProducts += $weight * $quantity;
+        }
+
+        return $weightOfProducts;
     }
 
     /**
@@ -349,6 +378,17 @@ class AbstractOrder extends BaseModel
     public function setType(?string $type): self
     {
         $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @param  int $emptyParcelWeight
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder
+     */
+    public function setWeight(int $emptyParcelWeight): self
+    {
+        $this->weight =  $emptyParcelWeight + $this->getWeightOfProducts();
         return $this;
     }
 

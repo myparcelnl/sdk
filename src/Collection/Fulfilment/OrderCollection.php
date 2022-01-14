@@ -90,6 +90,7 @@ class OrderCollection extends Collection
                         'options'             => $this->getShipmentOptions($deliveryOptions),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
                         'customs_declaration' => $order->getCustomsDeclaration(),
+                        'physical_properties' => $order->getWeight()
                     ],
                 ];
             }
