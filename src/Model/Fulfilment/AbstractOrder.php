@@ -229,22 +229,6 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return int|null
-     */
-    public function getWeightOfProducts(): ?int
-    {
-        $weightOfProducts = 0;
-
-        foreach ($this->order_lines as $orderLine) {
-            $weight = $orderLine->getProduct()->getWeight();
-            $quantity = $orderLine->getQuantity();
-            $weightOfProducts += $weight * $quantity;
-        }
-
-        return $weightOfProducts;
-    }
-
-    /**
      * @param  CustomsDeclaration $customs_declaration
      *
      * @return $this
@@ -386,9 +370,9 @@ class AbstractOrder extends BaseModel
      *
      * @return \MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder
      */
-    public function setWeight(int $emptyParcelWeight): self
+    public function setWeight(int $weight): self
     {
-        $this->weight =  $emptyParcelWeight + $this->getWeightOfProducts();
+        $this->weight =  $weight;
         return $this;
     }
 
