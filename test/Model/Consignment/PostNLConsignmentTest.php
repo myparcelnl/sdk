@@ -18,7 +18,10 @@ class PostNLConsignmentTest extends ConsignmentTestCase
     {
         return $this->createConsignmentProviderDataset([
             'NL -> NL' => [],
-            'NL -> BE' => $this->getDefaultAddress(AbstractConsignment::CC_BE),
+            'NL -> BE' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
+                    self::expected(self::ONLY_RECIPIENT) => true,
+                    self::expected(self::SIGNATURE) => true,
+                ],
             'BE -> BE' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
                     self::API_KEY => $this->getApiKey(self::ENV_API_KEY_BE),
                 ],
