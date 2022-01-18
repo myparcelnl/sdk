@@ -74,10 +74,12 @@ class MyParcelCollectionTest extends CollectionTestCase
             return $returnConsignment;
         });
 
-        self::assertEquals('first consignment', $collection[0]->getLabelDescription());
-        self::assertEquals('Return: first consignment', $collection[1]->getLabelDescription());
-        self::assertEquals('second consignment', $collection[2]->getLabelDescription());
-        self::assertEquals('Return: second consignment', $collection[3]->getLabelDescription());
+        self::assertSame([
+            'first consignment',
+            'Return: first consignment',
+            'second consignment',
+            'Return: second consignment',
+        ], Arr::pluck($collection->toArray(), self::LABEL_DESCRIPTION));
 
         $collection->setLinkOfLabels(false);
         self::assertHasPdfLink($collection);
