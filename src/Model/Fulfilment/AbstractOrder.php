@@ -75,6 +75,11 @@ class AbstractOrder extends BaseModel
     protected $pickupLocation;
 
     /**
+     * @var \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint|null
+     */
+    protected $dropOffPoint;
+
+    /**
      * @var string|null
      */
     protected $status;
@@ -189,6 +194,14 @@ class AbstractOrder extends BaseModel
     public function getPickupLocation(): ?PickupLocation
     {
         return $this->pickupLocation;
+    }
+
+    /**
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint|null
+     */
+    public function getDropOffPoint(): ?\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+    {
+        return $this->dropOffPoint;
     }
 
     /**
@@ -327,6 +340,18 @@ class AbstractOrder extends BaseModel
     public function setPickupLocation(?PickupLocation $pickupLocation): self
     {
         $this->pickupLocation = $pickupLocation;
+        return $this;
+    }
+
+    /**
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint|null $dropOffPoint
+     *
+     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder
+     */
+    public function setDropOffPoint(?\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint): self
+    {
+        $this->dropOffPoint = $dropOffPoint;
+
         return $this;
     }
 
