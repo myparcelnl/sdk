@@ -104,10 +104,12 @@ class OrderCollection extends Collection
      */
     private function getShipmentOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): array
     {
-        $dateTime     = $deliveryOptions->getDate() ? new DateTime($deliveryOptions->getDate()) : null;
-        $deliveryDate = $dateTime
-            ? $dateTime->format(AbstractOrder::DATE_FORMAT_FULL)
-            : null;
+        $deliveryDate = null;
+
+        if ($deliveryOptions->getDate()) {
+            $date         = new DateTime($deliveryOptions->getDate());
+            $deliveryDate = $date->format(AbstractOrder::DATE_FORMAT_FULL);
+        }
 
         $shipmentOptions = $deliveryOptions->getShipmentOptions();
 
