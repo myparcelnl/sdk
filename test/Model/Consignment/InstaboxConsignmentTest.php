@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
-class RedJePakketjeConsignmentTest extends ConsignmentTestCase
+class InstaboxConsignmentTest extends ConsignmentTestCase
 {
     /**
      * @return array
@@ -47,7 +47,7 @@ class RedJePakketjeConsignmentTest extends ConsignmentTestCase
         return array_replace(
             parent::getDefaultConsignmentData(),
             [
-                self::CARRIER_ID => CarrierRedJePakketje::ID,
+                self::CARRIER_ID => CarrierInstabox::ID,
             ]
         );
     }

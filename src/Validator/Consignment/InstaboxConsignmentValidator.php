@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Rule\Consignment\LocalCountryOnlyRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\ShipmentOptionsRule;
 use MyParcelNL\Sdk\src\Validator\AbstractValidator;
 
-class RedJePakketjeConsignmentValidator extends AbstractValidator
+class InstaboxConsignmentValidator extends AbstractValidator
 {
     /**
      * @inheritDoc

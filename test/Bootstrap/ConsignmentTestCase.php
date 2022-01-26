@@ -9,8 +9,8 @@ use DateTime;
 use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
@@ -400,7 +400,7 @@ class ConsignmentTestCase extends TestCase
      */
     protected static function skipIfRjp(int $carrierId): void
     {
-        if ($carrierId !== CarrierRedJePakketje::ID) {
+        if ($carrierId !== CarrierInstabox::ID) {
             return;
         }
 
