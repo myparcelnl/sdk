@@ -89,6 +89,7 @@ class OrderCollection extends Collection
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($deliveryOptions),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
+                        'drop_off_point'      => $order->getDropOffPoint(),
                         'customs_declaration' => $order->getCustomsDeclaration(),
                     ],
                 ];
