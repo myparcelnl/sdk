@@ -69,6 +69,7 @@ class ConsignmentTestCase extends TestCase
     protected const RETURN                      = 'return';
     protected const SAVE_RECIPIENT_ADDRESS      = 'save_recipient_address';
     protected const SIGNATURE                   = 'signature';
+    protected const SAME_DAY_DELIVERY           = 'same_day_delivery';
     protected const STREET                      = 'street';
     protected const TOTAL_WEIGHT                = 'total_weight';
     protected const WEIGHT                      = 'weight';
@@ -278,14 +279,17 @@ class ConsignmentTestCase extends TestCase
     /**
      * Creates a delivery date two days in the future.
      *
+     * @param  string $interval
+     *
      * @return string
+     * @throws \Exception
      * @see https://www.php.net/manual/en/dateinterval.construct.php
      */
-    protected function generateDeliveryDate(): string
+    protected function generateDeliveryDate(string $interval = 'P2D'): string
     {
         return (new DateTime())
             ->setTime(0, 0)
-            ->add(new DateInterval('P2D'))
+            ->add(new DateInterval($interval))
             ->format('Y-m-d H:m:i');
     }
 

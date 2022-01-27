@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 class OrderLine extends BaseModel
 {
@@ -63,10 +64,10 @@ class OrderLine extends BaseModel
     public function __construct(array $data = [])
     {
         $this->uuid            = $data['uuid'] ?? null;
-        $this->price           = $this->intOrNull($data['price'] ?? null);
-        $this->vat             = $this->intOrNull($data['vat'] ?? null);
-        $this->price_after_vat = $this->intOrNull($data['price_after_vat'] ?? null);
-        $this->quantity        = $this->intOrNull($data['quantity'] ?? null);
+        $this->price           = Helpers::intOrNull($data['price'] ?? null);
+        $this->vat             = Helpers::intOrNull($data['vat'] ?? null);
+        $this->price_after_vat = Helpers::intOrNull($data['price_after_vat'] ?? null);
+        $this->quantity        = Helpers::intOrNull($data['quantity'] ?? null);
         $this->instructions    = $data['instructions'] ?? null;
 
         $this->product = new Product($data['product'] ?? []);
