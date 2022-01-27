@@ -90,7 +90,7 @@ class OrderCollection extends Collection
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($deliveryOptions),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
-                        'drop_off_point'      => $this->getDropOffPoint($order->getDropOffPoint()),
+                        'drop_off_point'      => $this->getDropOffPointAsArray($order->getDropOffPoint()),
                         'customs_declaration' => $order->getCustomsDeclaration(),
                     ],
                 ];
@@ -140,7 +140,7 @@ class OrderCollection extends Collection
      *
      * @return array
      */
-    private function getDropOffPoint(DropOffPoint $dropOffPoint): array
+    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): array
     {
         return [
             'location_code'     => $dropOffPoint->getLocationCode(),
