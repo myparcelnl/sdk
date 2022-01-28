@@ -153,7 +153,7 @@ class MyParcelRequest
      */
     public function getRequestUrl(): string
     {
-        return getenv('API_BASE_URL') ?: self::REQUEST_URL;
+        return getenv('MYPARCEL_API_BASE_URL') ?: self::REQUEST_URL;
     }
 
     /**
