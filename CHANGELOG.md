@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0](https://github.com/myparcelnl/sdk/compare/v6.1.0...v7.0.0) (2022-02-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **instabox:** rename rjp to instabox (#348)
+
+### :bug: Bug Fixes
+
+* **collection:** remove php8 deprecation warnings ([#376](https://github.com/myparcelnl/sdk/issues/376)) ([790c22b](https://github.com/myparcelnl/sdk/commit/790c22bbb524bce19da0a623d9f5e38f3b2d9bb6))
+* **pps:** fix export delivery options ([#369](https://github.com/myparcelnl/sdk/issues/369)) ([6bbecac](https://github.com/myparcelnl/sdk/commit/6bbecac92cd4ea1e7c50a9fc1d0ec6e7a77a9661))
+
+
+* **instabox:** rename rjp to instabox ([#348](https://github.com/myparcelnl/sdk/issues/348)) ([a1c6dc7](https://github.com/myparcelnl/sdk/commit/a1c6dc7c6055eb534a4ceae50f803921c93cf0a5))
+
+
+### :sparkles: New Features
+
+* **instabox:** add same day delivery ([#380](https://github.com/myparcelnl/sdk/issues/380)) ([549f958](https://github.com/myparcelnl/sdk/commit/549f9587cb2e442380cca6d729ff9298b6a0126c))
+* **pps:** add delivery type to request body ([5f4d6be](https://github.com/myparcelnl/sdk/commit/5f4d6be91b177dbfadf2b8e851ba159278af16f3))
+
 ## [6.1.0](https://github.com/myparcelnl/sdk/compare/v6.0.0...v6.1.0) (2021-12-31)
 
 
