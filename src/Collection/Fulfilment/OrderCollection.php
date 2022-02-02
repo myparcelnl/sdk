@@ -139,22 +139,22 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param  null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return array
      */
-    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): array
+    private function getDropOffPointAsArray(?DropOffPoint $dropOffPoint): ?array
     {
-        return [
-            'location_code'     => $dropOffPoint->getLocationCode(),
-            'location_name'     => $dropOffPoint->getLocationName(),
-            'postal_code'       => $dropOffPoint->getPostalCode(),
-            'street'            => $dropOffPoint->getStreet(),
-            'number'            => $dropOffPoint->getNumber(),
-            'number_suffix'     => $dropOffPoint->getNumberSuffix(),
-            'city'              => $dropOffPoint->getCity(),
-            'cc'                => $dropOffPoint->getCc(),
-        ];
+        return $dropOffPoint ? [
+            'location_code' => $dropOffPoint->getLocationCode(),
+            'location_name' => $dropOffPoint->getLocationName(),
+            'postal_code'   => $dropOffPoint->getPostalCode(),
+            'street'        => $dropOffPoint->getStreet(),
+            'number'        => $dropOffPoint->getNumber(),
+            'number_suffix' => $dropOffPoint->getNumberSuffix(),
+            'city'          => $dropOffPoint->getCity(),
+            'cc'            => $dropOffPoint->getCc(),
+        ] : null;
     }
 
     /**
