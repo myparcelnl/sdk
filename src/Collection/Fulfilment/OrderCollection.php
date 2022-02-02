@@ -9,6 +9,7 @@ use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 use MyParcelNL\Sdk\src\Concerns\HasCountry;
 use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
@@ -89,6 +90,7 @@ class OrderCollection extends Collection
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($deliveryOptions),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
+                        'drop_off_point'      => $this->getDropOffPointAsArray($order->getDropOffPoint()),
                         'customs_declaration' => $order->getCustomsDeclaration(),
                         'physical_properties' => ['weight' => $order->getWeight()],
                     ],
@@ -134,6 +136,25 @@ class OrderCollection extends Collection
         }
 
         return $options;
+    }
+
+    /**
+     * @param  \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     *
+     * @return array
+     */
+    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): array
+    {
+        return [
+            'location_code'     => $dropOffPoint->getLocationCode(),
+            'location_name'     => $dropOffPoint->getLocationName(),
+            'postal_code'       => $dropOffPoint->getPostalCode(),
+            'street'            => $dropOffPoint->getStreet(),
+            'number'            => $dropOffPoint->getNumber(),
+            'number_suffix'     => $dropOffPoint->getNumberSuffix(),
+            'city'              => $dropOffPoint->getCity(),
+            'cc'                => $dropOffPoint->getCc(),
+        ];
     }
 
     /**
