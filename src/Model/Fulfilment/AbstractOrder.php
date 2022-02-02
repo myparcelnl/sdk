@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\src\Model\PickupLocation;
 use MyParcelNL\Sdk\src\Model\Recipient;
@@ -23,6 +24,11 @@ class AbstractOrder extends BaseModel
      * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
      */
     protected $delivery_options;
+
+    /**
+     * @var \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     */
+    protected $dropOffPoint;
 
     /**
      * The unique identifier of the order in your webshop.
@@ -112,6 +118,14 @@ class AbstractOrder extends BaseModel
     public function getDeliveryOptions(): AbstractDeliveryOptionsAdapter
     {
         return $this->delivery_options;
+    }
+
+    /**
+     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     */
+    public function getDropOffPoint(): ?DropOffPoint
+    {
+        return $this->dropOffPoint;
     }
 
     /**
@@ -247,6 +261,12 @@ class AbstractOrder extends BaseModel
     public function setDeliveryOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): self
     {
         $this->delivery_options = $deliveryOptions;
+        return $this;
+    }
+
+    public function setDropOffPoint(DropOffPoint $dropOffPoint): self
+    {
+        $this->dropOffPoint = $dropOffPoint;
         return $this;
     }
 
