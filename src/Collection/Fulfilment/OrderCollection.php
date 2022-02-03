@@ -77,7 +77,9 @@ class OrderCollection extends Collection
     {
         return $this->map(
             function (Order $order) {
-                $deliveryOptions = $order->getDeliveryOptions();
+                $deliveryOptions     = $order->getDeliveryOptions();
+                $dropOffPoint        = $order->getDropOffPoint();
+                $dropOffPointAsArray = $dropOffPoint ? $this->getDropOffPointAsArray($dropOffPoint) : null;
 
                 return [
                     'external_identifier'           => $order->getExternalIdentifier(),
@@ -90,7 +92,7 @@ class OrderCollection extends Collection
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($deliveryOptions),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
-                        'drop_off_point'      => $this->getDropOffPointAsArray($order->getDropOffPoint()),
+                        'drop_off_point'      => $dropOffPointAsArray,
                         'customs_declaration' => $order->getCustomsDeclaration(),
                         'physical_properties' => ['weight' => $order->getWeight()],
                     ],
@@ -139,13 +141,13 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param  null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param  \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return array
      */
-    private function getDropOffPointAsArray(?DropOffPoint $dropOffPoint): ?array
+    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): ?array
     {
-        return $dropOffPoint ? [
+        return [
             'location_code' => $dropOffPoint->getLocationCode(),
             'location_name' => $dropOffPoint->getLocationName(),
             'postal_code'   => $dropOffPoint->getPostalCode(),
@@ -154,7 +156,7 @@ class OrderCollection extends Collection
             'number_suffix' => $dropOffPoint->getNumberSuffix(),
             'city'          => $dropOffPoint->getCity(),
             'cc'            => $dropOffPoint->getCc(),
-        ] : null;
+        ];
     }
 
     /**
