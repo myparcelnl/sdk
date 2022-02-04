@@ -145,7 +145,7 @@ class OrderCollection extends Collection
      *
      * @return array
      */
-    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): ?array
+    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): array
     {
         return [
             'location_code' => $dropOffPoint->getLocationCode(),
