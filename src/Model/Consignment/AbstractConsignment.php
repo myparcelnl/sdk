@@ -193,6 +193,18 @@ abstract class AbstractConsignment
     public const DESCRIPTION_MAX_LENGTH = 50;
 
     /**
+     * @var array
+     */
+    public const DISALLOWED_WHEN_PICKUP = [
+        self::SHIPMENT_OPTION_RETURN,
+        self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+        self::PACKAGE_TYPE_LETTER_NAME,
+        self::PACKAGE_TYPE_MAILBOX_NAME,
+        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+    ];
+
+
+    /**
      * @internal
      * @var null|string
      */
@@ -491,9 +503,11 @@ abstract class AbstractConsignment
      */
     public function canHaveShipmentOption(string $option): bool
     {
-        $isPackage         = $this->getPackageType() === self::PACKAGE_TYPE_PACKAGE;
-        $optionIsAvailable = in_array($option, $this->getAllowedShipmentOptions(), true);
-        return $isPackage && $optionIsAvailable;
+        $isPackage               = $this->getPackageType() === self::PACKAGE_TYPE_PACKAGE;
+        $optionIsAvailable       = in_array($option, $this->getAllowedShipmentOptions(), true);
+        $pickupAllowedOrNoPickup = $this->getDeliveryType() !== self::DELIVERY_TYPE_PICKUP
+            || in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
+        return $isPackage && $optionIsAvailable && $pickupAllowedOrNoPickup;
     }
 
     /**
@@ -1765,6 +1779,14 @@ abstract class AbstractConsignment
      * @return string[]
      */
     public function getAllowedShipmentOptions(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getAllowedShipmentOptionsForPickup(): array
     {
         return [];
     }
