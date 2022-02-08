@@ -507,6 +507,7 @@ abstract class AbstractConsignment
         $optionIsAvailable       = in_array($option, $this->getAllowedShipmentOptions(), true);
         $pickupAllowedOrNoPickup = $this->getDeliveryType() !== self::DELIVERY_TYPE_PICKUP
             || in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
+
         return $isPackage && $optionIsAvailable && $pickupAllowedOrNoPickup;
     }
 

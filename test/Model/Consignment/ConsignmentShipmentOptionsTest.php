@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
@@ -118,6 +119,34 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     }
 
     /**
+     * @throws \Exception
+     */
+    public function provideShipmentOptionsWithPickupData(): array
+    {
+        return $this->createConsignmentProviderDataset(
+            [
+                'Pickup with shipment options PostNL'     => [
+                    self::DELIVERY_DATE                  => $this->generateDeliveryDate(),
+                    self::ONLY_RECIPIENT                 => true,
+                    self::RETURN                         => true,
+                    self::SIGNATURE                      => true,
+                    self::DELIVERY_TYPE                  => AbstractConsignment::DELIVERY_TYPE_PICKUP,
+                    self::expected(self::ONLY_RECIPIENT) => false,
+                    self::expected(self::RETURN)         => false,
+                    self::expected(self::SIGNATURE)      => true,
+                ],
+                'Pickup with shipment options Instabox' => [
+                    self::CARRIER_ID                => CarrierInstabox::ID,
+                    self::DELIVERY_DATE             => $this->generateDeliveryDate(),
+                    self::SIGNATURE                 => true,
+                    self::DELIVERY_TYPE             => AbstractConsignment::DELIVERY_TYPE_PICKUP,
+                    self::expected(self::SIGNATURE) => false,
+                ],
+            ]
+        );
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
@@ -214,6 +243,18 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @dataProvider provideLargeFormatData
      */
     public function testLargeFormat(array $testData): void
+    {
+        $this->doConsignmentTest($testData);
+    }
+
+    /**
+     * @param  array $testData
+     *
+     * @throws \Exception
+     * @throws \Exception
+     * @dataProvider provideShipmentOptionsWithPickupData
+     */
+    public function testPickupWithOptions(array $testData): void
     {
         $this->doConsignmentTest($testData);
     }
