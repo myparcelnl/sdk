@@ -100,6 +100,7 @@ class ConsignmentAdapter
             'age_check'         => (bool) ($options['age_check'] ?? false),
             'signature'         => (bool) ($options['signature'] ?? false),
             'return'            => (bool) ($options['return'] ?? false),
+            'insurance'         => $options['insurance']['amount'],
             'label_description' => $options['label_description'] ?? null,
         ]);
 

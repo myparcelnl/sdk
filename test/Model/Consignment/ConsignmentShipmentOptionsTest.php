@@ -109,7 +109,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
             //          self::expected(self::LARGE_FORMAT) => false,
             //      ],
             'Large format to Belgium' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
-                    self::CUSTOMS_DECLARATION            => $this->getDefaultCustomsDeclaration(AbstractConsignment::CC_BE),
+                    self::CUSTOMS_DECLARATION            => $this->getDefaultCustomsDeclaration(
+                        AbstractConsignment::CC_BE
+                    ),
                     self::LARGE_FORMAT                   => true,
                     self::expected(self::ONLY_RECIPIENT) => true,
                     self::expected(self::SIGNATURE)      => true,
@@ -142,6 +144,32 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
                 self::expected(self::SIGNATURE)      => false,
             ],
         ]);
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function provideInsuranceData(): array
+    {
+        return $this->createConsignmentProviderDataset([
+            'EUR 250' => [
+                self::INSURANCE                      => 250,
+                self::expected(self::ONLY_RECIPIENT) => true,
+                self::expected(self::SIGNATURE) => true,
+            ],
+        ]);
+    }
+
+    /**
+     * @param  array $testData
+     *
+     * @throws \Exception
+     * @dataProvider provideInsuranceData
+     */
+    public function testInsurance(array $testData): void
+    {
+        $this->doConsignmentTest($testData);
     }
 
     /**
