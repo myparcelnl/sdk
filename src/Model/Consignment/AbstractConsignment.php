@@ -193,18 +193,6 @@ abstract class AbstractConsignment
     public const DESCRIPTION_MAX_LENGTH = 50;
 
     /**
-     * @var array
-     */
-    public const DISALLOWED_WHEN_PICKUP = [
-        self::SHIPMENT_OPTION_RETURN,
-        self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-        self::PACKAGE_TYPE_LETTER_NAME,
-        self::PACKAGE_TYPE_MAILBOX_NAME,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-    ];
-
-
-    /**
      * @internal
      * @var null|string
      */
