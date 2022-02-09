@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.0](https://github.com/myparcelnl/sdk/compare/v7.0.0...v7.1.0) (2022-02-09)
+
+
+### :sparkles: New Features
+
+* **pps:** add drop-off point to order ([#387](https://github.com/myparcelnl/sdk/issues/387)) ([0722275](https://github.com/myparcelnl/sdk/commit/0722275ea724584b680c68786f435f809332d6b2))
+* **pps:** add physical_properties to order ([a474cde](https://github.com/myparcelnl/sdk/commit/a474cdef040a5a5d57ea171f24ec8c82fdd6b5f6))
+
+
+### :bug: Bug Fixes
+
+* **pps:** accept null as dropoffpoint to avoid errors ([#391](https://github.com/myparcelnl/sdk/issues/391)) ([436af33](https://github.com/myparcelnl/sdk/commit/436af33093734d118e9bbb4c8c625c44f860155f))
+* **pps:** datetime throwing error when null ([#385](https://github.com/myparcelnl/sdk/issues/385)) ([f3dd238](https://github.com/myparcelnl/sdk/commit/f3dd2383f3b89213a840853cdca2506f0e874514))
+* **pps:** make number suffix in drop off point non-nullable ([#397](https://github.com/myparcelnl/sdk/issues/397)) ([395d5e5](https://github.com/myparcelnl/sdk/commit/395d5e5cd0c0bea89cc0431ca2c32ae76347eea3))
+* use proprietary variable name in env ([#388](https://github.com/myparcelnl/sdk/issues/388)) ([98b6d7e](https://github.com/myparcelnl/sdk/commit/98b6d7eda2a6be3de296a67c9b298365fcbcf101))
+
 ## [7.0.0](https://github.com/myparcelnl/sdk/compare/v6.1.0...v7.0.0) (2022-02-09)
 
 
