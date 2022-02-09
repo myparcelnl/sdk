@@ -121,7 +121,7 @@ class OrderCollection extends Collection
         $options = [
             'package_type'      => $deliveryOptions->getPackageTypeId(),
             'delivery_type'     => $deliveryOptions->getDeliveryTypeId(),
-            'delivery_date'     => $deliveryDate,
+            'delivery_date'     => $deliveryDate ?: null,
             'signature'         => (int) $shipmentOptions->hasSignature(),
             'only_recipient'    => (int) $shipmentOptions->hasOnlyRecipient(),
             'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
@@ -153,7 +153,7 @@ class OrderCollection extends Collection
             'postal_code'   => $dropOffPoint->getPostalCode(),
             'street'        => $dropOffPoint->getStreet(),
             'number'        => $dropOffPoint->getNumber(),
-            'number_suffix' => $dropOffPoint->getNumberSuffix(),
+            'number_suffix' => $dropOffPoint->getNumberSuffix() ?? '',
             'city'          => $dropOffPoint->getCity(),
             'cc'            => $dropOffPoint->getCc(),
         ];
