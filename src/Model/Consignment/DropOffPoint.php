@@ -135,9 +135,9 @@ class DropOffPoint
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getNumberSuffix(): string
+    public function getNumberSuffix(): ?string
     {
         return $this->number_suffix;
     }
@@ -255,7 +255,7 @@ class DropOffPoint
      */
     public function setNumberSuffix(?string $numberSuffix = null): self
     {
-        $this->number_suffix = $numberSuffix ?? '';
+        $this->number_suffix = $numberSuffix;
         return $this;
     }
 

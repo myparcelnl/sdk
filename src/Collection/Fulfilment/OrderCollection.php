@@ -153,7 +153,7 @@ class OrderCollection extends Collection
             'postal_code'   => $dropOffPoint->getPostalCode(),
             'street'        => $dropOffPoint->getStreet(),
             'number'        => $dropOffPoint->getNumber(),
-            'number_suffix' => $dropOffPoint->getNumberSuffix(),
+            'number_suffix' => $dropOffPoint->getNumberSuffix() ?? '',
             'city'          => $dropOffPoint->getCity(),
             'cc'            => $dropOffPoint->getCc(),
         ];
