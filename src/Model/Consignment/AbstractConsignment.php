@@ -491,12 +491,12 @@ abstract class AbstractConsignment
      */
     public function canHaveShipmentOption(string $option): bool
     {
-        $isPackage               = $this->getPackageType() === self::PACKAGE_TYPE_PACKAGE;
-        $optionIsAvailable       = in_array($option, $this->getAllowedShipmentOptions(), true);
-        $pickupAllowedOrNoPickup = $this->getDeliveryType() !== self::DELIVERY_TYPE_PICKUP
-            || in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
+        $isPackage         = self::PACKAGE_TYPE_PACKAGE === $this->getPackageType();
+        $isPickup          = self::DELIVERY_TYPE_PICKUP === $this->getDeliveryType();
+        $optionIsAvailable = in_array($option, $this->getAllowedShipmentOptions(), true);
+        $pickupAllowed     = in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
 
-        return $isPackage && $optionIsAvailable && $pickupAllowedOrNoPickup;
+        return $isPackage && $optionIsAvailable && ($pickupAllowed || ! $isPickup);
     }
 
     /**
