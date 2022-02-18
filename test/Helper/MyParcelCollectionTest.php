@@ -103,9 +103,7 @@ class MyParcelCollectionTest extends CollectionTestCase
      */
     public function testSortByCollection(): void
     {
-        self::markTestBroken();
-
-        $collection = $this->generateSimpleCollection(10);
+        $collection = $this->generateSimpleCollection(10, true);
         $shuffled   = $collection->toArray();
         shuffle($shuffled);
 

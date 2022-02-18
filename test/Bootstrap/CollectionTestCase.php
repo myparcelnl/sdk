@@ -40,7 +40,7 @@ class CollectionTestCase extends ConsignmentTestCase
     ): MyParcelCollection {
         $testData = [];
 
-        for ($i = 0; $i < $amountOfConsignments; $i++) {
+        for ($i = 1; $i <= $amountOfConsignments; $i++) {
             if ($addProps) {
                 $testData[] = $this->getDefaultConsignmentData() + [
                         self::CONSIGNMENT_ID                      => $i,
