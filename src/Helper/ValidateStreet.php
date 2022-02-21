@@ -18,8 +18,8 @@ class ValidateStreet
         '(?P<number>\d{1,5})' .           // Number can contain a maximum of 5 numbers
         '[/\s\-]{0,2}' .                  // Separators between number and addition
         '(?P<number_suffix>' .
-        '[\-a-zA-Z0-9]{1,6}|'.               // has up to 6 non-whitespace characters or
-        '[\-a-zA-Z]{1}[a-zA-Z\s]{0,5}'.      // starts with a letter and has up to 5 letters with a space
+        '[\-a-z0-9]{1,6}|'.               // has up to 6 non-whitespace characters or
+        '[\-a-z]{1}[a-z\s]{0,5}'.      // starts with a letter and has up to 5 letters with a space
         ')?$~i';
 
     const SPLIT_STREET_REGEX_BE =
