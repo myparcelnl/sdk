@@ -18,7 +18,7 @@ class ValidateStreet
         '(?P<number>\d{1,5})' .             // Number can contain a maximum of 5 numbers
         '[/\s\-]{0,2}' .                    // Separators between number and addition
         '(?P<number_suffix>' .
-        '[/\-a-z]{1}\d{1,5}|'.              // Numbers suffix starts with a letter/dash/slash, followed by numbers or
+        '[a-z]{1}/\-?\d{1,3}|' .              // Numbers suffix starts with a letter with optional - followed by numbers or
         '-\d{1,4}|' .                       // starts with - and has up to 4 numbers or
         '(?=.{2,6}$)\d{1,6}[/\-a-z]{1,5}|'. // starts with numbers followed by letters with a maximum of 6 chars, or
         '[a-z][a-z\s]{0,5}'.                // has up to 6 letters with a space
