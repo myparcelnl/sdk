@@ -107,9 +107,9 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
             [
                 self::FULL_STREET                   => 'street street 269 133',
                 self::expected(self::FULL_STREET)   => 'street street 269 133',
-                self::expected(self::STREET)        => 'street street',
-                self::expected(self::NUMBER)        => 269,
-                self::expected(self::NUMBER_SUFFIX) => '133',
+                self::expected(self::STREET)        => 'street street 269',
+                self::expected(self::NUMBER)        => 133,
+                self::expected(self::NUMBER_SUFFIX) => '',
             ],
             [
                 self::FULL_STREET                 => 'Abeelstreet H 10',
@@ -120,9 +120,9 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
             [
                 self::FULL_STREET                   => 'street street 269 1001',
                 self::expected(self::FULL_STREET)   => 'street street 269 1001',
-                self::expected(self::STREET)        => 'street street',
-                self::expected(self::NUMBER)        => 269,
-                self::expected(self::NUMBER_SUFFIX) => '1001',
+                self::expected(self::STREET)        => 'street street 269',
+                self::expected(self::NUMBER)        => 1001,
+                self::expected(self::NUMBER_SUFFIX) => '',
             ],
             [
                 self::FULL_STREET                 => 'Meijhorst 50e 26',
@@ -159,9 +159,9 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
             [
                 self::FULL_STREET                   => 'Markerkant 10 142',
                 self::expected(self::FULL_STREET)   => 'Markerkant 10 142',
-                self::expected(self::STREET)        => 'Markerkant',
-                self::expected(self::NUMBER)        => 10,
-                self::expected(self::NUMBER_SUFFIX) => '142',
+                self::expected(self::STREET)        => 'Markerkant 10',
+                self::expected(self::NUMBER)        => 142,
+                self::expected(self::NUMBER_SUFFIX) => '',
             ],
             [
                 self::FULL_STREET                   => 'Markerkant 10 11e',
@@ -194,9 +194,9 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
             [
                 self::FULL_STREET                   => 'Scheepvaartlaan 34 302',
                 self::expected(self::FULL_STREET)   => 'Scheepvaartlaan 34 302',
-                self::expected(self::STREET)        => 'Scheepvaartlaan',
-                self::expected(self::NUMBER)        => 34,
-                self::expected(self::NUMBER_SUFFIX) => '302',
+                self::expected(self::STREET)        => 'Scheepvaartlaan 34',
+                self::expected(self::NUMBER)        => 302,
+                self::expected(self::NUMBER_SUFFIX) => '',
             ],
             [
                 self::FULL_STREET                 => 'oan e dijk 48',
@@ -251,6 +251,20 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
                 self::expected(self::STREET)        => 'Markerkant',
                 self::expected(self::NUMBER)        => 10,
                 self::expected(self::NUMBER_SUFFIX) => 'W',
+            ],
+            [
+                self::FULL_STREET                 => 'Tuinstraat 35 boven',
+                self::expected(self::FULL_STREET)   => 'Tuinstraat 35 boven',
+                self::expected(self::STREET)        => 'Tuinstraat',
+                self::expected(self::NUMBER)        => '35',
+                self::expected(self::NUMBER_SUFFIX) => 'boven',
+            ],
+            [
+                self::FULL_STREET                   => 'Nicolaas Ruyschstraat 8 ad hoc',
+                self::expected(self::FULL_STREET)   => 'Nicolaas Ruyschstraat 8 ad hoc',
+                self::expected(self::STREET)        => 'Nicolaas Ruyschstraat',
+                self::expected(self::NUMBER)        => 8,
+                self::expected(self::NUMBER_SUFFIX) => 'ad hoc',
             ],
             [
                 self::FULL_STREET                   => 'Hoofdweg 679 A',
