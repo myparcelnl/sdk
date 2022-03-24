@@ -180,6 +180,7 @@ class ConsignmentEncode
         /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
         if (
+            $consignment->getPickupCountry() !== null &&
             $consignment->getPickupPostalCode() !== null &&
             $consignment->getPickupStreet() !== null &&
             $consignment->getPickupCity() !== null &&
