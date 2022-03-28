@@ -1,0 +1,17 @@
+name: 'Dispatch command'
+
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Slash Command Dispatch'
+        uses: peter-evans/slash-command-dispatch@v1
+        with:
+          token: ${{ secrets.GH_REPO_TOKEN }}
+          commands: rebase
+          permission: write
+          issue-type: pull-request
