@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\src\Model\PickupLocation;
@@ -264,8 +265,11 @@ class AbstractOrder extends BaseModel
         return $this;
     }
 
-    public function setDropOffPoint(DropOffPoint $dropOffPoint): self
+    public function setDropOffPoint(?DropOffPoint $dropOffPoint): self
     {
+        if (CarrierInstabox::NAME === $this->delivery_options->getCarrier()) {
+            //TODO
+        }
         $this->dropOffPoint = $dropOffPoint;
         return $this;
     }
