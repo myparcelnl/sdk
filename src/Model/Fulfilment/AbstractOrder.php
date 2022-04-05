@@ -265,11 +265,13 @@ class AbstractOrder extends BaseModel
         return $this;
     }
 
+    /**
+     * @param  null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     *
+     * @return $this
+     */
     public function setDropOffPoint(?DropOffPoint $dropOffPoint): self
     {
-        if (CarrierInstabox::NAME === $this->delivery_options->getCarrier()) {
-            //TODO
-        }
         $this->dropOffPoint = $dropOffPoint;
         return $this;
     }
