@@ -58,11 +58,11 @@ class MyParcelCustomsItem
      */
     public function setDescription($description, $carrier = null): self
     {
-        $maxLength = AbstractConsignment::DESCRIPTION_MAX_LENGTH;
+        $maxLength = AbstractConsignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
 
         if ($carrier) {
             $consignment = ConsignmentFactory::createFromCarrier(CarrierFactory::create($carrier));
-            $maxLength   = $consignment::DESCRIPTION_MAX_LENGTH;
+            $maxLength   = $consignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
         }
 
         $this->description = Str::limit((string) $description, $maxLength - 3);
