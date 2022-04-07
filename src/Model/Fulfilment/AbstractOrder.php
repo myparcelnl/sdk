@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 
 use DateTime;
+use Exception;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\src\Model\PickupLocation;
@@ -269,9 +270,21 @@ class AbstractOrder extends BaseModel
      * @param  null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return $this
+     * @throws \Exception
      */
     public function setDropOffPoint(?DropOffPoint $dropOffPoint): self
     {
+        $carrier = CarrierFactory::createFromName($this->delivery_options->getCarrier());
+
+        if (! $dropOffPoint && $carrier->isDropOffPointRequired()) {
+            throw new Exception(
+                sprintf(
+                    'Default drop-off point missing for carrier %s. Configure one in the MyParcel Backoffice.',
+                    $carrier->getHuman()
+                )
+            );
+        }
+
         $this->dropOffPoint = $dropOffPoint;
         return $this;
     }

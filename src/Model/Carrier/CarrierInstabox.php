@@ -8,10 +8,11 @@ use MyParcelNL\Sdk\src\Model\Consignment\InstaboxConsignment;
 
 class CarrierInstabox extends AbstractCarrier
 {
-    public const CONSIGNMENT = InstaboxConsignment::class;
-    public const HUMAN       = 'Instabox';
-    public const ID          = 5;
-    public const NAME        = 'instabox';
+    public const CONSIGNMENT             = InstaboxConsignment::class;
+    public const HUMAN                   = 'Instabox';
+    public const ID                      = 5;
+    public const NAME                    = 'instabox';
+    public const DROP_OFF_POINT_REQUIRED = true;
 
     /**
      * @var class-string
@@ -32,4 +33,9 @@ class CarrierInstabox extends AbstractCarrier
      * @var string
      */
     protected $name = self::NAME;
+
+    /**
+     * @var bool
+     */
+    protected $isDropOffPointRequired = self::DROP_OFF_POINT_REQUIRED;
 }
