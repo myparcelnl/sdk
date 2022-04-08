@@ -12,7 +12,6 @@ class CarrierPostNL extends AbstractCarrier
     public const HUMAN                   = 'PostNL';
     public const ID                      = 1;
     public const NAME                    = 'postnl';
-    public const DROP_OFF_POINT_REQUIRED = false;
 
     /**
      * @var class-string
@@ -33,9 +32,4 @@ class CarrierPostNL extends AbstractCarrier
      * @var string
      */
     protected $name = self::NAME;
-
-    /**
-     * @var bool
-     */
-    protected $isDropOffPointRequired = self::DROP_OFF_POINT_REQUIRED;
 }
