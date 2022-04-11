@@ -14,16 +14,16 @@ class DeliveryDateRule extends Rule
      */
     public function validate($validationSubject): void
     {
-        $isDefaultDeliveryType = AbstractConsignment::DEFAULT_DELIVERY_TYPE === $validationSubject->getDeliveryType();
-        $canHaveDeliveryDate   = $validationSubject->canHaveExtraOption(AbstractConsignment::EXTRA_OPTION_DELIVERY_DATE);
+        $isMorningOrEvening = in_array(
+            $validationSubject->getDeliveryType(),
+            [AbstractConsignment::DELIVERY_TYPE_MORNING, AbstractConsignment::DELIVERY_TYPE_EVENING],
+            true
+        );
 
-        if (! $isDefaultDeliveryType && $canHaveDeliveryDate && ! $validationSubject->getDeliveryDate()) {
-            $this->addError(
-                sprintf(
-                    'If delivery_type is not %d, delivery_date is required.',
-                    AbstractConsignment::DEFAULT_DELIVERY_TYPE
-                )
-            );
+        if ($isMorningOrEvening
+            && $validationSubject->canHaveExtraOption(AbstractConsignment::EXTRA_OPTION_DELIVERY_DATE)
+            && ! $validationSubject->getDeliveryDate()) {
+            $this->addError('If delivery_type is morning or evening, delivery_date is required.');
         }
     }
 }
