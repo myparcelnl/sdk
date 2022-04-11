@@ -828,7 +828,7 @@ class MyParcelCollection extends Collection
         foreach ($result as $shipment) {
             $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
 
-            //TODO: Make AbstractConsignmentAdapter for carrier specific exceptions (https://jira.dmp.zone/browse/MY-32524)
+            //TODO: MY-32524 Make AbstractConsignmentAdapter for carrier specific exceptions
             if (CarrierInstabox::ID === $shipment['carrier_id']) {
                 $shipment['barcode'] = $shipment['barcode'] ?: $shipment['external_identifier'];
             }
