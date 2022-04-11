@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [7.2.1](https://github.com/myparcelnl/sdk/compare/v7.2.0...v7.2.1) (2022-04-11)
+
+
+### :bug: Bug Fixes
+
+* **consignment:** allow omitting insurance field ([#409](https://github.com/myparcelnl/sdk/issues/409)) ([810ac4e](https://github.com/myparcelnl/sdk/commit/810ac4e46f82b8d8726a08d360b1f26fb7fad243))
+
 ## [7.2.0](https://github.com/myparcelnl/sdk/compare/v7.1.0...v7.2.0) (2022-04-11)
 
 
