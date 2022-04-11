@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
 use MyParcelNL\Sdk\src\Validator\Consignment\BpostConsignmentValidator;
 
@@ -52,7 +53,7 @@ class BpostConsignment extends AbstractConsignment
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
-        if (self::CC_BE === $this->getCountry()) {
+        if (CountryCodes::CC_BE === $this->getCountry()) {
             return array_merge_recursive($consignmentEncoded, [
                 'recipient' => [
                     'street'                 => $this->getStreet(true),
@@ -73,7 +74,7 @@ class BpostConsignment extends AbstractConsignment
      */
     public function getLocalCountryCode(): string
     {
-        return self::CC_BE;
+        return CountryCodes::CC_BE;
     }
 
     /**

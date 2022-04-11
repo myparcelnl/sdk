@@ -1,6 +1,6 @@
 <?php
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\Concerns;
 
 use Closure;
 

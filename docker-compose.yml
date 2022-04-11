@@ -1,8 +1,9 @@
-version: '3'
+version: '3.9'
 
 services:
   php:
     image: myparcelnl/php-sdk
+    init: true
     build: ./
     working_dir: /app
     env_file:

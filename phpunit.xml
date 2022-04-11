@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.5/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
     colors="true"
-    cacheResult="true"
     executionOrder="depends,defects">
+    <coverage>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <report>
+            <html outputDirectory="./coverage" />
+        </report>
+    </coverage>
     <testsuites>
         <testsuite name="Unit">
-            <directory>test/Factory</directory>
+            <directory>test</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
     <php>
         <env name="TEST" value="true" />
     </php>
-    <logging>
-        <log type="coverage-html" target="./coverage" />
-    </logging>
 </phpunit>

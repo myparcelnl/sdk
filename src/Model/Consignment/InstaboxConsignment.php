@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Validator\Consignment\InstaboxConsignmentValidator;
 
@@ -74,6 +75,6 @@ class InstaboxConsignment extends AbstractConsignment
      */
     public function getLocalCountryCode(): string
     {
-        return self::CC_NL;
+        return CountryCodes::CC_NL;
     }
 }

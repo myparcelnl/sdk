@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="true" type="PestRunConfigurationType">
+    <CommandLine>
+      <PhpTestInterpreterSettings>
+        <option name="interpreterName" value="php" />
+      </PhpTestInterpreterSettings>
+    </CommandLine>
+    <option name="pestRunnerSettings">
+      <PestRunner method="" scope="ConfigurationFile" />
+    </option>
+    <option name="runnerSettings">
+      <PhpTestRunnerSettings method="" scope="ConfigurationFile" />
+    </option>
+    <method v="2" />
+  </configuration>
+</component>

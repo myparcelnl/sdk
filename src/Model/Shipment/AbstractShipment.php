@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Shipment;
 
-use MyParcelNL\Sdk\src\Concerns\Model\Initializable\HasDeliveryOptionsAttribute;
+use MyParcelNL\Sdk\src\Model\Address;
 use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Model\Recipient;
+use MyParcelNL\Sdk\src\Model\Concerns\Initializable\HasDeliveryOptionsAttribute;
 
 /**
- * @property string                              $apiKey
- * @property \MyParcelNL\Sdk\src\Model\Recipient $recipient
+ * @property string                            $apiKey
+ * @property \MyParcelNL\Sdk\src\Model\Address $recipient
  */
 class AbstractShipment extends BaseModel
 {
@@ -22,7 +22,7 @@ class AbstractShipment extends BaseModel
     protected $attributes = [
         'apiKey'          => null,
         'deliveryOptions' => DeliveryOptionsAdapter::class,
-        'recipient'       => Recipient::class,
+        'recipient'       => Address::class,
     ];
 
     //    public function __construct(array $data = [])

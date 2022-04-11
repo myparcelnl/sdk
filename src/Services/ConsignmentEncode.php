@@ -14,6 +14,7 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -94,7 +95,7 @@ class ConsignmentEncode
             $consignmentEncoded['options']['large_format'] = (int) $consignment->isLargeFormat();
         }
 
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
+        if ($consignment->getCountry() == CountryCodes::CC_NL && $consignment->hasAgeCheck()) {
             $consignmentEncoded['options']['age_check']      = 1;
             $consignmentEncoded['options']['only_recipient'] = $consignment->canHaveShipmentOption('only_recipient') ? 1 : 0;
             $consignmentEncoded['options']['signature']      = $consignment->canHaveShipmentOption('signature') ? 1 : 0;

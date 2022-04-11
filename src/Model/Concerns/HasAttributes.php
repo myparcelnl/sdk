@@ -1,8 +1,9 @@
 <?php
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Model\Concerns;
 
 use Illuminate\Support\Str;
+use MyParcelNL\Sdk\src\Contracts\Support\Arrayable;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 trait HasAttributes
@@ -33,9 +34,9 @@ trait HasAttributes
      *
      * @param  array|string $attributes
      *
-     * @return $this
+     * @return self
      */
-    public function append($attributes)
+    public function append($attributes): self
     {
         $this->appends = array_unique(
             array_merge($this->appends, is_string($attributes) ? func_get_args() : $attributes)
@@ -55,9 +56,10 @@ trait HasAttributes
             $this->attributes,
             array_keys($this->attributes)
         );
-        //        foreach ($this->getArrayableAttributes() as $key => $value) {
-        //            $attributes[$key] = $this->mutateAttributeForArray($key, $value);
-        //        }
+
+        foreach ($this->getArrayableAttributes() as $key => $value) {
+            $attributes[$key] = $this->mutateAttributeForArray($key, $value);
+        }
 
         $attributes = $this->addMutatedAttributesToArray(
             $attributes,
@@ -78,11 +80,12 @@ trait HasAttributes
      *
      * @return void
      */
-    public static function cacheMutatedAttributes($class)
+    public static function cacheMutatedAttributes(string $class): void
     {
-        static::$mutatorCache[$class] = (new Collection(static::getMutatorMethods($class)))->map(function ($match) {
-            return lcfirst(Str::camel($match));
-        })
+        static::$mutatorCache[$class] = (new Collection(static::getMutatorMethods($class)))
+            ->map(function ($match) {
+                return lcfirst(Str::camel($match));
+            })
             ->all();
     }
 
@@ -93,7 +96,7 @@ trait HasAttributes
      *
      * @return mixed
      */
-    public function getAttribute($key)
+    public function getAttribute(string $key)
     {
         if (! $key) {
             return null;
@@ -113,7 +116,7 @@ trait HasAttributes
      *
      * @return mixed
      */
-    public function getAttributeValue($key)
+    public function getAttributeValue(string $key)
     {
         return $this->transformModelValue($key, $this->getAttributeFromArray($key));
     }
@@ -133,7 +136,7 @@ trait HasAttributes
      *
      * @return array
      */
-    public function getMutatedAttributes()
+    public function getMutatedAttributes(): array
     {
         $class = static::class;
 
@@ -151,9 +154,9 @@ trait HasAttributes
      *
      * @return bool
      */
-    public function hasAppended($attribute)
+    public function hasAppended(string $attribute): bool
     {
-        return in_array($attribute, $this->appends);
+        return in_array($attribute, $this->appends, true);
     }
 
     /**
@@ -163,9 +166,9 @@ trait HasAttributes
      *
      * @return bool
      */
-    public function hasGetMutator($key): bool
+    public function hasGetMutator(string $key): bool
     {
-        return method_exists($this, 'get' . Str::studly($key) . 'Attribute');
+        return method_exists($this, $this->createMutatorName('get', $key));
     }
 
     /**
@@ -175,9 +178,9 @@ trait HasAttributes
      *
      * @return bool
      */
-    public function hasSetMutator($key): bool
+    public function hasSetMutator(string $key): bool
     {
-        return method_exists($this, 'set' . Str::studly($key) . 'Attribute');
+        return method_exists($this, $this->createMutatorName('set', $key));
     }
 
     /**
@@ -187,7 +190,7 @@ trait HasAttributes
      *
      * @return array
      */
-    public function only($attributes)
+    public function only($attributes): array
     {
         $results = [];
 
@@ -203,9 +206,9 @@ trait HasAttributes
      *
      * @param  array $appends
      *
-     * @return $this
+     * @return self
      */
-    public function setAppends(array $appends)
+    public function setAppends(array $appends): self
     {
         $this->appends = $appends;
 
@@ -218,9 +221,9 @@ trait HasAttributes
      * @param  string $key
      * @param  mixed  $value
      *
-     * @return mixed
+     * @return self
      */
-    public function setAttribute($key, $value)
+    public function setAttribute(string $key, $value): self
     {
         if ($this->hasSetMutator($key)) {
             return $this->setMutatedAttributeValue($key, $value);
@@ -235,9 +238,9 @@ trait HasAttributes
      *
      * @param  array $attributes
      *
-     * @return $this
+     * @return self
      */
-    public function setRawAttributes(array $attributes)
+    public function setRawAttributes(array $attributes): self
     {
         $this->attributes = $attributes;
 
@@ -316,7 +319,7 @@ trait HasAttributes
      *
      * @return mixed
      */
-    protected function getAttributeFromArray($key)
+    protected function getAttributeFromArray(string $key)
     {
         return $this->getAttributes()[$key] ?? null;
     }
@@ -328,7 +331,7 @@ trait HasAttributes
      *
      * @return array
      */
-    protected static function getMutatorMethods($class)
+    protected static function getMutatorMethods($class): array
     {
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($class)), $matches);
 
@@ -343,9 +346,9 @@ trait HasAttributes
      *
      * @return mixed
      */
-    protected function mutateAttribute($key, $value)
+    protected function mutateAttribute(string $key, $value)
     {
-        return $this->{'get' . Str::studly($key) . 'Attribute'}($value);
+        return $this->{$this->createMutatorName('get', $key)}($value);
     }
 
     /**
@@ -356,7 +359,7 @@ trait HasAttributes
      *
      * @return mixed
      */
-    protected function mutateAttributeForArray($key, $value)
+    protected function mutateAttributeForArray(string $key, $value)
     {
         $value = $this->mutateAttribute($key, $value);
 
@@ -371,9 +374,9 @@ trait HasAttributes
      *
      * @return mixed
      */
-    protected function setMutatedAttributeValue($key, $value)
+    protected function setMutatedAttributeValue(string $key, $value)
     {
-        return $this->{'set' . Str::studly($key) . 'Attribute'}($value);
+        return $this->{$this->createMutatorName('set', $key)}($value);
     }
 
     /**
@@ -382,12 +385,23 @@ trait HasAttributes
      *
      * @return mixed
      */
-    protected function transformModelValue($key, $value)
+    protected function transformModelValue(string $key, $value)
     {
         if ($this->hasGetMutator($key)) {
             return $this->mutateAttribute($key, $value);
         }
 
         return $value;
+    }
+
+    /**
+     * @param  string $type
+     * @param  string $key
+     *
+     * @return void
+     */
+    private function createMutatorName(string $type, string $key): string
+    {
+        return sprintf('%s%sAttribute', $type, Str::studly($key));
     }
 }

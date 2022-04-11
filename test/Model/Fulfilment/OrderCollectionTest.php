@@ -15,7 +15,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\src\Model\Fulfilment\Product;
-use MyParcelNL\Sdk\src\Model\Recipient;
+use MyParcelNL\Sdk\src\Model\Address;
 use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -214,11 +214,11 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Recipient
+     * @return \MyParcelNL\Sdk\src\Model\Address
      */
-    protected function generateRecipient(): Recipient
+    protected function generateRecipient(): Address
     {
-        return (new Recipient())
+        return (new Address())
             ->setCc('NL')
             ->setCity($this->faker->city)
             ->setCompany($this->faker->company)

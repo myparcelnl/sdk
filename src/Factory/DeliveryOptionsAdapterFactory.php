@@ -1,14 +1,12 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
  * @author      Richard Perdaan <support@myparcel.nl>
+ * @copyright   2010-2019 MyParcel
  * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
  * @link        https://github.com/myparcelnl/sdk
- * @copyright   2010-2019 MyParcel
  * @since       File available since Release v3.0.0
  */
 
@@ -23,7 +21,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
 class DeliveryOptionsAdapterFactory
 {
     /**
-     * @param  array $deliveryOptionsData
+     * @param array $deliveryOptionsData
      *
      * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
      * @throws \Exception
@@ -32,14 +30,12 @@ class DeliveryOptionsAdapterFactory
     {
         $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
 
-        if (array_key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData['time'])) {
+        if (key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData["time"])) {
             return new DeliveryOptionsV2Adapter($deliveryOptionsData);
-        }
-
-        if (array_key_exists('deliveryType', $deliveryOptionsData)) {
+        } elseif (key_exists('deliveryType', $deliveryOptionsData)) {
             return new DeliveryOptionsV3Adapter($deliveryOptionsData);
         }
 
-        throw new BadMethodCallException('Can\'t create DeliveryOptions. No suitable adapter found');
+        throw new BadMethodCallException("Can't create DeliveryOptions. No suitable adapter found");
     }
 }

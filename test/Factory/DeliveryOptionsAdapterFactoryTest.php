@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\Test\Factory;
 use BadMethodCallException;
 use DateTime;
 use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -48,7 +49,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'only_recipient' => true,
                     'insurance'      => 5000,
                 ],
-                'cc'                => AbstractConsignment::CC_NL,
+                'cc'                => CountryCodes::CC_NL,
                 'city'              => 'Hoofddorp',
                 'location_code'     => '123456',
                 'location_name'     => 'Primera Sanders',
@@ -88,7 +89,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'label_description' => $this->faker->words(3, true),
                 ],
                 'pickupLocation'  => [
-                    'country'           => AbstractConsignment::CC_NL,
+                    'country'           => CountryCodes::CC_NL,
                     'location_code'     => '123456',
                     'retail_network_id' => 'PNPNL-01',
                     'location_name'     => 'Primera Sanders',

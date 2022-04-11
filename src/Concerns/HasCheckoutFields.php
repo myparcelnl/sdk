@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\src\Concerns;
 
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\CheckoutFields;
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 /**
@@ -81,7 +82,7 @@ trait HasCheckoutFields
      */
     public function setPickupAddressFromCheckout(?string $checkoutData)
     {
-        if ($this->getCountry() !== AbstractConsignment::CC_NL && $this->getCountry() !== AbstractConsignment::CC_BE) {
+        if ($this->getCountry() !== CountryCodes::CC_NL && $this->getCountry() !== CountryCodes::CC_BE) {
             return $this;
         }
 

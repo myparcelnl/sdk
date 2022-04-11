@@ -25,14 +25,12 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BaseConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\Options\DeliveryTypeFactory;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Services\CollectionEncode;
 use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\src\Support\Str;
-use RuntimeException;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -179,58 +177,19 @@ class MyParcelCollection extends Collection
      * @param  AbstractConsignment $consignment
      *
      * @return self
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function addConsignment(AbstractConsignment $consignment): self
     {
-        return $this->push($consignment);
-    }
-
-    /**
-     * @param  AbstractConsignment ...$values
-     *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
-     * @throws \Exception
-     */
-    public function push(...$values): self
-    {
-        foreach ($values as $consignment) {
-            if (! is_a($consignment, AbstractConsignment::class)) {
-                throw new RuntimeException('Items in a MyParcelCollection must be instances of AbstractConsignment');
-            }
-
-            $consignment->validate();
-
-            if (! $consignment->canHaveDeliveryType(DeliveryTypeFactory::create($consignment->getDeliveryType())->getName())) {
-                $consignment->setDeliveryType(AbstractConsignment::DEFAULT_DELIVERY_TYPE);
-            }
-
-            if (! $consignment->canHaveShipmentOption(AbstractConsignment::SHIPMENT_OPTION_SIGNATURE)) {
-                $consignment->setSignature(false);
-            }
-
-            if (! $consignment->canHaveShipmentOption(AbstractConsignment::SHIPMENT_OPTION_RETURN)) {
-                $consignment->setReturn(false);
-            }
-
-            if (! $consignment->canHaveShipmentOption(AbstractConsignment::SHIPMENT_OPTION_INSURANCE)) {
-                $consignment->setInsurance(null);
-            }
-
-            if (! $consignment->canHaveShipmentOption(AbstractConsignment::SHIPMENT_OPTION_ONLY_RECIPIENT)) {
-                $consignment->setOnlyRecipient(false);
-            }
-
-            if (! $consignment->canHaveShipmentOption(AbstractConsignment::SHIPMENT_OPTION_AGE_CHECK)) {
-                $consignment->setAgeCheck(false);
-            }
-
-            if (! $consignment->canHaveShipmentOption(AbstractConsignment::SHIPMENT_OPTION_LARGE_FORMAT)) {
-                $consignment->setLargeFormat(false);
-            }
+        if ($consignment->getApiKey() === null) {
+            throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
 
-        return parent::push(...$values);
+        $consignment->validate();
+
+        $this->push($consignment);
+
+        return $this;
     }
 
     /**
@@ -895,8 +854,8 @@ class MyParcelCollection extends Collection
     private function addMissingReferenceId(): void
     {
         $this->transform(function (AbstractConsignment $consignment) {
-            if (! $consignment->getReferenceIdentifier()) {
-                $consignment->setReferenceIdentifier('random_' . uniqid('', true));
+            if (!$consignment->getReferenceId()) {
+                $consignment->setReferenceId('random_' . uniqid('', true));
             }
 
             return $consignment;

@@ -18,9 +18,9 @@ use MyParcelNL\Sdk\src\Model\FullStreet;
 
 class SplitStreet
 {
-    const BOX_NL                 = 'bus';
-    const BOX_SEPARATOR          = ['boîte', 'box', 'bte', 'Bus'];
-    const BOX_SEPARATOR_BY_REGEX = ['\/','-', 'B'];
+    public const BOX_NL                 = 'bus';
+    public const BOX_SEPARATOR          = ['boîte', 'box', 'bte', 'Bus'];
+    public const BOX_SEPARATOR_BY_REGEX = ['\/','-', 'B'];
 
     public const NUMBER_SUFFIX_ABBREVIATION = [
         'apartment'  => '',
@@ -61,32 +61,35 @@ class SplitStreet
      * Splits street data into separate parts for street name, house number and extension.
      * Only for Dutch and Belgium addresses
      *
-     * @param string $fullStreet The full street name including all parts
-     *
-     * @param string $local
-     * @param string $destination
+     * @param  string      $fullStreet The full street name including all parts
+     * @param  string      $local
+     * @param  null|string $destination
      *
      * @return \MyParcelNL\Sdk\src\Model\FullStreet
-     *
-     * @throws \Exception
+     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
      */
-    public static function splitStreet(string $fullStreet, string $local, string $destination): FullStreet
+    public static function splitStreet(string $fullStreet, string $local, string $destination = null): FullStreet
     {
-        $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
+        $destination = $destination ?? $local;
+        $fullStreet  = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
 
         // Replace house number suffix by an abbreviation, only possible for the Netherlands
-        if ($destination === AbstractConsignment::CC_NL) {
+        if (CountryCodes::CC_NL === $destination) {
             foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
                 $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
             }
         }
 
-        if ($destination === AbstractConsignment::CC_BE) {
+        if (CountryCodes::CC_BE === $destination) {
             // Replace box variants to bus
-            $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
-            // When a caracter is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must replaced by bus
+            $fullStreetParts = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
+            // When a character is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must be replaced by bus.
             foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
-                $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . ' ' . ltrim('$1'), $fullStreet);
+                $fullStreet = preg_replace(
+                    '#' . $boxRegex . '(\d)#',
+                    self::BOX_NL . ' ' . ltrim('$1'),
+                    $fullStreetParts
+                );
             }
         }
 
@@ -101,7 +104,7 @@ class SplitStreet
 
         return new FullStreet(
             $matches['street'] ?? $fullStreet,
-            (int) $matches['number'] ?? null,
+            (int) ($matches['number'] ?? null),
             $matches['number_suffix'] ?? null,
             $matches['box_number'] ?? null
         );
@@ -114,12 +117,10 @@ class SplitStreet
      *
      * @return array
      */
-    public static function getStreetParts($street)
+    public static function getStreetParts($street): array
     {
         $streetWrap = wordwrap($street, AbstractConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
-        $parts      = explode("BREAK_LINE", $streetWrap);
-
-        return $parts;
+        return explode("BREAK_LINE", $streetWrap);
     }
 
     /**
@@ -157,16 +158,16 @@ class SplitStreet
      */
     private static function validate(string $fullStreet, int $result, array $matches): void
     {
-        if (! $result || ! is_array($matches)) {
+        if (! $result) {
             // Invalid full street supplied
             throw new InvalidConsignmentException('Invalid full street supplied: ' . $fullStreet);
         }
 
-        if ($fullStreet != $matches[0]) {
+        if ($fullStreet !== $matches[0]) {
             // Characters are gone by preg_match
-            throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
+            throw new InvalidConsignmentException(
+                'Something went wrong splitting up the following address: ' . $fullStreet
+            );
         }
-
-        return;
     }
 }

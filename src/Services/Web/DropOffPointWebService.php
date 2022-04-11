@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Services\Web;
 
 use BadMethodCallException;
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Support\Collection;
 
@@ -65,7 +65,7 @@ class DropOffPointWebService extends AbstractWebService implements CanGetDropOff
      */
     public function getDropOffPoints(string $postalCode): Collection
     {
-        if (! ValidatePostalCode::validate($postalCode, AbstractConsignment::CC_NL)) {
+        if (! ValidatePostalCode::validate($postalCode, CountryCodes::CC_NL)) {
             throw new BadMethodCallException('Invalid postal code');
         }
 

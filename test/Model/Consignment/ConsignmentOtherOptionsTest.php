@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
@@ -48,7 +49,7 @@ class ConsignmentOtherOptionsTest extends ConsignmentTestCase
                 self::expected(self::DELIVERY_DATE)        => $deliveryDate,
                 self::expected(self::DELIVERY_TYPE)        => AbstractConsignment::DELIVERY_TYPE_PICKUP,
                 self::expected(self::PICKUP_CITY)          => 'Hoofddorp',
-                self::expected(self::PICKUP_COUNTRY)       => AbstractConsignment::CC_NL,
+                self::expected(self::PICKUP_COUNTRY)       => CountryCodes::CC_NL,
                 self::expected(self::PICKUP_LOCATION_NAME) => 'Primera Sanders',
                 self::expected(self::PICKUP_NUMBER)        => '3',
                 self::expected(self::PICKUP_POSTAL_CODE)   => '2132BA',

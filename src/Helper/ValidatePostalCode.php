@@ -2,8 +2,6 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-
 class ValidatePostalCode
 {
     private const VALIDATE_POSTAL_CODE_REGEX_NL = '/^[1-9]\d{3}\s?[a-z]{2}$/i';
@@ -28,9 +26,9 @@ class ValidatePostalCode
     private static function getPostalCodeRegexByCountry(string $destination): ?string
     {
         switch ($destination) {
-            case AbstractConsignment::CC_NL:
+            case CountryCodes::CC_NL:
                 return self::VALIDATE_POSTAL_CODE_REGEX_NL;
-            case AbstractConsignment::CC_BE:
+            case CountryCodes::CC_BE:
                 return self::VALIDATE_POSTAL_CODE_REGEX_BE;
             default:
                 return null;

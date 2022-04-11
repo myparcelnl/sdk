@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
+
 class BaseConsignment extends AbstractConsignment
 {
     /**
@@ -11,7 +13,7 @@ class BaseConsignment extends AbstractConsignment
      */
     public function getLocalCountryCode(): string
     {
-        return self::CC_NL;
+        return CountryCodes::CC_NL;
     }
 
     /**

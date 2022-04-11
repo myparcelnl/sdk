@@ -6,7 +6,7 @@ use MyParcelNL\Sdk\src\Entity\Consignment\PackageType;
 use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierRedJePakketje;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Recipient;
+use MyParcelNL\Sdk\src\Model\Address;
 use MyParcelNL\Sdk\src\Model\Shipment\AbstractShipment;
 use MyParcelNL\Sdk\src\Model\Shipment\DeliveryOptionsAdapter;
 use PHPUnit\Framework\TestCase;

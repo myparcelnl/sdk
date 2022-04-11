@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\src\Contracts\Support;
 
 interface Arrayable
 {
@@ -11,6 +11,6 @@ interface Arrayable
      *
      * @return array
      */
-    public function toArray();
+    public function toArray(): array;
 }
 

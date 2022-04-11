@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Entity\Consignment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Model\Model;
 
 /**
  * @property int    $id
  * @property string $name
  */
-abstract class AbstractEntity extends BaseModel
+abstract class AbstractEntity extends Model
 {
     /**
      * @var array

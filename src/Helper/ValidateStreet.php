@@ -2,8 +2,6 @@
 
 namespace MyParcelNL\Sdk\src\Helper;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-
 class ValidateStreet
 {
     /**
@@ -12,7 +10,7 @@ class ValidateStreet
      * This regex goes from right to left
      * Contains php keys to store the data in an array
      */
-    const SPLIT_STREET_REGEX_NL =
+    public const SPLIT_STREET_REGEX_NL =
         '~(?P<street>.{1,78}?)' .           // The rest belongs to the street
         '\s' .                              // Separator between street and number
         '(?P<number>\d{1,5})' .             // Number can contain a maximum of 5 numbers
@@ -24,7 +22,7 @@ class ValidateStreet
         '[a-z][a-z\s]{0,5}'.                // has up to 6 letters with a space
         ')?$~i';
 
-    const SPLIT_STREET_REGEX_BE =
+    public const SPLIT_STREET_REGEX_BE =
         '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{1,8})\s?(?P<box_separator>' . SplitStreet::BOX_NL . ')?\s?(?P<box_number>\d{0,8})\s?(?P<number_suffix>[A-z]{0,4}$)?)$~';
 
     /**
@@ -70,10 +68,10 @@ class ValidateStreet
      */
     public static function getStreetRegexByCountry(string $local, string $destination): ?string
     {
-        $localIsBe       = $local === AbstractConsignment::CC_BE;
-        $localIsNlOrBe   = in_array($local, [AbstractConsignment::CC_BE, AbstractConsignment::CC_NL]);
-        $destinationIsNl = $destination === AbstractConsignment::CC_NL;
-        $destinationIsBe = $destination === AbstractConsignment::CC_BE;
+        $localIsBe       = $local === CountryCodes::CC_BE;
+        $localIsNlOrBe   = in_array($local, [CountryCodes::CC_BE, CountryCodes::CC_NL], true);
+        $destinationIsNl = $destination === CountryCodes::CC_NL;
+        $destinationIsBe = $destination === CountryCodes::CC_BE;
 
         if ($localIsNlOrBe && $destinationIsNl) {
             return self::SPLIT_STREET_REGEX_NL;

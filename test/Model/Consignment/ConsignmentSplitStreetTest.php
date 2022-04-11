@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class ConsignmentSplitStreetTest extends ConsignmentTestCase
@@ -469,7 +469,7 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
             //  ],
         ], [
             self::CARRIER_ID                             => CarrierPostNL::ID,
-            self::COUNTRY                                => AbstractConsignment::CC_NL,
+            self::COUNTRY                                => CountryCodes::CC_NL,
             self::FULL_STREET                            => null,
             self::expected(self::BOX_NUMBER)             => null,
             self::expected(self::FULL_STREET)            => null,

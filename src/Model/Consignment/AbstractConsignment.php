@@ -9,27 +9,21 @@ use Exception;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Concerns\HasCountry;
-use MyParcelNL\Sdk\src\Concerns\Model\Initializable\HasCarrierAttribute;
-use MyParcelNL\Sdk\src\Concerns\Model\Initializable\HasDeliveryTypeAttribute;
-use MyParcelNL\Sdk\src\Concerns\Model\Initializable\HasPackageTypeAttribute;
-use MyParcelNL\Sdk\src\Entity\Consignment\DeliveryType;
-use MyParcelNL\Sdk\src\Entity\Consignment\PackageType;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Exception\ValidationException;
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
+use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Str;
 use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 
 abstract class AbstractConsignment
 {
-    use HasCarrierAttribute;
-    use HasPackageTypeAttribute;
-    use HasDeliveryTypeAttribute;
-
     use HasCheckoutFields;
     use HasCountry;
     use HasPickupLocation;
@@ -157,37 +151,12 @@ abstract class AbstractConsignment
     public const STATUS_CONCEPT    = 1;
     public const MAX_STREET_LENGTH = 40;
 
-    public const CC_NL = 'NL';
-    public const CC_BE = 'BE';
-
-    public const EURO_COUNTRIES = [
-        'NL',
-        'BE',
-        'AT',
-        'BG',
-        'CZ',
-        'CY',
-        'DK',
-        'EE',
-        'FI',
-        'FR',
-        'DE',
-        'GR',
-        'HU',
-        'IE',
-        'IT',
-        'LV',
-        'LT',
-        'LU',
-        'PL',
-        'PT',
-        'RO',
-        'SK',
-        'SI',
-        'ES',
-        'SE',
-        'XK',
-    ];
+    /** @deprecated since v7.0.0. Use CountryCodes::CC_NL */
+    public const CC_NL = CountryCodes::CC_NL;
+    /** @deprecated since v7.0.0. Use CountryCodes::CC_BE */
+    public const CC_BE = CountryCodes::CC_BE;
+    /** @deprecated since v7.0.0. Use CountryCodes::EURO_COUNTRIES */
+    public const EURO_COUNTRIES = CountryCodes::EU_COUNTRIES;
 
     /**
      * @var array
@@ -328,14 +297,12 @@ abstract class AbstractConsignment
     /**
      * @internal
      * @var int
-     * @deprecated use getPackageType/setPackageType
      */
     public $package_type;
 
     /**
      * @internal
      * @var int
-     * @deprecated use getDeliveryType/setDeliveryType
      */
     public $delivery_type = self::DEFAULT_DELIVERY_TYPE;
 
@@ -418,9 +385,19 @@ abstract class AbstractConsignment
     public $items = [];
 
     /**
+     * @var string|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     */
+    protected $carrierClass;
+
+    /**
      * @var null|string
      */
     protected $validatorClass;
+
+    /**
+     * @var null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     */
+    private $carrier;
 
     /**
      * @var bool
@@ -443,14 +420,30 @@ abstract class AbstractConsignment
     protected $drop_off_point;
 
     /**
-     * @param  int|string|\MyParcelNL\Sdk\src\Entity\Consignment\DeliveryType $deliveryType
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        $this->carrier = $this->carrierClass
+            ? CarrierFactory::createFromClass($this->carrierClass)
+            : null;
+    }
+
+    /**
+     * @return null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     */
+    final public function getCarrier(): ?AbstractCarrier
+    {
+        return $this->carrier;
+    }
+
+    /**
+     * @param  string $deliveryType
      *
      * @return bool
      */
-    public function canHaveDeliveryType($deliveryType): bool
+    public function canHaveDeliveryType(string $deliveryType): bool
     {
-        $deliveryType = new DeliveryType($deliveryType);
-        return in_array($deliveryType->getName(), $this->getAllowedDeliveryTypes(), true);
         $allowedDeliveryTypes = $this->getAllowedDeliveryTypes();
         if (self::PACKAGE_TYPE_PACKAGE !== $this->getPackageType()) {
             $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD];
@@ -476,8 +469,7 @@ abstract class AbstractConsignment
      */
     public function canHavePackageType(string $packageType): bool
     {
-        $packageTypeClass = new PackageType($packageType);
-        return in_array($packageTypeClass->getName(), $this->getAllowedPackageTypes(), true);
+        return in_array($packageType, $this->getAllowedPackageTypes(), true);
     }
 
     /**
@@ -1060,7 +1052,7 @@ abstract class AbstractConsignment
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
-        if ($this->getCountry() === self::CC_NL) {
+        if ($this->getCountry() === CountryCodes::CC_NL) {
             return array_merge_recursive($consignmentEncoded, [
                 'recipient' => [
                     'street'                 => $this->getStreet(true),
@@ -1242,46 +1234,43 @@ abstract class AbstractConsignment
      *          4. digital stamp
      * Required: Yes.
      *
-     * @param  int|string|\MyParcelNL\Sdk\src\Entity\Consignment\PackageType $packageType
+     * @param  int $packageType
      *
      * @return self
      * @throws \Exception
      */
-    public function setPackageType($packageType): self
+    public function setPackageType(int $packageType): self
     {
-        parent::setPackageType($packageType);
-        $this->packageType = $packageType;
-//        $packageTypeMap = array_flip(self::PACKAGE_TYPES_NAMES_IDS_MAP);
-//
-//        if (! in_array($packageTypeMap[$packageType], $this->getAllowedPackageTypes(), true)) {
-//            throw new Exception('Use the correct package type for shipment:' . $this->consignment_id);
-//        }
+        $packageTypeMap = array_flip(self::PACKAGE_TYPES_NAMES_IDS_MAP);
 
-        $this->package_type = (new PackageType($packageType))->getId();
+        if (! in_array($packageTypeMap[$packageType], $this->getAllowedPackageTypes(), true)) {
+            throw new Exception('Use the correct package type for shipment:' . $this->consignment_id);
+        }
+
+        $this->package_type = $packageType;
+
         return $this;
     }
 
     /**
      * @return int
-     * @deprecated use getDeliveryTypeId
      */
     public function getDeliveryType(): int
     {
-        return $this->getDeliveryTypeId();
+        return $this->delivery_type;
     }
 
     /**
      * The delivery type for the package
      * Required: Yes if delivery_date has been specified.
      *
-     * @param  $deliveryType
+     * @param  int $deliveryType
      *
      * @return self
      */
-    public function setDeliveryType($deliveryType): self
+    public function setDeliveryType(int $deliveryType): self
     {
-        $this->delivery_type = (new DeliveryType($deliveryType))->getId();
-        $this->deliveryType  = $deliveryType;
+        $this->delivery_type = $deliveryType;
 
         return $this;
     }
@@ -1802,5 +1791,21 @@ abstract class AbstractConsignment
         }
 
         return true;
+    }
+
+    /**
+     * @return null|int
+     */
+    final public function getCarrierId(): ?int
+    {
+        return $this->carrier ? $this->carrier->getId() : null;
+    }
+
+    /**
+     * @return null|string
+     */
+    final public function getCarrierName(): ?string
+    {
+        return $this->carrier ? $this->carrier->getName() : null;
     }
 }

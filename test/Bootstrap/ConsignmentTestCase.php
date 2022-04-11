@@ -6,9 +6,10 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateInterval;
 use DateTime;
-use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
@@ -112,7 +113,11 @@ class ConsignmentTestCase extends TestCase
      */
     protected static function assertHasPdfLink(MyParcelCollection $collection): void
     {
-        self::assertRegExp('#^https://api.myparcel.nl/pdfs#', $collection->getLinkOfLabels(), 'Can\'t get link of PDF');
+        self::assertMatchesRegularExpression(
+            '#^https://api.myparcel.nl/pdfs#',
+            $collection->getLinkOfLabels(),
+            'Can\'t get link of PDF'
+        );
     }
 
     /**
@@ -306,20 +311,20 @@ class ConsignmentTestCase extends TestCase
     /**
      * @throws \Exception
      */
-    protected function getDefaultAddress(string $country = AbstractConsignment::CC_NL): array
+    protected function getDefaultAddress(string $country = CountryCodes::CC_NL): array
     {
         switch ($country) {
-            case AbstractConsignment::CC_NL:
+            case CountryCodes::CC_NL:
                 return [
-                    self::COUNTRY     => AbstractConsignment::CC_NL,
+                    self::COUNTRY     => CountryCodes::CC_NL,
                     self::COMPANY     => 'MyParcel',
                     self::FULL_STREET => 'Antareslaan 31',
                     self::POSTAL_CODE => '2132JE',
                     self::CITY        => 'Hoofddorp',
                 ];
-            case AbstractConsignment::CC_BE:
+            case CountryCodes::CC_BE:
                 return [
-                    self::COUNTRY     => AbstractConsignment::CC_BE,
+                    self::COUNTRY     => CountryCodes::CC_BE,
                     self::COMPANY     => 'SendMyParcel',
                     self::FULL_STREET => 'Adriaan Brouwerstraat 16',
                     self::POSTAL_CODE => '2000',
@@ -380,7 +385,7 @@ class ConsignmentTestCase extends TestCase
     /**
      * @return array[]
      */
-    protected function getDefaultCustomsDeclaration(string $country = AbstractConsignment::CC_NL): array
+    protected function getDefaultCustomsDeclaration(string $country = CountryCodes::CC_NL): array
     {
         return [
             self::INVOICE                   => '12345678',

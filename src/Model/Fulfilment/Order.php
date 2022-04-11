@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 
 use DateTime;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter;
-use MyParcelNL\Sdk\src\Model\Recipient;
+use MyParcelNL\Sdk\src\Model\Address;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 class Order extends AbstractOrder
@@ -27,8 +27,8 @@ class Order extends AbstractOrder
         $this->status                        = $data['status'] ?? null;
         $this->type                          = $data['type'] ?? null;
 
-        $this->recipient        = new Recipient($data['shipment']['recipient'] ?? []);
-        $this->invoice_address  = new Recipient($data['invoice_address'] ?? []);
+        $this->recipient        = new Address($data['shipment']['recipient'] ?? []);
+        $this->invoice_address  = new Address($data['invoice_address'] ?? []);
         $this->order_lines      = (new Collection($data['order_lines'] ?? []))->mapInto(OrderLine::class);
         $this->delivery_options = new DeliveryOptionsFromOrderAdapter($data['shipment'] ?? []);
     }

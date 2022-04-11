@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Concerns\Model\Initializable;
+namespace MyParcelNL\Sdk\src\Model\Concerns\Initializable;
 
 use MyParcelNL\Sdk\src\Entity\Consignment\DeliveryType;
 

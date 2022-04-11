@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Helper\CountryCodes;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
@@ -30,7 +31,7 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
             //      self::expected(self::ONLY_RECIPIENT) => true,
             //      self::expected(self::SIGNATURE)      => true,
             //  ],
-            '18+ check EU shipment' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
+            '18+ check EU shipment' => $this->getDefaultAddress(CountryCodes::CC_BE) + [
                     self::AGE_CHECK => true,
                     self::EXCEPTION => 'The age check is not possible with an EU shipment or world shipment',
                 ],
@@ -109,9 +110,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
             //          self::LARGE_FORMAT                 => true,
             //          self::expected(self::LARGE_FORMAT) => false,
             //      ],
-            'Large format to Belgium' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
+            'Large format to Belgium' => $this->getDefaultAddress(CountryCodes::CC_BE) + [
                     self::CUSTOMS_DECLARATION            => $this->getDefaultCustomsDeclaration(
-                        AbstractConsignment::CC_BE
+                        CountryCodes::CC_BE
                     ),
                     self::LARGE_FORMAT                   => true,
                     self::expected(self::ONLY_RECIPIENT) => true,
@@ -213,7 +214,7 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
                 self::DELIVERY_DATE        => $this->generateDeliveryDate(),
                 self::DELIVERY_TYPE        => AbstractConsignment::DELIVERY_TYPE_PICKUP,
                 self::PICKUP_CITY          => 'Hoofddorp',
-                self::PICKUP_COUNTRY       => AbstractConsignment::CC_NL,
+                self::PICKUP_COUNTRY       => CountryCodes::CC_NL,
                 self::PICKUP_LOCATION_NAME => 'Primera Sanders',
                 self::PICKUP_NUMBER        => '1',
                 self::PICKUP_POSTAL_CODE   => '2132BA',
