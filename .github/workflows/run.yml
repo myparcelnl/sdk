@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - develop
     paths:
       - .github/workflows/run.yml
       - Dockerfile
@@ -22,6 +21,16 @@ on:
       - docker-compose.yml
       - src/**/*
       - test/**/*
+
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run tests on'
+        required: true
+        type: string
+
+  repository_dispatch:
+    types: [ test-command ]
 
 jobs:
   test:
@@ -62,8 +71,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: myparcelnl/actions/yarn-install@v1
-
-      - name: 'Run semantic release'
-        run: npx semantic-release
+      - uses: myparcelnl/actions/semantic-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
