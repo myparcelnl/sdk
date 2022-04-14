@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Support\Str;
 use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 
 abstract class AbstractConsignment
@@ -190,7 +191,12 @@ abstract class AbstractConsignment
     /**
      * @var int
      */
-    public const DESCRIPTION_MAX_LENGTH = 50;
+    public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
+
+    /**
+     * @var int
+     */
+    public const LABEL_DESCRIPTION_MAX_LENGTH = 45;
 
     /**
      * @internal
@@ -1512,7 +1518,7 @@ abstract class AbstractConsignment
      */
     public function setLabelDescription($labelDescription): self
     {
-        $this->label_description = (string) $labelDescription;
+        $this->label_description = Str::limit((string) $labelDescription, self::LABEL_DESCRIPTION_MAX_LENGTH - 3);
 
         return $this;
     }

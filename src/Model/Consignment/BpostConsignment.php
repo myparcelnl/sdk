@@ -20,7 +20,7 @@ class BpostConsignment extends AbstractConsignment
     /**
      * @var int
      */
-    public const DESCRIPTION_MAX_LENGTH = 30;
+    public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 30;
 
     /**
      * @var array

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [7.2.1](https://github.com/myparcelnl/sdk/compare/v7.2.0...v7.2.1) (2022-04-11)
+
+
+### :bug: Bug Fixes
+
+* **consignment:** allow omitting insurance field ([#409](https://github.com/myparcelnl/sdk/issues/409)) ([810ac4e](https://github.com/myparcelnl/sdk/commit/810ac4e46f82b8d8726a08d360b1f26fb7fad243))
+
+## [7.2.0](https://github.com/myparcelnl/sdk/compare/v7.1.0...v7.2.0) (2022-04-11)
+
+
+### :bug: Bug Fixes
+
+* allow 6 characters for number suffix ([#399](https://github.com/myparcelnl/sdk/issues/399)) ([05f9ff3](https://github.com/myparcelnl/sdk/commit/05f9ff37dc578b81d03dfa9c6eb7339b143560f2))
+* **consignment:** fix insurance from api not being set ([#396](https://github.com/myparcelnl/sdk/issues/396)) ([ffe8a87](https://github.com/myparcelnl/sdk/commit/ffe8a878ba77c63224bafe8b883a1cf163424c49))
+* cut off label description at 45 characters ([ff9aae5](https://github.com/myparcelnl/sdk/commit/ff9aae53d7772b42f62319cffa9e1a7732632521))
+
+
+### :sparkles: New Features
+
+* account for pickup with shipment options ([#395](https://github.com/myparcelnl/sdk/issues/395)) ([3ce7ad9](https://github.com/myparcelnl/sdk/commit/3ce7ad9192383fa39b3e45deb25151b733e0ef43))
+* add HasInstance trait ([#402](https://github.com/myparcelnl/sdk/issues/402)) ([6ee0506](https://github.com/myparcelnl/sdk/commit/6ee0506669db5031e0c3ab797e5645dfb302e4ba))
+* allow omitting delivery date with pickup ([#401](https://github.com/myparcelnl/sdk/issues/401)) ([f1603f0](https://github.com/myparcelnl/sdk/commit/f1603f0f9fc0288b9c9d3cd9752d67f07b079995))
+* set reference identifier for return shipments ([#394](https://github.com/myparcelnl/sdk/issues/394)) ([957ccc2](https://github.com/myparcelnl/sdk/commit/957ccc24a1b9aae9abea4b1c6af9401f1c9efb76))
+
 ## [7.1.0](https://github.com/myparcelnl/sdk/compare/v7.0.0...v7.1.0) (2022-02-09)
 
 
