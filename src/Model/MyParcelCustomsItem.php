@@ -2,12 +2,11 @@
 
 namespace MyParcelNL\Sdk\src\Model;
 
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\src\Validator\Consignment\CustomsItemValidator;
+use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 
 /**
  * This object is embedded in a Consignment for global shipments and is mandatory for non-EU shipments.
@@ -35,7 +34,7 @@ class MyParcelCustomsItem
     public $item_value;
 
     /**
-     * @var null|int
+     * @var null|string
      */
     public $classification;
 
@@ -76,22 +75,21 @@ class MyParcelCustomsItem
 
     /**
      * The description of the item
-     *
      * Required: Yes
      *
-     * @param mixed $description
-     * @param string|int|AbstractCarrier $carrier
-     * @return $this
+     * @param  mixed                      $description
+     * @param  string|int|AbstractCarrier $carrier
      *
+     * @return $this
      * @throws \Exception
      */
     public function setDescription($description, $carrier = null): self
     {
-        $maxLength = AbstractConsignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
+        $maxLength = AbstractCarrier::DEFAULT_CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
 
         if ($carrier) {
-            $consignment = ConsignmentFactory::createFromCarrier(CarrierFactory::create($carrier));
-            $maxLength   = $consignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
+            $carrierInstance = CarrierFactory::create($carrier);
+            $maxLength       = $carrierInstance->getCustomsDeclarationDescriptionMaxLength();
         }
 
         $this->description = Str::limit((string) $description, $maxLength - 3);
@@ -146,8 +144,6 @@ class MyParcelCustomsItem
     }
 
     /**
-     * Item value.
-     *
      * @return int|null
      */
     public function getItemValue(): ?int
@@ -173,45 +169,28 @@ class MyParcelCustomsItem
     }
 
     /**
-     * @param array $item_value
-     *
-     * @return $this
+     * @return null|string
      */
-    public function setItemValueArray(array $item_value): self
-    {
-        $this->item_value = $item_value;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getClassification(): ?int
+    public function getClassification(): ?string
     {
         return $this->classification;
     }
 
     /**
      * International Standard Industry Classification
-     *
      * Pattern: [0-9]{1,4}
      * Example: 0111 (Growing of cereals (except rice), leguminous crops and oil seeds)
      * Required: Yes
      *
      * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/internationale-handel-in-goederen/idep-codelijsten
      *
-     * @param null|int $classification
+     * @param  null|int|string $classification
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setClassification(?int $classification): self
+    public function setClassification($classification): self
     {
-        if (! $classification) {
-            throw new MissingFieldException('Classification must be set for a MyParcel product');
-        }
-
-        $this->classification = (int) Str::limit((string) $classification, 5, '');
+        $this->classification = Str::limit((string) $classification, 5, '');
 
         return $this;
     }
@@ -219,14 +198,13 @@ class MyParcelCustomsItem
     /**
      * @return string|null
      */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
     /**
      * The country of origin for this item
-     *
      * ISO 3166-1 alpha-2 code
      * Pattern: [A-Z]{2,2}
      * Example: NL, BE, CW
@@ -234,10 +212,11 @@ class MyParcelCustomsItem
      *
      * @link https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
      *
-     * @param string|null $country
+     * @param  null|string $country
+     *
      * @return $this
      */
-    public function setCountry($country): self
+    public function setCountry(?string $country): self
     {
         $this->country = $country;
 
@@ -245,25 +224,17 @@ class MyParcelCustomsItem
     }
 
     /**
-     * Check if object is fully filled
-     *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
-    public function ensureFilled(): void
+    public function validate(): void
     {
-        $required = [
-            'Description',
-            'Amount',
-            'Weight',
-            'ItemValue',
-            'Classification',
-            'Country',
-        ];
-        foreach ($required as $methodAlias) {
-            if (null === $this->{'get' . $methodAlias}()) {
-                throw new MissingFieldException("set$methodAlias() must be set");
-            }
+        $validator = ValidatorFactory::create(CustomsItemValidator::class);
+
+        if ($validator) {
+            $validator
+                ->validateAll($this)
+                ->report();
         }
     }
 }

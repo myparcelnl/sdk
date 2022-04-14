@@ -36,10 +36,7 @@ abstract class AbstractValidator
     public function report(): void
     {
         if ($this->errors->isNotEmpty()) {
-            $exception = new ValidationException('Validation failed', $this->validationCode);
-            $exception->setErrors($this->errors->toArray());
-
-            throw $exception;
+            throw new ValidationException('Validation failed', $this->validationCode, $this->errors->toArray());
         }
     }
 

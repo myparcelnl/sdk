@@ -11,7 +11,19 @@ class ValidationException extends Exception
     /**
      * @var string[]
      */
-    private $errors = [];
+    private $errors;
+
+    /**
+     * @param  string $message
+     * @param  int    $code
+     * @param  array  $errors
+     */
+    public function __construct(string $message = "", int $code = 0, array $errors = [])
+    {
+        $fullMessage  = sprintf('%s: "%s', $message, implode(' ', $errors));
+        $this->errors = $errors;
+        parent::__construct($fullMessage, $code);
+    }
 
     /**
      * Array of error messages.
@@ -21,24 +33,5 @@ class ValidationException extends Exception
     public function getErrors(): array
     {
         return $this->errors;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHumanMessage(): string
-    {
-        return $this->getMessage() . ": '" . implode("', '", $this->getErrors()) . "'";
-    }
-
-    /**
-     * @param  string[] $errors
-     *
-     * @return self
-     */
-    public function setErrors(array $errors): self
-    {
-        $this->errors = $errors;
-        return $this;
     }
 }

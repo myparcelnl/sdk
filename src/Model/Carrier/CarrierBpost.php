@@ -32,4 +32,12 @@ class CarrierBpost extends AbstractCarrier
      * @var string
      */
     protected $name = self::NAME;
+
+    /**
+     * @return int
+     */
+    public function getCustomsDeclarationDescriptionMaxLength(): int
+    {
+        return 30;
+    }
 }

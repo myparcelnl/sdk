@@ -44,7 +44,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
         if (null === $value) {
             throw new RuntimeException(
-                "Environment variable '$name' is missing. Add it up in the env file at '/.env' and try again."
+                "Environment variable '$name' is missing. Add it in the env file at '/.env' and try again."
             );
         }
 

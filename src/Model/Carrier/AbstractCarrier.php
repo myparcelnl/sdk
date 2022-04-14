@@ -6,6 +6,8 @@ namespace MyParcelNL\Sdk\src\Model\Carrier;
 
 abstract class AbstractCarrier
 {
+    public const DEFAULT_CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
+
     /**
      * @var class-string
      */
@@ -32,6 +34,14 @@ abstract class AbstractCarrier
     public function getConsignmentClass(): string
     {
         return $this->consignmentClass;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomsDeclarationDescriptionMaxLength(): int
+    {
+        return self::DEFAULT_CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
     }
 
     /**

@@ -11,7 +11,6 @@ use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
 use MyParcelNL\Sdk\src\Concerns\HasCountry;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Exception\ValidationException;
 use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
@@ -187,11 +186,6 @@ abstract class AbstractConsignment
      * @deprecated use getLocalInsurancePossibilities()
      */
     public const INSURANCE_POSSIBILITIES_LOCAL = [];
-
-    /**
-     * @var int
-     */
-    public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
 
     /**
      * @var int
@@ -1652,10 +1646,11 @@ abstract class AbstractConsignment
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function addItem(MyParcelCustomsItem $item): self
     {
-        $item->ensureFilled();
+        $item->validate();
 
         $this->items[] = $item;
 
@@ -1709,13 +1704,9 @@ abstract class AbstractConsignment
         $validator = ValidatorFactory::create($this->validatorClass);
 
         if ($validator) {
-            try {
-                $validator
-                    ->validateAll($this)
-                    ->report();
-            } catch (ValidationException $e) {
-                throw new Exception($e->getHumanMessage(), $e->getCode(), $e);
-            }
+            $validator
+                ->validateAll($this)
+                ->report();
         }
 
         return true;

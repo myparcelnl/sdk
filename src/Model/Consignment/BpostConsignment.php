@@ -18,11 +18,6 @@ class BpostConsignment extends AbstractConsignment
     public const DEFAULT_WEIGHT = 50;
 
     /**
-     * @var int
-     */
-    public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 30;
-
-    /**
      * @var array
      * @deprecated use getLocalInsurancePossibilities()
      */

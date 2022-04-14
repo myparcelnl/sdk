@@ -99,7 +99,7 @@ class ConsignmentEncode
 
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
-                'amount'   => (int) $consignment->getInsurance() * 100,
+                'amount'   => $consignment->getInsurance() * 100,
                 'currency' => self::CURRENCY_EUR,
             ];
         }
