@@ -7,13 +7,17 @@ namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 use DateTime;
 use Exception;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
+use MyParcelNL\Sdk\src\Exception\ValidationException;
 use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\src\Model\PickupLocation;
 use MyParcelNL\Sdk\src\Model\Recipient;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\src\Validator\Order\OrderValidator;
+use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 
 class AbstractOrder extends BaseModel
 {
@@ -100,11 +104,25 @@ class AbstractOrder extends BaseModel
     protected $uuid;
 
     /**
+     * @var
+     */
+    protected $validatorClass = OrderValidator::class;
+
+    /**
      * @var int|null
      */
     private $weight;
 
     protected $customs_declaration;
+
+    /**
+     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @throws \Exception
+     */
+    public function getCarrier(): AbstractCarrier
+    {
+        return CarrierFactory::createFromName($this->delivery_options->getCarrier());
+    }
 
     /**
      * @return null|\MyParcelNL\Sdk\src\Model\CustomsDeclaration
@@ -274,17 +292,6 @@ class AbstractOrder extends BaseModel
      */
     public function setDropOffPoint(?DropOffPoint $dropOffPoint): self
     {
-        $carrier = CarrierFactory::createFromName($this->delivery_options->getCarrier());
-
-        if (! $dropOffPoint && $carrier->isDropOffPointRequired()) {
-            throw new Exception(
-                sprintf(
-                    'Default drop-off point missing for carrier %s. Configure one in the MyParcel Backoffice.',
-                    $carrier->getHuman()
-                )
-            );
-        }
-
         $this->dropOffPoint = $dropOffPoint;
         return $this;
     }
@@ -413,6 +420,27 @@ class AbstractOrder extends BaseModel
     {
         $this->weight = $weight;
         return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function validate(): bool
+    {
+        $validator = ValidatorFactory::create($this->validatorClass);
+
+        if ($validator) {
+            try {
+                $validator
+                    ->validateAll($this)
+                    ->report();
+            } catch (ValidationException $e) {
+                throw new Exception($e->getHumanMessage(), $e->getCode(), $e);
+            }
+        }
+
+        return true;
     }
 
     /**

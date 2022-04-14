@@ -207,14 +207,6 @@ class ConsignmentTestCase extends TestCase
         if ($testData[self::PACKAGE_TYPE] === AbstractConsignment::PACKAGE_TYPE_PACKAGE) {
             self::assertNotEmpty($consignment->getBarcode(), 'Barcode is missing');
         }
-
-        $carrier = $consignment->getCarrier();
-
-        if (CarrierInstabox::NAME === $carrier->getName()) {
-            self::assertTrue($carrier->isDropOffPointRequired());
-        } else {
-            self::assertFalse($carrier->isDropOffPointRequired());
-        }
     }
 
     /**
