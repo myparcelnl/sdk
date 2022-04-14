@@ -1,0 +1,61 @@
+name: 'Bug report'
+description: 'Report a bug to help us fix it.'
+labels: [ 'bug' ]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this form! We will respond as fast as we can. Don't forget to check
+        whether your issue might be a duplicate of an existing one before submitting.
+
+  - type: input
+    id: version
+    attributes:
+      label: 'SDK version'
+      description: 'Which version of our software are you using?'
+      placeholder: 'x.x.x'
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      placeholder: '8.1'
+      label: 'PHP version'
+      description: 'Which PHP version are you using?'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 'What went wrong?'
+      description: 'A clear and concise description of what the bug is.'
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 'Reproduction steps'
+      description: 'Steps to reproduce this behavior.'
+      value: |
+        1. Navigate to ...
+        2. Click on ...
+        3. See ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 'Relevant log output'
+      description: 'Copy and paste any relevant log output here. Proper formatting will be applied automatically.'
+      render: shell
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 'Additional context'
+      description: |
+        Add any other context or screenshots about the bug here.
+
+        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.

@@ -153,7 +153,7 @@ class MyParcelRequest
      */
     public function getRequestUrl(): string
     {
-        return getenv('API_BASE_URL') ?: self::REQUEST_URL;
+        return getenv('MYPARCEL_API_BASE_URL') ?: self::REQUEST_URL;
     }
 
     /**
@@ -201,6 +201,7 @@ class MyParcelRequest
         $request = $this->instantiateCurl();
 
         $request->write($method, $url, $this->getHeaders(), $this->getRequestBody());
+
         $this->setResult($request);
         $request->close();
 
@@ -344,8 +345,9 @@ class MyParcelRequest
         foreach ($consignments as $consignment) {
             if ($consignment->getReferenceId()) {
                 $referenceIds[] = $consignment->getReferenceId();
-                $key            = $consignment->getApiKey();
             }
+
+            $key = $consignment->getApiKey();
         }
 
         return $referenceIds;

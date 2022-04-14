@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model;
 
+use MyParcelNL\Sdk\src\Helper\SplitStreet;
+
 class Recipient extends BaseModel
 {
     /**
@@ -39,7 +41,12 @@ class Recipient extends BaseModel
     /**
      * @var string|null
      */
-    private $postal_code;
+    private $postalCode;
+
+    /**
+     * @var string|null
+     */
+    private $region;
 
     /**
      * @var string|null
@@ -47,18 +54,56 @@ class Recipient extends BaseModel
     private $street;
 
     /**
-     * @param  array $data
+     * @var string|null
      */
-    public function __construct(array $data = [])
+    private $number;
+
+    /**
+     * @var string|null
+     */
+    private $fullStreet;
+
+    /**
+     * @var string|null
+     */
+    private $streetAdditionalInfo;
+
+    /**
+     * @var string|null
+     */
+    private $boxNumber;
+
+    /**
+     * @var string|null
+     */
+    private $numberSuffix;
+
+    /**
+     * @param  array       $data
+     * @param  string|null $originCountry
+     *
+     * @throws \Exception
+     */
+    public function __construct(array $data = [], ?string $originCountry = null)
     {
-        $this->cc          = $data['cc'] ?? null;
-        $this->city        = $data['city'] ?? null;
-        $this->company     = $data['company'] ?? null;
-        $this->email       = $data['email'] ?? null;
-        $this->person      = $data['person'] ?? null;
-        $this->phone       = $data['phone'] ?? null;
-        $this->postal_code = $data['postal_code'] ?? null;
-        $this->street      = $data['street'] ?? null;
+        $this->cc                   = $data['cc'] ?? null;
+        $this->city                 = $data['city'] ?? null;
+        $this->company              = $data['company'] ?? null;
+        $this->email                = $data['email'] ?? null;
+        $this->person               = $data['person'] ?? null;
+        $this->phone                = $data['phone'] ?? null;
+        $this->postalCode           = $data['postal_code'] ?? null;
+        $this->region               = $data['region'] ?? null;
+        $this->streetAdditionalInfo = $data['street_additional_info'] ?? null;
+        $this->street               = $data['street'] ?? null;
+        $this->fullStreet           = $data['full_street'] ?? null;
+        $this->number               = $data['number'] ?? null;
+        $this->numberSuffix         = $data['number_suffix'] ?? null;
+        $this->boxNumber            = $data['box_number'] ?? null;
+
+        if ($this->fullStreet && $originCountry) {
+            $this->setFullStreet($originCountry);
+        }
     }
 
     /**
@@ -114,7 +159,15 @@ class Recipient extends BaseModel
      */
     public function getPostalCode(): ?string
     {
-        return $this->postal_code;
+        return $this->postalCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegion(): ?string
+    {
+        return $this->region;
     }
 
     /**
@@ -123,6 +176,38 @@ class Recipient extends BaseModel
     public function getStreet(): ?string
     {
         return $this->street;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNumber(): ?string
+    {
+        return $this->number;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStreetAdditionalInfo(): ?string
+    {
+        return $this->streetAdditionalInfo;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBoxNumber(): ?string
+    {
+        return $this->boxNumber;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNumberSuffix(): ?string
+    {
+        return $this->numberSuffix;
     }
 
     /**
@@ -198,7 +283,18 @@ class Recipient extends BaseModel
      */
     public function setPostalCode(?string $postalCode): self
     {
-        $this->postal_code = $postalCode;
+        $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $region
+     *
+     * @return self
+     */
+    public function setRegion(?string $region): self
+    {
+        $this->region = $region;
         return $this;
     }
 
@@ -214,19 +310,74 @@ class Recipient extends BaseModel
     }
 
     /**
+     * @param  string|null $number
+     *
+     * @return self
+     */
+    public function setNumber(?string $number): self
+    {
+        $this->number = $number;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $boxNumber
+     *
+     * @return self
+     */
+    public function setBoxNumber(?string $boxNumber): self
+    {
+        $this->boxNumber = $boxNumber;
+        return $this;
+    }
+
+    /**
+     * @param  string|null $numberSuffix
+     *
+     * @return self
+     */
+    public function setNumberSuffix(?string $numberSuffix): self
+    {
+        $this->numberSuffix = $numberSuffix;
+        return $this;
+    }
+
+    /**
+     * @param  string $originCountry
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function setFullStreet(string $originCountry): self
+    {
+        $splitStreet = SplitStreet::splitStreet($this->fullStreet, $originCountry, $this->getCc());
+        $this->setStreet($splitStreet->getStreet());
+        $this->setNumber((string) $splitStreet->getNumber());
+        $this->setBoxNumber($splitStreet->getBoxNumber());
+        $this->setNumberSuffix($splitStreet->getNumberSuffix());
+
+        return $this;
+    }
+
+    /**
      * @return string[]
      */
     public function toArray(): array
     {
         return [
-            'cc'          => $this->getCc(),
-            'city'        => $this->getCity(),
-            'company'     => $this->getCompany(),
-            'email'       => $this->getEmail(),
-            'street'      => $this->getStreet(),
-            'person'      => $this->getPerson(),
-            'phone'       => $this->getPhone(),
-            'postal_code' => $this->getPostalCode(),
+            'box_number'             => $this->getBoxNumber(),
+            'cc'                     => $this->getCc(),
+            'city'                   => $this->getCity(),
+            'company'                => $this->getCompany(),
+            'email'                  => $this->getEmail(),
+            'number'                 => $this->getNumber(),
+            'number_suffix'          => $this->getNumberSuffix(),
+            'person'                 => $this->getPerson(),
+            'phone'                  => $this->getPhone(),
+            'postal_code'            => $this->getPostalCode(),
+            'region'                 => $this->getRegion(),
+            'street'                 => $this->getStreet(),
+            'street_additional_info' => $this->getStreetAdditionalInfo(),
         ];
     }
 }

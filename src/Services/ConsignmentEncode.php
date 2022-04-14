@@ -14,14 +14,16 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\src\Support\Helpers;
 
 class ConsignmentEncode
 {
+    private const CURRENCY_EUR = 'EUR';
+
     /**
      * @var array
      */
@@ -77,17 +79,18 @@ class ConsignmentEncode
         $consignmentEncoded = array_merge_recursive(
             $consignmentEncoded,
             [
-                'options' => [
+                'options' => Helpers::toArrayWithoutNull([
                     'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
                     'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient'    => (int) $consignment->isOnlyRecipient(),
-                    'signature'         => (int) $consignment->isSignature(),
-                    'return'            => (int) $consignment->isReturn(),
-                ],
+                    'only_recipient'    => Helpers::intOrNull($consignment->isOnlyRecipient()),
+                    'signature'         => Helpers::intOrNull($consignment->isSignature()),
+                    'return'            => Helpers::intOrNull($consignment->isReturn()),
+                    'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                ]),
             ]
         );
 
-        if ($consignment->isEuCountry()) {
+        if ($consignment->isToEuCountry()) {
             $consignmentEncoded['options']['large_format'] = (int) $consignment->isLargeFormat();
         }
 
@@ -106,7 +109,7 @@ class ConsignmentEncode
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
                 'amount'   => (int) $consignment->getInsurance() * 100,
-                'currency' => 'EUR',
+                'currency' => self::CURRENCY_EUR,
             ];
         }
 
@@ -230,7 +233,7 @@ class ConsignmentEncode
          * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
-        if ($consignment->isEuCountry()) {
+        if ($consignment->isToEuCountry()) {
             return $this;
         }
 
@@ -271,7 +274,7 @@ class ConsignmentEncode
      *
      * @return array
      */
-    private function encodeCdCountryItem($customsItem, $currency = 'EUR'): array
+    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = self::CURRENCY_EUR): array
     {
         $item = [
             'description'    => $customsItem->getDescription(),

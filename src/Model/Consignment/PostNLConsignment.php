@@ -96,6 +96,19 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
+     * @return string[]
+     */
+    protected function getAllowedShipmentOptionsForPickup(): array
+    {
+        return [
+            self::SHIPMENT_OPTION_AGE_CHECK,
+            self::SHIPMENT_OPTION_LARGE_FORMAT,
+            self::SHIPMENT_OPTION_INSURANCE,
+            self::SHIPMENT_OPTION_SIGNATURE,
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getLocalCountryCode(): string

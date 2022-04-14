@@ -16,7 +16,7 @@ class CarrierFactory
         CarrierBpost::class,
         CarrierDPD::class,
         CarrierPostNL::class,
-        CarrierRedJePakketje::class,
+        CarrierInstabox::class,
     ];
 
     /**

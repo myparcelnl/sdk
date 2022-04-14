@@ -1,48 +1,51 @@
 {
-  "name": "myparcelnl/sdk",
-  "version": "v6.0.0-beta.6",
-  "description": "This package is designed to send and receive data from MyParcel by means of an API.",
-  "homepage": "https://www.myparcel.nl",
-  "keywords": [
-    "MyParcel",
-    "My Parcel",
-    "Flespakket",
-    "Post NL",
-    "PostNL"
-  ],
-  "license": "GPL-3.0-or-later",
-  "authors": [
-    {
-      "name": "Reindert Vetter",
-      "email": "support@myparcel.nl",
-      "homepage": "https://www.myparcel.nl",
-      "role": "Developer"
+    "name": "myparcelnl/sdk",
+    "version": "7.2.1",
+    "description": "This package is designed to send and receive data from MyParcel by means of an API.",
+    "homepage": "https://www.myparcel.nl",
+    "keywords": [
+        "MyParcel",
+        "Flespakket",
+        "PostNL"
+    ],
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Reindert Vetter",
+            "email": "support@myparcel.nl",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Developer"
+        },
+        {
+            "name": "Richard Perdaan",
+            "email": "support@myparcel.nl",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Developer"
+        },
+        {
+            "name": "Edie Lemoine",
+            "email": "support@myparcel.nl",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
     },
-    {
-      "name": "Richard Perdaan",
-      "email": "support@myparcel.nl",
-      "homepage": "https://www.myparcel.nl",
-      "role": "Developer"
+    "require-dev": {
+        "fakerphp/faker": "^v1.16.0",
+        "phpunit/phpunit": "^7.5.20",
+        "psr/container": "~1.0.0"
     },
-    {
-      "name": "Edie Lemoine",
-      "email": "support@myparcel.nl",
-      "homepage": "https://www.myparcel.nl",
-      "role": "Developer"
+    "autoload": {
+        "psr-4": {
+            "MyParcelNL\\Sdk\\src\\": "src",
+            "MyParcelNL\\Sdk\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MyParcelNL\\Sdk\\Test\\": "test"
+        }
     }
-  ],
-  "require": {
-    "php": ">=7.1.0"
-  },
-  "require-dev": {
-    "fakerphp/faker": "^1.15.0",
-    "phpunit/phpunit": "^5.5",
-    "psr/container": "~1.0.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "MyParcelNL\\Sdk\\src\\": "src",
-      "MyParcelNL\\Sdk\\": "src"
-    }
-  }
 }

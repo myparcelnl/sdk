@@ -90,8 +90,8 @@ class MyParcelCollection extends Collection
 
     /**
      * Get one consignment
-     * @return mixed
      *
+     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      */
     public function getOneConsignment()
     {
@@ -796,10 +796,11 @@ class MyParcelCollection extends Collection
 
         foreach ($consignments as $consignment) {
             $shipment = [
-                'parent'  => $consignment->getConsignmentId(),
-                'carrier' => $consignment->getCarrierId(),
-                'email'   => $consignment->getEmail(),
-                'name'    => $consignment->getPerson(),
+                'parent'               => $consignment->getConsignmentId(),
+                'reference_identifier' => $consignment->getReferenceIdentifier(),
+                'carrier'              => $consignment->getCarrierId(),
+                'email'                => $consignment->getEmail(),
+                'name'                 => $consignment->getPerson(),
             ];
 
             $shipment = ConsignmentEncode::encodeExtraOptions($shipment, $consignment);

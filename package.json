@@ -1,0 +1,6 @@
+{
+  "name": "@myparcel/php-sdk",
+  "devDependencies": {
+    "@myparcel/semantic-release-config": "^1.3.1"
+  }
+}

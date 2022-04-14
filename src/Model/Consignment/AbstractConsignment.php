@@ -8,6 +8,7 @@ use BadMethodCallException;
 use Exception;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\src\Concerns\HasCountry;
 use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Exception\ValidationException;
@@ -23,6 +24,7 @@ use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 abstract class AbstractConsignment
 {
     use HasCheckoutFields;
+    use HasCountry;
     use HasPickupLocation;
 
     /*
@@ -31,12 +33,13 @@ abstract class AbstractConsignment
      */
     use HasApiKey;
 
-    public const SHIPMENT_OPTION_AGE_CHECK      = 'age_check';
-    public const SHIPMENT_OPTION_INSURANCE      = 'insurance';
-    public const SHIPMENT_OPTION_LARGE_FORMAT   = 'large_format';
-    public const SHIPMENT_OPTION_ONLY_RECIPIENT = 'only_recipient';
-    public const SHIPMENT_OPTION_RETURN         = 'return';
-    public const SHIPMENT_OPTION_SIGNATURE      = 'signature';
+    public const SHIPMENT_OPTION_AGE_CHECK         = 'age_check';
+    public const SHIPMENT_OPTION_INSURANCE         = 'insurance';
+    public const SHIPMENT_OPTION_LARGE_FORMAT      = 'large_format';
+    public const SHIPMENT_OPTION_ONLY_RECIPIENT    = 'only_recipient';
+    public const SHIPMENT_OPTION_RETURN            = 'return';
+    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
@@ -184,6 +187,12 @@ abstract class AbstractConsignment
      * @deprecated use getLocalInsurancePossibilities()
      */
     public const INSURANCE_POSSIBILITIES_LOCAL = [];
+
+    /**
+     * @var int
+     */
+
+    public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
 
     /**
      * @var int
@@ -344,6 +353,12 @@ abstract class AbstractConsignment
      * @internal
      * @var bool|null
      */
+    public $same_day_delivery;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
     public $large_format;
 
     /**
@@ -448,7 +463,12 @@ abstract class AbstractConsignment
      */
     public function canHaveDeliveryType(string $deliveryType): bool
     {
-        return in_array($deliveryType, $this->getAllowedDeliveryTypes(), true);
+        $allowedDeliveryTypes = $this->getAllowedDeliveryTypes();
+        if (self::PACKAGE_TYPE_PACKAGE !== $this->getPackageType()) {
+            $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD];
+        }
+
+        return in_array($deliveryType, $allowedDeliveryTypes, true);
     }
 
     /**
@@ -478,7 +498,12 @@ abstract class AbstractConsignment
      */
     public function canHaveShipmentOption(string $option): bool
     {
-        return in_array($option, $this->getAllowedShipmentOptions(), true);
+        $isPackage         = self::PACKAGE_TYPE_PACKAGE === $this->getPackageType();
+        $isPickup          = self::DELIVERY_TYPE_PICKUP === $this->getDeliveryType();
+        $optionIsAvailable = in_array($option, $this->getAllowedShipmentOptions(), true);
+        $pickupAllowed     = in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
+
+        return $isPackage && $optionIsAvailable && ($pickupAllowed || ! $isPickup);
     }
 
     /**
@@ -735,55 +760,25 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return string|null
-     */
-    public function getCountry()
-    {
-        return $this->cc;
-    }
-
-    /**
-     * The address country code
-     * ISO3166-1 alpha2 country code<br>
-     * <br>
-     * Pattern: [A-Z]{2}<br>
-     * Example: NL, BE, CW<br>
-     * Required: Yes.
-     *
-     * @param  string $cc
-     *
-     * @return self
-     */
-    public function setCountry($cc): self
-    {
-        $this->cc = $cc;
-
-        return $this;
-    }
-
-    /**
      * Check if the address is outside the EU.
      *
      * @return bool
-     * @todo move to hasCountry trait maken
+     * @deprecated Use HasCountry::isToRowCountry()
      */
     public function isCdCountry(): bool
     {
-        return false === $this->isEuCountry();
+        return $this->isToRowCountry();
     }
 
     /**
      * Check if the address is inside the EU.
      *
      * @return bool
-     * @todo move to hasCountry
+     * @deprecated Use HasCountry::isToEuCountry()
      */
     public function isEuCountry(): bool
     {
-        return in_array(
-            $this->getCountry(),
-            self::EURO_COUNTRIES
-        );
+       return $this->isToEuCountry();
     }
 
     /**
@@ -894,11 +889,11 @@ abstract class AbstractConsignment
      * The street additional info
      * Required: No.
      *
-     * @param  string $streetAdditionalInfo
+     * @param  string|null $streetAdditionalInfo
      *
      * @return self
      */
-    public function setStreetAdditionalInfo(string $streetAdditionalInfo): self
+    public function setStreetAdditionalInfo(?string $streetAdditionalInfo): self
     {
         $this->street_additional_info = $streetAdditionalInfo;
 
@@ -1192,9 +1187,9 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -1203,11 +1198,11 @@ abstract class AbstractConsignment
      * The address email
      * Required: no.
      *
-     * @param  string $email
+     * @param  string|null  $email
      *
      * @return self
      */
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -1372,11 +1367,10 @@ abstract class AbstractConsignment
      * @param  bool $onlyRecipient
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setOnlyRecipient(bool $onlyRecipient): self
     {
-        $this->only_recipient = $onlyRecipient && $this->isPackage();
+        $this->only_recipient = $onlyRecipient && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_ONLY_RECIPIENT);
 
         return $this;
     }
@@ -1388,11 +1382,10 @@ abstract class AbstractConsignment
      * @param  bool $signature
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
     public function setSignature(bool $signature): self
     {
-        $this->signature = $signature && $this->isPackage();
+        $this->signature = $signature && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_SIGNATURE);
 
         return $this;
     }
@@ -1418,6 +1411,27 @@ abstract class AbstractConsignment
     public function setReturn(bool $return): self
     {
         $this->return = $return && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_RETURN);
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isSameDayDelivery(): ?bool
+    {
+        return $this->same_day_delivery;
+    }
+
+    /**
+     * @param bool $sameDay
+     *
+     * @return $this
+     */
+    public function setSameDayDelivery(bool $sameDay): self
+    {
+        $this->same_day_delivery = $sameDay
+            && in_array(self::SHIPMENT_OPTION_SAME_DAY_DELIVERY, $this->getAllowedShipmentOptions(), true);
 
         return $this;
     }
@@ -1761,6 +1775,14 @@ abstract class AbstractConsignment
      * @return string[]
      */
     public function getAllowedShipmentOptions(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getAllowedShipmentOptionsForPickup(): array
     {
         return [];
     }

@@ -15,6 +15,10 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
@@ -25,14 +29,13 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 class MyParcelCustomsItem
 {
-    const DESCRIPTION_MAX_LENGTH = 47;
 
-    private $description;
-    private $amount;
-    private $weight;
-    private $item_value;
-    private $classification;
-    private $country;
+    public $description;
+    public $amount;
+    public $weight;
+    public $item_value;
+    public $classification;
+    public $country;
 
     /**
      * @return mixed
@@ -48,14 +51,21 @@ class MyParcelCustomsItem
      * Required: Yes
      *
      * @param mixed $description
+     * @param string|int|AbstractCarrier $carrier
      * @return $this
+     *
+     * @throws \Exception
      */
-    public function setDescription($description)
+    public function setDescription($description, $carrier = null): self
     {
-        /**
-         * Description cut after 47 chars
-         */
-        $this->description = Str::limit($description, self::DESCRIPTION_MAX_LENGTH);
+        $maxLength = AbstractConsignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
+
+        if ($carrier) {
+            $consignment = ConsignmentFactory::createFromCarrier(CarrierFactory::create($carrier));
+            $maxLength   = $consignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
+        }
+
+        $this->description = Str::limit((string) $description, $maxLength - 3);
 
         return $this;
     }
@@ -138,6 +148,18 @@ class MyParcelCustomsItem
         $this->item_value = (int) $item_value;
         return $this;
     }
+
+    /**
+     * @param array $item_value
+     *
+     * @return $this
+     */
+    public function setItemValueArray(array $item_value): self
+    {
+        $this->item_value = $item_value;
+        return $this;
+    }
+
 
     /**
      * @return int|null
