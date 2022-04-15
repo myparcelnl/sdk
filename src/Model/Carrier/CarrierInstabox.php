@@ -32,4 +32,9 @@ class CarrierInstabox extends AbstractCarrier
      * @var string
      */
     protected $name = self::NAME;
+
+    public function isDropOffPointRequired(): bool
+    {
+        return true;
+    }
 }

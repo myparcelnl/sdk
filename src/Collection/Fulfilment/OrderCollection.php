@@ -72,11 +72,13 @@ class OrderCollection extends Collection
 
     /**
      * @return array[]
+     * @throws \Exception
      */
     private function createRequestBody(): array
     {
         return $this->map(
             function (Order $order) {
+                $order->validate();
                 $deliveryOptions     = $order->getDeliveryOptions();
                 $dropOffPoint        = $order->getDropOffPoint();
                 $dropOffPointAsArray = $dropOffPoint ? $this->getDropOffPointAsArray($dropOffPoint) : null;

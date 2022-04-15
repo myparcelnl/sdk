@@ -11,6 +11,7 @@ use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\src\Model\Fulfilment\Product;
@@ -20,6 +21,17 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderCollectionTest extends TestCase
 {
+    private const DROP_OFF_POINT = [
+        'cc'            => 'NL',
+        'city'          => 'Leiden',
+        'location_code' => 'ed14eb91-7374-4dcc-a41d-34c0d3e45c01',
+        'location_name' => 'Instabox',
+        'number'        => '2',
+        'number_suffix' => 'H',
+        'postal_code'   => '2321 TD',
+        'street'        => 'Telderskade',
+    ];
+
     /**
      * @return void
      * @before
@@ -137,7 +149,8 @@ class OrderCollectionTest extends TestCase
             ->setRecipient($this->generateRecipient())
             ->setLanguage('NL')
             ->setType($this->faker->word)
-            ->setOrderDate((new DateTime())->format('Y-M-d'));
+            ->setOrderDate((new DateTime())->format('Y-M-d'))
+            ->setDropOffPoint(new DropOffPoint(self::DROP_OFF_POINT));
     }
 
     /**
