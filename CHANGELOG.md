@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [7.2.2](https://github.com/myparcelnl/sdk/compare/v7.2.1...v7.2.2) (2022-04-15)
+
+
+### :bug: Bug Fixes
+
+* add drop-off point validation for orders ([#407](https://github.com/myparcelnl/sdk/issues/407)) ([0b6aa79](https://github.com/myparcelnl/sdk/commit/0b6aa7966d3f66d8de929c0ddebdda4c8f68a62f))
+
 ### [7.2.1](https://github.com/myparcelnl/sdk/compare/v7.2.0...v7.2.1) (2022-04-11)
 
 
