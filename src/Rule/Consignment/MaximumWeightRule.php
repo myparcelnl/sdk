@@ -24,7 +24,7 @@ class MaximumWeightRule extends Rule
     {
         $weight = $validationSubject->getTotalWeight();
 
-        if (self::MAX_COLLO_WEIGHT_GRAMS < $weight) {
+        if ($weight > self::MAX_COLLO_WEIGHT_GRAMS) {
             throw new Exception(
                 sprintf(
                     'Order has not been exported to the MyParcel Backoffice. Shipment contains a weight of %s grams, maximum allowed is %s. Change package type or add more labels to distribute weight.',
