@@ -348,6 +348,10 @@ class MyParcelCollection extends Collection
         $myParcelRequest = new MyParcelRequest();
         $params          = $myParcelRequest->getLatestDataParams($size, $this, $key);
 
+        if (! $params) {
+            return $this;
+        }
+
         $request = $myParcelRequest
             ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
