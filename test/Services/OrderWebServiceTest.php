@@ -11,6 +11,15 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 class OrderWebServiceTest extends TestCase
 {
     /**
+     * @return void
+     * @before
+     */
+    public function before(): void
+    {
+        self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'The Order API is not available on production yet.');
+    }
+
+    /**
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
