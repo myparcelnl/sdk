@@ -1,6 +1,63 @@
 {
-  "name": "@myparcel/php-sdk",
+  "name": "@myparcel/sdk",
+  "version": "1.1.0",
+  "description": "JavaScript SDK to connect to the MyParcel API via Node.js or browser",
+  "keywords": [
+    "myparcel",
+    "sdk",
+    "node",
+    "browser"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/myparcelnl/js-sdk.git"
+  },
+  "license": "MIT",
+  "author": "Edie Lemoine <edie@myparcel.nl>",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist/* && rollup --config rollup.config.ts --configPlugin typescript",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "watch": "nodemon --watch ./src --exec 'yarn build'"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix"
+  },
+  "prettier": "@myparcel/prettier-config",
   "devDependencies": {
-    "@myparcel/semantic-release-config": "^1.3.1"
+    "@myparcel/eslint-config": "^3.4.4",
+    "@myparcel/prettier-config": "^1.0.0",
+    "@myparcel/semantic-release-config": "^2.0.0",
+    "@rollup/plugin-alias": "^3.1.9",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/jest": "^27.4.1",
+    "cross-fetch": "^3.1.5",
+    "esbuild": "^0.14.34",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "jest-fetch-mock": "^3.0.3",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.70.1",
+    "rollup-plugin-dts": "^4.2.0",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3",
+    "unfetch": "^4.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
