@@ -73,6 +73,11 @@ class AbstractOrder extends BaseModel
     protected $order_lines;
 
     /**
+     * @var array|null
+     */
+    protected $order_shipments;
+
+    /**
      * Shipping address of the customer.
      *
      * @var \MyParcelNL\Sdk\src\Model\Recipient
@@ -212,6 +217,14 @@ class AbstractOrder extends BaseModel
     public function getOrderLines(): Collection
     {
         return $this->order_lines;
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getOrderShipments(): ?array
+    {
+        return $this->order_shipments;
     }
 
     /**

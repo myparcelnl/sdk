@@ -23,6 +23,7 @@ class Order extends AbstractOrder
         $this->fulfilment_partner_identifier = $data['fulfilment_partner_identifier'] ?? null;
         $this->language                      = $data['language'] ?? null;
         $this->order_date                    = new DateTime($data['order_date'] ?? 'now');
+        $this->order_shipments               = $data['order_shipments'] ?? null;
         $this->status                        = $data['status'] ?? null;
         $this->type                          = $data['type'] ?? null;
 
