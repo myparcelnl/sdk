@@ -7,9 +7,9 @@ on:
 jobs:
   dispatch:
     runs-on: ubuntu-latest
+    if: github.event.issue.pull_request
     steps:
-      - name: 'Slash Command Dispatch'
-        uses: peter-evans/slash-command-dispatch@v1
+      - uses: peter-evans/slash-command-dispatch@v3
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
           commands: |
@@ -17,3 +17,5 @@ jobs:
             test
           permission: write
           issue-type: pull-request
+          static-args: |
+            comment-id=${{ github.event.comment.id }}

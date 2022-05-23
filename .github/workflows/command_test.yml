@@ -1,20 +1,20 @@
-name: 'Rebase pull request'
+name: 'Run tests on pull request'
 
 on:
   repository_dispatch:
-    types: [ rebase-command ]
+    types: [ test-command ]
 
 jobs:
+  test:
+    uses: myparcelnl/sdk/.github/workflows/test.yml@main
+    with:
+      ref: ${{ github.event.client_payload.pull_request.head.ref }}
+
   rebase:
     runs-on: ubuntu-latest
+    needs: test
     steps:
-      - uses: peter-evans/rebase@v2
-        id: rebase
-        with:
-          head: ${{ github.event.client_payload.pull_request.head.label }}
-
       - name: 'Add reaction'
-        if: steps.rebase.outputs.rebased-count == 1
         uses: peter-evans/create-or-update-comment@v2
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}

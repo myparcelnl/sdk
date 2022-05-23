@@ -1,0 +1,32 @@
+name: 'Process changes'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/release.yml
+      - composer.json
+      - composer.lock
+      - src/**/*
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    uses: myparcelnl/sdk/.github/workflows/test.yml@main
+
+  release:
+    name: 'Release'
+    runs-on: ubuntu-20.04
+    needs:
+      - test
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - uses: myparcelnl/actions/yarn-install@v2
+
+      - uses: myparcelnl/actions/semantic-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
