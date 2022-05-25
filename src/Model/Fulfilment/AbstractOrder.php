@@ -73,7 +73,7 @@ class AbstractOrder extends BaseModel
     protected $order_lines;
 
     /**
-     * @var array|null
+     * @var array
      */
     protected $order_shipments;
 
@@ -220,9 +220,9 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return null|array
+     * @return array
      */
-    public function getOrderShipments(): ?array
+    public function getOrderShipments(): array
     {
         return $this->order_shipments;
     }
