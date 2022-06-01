@@ -37,7 +37,7 @@ jobs:
           EOF
 
       - name: 'Run tests'
-        run: docker run --env-file .env ${{ steps.docker.outputs.tagged_image }}
+        run: docker run --env-file .env ${{ steps.docker.outputs.tagged-image }}
 
       - name: 'Get coverage file from container'
         run: docker cp $(docker ps -alq):/app/coverage.xml .
