@@ -190,6 +190,12 @@ abstract class AbstractConsignment
 
     /**
      * @var int
+     * @deprecated use self::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH
+     */
+    public const DESCRIPTION_MAX_LENGTH = self::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
+
+    /**
+     * @var int
      */
     public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
 
