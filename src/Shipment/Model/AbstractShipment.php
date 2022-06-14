@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Shipment;
+namespace MyParcelNL\Sdk\src\Shipment\Model;
 
 use MyParcelNL\Sdk\src\Model\Address;
-use MyParcelNL\Sdk\src\Model\BaseModel;
 use MyParcelNL\Sdk\src\Model\Concerns\Initializable\HasDeliveryOptionsAttribute;
+use MyParcelNL\Sdk\src\Model\Model;
+use MyParcelNL\Sdk\src\Model\Shipment\DeliveryOptionsAdapter;
 
 /**
  * @property string                            $apiKey
  * @property \MyParcelNL\Sdk\src\Model\Address $recipient
  */
-class AbstractShipment extends BaseModel
+abstract class AbstractShipment extends Model
 {
     use HasDeliveryOptionsAttribute;
 
