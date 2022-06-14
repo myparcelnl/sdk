@@ -3,12 +3,14 @@ on:
   push:
     branches:
       - main
+
     paths:
       - .github/workflows/release.yml
       - .github/workflows/test.yml
       - composer.json
       - composer.lock
       - src/**/*
+      - test/**/*
 
   workflow_dispatch:
 
