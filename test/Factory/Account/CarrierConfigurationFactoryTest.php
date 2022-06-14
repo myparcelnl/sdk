@@ -18,13 +18,13 @@ class CarrierConfigurationFactoryTest extends TestCase
     public function provideCreateCarrierConfigurationData(): array
     {
         return [
-            'With identifier only'        => [
-                [
-                    'carrier_id'                        => 1,
-                    'default_drop_off_point'            => null,
-                    'default_drop_off_point_identifier' => '217171',
-                ],
-            ],
+//            'With identifier only'        => [
+//                [
+//                    'carrier_id'                        => 1,
+//                    'default_drop_off_point'            => null,
+//                    'default_drop_off_point_identifier' => '217171',
+//                ],
+//            ],
             'With existing dropoff point' => [
                 [
                     'carrier_id'                        => 5,
@@ -45,13 +45,13 @@ class CarrierConfigurationFactoryTest extends TestCase
                     'default_drop_off_point_identifier' => null,
                 ],
             ],
-            'From carrier'                => [
-                [
-                    'carrier'                           => new CarrierPostNL(),
-                    'default_drop_off_point'            => null,
-                    'default_drop_off_point_identifier' => '217171',
-                ],
-            ],
+//            'From carrier'                => [
+//                [
+//                    'carrier'                           => new CarrierPostNL(),
+//                    'default_drop_off_point'            => null,
+//                    'default_drop_off_point_identifier' => '217171',
+//                ],
+//            ],
             'From API'                    => [
                 [
                     'carrier_id'    => 5,
@@ -75,6 +75,6 @@ class CarrierConfigurationFactoryTest extends TestCase
     {
         $carrierConfiguration = CarrierConfigurationFactory::create($testData, true, $this->getApiKey());
 
-        self::assertTrue(is_a($carrierConfiguration->getDefaultDropOffPoint(), DropOffPoint::class));
+        self::assertInstanceOf(DropOffPoint::class, $carrierConfiguration->getDefaultDropOffPoint());
     }
 }
