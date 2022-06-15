@@ -26,8 +26,8 @@ jobs:
         with:
           image: myparcel/php-sdk
           target: test
-          repository-user: ${{ github.actor }}
-          repository-password: ${{ secrets.GITHUB_TOKEN }}
+          registry-user: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Create .env file'
         run: |
