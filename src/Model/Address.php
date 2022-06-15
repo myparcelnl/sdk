@@ -39,14 +39,18 @@ class Address extends Model
     ];
 
     /**
-     * @param  string $fullStreet
+     * @param  null|string $fullStreet
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
      * @noinspection PhpUnused
      */
-    public function setFullStreetAttribute(string $fullStreet): self
+    public function setFullStreetAttribute(?string $fullStreet): self
     {
+        if (! $fullStreet) {
+            return $this;
+        }
+
         $country = $this->getCountry();
 
         if (! $country) {

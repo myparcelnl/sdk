@@ -40,11 +40,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function getEnvironmentVariable(string $name): ?string
     {
-        $value = $_ENV[$name] ?? null;
+        $value = getenv($name);
 
-        if (null === $value) {
+        if (! $value) {
             throw new RuntimeException(
-                "Environment variable '$name' is missing. Add it up in the env file at '/.env' and try again."
+                "Environment variable '$name' is missing. Add it in '.env' and try again."
             );
         }
 

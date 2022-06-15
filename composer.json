@@ -11,26 +11,30 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Reindert Vetter",
+      "name": "Edie Lemoine",
+      "email": "support@myparcel.nl"
+    },
+    {
+      "name": "Joeri van Veen",
+      "email": "support@myparcel.nl"
+    },
+    {
+      "name": "Mark Ernst",
       "email": "support@myparcel.nl"
     },
     {
       "name": "Richard Perdaan",
       "email": "support@myparcel.nl"
-    },
-    {
-      "name": "Edie Lemoine",
-      "email": "support@myparcel.nl"
     }
   ],
   "require": {
-    "php": ">=7.1.0",
-    "illuminate/support": "^7.30"
+    "php": ">=7.1.0"
   },
   "require-dev": {
     "fakerphp/faker": "^v1.16.0",
-    "phpunit/phpunit": "^7.5.20",
-    "psr/container": "~1.0.0"
+    "pestphp/pest": "^v1.21",
+    "pestphp/pest-plugin-faker": "^1.x-dev",
+    "pestphp/pest-plugin-watch": "^1.x-dev"
   },
   "autoload": {
     "psr-4": {
@@ -42,6 +46,10 @@
     "psr-4": {
       "MyParcelNL\\Sdk\\Test\\": "test"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   }
 }
-

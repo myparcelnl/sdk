@@ -13,7 +13,7 @@ use MyParcelNL\Sdk\src\Model\Shipment\DeliveryOptionsAdapter;
  * @property string                            $apiKey
  * @property \MyParcelNL\Sdk\src\Model\Address $recipient
  */
-abstract class AbstractShipment extends Model
+class AbstractShipment extends Model
 {
     use HasDeliveryOptionsAttribute;
 

@@ -13,14 +13,23 @@ use MyParcelNL\Sdk\src\Model\Address;
  */
 class PickupLocation extends Address
 {
-    public function __construct(array $data = [])
-    {
-        $this->append([
-            'locationCode',
-            'locationName',
-            'retailNetworkId',
-        ]);
+//    public function __construct(array $data = [])
+//    {
+//        $this->append([
+//            'locationCode',
+//            'locationName',
+//            'retailNetworkId',
+//        ]);
+//
+//        parent::__construct($data);
+//    }
 
-        parent::__construct($data);
+    public function getAttributes(): array
+    {
+        return parent::getAttributes() + [
+                'locationCode'    => null,
+                'locationName'    => null,
+                'retailNetworkId' => null,
+            ];
     }
 }

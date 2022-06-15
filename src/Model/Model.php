@@ -3,20 +3,23 @@
 namespace MyParcelNL\Sdk\src\Model;
 
 use ArrayAccess;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
 use MyParcelNL\Sdk\src\Contracts\Support\Arrayable;
 use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Model\Concerns\HasAttributes;
 use MyParcelNL\Sdk\src\Model\Concerns\HidesAttributes;
+use MyParcelNL\Sdk\src\Support\Str;
+
+//use Illuminate\Support\Str;
+//use Illuminate\Support\Traits\ForwardsCalls;
 
 class Model implements Arrayable, ArrayAccess
 {
     use HasAttributes;
     use HidesAttributes;
-    use ForwardsCalls;
 
-    const GET = 'get';
+    //    use ForwardsCalls;
+
+    private const GET = 'get';
 
     /**
      * @var array
@@ -53,15 +56,15 @@ class Model implements Arrayable, ArrayAccess
      */
     public function __call(string $method, array $parameters)
     {
-        $trimmed   = str_replace([self::GET, 'set', 'Attribute'], '', $method);
+        $trimmed = str_replace([self::GET, 'set', 'Attribute'], '', $method);
         $attribute = Str::camel($trimmed);
 
         if (Str::contains($method, self::GET)) {
-            return $this->attributes[$attribute];
+            return $this->getAttributes()[$attribute];
         }
 
         if (Str::contains($method, 'set')) {
-            $this->attributes[$attribute] = $parameters;
+            $this->getAttributes()[$attribute] = $parameters;
         }
 
         return $this;

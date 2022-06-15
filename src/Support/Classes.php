@@ -5,28 +5,26 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Support;
 
 use Exception;
-use RuntimeException;
 
 class Classes
 {
     /**
-     * @param  mixed       $class
-     * @param  null|string $expected
-     * @param  mixed       ...$args
+     * @param  mixed  $class
+     * @param  string $expected
      *
      * @return mixed
      * @throws \Exception
      */
-    public static function instantiateClass($class, ?string $expected = null, ...$args)
+    public static function instantiateClass($class, string $expected)
     {
         if (! class_exists($class)) {
-            throw new RuntimeException("Class '$class' not found");
+            throw new Exception("Class '$class' not found");
         }
 
-        $createdClass = new $class(...$args);
+        $validatorGroup = new $class();
 
-        if (! $expected || is_a($createdClass, $expected)) {
-            return $createdClass;
+        if (is_a($validatorGroup, $expected)) {
+            return $validatorGroup;
         }
 
         throw new Exception("Class '$class' must be an instance of " . $expected);

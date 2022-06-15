@@ -2,9 +2,9 @@
 
 namespace MyParcelNL\Sdk\src\Model\Concerns;
 
-use Illuminate\Support\Str;
 use MyParcelNL\Sdk\src\Contracts\Support\Arrayable;
 use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\src\Support\Str;
 
 trait HasAttributes
 {

@@ -39,7 +39,7 @@ COPY phpunit.xml ./
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/conf.d/00-php.ini" && \
     echo 'xdebug.mode = coverage' >> /usr/local/etc/php/conf.d/zzz-xdebug.ini
 
-ENTRYPOINT ["vendor/bin/phpunit", "--coverage-clover", "coverage.xml"]
+ENTRYPOINT ["vendor/bin/pest", "--coverage-clover", "coverage.xml"]
 
 
 ###

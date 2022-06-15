@@ -496,7 +496,7 @@ class ConsignmentTestCase extends TestCase
      */
     private function addDropOffPoint($data, AbstractConsignment $consignment): void
     {
-        if (! $data[self::ADD_DROPOFF_POINT]) {
+        if (! ($data[self::ADD_DROPOFF_POINT] ?? false)) {
             return;
         }
 
