@@ -32,5 +32,5 @@ jobs:
       - uses: myparcelnl/actions/yarn-install@v2
 
       - uses: myparcelnl/actions/semantic-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+        with:
+          token: ${{ secrets.GH_REPO_TOKEN }}
