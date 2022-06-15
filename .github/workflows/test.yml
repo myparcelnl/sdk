@@ -19,14 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.ref || '' }}
+          ref: ${{ inputs.ref }}
 
-      - uses: myparcelnl/actions/build-docker-image@v2
+      - uses: myparcelnl/actions/build-docker-image-reg@v2
         id: docker
         with:
-          image: myparcel/sdk
-          key: php-sdk
-          docker-args: --target test
+          image: myparcel/php-sdk
+          target: test
+          repository-user: ${{ github.actor }}
+          repository-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Create .env file'
         run: |
