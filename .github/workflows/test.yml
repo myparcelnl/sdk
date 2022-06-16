@@ -27,7 +27,7 @@ jobs:
       - uses: myparcelnl/actions/build-docker-image-reg@v2
         id: docker
         with:
-          image: myparcel/php-sdk
+          image: myparcelnl/php-sdk
           target: test
           registry-user: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
@@ -47,4 +47,4 @@ jobs:
         run: docker cp $(docker ps -alq):/app/coverage.xml .
 
       - name: 'Update code coverage'
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
