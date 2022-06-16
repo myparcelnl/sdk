@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.0](https://github.com/myparcelnl/sdk/compare/v7.2.2...v7.3.0) (2022-06-16)
+
+
+### :sparkles: New Features
+
+* add order status webhook and add shipments to order ([#414](https://github.com/myparcelnl/sdk/issues/414)) ([ae89f92](https://github.com/myparcelnl/sdk/commit/ae89f92b4063b4f08da40b199c121732a38fce60))
+* add weight validation to consignment ([#411](https://github.com/myparcelnl/sdk/issues/411)) ([d2cf46e](https://github.com/myparcelnl/sdk/commit/d2cf46eeb12d9d4d658ad61fd73e23d2041754f5))
+
+
+### :bug: Bug Fixes
+
+* adjust instabox shipment for ConsignmentAdapter usage ([#406](https://github.com/myparcelnl/sdk/issues/406)) ([ab0e6c7](https://github.com/myparcelnl/sdk/commit/ab0e6c756b5dd46958e476edc3619e138df56ac5))
+* restore deprecated constant ([#416](https://github.com/myparcelnl/sdk/issues/416)) ([ffffa0d](https://github.com/myparcelnl/sdk/commit/ffffa0d2360809bf91f4bd9d2fb1669b9c37d71a))
+
 ### [7.2.2](https://github.com/myparcelnl/sdk/compare/v7.2.1...v7.2.2) (2022-04-15)
 
 
