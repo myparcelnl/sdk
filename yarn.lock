@@ -45,10 +45,10 @@
   dependencies:
     "@semantic-release/error" "^2.2.0"
 
-"@myparcel/semantic-release-config@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@myparcel/semantic-release-config/-/semantic-release-config-3.1.0.tgz#4d8e8e40993b2cc539cdb7d6c9fe72ad38297059"
-  integrity sha512-mK1rsoCAAN8YybvOOW9j/oZpPldfeM9N7PBbVx0XKfHUdDAlNCXrWoxW2Ss6QWk+H8LDYrAJQ77nbCFWxzGU2Q==
+"@myparcel/semantic-release-config@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@myparcel/semantic-release-config/-/semantic-release-config-4.0.0.tgz#77b58cdba83cb3c41137027995fbe3642edca79f"
+  integrity sha512-+iNovKsZnNT9SmTOsF/1KDxGfEBqiJ9qmTg7GkpvMTJ7AVJefI0BybtHOCiyRUhuFklKP3v2EJXcoD15OxpFOg==
   dependencies:
     "@iwavesmedia/semantic-release-composer" "^1.0.0"
     "@semantic-release/changelog" "^6.0.1"
@@ -58,8 +58,8 @@
     "@semantic-release/github" "^8.0.4"
     "@semantic-release/npm" "^9.0.1"
     "@semantic-release/release-notes-generator" "^10.0.3"
-    conventional-changelog-conventionalcommits "^4.6.3"
-    semantic-release "^19.0.2"
+    conventional-changelog-conventionalcommits "^4.0.0 || ^5.0.0"
+    semantic-release "^19.0.3"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -856,10 +856,10 @@ conventional-changelog-angular@^5.0.0:
     compare-func "^2.0.0"
     q "^1.5.1"
 
-conventional-changelog-conventionalcommits@^4.6.3:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.6.3.tgz#0765490f56424b46f6cb4db9135902d6e5a36dc2"
-  integrity sha512-LTTQV4fwOM4oLPad317V/QNQ1FY4Hju5qeBIM1uTHbrnCE+Eg4CdRZ3gO2pUeR+tzWdp80M2j3qFFEDWVqOV4g==
+"conventional-changelog-conventionalcommits@^4.0.0 || ^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-5.0.0.tgz#41bdce54eb65a848a4a3ffdca93e92fa22b64a86"
+  integrity sha512-lCDbA+ZqVFQGUj7h9QBKoIpLhl8iihkO0nCTyRNzuXtcd7ubODpYB04IFy31JloiJgG0Uovu8ot8oxRzn7Nwtw==
   dependencies:
     compare-func "^2.0.0"
     lodash "^4.17.15"
@@ -2784,7 +2784,7 @@ safe-buffer@~5.2.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-semantic-release@^19.0.2:
+semantic-release@^19.0.3:
   version "19.0.3"
   resolved "https://registry.yarnpkg.com/semantic-release/-/semantic-release-19.0.3.tgz#9291053ad9890052f28e7c5921d4741530d516fd"
   integrity sha512-HaFbydST1cDKZHuFZxB8DTrBLJVK/AnDExpK0s3EqLIAAUAHUgnd+VSJCUtTYQKkAkauL8G9CucODrVCc7BuAA==

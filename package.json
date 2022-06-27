@@ -4,7 +4,7 @@
   "repository": "github:myparcelnl/sdk",
   "license": "MIT",
   "devDependencies": {
-    "@myparcel/semantic-release-config": "^3.1.0"
+    "@myparcel/semantic-release-config": "^4.0.0"
   },
   "release": {
     "extends": "@myparcel/semantic-release-config/github-composer"
