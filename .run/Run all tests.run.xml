@@ -5,7 +5,7 @@
         <option name="interpreterName" value="php" />
       </PhpTestInterpreterSettings>
     </CommandLine>
-    <TestRunner configuration_file="/app/phpunit.xml" scope="XML" />
+    <TestRunner configuration_file="/app/phpunit.xml" scope="XML" options="--coverage-html coverage" />
     <method v="2" />
   </configuration>
 </component>
