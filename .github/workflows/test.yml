@@ -21,10 +21,13 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
+        if: github.actor != 'dependabot[bot]'
         with:
           ref: ${{ inputs.ref }}
+          persist-credentials: false
 
       - uses: myparcelnl/actions/build-docker-image-reg@v2
+        if: github.actor != 'dependabot[bot]'
         id: docker
         with:
           image: myparcelnl/php-sdk
@@ -41,10 +44,13 @@ jobs:
           EOF
 
       - name: 'Run tests'
+        if: github.actor != 'dependabot[bot]'
         run: docker run --env-file .env ${{ steps.docker.outputs.tagged-image }}
 
       - name: 'Get coverage file from container'
+        if: github.actor != 'dependabot[bot]'
         run: docker cp $(docker ps -alq):/app/coverage.xml .
 
       - name: 'Update code coverage'
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v3
