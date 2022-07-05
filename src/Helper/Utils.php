@@ -30,16 +30,14 @@ class Utils
     }
 
     /**
-     * @param  array $array
-     * @param  array $requiredKeys
+     * @param  array      $array
+     * @param  null|array $requiredKeys
      *
      * @return array $emptyValues
      */
-    public static function emptyValues($array, $requiredKeys = null): array
+    public static function getKeysWithoutValue(array $array, array $requiredKeys = null): array
     {
-        if (! $requiredKeys) {
-            $requiredKeys = array_keys($array);
-        }
+        $requiredKeys = $requiredKeys ?? array_keys($array);
 
         $emptyValues = Arr::where(
             $array,

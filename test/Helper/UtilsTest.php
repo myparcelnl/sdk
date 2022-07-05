@@ -12,7 +12,7 @@ class UtilsTest extends TestCase
     /**
      * @return array
      */
-    public function provideEmptyValuesData(): array
+    public function provideGetKeysWithoutValueData(): array
     {
         return [
             [
@@ -45,16 +45,16 @@ class UtilsTest extends TestCase
     }
 
     /**
-     * @dataProvider provideEmptyValuesData
+     * @dataProvider provideGetKeysWithoutValueData
      * @param $array
      * @param $requiredFields
      * @param $expected
      *
      * @return void
      */
-    public function testEmptyValues($array, $requiredFields, $expected): void
+    public function testGetKeysWithoutValue($array, $requiredFields, $expected): void
     {
-        $emptyValues = Utils::emptyValues($array, $requiredFields);
+        $emptyValues = Utils::getKeysWithoutValue($array, $requiredFields);
         self::assertIsArray($emptyValues);
         self::assertEquals($expected, $emptyValues);
     }
