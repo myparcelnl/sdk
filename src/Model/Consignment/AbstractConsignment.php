@@ -232,7 +232,7 @@ abstract class AbstractConsignment
      * @internal
      * @var int
      */
-    public $status;
+    public $status = self::STATUS_CONCEPT;
 
     /**
      * @internal
