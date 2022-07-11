@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.1](https://github.com/myparcelnl/sdk/compare/v7.3.0...v7.3.1) (2022-07-11)
+
+
+### :bug: Bug Fixes
+
+* consignment status given default value ([#424](https://github.com/myparcelnl/sdk/issues/424)) ([0df494e](https://github.com/myparcelnl/sdk/commit/0df494e358d3cf80b196e5a7d2ef687a7f7c705d))
+
 ## [7.3.0](https://github.com/myparcelnl/sdk/compare/v7.2.2...v7.3.0) (2022-06-16)
 
 

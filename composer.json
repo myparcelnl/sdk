@@ -1,49 +1,49 @@
 {
-  "name": "myparcelnl/sdk",
-  "version": "7.3.0",
-  "description": "This package is designed to send and receive data from MyParcel by means of an API.",
-  "keywords": [
-    "MyParcel",
-    "Flespakket",
-    "PostNL"
-  ],
-  "homepage": "https://myparcelnl.github.io/sdk",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Edie Lemoine",
-      "email": "support@myparcel.nl"
+    "name": "myparcelnl/sdk",
+    "version": "7.3.1",
+    "description": "This package is designed to send and receive data from MyParcel by means of an API.",
+    "keywords": [
+        "MyParcel",
+        "Flespakket",
+        "PostNL"
+    ],
+    "homepage": "https://myparcelnl.github.io/sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Edie Lemoine",
+            "email": "support@myparcel.nl"
+        },
+        {
+            "name": "Joeri van Veen",
+            "email": "support@myparcel.nl"
+        },
+        {
+            "name": "Mark Ernst",
+            "email": "support@myparcel.nl"
+        },
+        {
+            "name": "Richard Perdaan",
+            "email": "support@myparcel.nl"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
     },
-    {
-      "name": "Joeri van Veen",
-      "email": "support@myparcel.nl"
+    "require-dev": {
+        "fakerphp/faker": "^v1.16.0",
+        "phpunit/phpunit": "^7.5.20",
+        "psr/container": "~1.0.0"
     },
-    {
-      "name": "Mark Ernst",
-      "email": "support@myparcel.nl"
+    "autoload": {
+        "psr-4": {
+            "MyParcelNL\\Sdk\\src\\": "src",
+            "MyParcelNL\\Sdk\\": "src"
+        }
     },
-    {
-      "name": "Richard Perdaan",
-      "email": "support@myparcel.nl"
+    "autoload-dev": {
+        "psr-4": {
+            "MyParcelNL\\Sdk\\Test\\": "test"
+        }
     }
-  ],
-  "require": {
-    "php": ">=7.1.0"
-  },
-  "require-dev": {
-    "fakerphp/faker": "^v1.16.0",
-    "phpunit/phpunit": "^7.5.20",
-    "psr/container": "~1.0.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "MyParcelNL\\Sdk\\src\\": "src",
-      "MyParcelNL\\Sdk\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "MyParcelNL\\Sdk\\Test\\": "test"
-    }
-  }
 }
