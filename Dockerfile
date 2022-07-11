@@ -11,7 +11,7 @@ COPY src/          ./src/
 
 RUN composer install --dev
 
-CMD ["vendor/bin/pest", "--coverage-clover", "coverage.xml"]
+CMD ["vendor/bin/phpunit", "--coverage-clover", "coverage.xml"]
 
 
 ###
