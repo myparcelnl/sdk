@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.0](https://github.com/myparcelnl/sdk/compare/v7.3.1...v7.4.0) (2022-07-11)
+
+
+### :sparkles: New Features
+
+* add helper function checking empty values in array ([#423](https://github.com/myparcelnl/sdk/issues/423)) ([f0e6549](https://github.com/myparcelnl/sdk/commit/f0e65494daa40576745c42cdf301662365d781fc))
+
 ## [7.3.1](https://github.com/myparcelnl/sdk/compare/v7.3.0...v7.3.1) (2022-07-11)
 
 
