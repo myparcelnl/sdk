@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.1](https://github.com/myparcelnl/sdk/compare/v7.4.0...v7.4.1) (2022-07-12)
+
+
+### :bug: Bug Fixes
+
+* import closure in helpers ([6e540b2](https://github.com/myparcelnl/sdk/commit/6e540b26b7cca5adb6de19aede67191a7c708914))
+
 ## [7.4.0](https://github.com/myparcelnl/sdk/compare/v7.3.1...v7.4.0) (2022-07-11)
 
 
