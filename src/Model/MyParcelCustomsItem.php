@@ -189,7 +189,7 @@ class MyParcelCustomsItem
             throw new MissingFieldException('Classification must be set for a MyParcel product');
         }
 
-        $this->classification = substr("$classification", 0, 5);
+        $this->classification = substr("$classification", 0, 6);
 
         return $this;
     }
