@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.3](https://github.com/myparcelnl/sdk/compare/v7.4.2...v7.4.3) (2022-07-20)
+
+
+### :bug: Bug Fixes
+
+* allow null as pickup location country ([#426](https://github.com/myparcelnl/sdk/issues/426)) ([7af1e83](https://github.com/myparcelnl/sdk/commit/7af1e83081f28620064b38da13abaea5a632351d))
+
 ## [7.4.2](https://github.com/myparcelnl/sdk/compare/v7.4.1...v7.4.2) (2022-07-14)
 
 
