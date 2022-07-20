@@ -144,11 +144,11 @@ trait HasPickupLocation
     }
 
     /**
-     * @param  string $pickupCountry
+     * @param  null|string $pickupCountry
      *
      * @return AbstractConsignment
      */
-    public function setPickupCountry(string $pickupCountry): self
+    public function setPickupCountry(?string $pickupCountry): self
     {
         $this->pickup_cc = $pickupCountry;
 
