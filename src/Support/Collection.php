@@ -668,7 +668,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      * @param  string  $key
      * @param  mixed  $operator
      * @param  mixed  $value
-     * @return static
+     * @return mixed
      */
     public function firstWhere($key, $operator = null, $value = null)
     {
