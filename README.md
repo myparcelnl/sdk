@@ -16,7 +16,7 @@ See [installation] for further instructions.
 
 ## Documentation
 
-For examples, guides and in-depth information, visit our [docs].
+For examples, guides and in-depth information, visit our [documentation].
 
 ## Support
 
@@ -30,4 +30,4 @@ Please make sure to read our [contribution guidelines] before submitting a pull 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
 [Installation]: https://myparcelnl.github.io/sdk/01.installation
 [contribution guidelines]: https://myparcelnl.github.io/sdk/07.contribute
-[docs]: https://myparcelnl.github.io/sdk
+[documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
