@@ -28,6 +28,6 @@ developers directly on [Slack].
 Please make sure to read our [contribution guidelines] before submitting a pull request.
 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
-[Installation]: https://myparcelnl.github.io/sdk/01.installation
-[contribution guidelines]: https://myparcelnl.github.io/sdk/07.contribute
+[Installation]:https://developer.myparcel.nl/documentation/50.php-sdk.html#installation
+[contribution guidelines]: https://developer.myparcel.nl/documentation/50.php-sdk.html#contributing
 [documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
