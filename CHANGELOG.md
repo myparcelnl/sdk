@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.4](https://github.com/myparcelnl/sdk/compare/v7.4.3...v7.4.4) (2022-09-09)
+
+
+### :bug: Bug Fixes
+
+* remove lockfile ([563fd76](https://github.com/myparcelnl/sdk/commit/563fd76201f41a60c11a63f26a7b3985c1f4ddba))
+
 ## [7.4.3](https://github.com/myparcelnl/sdk/compare/v7.4.2...v7.4.3) (2022-07-20)
 
 
