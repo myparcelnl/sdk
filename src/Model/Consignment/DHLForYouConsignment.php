@@ -10,10 +10,9 @@ use MyParcelNL\Sdk\src\Validator\Consignment\DHLForYouConsignmentValidator;
 class DHLForYouConsignment extends AbstractConsignment
 {
     /** @deprecated use $this->getCarrierId() */
-    // TODO: Add correct carrier ID
-    public const CARRIER_ID = 9;
+    public const CARRIER_ID = CarrierDHLForYou::ID;
     /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = 'dhlForYou';
+    public const CARRIER_NAME = CarrierDHLForYou::NAME;
     /**
      * @var array
      * @deprecated use getLocalInsurancePossibilities()
