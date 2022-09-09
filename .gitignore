@@ -9,3 +9,4 @@ coverage.xml
 coverage
 vendor
 node_modules
+composer.lock
