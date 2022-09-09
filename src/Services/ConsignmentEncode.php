@@ -86,6 +86,9 @@ class ConsignmentEncode
                     'signature'         => Helpers::intOrNull($consignment->isSignature()),
                     'return'            => Helpers::intOrNull($consignment->isReturn()),
                     'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                    'easy_label' => Helpers::intOrNull($consignment->hasEasyLabel()),
+                    'expedition_secret' => Helpers::intOrNull($consignment->hasExpeditionSecret()),
+                    'direct_evening_service' => Helpers::intOrNull($consignment->hasDirectEveningService()),
                 ]),
             ]
         );

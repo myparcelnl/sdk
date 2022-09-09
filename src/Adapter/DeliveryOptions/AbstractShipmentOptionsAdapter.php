@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
@@ -23,6 +24,21 @@ abstract class AbstractShipmentOptionsAdapter
      * @var bool|null
      */
     protected $same_day_delivery;
+
+    /**
+     * @var bool|null
+     */
+    protected $easy_label;
+
+    /**
+     * @var bool|null
+     */
+    protected $direct_evening_service;
+
+    /**
+     * @var bool|null
+     */
+    protected $expedition_secret;
 
     /**
      * @var bool|null
@@ -77,6 +93,30 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
+     * @return null|bool
+     */
+    public function hasEasyLabel(): ?bool
+    {
+        return $this->easy_label;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasDirectEveningService(): ?bool
+    {
+        return $this->direct_evening_service;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasExpeditionSecret(): ?bool
+    {
+        return $this->expedition_secret;
+    }
+
+    /**
      * Return the package if the recipient is not home
      *
      * @return bool|null
@@ -113,7 +153,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $signature
+     * @param  null|bool $signature
      *
      * @return void
      */
@@ -123,7 +163,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|int  $insurance
+     * @param  null|int $insurance
      *
      * @return void
      */
@@ -133,7 +173,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $ageCheck
+     * @param  null|bool $ageCheck
      *
      * @return void
      */
@@ -143,7 +183,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $onlyRecipient
+     * @param  null|bool $onlyRecipient
      *
      * @return void
      */
@@ -153,7 +193,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $return
+     * @param  null|bool $return
      *
      * @return void
      */
@@ -162,13 +202,48 @@ abstract class AbstractShipmentOptionsAdapter
         $this->return = $return;
     }
 
+    /**
+     * @param  null|bool $sameDayDelivery
+     *
+     * @return void
+     */
     public function setSameDayDelivery(?bool $sameDayDelivery): void
     {
         $this->same_day_delivery = $sameDayDelivery;
     }
 
     /**
-     * @param  null|bool  $largeFormat
+     * @param  null|bool $directEveningService
+     *
+     * @return void
+     */
+    public function setDirectEveningService(?bool $directEveningService): void
+    {
+        $this->direct_evening_service = $directEveningService;
+    }
+
+    /**
+     * @param  null|bool $easyLabel
+     *
+     * @return void
+     */
+    public function setEasyLabel(?bool $easyLabel): void
+    {
+        $this->easy_label = $easyLabel;
+    }
+
+    /**
+     * @param  null|bool $expeditionSecret
+     *
+     * @return void
+     */
+    public function setExpeditionSecret(?bool $expeditionSecret): void
+    {
+        $this->expedition_secret = $expeditionSecret;
+    }
+
+    /**
+     * @param  null|bool $largeFormat
      *
      * @return void
      */
@@ -183,14 +258,17 @@ abstract class AbstractShipmentOptionsAdapter
     public function toArray(): array
     {
         return [
-            'signature'         => $this->hasSignature(),
-            'insurance'         => $this->getInsurance(),
-            'age_check'         => $this->hasAgeCheck(),
-            'only_recipient'    => $this->hasOnlyRecipient(),
-            'return'            => $this->isReturn(),
-            'same_day_delivery' => $this->isSameDayDelivery(),
-            'large_format'      => $this->hasLargeFormat(),
-            'label_description' => $this->getLabelDescription(),
+            'signature'              => $this->hasSignature(),
+            'insurance'              => $this->getInsurance(),
+            'age_check'              => $this->hasAgeCheck(),
+            'only_recipient'         => $this->hasOnlyRecipient(),
+            'return'                 => $this->isReturn(),
+            'same_day_delivery'      => $this->isSameDayDelivery(),
+            'large_format'           => $this->hasLargeFormat(),
+            'label_description'      => $this->getLabelDescription(),
+            'easy_label'             => $this->hasEasyLabel(),
+            'direct_evening_service' => $this->hasDirectEveningService(),
+            'expedition_secret'      => $this->hasExpeditionSecret(),
         ];
     }
 }

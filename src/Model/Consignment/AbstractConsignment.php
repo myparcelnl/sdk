@@ -33,13 +33,16 @@ abstract class AbstractConsignment
      */
     use HasApiKey;
 
-    public const SHIPMENT_OPTION_AGE_CHECK         = 'age_check';
-    public const SHIPMENT_OPTION_INSURANCE         = 'insurance';
-    public const SHIPMENT_OPTION_LARGE_FORMAT      = 'large_format';
-    public const SHIPMENT_OPTION_ONLY_RECIPIENT    = 'only_recipient';
-    public const SHIPMENT_OPTION_RETURN            = 'return';
-    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
-    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
+    public const SHIPMENT_OPTION_AGE_CHECK              = 'age_check';
+    public const SHIPMENT_OPTION_DIRECT_EVENING_SERVICE = 'direct_evening_service';
+    public const SHIPMENT_OPTION_EASY_LABEL             = 'easyLabel';
+    public const SHIPMENT_OPTION_EXPEDITION_SECRET      = 'expedition_secret';
+    public const SHIPMENT_OPTION_INSURANCE              = 'insurance';
+    public const SHIPMENT_OPTION_LARGE_FORMAT           = 'large_format';
+    public const SHIPMENT_OPTION_ONLY_RECIPIENT         = 'only_recipient';
+    public const SHIPMENT_OPTION_RETURN                 = 'return';
+    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY      = 'same_day_delivery';
+    public const SHIPMENT_OPTION_SIGNATURE              = 'signature';
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
@@ -422,6 +425,21 @@ abstract class AbstractConsignment
      * @var null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      */
     private $carrier;
+
+    /**
+     * @var bool
+     */
+    private $direct_evening_service;
+
+    /**
+     * @var bool
+     */
+    private $easy_label;
+
+    /**
+     * @var bool
+     */
+    private $expedition_secret;
 
     /**
      * @var bool
@@ -1487,6 +1505,66 @@ abstract class AbstractConsignment
         $this->large_format = $largeFormat && $this->isPackage();
 
         return $this;
+    }
+
+    /**
+     * @param  bool $easyLabel
+     *
+     * @return $this
+     */
+    public function setEasyLabel(bool $easyLabel): self
+    {
+        $this->easy_label = $easyLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasEasyLabel(): ?bool
+    {
+        return $this->easy_label;
+    }
+
+    /**
+     * @param  bool $expeditionSecret
+     *
+     * @return $this
+     */
+    public function setExpeditionSecret(bool $expeditionSecret): self
+    {
+        $this->expedition_secret = $expeditionSecret;
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasExpeditionSecret(): ?bool
+    {
+        return $this->expedition_secret;
+    }
+
+    /**
+     * @param  bool $directEveningService
+     *
+     * @return $this
+     */
+    public function setDirectEveningService(bool $directEveningService): self
+    {
+        $this->direct_evening_service = $directEveningService;
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasDirectEveningService(): ?bool
+    {
+        return $this->direct_evening_service;
     }
 
     /**
