@@ -16,7 +16,7 @@ See [installation] for further instructions.
 
 ## Documentation
 
-For examples, guides and in-depth information, visit our [documentation].
+For examples, guides and in-depth information, visit the [PHP SDK documentation] on the [MyParcel Developer Portal].
 
 ## Support
 
@@ -25,9 +25,15 @@ developers directly on [Slack].
 
 ## Contribute
 
-Please make sure to read our [contribution guidelines] before submitting a pull request.
+1. Check for open issues or open a new issue to start a discussion around a bug
+   or feature
+2. Fork the repository and branch off from the `main` branch
+3. Write one or more tests for the new feature or that expose the bug
+4. Make code changes to implement the feature or fix the bug
+5. Submit a pull request to `main` to get your changes merged and published
 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
 [Installation]:https://developer.myparcel.nl/documentation/50.php-sdk.html#installation
 [contribution guidelines]: https://developer.myparcel.nl/documentation/50.php-sdk.html#contributing
-[documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
+[PHP SDK documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
+[MyParcel Developer Portal]: https://developer.myparcel.nl
