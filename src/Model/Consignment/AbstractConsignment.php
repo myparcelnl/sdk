@@ -440,7 +440,12 @@ abstract class AbstractConsignment
     /**
      * @var bool
      */
-    private $expedition_secret;
+    private $hide_sender;
+
+    /**
+     * @var bool
+     */
+    private $extra_assurance;
 
     /**
      * @var bool
@@ -1529,13 +1534,13 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $expeditionSecret
+     * @param  bool $hideSender
      *
      * @return $this
      */
-    public function setExpeditionSecret(bool $expeditionSecret): self
+    public function setHideSender(bool $hideSender): self
     {
-        $this->expedition_secret = $expeditionSecret;
+        $this->hide_sender = $hideSender;
 
         return $this;
     }
@@ -1543,9 +1548,29 @@ abstract class AbstractConsignment
     /**
      * @return null|bool
      */
-    public function hasExpeditionSecret(): ?bool
+    public function hasHideSender(): ?bool
     {
-        return $this->expedition_secret;
+        return $this->hide_sender;
+    }
+
+    /**
+     * @param  bool $extraAssurance
+     *
+     * @return $this
+     */
+    public function setExtraAssurance(bool $extraAssurance): self
+    {
+        $this->extra_assurance = $extraAssurance;
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasExtraAssurance(): ? bool
+    {
+        return $this->extra_assurance;
     }
 
     /**
