@@ -28,16 +28,6 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @var bool|null
      */
-    protected $easy_label;
-
-    /**
-     * @var bool|null
-     */
-    protected $direct_evening_service;
-
-    /**
-     * @var bool|null
-     */
     protected $hide_sender;
 
     /**
@@ -95,22 +85,6 @@ abstract class AbstractShipmentOptionsAdapter
     public function hasLargeFormat(): ?bool
     {
         return $this->large_format;
-    }
-
-    /**
-     * @return null|bool
-     */
-    public function hasEasyLabel(): ?bool
-    {
-        return $this->easy_label;
-    }
-
-    /**
-     * @return null|bool
-     */
-    public function hasDirectEveningService(): ?bool
-    {
-        return $this->direct_evening_service;
     }
 
     /**
@@ -226,26 +200,6 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool $directEveningService
-     *
-     * @return void
-     */
-    public function setDirectEveningService(?bool $directEveningService): void
-    {
-        $this->direct_evening_service = $directEveningService;
-    }
-
-    /**
-     * @param  null|bool $easyLabel
-     *
-     * @return void
-     */
-    public function setEasyLabel(?bool $easyLabel): void
-    {
-        $this->easy_label = $easyLabel;
-    }
-
-    /**
      * @param  null|bool $hideSender
      *
      * @return void
@@ -289,8 +243,6 @@ abstract class AbstractShipmentOptionsAdapter
             'same_day_delivery'      => $this->isSameDayDelivery(),
             'large_format'           => $this->hasLargeFormat(),
             'label_description'      => $this->getLabelDescription(),
-            'easy_label'             => $this->hasEasyLabel(),
-            'direct_evening_service' => $this->hasDirectEveningService(),
             'hide_sender'            => $this->hasHideSender(),
             'extra_assurance'        => $this->hasExtraAssurance(),
         ];

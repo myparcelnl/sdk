@@ -17,5 +17,7 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
         $this->return            = $shipmentOptions['return'] ?? null;
         $this->same_day_delivery = $shipmentOptions['same_day_delivery'] ?? null;
         $this->label_description = $shipmentOptions['label_description'] ?? null;
+        $this->hide_sender       = $shipmentOptions['hide_sender'] ?? null;
+        $this->extra_assurance   = $shipmentOptions['extra_assurance'] ?? null;
     }
 }
