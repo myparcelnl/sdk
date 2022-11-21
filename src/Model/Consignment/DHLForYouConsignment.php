@@ -19,17 +19,6 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     public const INSURANCE_POSSIBILITIES_LOCAL = [
         100,
-        250,
-        500,
-        1000,
-        1500,
-        2000,
-        2500,
-        3000,
-        3500,
-        4000,
-        4500,
-        5000,
     ];
 
     /**
@@ -49,7 +38,6 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return [
             self::DELIVERY_TYPE_STANDARD_NAME,
-            self::DELIVERY_TYPE_PICKUP_NAME,
         ];
     }
 
@@ -60,7 +48,6 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return [
             self::EXTRA_OPTION_DELIVERY_MONDAY,
-            self::EXTRA_OPTION_MULTI_COLLO,
         ];
     }
 
@@ -85,10 +72,8 @@ class DHLForYouConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_DIRECT_EVENING_SERVICE,
             self::SHIPMENT_OPTION_EASY_LABEL,
             self::SHIPMENT_OPTION_HIDE_SENDER,
-            self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_LARGE_FORMAT,
+            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-            self::SHIPMENT_OPTION_RETURN,
             self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
             self::SHIPMENT_OPTION_SIGNATURE,
         ];
@@ -101,8 +86,7 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_LARGE_FORMAT,
-            self::SHIPMENT_OPTION_INSURANCE,
+            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
             self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }
@@ -122,17 +106,6 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return [
             100,
-            250,
-            500,
-            1000,
-            1500,
-            2000,
-            2500,
-            3000,
-            3500,
-            4000,
-            4500,
-            5000,
         ];
     }
 }
