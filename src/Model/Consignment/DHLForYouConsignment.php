@@ -84,7 +84,7 @@ class DHLForYouConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_AGE_CHECK,
             self::SHIPMENT_OPTION_DIRECT_EVENING_SERVICE,
             self::SHIPMENT_OPTION_EASY_LABEL,
-            self::SHIPMENT_OPTION_EXPEDITION_SECRET,
+            self::SHIPMENT_OPTION_HIDE_SENDER,
             self::SHIPMENT_OPTION_INSURANCE,
             self::SHIPMENT_OPTION_LARGE_FORMAT,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
