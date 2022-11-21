@@ -82,11 +82,7 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     protected function getAllowedShipmentOptionsForPickup(): array
     {
-        return [
-            self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
-            self::SHIPMENT_OPTION_SIGNATURE,
-        ];
+        return [];
     }
 
     /**
