@@ -38,7 +38,7 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @var bool|null
      */
-    protected $expedition_secret;
+    protected $hide_sender;
 
     /**
      * @var bool|null
@@ -59,6 +59,11 @@ abstract class AbstractShipmentOptionsAdapter
      * @var string|null
      */
     protected $label_description;
+
+    /**
+     * @var null|bool
+     */
+    protected $extra_assurance;
 
     /**
      * @return bool|null
@@ -111,9 +116,17 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @return null|bool
      */
-    public function hasExpeditionSecret(): ?bool
+    public function hasHideSender(): ?bool
     {
-        return $this->expedition_secret;
+        return $this->hide_sender;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasExtraAssurance(): ?bool
+    {
+        return $this->extra_assurance;
     }
 
     /**
@@ -233,13 +246,13 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool $expeditionSecret
+     * @param  null|bool $hideSender
      *
      * @return void
      */
-    public function setExpeditionSecret(?bool $expeditionSecret): void
+    public function setHideSender(?bool $hideSender): void
     {
-        $this->expedition_secret = $expeditionSecret;
+        $this->hide_sender = $hideSender;
     }
 
     /**
@@ -250,6 +263,16 @@ abstract class AbstractShipmentOptionsAdapter
     public function setLargeFormat(?bool $largeFormat): void
     {
         $this->large_format = $largeFormat;
+    }
+
+    /**
+     * @param  null|bool $extraAssurance
+     *
+     * @return void
+     */
+    public function setExtraAssurance(?bool $extraAssurance): void
+    {
+        $this->extra_assurance = $extraAssurance;
     }
 
     /**
@@ -268,7 +291,8 @@ abstract class AbstractShipmentOptionsAdapter
             'label_description'      => $this->getLabelDescription(),
             'easy_label'             => $this->hasEasyLabel(),
             'direct_evening_service' => $this->hasDirectEveningService(),
-            'expedition_secret'      => $this->hasExpeditionSecret(),
+            'hide_sender'            => $this->hasHideSender(),
+            'extra_assurance'        => $this->hasExtraAssurance(),
         ];
     }
 }
