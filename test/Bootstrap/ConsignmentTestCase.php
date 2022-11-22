@@ -79,13 +79,14 @@ class ConsignmentTestCase extends TestCase
      * Consignment properties whose getters which don't follow the "get<property>" format.
      */
     private const ALTERNATIVE_GETTERS_MAP = [
-        self::AGE_CHECK       => 'hasAgeCheck',
-        self::LARGE_FORMAT    => 'isLargeFormat',
-        self::ONLY_RECIPIENT  => 'isOnlyRecipient',
-        self::RETURN          => 'isReturn',
-        self::SIGNATURE       => 'isSignature',
-        self::HIDE_SENDER     => 'hasHideSender',
-        self::EXTRA_ASSURANCE => 'hasExtraAssurance',
+        self::AGE_CHECK         => 'hasAgeCheck',
+        self::LARGE_FORMAT      => 'isLargeFormat',
+        self::ONLY_RECIPIENT    => 'isOnlyRecipient',
+        self::RETURN            => 'isReturn',
+        self::SIGNATURE         => 'isSignature',
+        self::HIDE_SENDER       => 'hasHideSender',
+        self::EXTRA_ASSURANCE   => 'hasExtraAssurance',
+        self::SAME_DAY_DELIVERY => 'isSameDayDelivery',
     ];
     private const EXPECTED_SUFFIX              = '_expected';
     private const KEYS_EXCLUDED_FROM_TEST_NAME = [
