@@ -87,9 +87,7 @@ class ConsignmentEncode
                     'signature'              => Helpers::intOrNull($consignment->isSignature()),
                     'return'                 => Helpers::intOrNull($consignment->isReturn()),
                     'same_day_delivery'      => Helpers::intOrNull($consignment->isSameDayDelivery()),
-                    'easy_label'             => Helpers::intOrNull($consignment->hasEasyLabel()),
                     'hide_sender'            => Helpers::intOrNull($consignment->hasHideSender()),
-                    'direct_evening_service' => Helpers::intOrNull($consignment->hasDirectEveningService()),
                     'extra_assurance'        => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
             ]
@@ -99,7 +97,7 @@ class ConsignmentEncode
             $consignmentEncoded['options']['large_format'] = (int) $consignment->isLargeFormat();
         }
 
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
+        if ($consignment->getCountry() === AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
             $consignmentEncoded['options']['age_check']      = 1;
             $consignmentEncoded['options']['only_recipient'] = $consignment->canHaveShipmentOption('only_recipient') ? 1 : 0;
             $consignmentEncoded['options']['signature']      = $consignment->canHaveShipmentOption('signature') ? 1 : 0;

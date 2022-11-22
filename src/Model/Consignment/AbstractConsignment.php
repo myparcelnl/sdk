@@ -34,8 +34,6 @@ abstract class AbstractConsignment
     use HasApiKey;
 
     public const SHIPMENT_OPTION_AGE_CHECK              = 'age_check';
-    public const SHIPMENT_OPTION_DIRECT_EVENING_SERVICE = 'direct_evening_service';
-    public const SHIPMENT_OPTION_EASY_LABEL             = 'easyLabel';
     public const SHIPMENT_OPTION_HIDE_SENDER            = 'hide_sender';
     public const SHIPMENT_OPTION_INSURANCE              = 'insurance';
     public const SHIPMENT_OPTION_LARGE_FORMAT           = 'large_format';
@@ -426,16 +424,6 @@ abstract class AbstractConsignment
      * @var null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      */
     private $carrier;
-
-    /**
-     * @var bool
-     */
-    private $direct_evening_service;
-
-    /**
-     * @var bool
-     */
-    private $easy_label;
 
     /**
      * @var bool
@@ -1514,26 +1502,6 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $easyLabel
-     *
-     * @return $this
-     */
-    public function setEasyLabel(bool $easyLabel): self
-    {
-        $this->easy_label = $easyLabel;
-
-        return $this;
-    }
-
-    /**
-     * @return null|bool
-     */
-    public function hasEasyLabel(): ?bool
-    {
-        return $this->easy_label;
-    }
-
-    /**
      * @param  bool $hideSender
      *
      * @return $this
@@ -1571,26 +1539,6 @@ abstract class AbstractConsignment
     public function hasExtraAssurance(): ? bool
     {
         return $this->extra_assurance;
-    }
-
-    /**
-     * @param  bool $directEveningService
-     *
-     * @return $this
-     */
-    public function setDirectEveningService(bool $directEveningService): self
-    {
-        $this->direct_evening_service = $directEveningService;
-
-        return $this;
-    }
-
-    /**
-     * @return null|bool
-     */
-    public function hasDirectEveningService(): ?bool
-    {
-        return $this->direct_evening_service;
     }
 
     /**
