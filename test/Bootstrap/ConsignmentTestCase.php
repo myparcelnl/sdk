@@ -70,18 +70,22 @@ class ConsignmentTestCase extends TestCase
     protected const SAVE_RECIPIENT_ADDRESS      = 'save_recipient_address';
     protected const SIGNATURE                   = 'signature';
     protected const SAME_DAY_DELIVERY           = 'same_day_delivery';
+    protected const HIDE_SENDER                 = 'hide_sender';
+    protected const EXTRA_ASSURANCE             = 'extra_assurance';
     protected const STREET                      = 'street';
     protected const TOTAL_WEIGHT                = 'total_weight';
     protected const WEIGHT                      = 'weight';
     /**
      * Consignment properties whose getters which don't follow the "get<property>" format.
      */
-    private const ALTERNATIVE_GETTERS_MAP      = [
-        self::AGE_CHECK      => 'hasAgeCheck',
-        self::LARGE_FORMAT   => 'isLargeFormat',
-        self::ONLY_RECIPIENT => 'isOnlyRecipient',
-        self::RETURN         => 'isReturn',
-        self::SIGNATURE      => 'isSignature',
+    private const ALTERNATIVE_GETTERS_MAP = [
+        self::AGE_CHECK       => 'hasAgeCheck',
+        self::LARGE_FORMAT    => 'isLargeFormat',
+        self::ONLY_RECIPIENT  => 'isOnlyRecipient',
+        self::RETURN          => 'isReturn',
+        self::SIGNATURE       => 'isSignature',
+        self::HIDE_SENDER     => 'hasHideSender',
+        self::EXTRA_ASSURANCE => 'hasExtraAssurance',
     ];
     private const EXPECTED_SUFFIX              = '_expected';
     private const KEYS_EXCLUDED_FROM_TEST_NAME = [

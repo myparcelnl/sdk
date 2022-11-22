@@ -20,6 +20,12 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
             'same day delivery' => [
                 self::SAME_DAY_DELIVERY => true,
             ],
+            'Hide sender'       => [
+                self::HIDE_SENDER => true,
+            ],
+            'Extra assurance'   => [
+                self::EXTRA_ASSURANCE => true,
+            ],
         ]);
     }
 
