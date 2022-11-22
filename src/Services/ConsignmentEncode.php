@@ -14,6 +14,7 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -104,6 +105,14 @@ class ConsignmentEncode
             $consignmentEncoded['options']['signature']      = $consignment->canHaveShipmentOption('signature') ? 1 : 0;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
+        }
+
+        if (CarrierDHLForYou::NAME === $consignment->getCarrierName() && $consignment->hasAgeCheck()) {
+            $consignmentEncoded['options']['only_recipient'] = 0;
+        }
+
+        if ($consignment->hasExtraAssurance()) {
+            $consignmentEncoded['options']['hide_sender'] = 0;
         }
 
         if ($consignment->getDeliveryDate()) {
