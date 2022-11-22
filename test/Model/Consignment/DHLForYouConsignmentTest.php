@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
-class InstaboxConsignmentTest extends ConsignmentTestCase
+class DHLForYouConsignmentTest extends ConsignmentTestCase
 {
     /**
      * @return array
      * @throws \Exception
      */
-    public function provideRedJePakketjeConsignmentsData(): array
+    public function provideDHLForYouConsignmentsData(): array
     {
         return $this->createConsignmentProviderDataset([
             'NL -> NL'          => [],
             'same day delivery' => [
-                self::SAME_DAY_DELIVERY => false,
-                // Delivery date is today at 14:00, it's currently 0:00 so before the max cutoff time of 9:30.
-                self::DELIVERY_DATE     => $this->generateDeliveryDate('PT14H'),
+                self::SAME_DAY_DELIVERY => true,
             ],
         ]);
     }
@@ -30,9 +28,9 @@ class InstaboxConsignmentTest extends ConsignmentTestCase
      *
      * @throws \Exception
      * @throws \Exception
-     * @dataProvider provideRedJePakketjeConsignmentsData
+     * @dataProvider provideDHLForYouConsignmentsData
      */
-    public function testRedJePakketjeConsignments(array $testData): void
+    public function testDHLForYouConsignments(array $testData): void
     {
         $this->doConsignmentTest($testData);
     }
@@ -46,8 +44,7 @@ class InstaboxConsignmentTest extends ConsignmentTestCase
         return array_replace(
             parent::getDefaultConsignmentData(),
             [
-                self::CARRIER_ID        => CarrierInstabox::ID,
-                self::ADD_DROPOFF_POINT => true,
+                self::CARRIER_ID        => CarrierDHLForYou::ID,
                 self::FULL_STREET       => 'Meander 631',
                 self::POSTAL_CODE       => '6825ME',
                 self::CITY              => 'Arnhem',
