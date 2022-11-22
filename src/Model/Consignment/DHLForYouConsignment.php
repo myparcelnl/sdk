@@ -38,6 +38,7 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return [
             self::DELIVERY_TYPE_STANDARD_NAME,
+            self::DELIVERY_TYPE_PICKUP_NAME,
         ];
     }
 
