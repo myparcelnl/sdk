@@ -2,10 +2,10 @@ version: '3.9'
 
 services:
   php:
-    image: myparcelnl/php-sdk
-    build: ./
+    image: ghcr.io/myparcelnl/php-xd:7.2
     init: true
     working_dir: /app
+    entrypoint: ["sh", "-c", "composer install && vendor/bin/phpunit"]
     env_file:
       - .env
     volumes:

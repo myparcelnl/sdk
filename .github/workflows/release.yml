@@ -16,20 +16,22 @@ on:
 
 jobs:
   test:
-    uses: myparcelnl/sdk/.github/workflows/test.yml@main
+    name: 'Run tests 🧪'
+    uses: ./.github/workflows/--test.yml
     secrets: inherit
 
   release:
     name: 'Release'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - test
     steps:
       - uses: actions/checkout@v3
         with:
-          persist-credentials: false
+          fetch-depth: 0
+          token: ${{ secrets.GH_REPO_TOKEN }}
 
-      - uses: myparcelnl/actions/yarn-install@v2
+      - uses: myparcelnl/actions/yarn2-install@v2
 
       - uses: myparcelnl/actions/semantic-release@v2
         with:

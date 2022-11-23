@@ -11,7 +11,7 @@ jobs:
       ref: ${{ github.event.client_payload.pull_request.head.ref }}
 
   update-comment:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: test
     steps:
       - name: 'Add reaction'

@@ -3,10 +3,11 @@
   "private": true,
   "repository": "github:myparcelnl/sdk",
   "license": "MIT",
+  "release": {
+    "extends": "@myparcel/semantic-release-config/github-composer"
+  },
   "devDependencies": {
     "@myparcel/semantic-release-config": "^4.0.0"
   },
-  "release": {
-    "extends": "@myparcel/semantic-release-config/github-composer"
-  }
+  "packageManager": "yarn@3.3.0"
 }

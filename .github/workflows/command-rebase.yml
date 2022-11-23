@@ -6,7 +6,7 @@ on:
 
 jobs:
   rebase:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: peter-evans/rebase@v2
         id: rebase
