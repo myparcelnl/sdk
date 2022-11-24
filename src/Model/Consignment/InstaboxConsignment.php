@@ -7,6 +7,9 @@ namespace MyParcelNL\Sdk\src\Model\Consignment;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Validator\Consignment\InstaboxConsignmentValidator;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InstaboxConsignment extends AbstractConsignment
 {
     /** @deprecated use $this->getCarrierId() */

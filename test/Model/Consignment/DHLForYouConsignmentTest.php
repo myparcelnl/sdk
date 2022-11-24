@@ -16,15 +16,16 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
     public function provideDHLForYouConsignmentsData(): array
     {
         return $this->createConsignmentProviderDataset([
-            'NL -> NL'          => [],
             'same day delivery' => [
                 self::SAME_DAY_DELIVERY => true,
-            ],
+           ],
             'Hide sender'       => [
                 self::HIDE_SENDER => true,
+                self::SAME_DAY_DELIVERY => true,
             ],
             'Extra assurance'   => [
                 self::EXTRA_ASSURANCE => true,
+                self::SAME_DAY_DELIVERY => true,
             ],
         ]);
     }

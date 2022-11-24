@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
@@ -137,13 +136,6 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
                     self::expected(self::ONLY_RECIPIENT) => false,
                     self::expected(self::RETURN)         => false,
                     self::expected(self::SIGNATURE)      => true,
-                ],
-                'Pickup with shipment options Instabox' => [
-                    self::CARRIER_ID                => CarrierInstabox::ID,
-                    self::DELIVERY_DATE             => $this->generateDeliveryDate(),
-                    self::SIGNATURE                 => true,
-                    self::DELIVERY_TYPE             => AbstractConsignment::DELIVERY_TYPE_PICKUP,
-                    self::expected(self::SIGNATURE) => false,
                 ],
             ]
         );
