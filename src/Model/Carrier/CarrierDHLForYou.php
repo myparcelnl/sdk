@@ -10,7 +10,6 @@ class CarrierDHLForYou extends AbstractCarrier
 {
     public const CONSIGNMENT = DHLForYouConsignment::class;
     public const HUMAN       = 'DHL For You';
-    // TODO: Add correct carrier ID
     public const ID          = 9;
     public const NAME        = 'dhlforyou';
 
