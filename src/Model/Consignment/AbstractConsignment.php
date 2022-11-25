@@ -1503,7 +1503,7 @@ abstract class AbstractConsignment
 
     /**
      * @param  bool $hideSender
-     *
+     * @codeCoverageIgnore
      * @return $this
      */
     public function setHideSender(bool $hideSender): self
@@ -1523,7 +1523,7 @@ abstract class AbstractConsignment
 
     /**
      * @param  bool $extraAssurance
-     *
+     * @codeCoverageIgnore
      * @return $this
      */
     public function setExtraAssurance(bool $extraAssurance): self
