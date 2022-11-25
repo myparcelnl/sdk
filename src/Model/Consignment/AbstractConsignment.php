@@ -33,15 +33,15 @@ abstract class AbstractConsignment
      */
     use HasApiKey;
 
-    public const SHIPMENT_OPTION_AGE_CHECK              = 'age_check';
-    public const SHIPMENT_OPTION_HIDE_SENDER            = 'hide_sender';
-    public const SHIPMENT_OPTION_INSURANCE              = 'insurance';
-    public const SHIPMENT_OPTION_LARGE_FORMAT           = 'large_format';
-    public const SHIPMENT_OPTION_ONLY_RECIPIENT         = 'only_recipient';
-    public const SHIPMENT_OPTION_RETURN                 = 'return';
-    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY      = 'same_day_delivery';
-    public const SHIPMENT_OPTION_SIGNATURE              = 'signature';
-    public const SHIPMENT_OPTION_EXTRA_ASSURANCE        = 'extra_assurance';
+    public const SHIPMENT_OPTION_AGE_CHECK         = 'age_check';
+    public const SHIPMENT_OPTION_HIDE_SENDER       = 'hide_sender';
+    public const SHIPMENT_OPTION_INSURANCE         = 'insurance';
+    public const SHIPMENT_OPTION_LARGE_FORMAT      = 'large_format';
+    public const SHIPMENT_OPTION_ONLY_RECIPIENT    = 'only_recipient';
+    public const SHIPMENT_OPTION_RETURN            = 'return';
+    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
+    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    public const SHIPMENT_OPTION_EXTRA_ASSURANCE   = 'extra_assurance';
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';

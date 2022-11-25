@@ -235,16 +235,16 @@ abstract class AbstractShipmentOptionsAdapter
     public function toArray(): array
     {
         return [
-            'signature'              => $this->hasSignature(),
-            'insurance'              => $this->getInsurance(),
-            'age_check'              => $this->hasAgeCheck(),
-            'only_recipient'         => $this->hasOnlyRecipient(),
-            'return'                 => $this->isReturn(),
-            'same_day_delivery'      => $this->isSameDayDelivery(),
-            'large_format'           => $this->hasLargeFormat(),
-            'label_description'      => $this->getLabelDescription(),
-            'hide_sender'            => $this->hasHideSender(),
-            'extra_assurance'        => $this->hasExtraAssurance(),
+            'signature'         => $this->hasSignature(),
+            'insurance'         => $this->getInsurance(),
+            'age_check'         => $this->hasAgeCheck(),
+            'only_recipient'    => $this->hasOnlyRecipient(),
+            'return'            => $this->isReturn(),
+            'same_day_delivery' => $this->isSameDayDelivery(),
+            'large_format'      => $this->hasLargeFormat(),
+            'label_description' => $this->getLabelDescription(),
+            'hide_sender'       => $this->hasHideSender(),
+            'extra_assurance'   => $this->hasExtraAssurance(),
         ];
     }
 }
