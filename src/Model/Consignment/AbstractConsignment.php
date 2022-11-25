@@ -1536,7 +1536,7 @@ abstract class AbstractConsignment
     /**
      * @return null|bool
      */
-    public function hasExtraAssurance(): ? bool
+    public function hasExtraAssurance(): ?bool
     {
         return $this->extra_assurance;
     }
