@@ -72,6 +72,7 @@ class DHLForYouConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
+            self::SHIPMENT_OPTION_SAME_DAY_DELIVERY
         ];
     }
 
