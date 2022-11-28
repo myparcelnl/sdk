@@ -31,6 +31,11 @@ class PostNLConsignment extends AbstractConsignment
         4500,
         5000,
     ];
+    public const INSURANCE_POSSIBILITIES_EU = [
+        0,
+        50,
+        500,
+    ];
 
     /**
      * @var string
@@ -135,5 +140,10 @@ class PostNLConsignment extends AbstractConsignment
             4500,
             5000,
         ];
+    }
+
+    public function getEUInsurancePossibilities(): array
+    {
+        return self::INSURANCE_POSSIBILITIES_EU;
     }
 }
