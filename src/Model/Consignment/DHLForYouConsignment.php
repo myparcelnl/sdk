@@ -47,9 +47,7 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     public function getAllowedExtraOptions(): array
     {
-        return [
-            self::EXTRA_OPTION_DELIVERY_MONDAY,
-        ];
+        return [];
     }
 
     /**
@@ -73,7 +71,6 @@ class DHLForYouConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_HIDE_SENDER,
             self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-            self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
             self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }

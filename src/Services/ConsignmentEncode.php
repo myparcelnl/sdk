@@ -77,6 +77,7 @@ class ConsignmentEncode
      */
     public static function encodeExtraOptions(array $consignmentEncoded, AbstractConsignment $consignment): array
     {
+        $isDhl              = CarrierDHLForYou::NAME === $consignment->getCarrierName();
         $consignmentEncoded = array_merge_recursive(
             $consignmentEncoded,
             [
@@ -86,7 +87,7 @@ class ConsignmentEncode
                     'only_recipient'         => Helpers::intOrNull($consignment->isOnlyRecipient()),
                     'signature'              => Helpers::intOrNull($consignment->isSignature()),
                     'return'                 => Helpers::intOrNull($consignment->isReturn()),
-                    'same_day_delivery'      => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                    'same_day_delivery'      => $isDhl ? 1 : Helpers::intOrNull($consignment->isSameDayDelivery()),
                     'hide_sender'            => Helpers::intOrNull($consignment->hasHideSender()),
                     'extra_assurance'        => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
@@ -105,7 +106,7 @@ class ConsignmentEncode
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
         }
 
-        if (CarrierDHLForYou::NAME === $consignment->getCarrierName() && $consignment->hasAgeCheck()) {
+        if ($isDhl && $consignment->hasAgeCheck()) {
             $consignmentEncoded['options']['only_recipient'] = 0;
         }
 
