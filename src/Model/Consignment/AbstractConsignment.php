@@ -1803,6 +1803,16 @@ abstract class AbstractConsignment
     }
 
     /**
+     * Array of insurance possibilities for Belgium.
+     *
+     * @return int[]
+     */
+    protected function getBeInsurancePossibilities(): array
+    {
+        return [];
+    }
+
+    /**
      * @param  string $shipmentOption
      *
      * @return bool
