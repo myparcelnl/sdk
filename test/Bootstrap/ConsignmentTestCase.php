@@ -9,7 +9,7 @@ use DateTime;
 use MyParcelNL\Sdk\src\Helper\Utils;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
@@ -21,12 +21,12 @@ use RuntimeException;
 
 class ConsignmentTestCase extends TestCase
 {
-    public const    ENV_ALLOW_RJP      = 'ALLOW_RJP';
-    protected const ADD_DROPOFF_POINT  = 'add_dropoff_point';
-    protected const AGE_CHECK          = 'age_check';
-    protected const API_KEY            = 'api_key';
-    protected const AUTO_DETECT_PICKUP = 'auto_detect_pickup';
-    protected const CARRIER_ID         = 'carrier_id';
+    public const    ENV_ALLOW_DHL_FOR_YOU = 'ALLOW_DHL_FOR_YOU';
+    protected const ADD_DROPOFF_POINT     = 'add_dropoff_point';
+    protected const AGE_CHECK             = 'age_check';
+    protected const API_KEY               = 'api_key';
+    protected const AUTO_DETECT_PICKUP    = 'auto_detect_pickup';
+    protected const CARRIER_ID            = 'carrier_id';
     /** @deprecated */
     protected const CHECKOUT_DATA               = 'checkout_data';
     protected const CITY                        = 'city';
@@ -70,18 +70,23 @@ class ConsignmentTestCase extends TestCase
     protected const SAVE_RECIPIENT_ADDRESS      = 'save_recipient_address';
     protected const SIGNATURE                   = 'signature';
     protected const SAME_DAY_DELIVERY           = 'same_day_delivery';
+    protected const HIDE_SENDER                 = 'hide_sender';
+    protected const EXTRA_ASSURANCE             = 'extra_assurance';
     protected const STREET                      = 'street';
     protected const TOTAL_WEIGHT                = 'total_weight';
     protected const WEIGHT                      = 'weight';
     /**
      * Consignment properties whose getters which don't follow the "get<property>" format.
      */
-    private const ALTERNATIVE_GETTERS_MAP      = [
-        self::AGE_CHECK      => 'hasAgeCheck',
-        self::LARGE_FORMAT   => 'isLargeFormat',
-        self::ONLY_RECIPIENT => 'isOnlyRecipient',
-        self::RETURN         => 'isReturn',
-        self::SIGNATURE      => 'isSignature',
+    private const ALTERNATIVE_GETTERS_MAP = [
+        self::AGE_CHECK         => 'hasAgeCheck',
+        self::LARGE_FORMAT      => 'isLargeFormat',
+        self::ONLY_RECIPIENT    => 'isOnlyRecipient',
+        self::RETURN            => 'isReturn',
+        self::SIGNATURE         => 'isSignature',
+        self::HIDE_SENDER       => 'hasHideSender',
+        self::EXTRA_ASSURANCE   => 'hasExtraAssurance',
+        self::SAME_DAY_DELIVERY => 'isSameDayDelivery',
     ];
     private const EXPECTED_SUFFIX              = '_expected';
     private const KEYS_EXCLUDED_FROM_TEST_NAME = [
@@ -264,8 +269,7 @@ class ConsignmentTestCase extends TestCase
             $data = $this->createConsignmentTestData($data);
         }
 
-        $carrierId = $data[self::CARRIER_ID] ?? CarrierPostNL::ID;
-        self::skipIfRjp($carrierId);
+        $carrierId   = $data[self::CARRIER_ID] ?? CarrierPostNL::ID;
         $consignment = (ConsignmentFactory::createByCarrierId($carrierId));
 
         Utils::fillObject($consignment, $data);
@@ -395,23 +399,6 @@ class ConsignmentTestCase extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @param  int $carrierId
-     *
-     * @return void
-     */
-    protected static function skipIfRjp(int $carrierId): void
-    {
-        if ($carrierId !== CarrierInstabox::ID) {
-            return;
-        }
-
-        self::skipUnlessEnabled(
-            self::ENV_ALLOW_RJP,
-            'Testing RJP consignments is currently disabled because all created shipments need to be manually cancelled. So if you run this test anyway, don\'t forget to cancel all the RJP shipments that will be created.'
-        );
     }
 
     /**

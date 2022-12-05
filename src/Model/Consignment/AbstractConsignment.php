@@ -34,12 +34,14 @@ abstract class AbstractConsignment
     use HasApiKey;
 
     public const SHIPMENT_OPTION_AGE_CHECK         = 'age_check';
+    public const SHIPMENT_OPTION_HIDE_SENDER       = 'hide_sender';
     public const SHIPMENT_OPTION_INSURANCE         = 'insurance';
     public const SHIPMENT_OPTION_LARGE_FORMAT      = 'large_format';
     public const SHIPMENT_OPTION_ONLY_RECIPIENT    = 'only_recipient';
     public const SHIPMENT_OPTION_RETURN            = 'return';
-    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
     public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
+    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    public const SHIPMENT_OPTION_EXTRA_ASSURANCE   = 'extra_assurance';
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
@@ -422,6 +424,16 @@ abstract class AbstractConsignment
      * @var null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
      */
     private $carrier;
+
+    /**
+     * @var bool
+     */
+    private $hide_sender;
+
+    /**
+     * @var bool
+     */
+    private $extra_assurance;
 
     /**
      * @var bool
@@ -1487,6 +1499,46 @@ abstract class AbstractConsignment
         $this->large_format = $largeFormat && $this->isPackage();
 
         return $this;
+    }
+
+    /**
+     * @param  bool $hideSender
+     * @codeCoverageIgnore
+     * @return $this
+     */
+    public function setHideSender(bool $hideSender): self
+    {
+        $this->hide_sender = $hideSender;
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasHideSender(): ?bool
+    {
+        return $this->hide_sender;
+    }
+
+    /**
+     * @param  bool $extraAssurance
+     * @codeCoverageIgnore
+     * @return $this
+     */
+    public function setExtraAssurance(bool $extraAssurance): self
+    {
+        $this->extra_assurance = $extraAssurance;
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasExtraAssurance(): ?bool
+    {
+        return $this->extra_assurance;
     }
 
     /**

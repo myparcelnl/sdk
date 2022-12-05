@@ -4,28 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
-use MyParcelNL\Sdk\src\Validator\Consignment\InstaboxConsignmentValidator;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\src\Validator\Consignment\DHLForYouConsignmentValidator;
 
-/**
- * @codeCoverageIgnore
- */
-class InstaboxConsignment extends AbstractConsignment
+class DHLForYouConsignment extends AbstractConsignment
 {
-    /** @deprecated use $this->getCarrierId() */
-    public const CARRIER_ID = 5;
-    /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = 'instabox';
+    /**
+     * @var string
+     */
+    protected $carrierClass = CarrierDHLForYou::class;
 
     /**
      * @var string
      */
-    protected $carrierClass = CarrierInstabox::class;
-
-    /**
-     * @var string
-     */
-    protected $validatorClass = InstaboxConsignmentValidator::class;
+    protected $validatorClass = DHLForYouConsignmentValidator::class;
 
     /**
      * @return string[]
@@ -34,16 +26,7 @@ class InstaboxConsignment extends AbstractConsignment
     {
         return [
             self::DELIVERY_TYPE_STANDARD_NAME,
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAllowedExtraOptions(): array
-    {
-        return [
-            self::EXTRA_OPTION_DELIVERY_DATE,
+            self::DELIVERY_TYPE_PICKUP_NAME,
         ];
     }
 
@@ -65,9 +48,10 @@ class InstaboxConsignment extends AbstractConsignment
     {
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_LARGE_FORMAT,
+            self::SHIPMENT_OPTION_HIDE_SENDER,
+            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-            self::SHIPMENT_OPTION_RETURN,
+            self::SHIPMENT_OPTION_SIGNATURE,
             self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
         ];
     }

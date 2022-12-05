@@ -14,6 +14,7 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -76,16 +77,19 @@ class ConsignmentEncode
      */
     public static function encodeExtraOptions(array $consignmentEncoded, AbstractConsignment $consignment): array
     {
+        $isDhl              = CarrierDHLForYou::NAME === $consignment->getCarrierName();
         $consignmentEncoded = array_merge_recursive(
             $consignmentEncoded,
             [
                 'options' => Helpers::toArrayWithoutNull([
-                    'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
-                    'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient'    => Helpers::intOrNull($consignment->isOnlyRecipient()),
-                    'signature'         => Helpers::intOrNull($consignment->isSignature()),
-                    'return'            => Helpers::intOrNull($consignment->isReturn()),
-                    'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                    'package_type'           => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
+                    'label_description'      => $consignment->getLabelDescription(),
+                    'only_recipient'         => Helpers::intOrNull($consignment->isOnlyRecipient()),
+                    'signature'              => Helpers::intOrNull($consignment->isSignature()),
+                    'return'                 => Helpers::intOrNull($consignment->isReturn()),
+                    'same_day_delivery'      => $isDhl ? 1 : Helpers::intOrNull($consignment->isSameDayDelivery()),
+                    'hide_sender'            => Helpers::intOrNull($consignment->hasHideSender()),
+                    'extra_assurance'        => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
             ]
         );
@@ -94,12 +98,20 @@ class ConsignmentEncode
             $consignmentEncoded['options']['large_format'] = (int) $consignment->isLargeFormat();
         }
 
-        if ($consignment->getCountry() == AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
+        if ($consignment->getCountry() === AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
             $consignmentEncoded['options']['age_check']      = 1;
             $consignmentEncoded['options']['only_recipient'] = $consignment->canHaveShipmentOption('only_recipient') ? 1 : 0;
             $consignmentEncoded['options']['signature']      = $consignment->canHaveShipmentOption('signature') ? 1 : 0;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
+        }
+
+        if ($isDhl && $consignment->hasAgeCheck()) {
+            $consignmentEncoded['options']['only_recipient'] = 0;
+        }
+
+        if ($consignment->hasExtraAssurance()) {
+            $consignmentEncoded['options']['hide_sender'] = 0;
         }
 
         if ($consignment->getDeliveryDate()) {

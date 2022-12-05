@@ -17,6 +17,7 @@ class CarrierFactory
         CarrierDPD::class,
         CarrierPostNL::class,
         CarrierInstabox::class,
+        CarrierDHLForYou::class,
     ];
 
     /**

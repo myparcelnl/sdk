@@ -817,6 +817,7 @@ class MyParcelCollection extends Collection
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
      */
     private function getNewCollectionFromResult($result): self
     {

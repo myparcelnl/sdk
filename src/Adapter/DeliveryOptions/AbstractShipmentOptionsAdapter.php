@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
 
@@ -27,6 +28,11 @@ abstract class AbstractShipmentOptionsAdapter
     /**
      * @var bool|null
      */
+    protected $hide_sender;
+
+    /**
+     * @var bool|null
+     */
     protected $large_format;
 
     /**
@@ -43,6 +49,11 @@ abstract class AbstractShipmentOptionsAdapter
      * @var string|null
      */
     protected $label_description;
+
+    /**
+     * @var null|bool
+     */
+    protected $extra_assurance;
 
     /**
      * @return bool|null
@@ -74,6 +85,22 @@ abstract class AbstractShipmentOptionsAdapter
     public function hasLargeFormat(): ?bool
     {
         return $this->large_format;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasHideSender(): ?bool
+    {
+        return $this->hide_sender;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function hasExtraAssurance(): ?bool
+    {
+        return $this->extra_assurance;
     }
 
     /**
@@ -113,7 +140,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $signature
+     * @param  null|bool $signature
      *
      * @return void
      */
@@ -123,7 +150,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|int  $insurance
+     * @param  null|int $insurance
      *
      * @return void
      */
@@ -133,7 +160,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $ageCheck
+     * @param  null|bool $ageCheck
      *
      * @return void
      */
@@ -143,7 +170,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $onlyRecipient
+     * @param  null|bool $onlyRecipient
      *
      * @return void
      */
@@ -153,7 +180,7 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
-     * @param  null|bool  $return
+     * @param  null|bool $return
      *
      * @return void
      */
@@ -162,19 +189,44 @@ abstract class AbstractShipmentOptionsAdapter
         $this->return = $return;
     }
 
+    /**
+     * @param  null|bool $sameDayDelivery
+     *
+     * @return void
+     */
     public function setSameDayDelivery(?bool $sameDayDelivery): void
     {
         $this->same_day_delivery = $sameDayDelivery;
     }
 
     /**
-     * @param  null|bool  $largeFormat
+     * @param  null|bool $hideSender
+     *
+     * @return void
+     */
+    public function setHideSender(?bool $hideSender): void
+    {
+        $this->hide_sender = $hideSender;
+    }
+
+    /**
+     * @param  null|bool $largeFormat
      *
      * @return void
      */
     public function setLargeFormat(?bool $largeFormat): void
     {
         $this->large_format = $largeFormat;
+    }
+
+    /**
+     * @param  null|bool $extraAssurance
+     *
+     * @return void
+     */
+    public function setExtraAssurance(?bool $extraAssurance): void
+    {
+        $this->extra_assurance = $extraAssurance;
     }
 
     /**
@@ -191,6 +243,8 @@ abstract class AbstractShipmentOptionsAdapter
             'same_day_delivery' => $this->isSameDayDelivery(),
             'large_format'      => $this->hasLargeFormat(),
             'label_description' => $this->getLabelDescription(),
+            'hide_sender'       => $this->hasHideSender(),
+            'extra_assurance'   => $this->hasExtraAssurance(),
         ];
     }
 }
