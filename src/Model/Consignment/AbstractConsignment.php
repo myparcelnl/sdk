@@ -1803,6 +1803,16 @@ abstract class AbstractConsignment
     }
 
     /**
+     * Array of insurance possibilities for the local country.
+     *
+     * @return int[]
+     */
+    protected function getEuInsurancePossibilities(): array
+    {
+        return [];
+    }
+
+    /**
      * @param  string $shipmentOption
      *
      * @return bool
