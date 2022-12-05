@@ -142,7 +142,7 @@ class PostNLConsignment extends AbstractConsignment
         ];
     }
 
-    public function getEUInsurancePossibilities(): array
+    public function getEuInsurancePossibilities(): array
     {
         return self::INSURANCE_POSSIBILITIES_EU;
     }
