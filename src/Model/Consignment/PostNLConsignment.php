@@ -143,7 +143,6 @@ class PostNLConsignment extends AbstractConsignment
     public function getEuInsurancePossibilities(): array
     {
         return [
-            0,
             50,
             500,
         ];
