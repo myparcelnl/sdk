@@ -123,4 +123,16 @@ class PostNLConsignment extends AbstractConsignment
             5000,
         ];
     }
+
+    /**
+     * Array of insurance possibilities for Belgium.
+     *
+     * @return int[]
+     */
+    protected function getBeInsurancePossibilities(): array
+    {
+        return [
+            500,
+        ];
+    }
 }
