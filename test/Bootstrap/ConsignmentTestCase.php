@@ -269,8 +269,7 @@ class ConsignmentTestCase extends TestCase
             $data = $this->createConsignmentTestData($data);
         }
 
-        $carrierId = $data[self::CARRIER_ID] ?? CarrierPostNL::ID;
-        //self::skipIfDHLForYou($carrierId);
+        $carrierId   = $data[self::CARRIER_ID] ?? CarrierPostNL::ID;
         $consignment = (ConsignmentFactory::createByCarrierId($carrierId));
 
         Utils::fillObject($consignment, $data);
@@ -400,23 +399,6 @@ class ConsignmentTestCase extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @param  int $carrierId
-     *
-     * @return void
-     */
-    protected static function skipIfDHLForYou(int $carrierId): void
-    {
-        if ($carrierId !== CarrierDHLForYou::ID) {
-            return;
-        }
-
-        self::skipUnlessEnabled(
-            self::ENV_ALLOW_DHL_FOR_YOU,
-            'Testing DHL for you consignments is currently disabled because API cannot return correct properties.'
-        );
     }
 
     /**

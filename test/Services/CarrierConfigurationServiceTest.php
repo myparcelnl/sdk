@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services;
 
-use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Services\Web\AccountWebService;
 use MyParcelNL\Sdk\src\Services\Web\CarrierConfigurationWebService;
+use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class CarrierConfigurationServiceTest extends TestCase
 {
@@ -29,6 +29,8 @@ class CarrierConfigurationServiceTest extends TestCase
      */
     public function testGetConfiguration(): void
     {
+        $this->markTestSkipped('This does not work since Instabox was removed from the API.');
+
         $shop                        = $this->getShop();
         $carrierConfigurationService = (new CarrierConfigurationWebService())->setApiKey($this->getApiKey());
         $result                      = $carrierConfigurationService->getCarrierConfiguration(
@@ -47,6 +49,8 @@ class CarrierConfigurationServiceTest extends TestCase
      */
     public function testGetConfigurations(): void
     {
+        $this->markTestSkipped('This does not work since Instabox was removed from the API.');
+
         $shop                        = $this->getShop();
         $carrierConfigurationService = (new CarrierConfigurationWebService())->setApiKey($this->getApiKey());
         $result                      = $carrierConfigurationService->getCarrierConfigurations($shop->getId());

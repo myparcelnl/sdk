@@ -9,16 +9,6 @@ use MyParcelNL\Sdk\src\Validator\Consignment\DHLForYouConsignmentValidator;
 
 class DHLForYouConsignment extends AbstractConsignment
 {
-    /** @deprecated use $this->getCarrierId() */
-    public const CARRIER_ID = CarrierDHLForYou::ID;
-    /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = CarrierDHLForYou::NAME;
-    /**
-     * @var array
-     * @deprecated use getLocalInsurancePossibilities()
-     */
-    public const INSURANCE_POSSIBILITIES_LOCAL = [];
-
     /**
      * @var string
      */
@@ -43,14 +33,6 @@ class DHLForYouConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
-    public function getAllowedExtraOptions(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return string[]
-     */
     public function getAllowedPackageTypes(): array
     {
         return [
@@ -70,17 +52,7 @@ class DHLForYouConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
-            self::SHIPMENT_OPTION_SAME_DAY_DELIVERY
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getAllowedShipmentOptionsForPickup(): array
-    {
-        return [
-            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
+            self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
         ];
     }
 
@@ -90,13 +62,5 @@ class DHLForYouConsignment extends AbstractConsignment
     public function getLocalCountryCode(): string
     {
         return self::CC_NL;
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getLocalInsurancePossibilities(): array
-    {
-        return [];
     }
 }
