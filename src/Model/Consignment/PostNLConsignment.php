@@ -140,10 +140,21 @@ class PostNLConsignment extends AbstractConsignment
     /**
      * @return int[]
      */
-    public function getEuInsurancePossibilities(): array
+    protected function getEuInsurancePossibilities(): array
     {
         return [
             50,
+            500,
+        ];
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getNlToBeInsurancePossibilities(): array
+    {
+        return [
             500,
         ];
     }

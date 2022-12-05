@@ -524,11 +524,21 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @param  null|string $cc
+     *
      * @return array
      */
-    public function getInsurancePossibilities(): array
+    public function getInsurancePossibilities(?string $cc): array
     {
-        return $this->getLocalInsurancePossibilities();
+        if ($cc === $this->getLocalCountryCode()) {
+            return $this->getLocalInsurancePossibilities();
+        }
+
+        if ($cc === self::CC_BE) {
+            return $this->getNlToBeInsurancePossibilities();
+        }
+
+        return $this->getEuInsurancePossibilities();
     }
 
     /**
@@ -1803,11 +1813,21 @@ abstract class AbstractConsignment
     }
 
     /**
-     * Array of insurance possibilities for the local country.
+     * Array of insurance possibilities for EU.
      *
      * @return int[]
      */
     protected function getEuInsurancePossibilities(): array
+    {
+        return [];
+    }
+
+    /**
+     * Array of insurance possibilities for NL to BE.
+     *
+     * @return array
+     */
+    protected function getNlToBeInsurancePossibilities(): array
     {
         return [];
     }
