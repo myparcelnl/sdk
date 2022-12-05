@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.0](https://github.com/myparcelnl/sdk/compare/v7.4.4...v7.5.0) (2022-12-05)
+
+
+### :sparkles: New Features
+
+* add carrier dhl ([#428](https://github.com/myparcelnl/sdk/issues/428)) ([d1d56cf](https://github.com/myparcelnl/sdk/commit/d1d56cf96b7bcedf94a1d335749409773a6a8471))
+
 ## [7.4.4](https://github.com/myparcelnl/sdk/compare/v7.4.3...v7.4.4) (2022-09-09)
 
 
