@@ -270,7 +270,7 @@ class ConsignmentTestCase extends TestCase
         }
 
         $carrierId = $data[self::CARRIER_ID] ?? CarrierPostNL::ID;
-        self::skipIfDHLForYou($carrierId);
+        //self::skipIfDHLForYou($carrierId);
         $consignment = (ConsignmentFactory::createByCarrierId($carrierId));
 
         Utils::fillObject($consignment, $data);

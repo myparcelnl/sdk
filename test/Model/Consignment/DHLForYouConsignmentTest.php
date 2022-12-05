@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class DHLForYouConsignmentTest extends ConsignmentTestCase
@@ -18,14 +19,20 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
         return $this->createConsignmentProviderDataset([
             'same day delivery' => [
                 self::SAME_DAY_DELIVERY => true,
-           ],
+            ],
             'Hide sender'       => [
-                self::HIDE_SENDER => true,
+                self::HIDE_SENDER       => true,
                 self::SAME_DAY_DELIVERY => true,
             ],
             'Extra assurance'   => [
-                self::EXTRA_ASSURANCE => true,
-                self::SAME_DAY_DELIVERY => true,
+                self::EXTRA_ASSURANCE           => true,
+                self::SAME_DAY_DELIVERY         => true,
+                self::expected(self::INSURANCE) => 0,
+            ],
+            'Return'   => [
+                self::RETURN                 => true,
+                self::expected(self::RETURN) => false,
+                self::SAME_DAY_DELIVERY      => true,
             ],
         ]);
     }

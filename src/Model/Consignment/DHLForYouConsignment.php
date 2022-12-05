@@ -17,9 +17,7 @@ class DHLForYouConsignment extends AbstractConsignment
      * @var array
      * @deprecated use getLocalInsurancePossibilities()
      */
-    public const INSURANCE_POSSIBILITIES_LOCAL = [
-        100,
-    ];
+    public const INSURANCE_POSSIBILITIES_LOCAL = [];
 
     /**
      * @var string
@@ -81,7 +79,9 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     protected function getAllowedShipmentOptionsForPickup(): array
     {
-        return [];
+        return [
+            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
+        ];
     }
 
     /**
@@ -97,8 +97,6 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     protected function getLocalInsurancePossibilities(): array
     {
-        return [
-            100,
-        ];
+        return [];
     }
 }
