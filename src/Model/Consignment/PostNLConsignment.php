@@ -32,7 +32,6 @@ class PostNLConsignment extends AbstractConsignment
         5000,
     ];
     public const INSURANCE_POSSIBILITIES_EU = [
-        0,
         50,
         500,
     ];
