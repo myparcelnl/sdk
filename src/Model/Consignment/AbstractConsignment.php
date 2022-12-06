@@ -470,7 +470,7 @@ abstract class AbstractConsignment
     {
         $allowedDeliveryTypes = $this->getAllowedDeliveryTypes();
         if (self::PACKAGE_TYPE_PACKAGE !== $this->getPackageType()) {
-            $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD];
+            $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD_NAME];
         }
 
         return in_array($deliveryType, $allowedDeliveryTypes, true);
@@ -534,7 +534,7 @@ abstract class AbstractConsignment
             return $this->getLocalInsurancePossibilities();
         }
 
-        if ($cc === self::CC_BE) {
+        if (self::CC_BE === $cc) {
             return $this->getNlToBeInsurancePossibilities();
         }
 
