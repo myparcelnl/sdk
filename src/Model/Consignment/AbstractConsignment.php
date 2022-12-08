@@ -530,15 +530,15 @@ abstract class AbstractConsignment
      */
     public function getInsurancePossibilities(?string $cc): array
     {
-        if ($cc === $this->getLocalCountryCode()) {
-            return $this->getLocalInsurancePossibilities();
-        }
-
-        if (self::CC_BE === $cc) {
+        if (self::CC_BE === $cc && self::CC_NL === $this->getLocalCountryCode()) {
             return $this->getNlToBeInsurancePossibilities();
         }
 
-        return $this->getEuInsurancePossibilities();
+        if ($cc !== $this->getLocalCountryCode()) {
+            return $this->getEuInsurancePossibilities();
+        }
+
+        return $this->getLocalInsurancePossibilities();
     }
 
     /**

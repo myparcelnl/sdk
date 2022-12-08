@@ -21,18 +21,18 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
         return [
             'NL'       => [
                 'data'   => self::BASE_DATA,
-                'expect' => [100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000,],
                 'cc'     => AbstractConsignment::CC_NL,
+                'expect' => [100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000],
             ],
             'NL -> BE' => [
                 'data'   => self::BASE_DATA,
-                'expect' => [500,],
                 'cc'     => AbstractConsignment::CC_BE,
+                'expect' => [500],
             ],
             'NL -> FR' => [
                 'data'   => self::BASE_DATA,
-                'expect' => [50, 500,],
                 'cc'     => self::CC_FR,
+                'expect' => [50, 500],
             ],
         ];
     }
@@ -41,9 +41,9 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
     {
         return [
             'NL' => [
-                'data'   => self::BASE_DATA,
-                'expect' => true,
-                'assert' => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+                'data'        => self::BASE_DATA,
+                'packageType' => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+                'expect'      => true,
             ],
         ];
     }
@@ -52,14 +52,14 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
     {
         return [
             'Standard' => [
-                'data'   => self::BASE_DATA,
-                'expect' => true,
-                'assert' => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'data'         => self::BASE_DATA,
+                'deliveryType' => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'expect'       => true,
             ],
             'Evening'  => [
-                'data'   => self::BASE_DATA + ['packageType' => AbstractConsignment::PACKAGE_TYPE_PACKAGE],
-                'expect' => true,
-                'assert' => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
+                'data'         => self::BASE_DATA + ['packageType' => AbstractConsignment::PACKAGE_TYPE_PACKAGE],
+                'deliveryType' => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
+                'expect'       => true,
             ],
         ];
     }
@@ -67,60 +67,60 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
     /**
      * @param  array  $data
      * @param  array  $expect
-     * @param  string $assert
+     * @param  string $cc
      *
      * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @dataProvider provideInsurancePossibilitiesData
      */
-    public function testInsurancePossibilities(array $data, array $expect, string $assert): void
+    public function testInsurancePossibilities(array $data, string $cc, array $expect): void
     {
         $consignment = $this->getConsignment($data);
 
         self::assertEquals(
             $expect,
-            $consignment->getInsurancePossibilities($assert),
-            "Wrong insurance possibilities for $assert"
+            $consignment->getInsurancePossibilities($cc),
+            "Wrong insurance possibilities for $cc"
         );
     }
 
     /**
      * @param  array  $data
      * @param  bool   $expect
-     * @param  string $assert
+     * @param  string $packageType
      *
      * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @dataProvider provideCanHavePackageTypeData
      */
-    public function testCanHavePackageType(array $data, bool $expect, string $assert): void
+    public function testCanHavePackageType(array $data, string $packageType, bool $expect): void
     {
         $consignment = $this->getConsignment($data);
 
         self::assertEquals(
             $expect,
-            $consignment->canHavePackageType($assert),
-            "Wrong package type $assert"
+            $consignment->canHavePackageType($packageType),
+            "Wrong package type $packageType"
         );
     }
 
     /**
      * @param  array  $data
      * @param  bool   $expect
-     * @param  string $assert
+     * @param  string $deliveryType
      *
      * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @dataProvider provideCanHaveDeliveryTypeData
      */
-    public function testCanHaveDeliveryType(array $data, bool $expect, string $assert): void
+    public function testCanHaveDeliveryType(array $data, string $deliveryType, bool $expect): void
     {
         $consignment = $this->getConsignment($data);
 
         self::assertEquals(
             $expect,
-            $consignment->canHaveDeliveryType($assert),
-            "Wrong delivery type $assert"
+            $consignment->canHaveDeliveryType($deliveryType),
+            "Wrong delivery type $deliveryType"
         );
     }
 
