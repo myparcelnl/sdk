@@ -1712,7 +1712,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         return array_map(
             static function ($value) {
-            if ($value && method_exists($value, 'toArray')) {
+            if ($value && (is_object($value) || is_string($value)) && method_exists($value, 'toArray')) {
                 return $value->toArray();
             }
             return $value;
