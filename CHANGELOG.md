@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.0](https://github.com/myparcelnl/sdk/compare/v7.5.1...v7.6.0) (2022-12-30)
+
+
+### :sparkles: New Features
+
+* add insurance possibilities for eu shipments ([#429](https://github.com/myparcelnl/sdk/issues/429)) ([da725c8](https://github.com/myparcelnl/sdk/commit/da725c8e66875b14fe9daff472bdafabbef68373))
+
 ## [7.5.1](https://github.com/myparcelnl/sdk/compare/v7.5.0...v7.5.1) (2022-12-16)
 
 
