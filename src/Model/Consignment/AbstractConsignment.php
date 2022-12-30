@@ -482,7 +482,7 @@ abstract class AbstractConsignment
     {
         $allowedDeliveryTypes = $this->getAllowedDeliveryTypes();
         if (self::PACKAGE_TYPE_PACKAGE !== $this->getPackageType()) {
-            $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD];
+            $allowedDeliveryTypes = [self::DELIVERY_TYPE_STANDARD_NAME];
         }
 
         return in_array($deliveryType, $allowedDeliveryTypes, true);
@@ -536,10 +536,20 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @param  null|string $cc
+     *
      * @return array
      */
-    public function getInsurancePossibilities(): array
+    public function getInsurancePossibilities(?string $cc): array
     {
+        if (self::CC_BE === $cc && self::CC_NL === $this->getLocalCountryCode()) {
+            return $this->getNlToBeInsurancePossibilities();
+        }
+
+        if ($cc !== $this->getLocalCountryCode()) {
+            return $this->getEuInsurancePossibilities();
+        }
+
         return $this->getLocalInsurancePossibilities();
     }
 
@@ -1850,6 +1860,26 @@ abstract class AbstractConsignment
      * @return int[]
      */
     protected function getLocalInsurancePossibilities(): array
+    {
+        return [];
+    }
+
+    /**
+     * Array of insurance possibilities for EU.
+     *
+     * @return int[]
+     */
+    protected function getEuInsurancePossibilities(): array
+    {
+        return [];
+    }
+
+    /**
+     * Array of insurance possibilities for NL to BE.
+     *
+     * @return array
+     */
+    protected function getNlToBeInsurancePossibilities(): array
     {
         return [];
     }
