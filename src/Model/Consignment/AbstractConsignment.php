@@ -538,9 +538,9 @@ abstract class AbstractConsignment
     /**
      * @param  null|string $cc
      *
-     * @return array
+     * @return int[]
      */
-    public function getInsurancePossibilities(?string $cc): array
+    public function getInsurancePossibilities(?string $cc = null): array
     {
         if (self::CC_BE === $cc && self::CC_NL === $this->getLocalCountryCode()) {
             return $this->getNlToBeInsurancePossibilities();

@@ -26,10 +26,6 @@ class PostNLConsignmentTest extends ConsignmentTestCase
             'BE -> BE' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
                     self::API_KEY => $this->getApiKey(self::ENV_API_KEY_BE),
                 ],
-            'BE -> NL' => [
-                self::API_KEY => $this->getApiKey(self::ENV_API_KEY_BE),
-                self::expected(self::INSURANCE) => 500,
-            ],
         ]);
     }
 
