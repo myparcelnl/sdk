@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.1](https://github.com/myparcelnl/sdk/compare/v7.6.0...v7.6.1) (2023-01-02)
+
+
+### :bug: Bug Fixes
+
+* **consignment:** make insurance possibilities cc parameter optional ([2bf29b0](https://github.com/myparcelnl/sdk/commit/2bf29b0435d8dc9d98faf4cf7d9ffa6f03ce76e4))
+
 ## [7.6.0](https://github.com/myparcelnl/sdk/compare/v7.5.1...v7.6.0) (2022-12-30)
 
 
