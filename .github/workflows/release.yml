@@ -31,8 +31,8 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_REPO_TOKEN }}
 
-      - uses: myparcelnl/actions/yarn2-install@v2
+      - uses: myparcelnl/actions/yarn2-install@v3
 
-      - uses: myparcelnl/actions/semantic-release@v2
+      - uses: myparcelnl/actions/semantic-release@v3
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}

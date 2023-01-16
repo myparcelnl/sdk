@@ -16,7 +16,7 @@ jobs:
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
 
-      - uses: myparcelnl/actions/build-docker-image-reg@v2
+      - uses: myparcelnl/actions/build-docker-image-reg@v3
         if: github.actor != 'dependabot[bot]'
         id: docker
         with:
