@@ -22,30 +22,45 @@ jobs:
         with:
           token: ${{ steps.credentials.outputs.token }}
 
-      - uses: myparcelnl/actions/build-docker-image-reg@v3
+      - name: 'Handle coverage cache'
         if: github.actor != 'dependabot[bot]'
+        uses: actions/cache@v3
+        id: cache-coverage
+        with:
+          path: ./clover.xml
+          key: ${{ runner.os }}-coverage-${{ hashFiles('./src/**', './tests/**') }}
+
+      - uses: myparcelnl/actions/pull-docker-image@v3
+        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
-          image: ${{ github.owner }}//php-sdk
-          target: test
-          registry-user: ${{ github.actor }}
-          registry-password: ${{ steps.credentials.outputs.token }}
+          image: ghcr.io/myparcelnl/php-xd:7.2
 
-      - name: 'Create .env file'
+      - name: 'Install composer dependencies'
+        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
         run: |
-          cat << EOF > .env
-          CI=${CI}
-          API_KEY_NL=${{ secrets.API_KEY_NL }}
-          API_KEY_BE=${{ secrets.API_KEY_BE }}
-          EOF
+          docker run \
+            --volume $PWD:/app \
+            --volume $HOME/.composer:/root/.composer \
+            --env COMPOSER_CACHE_DIR=/root/.composer \
+            ${{ steps.docker.outputs.image }} \
+            composer install --no-progress --no-scripts --no-plugins
 
       - name: 'Run tests'
-        if: github.actor != 'dependabot[bot]'
-        run: docker run --env-file .env ${{ steps.docker.outputs.tagged-image }}
+        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
+        run: |
+          docker run \
+            --volume $PWD:/app \
+            --env CI=${CI} \
+            --env API_KEY_NL=${{ secrets.API_KEY_NL }} \
+            --env API_KEY_BE=${{ secrets.API_KEY_BE }} \
+            ${{ steps.docker.outputs.image }} \
+            vendor/bin/phpunit --coverage-clover coverage.xml
 
       - name: 'Get coverage file from container'
-        if: github.actor != 'dependabot[bot]'
-        run: docker cp $(docker ps -alq):/app/coverage.xml .
+        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
+        run: |
+          docker cp $(docker ps -alq):/app/coverage.xml .
 
       - name: 'Update code coverage'
         if: github.actor != 'dependabot[bot]'
