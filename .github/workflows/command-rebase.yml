@@ -8,6 +8,12 @@ jobs:
   rebase:
     runs-on: ubuntu-22.04
     steps:
+      - uses: myparcelnl/actions/setup-app-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - uses: peter-evans/rebase@v2
         id: rebase
         with:
@@ -17,6 +23,6 @@ jobs:
         if: steps.rebase.outputs.rebased-count == 1
         uses: peter-evans/create-or-update-comment@v2
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
           comment-id: ${{ github.event.client_payload.slash_command.args.named.comment-id }}
           reaction-type: rocket

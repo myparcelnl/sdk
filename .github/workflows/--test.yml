@@ -11,19 +11,25 @@ jobs:
       contents: read
       packages: write
     steps:
+      - uses: myparcelnl/actions/setup-app-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         if: github.actor != 'dependabot[bot]'
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
 
-      - uses: myparcelnl/actions/build-docker-image-reg@v2
+      - uses: myparcelnl/actions/build-docker-image-reg@v3
         if: github.actor != 'dependabot[bot]'
         id: docker
         with:
-          image: myparcelnl/php-sdk
+          image: ${{ github.owner }}//php-sdk
           target: test
           registry-user: ${{ github.actor }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          registry-password: ${{ steps.credentials.outputs.token }}
 
       - name: 'Create .env file'
         run: |

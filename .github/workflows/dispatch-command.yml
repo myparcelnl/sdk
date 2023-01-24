@@ -9,9 +9,15 @@ jobs:
     runs-on: ubuntu-22.04
     if: github.event.issue.pull_request
     steps:
+      - uses: myparcelnl/actions/setup-app-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - uses: peter-evans/slash-command-dispatch@v3
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
           commands: |
             rebase
             test

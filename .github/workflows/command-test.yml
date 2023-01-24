@@ -14,9 +14,15 @@ jobs:
     runs-on: ubuntu-22.04
     needs: test
     steps:
+      - uses: myparcelnl/actions/setup-app-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - name: 'Add reaction'
         uses: peter-evans/create-or-update-comment@v2
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
           comment-id: ${{ github.event.client_payload.slash_command.args.named.comment-id }}
           reaction-type: rocket
