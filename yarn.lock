@@ -66,13 +66,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@myparcel/php-sdk@workspace:."
   dependencies:
-    "@myparcel/semantic-release-config": ^4.0.0
+    "@myparcel/semantic-release-config": ^4.2.2
   languageName: unknown
   linkType: soft
 
-"@myparcel/semantic-release-config@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@myparcel/semantic-release-config@npm:4.0.0"
+"@myparcel/semantic-release-config@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "@myparcel/semantic-release-config@npm:4.2.2"
   dependencies:
     "@iwavesmedia/semantic-release-composer": ^1.0.0
     "@semantic-release/changelog": ^6.0.1
@@ -84,7 +84,7 @@ __metadata:
     "@semantic-release/release-notes-generator": ^10.0.3
     conventional-changelog-conventionalcommits: ^4.0.0 || ^5.0.0
     semantic-release: ^19.0.3
-  checksum: 3001860acee3d609e2031a2a33bd7a3790482b1b2e23112057f858ec494e8966787c78de3a1424fb4a1e310e990b0e39b7d7e79f4bc8e11d586a763ed9eb1b70
+  checksum: 5d53bd53f88771bac718637f4329d6e6ac22681f7c1b605f8119dcb6ee46722c6ae574c37ee385e2b38aeb423deca90919938e406ac40f9e00ff051da5c4c0a9
   languageName: node
   linkType: hard
 
