@@ -1,0 +1,55 @@
+name: 'Push to main 🚀'
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 'Run tests 🧪'
+    uses: ./.github/workflows/--test.yml
+    secrets: inherit
+
+  release:
+    name: 'Release'
+    runs-on: ubuntu-22.04
+    needs:
+      - test
+    steps:
+      - uses: myparcelnl/actions/setup-git-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ steps.credentials.outputs.token }}
+
+      - uses: myparcelnl/actions/yarn2-install@v3
+
+      - uses: myparcelnl/actions/semantic-release@v3
+        with:
+          token: ${{ steps.credentials.outputs.token }}
+
+  rebase-prs:
+    name: 'Rebase pull requests'
+    if: always()
+    needs: release
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: myparcelnl/actions/setup-app-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
+      - uses: peter-evans/rebase@v2
+        with:
+          token: ${{ steps.credentials.outputs.token }}
+          base: ${{ github.ref }}
+          exclude-drafts: true
