@@ -7,7 +7,7 @@
     "extends": "@myparcel/semantic-release-config/github-composer"
   },
   "devDependencies": {
-    "@myparcel/semantic-release-config": "^4.0.0"
+    "@myparcel/semantic-release-config": "^4.2.3"
   },
   "packageManager": "yarn@3.3.0"
 }
