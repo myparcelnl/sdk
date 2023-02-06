@@ -81,16 +81,27 @@ class SplitStreet
             }
         }
 
+        $regex = ValidateStreet::getStreetRegexByCountry($local, $destination);
+
         if ($destination === AbstractConsignment::CC_BE) {
-            // Replace box variants to bus
-            $fullStreet = str_ireplace(self::BOX_SEPARATOR, self::BOX_NL, $fullStreet);
-            // When a caracter is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must replaced by bus
+            $regexResult = preg_match(ValidateStreet::SPLIT_STREET_REGEX_BE, $fullStreet, $matches);
+            if (in_array($matches['box_separator'], self::BOX_SEPARATOR)) {
+                $matches['box_separator'] = self::BOX_NL;
+            }
+
+            $fullStreet = implode(' ', [
+                $matches['street'],
+                $matches['number'],
+                $matches['number_suffix'],
+                $matches['box_separator'],
+                $matches['box_number']
+            ]);
+
+            // When a character is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must be replaced by bus
             foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
                 $fullStreet = preg_replace('#' . $boxRegex . '([0-9])#', self::BOX_NL . ' ' . ltrim('$1'), $fullStreet);
             }
         }
-
-        $regex = ValidateStreet::getStreetRegexByCountry($local, $destination);
 
         if (! $regex) {
             return new FullStreet($fullStreet, null, null, null);
