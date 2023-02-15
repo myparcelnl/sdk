@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Carrier;
 
-use MyParcelNL\Sdk\src\Model\Consignment\DHLForYouConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DHLEuroPlusConsignment;
 
-class CarrierDHLForYou extends AbstractCarrier
+class CarrierDHLEuroPlus extends AbstractCarrier
 {
-    public const CONSIGNMENT = DHLForYouConsignment::class;
-    public const HUMAN       = 'DHL For You Vandaag';
-    public const ID          = 9;
-    public const NAME        = 'dhlforyou';
-    public const TYPE        = 'b2c';
+    public const CONSIGNMENT = DHLEuroPlusConsignment::class;
+    public const HUMAN       = 'DHL Euro Plus';
+    public const ID          = 11;
+    public const NAME        = 'dhleuroplus';
+    public const TYPE        = 'b2b';
 
     /**
      * @var class-string

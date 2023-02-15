@@ -18,6 +18,8 @@ class CarrierFactory
         CarrierPostNL::class,
         CarrierInstabox::class,
         CarrierDHLForYou::class,
+        CarrierDHLParcelConnect::class,
+        CarrierDHLEuroPlus::class
     ];
 
     /**

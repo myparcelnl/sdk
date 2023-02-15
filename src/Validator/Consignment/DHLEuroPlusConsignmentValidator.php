@@ -12,7 +12,7 @@ use MyParcelNL\Sdk\src\Rule\Consignment\MaximumWeightRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\ShipmentOptionsRule;
 use MyParcelNL\Sdk\src\Validator\AbstractValidator;
 
-class DHLForYouConsignmentValidator extends AbstractValidator
+class DHLEuroPlusConsignmentValidator extends AbstractValidator
 {
     /**
      * @return \MyParcelNL\Sdk\src\Rule\Rule[]
@@ -22,12 +22,15 @@ class DHLForYouConsignmentValidator extends AbstractValidator
         return [
             new DeliveryDateRule(),
             new ShipmentOptionsRule([
-                    AbstractConsignment::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
-                ]
-            ),
+                AbstractConsignment::SHIPMENT_OPTION_SIGNATURE,
+            ], [
+                AbstractConsignment::CC_NL => [
+                    AbstractConsignment::EXTRA_OPTION_DELIVERY_SATURDAY,
+                ],
+            ]),
             new DropOffPointRule(),
             new MaximumWeightRule(),
-            new AllowSpecificCountriesRule([AbstractConsignment::CC_NL, AbstractConsignment::CC_BE]),
+            new AllowSpecificCountriesRule(AbstractConsignment::EURO_COUNTRIES),
         ];
     }
 }
