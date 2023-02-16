@@ -182,6 +182,7 @@ abstract class AbstractConsignment
         'ES',
         'SE',
         'XK',
+        'HR',
     ];
 
     /**
