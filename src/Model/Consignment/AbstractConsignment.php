@@ -764,7 +764,7 @@ abstract class AbstractConsignment
     /**
      * @return int|null
      */
-    public function getShopId(): int
+    public function getShopId(): ?int
     {
         return $this->shop_id;
     }
