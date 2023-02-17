@@ -5,6 +5,7 @@ FROM php:${PHP_VERSION}-alpine AS base
 RUN apk update && \
     apk add --no-cache \
         composer \
+    linux-headers \
         # https://github.com/krallin/tini
         tini \
         # Dependencies needed for installing XDebug
