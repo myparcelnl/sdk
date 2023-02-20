@@ -24,12 +24,12 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
                 self::HIDE_SENDER       => true,
                 self::SAME_DAY_DELIVERY => true,
             ],
-            'Insurance'   => [
-                self::INSURANCE           => 500,
+            'Insurance'         => [
+                self::INSURANCE                 => 500,
                 self::SAME_DAY_DELIVERY         => true,
                 self::expected(self::INSURANCE) => 500,
             ],
-            'Return'   => [
+            'Return'            => [
                 self::RETURN                 => true,
                 self::expected(self::RETURN) => false,
                 self::SAME_DAY_DELIVERY      => true,
@@ -58,11 +58,11 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
         return array_replace(
             parent::getDefaultConsignmentData(),
             [
-                self::CARRIER_ID        => CarrierDHLForYou::ID,
-                self::FULL_STREET       => 'Meander 631',
-                self::POSTAL_CODE       => '6825ME',
-                self::CITY              => 'Arnhem',
-                self::PHONE             => '123456',
+                self::CARRIER_ID  => CarrierDHLForYou::ID,
+                self::FULL_STREET => 'Meander 631',
+                self::POSTAL_CODE => '6825ME',
+                self::CITY        => 'Arnhem',
+                self::PHONE       => '123456',
             ]
         );
     }
