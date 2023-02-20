@@ -13,7 +13,7 @@ class CarrierDHLEuroPlus extends AbstractCarrier
     public const HUMAN       = 'DHL Euro Plus';
     public const ID          = 11;
     public const NAME        = 'dhleuroplus';
-    public const TYPE        = AbstractConsignment::TYPE_B2C;
+    public const TYPE        = AbstractConsignment::TYPE_B2B;
 
     /**
      * @var class-string
