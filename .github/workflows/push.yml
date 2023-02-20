@@ -28,13 +28,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ steps.credentials.outputs.token }}
+          persist-credentials: false
 
-      - uses: myparcelnl/actions/yarn2-install@v3
+      - uses: myparcelnl/actions/yarn-install@v3
+        with:
+          node-version: 18
 
       - uses: myparcelnl/actions/semantic-release@v3
         with:
-          token: ${{ steps.credentials.outputs.token }}
+          token: ${{ secrets.GH_REPO_TOKEN }}
 
   rebase-prs:
     name: 'Rebase pull requests'
