@@ -49,7 +49,7 @@ class DHLForYouConsignment extends AbstractConsignment
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
             self::SHIPMENT_OPTION_HIDE_SENDER,
-            self::SHIPMENT_OPTION_EXTRA_ASSURANCE,
+            self::SHIPMENT_OPTION_INSURANCE,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
             self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
@@ -77,4 +77,20 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return self::CC_NL;
     }
+
+    /**
+     * @return int[]
+     */
+    protected function getLocalInsurancePossibilities(): array
+    {
+        return [
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+        ];
+    }
+
 }

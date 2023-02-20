@@ -41,6 +41,9 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_RETURN            = 'return';
     public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
     public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    /**
+     * @deprecated since jan 2023 extra_assurance is no longer supported
+     */
     public const SHIPMENT_OPTION_EXTRA_ASSURANCE   = 'extra_assurance';
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
@@ -182,6 +185,7 @@ abstract class AbstractConsignment
         'ES',
         'SE',
         'XK',
+        'HR',
     ];
 
     /**
@@ -764,7 +768,7 @@ abstract class AbstractConsignment
     /**
      * @return int|null
      */
-    public function getShopId(): int
+    public function getShopId(): ?int
     {
         return $this->shop_id;
     }
@@ -1535,6 +1539,7 @@ abstract class AbstractConsignment
      * @param  bool $extraAssurance
      * @codeCoverageIgnore
      * @return $this
+     * @deprecated since 2023
      */
     public function setExtraAssurance(bool $extraAssurance): self
     {
@@ -1545,6 +1550,7 @@ abstract class AbstractConsignment
 
     /**
      * @return null|bool
+     * @deprecated since 2023
      */
     public function hasExtraAssurance(): ?bool
     {

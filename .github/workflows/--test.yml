@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v3
         id: cache-coverage
         with:
-          path: ./clover.xml
+          path: ./coverage.xml
           key: ${{ runner.os }}-coverage-${{ hashFiles('./src/**', './tests/**') }}
 
       - uses: myparcelnl/actions/pull-docker-image@v3

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.2](https://github.com/myparcelnl/sdk/compare/v7.6.1...v7.6.2) (2023-02-20)
+
+
+### :bug: Bug Fixes
+
+* **consignment:** add croatian country code ([#444](https://github.com/myparcelnl/sdk/issues/444)) ([526e007](https://github.com/myparcelnl/sdk/commit/526e007532aa99375d8bad1b5a76661ba9c9da07)), closes [#443](https://github.com/myparcelnl/sdk/issues/443)
+* **consignment:** type error on getting shop id ([#436](https://github.com/myparcelnl/sdk/issues/436)) ([aae620a](https://github.com/myparcelnl/sdk/commit/aae620a9ecbdde2deaf51ec850c9c3b1aaa48925))
+* use correct insurance format ([#445](https://github.com/myparcelnl/sdk/issues/445)) ([78318aa](https://github.com/myparcelnl/sdk/commit/78318aa1404574fc93c89a250c6079e295e90317))
+
 ## [7.6.1](https://github.com/myparcelnl/sdk/compare/v7.6.0...v7.6.1) (2023-01-02)
 
 
