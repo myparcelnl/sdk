@@ -23,7 +23,7 @@ class AllowSpecificCountriesRule extends Rule
      */
     public function validate($validationSubject): void
     {
-        if (! $validationSubject->isToEuCountry()) {
+        if (! in_array($validationSubject->getCountry(), $this->allowedCountries, true)) {
             $this->addError(
                 'Shipments are only allowed to the following countries: ' . implode(', ', $this->allowedCountries)
             );
