@@ -25,9 +25,9 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
                 self::SAME_DAY_DELIVERY => true,
             ],
             'Insurance'   => [
-                self::INSURANCE           => 0,
+                self::INSURANCE           => 500,
                 self::SAME_DAY_DELIVERY         => true,
-                self::expected(self::INSURANCE) => 0,
+                self::expected(self::INSURANCE) => 500,
             ],
             'Return'   => [
                 self::RETURN                 => true,
