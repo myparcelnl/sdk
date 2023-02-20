@@ -36,12 +36,13 @@ class ShipmentOptionsRule extends Rule
     public function validate($validationSubject): void
     {
         $options = [
-            AbstractConsignment::SHIPMENT_OPTION_AGE_CHECK      => $validationSubject->hasAgeCheck(),
-            AbstractConsignment::SHIPMENT_OPTION_INSURANCE      => $validationSubject->getInsurance(),
-            AbstractConsignment::SHIPMENT_OPTION_LARGE_FORMAT   => $validationSubject->isLargeFormat(),
-            AbstractConsignment::SHIPMENT_OPTION_ONLY_RECIPIENT => $validationSubject->isOnlyRecipient(),
-            AbstractConsignment::SHIPMENT_OPTION_RETURN         => $validationSubject->isReturn(),
-            AbstractConsignment::SHIPMENT_OPTION_SIGNATURE      => $validationSubject->isSignature(),
+            AbstractConsignment::SHIPMENT_OPTION_AGE_CHECK         => $validationSubject->hasAgeCheck(),
+            AbstractConsignment::SHIPMENT_OPTION_INSURANCE         => $validationSubject->getInsurance(),
+            AbstractConsignment::SHIPMENT_OPTION_LARGE_FORMAT      => $validationSubject->isLargeFormat(),
+            AbstractConsignment::SHIPMENT_OPTION_ONLY_RECIPIENT    => $validationSubject->isOnlyRecipient(),
+            AbstractConsignment::SHIPMENT_OPTION_RETURN            => $validationSubject->isReturn(),
+            AbstractConsignment::SHIPMENT_OPTION_SIGNATURE         => $validationSubject->isSignature(),
+            AbstractConsignment::SHIPMENT_OPTION_SAME_DAY_DELIVERY => $validationSubject->isSameDayDelivery(),
         ];
 
         foreach ($options as $option => $value) {
@@ -60,7 +61,6 @@ class ShipmentOptionsRule extends Rule
     }
 
     /**
-     * TODO: Test function and check if it works
      * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $validationSubject
      * @param  array                                                     $options
      */
