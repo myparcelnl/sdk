@@ -32,18 +32,18 @@ class DHLParcelConnectConsignmentTest extends ConsignmentTestCase
         ];
 
         return $this->createConsignmentProviderDataset([
-            'Signature'       => [
-                self::SIGNATURE => true,
-            ] + $pickupInformation,
+            'Signature' => [
+                    self::SIGNATURE => true,
+                ] + $pickupInformation,
             'Insurance' => [
-                self::expected(self::INSURANCE) => 0,
-                self::SIGNATURE                 => true,
-            ] + $pickupInformation,
-            'Return'          => [
-                self::RETURN                 => true,
-                self::expected(self::RETURN) => false,
-                self::SIGNATURE              => true,
-            ] + $pickupInformation,
+                    self::expected(self::INSURANCE) => 0,
+                    self::SIGNATURE                 => true,
+                ] + $pickupInformation,
+            'Return'    => [
+                    self::RETURN                 => true,
+                    self::expected(self::RETURN) => false,
+                    self::SIGNATURE              => true,
+                ] + $pickupInformation,
         ]);
     }
 

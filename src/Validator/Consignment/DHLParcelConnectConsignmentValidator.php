@@ -21,7 +21,7 @@ class DHLParcelConnectConsignmentValidator extends AbstractValidator
         return [
             new DeliveryDateRule(),
             new ShipmentOptionsRule([
-                AbstractConsignment::SHIPMENT_OPTION_SIGNATURE
+                AbstractConsignment::SHIPMENT_OPTION_SIGNATURE,
             ]),
             new DropOffPointRule(),
             new MaximumWeightRule(),

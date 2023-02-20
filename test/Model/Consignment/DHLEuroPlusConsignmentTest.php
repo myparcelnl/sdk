@@ -16,18 +16,18 @@ class DHLEuroPlusConsignmentTest extends ConsignmentTestCase
     public function provideDHLEuroPlusConsignmentsData(): array
     {
         return $this->createConsignmentProviderDataset([
-            'Signature'       => [
+            'Signature' => [
                 self::SIGNATURE => true,
             ],
             'Insurance' => [
-                self::INSURANCE           => 0,
+                self::INSURANCE                 => 0,
                 self::expected(self::INSURANCE) => 0,
                 self::SIGNATURE                 => true,
             ],
-            'Return'          => [
+            'Return'    => [
                 self::RETURN                 => true,
                 self::expected(self::RETURN) => false,
-                self::SIGNATURE                 => true,
+                self::SIGNATURE              => true,
             ],
         ]);
     }
