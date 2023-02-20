@@ -11,20 +11,20 @@ class ShipmentOptionsRule extends Rule
 {
     private $requiredOptions;
 
-    private $conditionalOptions;
+    private $countrySpecific;
 
     /**
      * @param $required
-     * @param $conditional
+     * @param $countrySpecific
      */
-    public function __construct($required = null, $conditional = null)
+    public function __construct($required = null, $countrySpecific = null)
     {
         if (is_array($required)) {
             $this->requiredOptions = $required;
         }
 
-        if (is_array($conditional)) {
-            $this->conditionalOptions = $conditional;
+        if (is_array($countrySpecific)) {
+            $this->countrySpecific = $countrySpecific;
         }
 
         parent::__construct();
@@ -55,18 +55,17 @@ class ShipmentOptionsRule extends Rule
             $this->validateRequired($options);
         }
 
-        if (! empty($this->conditionalOptions)) {
-            $this->validateConditional($validationSubject, $options);
+        if (! empty($this->countrySpecific)) {
+            $this->validateCountrySpecific($validationSubject);
         }
     }
 
     /**
      * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $validationSubject
-     * @param  array                                                     $options
      */
-    private function validateConditional(AbstractConsignment $validationSubject, array $options): void
+    private function validateCountrySpecific(AbstractConsignment $validationSubject): void
     {
-        foreach ($this->conditionalOptions as $country => $conditionalOption) {
+        foreach ($this->countrySpecific as $country => $conditionalOption) {
             if ($country === $validationSubject->getCountry()) {
                 foreach ($conditionalOption as $option) {
                     if ($option && ! in_array($option, $validationSubject->getAllowedShipmentOptions(), true)) {

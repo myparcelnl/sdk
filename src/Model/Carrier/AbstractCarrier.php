@@ -27,6 +27,11 @@ abstract class AbstractCarrier
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $type;
+
+    /**
      * @return class-string<\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment>
      */
     public function getConsignmentClass(): string
@@ -60,6 +65,17 @@ abstract class AbstractCarrier
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return bool
+     */
     public function isDropOffPointRequired(): bool
     {
         return false;
