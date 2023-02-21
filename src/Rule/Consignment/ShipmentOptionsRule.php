@@ -62,14 +62,14 @@ class ShipmentOptionsRule extends Rule
         }
 
         if (! empty($this->countrySpecificOptions)) {
-            $this->validateCountrySpecific($validationSubject);
+            $this->validateCountrySpecificOptions($validationSubject);
         }
     }
 
     /**
      * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $validationSubject
      */
-    private function validateCountrySpecific(AbstractConsignment $validationSubject): void
+    private function validateCountrySpecificOptions(AbstractConsignment $validationSubject): void
     {
         foreach ($this->countrySpecificOptions as $country => $conditionalOption) {
             if ($country !== $validationSubject->getCountry()){
