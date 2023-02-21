@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Validator\Consignment;
 
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Rule\Consignment\AllowSpecificCountriesRule;
+use MyParcelNL\Sdk\src\Rule\Consignment\RestrictCountriesRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\DeliveryDateRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\DropOffPointRule;
 use MyParcelNL\Sdk\src\Rule\Consignment\MaximumWeightRule;
@@ -27,7 +27,7 @@ class DHLForYouConsignmentValidator extends AbstractValidator
             ),
             new DropOffPointRule(),
             new MaximumWeightRule(),
-            new AllowSpecificCountriesRule([AbstractConsignment::CC_NL, AbstractConsignment::CC_BE]),
+            new RestrictCountriesRule([AbstractConsignment::CC_NL, AbstractConsignment::CC_BE]),
         ];
     }
 }

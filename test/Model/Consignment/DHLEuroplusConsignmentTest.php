@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroPlus;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
-class DHLEuroPlusConsignmentTest extends ConsignmentTestCase
+class DHLEuroplusConsignmentTest extends ConsignmentTestCase
 {
     /**
      * @return array
@@ -53,7 +53,7 @@ class DHLEuroPlusConsignmentTest extends ConsignmentTestCase
         return array_replace(
             parent::getDefaultConsignmentData(),
             [
-                self::CARRIER_ID  => CarrierDHLEuroPlus::ID,
+                self::CARRIER_ID  => CarrierDHLEuroplus::ID,
                 self::FULL_STREET => 'Feldstrasse 17',
                 self::POSTAL_CODE => '39394',
                 self::CITY        => 'Schwanebeck',

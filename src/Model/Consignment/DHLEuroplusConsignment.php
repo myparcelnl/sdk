@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroPlus;
-use MyParcelNL\Sdk\src\Validator\Consignment\DHLEuroPlusConsignmentValidator;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
+use MyParcelNL\Sdk\src\Validator\Consignment\DHLEuroplusConsignmentValidator;
 
-class DHLEuroPlusConsignment extends AbstractConsignment
+class DHLEuroplusConsignment extends AbstractConsignment
 {
     /**
      * @var string
      */
-    protected $carrierClass = CarrierDHLEuroPlus::class;
+    protected $carrierClass = CarrierDHLEuroplus::class;
 
     /**
      * @var string
      */
-    protected $validatorClass = DHLEuroPlusConsignmentValidator::class;
+    protected $validatorClass = DHLEuroplusConsignmentValidator::class;
 
     /**
      * @return string[]

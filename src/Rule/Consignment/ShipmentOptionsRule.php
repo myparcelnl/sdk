@@ -9,22 +9,28 @@ use MyParcelNL\Sdk\src\Rule\Rule;
 
 class ShipmentOptionsRule extends Rule
 {
+    /**
+     * @var array
+     */
     private $requiredOptions;
 
-    private $countrySpecific;
+    /**
+     * @var array
+     */
+    private $countrySpecificOptions;
 
     /**
-     * @param $required
-     * @param $countrySpecific
+     * @param  null|array $required
+     * @param  null|array $countrySpecificOptions
      */
-    public function __construct($required = null, $countrySpecific = null)
+    public function __construct(array $required = null, array $countrySpecificOptions = null)
     {
         if (is_array($required)) {
             $this->requiredOptions = $required;
         }
 
-        if (is_array($countrySpecific)) {
-            $this->countrySpecific = $countrySpecific;
+        if (is_array($countrySpecificOptions)) {
+            $this->countrySpecificOptions = $countrySpecificOptions;
         }
 
         parent::__construct();
@@ -52,10 +58,10 @@ class ShipmentOptionsRule extends Rule
         }
 
         if (! empty($this->requiredOptions)) {
-            $this->validateRequired($options);
+            $this->validateRequiredOptions($options);
         }
 
-        if (! empty($this->countrySpecific)) {
+        if (! empty($this->countrySpecificOptions)) {
             $this->validateCountrySpecific($validationSubject);
         }
     }
@@ -65,13 +71,18 @@ class ShipmentOptionsRule extends Rule
      */
     private function validateCountrySpecific(AbstractConsignment $validationSubject): void
     {
-        foreach ($this->countrySpecific as $country => $conditionalOption) {
-            if ($country === $validationSubject->getCountry()) {
-                foreach ($conditionalOption as $option) {
-                    if ($option && ! in_array($option, $validationSubject->getAllowedShipmentOptions(), true)) {
-                        $this->addError($option . ' is not allowed in ' . get_class($validationSubject));
-                    }
+        foreach ($this->countrySpecificOptions as $country => $conditionalOption) {
+            if ($country !== $validationSubject->getCountry()){
+                continue;
+            }
+
+            foreach($conditionalOption as $option) {
+                if (in_array($option, $validationSubject->getAllowedShipmentOptions(), true)) {
+                    continue;
                 }
+
+                $this->addError($option . ' is not allowed in ' . get_class($validationSubject));
+                return;
             }
         }
     }
@@ -79,12 +90,15 @@ class ShipmentOptionsRule extends Rule
     /**
      * @param  array $options
      */
-    private function validateRequired(array $options): void
+    private function validateRequiredOptions(array $options): void
     {
         foreach ($this->requiredOptions as $requiredOption) {
-            if (! $options[$requiredOption]) {
-                $this->addError($requiredOption . ' is required for this carrier');
+            if ($options[$requiredOption]) {
+                continue;
             }
+
+            $this->addError( "$requiredOption is required for this carrier");
+            return;
         }
     }
 }

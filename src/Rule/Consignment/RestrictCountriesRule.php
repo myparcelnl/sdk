@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\src\Rule\Consignment;
 
 use MyParcelNL\Sdk\src\Rule\Rule;
 
-class AllowSpecificCountriesRule extends Rule
+class RestrictCountriesRule extends Rule
 {
     private $allowedCountries;
 
@@ -23,10 +23,12 @@ class AllowSpecificCountriesRule extends Rule
      */
     public function validate($validationSubject): void
     {
-        if (! in_array($validationSubject->getCountry(), $this->allowedCountries, true)) {
-            $this->addError(
-                'Shipments are only allowed to the following countries: ' . implode(', ', $this->allowedCountries)
-            );
+        if (in_array($validationSubject->getCountry(), $this->allowedCountries, true)) {
+            return;
         }
+
+        $this->addError(
+            'Shipments are only allowed to the following countries: ' . implode(', ', $this->allowedCountries)
+        );
     }
 }
