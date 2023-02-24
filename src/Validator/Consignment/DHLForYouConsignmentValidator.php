@@ -22,7 +22,7 @@ class DHLForYouConsignmentValidator extends AbstractValidator
         return [
             new DeliveryDateRule(),
             new ShipmentOptionsRule([
-                    AbstractConsignment::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
+                    //AbstractConsignment::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
                 ]
             ),
             new DropOffPointRule(),
