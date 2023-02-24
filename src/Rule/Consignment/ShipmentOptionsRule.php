@@ -72,16 +72,16 @@ class ShipmentOptionsRule extends Rule
     private function validateCountrySpecificOptions(AbstractConsignment $validationSubject): void
     {
         foreach ($this->countrySpecificOptions as $country => $conditionalOption) {
-            if ($country !== $validationSubject->getCountry()){
+            if ($country !== $validationSubject->getCountry()) {
                 continue;
             }
 
-            foreach($conditionalOption as $option) {
+            foreach ($conditionalOption as $option) {
                 if (in_array($option, $validationSubject->getAllowedShipmentOptions(), true)) {
                     continue;
                 }
 
-                $this->addError($option . ' is not allowed in ' . get_class($validationSubject));
+                $this->addError(sprintf('%s is not allowed in %s', $option, get_class($validationSubject)));
                 return;
             }
         }

@@ -22,6 +22,8 @@ class DHLForYouConsignmentValidator extends AbstractValidator
         return [
             new DeliveryDateRule(),
             new ShipmentOptionsRule([
+                    // Tijdelijk uitgezet i.v.m. DHL Pilot (MY-35887) zodat same_day_delivery uitgezet kan worden vanuit de plugin.
+                    // Dient weer geactiveerd te worden zodra de carriers opgesplitst zijn.
                     //AbstractConsignment::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
                 ]
             ),
