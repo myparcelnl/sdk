@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\DHLForYouConsignment;
 class CarrierDHLForYou extends AbstractCarrier
 {
     public const CONSIGNMENT = DHLForYouConsignment::class;
-    public const HUMAN       = 'DHL For You Vandaag';
+    public const HUMAN       = 'DHL For You';
     public const ID          = 9;
     public const NAME        = 'dhlforyou';
     public const TYPE        = AbstractConsignment::TYPE_B2C;

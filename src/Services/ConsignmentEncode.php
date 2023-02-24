@@ -53,18 +53,18 @@ class ConsignmentEncode
     public function apiEncode(): array
     {
         $this->encodeBase()
-             ->encodeStreet();
+            ->encodeStreet();
 
         $this->consignmentEncoded = self::encodeExtraOptions(
             $this->consignmentEncoded,
             Arr::first($this->consignments)
         );
         $this->encodeDeliveryType()
-             ->encodePickup()
-             ->encodePhysicalProperties()
-             ->encodeCdCountry()
-             ->encodeMultiCollo()
-             ->encodeDropOffPoint();
+            ->encodePickup()
+            ->encodePhysicalProperties()
+            ->encodeCdCountry()
+            ->encodeMultiCollo()
+            ->encodeDropOffPoint();
 
         return $this->consignmentEncoded;
     }
@@ -77,7 +77,6 @@ class ConsignmentEncode
      */
     public static function encodeExtraOptions(array $consignmentEncoded, AbstractConsignment $consignment): array
     {
-        $isDhl              = CarrierDHLForYou::NAME === $consignment->getCarrierName();
         $consignmentEncoded = array_merge_recursive(
             $consignmentEncoded,
             [
@@ -87,7 +86,7 @@ class ConsignmentEncode
                     'only_recipient'         => Helpers::intOrNull($consignment->isOnlyRecipient()),
                     'signature'              => Helpers::intOrNull($consignment->isSignature()),
                     'return'                 => Helpers::intOrNull($consignment->isReturn()),
-                    'same_day_delivery'      => $isDhl ? 1 : Helpers::intOrNull($consignment->isSameDayDelivery()),
+                    'same_day_delivery'      => Helpers::intOrNull($consignment->isSameDayDelivery()),
                     'hide_sender'            => Helpers::intOrNull($consignment->hasHideSender()),
                     'extra_assurance'        => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
@@ -104,10 +103,6 @@ class ConsignmentEncode
             $consignmentEncoded['options']['signature']      = $consignment->canHaveShipmentOption('signature') ? 1 : 0;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
-        }
-
-        if ($isDhl && $consignment->hasAgeCheck()) {
-            $consignmentEncoded['options']['only_recipient'] = 0;
         }
 
         if ($consignment->hasExtraAssurance()) {
@@ -226,8 +221,16 @@ class ConsignmentEncode
         if (empty($consignment->getPhysicalProperties()) && $consignment->getPackageType() != AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
             return $this;
         }
+
         if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP && ! isset($consignment->getPhysicalProperties()['weight'])) {
             throw new MissingFieldException('Weight in physical properties must be set for digital stamp shipments.');
+        }
+
+        if (CarrierDHLForYou::NAME === $consignment->getCarrier()->getName()) {
+            $consignment->setPhysicalProperties([
+                'weight' => $consignment->getTotalWeight(),
+                'volume' => 1,
+            ]);
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
