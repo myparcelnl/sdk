@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
-use MyParcelNL\Sdk\src\Validator\Consignment\DHLForYouConsignmentValidator;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLParcelConnect;
+use MyParcelNL\Sdk\src\Validator\Consignment\DHLParcelConnectConsignmentValidator;
 
-class DHLForYouConsignment extends AbstractConsignment
+class DHLParcelConnectConsignment extends AbstractConsignment
 {
     /**
      * @var string
      */
-    protected $carrierClass = CarrierDHLForYou::class;
+    protected $carrierClass = CarrierDHLParcelConnect::class;
 
     /**
      * @var string
      */
-    protected $validatorClass = DHLForYouConsignmentValidator::class;
+    protected $validatorClass = DHLParcelConnectConsignmentValidator::class;
 
     /**
      * @return string[]
@@ -47,12 +47,8 @@ class DHLForYouConsignment extends AbstractConsignment
     public function getAllowedShipmentOptions(): array
     {
         return [
-            self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_HIDE_SENDER,
             self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
-            self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
         ];
     }
 
@@ -62,10 +58,6 @@ class DHLForYouConsignment extends AbstractConsignment
     public function getAllowedShipmentOptionsForPickup(): array
     {
         return [
-            self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_HIDE_SENDER,
-            self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }
@@ -83,14 +75,6 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     protected function getLocalInsurancePossibilities(): array
     {
-        return [
-            500,
-            1000,
-            1500,
-            2000,
-            2500,
-            3000,
-        ];
+        return [500, 1000, 5000];
     }
-
 }

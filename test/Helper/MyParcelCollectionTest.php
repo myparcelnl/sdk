@@ -74,6 +74,9 @@ class MyParcelCollectionTest extends CollectionTestCase
             return $returnConsignment;
         });
 
+        $collection->toArray()[1]->setLabelDescription("Return: first consignment");
+        $collection->toArray()[3]->setLabelDescription("Return: second consignment");
+
         self::assertSame([
             'first consignment',
             'Return: first consignment',

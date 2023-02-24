@@ -158,6 +158,9 @@ abstract class AbstractConsignment
     public const CC_NL = 'NL';
     public const CC_BE = 'BE';
 
+    public const TYPE_B2C = 'b2c';
+    public const TYPE_B2B = 'b2b';
+
     public const EURO_COUNTRIES = [
         'NL',
         'BE',
