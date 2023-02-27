@@ -33,6 +33,16 @@ class DHLForYouConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
+    public function getAllowedExtraOptions(): array
+    {
+        return [
+            self::EXTRA_OPTION_DELIVERY_DATE,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
     public function getAllowedPackageTypes(): array
     {
         return [
