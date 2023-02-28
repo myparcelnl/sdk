@@ -72,11 +72,7 @@ class DHLForYouConsignment extends AbstractConsignment
     public function getAllowedShipmentOptionsForPickup(): array
     {
         return [
-            self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_HIDE_SENDER,
             self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-            self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }
 

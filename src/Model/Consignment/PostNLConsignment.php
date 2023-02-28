@@ -98,7 +98,7 @@ class PostNLConsignment extends AbstractConsignment
     /**
      * @return string[]
      */
-    protected function getAllowedShipmentOptionsForPickup(): array
+    public function getAllowedShipmentOptionsForPickup(): array
     {
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
