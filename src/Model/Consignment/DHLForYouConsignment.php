@@ -36,7 +36,7 @@ class DHLForYouConsignment extends AbstractConsignment
     public function getAllowedExtraOptions(): array
     {
         return [
-            self::EXTRA_OPTION_DELIVERY_DATE,
+//            self::EXTRA_OPTION_DELIVERY_DATE,
         ];
     }
 
