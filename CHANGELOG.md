@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.1](https://github.com/myparcelnl/sdk/compare/v7.7.0...v7.7.1) (2023-03-01)
+
+
+### :bug: Bug Fixes
+
+* add exceptions for dhl carriers ([#447](https://github.com/myparcelnl/sdk/issues/447)) ([959b232](https://github.com/myparcelnl/sdk/commit/959b2327ad8975e64fd7e6d32706da586c5af9e0))
+
 ## [7.7.0](https://github.com/myparcelnl/sdk/compare/v7.6.2...v7.7.0) (2023-02-24)
 
 
