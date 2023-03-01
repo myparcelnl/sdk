@@ -62,11 +62,7 @@ class DHLForYouConsignment extends AbstractConsignment
     public function getAllowedShipmentOptionsForPickup(): array
     {
         return [
-            self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_HIDE_SENDER,
             self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-            self::SHIPMENT_OPTION_SIGNATURE,
         ];
     }
 
@@ -90,7 +86,29 @@ class DHLForYouConsignment extends AbstractConsignment
             2000,
             2500,
             3000,
+            3500,
+            4000,
+            4500,
+            5000,
         ];
     }
 
+    /**
+     * @return array
+     */
+    protected function getNlToBeInsurancePossibilities(): array
+    {
+        return [
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
+    }
 }

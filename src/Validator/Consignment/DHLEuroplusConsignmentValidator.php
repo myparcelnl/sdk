@@ -21,16 +21,7 @@ class DHLEuroplusConsignmentValidator extends AbstractValidator
     {
         return [
             new DeliveryDateRule(),
-            new ShipmentOptionsRule(
-                [
-                    AbstractConsignment::SHIPMENT_OPTION_SIGNATURE,
-                ],
-                [
-                AbstractConsignment::CC_NL => [
-                    AbstractConsignment::EXTRA_OPTION_DELIVERY_SATURDAY,
-                ],
-            ]
-            ),
+            new ShipmentOptionsRule(),
             new DropOffPointRule(),
             new MaximumWeightRule(),
             new RestrictCountriesRule(AbstractConsignment::EURO_COUNTRIES),

@@ -73,8 +73,19 @@ class DHLParcelConnectConsignment extends AbstractConsignment
     /**
      * @return int[]
      */
-    protected function getLocalInsurancePossibilities(): array
+    protected function getEuInsurancePossibilities(): array
     {
-        return [500, 1000, 5000];
+        return [
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
     }
 }

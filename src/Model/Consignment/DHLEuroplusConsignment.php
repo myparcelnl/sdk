@@ -65,7 +65,18 @@ class DHLEuroplusConsignment extends AbstractConsignment
     */
     protected function getLocalInsurancePossibilities(): array
     {
-        return [500, 1000, 5000];
+        return [
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
     }
 
     /**
@@ -73,6 +84,33 @@ class DHLEuroplusConsignment extends AbstractConsignment
      */
     protected function getEuInsurancePossibilities(): array
     {
-        return [500, 1000, 5000];
+        return [
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
+    }
+
+    protected function getNlToBeInsurancePossibilities(): array
+    {
+        return [
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
     }
 }
