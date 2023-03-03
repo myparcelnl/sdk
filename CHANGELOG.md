@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.2](https://github.com/myparcelnl/sdk/compare/v7.7.1...v7.7.2) (2023-03-03)
+
+
+### :bug: Bug Fixes
+
+* add valid insurance amounts for nl to be for postnl ([#448](https://github.com/myparcelnl/sdk/issues/448)) ([94e69f0](https://github.com/myparcelnl/sdk/commit/94e69f07c21825d94752c4774ae9daa272608cd1))
+
 ## [7.7.1](https://github.com/myparcelnl/sdk/compare/v7.7.0...v7.7.1) (2023-03-01)
 
 
