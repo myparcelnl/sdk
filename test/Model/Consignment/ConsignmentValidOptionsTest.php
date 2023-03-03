@@ -27,7 +27,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
             'NL -> BE' => [
                 'data'   => self::BASE_DATA,
                 'cc'     => AbstractConsignment::CC_BE,
-                'expect' => [500],
+                'expect' => [100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000],
             ],
             'NL -> FR' => [
                 'data'   => self::BASE_DATA,
