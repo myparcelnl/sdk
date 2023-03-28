@@ -49,6 +49,18 @@ class OrderCollection extends Collection
         return self::createCollectionFromResponse($request);
     }
 
+    public static function getOrder(string $uuid, string $apiKey)
+    {
+        $request = (new MyParcelRequest())
+            ->setRequestParameters($apiKey)
+            ->sendRequest(
+                'GET',
+                MyParcelRequest::REQUEST_TYPE_ORDERS . '/' . $uuid
+            );
+
+        return self::createCollectionFromResponse($request);
+    }
+
     /**
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -62,8 +74,8 @@ class OrderCollection extends Collection
         $request     = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
-            $this->ensureHasApiKey(),
-            $requestBody
+                $this->ensureHasApiKey(),
+                $requestBody
             )
             ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
 
