@@ -16,7 +16,6 @@ class CarrierFactory
         CarrierBpost::class,
         CarrierDPD::class,
         CarrierPostNL::class,
-        CarrierInstabox::class,
         CarrierDHLForYou::class,
         CarrierDHLParcelConnect::class,
         CarrierDHLEuroplus::class
