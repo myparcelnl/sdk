@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.4](https://github.com/myparcelnl/sdk/compare/v7.7.3...v7.7.4) (2023-04-04)
+
+
+### :bug: Bug Fixes
+
+* remove instabox from carrierfactory ([#449](https://github.com/myparcelnl/sdk/issues/449)) ([5bb7bee](https://github.com/myparcelnl/sdk/commit/5bb7bee160b438cc175a5e407e2eba5fcfbe37cb))
+
 ## [7.7.3](https://github.com/myparcelnl/sdk/compare/v7.7.2...v7.7.3) (2023-03-14)
 
 
