@@ -27,20 +27,20 @@ class CarrierConfigurationFactoryTest extends TestCase
 //            ],
             'With existing dropoff point' => [
                 [
-                    'carrier_id'                        => 5,
+                    'carrier_id'                        => 1,
                     'default_drop_off_point'            => [
                         'box_number'        => null,
                         'cc'                => 'NL',
-                        'city'              => 'Arnhem',
-                        'location_code'     => '73658f70-417a-48d2-82bb-291f3dccce93',
-                        'location_name'     => 'Instabox',
-                        'number'            => '24',
-                        'number_suffix'     => 'K',
-                        'postal_code'       => '6827DE',
+                        'city'              => 'Hoofddorp',
+                        'location_code'     => '217171',
+                        'location_name'     => 'PostNL',
+                        'number'            => '124',
+                        'number_suffix'     => null,
+                        'postal_code'       => '2132DM',
                         'region'            => null,
                         'retail_network_id' => null,
                         'state'             => null,
-                        'street'            => 'Hondsstraat',
+                        'street'            => 'Marktlaan',
                     ],
                     'default_drop_off_point_identifier' => null,
                 ],
@@ -54,10 +54,10 @@ class CarrierConfigurationFactoryTest extends TestCase
 //            ],
             'From API'                    => [
                 [
-                    'carrier_id'    => 5,
+                    'carrier_id'    => 1,
                     'configuration' => [
                         'default_cutoff_time'    => '09:30',
-                        'default_drop_off_point' => 'e9149b66-7bee-439b-bab0-7a5d92ddc519',
+                        'default_drop_off_point' => '217171',
                         'monday_cutoff_time'     => '09:30',
                     ],
                 ],
