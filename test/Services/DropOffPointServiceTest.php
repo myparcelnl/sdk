@@ -20,10 +20,10 @@ class DropOffPointServiceTest extends TestCase
     public function testGetDropOffPoint(): void
     {
         $service = (new DropOffPointWebService(new CarrierPostNL()))->setApiKey($this->getApiKey());
-        $result  = $service->getDropOffPoint('e9149b66-7bee-439b-bab0-7a5d92ddc519');
+        $result  = $service->getDropOffPoint('217171');
 
         if ($result) {
-            self::assertEquals('e9149b66-7bee-439b-bab0-7a5d92ddc519', $result->getLocationCode());
+            self::assertEquals('217171', $result->getLocationCode());
         } else {
             throw new Exception('Not one drop off point returned for external identifier');
         }
