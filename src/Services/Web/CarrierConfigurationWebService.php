@@ -34,7 +34,7 @@ class CarrierConfigurationWebService extends AbstractWebService
         $uri    = strtr(self::ENDPOINT_SINGLE, [':shopId' => $shopId, ':carrierId' => $carrierId]);
         $result = $this->doRequest($uri);
 
-        if (! $result) {
+        if (! $result || ! $this->carrierIdExists($result[0]['carrier_id'])) {
             return null;
         }
 
