@@ -85,7 +85,8 @@ class CarrierFactory
             }
         }
 
-        throw new Exception('No carrier found for id ' . $carrierId);
+        // Default to PostNL when carrier ID is invalid
+        return new CarrierPostNL();
     }
 
     /**
