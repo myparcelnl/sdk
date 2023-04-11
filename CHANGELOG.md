@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.5](https://github.com/myparcelnl/sdk/compare/v7.7.4...v7.7.5) (2023-04-11)
+
+
+### :bug: Bug Fixes
+
+* default to postnl when carrier id is invalid ([#452](https://github.com/myparcelnl/sdk/issues/452)) ([fb1304d](https://github.com/myparcelnl/sdk/commit/fb1304defa799fa5b7233e8943cf07881cb43863))
+
 ## [7.7.4](https://github.com/myparcelnl/sdk/compare/v7.7.3...v7.7.4) (2023-04-04)
 
 
