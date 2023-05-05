@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Support\Helpers;
 
 class ConsignmentEncode
 {
-    private const CURRENCY_EUR = 'EUR';
+    public const DEFAULT_CURRENCY = 'EUR';
 
     /**
      * @var array
@@ -114,7 +114,7 @@ class ConsignmentEncode
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
                 'amount'   => (int) $consignment->getInsurance() * 100,
-                'currency' => self::CURRENCY_EUR,
+                'currency' => self::DEFAULT_CURRENCY,
             ];
         }
 
@@ -300,26 +300,20 @@ class ConsignmentEncode
     /**
      * Encode product for the request
      *
-     * @param  string              $currency
      * @param  MyParcelCustomsItem $customsItem
      *
      * @return array
      */
-    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem, $currency = self::CURRENCY_EUR): array
+    private function encodeCdCountryItem(MyParcelCustomsItem $customsItem): array
     {
-        $item = [
+        return [
             'description'    => $customsItem->getDescription(),
             'amount'         => $customsItem->getAmount(),
             'weight'         => $customsItem->getWeight(),
             'classification' => $customsItem->getClassification(),
             'country'        => $customsItem->getCountry(),
-            'item_value'     => [
-                'amount'   => $customsItem->getItemValue(),
-                'currency' => $currency,
-            ],
+            'item_value'     => $customsItem->getItemValue(),
         ];
-
-        return $item;
     }
 
     /**
