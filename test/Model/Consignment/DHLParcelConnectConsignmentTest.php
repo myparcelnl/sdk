@@ -21,13 +21,13 @@ class DHLParcelConnectConsignmentTest extends ConsignmentTestCase
     {
         $pickupInformation = [
             self::DELIVERY_TYPE => AbstractConsignment::DELIVERY_TYPE_PICKUP,
-            self::PICKUP_STREET => 'Boulevard De Courcelles',
-            self::PICKUP_CITY   => 'Paris',
-            self::PICKUP_NUMBER => '6',
-            self::PICKUP_POSTAL_CODE => '75017',
+            self::PICKUP_STREET => 'Boulevard National',
+            self::PICKUP_CITY   => 'Nanterre',
+            self::PICKUP_NUMBER => '134',
+            self::PICKUP_POSTAL_CODE => '92000',
             self::PICKUP_COUNTRY => 'FR',
-            self::PICKUP_LOCATION_NAME => 'RESEAU MAC',
-            self::PICKUP_LOCATION_CODE => '8015-C32T2',
+            self::PICKUP_LOCATION_NAME => 'LES 4 SAISONS',
+            self::PICKUP_LOCATION_CODE => '8057-H4100',
             self::RETAIL_NETWORK_ID => '',
         ];
 
@@ -71,8 +71,8 @@ class DHLParcelConnectConsignmentTest extends ConsignmentTestCase
                 self::CARRIER_ID  => CarrierDHLParcelConnect::ID,
                 self::COUNTRY     => 'FR',
                 self::FULL_STREET => '92 rue de Raymond Poincaré',
-                self::POSTAL_CODE => '11100',
-                self::CITY        => 'Languedoc-Roussillon',
+                self::POSTAL_CODE => '92000',
+                self::CITY        => 'Nanterre',
                 self::PHONE       => '04.94.36.42.48',
             ]
         );

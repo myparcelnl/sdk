@@ -57,7 +57,7 @@ class CarrierConfigurationFactoryTest extends TestCase
                     'carrier_id'    => 1,
                     'configuration' => [
                         'default_cutoff_time'    => '09:30',
-                        'default_drop_off_point' => '217171',
+                        'default_drop_off_point' => '171963',
                         'monday_cutoff_time'     => '09:30',
                     ],
                 ],
