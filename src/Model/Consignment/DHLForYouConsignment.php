@@ -46,14 +46,19 @@ class DHLForYouConsignment extends AbstractConsignment
      */
     public function getAllowedShipmentOptions(): array
     {
-        return [
+        $allowed = [
             self::SHIPMENT_OPTION_AGE_CHECK,
             self::SHIPMENT_OPTION_HIDE_SENDER,
             self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
             self::SHIPMENT_OPTION_SAME_DAY_DELIVERY,
         ];
+
+        if (! $this->hasAgeCheck()) {
+            $allowed[] = self::SHIPMENT_OPTION_ONLY_RECIPIENT;
+        }
+
+        return $allowed;
     }
 
     /**

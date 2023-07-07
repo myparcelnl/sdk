@@ -96,6 +96,23 @@ class PostNLConsignment extends AbstractConsignment
     }
 
     /**
+     * @return array
+     */
+    public function getMandatoryShipmentOptions(): array
+    {
+        $mandatory = [];
+
+        if ($this->hasAgeCheck()) {
+            $mandatory = array_merge($mandatory, [
+                self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+                self::SHIPMENT_OPTION_SIGNATURE,
+            ]);
+        }
+
+        return $mandatory;
+    }
+
+    /**
      * @return string[]
      */
     public function getAllowedShipmentOptionsForPickup(): array

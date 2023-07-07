@@ -98,9 +98,7 @@ class ConsignmentEncode
         }
 
         if ($consignment->getCountry() === AbstractConsignment::CC_NL && $consignment->hasAgeCheck()) {
-            $consignmentEncoded['options']['age_check']      = 1;
-            $consignmentEncoded['options']['only_recipient'] = $consignment->canHaveShipmentOption('only_recipient') ? 1 : 0;
-            $consignmentEncoded['options']['signature']      = $consignment->canHaveShipmentOption('signature') ? 1 : 0;
+            $consignmentEncoded['options']['age_check'] = 1;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
         }
@@ -118,6 +116,20 @@ class ConsignmentEncode
                 'amount'   => (int) $consignment->getInsurance() * 100,
                 'currency' => self::CURRENCY_EUR,
             ];
+        }
+
+        // switch on mandatory options
+        foreach ($consignment->getMandatoryShipmentOptions() as $option) {
+            if (! isset($consignmentEncoded['options'][$option])) {
+                $consignmentEncoded['options'][$option] = 1;
+            }
+        }
+
+        // switch off options that are (no longer) allowed
+        foreach ($consignmentEncoded['options'] as $option => $value) {
+            if (1 === $value && ! $consignment->canHaveShipmentOption($option)) {
+                $consignmentEncoded['options'][$option] = 0;
+            }
         }
 
         return $consignmentEncoded;

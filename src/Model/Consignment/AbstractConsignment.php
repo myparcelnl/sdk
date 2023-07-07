@@ -1856,6 +1856,14 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @return array
+     */
+    public function getMandatoryShipmentOptions(): array
+    {
+        return [];
+    }
+
+    /**
      * @return string[]
      */
     public function getAllowedShipmentOptionsForPickup(): array
