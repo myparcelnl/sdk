@@ -137,7 +137,7 @@ class ConsignmentEncode
         ] as $option) {
 
             if (1 === $consignmentEncoded['options'][$option] && ! $consignment->canHaveShipmentOption($option)) {
-                $consignmentEncoded['options'][$option] = 0;
+                unset($consignmentEncoded['options'][$option]);
             }
         }
 
