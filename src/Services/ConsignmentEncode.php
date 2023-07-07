@@ -119,7 +119,10 @@ class ConsignmentEncode
         }
 
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
-            if (! isset($consignmentEncoded['options'][$option])) {
+            if (
+                ! isset($consignmentEncoded['options'][$option])
+                || 0 === $consignmentEncoded['options'][$option]
+            ) {
                 $consignmentEncoded['options'][$option] = 1;
             }
         }
