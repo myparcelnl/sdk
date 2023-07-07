@@ -118,16 +118,22 @@ class ConsignmentEncode
             ];
         }
 
-        // switch on mandatory options
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
             if (! isset($consignmentEncoded['options'][$option])) {
                 $consignmentEncoded['options'][$option] = 1;
             }
         }
 
-        // switch off options that are (no longer) allowed
-        foreach ($consignmentEncoded['options'] as $option => $value) {
-            if (1 === $value && ! $consignment->canHaveShipmentOption($option)) {
+        foreach ([
+            AbstractConsignment::SHIPMENT_OPTION_AGE_CHECK,
+            AbstractConsignment::SHIPMENT_OPTION_LARGE_FORMAT,
+            AbstractConsignment::SHIPMENT_OPTION_ONLY_RECIPIENT,
+            AbstractConsignment::SHIPMENT_OPTION_RETURN,
+            AbstractConsignment::SHIPMENT_OPTION_SIGNATURE,
+            AbstractConsignment::SHIPMENT_OPTION_HIDE_SENDER,
+        ] as $option) {
+
+            if (1 === $consignmentEncoded['options'][$option] && ! $consignment->canHaveShipmentOption($option)) {
                 $consignmentEncoded['options'][$option] = 0;
             }
         }
