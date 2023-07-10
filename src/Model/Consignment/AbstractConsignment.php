@@ -46,6 +46,15 @@ abstract class AbstractConsignment
      */
     public const SHIPMENT_OPTION_EXTRA_ASSURANCE   = 'extra_assurance';
 
+    public const SHIPMENT_OPTIONS_TO_CHECK = [
+        self::SHIPMENT_OPTION_AGE_CHECK,
+        self::SHIPMENT_OPTION_HIDE_SENDER,
+        self::SHIPMENT_OPTION_LARGE_FORMAT,
+        self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+        self::SHIPMENT_OPTION_RETURN,
+        self::SHIPMENT_OPTION_SIGNATURE,
+    ];
+
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
     public const EXTRA_OPTION_DELIVERY_SATURDAY = 'delivery_saturday';

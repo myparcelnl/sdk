@@ -119,25 +119,20 @@ class ConsignmentEncode
         }
 
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
-            if (
-                ! isset($consignmentEncoded['options'][$option])
-                || 0 === $consignmentEncoded['options'][$option]
-            ) {
-                $consignmentEncoded['options'][$option] = 1;
+            $key   = "options.$option";
+            $value = Arr::get($consignmentEncoded, $key);
+
+            if (null === $value || 0 === $value) {
+                Arr::set($consignmentEncoded, $key, 1);
             }
         }
 
-        foreach ([
-            AbstractConsignment::SHIPMENT_OPTION_AGE_CHECK,
-            AbstractConsignment::SHIPMENT_OPTION_LARGE_FORMAT,
-            AbstractConsignment::SHIPMENT_OPTION_ONLY_RECIPIENT,
-            AbstractConsignment::SHIPMENT_OPTION_RETURN,
-            AbstractConsignment::SHIPMENT_OPTION_SIGNATURE,
-            AbstractConsignment::SHIPMENT_OPTION_HIDE_SENDER,
-        ] as $option) {
+        foreach (AbstractConsignment::SHIPMENT_OPTIONS_TO_CHECK as $option) {
+            $key   = "options.$option";
+            $value = Arr::get($consignmentEncoded, $key);
 
-            if (1 === $consignmentEncoded['options'][$option] && ! $consignment->canHaveShipmentOption($option)) {
-                unset($consignmentEncoded['options'][$option]);
+            if (1 === $value && ! $consignment->canHaveShipmentOption($option)) {
+                Arr::forget($consignmentEncoded, $key);
             }
         }
 
