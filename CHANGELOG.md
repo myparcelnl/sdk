@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.6](https://github.com/myparcelnl/sdk/compare/v7.7.5...v7.7.6) (2023-07-10)
+
+
+### :bug: Bug Fixes
+
+* **encode:** use carrier specific options logic ([#455](https://github.com/myparcelnl/sdk/issues/455)) ([51bffc3](https://github.com/myparcelnl/sdk/commit/51bffc3512fbc0feeff45e22220df36cd3eeda30))
+
 ## [7.7.5](https://github.com/myparcelnl/sdk/compare/v7.7.4...v7.7.5) (2023-04-11)
 
 
