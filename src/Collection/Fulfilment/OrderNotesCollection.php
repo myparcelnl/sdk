@@ -31,9 +31,12 @@ class OrderNotesCollection extends Collection
     use HasUserAgent;
     use HasApiKey;
 
+    /**
+     * @return mixed
+     */
     private function UuidsInCollection()
     {
-        return array_values($this->reduce(
+        return array_unique($this->reduce(
             function (array $uuids, OrderNote $orderNote) {
                 $uuids[] = $orderNote->getUuid();
 
