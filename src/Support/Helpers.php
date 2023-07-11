@@ -4,6 +4,7 @@ namespace MyParcelNL\Sdk\src\Support;
 
 use Closure;
 use Exception;
+use ReflectionClass;
 
 /**
  * Class Helpers
@@ -418,6 +419,12 @@ class Helpers {
                 $target = $target[$segment];
             } elseif (is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};
+            } elseif (is_object($target) && is_string($segment)) {
+                $mirror  = new ReflectionClass(get_class($target));
+                $private = $mirror->getProperty($segment);
+                $private->setAccessible(true);
+
+                return $private->getValue($target);
             } else {
                 return $this->value($default);
             }

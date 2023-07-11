@@ -48,7 +48,7 @@ class OrderNotesCollection extends Collection
         $notes = [];
 
         foreach ($this->UuidsInCollection() as $uuid) {
-            $requestBody = $this->where('uuid', $uuid)->map(
+            $requestBody = $this->where('uuid', '=', $uuid)->map(
                 function (OrderNote $orderNote) {
                     $orderNote->validate();
 
@@ -62,9 +62,9 @@ class OrderNotesCollection extends Collection
                     $this->ensureHasApiKey(),
                     json_encode($requestBody)
                 )
-                ->sendRequest('POST', strtr(MyParcelRequest::REQUEST_TYPE_ORDER_NOTES, '{id}', $uuid));
+                ->sendRequest('POST', str_replace('{id}', $uuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));
 
-            $newNotes = Arr::get($response->getResult(), 'data.notes');
+            $newNotes = Arr::get($response->getResult(), 'data.notes') ?? [];
 
             array_map(static function (array $note) use ($uuid) {
                 $note['uuid'] = $uuid;
