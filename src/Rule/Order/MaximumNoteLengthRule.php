@@ -9,7 +9,7 @@ use MyParcelNL\Sdk\src\Rule\Rule;
 
 class MaximumNoteLengthRule extends Rule
 {
-    public const MaximumNoteLength = 2500;
+    public const MAXIMUM_NOTE_LENGTH = 2500;
 
     /**
      * @throws \Exception
@@ -20,8 +20,8 @@ class MaximumNoteLengthRule extends Rule
             return;
         }
 
-        if (strlen($validationSubject->getNote()) > self::MaximumNoteLength) {
-            throw new Exception(sprintf('The note may not be longer than %s characters', self::MaximumNoteLength));
+        if (strlen($validationSubject->getNote()) > self::MAXIMUM_NOTE_LENGTH) {
+            throw new Exception(sprintf('The note may not be longer than %s characters', self::MAXIMUM_NOTE_LENGTH));
         }
     }
 }
