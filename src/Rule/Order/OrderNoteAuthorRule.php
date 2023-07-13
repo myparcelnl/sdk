@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\src\Rule\Order;
 use Exception;
 use MyParcelNL\Sdk\src\Rule\Rule;
 
-class NoteAuthorRule extends Rule
+class OrderNoteAuthorRule extends Rule
 {
     public const AUTHOR_CUSTOMER = 'customer';
     public const AUTHOR_WEBSHOP  = 'webshop';

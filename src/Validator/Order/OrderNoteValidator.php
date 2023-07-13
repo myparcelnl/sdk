@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\src\Validator\Order;
 
 use MyParcelNL\Sdk\src\Rule\Order\AllPropertiesSetRule;
 use MyParcelNL\Sdk\src\Rule\Order\MaximumNoteLengthRule;
-use MyParcelNL\Sdk\src\Rule\Order\NoteAuthorRule;
+use MyParcelNL\Sdk\src\Rule\Order\OrderNoteAuthorRule;
 use MyParcelNL\Sdk\src\Validator\AbstractValidator;
 
 class OrderNoteValidator extends AbstractValidator
@@ -16,7 +16,7 @@ class OrderNoteValidator extends AbstractValidator
         return [
             new AllPropertiesSetRule(),
             new MaximumNoteLengthRule(),
-            new NoteAuthorRule(),
+            new OrderNoteAuthorRule(),
         ];
     }
 }
