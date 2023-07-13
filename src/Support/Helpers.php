@@ -420,7 +420,7 @@ class Helpers {
             } elseif (is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};
             } elseif (is_object($target) && is_string($segment)) {
-                $mirror  = new ReflectionClass(get_class($target));
+                $mirror = new ReflectionClass(get_class($target));
 
                 if (! $mirror->hasProperty($segment)) {
                     return $this->value($default);
