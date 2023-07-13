@@ -18,33 +18,15 @@ class OrderNotesCollection extends Collection
     use HasApiKey;
 
     /**
-     * @return array Indexed array of order uuids present in this collection.
-     */
-    private function orderUuidsInCollection(): array
-    {
-        return array_unique($this->reduce(
-            function (array $uuids, OrderNote $orderNote) {
-                $uuids[] = $orderNote->getOrderUuid();
-
-                return $uuids;
-            },
-            []
-        ));
-    }
-
-    /**
      * @return self Collection of notes that were saved.
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @throws \Exception
      */
     public function save(): self
     {
         $notes = [];
 
-        foreach ($this->orderUuidsInCollection() as $orderUuid) {
+        $this->orderUuidsInCollection()->map(function (string $orderUuid) use (&$notes) {
             $newNotes = $this->saveForOrder($orderUuid);
 
             $notes = array_reduce($newNotes, static function (array $notes, OrderNote $note) {
@@ -52,9 +34,19 @@ class OrderNotesCollection extends Collection
 
                 return $notes;
             }, $notes);
-        }
+        });
 
         return (new self($notes));
+    }
+
+    /**
+     * @return \MyParcelNL\Sdk\src\Collection\Fulfilment\OrderNotesCollection
+     */
+    private function orderUuidsInCollection(): OrderNotesCollection
+    {
+        return $this->map(function (OrderNote $orderNote) {
+            return $orderNote->getOrderUuid();
+        })->unique();
     }
 
     /**
@@ -88,6 +80,6 @@ class OrderNotesCollection extends Collection
             $note['orderUuid'] = $orderUuid;
 
             return new OrderNote($note);
-        }, Arr::get($response->getResult(), 'data.order_notes') ?? []);
+        }, Arr::get($response->getResult(), 'data.order_notes', []));
     }
 }

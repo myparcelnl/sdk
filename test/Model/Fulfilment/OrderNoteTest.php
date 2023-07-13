@@ -9,7 +9,7 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderNoteTest extends TestCase
 {
-    public function testToArray(): void
+    public function testToApiClass(): void
     {
         $orderNote = (new OrderNote())
             ->setOrderUuid('uuid')
@@ -30,15 +30,15 @@ class OrderNoteTest extends TestCase
      * @param  array $data
      *
      * @throws \Exception
-     * @dataProvider bunchOfNotes
+     * @dataProvider notesProvider
      */
-    public function testValidator(array $data) {
+    public function testValidate(array $data) {
         $this->expectExceptionMessage($data['expectedError']);
         $note = new OrderNote($data['orderNote']);
         $note->validate();
     }
 
-    public function bunchOfNotes(): array
+    public function notesProvider(): array
     {
         $stringTooLong = str_repeat('!', 2501);
         return [

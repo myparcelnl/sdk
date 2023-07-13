@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Rule\Order;
 
 use Exception;
+use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\src\Rule\Rule;
 
 class OrderNoteAuthorRule extends Rule
@@ -17,7 +18,7 @@ class OrderNoteAuthorRule extends Rule
     ];
 
     /**
-     * @param $validationSubject
+     * @param $validationSubject OrderNote
      *
      * @return void
      * @throws \Exception

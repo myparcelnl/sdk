@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Rule\Order;
 
 use Exception;
+use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\src\Rule\Rule;
 
 class MaximumNoteLengthRule extends Rule
@@ -12,6 +13,8 @@ class MaximumNoteLengthRule extends Rule
     public const MAXIMUM_NOTE_LENGTH = 2500;
 
     /**
+     * @param $validationSubject OrderNote
+     *
      * @throws \Exception
      */
     public function validate($validationSubject): void

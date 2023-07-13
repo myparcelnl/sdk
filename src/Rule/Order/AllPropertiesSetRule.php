@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\src\Rule\Order;
 
 use Exception;
+use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\src\Rule\Rule;
 use ReflectionClass;
 
 class AllPropertiesSetRule extends Rule
 {
     /**
+     * @param $validationSubject OrderNote
+     *
      * @throws \ReflectionException
      * @throws \Exception
      */
