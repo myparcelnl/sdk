@@ -24,7 +24,7 @@ class MaximumNoteLengthRule extends Rule
         }
 
         if (strlen($validationSubject->getNote()) > self::MAXIMUM_NOTE_LENGTH) {
-            throw new Exception(sprintf('The note may not be longer than %s characters', self::MAXIMUM_NOTE_LENGTH));
+            $this->addError(sprintf('The note may not be longer than %s characters', self::MAXIMUM_NOTE_LENGTH));
         }
     }
 }

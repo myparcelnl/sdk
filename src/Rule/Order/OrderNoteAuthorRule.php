@@ -26,7 +26,7 @@ class OrderNoteAuthorRule extends Rule
     public function validate($validationSubject): void
     {
         if (! in_array($validationSubject->getAuthor(), self::AUTHORS_ALLOWED, true)) {
-            throw new Exception(sprintf('Author must be one of %s', implode(', ', self::AUTHORS_ALLOWED)));
+            $this->addError(sprintf('Author must be one of %s', implode(', ', self::AUTHORS_ALLOWED)));
         }
     }
 }

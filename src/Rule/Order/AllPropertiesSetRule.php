@@ -21,14 +21,14 @@ class AllPropertiesSetRule extends Rule
     {
         $properties = (new ReflectionClass($validationSubject))->getProperties();
 
-        array_map(static function($property) use ($validationSubject) {
+        array_map(function($property) use ($validationSubject) {
             $getter = 'get' . ucfirst($property->getName());
 
             if (
                 method_exists($validationSubject, $getter)
                 && null === $validationSubject->$getter()
             ) {
-                throw new Exception(sprintf('All properties must be set on %s', get_class($validationSubject)));
+                $this->addError(sprintf('All properties must be set on %s', get_class($validationSubject)));
             }
         }, $properties);
     }
