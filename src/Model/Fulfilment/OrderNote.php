@@ -32,10 +32,6 @@ class OrderNote
     private $validatorClass = OrderNoteValidator::class;
 
     public function __construct(?array $data = []) {
-        if (! is_array($data)) {
-            return;
-        }
-
         $this->note      = $data['note'] ?? null;
         $this->author    = $data['author'] ?? null;
         $this->orderUuid = $data['orderUuid'] ?? null;
@@ -131,10 +127,6 @@ class OrderNote
     public function validate(): bool
     {
         $validator = ValidatorFactory::create($this->validatorClass);
-
-        if (! $validator) {
-            return true;
-        }
 
         try {
             $validator

@@ -32,7 +32,8 @@ class OrderNoteTest extends TestCase
      * @throws \Exception
      * @dataProvider notesProvider
      */
-    public function testValidate(array $data) {
+    public function testValidate(array $data): void
+    {
         $this->expectExceptionMessage($data['expectedError']);
         $note = new OrderNote($data['orderNote']);
         $note->validate();
@@ -46,8 +47,8 @@ class OrderNoteTest extends TestCase
                 [
                     'data' => [
                         'orderNote'     => [
-                            'author' => 'customer',
-                            'note'   => 'Test',
+                            'orderUuid' => 'uuid',
+                            'author'    => 'customer',
                         ],
                         'expectedError' => 'All properties must be set on MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote',
                     ],

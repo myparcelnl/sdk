@@ -14,8 +14,8 @@ class OrderNoteValidator extends AbstractValidator
     protected function getRules(): array
     {
         return [
-            new AllPropertiesSetRule(),
             new MaximumNoteLengthRule(),
+            new AllPropertiesSetRule(),
             new OrderNoteAuthorRule(),
         ];
     }
