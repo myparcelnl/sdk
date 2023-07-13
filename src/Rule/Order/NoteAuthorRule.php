@@ -15,6 +15,13 @@ class NoteAuthorRule extends Rule
         self::AUTHOR_CUSTOMER,
         self::AUTHOR_WEBSHOP,
     ];
+
+    /**
+     * @param $validationSubject
+     *
+     * @return void
+     * @throws \Exception
+     */
     public function validate($validationSubject): void
     {
         if (! in_array($validationSubject->getAuthor(), self::AUTHORS_ALLOWED, true)) {
