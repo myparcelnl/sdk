@@ -11,6 +11,7 @@ use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\RequestBody;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection;
+use Throwable;
 
 class OrderNotesCollection extends Collection
 {
@@ -19,15 +20,17 @@ class OrderNotesCollection extends Collection
 
     /**
      * @return self Collection of notes that were saved.
-     *
-     * @throws \Exception
      */
     public function save(): self
     {
         $notes = [];
 
-        $this->orderUuidsInCollection()->map(function (string $orderUuid) use (&$notes) {
-            $newNotes = $this->saveForOrder($orderUuid);
+        $this->getUniqueOrderUuids()->each(function (string $orderUuid) use (&$notes) {
+            try {
+                $newNotes = $this->saveForOrder($orderUuid);
+            } catch (Throwable $e) {
+                return;
+            }
 
             $notes = array_reduce($newNotes, static function (array $notes, OrderNote $note) {
                 $notes[] = $note;
@@ -42,7 +45,7 @@ class OrderNotesCollection extends Collection
     /**
      * @return \MyParcelNL\Sdk\src\Collection\Fulfilment\OrderNotesCollection
      */
-    private function orderUuidsInCollection(): OrderNotesCollection
+    private function getUniqueOrderUuids(): OrderNotesCollection
     {
         return $this->map(function (OrderNote $orderNote) {
             return $orderNote->getOrderUuid();
@@ -60,13 +63,13 @@ class OrderNotesCollection extends Collection
      */
     private function saveForOrder(string $orderUuid): array
     {
-        $orderNotes = $this->where('orderUuid', '=', $orderUuid)->map(
-            function (OrderNote $orderNote) {
-                $orderNote->validate();
+        $orderNotes = [];
 
-                return $orderNote->toApiObject();
+        $this->each(static function (OrderNote $orderNote) use (&$orderNotes, $orderUuid) {
+            if ($orderUuid === $orderNote->getOrderUuid() && $orderNote->validate()) {
+                $orderNotes[] = $orderNote->toApiObject();
             }
-        )->toArrayWithoutNull();
+        });
 
         $response = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())

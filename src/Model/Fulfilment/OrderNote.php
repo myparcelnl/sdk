@@ -50,6 +50,22 @@ class OrderNote
     }
 
     /**
+     * @return null|string
+     */
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getOrderUuid(): ?string
+    {
+        return $this->orderUuid;
+    }
+
+    /**
      * @param  null|string $author
      *
      * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote
@@ -59,14 +75,6 @@ class OrderNote
         $this->author = $author;
 
         return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNote(): ?string
-    {
-        return $this->note;
     }
 
     /**
@@ -82,14 +90,6 @@ class OrderNote
     }
 
     /**
-     * @return null|string
-     */
-    public function getOrderUuid(): ?string
-    {
-        return $this->orderUuid;
-    }
-
-    /**
      * @param  null|string $orderUuid
      *
      * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote
@@ -99,27 +99,6 @@ class OrderNote
         $this->orderUuid = $orderUuid;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     * @throws \Exception
-     */
-    public function validate(): bool
-    {
-        $validator = ValidatorFactory::create($this->validatorClass);
-
-        if ($validator) {
-            try {
-                $validator
-                    ->validateAll($this)
-                    ->report();
-            } catch (ValidationException $e) {
-                throw new Exception($e->getHumanMessage(), $e->getCode(), $e);
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -143,5 +122,28 @@ class OrderNote
             'note'      => $this->getNote(),
             'author'    => $this->getAuthor(),
         ];
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function validate(): bool
+    {
+        $validator = ValidatorFactory::create($this->validatorClass);
+
+        if (! $validator) {
+            return true;
+        }
+
+        try {
+            $validator
+                ->validateAll($this)
+                ->report();
+        } catch (ValidationException $e) {
+            throw new Exception($e->getHumanMessage(), $e->getCode(), $e);
+        }
+
+        return true;
     }
 }

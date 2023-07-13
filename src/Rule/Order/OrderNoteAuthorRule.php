@@ -10,9 +10,9 @@ use MyParcelNL\Sdk\src\Rule\Rule;
 
 class OrderNoteAuthorRule extends Rule
 {
-    public const AUTHOR_CUSTOMER = 'customer';
-    public const AUTHOR_WEBSHOP  = 'webshop';
-    public const AUTHORS_ALLOWED = [
+    private const AUTHOR_CUSTOMER = 'customer';
+    private const AUTHOR_WEBSHOP  = 'webshop';
+    private const AUTHORS_ALLOWED = [
         self::AUTHOR_CUSTOMER,
         self::AUTHOR_WEBSHOP,
     ];
