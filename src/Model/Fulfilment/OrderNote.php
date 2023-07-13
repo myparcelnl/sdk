@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Sdk\src\Model\Fulfilment;
 
 use Exception;
@@ -10,19 +12,19 @@ use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 class OrderNote
 {
     /**
-     * @var string either 'customer' or 'webshop'
+     * @var string Either 'customer' or 'webshop'.
      */
     private $author;
 
     /**
-     * @var string
+     * @var string The text with a max length of 2500 characters.
      */
     private $note;
 
     /**
      * @var string
      */
-    private $uuid;
+    private $orderUuid;
 
     /**
      * @var string The validator class that should be used for this model.
@@ -34,9 +36,9 @@ class OrderNote
             return;
         }
 
-        $this->note   = $data['note'] ?? null;
-        $this->author = $data['author'] ?? null;
-        $this->uuid   = $data['uuid'] ?? null;
+        $this->note      = $data['note'] ?? null;
+        $this->author    = $data['author'] ?? null;
+        $this->orderUuid = $data['orderUuid'] ?? null;
     }
 
     /**
@@ -82,19 +84,19 @@ class OrderNote
     /**
      * @return null|string
      */
-    public function getUuid(): ?string
+    public function getOrderUuid(): ?string
     {
-        return $this->uuid;
+        return $this->orderUuid;
     }
 
     /**
-     * @param  null|string $uuid
+     * @param  null|string $orderUuid
      *
      * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote
      */
-    public function setUuid(?string $uuid): self
+    public function setOrderUuid(?string $orderUuid): self
     {
-        $this->uuid = $uuid;
+        $this->orderUuid = $orderUuid;
 
         return $this;
     }
@@ -121,13 +123,25 @@ class OrderNote
     }
 
     /**
+     * @return object
+     */
+    public function toApiObject(): \stdClass
+    {
+        return (object)[
+            'note'   => $this->getNote(),
+            'author' => $this->getAuthor(),
+        ];
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
     {
         return [
-            'note'   => $this->getNote(),
-            'author' => $this->getAuthor(),
+            'orderUuid' => $this->getOrderUuid(),
+            'note'      => $this->getNote(),
+            'author'    => $this->getAuthor(),
         ];
     }
 }

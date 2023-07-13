@@ -20,6 +20,7 @@ class AllPropertiesSetRule extends Rule
 
         array_map(static function($property) use ($validationSubject) {
             $getter = 'get' . ucfirst($property->getName());
+
             if (
                 method_exists($validationSubject, $getter)
                 && null === $validationSubject->$getter()

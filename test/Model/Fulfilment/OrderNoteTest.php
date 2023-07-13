@@ -12,18 +12,18 @@ class OrderNoteTest extends TestCase
     public function testToArray(): void
     {
         $orderNote = (new OrderNote())
-            ->setUuid('uuid')
+            ->setOrderUuid('uuid')
             ->setAuthor('customer')
             ->setNote('Test');
 
-        $this->assertEquals('uuid', $orderNote->getUuid());
+        $this->assertEquals('uuid', $orderNote->getOrderUuid());
         $this->assertEquals('customer', $orderNote->getAuthor());
         $this->assertEquals('Test', $orderNote->getNote());
 
-        $this->assertEquals([
+        $this->assertEquals((object)[
             'author' => 'customer',
             'note'   => 'Test',
-        ], $orderNote->toArray());
+        ], $orderNote->toApiObject());
     }
 
     /**
@@ -55,9 +55,9 @@ class OrderNoteTest extends TestCase
             'note too long'  => [
                 'data' => [
                     'orderNote'     => [
-                        'uuid'   => 'uuid',
-                        'author' => 'customer',
-                        'note'   => $stringTooLong,
+                        'orderUuid' => 'uuid',
+                        'author'    => 'customer',
+                        'note'      => $stringTooLong,
                     ],
                     'expectedError' => 'The note may not be longer than 2500 characters',
                 ],
@@ -65,9 +65,9 @@ class OrderNoteTest extends TestCase
             'illegal author' => [
                 'data' => [
                     'orderNote'     => [
-                        'uuid'   => 'uuid',
-                        'author' => 'wrong',
-                        'note'   => 'Test',
+                        'orderUuid' => 'uuid',
+                        'author'    => 'wrong',
+                        'note'      => 'Test',
                     ],
                     'expectedError' => 'Author must be one of customer, webshop',
                 ],

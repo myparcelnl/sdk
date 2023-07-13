@@ -2,20 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * POST /fulfilment/orders/{id}/notes
- * {
-  "data": {
-    "order_notes": [
-      {
-        "note": "Test",
-        "author": "customer|webshop",
-      }
-    ]
-  }
-}
- */
-
 namespace MyParcelNL\Sdk\src\Collection\Fulfilment;
 
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
@@ -32,13 +18,13 @@ class OrderNotesCollection extends Collection
     use HasApiKey;
 
     /**
-     * @return mixed
+     * @return array Indexed array of order uuids present in this collection.
      */
-    private function UuidsInCollection()
+    private function orderUuidsInCollection(): array
     {
         return array_unique($this->reduce(
             function (array $uuids, OrderNote $orderNote) {
-                $uuids[] = $orderNote->getUuid();
+                $uuids[] = $orderNote->getOrderUuid();
 
                 return $uuids;
             },
@@ -46,38 +32,43 @@ class OrderNotesCollection extends Collection
         ));
     }
 
+    /**
+     * @return self Collection of notes that were saved.
+     *
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \Exception
+     */
     public function save(): self
     {
         $notes = [];
 
-        foreach ($this->UuidsInCollection() as $uuid) {
-            $requestBody = $this->where('uuid', '=', $uuid)->map(
+        foreach ($this->orderUuidsInCollection() as $orderUuid) {
+            $orderNotes = $this->where('orderUuid', '=', $orderUuid)->map(
                 function (OrderNote $orderNote) {
                     $orderNote->validate();
 
-                    return $orderNote->toArray();
+                    return $orderNote->toApiObject();
                 }
             )->toArrayWithoutNull();
-
+            $requestBody = new RequestBody('order_notes', $orderNotes);
+var_dump($orderUuid, $this->items, $this->where('orderUuid', '=', $orderUuid), $orderNotes, $requestBody);
             $response = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $this->ensureHasApiKey(),
-                    json_encode($requestBody)
+                    $requestBody
                 )
-                ->sendRequest('POST', str_replace('{id}', $uuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));
+                ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));
 
-            $newNotes = Arr::get($response->getResult(), 'data.notes') ?? [];
+            $notes += array_map(static function (array $note) use ($orderUuid) {
+                $note['orderUuid'] = $orderUuid;
 
-            array_map(static function (array $note) use ($uuid) {
-                $note['uuid'] = $uuid;
-
-                return $note;
-            }, $newNotes);
-
-            $notes += $newNotes;
+                return new OrderNote($note);
+            }, Arr::get($response->getResult(), 'data.order_notes') ?? []);
         }
 
-        return (new self($notes))->mapInto(OrderNote::class);
+        return (new self($notes));
     }
 }

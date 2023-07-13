@@ -421,6 +421,11 @@ class Helpers {
                 $target = $target->{$segment};
             } elseif (is_object($target) && is_string($segment)) {
                 $mirror  = new ReflectionClass(get_class($target));
+
+                if (! $mirror->hasProperty($segment)) {
+                    return $this->value($default);
+                }
+
                 $private = $mirror->getProperty($segment);
                 $private->setAccessible(true);
 

@@ -11,11 +11,15 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderNotesCollectionTest extends TestCase
 {
+    /**
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     */
     public function testSave() {
         $apiKey               = $this->getApiKey();
         $orderNotesCollection = (new OrderNotesCollection())->setApiKey($apiKey);
 
-        // get last order to have a valid uuid
         $collection = OrderCollection::query($this->getApiKey());
 
         if ($collection->isEmpty()) {
@@ -24,13 +28,17 @@ class OrderNotesCollectionTest extends TestCase
 
         $uuid = $collection->first()->getUuid();
 
-        $orderNotesCollection->push(
-            (new OrderNote())
-                ->setUuid($uuid)
-                ->setAuthor('webshop')
-                ->setNote('ordernote test save')
-        );
+        array_map(static function(string $note) use ($orderNotesCollection, $uuid) {
+            $orderNotesCollection->push(
+                (new OrderNote())
+                    ->setOrderUuid($uuid)
+                    ->setAuthor('webshop')
+                    ->setNote($note)
+            );
+            }, ['first ordernote test save', 'second ordernote test save']);
 
-        $this->assertSame([], $orderNotesCollection->save());
+        $savedNotes = $orderNotesCollection->save();
+
+        $this->assertSame($orderNotesCollection->toArray(), $savedNotes->toArray());
     }
 }
