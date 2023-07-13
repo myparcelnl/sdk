@@ -52,8 +52,9 @@ class OrderNotesCollection extends Collection
                     return $orderNote->toApiObject();
                 }
             )->toArrayWithoutNull();
-            $requestBody = new RequestBody('order_notes', $orderNotes);
-var_dump($orderUuid, $this->items, $this->where('orderUuid', '=', $orderUuid), $orderNotes, $requestBody);
+
+            $requestBody = new RequestBody('order_notes', array_values($orderNotes));
+
             $response = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
@@ -62,11 +63,17 @@ var_dump($orderUuid, $this->items, $this->where('orderUuid', '=', $orderUuid), $
                 )
                 ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));
 
-            $notes += array_map(static function (array $note) use ($orderUuid) {
+            $newNotes = array_map(static function (array $note) use ($orderUuid) {
                 $note['orderUuid'] = $orderUuid;
 
                 return new OrderNote($note);
             }, Arr::get($response->getResult(), 'data.order_notes') ?? []);
+
+            $notes = array_reduce($newNotes, static function (array $notes, OrderNote $note) {
+                $notes[] = $note;
+
+                return $notes;
+            }, $notes);
         }
 
         return (new self($notes));

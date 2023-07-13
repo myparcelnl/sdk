@@ -26,16 +26,25 @@ class OrderNotesCollectionTest extends TestCase
             $this->markTestSkipped('No orders found');
         }
 
-        $uuid = $collection->first()->getUuid();
+        $i = 1;
+        foreach ($collection->getIterator() as $order) {
+            $uuid = $order->getUuid();
 
-        array_map(static function(string $note) use ($orderNotesCollection, $uuid) {
-            $orderNotesCollection->push(
-                (new OrderNote())
-                    ->setOrderUuid($uuid)
-                    ->setAuthor('webshop')
-                    ->setNote($note)
-            );
-            }, ['first ordernote test save', 'second ordernote test save']);
+            array_map(static function(string $note) use ($orderNotesCollection, $uuid) {
+                $orderNotesCollection->push(
+                    (new OrderNote())
+                        ->setOrderUuid($uuid)
+                        ->setAuthor('webshop')
+                        ->setNote($note)
+                );
+            }, ["first ordernote test save $i", "second ordernote test save $i"]);
+
+            if (2 === $i) {
+                break;
+            }
+
+            ++$i;
+        }
 
         $savedNotes = $orderNotesCollection->save();
 
