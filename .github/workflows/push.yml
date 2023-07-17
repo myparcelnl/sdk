@@ -57,5 +57,5 @@ jobs:
       - uses: peter-evans/rebase@v2
         with:
           token: ${{ steps.credentials.outputs.token }}
-          base: ${{ github.ref }}
+          base: ${{ github.ref_name }}
           exclude-drafts: true
