@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.7](https://github.com/myparcelnl/sdk/compare/v7.7.6...v7.7.7) (2023-07-17)
+
+
+### :bug: Bug Fixes
+
+* **shipment:** fix setItemValueArray method ([#454](https://github.com/myparcelnl/sdk/issues/454)) ([e206068](https://github.com/myparcelnl/sdk/commit/e2060689ea21ce654f403058279a1ec89f7dfeb8))
+
 ## [7.7.6](https://github.com/myparcelnl/sdk/compare/v7.7.5...v7.7.6) (2023-07-10)
 
 
