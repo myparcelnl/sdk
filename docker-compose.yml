@@ -1,12 +1,21 @@
 version: '3.9'
 
+# volumes are not in common, because phpstorm doesn't understand it
+x-common: &common
+  image: ghcr.io/myparcelnl/php-xd:7.2
+  init: true
+  env_file:
+    - .env
+
 services:
   php:
-    image: ghcr.io/myparcelnl/php-xd:7.2
-    init: true
-    working_dir: /app
-    entrypoint: ["sh", "-c", "composer install && vendor/bin/phpunit"]
-    env_file:
-      - .env
+    <<: *common
     volumes:
       - ./:/app
+    command: [ 'composer','install' ]
+
+  test:
+    <<: *common
+    volumes:
+      - ./:/app
+    command: [ 'composer', 'test:coverage' ]

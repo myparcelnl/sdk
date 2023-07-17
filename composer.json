@@ -27,6 +27,10 @@
             "email": "support@myparcel.nl"
         }
     ],
+    "scripts": {
+        "test": "phpunit",
+        "test:coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
     "require": {
         "php": ">=7.1.0"
     },
