@@ -28,7 +28,7 @@ jobs:
         id: cache-coverage
         with:
           path: ./coverage.xml
-          key: ${{ runner.os }}-coverage-${{ hashFiles('./src/**', './tests/**') }}
+          key: ${{ runner.os }}-coverage-${{ hashFiles('./src/**', './test/**') }}
 
       - uses: myparcelnl/actions/pull-docker-image@v3
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
