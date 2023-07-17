@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\src\Rule\Order;
 
-use Exception;
 use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\src\Rule\Rule;
 
 class OrderNoteAuthorRule extends Rule
 {
     private const AUTHOR_CUSTOMER = 'customer';
-    private const AUTHOR_WEBSHOP  = 'webshop';
+    private const AUTHOR_WEB_SHOP = 'webshop';
     private const AUTHORS_ALLOWED = [
         self::AUTHOR_CUSTOMER,
-        self::AUTHOR_WEBSHOP,
+        self::AUTHOR_WEB_SHOP,
     ];
 
     /**
