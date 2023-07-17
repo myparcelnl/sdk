@@ -27,6 +27,7 @@ class MyParcelRequest
     public const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
     public const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
     public const REQUEST_TYPE_ORDERS                  = 'fulfilment/orders';
+    public const REQUEST_TYPE_ORDER_NOTES             = 'fulfilment/orders/{id}/notes';
 
     public const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
