@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.0](https://github.com/myparcelnl/sdk/compare/v7.7.7...v7.8.0) (2023-07-17)
+
+
+### :sparkles: New Features
+
+* **fulfilment:** add order notes ([#456](https://github.com/myparcelnl/sdk/issues/456)) ([c8e2b5b](https://github.com/myparcelnl/sdk/commit/c8e2b5b5202417e124a55311c65f113632ed541c))
+
 ## [7.7.7](https://github.com/myparcelnl/sdk/compare/v7.7.6...v7.7.7) (2023-07-17)
 
 
