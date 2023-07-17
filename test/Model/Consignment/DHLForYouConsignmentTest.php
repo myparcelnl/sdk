@@ -33,6 +33,11 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
                 self::expected(self::RETURN) => false,
                 self::SAME_DAY_DELIVERY      => true,
             ],
+            'Age check' => [
+                self::AGE_CHECK => true,
+                self::ONLY_RECIPIENT => true,
+                self::expected(self::ONLY_RECIPIENT) => false,
+            ],
         ]);
     }
 

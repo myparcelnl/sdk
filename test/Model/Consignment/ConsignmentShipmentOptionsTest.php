@@ -109,13 +109,13 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
             //          self::expected(self::LARGE_FORMAT) => false,
             //      ],
             'Large format to Belgium' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
-                    self::CUSTOMS_DECLARATION            => $this->getDefaultCustomsDeclaration(
+                    self::CUSTOMS_DECLARATION       => $this->getDefaultCustomsDeclaration(
                         AbstractConsignment::CC_BE
                     ),
                     self::LARGE_FORMAT                   => true,
+                    self::expected(self::INSURANCE)      => 500,
                     self::expected(self::ONLY_RECIPIENT) => true,
                     self::expected(self::SIGNATURE)      => true,
-                    self::expected(self::INSURANCE)      => 500,
                 ],
         ]);
     }
