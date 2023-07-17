@@ -32,11 +32,7 @@ class OrderNotesCollection extends Collection
                 return;
             }
 
-            $notes = array_reduce($newNotes, static function (array $notes, OrderNote $note) {
-                $notes[] = $note;
-
-                return $notes;
-            }, $notes);
+            $notes = array_merge($notes, $newNotes);
         });
 
         return (new self($notes));
@@ -63,19 +59,21 @@ class OrderNotesCollection extends Collection
      */
     private function saveForOrder(string $orderUuid): array
     {
-        $orderNotes = [];
-
-        $this->each(static function (OrderNote $orderNote) use (&$orderNotes, $orderUuid) {
-            if ($orderUuid === $orderNote->getOrderUuid() && $orderNote->validate()) {
-                $orderNotes[] = $orderNote->toApiObject();
-            }
-        });
+        $orderNotes = $this
+            ->filter(static function (OrderNote $orderNote) use ($orderUuid) {
+                return $orderNote->getOrderUuid() === $orderUuid && $orderNote->validate();
+            })
+            ->map(static function (OrderNote $orderNote) {
+                return $orderNote->toApiObject();
+            })
+            ->values()
+            ->toArray();
 
         $response = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
                 $this->ensureHasApiKey(),
-                new RequestBody('order_notes', array_values($orderNotes))
+                new RequestBody('order_notes', $orderNotes)
             )
             ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));
 
