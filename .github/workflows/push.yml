@@ -13,12 +13,10 @@ concurrency:
 
 jobs:
   test:
-    name: 'Run tests 🧪'
     uses: ./.github/workflows/--test.yml
     secrets: inherit
 
   release:
-    name: 'Release'
     runs-on: ubuntu-22.04
     needs:
       - test
@@ -43,7 +41,6 @@ jobs:
           token: ${{ secrets.GH_REPO_TOKEN }}
 
   rebase-prs:
-    name: 'Rebase pull requests'
     if: always()
     needs: release
     runs-on: ubuntu-22.04

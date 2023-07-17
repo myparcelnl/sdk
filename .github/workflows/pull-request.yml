@@ -5,6 +5,5 @@ on:
 
 jobs:
   test:
-    name: 'Run tests 🧪'
     uses: ./.github/workflows/--test.yml
     secrets: inherit
