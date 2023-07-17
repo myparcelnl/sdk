@@ -19,6 +19,7 @@ use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
@@ -29,11 +30,10 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 class MyParcelCustomsItem
 {
-
     public $description;
     public $amount;
     public $weight;
-    public $item_value;
+    public $item_value = [];
     public $classification;
     public $country;
 
@@ -125,7 +125,7 @@ class MyParcelCustomsItem
     /**
      * Item value.
      *
-     * @return int|null
+     * @return array
      */
     public function getItemValue()
     {
@@ -139,14 +139,16 @@ class MyParcelCustomsItem
      * separators (in cents).
      * Required: Yes
      *
-     * @param int $item_value
+     * @param int|float|string $item_value
      *
      * @return $this
      */
-    public function setItemValue($item_value)
+    public function setItemValue($item_value): self
     {
-        $this->item_value = (int) $item_value;
-        return $this;
+        return $this->setItemValueArray([
+            'amount'   => (int) $item_value,
+            'currency' => ConsignmentEncode::DEFAULT_CURRENCY,
+        ]);
     }
 
     /**
