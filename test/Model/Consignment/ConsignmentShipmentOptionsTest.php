@@ -112,8 +112,10 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
                     self::CUSTOMS_DECLARATION       => $this->getDefaultCustomsDeclaration(
                         AbstractConsignment::CC_BE
                     ),
-                    self::LARGE_FORMAT              => true,
-                    self::expected(self::INSURANCE) => 500,
+                    self::LARGE_FORMAT                   => true,
+                    self::expected(self::INSURANCE)      => 500,
+                    self::expected(self::ONLY_RECIPIENT) => true,
+                    self::expected(self::SIGNATURE)      => true,
                 ],
         ]);
     }
