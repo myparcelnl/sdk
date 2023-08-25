@@ -24,7 +24,7 @@ class DHLEuroplusConsignmentValidator extends AbstractValidator
             new ShipmentOptionsRule(),
             new DropOffPointRule(),
             new MaximumWeightRule(),
-            new RestrictCountriesRule(AbstractConsignment::EURO_COUNTRIES),
+            new RestrictCountriesRule(array_merge(AbstractConsignment::EURO_COUNTRIES, ['UK', 'GB']))
         ];
     }
 }
