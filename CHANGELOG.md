@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.1](https://github.com/myparcelnl/sdk/compare/v7.8.0...v7.8.1) (2023-09-13)
+
+
+### :bug: Bug Fixes
+
+* correct label positions doc block ([#458](https://github.com/myparcelnl/sdk/issues/458)) ([318c6e3](https://github.com/myparcelnl/sdk/commit/318c6e34802ad7ccc181647174f90b631668cb70))
+
 ## [7.8.0](https://github.com/myparcelnl/sdk/compare/v7.7.7...v7.8.0) (2023-07-17)
 
 
