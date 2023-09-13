@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.2](https://github.com/myparcelnl/sdk/compare/v7.8.1...v7.8.2) (2023-09-13)
+
+
+### :bug: Bug Fixes
+
+* allow 10 digit classification numbers ([#459](https://github.com/myparcelnl/sdk/issues/459)) ([595943a](https://github.com/myparcelnl/sdk/commit/595943a901aad1314248b27f5485935a7d917002))
+
 ## [7.8.1](https://github.com/myparcelnl/sdk/compare/v7.8.0...v7.8.1) (2023-09-13)
 
 
