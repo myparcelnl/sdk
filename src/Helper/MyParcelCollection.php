@@ -391,11 +391,11 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param  int $positions           The position of the label on an A4 sheet. Set to false to create an A6 sheet.
-     *                                  You can specify multiple positions by using an array. E.g. [2,3,4]. If you do
-     *                                  not specify an array, but specify a number, the following labels will fill the
-     *                                  ascending positions. Positioning is only applied on the first page with labels.
-     *                                  All subsequent pages will use the default positioning [1,2,3,4].
+     * @param mixed $positions  The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
+     *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
+     *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
+     *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -439,11 +439,11 @@ class MyParcelCollection extends Collection
      * Receive label PDF
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param  int $positions           The position of the label on an A4 sheet. You can specify multiple positions by
-     *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
-     *                                  number, the following labels will fill the ascending positions. Positioning is
-     *                                  only applied on the first page with labels. All subsequent pages will use the
-     *                                  default positioning [1,2,3,4].
+     * @param mixed $positions  The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
+     *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
+     *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
+     *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -452,7 +452,6 @@ class MyParcelCollection extends Collection
      */
     public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
-        /** If $positions is not false, set paper size to A4 */
         $this
             ->createConcepts()
             ->setLabelFormat($positions);
@@ -754,19 +753,19 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Set label format settings        The position of the label on an A4 sheet. You can specify multiple positions by
-     *                                  using an array. E.g. [2,3,4]. If you do not specify an array, but specify a
-     *                                  number, the following labels will fill the ascending positions. Positioning is
-     *                                  only applied on the first page with labels. All subsequent pages will use the
-     *                                  default positioning [1,2,3,4].
+     * Sets label format settings
      *
-     * @param int|array|null $positions
+     * @param mixed $positions  The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
+     *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
+     *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
+     *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
      */
     private function setLabelFormat($positions): self
     {
-        /** If $positions is not false, set paper size to A4 */
+        /** If $positions is not falsy, set paper size to A4 */
         if (is_numeric($positions)) {
             /** Generating positions for A4 paper */
             $this->paper_size     = 'A4';
