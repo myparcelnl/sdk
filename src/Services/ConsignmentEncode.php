@@ -14,7 +14,9 @@ namespace MyParcelNL\Sdk\src\Services;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLParcelConnect;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -105,6 +107,10 @@ class ConsignmentEncode
 
         if ($consignment->hasExtraAssurance()) {
             $consignmentEncoded['options']['hide_sender'] = 0;
+        }
+
+        if (in_array($consignment->getCarrierName(), [CarrierDHLEuroplus::NAME, CarrierDHLParcelConnect::NAME])) {
+            $consignmentEncoded['options']['signature'] = 1;
         }
 
         if ($consignment->getDeliveryDate()) {
