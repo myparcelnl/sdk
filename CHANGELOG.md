@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.3](https://github.com/myparcelnl/sdk/compare/v7.8.2...v7.8.3) (2023-10-04)
+
+
+### :bug: Bug Fixes
+
+* ensure signature for europlus and parcel connect ([#460](https://github.com/myparcelnl/sdk/issues/460)) ([87a6931](https://github.com/myparcelnl/sdk/commit/87a6931bea4598cab9196319585f6cedde8df6f2))
+
 ## [7.8.2](https://github.com/myparcelnl/sdk/compare/v7.8.1...v7.8.2) (2023-09-13)
 
 
