@@ -91,7 +91,8 @@ class SplitStreet
         $regex = ValidateStreet::getStreetRegexByCountry($local, $destination);
 
         if ($destination === AbstractConsignment::CC_BE) {
-            $regexResult = preg_match(ValidateStreet::SPLIT_STREET_REGEX_BE, $fullStreet, $matches);
+            preg_match(ValidateStreet::SPLIT_STREET_REGEX_BE, $fullStreet, $matches);
+
             if (in_array($matches['box_separator'], self::BOX_SEPARATOR)) {
                 $matches['box_separator'] = self::BOX_NL;
             }
