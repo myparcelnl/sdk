@@ -19,8 +19,15 @@ use MyParcelNL\Sdk\src\Model\FullStreet;
 class SplitStreet
 {
     const BOX_NL                 = 'bus';
-    const BOX_SEPARATOR          = ['boîte', 'box', 'bte', 'Bus'];
-    const BOX_SEPARATOR_BY_REGEX = ['\/','-', 'B'];
+    const BOX_BTE                = 'bte';
+    const BOX_FR                 = 'boîte';
+    const BOX_EN                 = 'box';
+    const BOX_DE                 = 'Bus';
+    const BOX_SEPARATOR          = [self::BOX_FR, self::BOX_EN, self::BOX_BTE, self::BOX_DE];
+    const BOX_SLASH              = '\/';
+    const BOX_DASH               = '-';
+    const BOX_B                  = 'B';
+    const BOX_SEPARATOR_BY_REGEX = [self::BOX_SLASH, self::BOX_DASH, self::BOX_B];
 
     public const NUMBER_SUFFIX_ABBREVIATION = [
         'apartment'  => '',
@@ -89,13 +96,21 @@ class SplitStreet
                 $matches['box_separator'] = self::BOX_NL;
             }
 
-            $fullStreet = implode(' ', [
-                $matches['street'],
-                $matches['number'],
-                $matches['number_suffix'],
-                $matches['box_separator'],
-                $matches['box_number']
-            ]);
+            if ($matches['box_separator'] && ! $matches['box_number']) {
+                $matches['number_suffix'] = $matches['box_separator'];
+                $matches['box_separator'] = null;
+            }
+
+            $fullStreet = implode(
+                ' ',
+                array_filter([
+                    $matches['street'],
+                    $matches['number'],
+                    $matches['box_separator'],
+                    $matches['box_number'],
+                    $matches['number_suffix'],
+                ])
+            );
 
             // When a character is present at BOX_SEPARATOR_BY_REGEX and followed by a number, it must be replaced by bus
             foreach (self::BOX_SEPARATOR_BY_REGEX as $boxRegex) {
