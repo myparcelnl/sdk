@@ -96,11 +96,6 @@ class SplitStreet
                 $matches['box_separator'] = self::BOX_NL;
             }
 
-            if ($matches['box_separator'] && ! $matches['box_number']) {
-                $matches['number_suffix'] = $matches['box_separator'];
-                $matches['box_separator'] = null;
-            }
-
             $fullStreet = implode(
                 ' ',
                 array_filter([
