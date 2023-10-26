@@ -25,8 +25,9 @@ class ValidateStreet
         ')?$~i';
 
     const SPLIT_STREET_REGEX_BE =
-        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{1,8})\s?(?P<box_separator>' . SplitStreet::BOX_NL . ')?\s?(?P<box_number>\d{0,8})\s?(?P<number_suffix>[A-z]{0,4}$)?)$~';
+        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{1,8})\s?(?P<box_separator>' . self::REGEX_BE_BOX_SEPARATORS . ')?\s?(?P<box_number>\d{0,8})\s?(?P<number_suffix>[A-z]{0,4}$)?)$~';
 
+    const REGEX_BE_BOX_SEPARATORS = SplitStreet::BOX_BTE . '|' . SplitStreet::BOX_EN . '|' . SplitStreet::BOX_FR . '|' . SplitStreet::BOX_NL . '|' . SplitStreet::BOX_DE . '|' . SplitStreet::BOX_SLASH . '|' . SplitStreet::BOX_DASH . '|' . SplitStreet::BOX_B . '.+';
     /**
      * @param string      $fullStreet
      * @param string      $localCountry
