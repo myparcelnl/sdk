@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.4](https://github.com/myparcelnl/sdk/compare/v7.8.3...v7.8.4) (2023-10-26)
+
+
+### :bug: Bug Fixes
+
+* **consignment:** replace part of box separator instead of fullstreet ([#441](https://github.com/myparcelnl/sdk/issues/441)) ([a2f1e29](https://github.com/myparcelnl/sdk/commit/a2f1e29b55d94be22b208869a88af6281fb2b544))
+
 ## [7.8.3](https://github.com/myparcelnl/sdk/compare/v7.8.2...v7.8.3) (2023-10-04)
 
 
