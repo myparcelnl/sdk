@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Sdk\src\Validator\Consignment;
 
 use MyParcelNL\Sdk\src\Rule\Consignment\DeliveryDateRule;
