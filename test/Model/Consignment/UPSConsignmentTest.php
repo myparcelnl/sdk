@@ -16,6 +16,7 @@ class UPSConsignmentTest extends ConsignmentTestCase
     public function provideUPSConsignmentsData(): array
     {
         return $this->createConsignmentProviderDataset([
+            'NL -> NL' => [],
         ]);
     }
 
