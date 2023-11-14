@@ -41,7 +41,7 @@ class UPSConsignment extends AbstractConsignment
     public function getAllowedPackageTypes(): array
     {
         return [
-            self::PACKAGE_TYPE_PACKAGE,
+            self::PACKAGE_TYPE_PACKAGE_NAME,
         ];
     }
 
