@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierUPS;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class UPSConsignmentTest extends ConsignmentTestCase
@@ -16,7 +18,7 @@ class UPSConsignmentTest extends ConsignmentTestCase
     public function provideUPSConsignmentsData(): array
     {
         return $this->createConsignmentProviderDataset([
-            'NL -> NL' => $this->getDefaultAddress(),
+            'NL -> EU' => [],
         ]);
     }
 
@@ -42,9 +44,11 @@ class UPSConsignmentTest extends ConsignmentTestCase
             parent::getDefaultConsignmentData(),
             [
                 self::CARRIER_ID  => CarrierUPS::ID,
-                self::FULL_STREET => 'Meander 631',
-                self::POSTAL_CODE => '6825ME',
-                self::CITY        => 'Arnhem',
+                self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                self::FULL_STREET => 'Feldstrasse 17',
+                self::POSTAL_CODE => '39394',
+                self::CITY        => 'Schwanebeck',
+                self::COUNTRY     => 'DE',
                 self::PHONE       => '123456',
             ]
         );

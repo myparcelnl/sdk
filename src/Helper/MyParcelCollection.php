@@ -23,6 +23,7 @@ use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierUPS;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
@@ -829,7 +830,7 @@ class MyParcelCollection extends Collection
             $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
 
             //TODO: MY-32524 Make AbstractConsignmentAdapter for carrier specific exceptions
-            if (CarrierInstabox::ID === $shipment['carrier_id']) {
+            if (CarrierInstabox::ID === $shipment['carrier_id'] || CarrierUPS::ID === $shipment['carrier_id']) {
                 $shipment['barcode'] = $shipment['barcode'] ?: $shipment['external_identifier'];
             }
 
