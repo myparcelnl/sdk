@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.5](https://github.com/myparcelnl/sdk/compare/v7.8.4...v7.8.5) (2023-12-04)
+
+
+### :bug: Bug Fixes
+
+* correct dpd shipment options ([#464](https://github.com/myparcelnl/sdk/issues/464)) ([e454e13](https://github.com/myparcelnl/sdk/commit/e454e1361b0c9348fcd63fd8ddf6a961c9a1f459))
+
 ## [7.8.4](https://github.com/myparcelnl/sdk/compare/v7.8.3...v7.8.4) (2023-10-26)
 
 
