@@ -22,7 +22,6 @@ class ConsignmentTestCase extends TestCase
 {
     public const    ENV_ALLOW_DHL_FOR_YOU = 'ALLOW_DHL_FOR_YOU';
     protected const ADD_DROPOFF_POINT     = 'add_dropoff_point';
-    protected const PHYSICAL_PROPERTIES   = 'physical_properties';
     protected const AGE_CHECK             = 'age_check';
     protected const API_KEY               = 'api_key';
     protected const AUTO_DETECT_PICKUP    = 'auto_detect_pickup';

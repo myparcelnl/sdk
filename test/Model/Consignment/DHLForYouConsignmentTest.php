@@ -67,13 +67,6 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
                 self::POSTAL_CODE       => '6825ME',
                 self::CITY              => 'Arnhem',
                 self::PHONE             => '123456',
-                self::ADD_DROPOFF_POINT => false,
-                'physical_properties' => [
-                    'weight' => 1,
-                    'height' => 1,
-                    'width'  => 1,
-                    'volume' => 1,
-                ],
             ]
         );
     }
