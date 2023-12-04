@@ -33,9 +33,9 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
                 self::expected(self::RETURN) => false,
                 self::SAME_DAY_DELIVERY      => true,
             ],
-            'Age check' => [
-                self::AGE_CHECK => true,
-                self::ONLY_RECIPIENT => true,
+            'Age check'         => [
+                self::AGE_CHECK                      => true,
+                self::ONLY_RECIPIENT                 => true,
                 self::expected(self::ONLY_RECIPIENT) => false,
             ],
         ]);
@@ -62,11 +62,18 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
         return array_replace(
             parent::getDefaultConsignmentData(),
             [
-                self::CARRIER_ID  => CarrierDHLForYou::ID,
-                self::FULL_STREET => 'Meander 631',
-                self::POSTAL_CODE => '6825ME',
-                self::CITY        => 'Arnhem',
-                self::PHONE       => '123456',
+                self::CARRIER_ID        => CarrierDHLForYou::ID,
+                self::FULL_STREET       => 'Meander 631',
+                self::POSTAL_CODE       => '6825ME',
+                self::CITY              => 'Arnhem',
+                self::PHONE             => '123456',
+                self::ADD_DROPOFF_POINT => false,
+                'physical_properties' => [
+                    'weight' => 1,
+                    'height' => 1,
+                    'width'  => 1,
+                    'volume' => 1,
+                ],
             ]
         );
     }
