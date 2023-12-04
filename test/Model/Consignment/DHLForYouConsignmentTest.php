@@ -62,11 +62,11 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
         return array_replace(
             parent::getDefaultConsignmentData(),
             [
-                self::CARRIER_ID        => CarrierDHLForYou::ID,
-                self::FULL_STREET       => 'Meander 631',
-                self::POSTAL_CODE       => '6825ME',
-                self::CITY              => 'Arnhem',
-                self::PHONE             => '123456',
+                self::CARRIER_ID  => CarrierDHLForYou::ID,
+                self::FULL_STREET => 'Meander 631',
+                self::POSTAL_CODE => '6825ME',
+                self::CITY        => 'Arnhem',
+                self::PHONE       => '123456',
             ]
         );
     }
