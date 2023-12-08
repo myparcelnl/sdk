@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.9.0](https://github.com/myparcelnl/sdk/compare/v7.8.5...v7.9.0) (2023-12-08)
+
+
+### :sparkles: New Features
+
+* add carrier ups ([#463](https://github.com/myparcelnl/sdk/issues/463)) ([5ec154c](https://github.com/myparcelnl/sdk/commit/5ec154c3919d957ae69df47c2d62ead25edce1fa))
+
 ## [7.8.5](https://github.com/myparcelnl/sdk/compare/v7.8.4...v7.8.5) (2023-12-04)
 
 
