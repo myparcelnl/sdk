@@ -18,7 +18,8 @@ class CarrierFactory
         CarrierPostNL::class,
         CarrierDHLForYou::class,
         CarrierDHLParcelConnect::class,
-        CarrierDHLEuroplus::class
+        CarrierDHLEuroplus::class,
+        CarrierUPS::class
     ];
 
     /**
