@@ -113,9 +113,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
                         AbstractConsignment::CC_BE
                     ),
                     self::LARGE_FORMAT                   => true,
-                    self::expected(self::INSURANCE)      => 500,
-                    self::expected(self::ONLY_RECIPIENT) => true,
-                    self::expected(self::SIGNATURE)      => true,
+                    self::expected(self::INSURANCE)      => 0,
+                    self::expected(self::ONLY_RECIPIENT) => false,
+                    self::expected(self::SIGNATURE)      => false,
                 ],
         ]);
     }

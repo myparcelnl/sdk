@@ -33,15 +33,6 @@ class OrderCollectionTest extends TestCase
     ];
 
     /**
-     * @return void
-     * @before
-     */
-    public function before(): void
-    {
-        self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'The Order API is not available on production yet.');
-    }
-
-    /**
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -83,6 +74,7 @@ class OrderCollectionTest extends TestCase
             $orderLines = $this->generateOrderLines(3);
 
             $order->setOrderLines($orderLines);
+            $order->setWeight($orderLines->sum('weight'));
             $orderCollection->push($order);
         }
 
@@ -112,13 +104,15 @@ class OrderCollectionTest extends TestCase
                     $originalOrder->getInvoiceAddress()
                         ->toArray(),
                     $savedOrder->getInvoiceAddress()
-                        ->toArray()
+                        ->toArray(),
+                    'invoice address is not the same'
                 );
                 self::assertArraySame(
                     $originalOrder->getRecipient()
                         ->toArray(),
                     $savedOrder->getRecipient()
-                        ->toArray()
+                        ->toArray(),
+                    'recipient is not the same'
                 );
 
                 $savedOrder

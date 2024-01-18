@@ -96,7 +96,12 @@ class OrderCollection extends Collection
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
                         'drop_off_point'      => $dropOffPointAsArray,
                         'customs_declaration' => $order->getCustomsDeclaration(),
-                        'physical_properties' => ['weight' => $order->getWeight()],
+                        'physical_properties' => [
+                            'weight' => $order->getWeight(),
+                            'height' => 1,
+                            'length' => 1,
+                            'width'  => 1,
+                        ],
                     ],
                 ];
             }
