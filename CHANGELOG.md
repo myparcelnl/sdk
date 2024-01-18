@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.9.1](https://github.com/myparcelnl/sdk/compare/v7.9.0...v7.9.1) (2024-01-18)
+
+
+### :bug: Bug Fixes
+
+* **fulfilment:** export physical properties ([#465](https://github.com/myparcelnl/sdk/issues/465)) ([b7ea460](https://github.com/myparcelnl/sdk/commit/b7ea4609d61b2e39a7278d8bc6bcd30b6585d186))
+
 ## [7.9.0](https://github.com/myparcelnl/sdk/compare/v7.8.5...v7.9.0) (2023-12-08)
 
 
