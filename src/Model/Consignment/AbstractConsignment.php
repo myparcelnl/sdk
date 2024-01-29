@@ -472,6 +472,11 @@ abstract class AbstractConsignment
     protected $drop_off_point;
 
     /**
+     * @var null|string
+     */
+    private $state;
+
+    /**
      * @throws \Exception
      */
     public function __construct()
@@ -838,6 +843,24 @@ abstract class AbstractConsignment
     public function getRegion(): ?string
     {
         return $this->region;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param  null|string $state
+     *
+     * @return void
+     */
+    public function setState(?string $state)
+    {
+        $this->state = $state;
     }
 
     /**
