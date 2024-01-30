@@ -28,7 +28,7 @@ class UPSConsignmentTest extends ConsignmentTestCase
      * @throws \Exception
      * @dataProvider provideUPSConsignmentsData
      */
-    public function testUPSForYouConsignments(array $testData): void
+    public function testUPSConsignments(array $testData): void
     {
         $this->doConsignmentTest($testData);
     }

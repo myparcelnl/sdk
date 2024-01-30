@@ -856,11 +856,13 @@ abstract class AbstractConsignment
     /**
      * @param  null|string $state
      *
-     * @return void
+     * @return self
      */
-    public function setState(?string $state)
+    public function setState(?string $state): self
     {
         $this->state = $state;
+
+        return $this;
     }
 
     /**
