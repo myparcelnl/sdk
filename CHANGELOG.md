@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.10.0](https://github.com/myparcelnl/sdk/compare/v7.9.1...v7.10.0) (2024-02-01)
+
+
+### :sparkles: New Features
+
+* **consignment:** add state property ([#469](https://github.com/myparcelnl/sdk/issues/469)) ([3488251](https://github.com/myparcelnl/sdk/commit/3488251f211a77654039ce44ab0aaa12ffe1d979))
+
 ## [7.9.1](https://github.com/myparcelnl/sdk/compare/v7.9.0...v7.9.1) (2024-01-18)
 
 
