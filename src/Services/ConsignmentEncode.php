@@ -334,8 +334,18 @@ class ConsignmentEncode
             throw new MissingFieldException('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
-        if ($consignment->getPackageType() !== AbstractConsignment::PACKAGE_TYPE_PACKAGE && $consignment->getPackageType() !== AbstractConsignment::PACKAGE_TYPE_LETTER) {
-            throw new MissingFieldException('For international shipments, package_type must be 1 (normal package) or 3 (letter).');
+        if (in_array(
+            $consignment->getPackageType(),
+            [
+                AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                AbstractConsignment::PACKAGE_TYPE_LETTER,
+                AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL,
+            ],
+            true
+        )) {
+            throw new MissingFieldException(
+                'For international shipments, package_type must be 1 (normal package), 3 (letter) or 6 (small package).'
+            );
         }
 
         if (empty($consignment->getInvoice())) {
