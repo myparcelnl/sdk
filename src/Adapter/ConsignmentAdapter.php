@@ -135,7 +135,7 @@ class ConsignmentAdapter
                 'pickup_country'       => $pickup['cc'] ?? null,
                 'pickup_location_code' => $pickup['location_code'] ?? null,
                 'pickup_location_name' => $pickup['location_name'] ?? null,
-                'pickup_network_id'    => $pickup['retail_network_id'] ?? null,
+                'pickup_network_id'    => $pickup['retail_network_id'] ?? '',
                 'pickup_number'        => $pickup['number'] ?? null,
                 'pickup_postal_code'   => $pickup['postal_code'] ?? null,
                 'pickup_street'        => $pickup['street'] ?? null,
