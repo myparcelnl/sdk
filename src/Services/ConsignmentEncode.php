@@ -124,6 +124,10 @@ class ConsignmentEncode
             ];
         }
 
+        if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL === $consignment->getPackageType()) {
+            $consignmentEncoded['options']['tracked'] = 1;
+        }
+
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
             $key   = "options.$option";
             $value = Arr::get($consignmentEncoded, $key);

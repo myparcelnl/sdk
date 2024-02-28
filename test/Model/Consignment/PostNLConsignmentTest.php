@@ -31,6 +31,19 @@ class PostNLConsignmentTest extends ConsignmentTestCase
                 self::expected(self::ONLY_RECIPIENT) => true,
                 self::expected(self::SIGNATURE)      => true,
             ],
+            'Letter' => [
+                self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_LETTER,
+                self::expected(self::DELIVERY_TYPE) => AbstractConsignment::DELIVERY_TYPE_STANDARD,
+            ],
+            'Small package' => $this->getDefaultAddress('DE') + [
+                self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL,
+                self::expected(self::DELIVERY_TYPE) => AbstractConsignment::DELIVERY_TYPE_STANDARD,
+            ],
+            'Customs declaration' => $this->getDefaultAddress('CA') + [
+                self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                self::CUSTOMS_DECLARATION => $this->getDefaultCustomsDeclaration(),
+                self::expected(self::DELIVERY_TYPE) => AbstractConsignment::DELIVERY_TYPE_STANDARD,
+                ],
         ]);
     }
 
