@@ -39,11 +39,10 @@ class PostNLConsignmentTest extends ConsignmentTestCase
                 self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL,
                 self::expected(self::DELIVERY_TYPE) => AbstractConsignment::DELIVERY_TYPE_STANDARD,
             ],
-            'Customs declaration' => $this->getDefaultAddress('CA') + [
-                self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+            'Customs declaration' => array_merge($this->getDefaultAddress('CA'),$this->getDefaultConsignmentData(), [
                 self::CUSTOMS_DECLARATION => $this->getDefaultCustomsDeclaration(),
                 self::expected(self::DELIVERY_TYPE) => AbstractConsignment::DELIVERY_TYPE_STANDARD,
-                ],
+                ]),
         ]);
     }
 
