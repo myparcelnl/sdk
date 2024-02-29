@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.10.1](https://github.com/myparcelnl/sdk/compare/v7.10.0...v7.10.1) (2024-02-29)
+
+
+### :bug: Bug Fixes
+
+* retail_network_id null value found ([#473](https://github.com/myparcelnl/sdk/issues/473)) ([63113cc](https://github.com/myparcelnl/sdk/commit/63113cc01514a304788d4d9f48c0c5c4a0df3d1c))
+
 ## [7.10.0](https://github.com/myparcelnl/sdk/compare/v7.9.1...v7.10.0) (2024-02-01)
 
 
