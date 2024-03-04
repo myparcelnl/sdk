@@ -275,6 +275,9 @@ class ConsignmentEncode
          * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
+
+        var_dump($consignment);
+
         if ($consignment->isToEuCountry()) {
             return $this;
         }
@@ -338,7 +341,7 @@ class ConsignmentEncode
             throw new MissingFieldException('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
-        if (in_array(
+        if (! in_array(
             $consignment->getPackageType(),
             [
                 AbstractConsignment::PACKAGE_TYPE_PACKAGE,
