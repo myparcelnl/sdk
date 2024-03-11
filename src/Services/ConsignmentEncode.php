@@ -276,8 +276,6 @@ class ConsignmentEncode
          */
         $consignment = Arr::first($this->consignments);
 
-        var_dump($consignment);
-
         if ($consignment->isToEuCountry()) {
             return $this;
         }
