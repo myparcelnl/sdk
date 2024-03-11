@@ -125,7 +125,11 @@ class ConsignmentEncode
         }
 
         if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL === $consignment->getPackageType()) {
-            $consignmentEncoded['options']['tracked'] = 1;
+            if (AbstractConsignment::CC_NL === $consignment->getCountry()) {
+                $consignmentEncoded['options']['package_format'] = 0;
+            } else {
+                $consignmentEncoded['options']['package_format'] = 1;
+            }
         }
 
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
