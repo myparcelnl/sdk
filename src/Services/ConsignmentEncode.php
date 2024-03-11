@@ -126,9 +126,9 @@ class ConsignmentEncode
 
         if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL === $consignment->getPackageType()) {
             if (AbstractConsignment::CC_NL === $consignment->getCountry()) {
-                $consignmentEncoded['options']['package_format'] = 0;
+                $consignmentEncoded['options']['tracked'] = 0;
             } else {
-                $consignmentEncoded['options']['package_format'] = 1;
+                $consignmentEncoded['options']['tracked'] = 1;
             }
         }
 
