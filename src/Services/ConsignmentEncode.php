@@ -25,7 +25,8 @@ use MyParcelNL\Sdk\src\Support\Helpers;
 
 class ConsignmentEncode
 {
-    public const DEFAULT_CURRENCY = 'EUR';
+    public const DEFAULT_CURRENCY           = 'EUR';
+    private const MAX_INSURANCE_PACKETS_ROW = 5000;
 
     /**
      * @var array
@@ -125,6 +126,13 @@ class ConsignmentEncode
         }
 
         if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL === $consignment->getPackageType()) {
+            $consignmentEncoded['options']['large_format'] = 0;
+
+            if (AbstractConsignment::CC_NL !== $consignment->getCountry()
+                && self::MAX_INSURANCE_PACKETS_ROW < $consignment->getInsurance() * 100) {
+                $consignmentEncoded['options']['insurance']['amount'] = self::MAX_INSURANCE_PACKETS_ROW;
+            }
+
             if (AbstractConsignment::CC_NL === $consignment->getCountry()) {
                 $consignmentEncoded['options']['tracked'] = 0;
             } else {
