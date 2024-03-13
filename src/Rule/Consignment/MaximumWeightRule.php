@@ -26,6 +26,10 @@ class MaximumWeightRule extends Rule
      * @var int
      */
     public const MAX_COLLO_WEIGHT_DIGITAL_STAMP_GRAMS = 2000;
+    /**
+     * @var int
+     */
+    public const MAX_COLLO_WEIGHT_PACKAGE_SMALL_GRAMS = 2000;
 
     /**
      * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $validationSubject
@@ -49,6 +53,9 @@ class MaximumWeightRule extends Rule
                 break;
             case AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP:
                 $weightLimit = self::MAX_COLLO_WEIGHT_DIGITAL_STAMP_GRAMS;
+                break;
+            case AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL:
+                $weightLimit = self::MAX_COLLO_WEIGHT_PACKAGE_SMALL_GRAMS;
                 break;
             default:
                 $weightLimit = null;

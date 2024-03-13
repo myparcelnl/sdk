@@ -126,17 +126,20 @@ abstract class AbstractConsignment
     public const PACKAGE_TYPE_MAILBOX       = 2;
     public const PACKAGE_TYPE_LETTER        = 3;
     public const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+    public const PACKAGE_TYPE_PACKAGE_SMALL = 6;
 
     public const PACKAGE_TYPE_PACKAGE_NAME       = 'package';
     public const PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
     public const PACKAGE_TYPE_LETTER_NAME        = 'letter';
     public const PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
+    public const PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
 
     public const PACKAGE_TYPES_IDS = [
         self::PACKAGE_TYPE_PACKAGE,
         self::PACKAGE_TYPE_MAILBOX,
         self::PACKAGE_TYPE_LETTER,
         self::PACKAGE_TYPE_DIGITAL_STAMP,
+        self::PACKAGE_TYPE_PACKAGE_SMALL,
     ];
 
     public const PACKAGE_TYPES_NAMES = [
@@ -144,6 +147,7 @@ abstract class AbstractConsignment
         self::PACKAGE_TYPE_MAILBOX_NAME,
         self::PACKAGE_TYPE_LETTER_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
     ];
 
     public const PACKAGE_TYPES_NAMES_IDS_MAP = [
@@ -151,6 +155,7 @@ abstract class AbstractConsignment
         self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
         self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL,
     ];
 
     public const DEFAULT_PACKAGE_TYPE      = self::PACKAGE_TYPE_PACKAGE;
@@ -536,12 +541,12 @@ abstract class AbstractConsignment
      */
     public function canHaveShipmentOption(string $option): bool
     {
-        $isPackage         = self::PACKAGE_TYPE_PACKAGE === $this->getPackageType();
-        $isPickup          = self::DELIVERY_TYPE_PICKUP === $this->getDeliveryType();
-        $optionIsAvailable = in_array($option, $this->getAllowedShipmentOptions(), true);
-        $pickupAllowed     = in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
+        $canHaveShipmentOptions = in_array($this->getPackageType(), [self::PACKAGE_TYPE_PACKAGE, self::PACKAGE_TYPE_PACKAGE_SMALL]);
+        $isPickup               = self::DELIVERY_TYPE_PICKUP === $this->getDeliveryType();
+        $optionIsAvailable      = in_array($option, $this->getAllowedShipmentOptions(), true);
+        $pickupAllowed          = in_array($option, $this->getAllowedShipmentOptionsForPickup(), true);
 
-        return $isPackage && $optionIsAvailable && ($pickupAllowed || ! $isPickup);
+        return $canHaveShipmentOptions && $optionIsAvailable && ($pickupAllowed || ! $isPickup);
     }
 
     /**

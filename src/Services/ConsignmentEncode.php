@@ -25,7 +25,8 @@ use MyParcelNL\Sdk\src\Support\Helpers;
 
 class ConsignmentEncode
 {
-    public const DEFAULT_CURRENCY = 'EUR';
+    public const DEFAULT_CURRENCY           = 'EUR';
+    private const MAX_INSURANCE_PACKETS_ROW = 5000;
 
     /**
      * @var array
@@ -122,6 +123,21 @@ class ConsignmentEncode
                 'amount'   => (int) $consignment->getInsurance() * 100,
                 'currency' => self::DEFAULT_CURRENCY,
             ];
+        }
+
+        if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL === $consignment->getPackageType()) {
+            $consignmentEncoded['options']['large_format'] = 0;
+
+            if (AbstractConsignment::CC_NL !== $consignment->getCountry()
+                && self::MAX_INSURANCE_PACKETS_ROW < $consignment->getInsurance() * 100) {
+                $consignmentEncoded['options']['insurance']['amount'] = self::MAX_INSURANCE_PACKETS_ROW;
+            }
+
+            if (AbstractConsignment::CC_NL === $consignment->getCountry()) {
+                $consignmentEncoded['options']['tracked'] = 0;
+            } else {
+                $consignmentEncoded['options']['tracked'] = 1;
+            }
         }
 
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
@@ -271,6 +287,7 @@ class ConsignmentEncode
          * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
+
         if ($consignment->isToEuCountry()) {
             return $this;
         }
@@ -334,8 +351,18 @@ class ConsignmentEncode
             throw new MissingFieldException('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
-        if ($consignment->getPackageType() !== AbstractConsignment::PACKAGE_TYPE_PACKAGE && $consignment->getPackageType() !== AbstractConsignment::PACKAGE_TYPE_LETTER) {
-            throw new MissingFieldException('For international shipments, package_type must be 1 (normal package) or 3 (letter).');
+        if (! in_array(
+            $consignment->getPackageType(),
+            [
+                AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                AbstractConsignment::PACKAGE_TYPE_LETTER,
+                AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL,
+            ],
+            true
+        )) {
+            throw new MissingFieldException(
+                'For international shipments, package_type must be 1 (normal package), 3 (letter) or 6 (small package).'
+            );
         }
 
         if (empty($consignment->getInvoice())) {

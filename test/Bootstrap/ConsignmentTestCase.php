@@ -328,6 +328,13 @@ class ConsignmentTestCase extends TestCase
                     self::POSTAL_CODE => '2000',
                     self::CITY        => 'Antwerpen',
                 ];
+            case 'DE':
+                return [
+                    self::COUNTRY     => 'DE',
+                    self::FULL_STREET => 'Kurfürstendamm 195',
+                    self::POSTAL_CODE => '10707',
+                    self::CITY        => 'Berlin',
+                ];
             case 'CA':
                 return [
                     self::COUNTRY     => 'CA',
