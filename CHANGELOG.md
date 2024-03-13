@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.11.0](https://github.com/myparcelnl/sdk/compare/v7.10.1...v7.11.0) (2024-03-13)
+
+
+### :sparkles: New Features
+
+* add package type package_small ([#471](https://github.com/myparcelnl/sdk/issues/471)) ([dd72573](https://github.com/myparcelnl/sdk/commit/dd72573c968d9634e7f765e917bd26555f5db17d))
+
 ## [7.10.1](https://github.com/myparcelnl/sdk/compare/v7.10.0...v7.10.1) (2024-02-29)
 
 
