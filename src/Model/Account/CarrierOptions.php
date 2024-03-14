@@ -31,16 +31,23 @@ class CarrierOptions extends BaseModel
     private $optional;
 
     /**
+     * @var int
+     */
+    private $contractId;
+
+    /**
      * @param  array $options
      *
      * @throws \Exception
      */
     public function __construct(array $options)
     {
-        $this->enabled  = (bool) $options['enabled'];
-        $this->optional = (bool) $options['optional'];
-        $this->carrier  = CarrierFactory::create($options['carrier']['id']);
-        $this->label    = $options['label'] ?? $this->carrier->getHuman();
+        var_dump($options); echo "\njoepiejoepie\n";
+        $this->enabled    = (bool) $options['enabled'];
+        $this->optional   = (bool) $options['optional'];
+        $this->carrier    = CarrierFactory::create($options['carrier']['id']);
+        $this->label      = $options['label'] ?? $this->carrier->getHuman();
+        $this->contractId = $options['subscription_id'] ?? null;
     }
 
     /**
@@ -73,5 +80,10 @@ class CarrierOptions extends BaseModel
     public function isOptional(): bool
     {
         return $this->optional;
+    }
+
+    public function hasContract(): bool
+    {
+        return (bool) $this->contractId;
     }
 }

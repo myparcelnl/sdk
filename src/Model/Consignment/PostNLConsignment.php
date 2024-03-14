@@ -72,13 +72,6 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function getAllowedPackageTypes(): array
     {
-        $cc = $this->getCountry() ?? $this->getLocalCountryCode();
-        if ($cc !== $this->getLocalCountryCode()) {
-            return [
-                self::PACKAGE_TYPE_PACKAGE_NAME,
-                self::PACKAGE_TYPE_MAILBOX_NAME,
-            ];
-        }
         return [
             self::PACKAGE_TYPE_PACKAGE_NAME,
             self::PACKAGE_TYPE_MAILBOX_NAME,
