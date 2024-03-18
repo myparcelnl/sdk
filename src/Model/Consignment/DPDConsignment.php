@@ -47,6 +47,17 @@ class DPDConsignment extends AbstractConsignment
     protected $validatorClass = DPDConsignmentValidator::class;
 
     /**
+     * @return string[]
+     */
+    public function getAllowedPackageTypes(): array
+    {
+        return [
+            self::PACKAGE_TYPE_PACKAGE_NAME,
+            self::PACKAGE_TYPE_MAILBOX_NAME,
+        ];
+    }
+
+    /**
      * @param  array $consignmentEncoded
      *
      * @return array
