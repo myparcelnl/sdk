@@ -37,7 +37,6 @@ class CarrierOptions extends BaseModel
      */
     public function __construct(array $options)
     {
-        var_dump($options); echo "\n JOERI \n";
         $this->enabled    = (bool) $options['enabled'];
         $this->optional   = (bool) $options['optional'];
         $this->carrier    = CarrierFactory::create($options['carrier']['id']);
