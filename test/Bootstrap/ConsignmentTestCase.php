@@ -338,7 +338,7 @@ class ConsignmentTestCase extends TestCase
             case 'CA':
                 return [
                     self::COUNTRY     => 'CA',
-                    self::FULL_STREET => '4777 Pierre-de Coubertin Ave',
+                    self::FULL_STREET => 'Pierre-de Coubertin Ave 4777',
                     self::POSTAL_CODE => 'H1V 1B3',
                     self::CITY        => 'Montreal',
                 ];
