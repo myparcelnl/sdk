@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.12.0](https://github.com/myparcelnl/sdk/compare/v7.11.0...v7.12.0) (2024-03-25)
+
+
+### :sparkles: New Features
+
+* add international bbp ([#476](https://github.com/myparcelnl/sdk/issues/476)) ([453c590](https://github.com/myparcelnl/sdk/commit/453c59079c9befcd38db066a7fdcae1ef7743a86))
+
 ## [7.11.0](https://github.com/myparcelnl/sdk/compare/v7.10.1...v7.11.0) (2024-03-13)
 
 
