@@ -29,6 +29,10 @@ class CarrierOptions extends BaseModel
      * @var bool
      */
     private $optional;
+    /**
+     * @var string
+     */
+    private $type;
 
     /**
      * @param  array $options
@@ -41,6 +45,7 @@ class CarrierOptions extends BaseModel
         $this->optional = (bool) $options['optional'];
         $this->carrier  = CarrierFactory::create($options['carrier']['id']);
         $this->label    = $options['label'] ?? $this->carrier->getHuman();
+        $this->type     = $options['type'] ?? $this->label;
     }
 
     /**
@@ -57,6 +62,14 @@ class CarrierOptions extends BaseModel
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     /**
