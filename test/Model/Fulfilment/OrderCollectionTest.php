@@ -25,7 +25,7 @@ class OrderCollectionTest extends TestCase
         'cc'            => 'NL',
         'city'          => 'Leiden',
         'location_code' => 'ed14eb91-7374-4dcc-a41d-34c0d3e45c01',
-        'location_name' => 'Instabox',
+        'location_name' => 'Dropoff',
         'number'        => '2',
         'number_suffix' => 'H',
         'postal_code'   => '2321 TD',

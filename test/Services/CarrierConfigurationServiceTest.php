@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services;
 
 use MyParcelNL\Sdk\src\Model\Account\Shop;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Services\Web\AccountWebService;
 use MyParcelNL\Sdk\src\Services\Web\CarrierConfigurationWebService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
