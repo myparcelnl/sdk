@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.12.1](https://github.com/myparcelnl/sdk/compare/v7.12.0...v7.12.1) (2024-04-05)
+
+
+### :bug: Bug Fixes
+
+* remove instabox ([#478](https://github.com/myparcelnl/sdk/issues/478)) ([20b74e6](https://github.com/myparcelnl/sdk/commit/20b74e6e6062eda5215358b4d24300bec127693d))
+
 ## [7.12.0](https://github.com/myparcelnl/sdk/compare/v7.11.0...v7.12.0) (2024-03-25)
 
 
