@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.0](https://github.com/myparcelnl/sdk/compare/v7.12.1...v7.13.0) (2024-04-11)
+
+
+### :sparkles: New Features
+
+* allow package type mailbox for dpd ([#475](https://github.com/myparcelnl/sdk/issues/475)) ([a1326a3](https://github.com/myparcelnl/sdk/commit/a1326a3cb6241226b45c9835ace7ef32ae325e12))
+
 ## [7.12.1](https://github.com/myparcelnl/sdk/compare/v7.12.0...v7.12.1) (2024-04-05)
 
 
