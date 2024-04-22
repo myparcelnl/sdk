@@ -17,6 +17,7 @@ use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV2Adapter;
 use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV3Adapter;
 use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsAdapterFactory
 {
@@ -28,14 +29,31 @@ class DeliveryOptionsAdapterFactory
      */
     public static function create(array $deliveryOptionsData): AbstractDeliveryOptionsAdapter
     {
-        $deliveryOptionsData = Arr::fromObject($deliveryOptionsData);
+        /**
+         * To ensure backwards compatibility in consuming applications, we convert camelCase to snake_case here,
+         * only for shipmentOptions and pickupLocation. Everything else should remain camelCased.
+         */
+        foreach (['shipmentOptions', 'pickupLocation'] as $item) {
+            if (isset($deliveryOptionsData[$item]) && is_array($deliveryOptionsData[$item])) {
+                foreach ($deliveryOptionsData[$item] as $key => $value) {
+                    $snakeCasedKey = Str::snake($key);
+                    if ($snakeCasedKey === $key) {
+                        continue;
+                    }
+                    unset($deliveryOptionsData[$item][$key]);
+                    $deliveryOptionsData[$item][$snakeCasedKey] = $value;
+                }
+            }
+        }
 
-        if (key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData["time"])) {
+        if (array_key_exists('time', $deliveryOptionsData) && is_array($deliveryOptionsData['time'])) {
             return new DeliveryOptionsV2Adapter($deliveryOptionsData);
-        } elseif (key_exists('deliveryType', $deliveryOptionsData)) {
+        }
+
+        if (array_key_exists('deliveryType', $deliveryOptionsData)) {
             return new DeliveryOptionsV3Adapter($deliveryOptionsData);
         }
 
-        throw new BadMethodCallException("Can't create DeliveryOptions. No suitable adapter found");
+        throw new BadMethodCallException('Can\'t create DeliveryOptions. No suitable adapter found');
     }
 }
