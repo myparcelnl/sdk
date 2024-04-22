@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.1](https://github.com/myparcelnl/sdk/compare/v7.13.0...v7.13.1) (2024-04-22)
+
+
+### :bug: Bug Fixes
+
+* make shipmentOptions and pickupLocation properties snake_case for backwards compatibility ([#481](https://github.com/myparcelnl/sdk/issues/481)) ([f4ec38d](https://github.com/myparcelnl/sdk/commit/f4ec38d78615c16d6b4485279bb796cfb68b9f0d))
+
 ## [7.13.0](https://github.com/myparcelnl/sdk/compare/v7.12.1...v7.13.0) (2024-04-11)
 
 
