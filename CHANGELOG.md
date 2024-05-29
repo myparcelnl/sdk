@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.2](https://github.com/myparcelnl/sdk/compare/v7.13.1...v7.13.2) (2024-05-29)
+
+
+### :bug: Bug Fixes
+
+* remove dpd default weight ([#482](https://github.com/myparcelnl/sdk/issues/482)) ([070456f](https://github.com/myparcelnl/sdk/commit/070456fc1cc1a8a22b7540dfda966e6f8f89a06d))
+
 ## [7.13.1](https://github.com/myparcelnl/sdk/compare/v7.13.0...v7.13.1) (2024-04-22)
 
 
