@@ -28,13 +28,6 @@ class DPDConsignment extends AbstractConsignment
 
     /** @deprecated use $this->getCarrierName() */
     public const CARRIER_NAME = 'dpd';
-    public const DEFAULT_WEIGHT = 3000;
-
-    /**
-     * @internal
-     * @var int
-     */
-    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
      * @var string
