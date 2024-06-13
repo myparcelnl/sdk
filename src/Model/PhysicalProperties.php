@@ -7,7 +7,7 @@ class PhysicalProperties extends BaseModel
 {
     private const DEFAULT_WEIGHT = 10;
     private const DEFAULT_LENGTH = 10;
-    private const DEFAULT_WIDTH = 10;
+    private const DEFAULT_WIDTH  = 10;
     private const DEFAULT_HEIGHT = 10;
 
 
