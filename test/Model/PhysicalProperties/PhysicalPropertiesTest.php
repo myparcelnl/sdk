@@ -41,7 +41,7 @@ class PhysicalPropertiesTest extends TestCase
         $array = [
             'weight' => $this->faker->numberBetween(200, 10000),
             'length' => $this->faker->numberBetween(1, 100),
-            'width' => $this->faker->numberBetween(1, 100),
+            'width'  => $this->faker->numberBetween(1, 100),
             'height' => $this->faker->numberBetween(1, 100),
         ];
 
