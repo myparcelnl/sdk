@@ -32,17 +32,17 @@ class PhysicalProperties extends BaseModel
     private $height;
 
     /**
-     * Supply weight, length, width and height. Non-supplied values will be set to default 10.
+     * Supply weight, length, width and height. Illegal values will be set to default 10.
      * MyParcel API expects weight in grams and dimensions in centimeters / cm.
      *
      * @param array $data
      */
     public function __construct(array $data = [])
     {
-        $this->setWeight($data['weight'] ?? self::DEFAULT_WEIGHT);
-        $this->setLength($data['length'] ?? self::DEFAULT_LENGTH);
-        $this->setWidth($data['width'] ?? self::DEFAULT_WIDTH);
-        $this->setHeight($data['height'] ?? self::DEFAULT_HEIGHT);
+        $this->setWeight(((int) $data['weight']) ?: self::DEFAULT_WEIGHT);
+        $this->setLength(((int) $data['length']) ?: self::DEFAULT_LENGTH);
+        $this->setWidth(((int) $data['width']) ?: self::DEFAULT_WIDTH);
+        $this->setHeight(((int) $data['height']) ?: self::DEFAULT_HEIGHT);
     }
 
     /**
