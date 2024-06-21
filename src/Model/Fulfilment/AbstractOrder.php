@@ -13,6 +13,7 @@ use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
+use MyParcelNL\Sdk\src\Model\PhysicalProperties;
 use MyParcelNL\Sdk\src\Model\PickupLocation;
 use MyParcelNL\Sdk\src\Model\Recipient;
 use MyParcelNL\Sdk\src\Support\Collection;
@@ -90,6 +91,11 @@ class AbstractOrder extends BaseModel
      * @var \MyParcelNL\Sdk\src\Model\PickupLocation|null
      */
     protected $pickupLocation;
+
+    /**
+     * @var \MyParcelNL\Sdk\src\Model\PhysicalProperties|null
+     */
+    protected $physicalProperties;
 
     /**
      * @var string|null
@@ -233,6 +239,20 @@ class AbstractOrder extends BaseModel
     public function getRecipient(): Recipient
     {
         return $this->recipient;
+    }
+
+    /**
+     * When not set, will return PhysicalProperties with order total weight and default dimensions.
+     *
+     * @return PhysicalProperties
+     */
+    public function getPhysicalProperties(): PhysicalProperties
+    {
+        if (!isset($this->physicalProperties)) {
+            $this->physicalProperties = new PhysicalProperties(['weight'=>$this->getWeight()]);
+        }
+
+        return $this->physicalProperties;
     }
 
     /**
@@ -392,6 +412,16 @@ class AbstractOrder extends BaseModel
     }
 
     /**
+     * @param PhysicalProperties $physicalProperties
+     * @return self
+     */
+    public function setPhysicalProperties(PhysicalProperties $physicalProperties): self
+    {
+        $this->physicalProperties = $physicalProperties;
+        return $this;
+    }
+
+    /**
      * @param  \MyParcelNL\Sdk\src\Model\PickupLocation|null  $pickupLocation
      *
      * @return self
@@ -473,7 +503,10 @@ class AbstractOrder extends BaseModel
             ],
             (null === $this->customs_declaration)
                 ? []
-                : ['customs_declaration' => $this->getCustomsDeclaration()->toArray()]
+                : ['customs_declaration' => $this->getCustomsDeclaration()->toArray()],
+            (null === $this->physicalProperties)
+                ? []
+                : ['physical_properties' => $this->getPhysicalProperties()->toArray()]
         );
     }
 }
