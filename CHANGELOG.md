@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.14.0](https://github.com/myparcelnl/sdk/compare/v7.13.2...v7.14.0) (2024-06-21)
+
+
+### :sparkles: New Features
+
+* add physical properties properly ([#483](https://github.com/myparcelnl/sdk/issues/483)) ([d7e508c](https://github.com/myparcelnl/sdk/commit/d7e508c331cbe73b6df122e679e5f5418051b56d))
+
 ## [7.13.2](https://github.com/myparcelnl/sdk/compare/v7.13.1...v7.13.2) (2024-05-29)
 
 
