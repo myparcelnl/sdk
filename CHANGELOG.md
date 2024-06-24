@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.14.1](https://github.com/myparcelnl/sdk/compare/v7.14.0...v7.14.1) (2024-06-24)
+
+
+### :bug: Bug Fixes
+
+* fix physical properties constructor ([#485](https://github.com/myparcelnl/sdk/issues/485)) ([89ee368](https://github.com/myparcelnl/sdk/commit/89ee368cbfdd855796c4f73c3b55883525bba3ca))
+
 ## [7.14.0](https://github.com/myparcelnl/sdk/compare/v7.13.2...v7.14.0) (2024-06-21)
 
 
