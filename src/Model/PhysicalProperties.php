@@ -39,10 +39,10 @@ class PhysicalProperties extends BaseModel
      */
     public function __construct(array $data = [])
     {
-        $this->setWeight(((int) $data['weight']) ?: self::DEFAULT_WEIGHT);
-        $this->setLength(((int) $data['length']) ?: self::DEFAULT_LENGTH);
-        $this->setWidth(((int) $data['width']) ?: self::DEFAULT_WIDTH);
-        $this->setHeight(((int) $data['height']) ?: self::DEFAULT_HEIGHT);
+        $this->setWeight((int) ($data['weight'] ?? self::DEFAULT_WEIGHT));
+        $this->setLength((int) ($data['length'] ?? self::DEFAULT_LENGTH));
+        $this->setWidth((int) ($data['width'] ?? self::DEFAULT_WIDTH));
+        $this->setHeight((int) ($data['height'] ?? self::DEFAULT_HEIGHT));
     }
 
     /**
