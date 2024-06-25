@@ -230,12 +230,12 @@ abstract class AbstractConsignment
     /**
      * @var int
      */
-    public const PERSON_NAME_MAX_LENGTH = 500;
+    public const PERSON_NAME_MAX_LENGTH = 50;
 
     /**
      * @var int
      */
-    public const COMPANY_NAME_MAX_LENGTH = 500;
+    public const COMPANY_NAME_MAX_LENGTH = 50;
 
     /**
      * @internal
