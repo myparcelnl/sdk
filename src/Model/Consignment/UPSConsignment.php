@@ -12,11 +12,6 @@ class UPSConsignment extends AbstractConsignment
     public const DEFAULT_WEIGHT = 3000;
 
     /**
-     * @var int
-     */
-    public const PERSON_NAME_MAX_LENGTH = 35;
-
-    /**
      * @internal
      * @var int
      */
