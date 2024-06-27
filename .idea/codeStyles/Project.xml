@@ -15,7 +15,7 @@
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
     </CssCodeStyleSettings>
-    <DB2CodeStyleSettings version="6">
+    <DB2CodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -26,7 +26,7 @@
       <option name="IMP_DECLARE_ALIGN_TYPE" value="false" />
       <option name="IMP_DECLARE_ALIGN_EQ" value="false" />
     </DB2CodeStyleSettings>
-    <DerbyCodeStyleSettings version="6">
+    <DerbyCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -37,7 +37,7 @@
       <option name="IMP_DECLARE_ALIGN_TYPE" value="false" />
       <option name="IMP_DECLARE_ALIGN_EQ" value="false" />
     </DerbyCodeStyleSettings>
-    <H2CodeStyleSettings version="6">
+    <H2CodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -46,7 +46,7 @@
       <option name="QUOTE_TYPE" value="11" />
       <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
     </H2CodeStyleSettings>
-    <HSQLCodeStyleSettings version="6">
+    <HSQLCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -87,7 +87,7 @@
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
     </LessCodeStyleSettings>
-    <MSSQLCodeStyleSettings version="6">
+    <MSSQLCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -103,7 +103,7 @@
       <option name="MIN_LINES_AROUND_BLOCK_ELEMENTS" value="0" />
       <option name="MIN_LINES_BETWEEN_PARAGRAPHS" value="0" />
     </Markdown>
-    <MySQLCodeStyleSettings version="6">
+    <MySQLCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -112,7 +112,7 @@
       <option name="QUOTE_TYPE" value="11" />
       <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
     </MySQLCodeStyleSettings>
-    <OracleCodeStyleSettings version="6">
+    <OracleCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -159,10 +159,10 @@
       <option name="ATTRIBUTES_WRAP" value="1" />
       <option name="PARAMETERS_ATTRIBUTES_WRAP" value="1" />
     </PHPCodeStyleSettings>
-    <PostgresCodeStyleSettings version="6">
+    <PostgresCodeStyleSettings version="7">
       <option name="USE_GENERIC_STYLE" value="true" />
     </PostgresCodeStyleSettings>
-    <SQLiteCodeStyleSettings version="6">
+    <SQLiteCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -178,7 +178,7 @@
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
     </ScssCodeStyleSettings>
-    <SqlCodeStyleSettings version="6">
+    <SqlCodeStyleSettings version="7">
       <option name="KEYWORD_CASE" value="2" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="TYPE_CASE" value="2" />
@@ -214,7 +214,7 @@
       <option name="EXPR_CASE_THEN_ALIGN" value="true" />
       <option name="EXPR_CASE_END" value="1" />
     </SqlCodeStyleSettings>
-    <SybaseCodeStyleSettings version="6">
+    <SybaseCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />

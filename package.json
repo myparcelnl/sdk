@@ -9,5 +9,8 @@
   "devDependencies": {
     "@myparcel/semantic-release-config": "^4.0.0"
   },
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "yarn@4.3.1",
+  "volta": {
+    "node": "20.15.0"
+  }
 }
