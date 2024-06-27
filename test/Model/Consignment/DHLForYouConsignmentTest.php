@@ -50,7 +50,6 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
      */
     public function testDHLForYouConsignments(array $testData): void
     {
-        $this->markTestSkipped('Skip because of DHL api error');
         $this->doConsignmentTest($testData);
     }
 
