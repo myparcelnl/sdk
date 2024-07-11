@@ -120,8 +120,6 @@ class DHLEuroplusConsignment extends AbstractConsignment
     protected function getRowInsurancePossibilities(): array
     {
         return [
-            100,
-            250,
             500,
             1000,
             1500,

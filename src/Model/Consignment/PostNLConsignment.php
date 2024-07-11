@@ -194,18 +194,8 @@ class PostNLConsignment extends AbstractConsignment
     protected function getRowInsurancePossibilities(): array
     {
         return [
-            100,
-            250,
+            50,
             500,
-            1000,
-            1500,
-            2000,
-            2500,
-            3000,
-            3500,
-            4000,
-            4500,
-            5000,
         ];
     }
 }
