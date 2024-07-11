@@ -18,6 +18,8 @@ use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Services\CountryCodes;
+use MyParcelNL\Sdk\src\Services\CountryService;
 use MyParcelNL\Sdk\src\Support\Str;
 use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
 
@@ -568,12 +570,18 @@ abstract class AbstractConsignment
      */
     public function getInsurancePossibilities(?string $cc = null): array
     {
-        if (self::CC_BE === $cc && self::CC_NL === $this->getLocalCountryCode()) {
+        $countryService = new CountryService();
+
+        if (CountryCodes::CC_BE === $cc && CountryCodes::CC_NL === $this->getLocalCountryCode()) {
             return $this->getNlToBeInsurancePossibilities();
         }
 
-        if ($cc !== $this->getLocalCountryCode()) {
+        if (CountryCodes::ZONE_EU === $cc || $countryService->isEu($cc)) {
             return $this->getEuInsurancePossibilities();
+        }
+
+        if (CountryCodes::ZONE_ROW === $cc || $countryService->isRow($cc)) {
+            return $this->getRowInsurancePossibilities();
         }
 
         return $this->getLocalInsurancePossibilities();
@@ -1936,6 +1944,16 @@ abstract class AbstractConsignment
      * @return array
      */
     protected function getNlToBeInsurancePossibilities(): array
+    {
+        return [];
+    }
+
+    /**
+     * Array of insurance possibilities for ROW.
+     *
+     * @return array
+     */
+    protected function getRowInsurancePossibilities(): array
     {
         return [];
     }
