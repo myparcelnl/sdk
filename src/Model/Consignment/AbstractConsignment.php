@@ -576,11 +576,17 @@ abstract class AbstractConsignment
             return $this->getNlToBeInsurancePossibilities();
         }
 
-        if (CountryCodes::ZONE_EU === $cc || $countryService->isEu($cc)) {
+        if (
+            $cc !== null
+            && (CountryCodes::ZONE_EU === $cc || $countryService->isEu($cc))
+        ) {
             return $this->getEuInsurancePossibilities();
         }
 
-        if (CountryCodes::ZONE_ROW === $cc || $countryService->isRow($cc)) {
+        if (
+            $cc !== null
+            && (CountryCodes::ZONE_ROW === $cc || $countryService->isRow($cc))
+        ) {
             return $this->getRowInsurancePossibilities();
         }
 
