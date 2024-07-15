@@ -40,7 +40,7 @@
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",
         "phpunit/phpunit": "^7.5.20",
-        "psr/container": "~1.0.0"
+        "psr/container": "~2.0.2"
     },
     "autoload": {
         "psr-4": {
