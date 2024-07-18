@@ -187,4 +187,15 @@ class PostNLConsignment extends AbstractConsignment
             5000,
         ];
     }
+
+    /**
+     * @return int[]
+     */
+    protected function getRowInsurancePossibilities(): array
+    {
+        return [
+            50,
+            500,
+        ];
+    }
 }
