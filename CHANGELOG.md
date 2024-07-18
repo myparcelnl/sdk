@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.0](https://github.com/myparcelnl/sdk/compare/v7.14.1...v7.15.0) (2024-07-18)
+
+
+### :rewind: Reverts
+
+* revert unnecessary change ([be0b704](https://github.com/myparcelnl/sdk/commit/be0b7040d96148bfb3b5ca913e06fb5f50db1265))
+
+
+### :sparkles: New Features
+
+* add row insurance possibilities ([#489](https://github.com/myparcelnl/sdk/issues/489)) ([0fda2f2](https://github.com/myparcelnl/sdk/commit/0fda2f23d2ae638c2bfdfaca3c85d61c91957a92))
+
 ## [7.14.1](https://github.com/myparcelnl/sdk/compare/v7.14.0...v7.14.1) (2024-06-24)
 
 
