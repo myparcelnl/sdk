@@ -58,10 +58,10 @@ class MinimumItemValueRuleTest extends TestCase
     public function testMinimumItemValueRule(array $data, bool $expected): void
     {
         $rule = new MinimumItemValueRule();
-        $cons = new PostNLConsignment();
+        $consignment = new PostNLConsignment();
 
         foreach ($data['items'] as $item) {
-            $cons->addItem(
+            $consignment->addItem(
                 (new MyParcelCustomsItem())
                     ->setItemValue($item['amount'])
                     ->setAmount($item['amount'])
@@ -72,7 +72,7 @@ class MinimumItemValueRuleTest extends TestCase
             );
         }
 
-        $rule->validate($cons);
+        $rule->validate($consignment);
 
         self::assertEquals($expected, 0 === count($rule->getErrors()));
     }
