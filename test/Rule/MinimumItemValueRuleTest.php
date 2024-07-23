@@ -64,7 +64,7 @@ class MinimumItemValueRuleTest extends TestCase
             $consignment->addItem(
                 (new MyParcelCustomsItem())
                     ->setItemValue($item['amount'])
-                    ->setAmount($item['amount'])
+                    ->setAmount(1)
                     ->setWeight(1)
                     ->setClassification(123456)
                     ->setCountry('NL')
