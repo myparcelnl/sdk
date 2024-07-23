@@ -25,7 +25,7 @@ class ValidateStreet
         ')?$~i';
 
     const SPLIT_STREET_REGEX_BE =
-        '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{1,8})\s?(?P<box_separator>' . self::REGEX_BE_BOX_SEPARATORS . ')?\s?(?P<box_number>\d{0,8})\s?(?P<number_suffix>[A-z]{0,4}$)?)$~';
+    '~(?P<box_number>)(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{0,7}[0-9])\s?(?P<box_separator>' . self::REGEX_BE_BOX_SEPARATORS . ')?\s?(?P<box_number>[0-9A-z]{0,7}[0-9])?\s?(?P<number_suffix>[A-z]{0,4}$))?$~J';
 
     const REGEX_BE_BOX_SEPARATORS = SplitStreet::BOX_BTE . '|' . SplitStreet::BOX_EN . '|' . SplitStreet::BOX_FR . '|' . SplitStreet::BOX_NL . '|' . SplitStreet::BOX_DE . '|' . SplitStreet::BOX_SLASH . '|' . SplitStreet::BOX_DASH . '|' . SplitStreet::BOX_B . '.+';
     /**
@@ -37,13 +37,6 @@ class ValidateStreet
      */
     public static function validate(string $fullStreet, string $localCountry, ?string $destinationCountry): bool
     {
-        echo '<textarea>';
-        echo self::SPLIT_STREET_REGEX_BE;
-        echo PHP_EOL;
-        echo '~(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{1,8})\s?(?P<box_separator>bus)?\s?(?P<box_number>\d{0,8})\s?(?P<number_suffix>[A-z]{0,4}$)?)$~';
-        echo "\n\nAPI:\n";
-        echo '@^(?P<street>.+?)\s(?P<number>[0-9]{1,8}(?:-[0-9]{1,8}$)?)\s?(?:boite|boîte|box|bte|bus|b(?!$)|rdc|appt|/|#|-)?\s?(?P<box_number>[a-zA-Z0-9.][a-zA-Z0-9 .]{0,7})?$@i';
-        die('</textarea>');
         if (null === $destinationCountry) {
             return true;
         }

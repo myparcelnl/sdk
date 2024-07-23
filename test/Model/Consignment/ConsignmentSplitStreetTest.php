@@ -348,6 +348,15 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
                 self::expected(self::BOX_NUMBER)  => '',
             ],
             [
+                self::FULL_STREET                 => 'Straat 23-C11',
+                self::COUNTRY                     => 'BE',
+                self::CARRIER_ID                  => CarrierBpost::ID,
+                self::expected(self::FULL_STREET) => 'Straat 23 bus C11',
+                self::expected(self::STREET)      => 'Straat',
+                self::expected(self::NUMBER)      => 23,
+                self::expected(self::BOX_NUMBER)  => 'C11',
+            ],
+            [
                 self::FULL_STREET                 => 'Kortenberglaan 4 bus 10',
                 self::COUNTRY                     => 'BE',
                 self::CARRIER_ID                  => CarrierBpost::ID,
@@ -497,7 +506,7 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
         unset($testData[self::POSTAL_CODE]);
 
         $consignment = $this->generateConsignment($testData);
-
+//throw new \Exception($consignment->getFullStreet() . ' =? ' . $expectedFullStreet);
         self::validateConsignmentOptions(
             [
                 self::FULL_STREET            => $expectedFullStreet,
