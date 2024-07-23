@@ -21,30 +21,43 @@ class MinimumItemValueRuleTest extends TestCase
                 [
                     'items' => [
                         [
-                            'amount' => 50,
+                            'value' => 50,
                         ],
                         [
-                            'amount' => 50,
+                            'value' => 50,
                         ],
                     ],
                 ],
-                true,
+                'expected'=>true,
             ],
             [
                 [
                     'items' => [
                         [
-                            'amount' => 50,
+                            'value' => 5000,
+                        ],
+                        [
+                            'value' => 9995,
                         ],
                     ],
                 ],
-                false,
+                'expected'=>true,
+            ],
+            [
+                [
+                    'items' => [
+                        [
+                            'value' => 50,
+                        ],
+                    ],
+                ],
+                'expected'=>false,
             ],
             [
                 [
                     'items' => [],
                 ],
-                true,
+                'expected'=>true,
             ],
         ];
     }
@@ -63,7 +76,7 @@ class MinimumItemValueRuleTest extends TestCase
         foreach ($data['items'] as $item) {
             $consignment->addItem(
                 (new MyParcelCustomsItem())
-                    ->setItemValue($item['amount'])
+                    ->setItemValue($item['value'])
                     ->setAmount(1)
                     ->setWeight(1)
                     ->setClassification(123456)
