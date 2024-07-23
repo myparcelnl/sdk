@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.1](https://github.com/myparcelnl/sdk/compare/v7.15.0...v7.15.1) (2024-07-23)
+
+
+### :bug: Bug Fixes
+
+* prevent adding array to int calculating total value ([#492](https://github.com/myparcelnl/sdk/issues/492)) ([ebc2ff8](https://github.com/myparcelnl/sdk/commit/ebc2ff8459c9c77b617789e8a76992fff0ddf928))
+
 ## [7.15.0](https://github.com/myparcelnl/sdk/compare/v7.14.1...v7.15.0) (2024-07-18)
 
 
