@@ -20,7 +20,13 @@ class MinimumItemValueRule extends Rule
         $totalValue = 0;
 
         foreach ($validationSubject->items as $item) {
-            $totalValue += $item->getItemValue();
+            $itemValue = $item->getItemValue();
+
+            if (! isset($itemValue['amount'])) {
+                continue;
+            }
+
+            $totalValue += (int) $itemValue['amount'];
         }
 
         if ($totalValue < 100) {
