@@ -506,7 +506,7 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
         unset($testData[self::POSTAL_CODE]);
 
         $consignment = $this->generateConsignment($testData);
-//throw new \Exception($consignment->getFullStreet() . ' =? ' . $expectedFullStreet);
+
         self::validateConsignmentOptions(
             [
                 self::FULL_STREET            => $expectedFullStreet,
