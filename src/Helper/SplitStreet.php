@@ -100,7 +100,7 @@ class SplitStreet
             $fullStreet = implode(
                 ' ',
                 array_filter([
-                    $matches['street'],
+                    $matches['street'] ?? $fullStreet,
                     $matches['number'],
                     $matches['box_separator'],
                     $matches['box_number'],
@@ -123,7 +123,7 @@ class SplitStreet
 
         return new FullStreet(
             $matches['street'] ?? $fullStreet,
-            (int) $matches['number'] ?? null,
+                (int) $matches['number'] ?: null,
             $matches['number_suffix'] ?? null,
             $matches['box_number'] ?? null
         );
