@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.2](https://github.com/myparcelnl/sdk/compare/v7.15.1...v7.15.2) (2024-08-02)
+
+
+### :bug: Bug Fixes
+
+* **split-street:** get actual matches from belgium split street regex ([#494](https://github.com/myparcelnl/sdk/issues/494)) ([0bc97fd](https://github.com/myparcelnl/sdk/commit/0bc97fd80b11e4238436c74269a18e6916f53967))
+
 ## [7.15.1](https://github.com/myparcelnl/sdk/compare/v7.15.0...v7.15.1) (2024-07-23)
 
 
