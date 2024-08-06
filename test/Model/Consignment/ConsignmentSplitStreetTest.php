@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Helper\SplitStreet;
 use MyParcelNL\Sdk\src\Helper\ValidateStreet;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLParcelConnect;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDPD;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierUPS;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
