@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.3](https://github.com/myparcelnl/sdk/compare/v7.15.2...v7.15.3) (2024-08-08)
+
+
+### :bug: Bug Fixes
+
+* **splitstreet:** ensure box separator for be address ([#496](https://github.com/myparcelnl/sdk/issues/496)) ([2997ac8](https://github.com/myparcelnl/sdk/commit/2997ac8a5aa58dbcd87201a74b2a5c01c5532daf))
+
 ## [7.15.2](https://github.com/myparcelnl/sdk/compare/v7.15.1...v7.15.2) (2024-08-02)
 
 
