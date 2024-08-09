@@ -133,7 +133,7 @@ class ConsignmentEncode
                 $consignmentEncoded['options']['insurance']['amount'] = self::MAX_INSURANCE_PACKETS_ROW;
             }
 
-            if (AbstractConsignment::CC_NL === $consignment->getCountry()) {
+            if (in_array($consignment->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
                 $consignmentEncoded['options']['tracked'] = 0;
             } else {
                 $consignmentEncoded['options']['tracked'] = 1;
