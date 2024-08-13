@@ -1255,7 +1255,7 @@ abstract class AbstractConsignment
      */
     public function setPerson(string $person): self
     {
-        $this->person = substr($person, -self::PERSON_NAME_MAX_LENGTH);
+        $this->person = Str::limit($person, self::PERSON_NAME_MAX_LENGTH);
 
         return $this;
     }
@@ -1279,7 +1279,7 @@ abstract class AbstractConsignment
     public function setCompany(?string $company): self
     {
         if (isset($company)) {
-            $company = substr($company, -self::COMPANY_NAME_MAX_LENGTH);
+            $company = Str::limit($company, self::COMPANY_NAME_MAX_LENGTH);
         }
 
         $this->company = $company;
