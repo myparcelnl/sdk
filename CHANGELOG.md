@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.4](https://github.com/myparcelnl/sdk/compare/v7.15.3...v7.15.4) (2024-08-13)
+
+
+### :bug: Bug Fixes
+
+* resolve error for small package BE creation ([#497](https://github.com/myparcelnl/sdk/issues/497)) ([05131e4](https://github.com/myparcelnl/sdk/commit/05131e4214effd5ab5da76a4e754e7c23b48ffc6))
+
 ## [7.15.3](https://github.com/myparcelnl/sdk/compare/v7.15.2...v7.15.3) (2024-08-08)
 
 
