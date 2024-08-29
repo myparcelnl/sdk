@@ -15,7 +15,7 @@ class BpostConsignment extends AbstractConsignment
     /** @deprecated use $this->getCarrierName() */
     public const CARRIER_NAME   = 'bpost';
 
-    public const DEFAULT_WEIGHT = 50;
+//    public const DEFAULT_WEIGHT = 50;
 
     /**
      * @var int
@@ -32,7 +32,7 @@ class BpostConsignment extends AbstractConsignment
      * @internal
      * @var int
      */
-    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
+//    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
      * @var string
