@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.16.0](https://github.com/myparcelnl/sdk/compare/v7.15.4...v7.16.0) (2024-09-10)
+
+
+### :sparkles: New Features
+
+* prevent api errors for long person and company names ([#486](https://github.com/myparcelnl/sdk/issues/486)) ([5bb9271](https://github.com/myparcelnl/sdk/commit/5bb927192dd5f8b69137e592447ee27146509075))
+
 ## [7.15.4](https://github.com/myparcelnl/sdk/compare/v7.15.3...v7.15.4) (2024-08-13)
 
 
