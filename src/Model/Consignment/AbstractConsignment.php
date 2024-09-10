@@ -230,6 +230,16 @@ abstract class AbstractConsignment
     public const LABEL_DESCRIPTION_MAX_LENGTH = 45;
 
     /**
+     * @var int
+     */
+    public const PERSON_NAME_MAX_LENGTH = 50;
+
+    /**
+     * @var int
+     */
+    public const COMPANY_NAME_MAX_LENGTH = 50;
+
+    /**
      * @internal
      * @var null|string
      */
@@ -1245,7 +1255,7 @@ abstract class AbstractConsignment
      */
     public function setPerson(string $person): self
     {
-        $this->person = $person;
+        $this->person = Str::limit($person, self::PERSON_NAME_MAX_LENGTH);
 
         return $this;
     }
@@ -1268,6 +1278,10 @@ abstract class AbstractConsignment
      */
     public function setCompany(?string $company): self
     {
+        if (isset($company)) {
+            $company = Str::limit($company, self::COMPANY_NAME_MAX_LENGTH);
+        }
+
         $this->company = $company;
 
         return $this;
