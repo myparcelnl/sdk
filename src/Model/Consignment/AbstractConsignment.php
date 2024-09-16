@@ -1168,17 +1168,6 @@ abstract class AbstractConsignment
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
-//        if ($this->getCountry() === self::CC_NL) {
-//            return array_merge_recursive($consignmentEncoded, [
-//                'recipient' => [
-//                    'street'                 => $this->getStreet(true),
-//                    'street_additional_info' => $this->getStreetAdditionalInfo(),
-//                    'number'                 => $this->getNumber(),
-//                    'number_suffix'          => (string) $this->getNumberSuffix(),
-//                ],
-//            ]);
-//        }
-
         $consignmentEncoded['recipient']['street']                 = $this->getFullStreet(true);
         $consignmentEncoded['recipient']['street_additional_info'] = $this->getStreetAdditionalInfo();
 
