@@ -265,6 +265,13 @@ class ConsignmentEncode
             throw new MissingFieldException('Weight in physical properties must be set for digital stamp shipments.');
         }
 
+        if (CarrierDHLForYou::NAME === $consignment->getCarrier()->getName()) {
+            $consignment->setPhysicalProperties([
+                'weight' => $consignment->getTotalWeight(),
+                'volume' => 1,
+            ]);
+        }
+
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
 
         return $this;
