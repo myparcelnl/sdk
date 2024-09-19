@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.16.1](https://github.com/myparcelnl/sdk/compare/v7.16.0...v7.16.1) (2024-09-19)
+
+
+### :bug: Bug Fixes
+
+* fix error physical properties DHLForYou ([#504](https://github.com/myparcelnl/sdk/issues/504)) ([7159c79](https://github.com/myparcelnl/sdk/commit/7159c79af18d11d91f1e4e20a4921faac7dd944b))
+
 ## [7.16.0](https://github.com/myparcelnl/sdk/compare/v7.15.4...v7.16.0) (2024-09-10)
 
 

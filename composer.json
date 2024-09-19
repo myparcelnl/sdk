@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/sdk",
-    "version": "7.16.0",
+    "version": "7.16.1",
     "description": "This package is designed to send and receive data from MyParcel by means of an API.",
     "keywords": [
         "MyParcel",
