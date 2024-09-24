@@ -45,30 +45,6 @@ class BpostConsignment extends AbstractConsignment
     protected $validatorClass = BpostConsignmentValidator::class;
 
     /**
-     * @param  array $consignmentEncoded
-     *
-     * @return array
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-     */
-    public function encodeStreet(array $consignmentEncoded): array
-    {
-        if (self::CC_BE === $this->getCountry()) {
-            return array_merge_recursive($consignmentEncoded, [
-                'recipient' => [
-                    'street'                 => $this->getStreet(true),
-                    'street_additional_info' => $this->getStreetAdditionalInfo(),
-                    'number'                 => $this->getNumber(),
-                    'box_number'             => (string) $this->getBoxNumber(),
-                    'number_suffix'          => (string) $this->getNumberSuffix(),
-                ],
-            ]);
-        }
-
-        return parent::encodeStreet($consignmentEncoded);
-    }
-
-
-    /**
      * @return string
      */
     public function getLocalCountryCode(): string
