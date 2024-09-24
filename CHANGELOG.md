@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.16.2](https://github.com/myparcelnl/sdk/compare/v7.16.1...v7.16.2) (2024-09-24)
+
+
+### :bug: Bug Fixes
+
+* **export:** export addresses consistently ([#502](https://github.com/myparcelnl/sdk/issues/502)) ([049a1ac](https://github.com/myparcelnl/sdk/commit/049a1ac5e948bcbb10bd09804eacfbd5e48a12df))
+
 ## [7.16.1](https://github.com/myparcelnl/sdk/compare/v7.16.0...v7.16.1) (2024-09-19)
 
 
