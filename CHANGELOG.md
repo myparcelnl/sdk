@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.17.0](https://github.com/myparcelnl/sdk/compare/v7.16.2...v7.17.0) (2024-09-30)
+
+
+### :sparkles: New Features
+
+* allow small package with DHLForYou ([#506](https://github.com/myparcelnl/sdk/issues/506)) ([43b9694](https://github.com/myparcelnl/sdk/commit/43b96946831e59877d45d3004871bf7dfe51b352))
+
 ## [7.16.2](https://github.com/myparcelnl/sdk/compare/v7.16.1...v7.16.2) (2024-09-24)
 
 
