@@ -128,18 +128,11 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function getAllowedShipmentOptionsForPickup(): array
     {
-        if ($this->hasReceiptCode()) {
-            return [
-                self::SHIPMENT_OPTION_INSURANCE,
-                self::SHIPMENT_OPTION_RECEIPT_CODE,
-            ];
-        }
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
             self::SHIPMENT_OPTION_LARGE_FORMAT,
             self::SHIPMENT_OPTION_INSURANCE,
             self::SHIPMENT_OPTION_SIGNATURE,
-            self::SHIPMENT_OPTION_RECEIPT_CODE,
         ];
     }
 

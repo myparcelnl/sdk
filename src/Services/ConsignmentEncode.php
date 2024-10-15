@@ -146,15 +146,6 @@ class ConsignmentEncode
             $key   = "options.$option";
             $value = Arr::get($consignmentEncoded, $key);
 
-            if (null === $value || 0 === $value) {
-                Arr::set($consignmentEncoded, $key, 1);
-            }
-        }
-
-        foreach (AbstractConsignment::SHIPMENT_OPTIONS_TO_CHECK as $option) {
-            $key   = "options.$option";
-            $value = Arr::get($consignmentEncoded, $key);
-
             if (AbstractConsignment::SHIPMENT_OPTION_INSURANCE === $option) {
                 $minimumAmount = $consignment->getInsurancePossibilities()[0] ?? 0;
                 Arr::set($consignmentEncoded, $key, [
@@ -163,6 +154,15 @@ class ConsignmentEncode
                 ]);
             } elseif (null === $value || 0 === $value) {
                 Arr::set($consignmentEncoded, $key, 1);
+            }
+        }
+
+        foreach (AbstractConsignment::SHIPMENT_OPTIONS_TO_CHECK as $option) {
+            $key   = "options.$option";
+            $value = Arr::get($consignmentEncoded, $key);
+
+            if (1 === $value && ! $consignment->canHaveShipmentOption($option)) {
+                Arr::forget($consignmentEncoded, $key);
             }
         }
 
