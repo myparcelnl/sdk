@@ -175,7 +175,8 @@ class ConsignmentEncode
     private function encodeDeliveryType(): self
     {
         /** @var AbstractConsignment $consignment */
-        $consignment                                          = Arr::first($this->consignments);
+        $consignment = Arr::first($this->consignments);
+
         $this->consignmentEncoded['options']['delivery_type'] = $consignment->getDeliveryType();
 
         return $this;

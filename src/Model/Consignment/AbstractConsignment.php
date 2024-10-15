@@ -1498,7 +1498,7 @@ abstract class AbstractConsignment
 
     /**
      * @param bool $receiptCode
-     * @return $this
+     * @return self
      */
     public function setReceiptCode(bool $receiptCode): self
     {
@@ -1543,7 +1543,7 @@ abstract class AbstractConsignment
     /**
      * @param bool $sameDay
      *
-     * @return $this
+     * @return self
      */
     public function setSameDayDelivery(bool $sameDay): self
     {
@@ -1612,7 +1612,7 @@ abstract class AbstractConsignment
     /**
      * @param bool $hideSender
      * @codeCoverageIgnore
-     * @return $this
+     * @return self
      */
     public function setHideSender(bool $hideSender): self
     {
@@ -1632,7 +1632,7 @@ abstract class AbstractConsignment
     /**
      * @param bool $extraAssurance
      * @codeCoverageIgnore
-     * @return $this
+     * @return self
      * @deprecated since 2023
      */
     public function setExtraAssurance(bool $extraAssurance): self
