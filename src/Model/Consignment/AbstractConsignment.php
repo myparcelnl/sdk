@@ -43,19 +43,22 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_RETURN            = 'return';
     public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
     public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    public const SHIPMENT_OPTION_RECEIPT_CODE      = 'receipt_code';
     /**
      * @deprecated since jan 2023 extra_assurance is no longer supported
      */
-    public const SHIPMENT_OPTION_EXTRA_ASSURANCE   = 'extra_assurance';
+    public const SHIPMENT_OPTION_EXTRA_ASSURANCE = 'extra_assurance';
 
-    public const SHIPMENT_OPTIONS_TO_CHECK = [
-        self::SHIPMENT_OPTION_AGE_CHECK,
-        self::SHIPMENT_OPTION_HIDE_SENDER,
-        self::SHIPMENT_OPTION_LARGE_FORMAT,
-        self::SHIPMENT_OPTION_ONLY_RECIPIENT,
-        self::SHIPMENT_OPTION_RETURN,
-        self::SHIPMENT_OPTION_SIGNATURE,
-    ];
+    public const SHIPMENT_OPTIONS_TO_CHECK
+        = [
+            self::SHIPMENT_OPTION_AGE_CHECK,
+            self::SHIPMENT_OPTION_HIDE_SENDER,
+            self::SHIPMENT_OPTION_LARGE_FORMAT,
+            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+            self::SHIPMENT_OPTION_RETURN,
+            self::SHIPMENT_OPTION_SIGNATURE,
+            self::SHIPMENT_OPTION_RECEIPT_CODE,
+        ];
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
     public const EXTRA_OPTION_DELIVERY_MONDAY   = 'delivery_monday';
@@ -85,29 +88,32 @@ abstract class AbstractConsignment
      */
     public const DELIVERY_TYPE_PICKUP_EXPRESS_NAME = 'pickup_express';
 
-    public const DELIVERY_TYPES_IDS = [
-        self::DELIVERY_TYPE_MORNING,
-        self::DELIVERY_TYPE_STANDARD,
-        self::DELIVERY_TYPE_EVENING,
-        self::DELIVERY_TYPE_PICKUP,
-        self::DELIVERY_TYPE_PICKUP_EXPRESS,
-    ];
+    public const DELIVERY_TYPES_IDS
+        = [
+            self::DELIVERY_TYPE_MORNING,
+            self::DELIVERY_TYPE_STANDARD,
+            self::DELIVERY_TYPE_EVENING,
+            self::DELIVERY_TYPE_PICKUP,
+            self::DELIVERY_TYPE_PICKUP_EXPRESS,
+        ];
 
-    public const DELIVERY_TYPES_NAMES = [
-        self::DELIVERY_TYPE_MORNING_NAME,
-        self::DELIVERY_TYPE_STANDARD_NAME,
-        self::DELIVERY_TYPE_EVENING_NAME,
-        self::DELIVERY_TYPE_PICKUP_NAME,
-        self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
-    ];
+    public const DELIVERY_TYPES_NAMES
+        = [
+            self::DELIVERY_TYPE_MORNING_NAME,
+            self::DELIVERY_TYPE_STANDARD_NAME,
+            self::DELIVERY_TYPE_EVENING_NAME,
+            self::DELIVERY_TYPE_PICKUP_NAME,
+            self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
+        ];
 
-    public const DELIVERY_TYPES_NAMES_IDS_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME        => self::DELIVERY_TYPE_MORNING,
-        self::DELIVERY_TYPE_STANDARD_NAME       => self::DELIVERY_TYPE_STANDARD,
-        self::DELIVERY_TYPE_EVENING_NAME        => self::DELIVERY_TYPE_EVENING,
-        self::DELIVERY_TYPE_PICKUP_NAME         => self::DELIVERY_TYPE_PICKUP,
-        self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME => self::DELIVERY_TYPE_PICKUP_EXPRESS,
-    ];
+    public const DELIVERY_TYPES_NAMES_IDS_MAP
+        = [
+            self::DELIVERY_TYPE_MORNING_NAME        => self::DELIVERY_TYPE_MORNING,
+            self::DELIVERY_TYPE_STANDARD_NAME       => self::DELIVERY_TYPE_STANDARD,
+            self::DELIVERY_TYPE_EVENING_NAME        => self::DELIVERY_TYPE_EVENING,
+            self::DELIVERY_TYPE_PICKUP_NAME         => self::DELIVERY_TYPE_PICKUP,
+            self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME => self::DELIVERY_TYPE_PICKUP_EXPRESS,
+        ];
 
     public const DEFAULT_DELIVERY_TYPE      = self::DELIVERY_TYPE_STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = self::DELIVERY_TYPE_STANDARD_NAME;
@@ -136,29 +142,32 @@ abstract class AbstractConsignment
     public const PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
     public const PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
 
-    public const PACKAGE_TYPES_IDS = [
-        self::PACKAGE_TYPE_PACKAGE,
-        self::PACKAGE_TYPE_MAILBOX,
-        self::PACKAGE_TYPE_LETTER,
-        self::PACKAGE_TYPE_DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL,
-    ];
+    public const PACKAGE_TYPES_IDS
+        = [
+            self::PACKAGE_TYPE_PACKAGE,
+            self::PACKAGE_TYPE_MAILBOX,
+            self::PACKAGE_TYPE_LETTER,
+            self::PACKAGE_TYPE_DIGITAL_STAMP,
+            self::PACKAGE_TYPE_PACKAGE_SMALL,
+        ];
 
-    public const PACKAGE_TYPES_NAMES = [
-        self::PACKAGE_TYPE_PACKAGE_NAME,
-        self::PACKAGE_TYPE_MAILBOX_NAME,
-        self::PACKAGE_TYPE_LETTER_NAME,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
-    ];
+    public const PACKAGE_TYPES_NAMES
+        = [
+            self::PACKAGE_TYPE_PACKAGE_NAME,
+            self::PACKAGE_TYPE_MAILBOX_NAME,
+            self::PACKAGE_TYPE_LETTER_NAME,
+            self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+            self::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+        ];
 
-    public const PACKAGE_TYPES_NAMES_IDS_MAP = [
-        self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE,
-        self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
-        self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL,
-    ];
+    public const PACKAGE_TYPES_NAMES_IDS_MAP
+        = [
+            self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE,
+            self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
+            self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
+            self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
+            self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL,
+        ];
 
     public const DEFAULT_PACKAGE_TYPE      = self::PACKAGE_TYPE_PACKAGE;
     public const DEFAULT_PACKAGE_TYPE_NAME = self::PACKAGE_TYPE_PACKAGE_NAME;
@@ -177,35 +186,36 @@ abstract class AbstractConsignment
     public const TYPE_B2C = 'b2c';
     public const TYPE_B2B = 'b2b';
 
-    public const EURO_COUNTRIES = [
-        'NL',
-        'BE',
-        'AT',
-        'BG',
-        'CZ',
-        'CY',
-        'DK',
-        'EE',
-        'FI',
-        'FR',
-        'DE',
-        'GR',
-        'HU',
-        'IE',
-        'IT',
-        'LV',
-        'LT',
-        'LU',
-        'PL',
-        'PT',
-        'RO',
-        'SK',
-        'SI',
-        'ES',
-        'SE',
-        'XK',
-        'HR',
-    ];
+    public const EURO_COUNTRIES
+        = [
+            'NL',
+            'BE',
+            'AT',
+            'BG',
+            'CZ',
+            'CY',
+            'DK',
+            'EE',
+            'FI',
+            'FR',
+            'DE',
+            'GR',
+            'HU',
+            'IE',
+            'IT',
+            'LV',
+            'LT',
+            'LU',
+            'PL',
+            'PT',
+            'RO',
+            'SK',
+            'SI',
+            'ES',
+            'SE',
+            'XK',
+            'HR',
+        ];
 
     /**
      * @var array
@@ -387,6 +397,12 @@ abstract class AbstractConsignment
      * @internal
      * @var bool|null
      */
+    protected $receipt_code;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
     public $return;
 
     /**
@@ -512,7 +528,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $deliveryType
+     * @param string $deliveryType
      *
      * @return bool
      */
@@ -527,7 +543,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $option
+     * @param string $option
      *
      * @return bool
      */
@@ -537,7 +553,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $packageType
+     * @param string $packageType
      *
      * @return bool
      */
@@ -547,7 +563,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $option
+     * @param string $option
      *
      * @return bool
      */
@@ -574,7 +590,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  null|string $cc
+     * @param null|string $cc
      *
      * @return int[]
      */
@@ -621,7 +637,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  int $id
+     * @param int $id
      *
      * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
      * @internal
@@ -633,7 +649,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string|null $referenceIdentifier
+     * @param string|null $referenceIdentifier
      *
      * @return self
      */
@@ -645,7 +661,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string|null $referenceIdentifier
+     * @param string|null $referenceIdentifier
      *
      * @return self
      * @deprecated use setReferenceIdentifier()
@@ -667,7 +683,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  int|null $id
+     * @param int|null $id
      *
      * @return self
      * @internal
@@ -681,7 +697,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return self
      */
@@ -700,7 +716,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $value
+     * @param bool $value
      *
      * @return self
      */
@@ -728,7 +744,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string|null $barcode
+     * @param string|null $barcode
      *
      * @return self
      * @internal
@@ -749,7 +765,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  null|string  $externalIdentifier
+     * @param null|string $externalIdentifier
      *
      * @return self
      * @internal
@@ -799,7 +815,7 @@ abstract class AbstractConsignment
     /**
      * Status of the consignment.
      *
-     * @param  int $status
+     * @param int $status
      *
      * @return self
      * @internal
@@ -820,7 +836,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  mixed $shopId
+     * @param mixed $shopId
      *
      * @return self
      * @internal
@@ -855,7 +871,7 @@ abstract class AbstractConsignment
      */
     public function isEuCountry(): bool
     {
-       return $this->isToEuCountry();
+        return $this->isToEuCountry();
     }
 
     /**
@@ -883,7 +899,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  null|string $state
+     * @param null|string $state
      *
      * @return self
      */
@@ -895,7 +911,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string|null  $region
+     * @param string|null $region
      *
      * @return self
      */
@@ -910,7 +926,7 @@ abstract class AbstractConsignment
      * The address city
      * Required: Yes.
      *
-     * @param  string $city
+     * @param string $city
      *
      * @return self
      */
@@ -947,7 +963,7 @@ abstract class AbstractConsignment
      * The address street name
      * Required: Yes or use setFullStreet().
      *
-     * @param  string $street
+     * @param string $street
      *
      * @return self
      */
@@ -986,7 +1002,7 @@ abstract class AbstractConsignment
      * The street additional info
      * Required: No.
      *
-     * @param  string|null $streetAdditionalInfo
+     * @param string|null $streetAdditionalInfo
      *
      * @return self
      */
@@ -1028,7 +1044,7 @@ abstract class AbstractConsignment
      * Splitting a full NL address and save it in this object
      * Required: Yes or use setStreet().
      *
-     * @param  string $fullStreet
+     * @param string $fullStreet
      *
      * @return self
      * @throws MissingFieldException
@@ -1057,7 +1073,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $value
+     * @param bool $value
      *
      * @return self
      */
@@ -1077,9 +1093,9 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $barcode
-     * @param  string $postalCode
-     * @param  string $countryCode
+     * @param string $barcode
+     * @param string $postalCode
+     * @param string $countryCode
      *
      * @return string
      */
@@ -1103,7 +1119,7 @@ abstract class AbstractConsignment
      * Example: 10. 20. NOT 2,3
      * Required: Yes for NL.
      *
-     * @param  mixed $number
+     * @param mixed $number
      *
      * @return self
      */
@@ -1126,7 +1142,7 @@ abstract class AbstractConsignment
      * Street number suffix.
      * Required: no.
      *
-     * @param  string|null $numberSuffix
+     * @param string|null $numberSuffix
      *
      * @return self
      */
@@ -1149,7 +1165,7 @@ abstract class AbstractConsignment
      * Street number suffix.
      * Required: no.
      *
-     * @param  string|null $boxNumber
+     * @param string|null $boxNumber
      *
      * @return self
      */
@@ -1161,7 +1177,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  array $consignmentEncoded
+     * @param array $consignmentEncoded
      *
      * @return array
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -1178,7 +1194,7 @@ abstract class AbstractConsignment
      * Check if address is correct
      * Only for Dutch addresses.
      *
-     * @param  string $fullStreet
+     * @param string $fullStreet
      *
      * @return bool
      * @deprecated Use ValidateStreet::validate()
@@ -1200,7 +1216,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $postalCode
+     * @param string $postalCode
      *
      * @return self
      * @throws \BadMethodCallException
@@ -1238,7 +1254,7 @@ abstract class AbstractConsignment
      * The person at this address
      * Required: Yes.
      *
-     * @param  string $person
+     * @param string $person
      *
      * @return self
      */
@@ -1261,7 +1277,7 @@ abstract class AbstractConsignment
      * Company name
      * Required: no.
      *
-     * @param  string|null $company
+     * @param string|null $company
      *
      * @return self
      */
@@ -1288,7 +1304,7 @@ abstract class AbstractConsignment
      * The address email
      * Required: no.
      *
-     * @param  string|null  $email
+     * @param string|null $email
      *
      * @return self
      */
@@ -1311,7 +1327,7 @@ abstract class AbstractConsignment
      * The address phone
      * Required: no.
      *
-     * @param  string|null $phone
+     * @param string|null $phone
      *
      * @return self
      */
@@ -1323,7 +1339,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  int|null $default
+     * @param int|null $default
      *
      * @return int|null
      */
@@ -1343,7 +1359,7 @@ abstract class AbstractConsignment
      *          4. digital stamp
      * Required: Yes.
      *
-     * @param  int $packageType
+     * @param int $packageType
      *
      * @return self
      * @throws \Exception
@@ -1373,7 +1389,7 @@ abstract class AbstractConsignment
      * The delivery type for the package
      * Required: Yes if delivery_date has been specified.
      *
-     * @param  int $deliveryType
+     * @param int $deliveryType
      *
      * @return self
      */
@@ -1385,7 +1401,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $value
+     * @param bool $value
      *
      * @return self
      */
@@ -1418,7 +1434,7 @@ abstract class AbstractConsignment
      * Example: 2017-01-01 | 2017-01-01 00:00:00
      * Required: Yes if delivery type has been specified.
      *
-     * @param  string|null $deliveryDate
+     * @param string|null $deliveryDate
      *
      * @return self
      */
@@ -1454,7 +1470,7 @@ abstract class AbstractConsignment
      * Deliver the package to the recipient only
      * Required: No.
      *
-     * @param  bool $onlyRecipient
+     * @param bool $onlyRecipient
      *
      * @return self
      */
@@ -1469,13 +1485,24 @@ abstract class AbstractConsignment
      * * Package must be signed for
      * Required: No.
      *
-     * @param  bool $signature
+     * @param bool $signature
      *
      * @return self
      */
     public function setSignature(bool $signature): self
     {
         $this->signature = $signature && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_SIGNATURE);
+
+        return $this;
+    }
+
+    /**
+     * @param bool $receiptCode
+     * @return $this
+     */
+    public function setReceiptCode(bool $receiptCode): self
+    {
+        $this->receipt_code = $receiptCode && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_RECEIPT_CODE);
 
         return $this;
     }
@@ -1494,7 +1521,7 @@ abstract class AbstractConsignment
      * Return the package if the recipient is not home
      * Required: No.
      *
-     * @param  bool $return
+     * @param bool $return
      *
      * @return self
      */
@@ -1543,6 +1570,14 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @return bool|null
+     */
+    public function hasReceiptCode(): ?bool
+    {
+        return $this->receipt_code;
+    }
+
+    /**
      * @return boolean
      */
     public function isLargeFormat(): ?bool
@@ -1562,7 +1597,7 @@ abstract class AbstractConsignment
      * Large format package
      * Required: No.
      *
-     * @param  bool $largeFormat
+     * @param bool $largeFormat
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -1575,7 +1610,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $hideSender
+     * @param bool $hideSender
      * @codeCoverageIgnore
      * @return $this
      */
@@ -1595,7 +1630,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  bool $extraAssurance
+     * @param bool $extraAssurance
      * @codeCoverageIgnore
      * @return $this
      * @deprecated since 2023
@@ -1620,7 +1655,7 @@ abstract class AbstractConsignment
      * Age check
      * Required: No.
      *
-     * @param  bool $ageCheck
+     * @param bool $ageCheck
      *
      * @return AbstractConsignment
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -1645,7 +1680,7 @@ abstract class AbstractConsignment
      * Note: This will be overridden for return shipment by the following: Retour – 3SMYPAXXXXXX
      * Required: No.
      *
-     * @param  mixed $labelDescription
+     * @param mixed $labelDescription
      *
      * @return self
      */
@@ -1669,7 +1704,7 @@ abstract class AbstractConsignment
      * Composite type containing integer and currency. The amount is without decimal separators.
      * Required: No.
      *
-     * @param  int|null $insurance
+     * @param int|null $insurance
      *
      * @return self
      * @throws \Exception
@@ -1696,7 +1731,7 @@ abstract class AbstractConsignment
     /**
      * Required: Yes for non-EU shipments and digital stamps.
      *
-     * @param  array $physicalProperties
+     * @param array $physicalProperties
      *
      * @return self
      */
@@ -1735,7 +1770,7 @@ abstract class AbstractConsignment
      *          5. return shipment
      * Required: Yes for shipping outside EU.
      *
-     * @param  int $contents
+     * @param int $contents
      *
      * @return self
      */
@@ -1758,7 +1793,7 @@ abstract class AbstractConsignment
      * The invoice number for the commercial goods or samples of package contents.
      * Required: Yes for international shipments.
      *
-     * @param  string $invoice
+     * @param string $invoice
      *
      * @return self
      */
@@ -1781,7 +1816,7 @@ abstract class AbstractConsignment
      * A CustomsItem objects with description in the package.
      * Required: Yes for international shipments.
      *
-     * @param  \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item
+     * @param \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -1822,7 +1857,7 @@ abstract class AbstractConsignment
     /**
      * The weight has to be entered in grams.
      *
-     * @param  int $weight
+     * @param int $weight
      *
      * @return self
      */
@@ -1968,7 +2003,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param  string $shipmentOption
+     * @param string $shipmentOption
      *
      * @return bool
      * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException

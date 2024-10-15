@@ -17,20 +17,21 @@ class PostNLConsignment extends AbstractConsignment
      * @var array
      * @deprecated use getLocalInsurancePossibilities()
      */
-    public const INSURANCE_POSSIBILITIES_LOCAL = [
-        100,
-        250,
-        500,
-        1000,
-        1500,
-        2000,
-        2500,
-        3000,
-        3500,
-        4000,
-        4500,
-        5000,
-    ];
+    public const INSURANCE_POSSIBILITIES_LOCAL
+        = [
+            100,
+            250,
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
 
     /**
      * @var string
@@ -86,6 +87,12 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function getAllowedShipmentOptions(): array
     {
+        if ($this->hasReceiptCode()) {
+            return [
+                self::SHIPMENT_OPTION_INSURANCE,
+                self::SHIPMENT_OPTION_RECEIPT_CODE,
+            ];
+        }
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
             self::SHIPMENT_OPTION_INSURANCE,
@@ -93,6 +100,7 @@ class PostNLConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_RETURN,
             self::SHIPMENT_OPTION_SIGNATURE,
+            self::SHIPMENT_OPTION_RECEIPT_CODE,
         ];
     }
 
@@ -103,7 +111,9 @@ class PostNLConsignment extends AbstractConsignment
     {
         $mandatory = [];
 
-        if ($this->hasAgeCheck()) {
+        if ($this->hasReceiptCode()) {
+            $mandatory[] = self::SHIPMENT_OPTION_INSURANCE;
+        } elseif ($this->hasAgeCheck()) {
             $mandatory = array_merge($mandatory, [
                 self::SHIPMENT_OPTION_ONLY_RECIPIENT,
                 self::SHIPMENT_OPTION_SIGNATURE,
@@ -118,11 +128,18 @@ class PostNLConsignment extends AbstractConsignment
      */
     public function getAllowedShipmentOptionsForPickup(): array
     {
+        if ($this->hasReceiptCode()) {
+            return [
+                self::SHIPMENT_OPTION_INSURANCE,
+                self::SHIPMENT_OPTION_RECEIPT_CODE,
+            ];
+        }
         return [
             self::SHIPMENT_OPTION_AGE_CHECK,
             self::SHIPMENT_OPTION_LARGE_FORMAT,
             self::SHIPMENT_OPTION_INSURANCE,
             self::SHIPMENT_OPTION_SIGNATURE,
+            self::SHIPMENT_OPTION_RECEIPT_CODE,
         ];
     }
 
