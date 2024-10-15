@@ -34,24 +34,25 @@ class MyParcelRequest
     /**
      * API headers.
      */
-    public const HEADER_CONTENT_TYPE_SHIPMENT        = [
-        'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
-    ];
+    public const HEADER_CONTENT_TYPE_SHIPMENT
+                                                     = [
+            'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
+        ];
     public const HEADER_ACCEPT_APPLICATION_PDF       = ['Accept' => 'application/pdf'];
     public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
 
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_SHIPMENT            = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
+    public const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_SHIPMENT   = 'Accept: application/json; charset=utf8';
+    public const REQUEST_HEADER_RETRIEVE_SHIPMENT = 'Accept: application/json; charset=utf8';
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
     public const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_LABEL_PDF  = 'Accept: application/pdf';
+    public const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf';
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETURN              = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
+    public const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_DELETE              = 'Accept: application/json; charset=utf8';
+    public const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
 
     /**
      * API URL.
@@ -125,7 +126,7 @@ class MyParcelRequest
 
     /**
      * @param                     $size
-     * @param  MyParcelCollection $collection
+     * @param MyParcelCollection  $collection
      * @param                     $key
      *
      * @return string|null
@@ -160,8 +161,8 @@ class MyParcelRequest
     /**
      * Get an item from the result using dot notation.
      *
-     * @param  string|null $key
-     * @param  string|null $pluck
+     * @param string|null $key
+     * @param string|null $pluck
      *
      * @return mixed
      */
@@ -183,8 +184,8 @@ class MyParcelRequest
     /**
      * Send the created request to MyParcel.
      *
-     * @param  string $method
-     * @param  string $uri
+     * @param string $method
+     * @param string $uri
      *
      * @return self|bool
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -212,7 +213,7 @@ class MyParcelRequest
     }
 
     /**
-     * @param  string|array $requestHeaders
+     * @param string|array $requestHeaders
      *
      * @return self
      */
@@ -228,7 +229,7 @@ class MyParcelRequest
     }
 
     /**
-     * @param  array $parameters
+     * @param array $parameters
      *
      * @return self
      */
@@ -239,7 +240,7 @@ class MyParcelRequest
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\RequestBody|array|string|null $body
+     * @param \MyParcelNL\Sdk\src\Model\RequestBody|array|string|null $body
      *
      * @return self
      */
@@ -261,9 +262,9 @@ class MyParcelRequest
      * Sets the parameters for an API call based on a string with all required request parameters and the requested API
      * method.
      *
-     * @param  string            $apiKey
-     * @param  array|string|null $body
-     * @param  string|array      $requestHeaders
+     * @param string            $apiKey
+     * @param array|string|null $body
+     * @param string|array      $requestHeaders
      *
      * @return self
      */
@@ -309,8 +310,8 @@ class MyParcelRequest
     }
 
     /**
-     * @param  string $uri
-     * @param  string $method
+     * @param string $uri
+     * @param string $method
      *
      * @return string
      */
@@ -334,7 +335,7 @@ class MyParcelRequest
     /**
      * Get all consignment ids.
      *
-     * @param  MyParcelCollection|AbstractConsignment[] $consignments
+     * @param MyParcelCollection|AbstractConsignment[]  $consignments
      * @param                                           $key
      *
      * @return array
@@ -377,7 +378,7 @@ class MyParcelRequest
     }
 
     /**
-     * @param  string $url
+     * @param string $url
      *
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
@@ -407,17 +408,17 @@ class MyParcelRequest
     private function instantiateCurl(): MyParcelCurl
     {
         return (new MyParcelCurl())->setConfig([
-                'header'  => 0,
-                'timeout' => 60,
-            ])->addOptions([
-                CURLOPT_POST           => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_AUTOREFERER    => true,
-            ]);
+            'header'  => 0,
+            'timeout' => 60,
+        ])->addOptions([
+            CURLOPT_POST           => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_AUTOREFERER    => true,
+        ]);
     }
 
     /**
-     * @param  MyParcelCurl $request
+     * @param MyParcelCurl $request
      *
      * @return array
      * @throws \Exception

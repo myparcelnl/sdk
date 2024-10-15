@@ -27,8 +27,8 @@ class OrderCollection extends Collection
     use HasCountry;
 
     /**
-     * @param  string $apiKey
-     * @param  array  $parameters
+     * @param string $apiKey
+     * @param array  $parameters
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -62,8 +62,8 @@ class OrderCollection extends Collection
         $request     = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
-            $this->ensureHasApiKey(),
-            $requestBody
+                $this->ensureHasApiKey(),
+                $requestBody
             )
             ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
 
@@ -125,6 +125,7 @@ class OrderCollection extends Collection
             'delivery_type'     => $deliveryOptions->getDeliveryTypeId(),
             'delivery_date'     => $deliveryDate ?: null,
             'signature'         => (int) $shipmentOptions->hasSignature(),
+            'receipt_code'      => (int) $shipmentOptions->hasReceiptCode(),
             'only_recipient'    => (int) $shipmentOptions->hasOnlyRecipient(),
             'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
             'large_format'      => (int) $shipmentOptions->hasLargeFormat(),
@@ -143,7 +144,7 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return array
      */
@@ -162,7 +163,7 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\MyParcelRequest $request
+     * @param \MyParcelNL\Sdk\src\Model\MyParcelRequest $request
      *
      * @return self
      */
