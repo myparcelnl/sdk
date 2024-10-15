@@ -174,7 +174,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  AbstractConsignment $consignment
+     * @param AbstractConsignment $consignment
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -193,8 +193,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  int[]  $ids
-     * @param  string $apiKey
+     * @param int[]  $ids
+     * @param string $apiKey
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -213,8 +213,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  string[] $ids
-     * @param  string   $apiKey
+     * @param string[] $ids
+     * @param string   $apiKey
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -337,7 +337,7 @@ class MyParcelCollection extends Collection
      * Get all current data
      * Set id and run this function to update all the information about this shipment
      *
-     * @param  int $size
+     * @param int $size
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -373,7 +373,7 @@ class MyParcelCollection extends Collection
      * Get all the information about the last created shipments
      *
      * @param      $key
-     * @param  int $size
+     * @param int  $size
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -391,7 +391,7 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param mixed $positions  The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     * @param mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
      *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
      *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
      *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
@@ -439,7 +439,7 @@ class MyParcelCollection extends Collection
      * Receive label PDF
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param mixed $positions  The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     * @param mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
      *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
      *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
      *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
@@ -478,7 +478,7 @@ class MyParcelCollection extends Collection
     /**
      * Download labels
      *
-     * @param  bool $inline_download
+     * @param bool $inline_download
      *
      * @return void
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
@@ -505,8 +505,8 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @param  bool          $sendMail
-     * @param  \Closure|null $modifier
+     * @param bool          $sendMail
+     * @param \Closure|null $modifier
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -521,8 +521,8 @@ class MyParcelCollection extends Collection
         $parentConsignments = $this->getConsignments(false);
         $returnConsignments = $this->getReturnConsignments($parentConsignments, $modifier);
 
-        $data        = $this->apiEncodeReturnShipments($returnConsignments);
-        $apiKey      = $returnConsignments[0]->getApiKey();
+        $data   = $this->apiEncodeReturnShipments($returnConsignments);
+        $apiKey = $returnConsignments[0]->getApiKey();
 
         $request = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
@@ -610,8 +610,8 @@ class MyParcelCollection extends Collection
     /**
      * To search and filter consignments by certain values
      *
-     * @param  string $apiKey
-     * @param  mixed  $parameters May be an array or object containing properties.
+     * @param string $apiKey
+     * @param mixed  $parameters May be an array or object containing properties.
      *                            If query_data is an array, it may be a simple one-dimensional structure,
      *                            or an array of arrays (which in turn may contain other arrays).
      *                            If query_data is an object, then only public properties will be incorporated
@@ -651,8 +651,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  int    $id
-     * @param  string $apiKey
+     * @param int    $id
+     * @param string $apiKey
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -665,8 +665,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  array  $consignmentIds
-     * @param  string $apiKey
+     * @param array  $consignmentIds
+     * @param string $apiKey
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -691,8 +691,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  string $id
-     * @param  string $apiKey
+     * @param string $id
+     * @param string $apiKey
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -705,8 +705,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  array  $referenceIds
-     * @param  string $apiKey
+     * @param array  $referenceIds
+     * @param string $apiKey
      *
      * @return self
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
@@ -755,7 +755,7 @@ class MyParcelCollection extends Collection
     /**
      * Sets label format settings
      *
-     * @param mixed $positions  The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     * @param mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
      *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
      *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
      *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
@@ -854,7 +854,7 @@ class MyParcelCollection extends Collection
     private function addMissingReferenceId(): void
     {
         $this->transform(function (AbstractConsignment $consignment) {
-            if (!$consignment->getReferenceId()) {
+            if (! $consignment->getReferenceId()) {
                 $consignment->setReferenceId('random_' . uniqid('', true));
             }
 

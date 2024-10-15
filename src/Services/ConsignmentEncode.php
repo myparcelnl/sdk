@@ -12,6 +12,7 @@
 
 namespace MyParcelNL\Sdk\src\Services;
 
+use Exception;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
@@ -25,7 +26,7 @@ use MyParcelNL\Sdk\src\Support\Helpers;
 
 class ConsignmentEncode
 {
-    public const DEFAULT_CURRENCY           = 'EUR';
+    public const  DEFAULT_CURRENCY          = 'EUR';
     private const MAX_INSURANCE_PACKETS_ROW = 5000;
 
     /**
@@ -56,18 +57,18 @@ class ConsignmentEncode
     public function apiEncode(): array
     {
         $this->encodeBase()
-            ->encodeStreet();
+             ->encodeStreet();
 
         $this->consignmentEncoded = self::encodeExtraOptions(
             $this->consignmentEncoded,
             Arr::first($this->consignments)
         );
         $this->encodeDeliveryType()
-            ->encodePickup()
-            ->encodePhysicalProperties()
-            ->encodeCdCountry()
-            ->encodeMultiCollo()
-            ->encodeDropOffPoint();
+             ->encodePickup()
+             ->encodePhysicalProperties()
+             ->encodeCdCountry()
+             ->encodeMultiCollo()
+             ->encodeDropOffPoint();
 
         return $this->consignmentEncoded;
     }
@@ -84,14 +85,15 @@ class ConsignmentEncode
             $consignmentEncoded,
             [
                 'options' => Helpers::toArrayWithoutNull([
-                    'package_type'           => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
-                    'label_description'      => $consignment->getLabelDescription(),
-                    'only_recipient'         => Helpers::intOrNull($consignment->isOnlyRecipient()),
-                    'signature'              => Helpers::intOrNull($consignment->isSignature()),
-                    'return'                 => Helpers::intOrNull($consignment->isReturn()),
-                    'same_day_delivery'      => Helpers::intOrNull($consignment->isSameDayDelivery()),
-                    'hide_sender'            => Helpers::intOrNull($consignment->hasHideSender()),
-                    'extra_assurance'        => Helpers::intOrNull($consignment->hasExtraAssurance()),
+                    'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
+                    'label_description' => $consignment->getLabelDescription(),
+                    'only_recipient'    => Helpers::intOrNull($consignment->isOnlyRecipient()),
+                    'signature'         => Helpers::intOrNull($consignment->isSignature()),
+                    'receipt_code'      => Helpers::intOrNull($consignment->hasReceiptCode()),
+                    'return'            => Helpers::intOrNull($consignment->isReturn()),
+                    'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                    'hide_sender'       => Helpers::intOrNull($consignment->hasHideSender()),
+                    'extra_assurance'   => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
             ]
         );
@@ -120,7 +122,7 @@ class ConsignmentEncode
 
         if ($consignment->getInsurance() > 1) {
             $consignmentEncoded['options']['insurance'] = [
-                'amount'   => (int) $consignment->getInsurance() * 100,
+                'amount'   => $consignment->getInsurance() * 100,
                 'currency' => self::DEFAULT_CURRENCY,
             ];
         }
@@ -144,7 +146,13 @@ class ConsignmentEncode
             $key   = "options.$option";
             $value = Arr::get($consignmentEncoded, $key);
 
-            if (null === $value || 0 === $value) {
+            if (AbstractConsignment::SHIPMENT_OPTION_INSURANCE === $option) {
+                $minimumAmount = $consignment->getInsurancePossibilities()[0] ?? 0;
+                Arr::set($consignmentEncoded, $key, [
+                    'amount'   => $consignment->getInsurance() * 100 ?: $minimumAmount,
+                    'currency' => self::DEFAULT_CURRENCY,
+                ]);
+            } elseif (null === $value || 0 === $value) {
                 Arr::set($consignmentEncoded, $key, 1);
             }
         }
@@ -168,6 +176,7 @@ class ConsignmentEncode
     {
         /** @var AbstractConsignment $consignment */
         $consignment = Arr::first($this->consignments);
+
         $this->consignmentEncoded['options']['delivery_type'] = $consignment->getDeliveryType();
 
         return $this;
@@ -324,7 +333,7 @@ class ConsignmentEncode
     /**
      * Encode product for the request
      *
-     * @param  MyParcelCustomsItem $customsItem
+     * @param MyParcelCustomsItem $customsItem
      *
      * @return array
      */
@@ -379,7 +388,7 @@ class ConsignmentEncode
         /** @var AbstractConsignment $first */
         $first = Arr::first($this->consignments);
         if (count($this->consignments) > 1 && ! $first->isPartOfMultiCollo()) {
-            throw new \Exception("Can not encode multi collo with this consignment.");
+            throw new Exception("Can not encode multi collo with this consignment.");
         }
 
         $secondaryShipments = $this->consignments;

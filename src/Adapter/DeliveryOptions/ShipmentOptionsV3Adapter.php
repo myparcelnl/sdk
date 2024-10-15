@@ -19,5 +19,6 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
         $this->return            = $shipmentOptions['return'] ?? null;
         $this->same_day_delivery = $shipmentOptions['same_day_delivery'] ?? null;
         $this->signature         = $shipmentOptions['signature'] ?? null;
+        $this->receipt_code      = $shipmentOptions['receipt_code'] ?? null;
     }
 }
