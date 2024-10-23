@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.18.0](https://github.com/myparcelnl/sdk/compare/v7.17.0...v7.18.0) (2024-10-23)
+
+
+### :bug: Bug Fixes
+
+* comment out default weight in BpostConsignment model ([#499](https://github.com/myparcelnl/sdk/issues/499)) ([1e01ce2](https://github.com/myparcelnl/sdk/commit/1e01ce272874af419a69e2ba20d6a3ed36b51ea2))
+
+
+### :sparkles: New Features
+
+* add receipt code ([#507](https://github.com/myparcelnl/sdk/issues/507)) ([e794021](https://github.com/myparcelnl/sdk/commit/e794021b4bdbcc553c29627bb95f3947386de4e3))
+
 ## [7.17.0](https://github.com/myparcelnl/sdk/compare/v7.16.2...v7.17.0) (2024-09-30)
 
 
