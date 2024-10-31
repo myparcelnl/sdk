@@ -396,14 +396,6 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
                 self::expected(self::BOX_NUMBER)  => '10',
             ],
             [
-                self::FULL_STREET                 => 'Kortenberglaan 4 bus 10',
-                self::COUNTRY                     => 'BE',
-                self::CARRIER_ID                  => CarrierBpost::ID,
-                self::expected(self::FULL_STREET) => 'Kortenberglaan 4 bus 10',
-                self::expected(self::STREET)      => 'Kortenberglaan',
-                self::expected(self::NUMBER)      => '4',
-                self::expected(self::BOX_NUMBER)  => '10',
-            ],[
                 self::FULL_STREET                 => 'Kortenberglaan 4 BUS 10',
                 self::COUNTRY                     => 'BE',
                 self::CARRIER_ID                  => CarrierBpost::ID,
