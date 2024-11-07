@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.18.1](https://github.com/myparcelnl/sdk/compare/v7.18.0...v7.18.1) (2024-11-07)
+
+
+### :bug: Bug Fixes
+
+* support capital letters in box number detection ([#508](https://github.com/myparcelnl/sdk/issues/508)) ([98d4a0d](https://github.com/myparcelnl/sdk/commit/98d4a0de33808225ee7a6a1a96212a3334aeaa45))
+
 ## [7.18.0](https://github.com/myparcelnl/sdk/compare/v7.17.0...v7.18.0) (2024-10-23)
 
 
