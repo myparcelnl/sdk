@@ -410,6 +410,12 @@ abstract class AbstractConsignment
      * @internal
      * @var bool|null
      */
+    protected $collect;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
     public $return;
 
     /**
@@ -1515,6 +1521,17 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @param bool $collect
+     * @return self
+     */
+    public function setCollect(bool $collect): self
+    {
+        $this->collect = $collect && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_COLLECT);
+
+        return $this;
+    }
+
+    /**
      * Return the package if the recipient is not home.
      *
      * @return null|bool
@@ -1582,6 +1599,11 @@ abstract class AbstractConsignment
     public function hasReceiptCode(): ?bool
     {
         return $this->receipt_code;
+    }
+
+    public function hasCollect(): ?bool
+    {
+        return $this->collect;
     }
 
     /**

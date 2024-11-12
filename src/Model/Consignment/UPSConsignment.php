@@ -76,6 +76,20 @@ class UPSConsignment extends AbstractConsignment
     }
 
     /**
+     * @return string[]
+     */
+    public function getMandatoryShipmentOptions(): array
+    {
+        if ($this->hasAgeCheck()) {
+            return [
+                self::SHIPMENT_OPTION_SIGNATURE,
+            ];
+        }
+
+        return [];
+    }
+
+    /**
      * @return int[]
      */
     protected function getLocalInsurancePossibilities(): array
