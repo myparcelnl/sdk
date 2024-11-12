@@ -56,7 +56,58 @@ class UPSConsignment extends AbstractConsignment
     public function getAllowedDeliveryTypes(): array
     {
         return [
-            self::DELIVERY_TYPE_STANDARD,
+            self::DELIVERY_TYPE_STANDARD_NAME,
+            self::DELIVERY_TYPE_EXPRESS_NAME,
         ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedShipmentOptions(): array
+    {
+        return [
+            self::SHIPMENT_OPTION_AGE_CHECK,
+            self::SHIPMENT_OPTION_COLLECT,
+            self::SHIPMENT_OPTION_INSURANCE,
+            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+            self::SHIPMENT_OPTION_SIGNATURE,
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    protected function getLocalInsurancePossibilities(): array
+    {
+        return [
+            250,
+            500,
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    protected function getEuInsurancePossibilities(): array
+    {
+        return $this->getLocalInsurancePossibilities();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getNlToBeInsurancePossibilities(): array
+    {
+        return $this->getLocalInsurancePossibilities();
     }
 }
