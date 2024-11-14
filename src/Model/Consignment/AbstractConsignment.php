@@ -43,6 +43,7 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_RETURN            = 'return';
     public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
     public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
+    public const SHIPMENT_OPTION_COLLECT           = 'collect';
     public const SHIPMENT_OPTION_RECEIPT_CODE      = 'receipt_code';
     /**
      * @deprecated since jan 2023 extra_assurance is no longer supported
@@ -57,6 +58,7 @@ abstract class AbstractConsignment
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_RETURN,
             self::SHIPMENT_OPTION_SIGNATURE,
+            self::SHIPMENT_OPTION_COLLECT,
             self::SHIPMENT_OPTION_RECEIPT_CODE,
         ];
 
@@ -72,6 +74,7 @@ abstract class AbstractConsignment
     public const DELIVERY_TYPE_STANDARD = 2;
     public const DELIVERY_TYPE_EVENING  = 3;
     public const DELIVERY_TYPE_PICKUP   = 4;
+    public const DELIVERY_TYPE_EXPRESS  = 7;
 
     /**
      * @deprecated Since November 2019 is it no longer possible to use pickup express.
@@ -82,6 +85,7 @@ abstract class AbstractConsignment
     public const DELIVERY_TYPE_STANDARD_NAME = 'standard';
     public const DELIVERY_TYPE_EVENING_NAME  = 'evening';
     public const DELIVERY_TYPE_PICKUP_NAME   = 'pickup';
+    public const DELIVERY_TYPE_EXPRESS_NAME  = 'express';
 
     /**
      * @deprecated Since November 2019 is it no longer possible to use pickup express.
@@ -94,6 +98,7 @@ abstract class AbstractConsignment
             self::DELIVERY_TYPE_STANDARD,
             self::DELIVERY_TYPE_EVENING,
             self::DELIVERY_TYPE_PICKUP,
+            self::DELIVERY_TYPE_EXPRESS,
             self::DELIVERY_TYPE_PICKUP_EXPRESS,
         ];
 
@@ -103,6 +108,7 @@ abstract class AbstractConsignment
             self::DELIVERY_TYPE_STANDARD_NAME,
             self::DELIVERY_TYPE_EVENING_NAME,
             self::DELIVERY_TYPE_PICKUP_NAME,
+            self::DELIVERY_TYPE_EXPRESS_NAME,
             self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
         ];
 
@@ -112,6 +118,7 @@ abstract class AbstractConsignment
             self::DELIVERY_TYPE_STANDARD_NAME       => self::DELIVERY_TYPE_STANDARD,
             self::DELIVERY_TYPE_EVENING_NAME        => self::DELIVERY_TYPE_EVENING,
             self::DELIVERY_TYPE_PICKUP_NAME         => self::DELIVERY_TYPE_PICKUP,
+            self::DELIVERY_TYPE_EXPRESS_NAME        => self::DELIVERY_TYPE_EXPRESS,
             self::DELIVERY_TYPE_PICKUP_EXPRESS_NAME => self::DELIVERY_TYPE_PICKUP_EXPRESS,
         ];
 
@@ -398,6 +405,12 @@ abstract class AbstractConsignment
      * @var bool|null
      */
     protected $receipt_code;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
+    protected $collect;
 
     /**
      * @internal
@@ -1508,6 +1521,17 @@ abstract class AbstractConsignment
     }
 
     /**
+     * @param bool $collect
+     * @return self
+     */
+    public function setCollect(bool $collect): self
+    {
+        $this->collect = $collect && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_COLLECT);
+
+        return $this;
+    }
+
+    /**
      * Return the package if the recipient is not home.
      *
      * @return null|bool
@@ -1575,6 +1599,11 @@ abstract class AbstractConsignment
     public function hasReceiptCode(): ?bool
     {
         return $this->receipt_code;
+    }
+
+    public function hasCollect(): ?bool
+    {
+        return $this->collect;
     }
 
     /**

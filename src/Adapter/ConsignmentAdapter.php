@@ -103,6 +103,7 @@ class ConsignmentAdapter
             'return'            => (bool) ($options['return'] ?? false),
             'same_day_delivery' => (bool) ($options['same_day_delivery'] ?? false),
             'signature'         => (bool) ($options['signature'] ?? false),
+            'collect'           => (bool) ($options['collect'] ?? false),
             'receipt_code'      => (bool) ($options['receipt_code'] ?? false),
             'insurance'         => $options['insurance']['amount'] ?? 0,
             'label_description' => $options['label_description'] ?? null,

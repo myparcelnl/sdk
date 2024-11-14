@@ -89,6 +89,7 @@ class ConsignmentEncode
                     'label_description' => $consignment->getLabelDescription(),
                     'only_recipient'    => Helpers::intOrNull($consignment->isOnlyRecipient()),
                     'signature'         => Helpers::intOrNull($consignment->isSignature()),
+                    'collect'           => Helpers::intOrNull($consignment->hasCollect()),
                     'receipt_code'      => Helpers::intOrNull($consignment->hasReceiptCode()),
                     'return'            => Helpers::intOrNull($consignment->isReturn()),
                     'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),

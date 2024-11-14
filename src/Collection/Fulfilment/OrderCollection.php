@@ -125,6 +125,7 @@ class OrderCollection extends Collection
             'delivery_type'     => $deliveryOptions->getDeliveryTypeId(),
             'delivery_date'     => $deliveryDate ?: null,
             'signature'         => (int) $shipmentOptions->hasSignature(),
+            'collect'           => (int) $shipmentOptions->hasCollect(),
             'receipt_code'      => (int) $shipmentOptions->hasReceiptCode(),
             'only_recipient'    => (int) $shipmentOptions->hasOnlyRecipient(),
             'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
