@@ -42,6 +42,13 @@ class DHLForYouConsignment extends AbstractConsignment
         ];
     }
 
+    public function getAllowedExtraOptions(): array
+    {
+        return [
+            self::EXTRA_OPTION_DELIVERY_SATURDAY,
+        ];
+    }
+
     /**
      * @return string[]
      */
