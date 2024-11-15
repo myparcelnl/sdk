@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.20.0](https://github.com/myparcelnl/sdk/compare/v7.19.0...v7.20.0) (2024-11-15)
+
+
+### :sparkles: New Features
+
+* Allow saturday delivery for DHLForYou ([#510](https://github.com/myparcelnl/sdk/issues/510)) ([f33483e](https://github.com/myparcelnl/sdk/commit/f33483e804a168801a8dcb4a47b8a82163d13bf3))
+
 ## [7.19.0](https://github.com/myparcelnl/sdk/compare/v7.18.1...v7.19.0) (2024-11-14)
 
 
