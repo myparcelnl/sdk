@@ -46,6 +46,7 @@ class DHLForYouConsignment extends AbstractConsignment
     {
         return [
             self::EXTRA_OPTION_DELIVERY_SATURDAY,
+            self::EXTRA_OPTION_DELIVERY_DATE,
         ];
     }
 
