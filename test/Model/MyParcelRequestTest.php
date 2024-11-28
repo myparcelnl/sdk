@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model;
 
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
 
@@ -34,7 +35,7 @@ class MyParcelRequestTest extends TestCase
         );
 
         $headers = $request->getHeaders();
-        self::assertContains('MyECommercePlatform/4.4.0', $headers['User-Agent']);
+        self::assertMatchesRegularExpression('|MyECommercePlatform/4.4.0|', $headers['User-Agent']);
     }
 
     /**

@@ -39,7 +39,7 @@ class OrderNoteTest extends TestCase
         $note->validate();
     }
 
-    public function notesProvider(): array
+    public static function notesProvider(): array
     {
         $stringTooLong = str_repeat('!', 2501);
         return [

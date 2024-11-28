@@ -14,12 +14,13 @@ class BpostConsignmentTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideBpostConsignmentsData(): array
+    public static function provideBpostConsignmentsData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset([
             'BE -> BE' => [],
-            'BE -> NL' => $this->getDefaultAddress(),
-            'Bpost pickup + shipment options' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
+            'BE -> NL' => $instance->getDefaultAddress(),
+            'Bpost pickup + shipment options' => $instance->getDefaultAddress(AbstractConsignment::CC_BE) + [
                     self::ONLY_RECIPIENT                 => true,
                     self::SIGNATURE                      => true,
                     self::DELIVERY_TYPE                  => AbstractConsignment::DELIVERY_TYPE_PICKUP,

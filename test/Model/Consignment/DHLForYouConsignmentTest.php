@@ -13,9 +13,9 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideDHLForYouConsignmentsData(): array
+    public static function provideDHLForYouConsignmentsData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             'same day delivery' => [
                 self::SAME_DAY_DELIVERY => true,
             ],

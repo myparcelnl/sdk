@@ -13,10 +13,11 @@ class ConsignmentOtherOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideAutoDetectPickupData(): array
+    public static function provideAutoDetectPickupData(): array
     {
-        $deliveryDate = $this->generateDeliveryDate();
-        return $this->createConsignmentProviderDataset(
+        $instance = new self();
+        $deliveryDate = $instance->generateDeliveryDate();
+        return $instance->createConsignmentProviderDataset(
             [
                 'Auto detect pickup' => [
                     'checkout_data'                     => sprintf(
@@ -36,10 +37,11 @@ class ConsignmentOtherOptionsTest extends ConsignmentTestCase
      * @throws \Exception
      * @deprecated
      */
-    public function provideCheckoutDataData(): array
+    public static function provideCheckoutDataData(): array
     {
-        $deliveryDate = $this->generateDeliveryDate();
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        $deliveryDate = $instance->generateDeliveryDate();
+        return $instance->createConsignmentProviderDataset([
             '[DEPRECATED] checkout data' => [
                 'checkout_data'                            => sprintf(
                     '{"date":"%s","time":[{"start":"16:00:00","type":4,"price":{"currency":"EUR","amount":0}}],"location":"Primera Sanders","street":"Polderplein","number":"3","postal_code":"2132BA","city":"Hoofddorp","cc":"NL","start_time":"16:00:00","price":0,"price_comment":"retail","comment":"Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.","phone_number":"","opening_hours":{"monday":["11:00-18:00"],"tuesday":["09:00-18:00"],"wednesday":["09:00-18:00"],"thursday":["09:00-18:00"],"friday":["09:00-21:00"],"saturday":["09:00-18:00"],"sunday":["12:00-17:00"]},"distance":"312","latitude":"52.30329367","longitude":"4.69476214","location_code":"176227","retail_network_id":"PNPNL-01","holiday":[]}',
@@ -61,9 +63,9 @@ class ConsignmentOtherOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideSaveRecipientAddressData(): array
+    public static function provideSaveRecipientAddressData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             'Save recipient address' => [
                 self::SAVE_RECIPIENT_ADDRESS => true,
             ],

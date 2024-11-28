@@ -27,7 +27,7 @@ class AbstractValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function provideValidatorData(): array
+    public static function provideValidatorData(): array
     {
         return [
             [
@@ -60,13 +60,11 @@ class AbstractValidatorTest extends TestCase
             (new $testValidator())
                 ->validateAll(true)
                 ->report();
+            self::fail();
         } catch (ValidationException $e) {
             self::assertSame(['Error', 'Error', 'Error'], $e->getErrors());
             $this->addToAssertionCount(1);
         }
-
-        // Make sure the catch assertion has been executed.
-        self::assertEquals(1, $this->getNumAssertions());
     }
 
     /**

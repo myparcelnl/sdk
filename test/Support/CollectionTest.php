@@ -13,7 +13,7 @@ class CollectionTest extends TestCase
      * @return array
      * @throws \Exception
      */
-    public function provideToArrayWithoutNullData(): array
+    public static function provideToArrayWithoutNullData(): array
     {
         return [
             'plain array'        => [
@@ -55,6 +55,6 @@ class CollectionTest extends TestCase
      */
     public function testToArrayWithoutNull(array $input, array $output): void
     {
-        self::assertSame(((new Collection($input))->toArrayWithoutNull()), $output);
+        self::assertSame($output, ((new Collection($input))->toArrayWithoutNull()));
     }
 }

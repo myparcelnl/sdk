@@ -15,7 +15,7 @@ class CarrierConfigurationFactoryTest extends TestCase
      * @return array
      * @throws \Exception
      */
-    public function provideCreateCarrierConfigurationData(): array
+    public static function provideCreateCarrierConfigurationData(): array
     {
         return [
 //            'With identifier only'        => [
