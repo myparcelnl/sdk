@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); /** @noinspection PhpUndefinedClassInspection */
 
-namespace MyParcelNL\Sdk\src\Support;
+namespace MyParcelNL\Sdk\Support;
 
 use ArrayAccess;
 use InvalidArgumentException;

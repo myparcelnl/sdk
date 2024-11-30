@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web;
+namespace MyParcelNL\Sdk\Services\Web;
 
-use MyParcelNL\Sdk\src\Factory\Account\CarrierConfigurationFactory;
-use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Factory\Account\CarrierConfigurationFactory;
+use MyParcelNL\Sdk\Model\Account\CarrierConfiguration;
+use MyParcelNL\Sdk\Support\Collection;
 
 class CarrierConfigurationWebService extends AbstractWebService
 {
@@ -20,10 +20,10 @@ class CarrierConfigurationWebService extends AbstractWebService
      * @param  int  $carrierId
      * @param  bool $fetchDropOffPoint
      *
-     * @return null|\MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return null|\MyParcelNL\Sdk\Model\Account\CarrierConfiguration
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function getCarrierConfiguration(
@@ -45,10 +45,10 @@ class CarrierConfigurationWebService extends AbstractWebService
      * @param  int  $shopId
      * @param  bool $fetchDropOffPoint
      *
-     * @return \MyParcelNL\Sdk\src\Support\Collection|\MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration[]
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Support\Collection|\MyParcelNL\Sdk\Model\Account\CarrierConfiguration[]
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function getCarrierConfigurations(
         int  $shopId,
@@ -74,9 +74,9 @@ class CarrierConfigurationWebService extends AbstractWebService
      * @param  string $uri
      *
      * @return null|array
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function doRequest(string $uri): ?array
     {

@@ -41,13 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\src\\": "src",
-            "MyParcelNL\\Sdk\\": "src"
+            "MyParcelNL\\Sdk\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\Test\\": "test"
+            "MyParcelNL\\Sdk\\Test\\": "test/"
         }
     }
 }

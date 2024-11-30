@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
-use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderNoteTest extends TestCase
@@ -50,7 +50,7 @@ class OrderNoteTest extends TestCase
                             'orderUuid' => 'uuid',
                             'author'    => 'customer',
                         ],
-                        'expectedError' => 'All properties must be set on MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote',
+                        'expectedError' => 'All properties must be set on MyParcelNL\Sdk\Model\Fulfilment\OrderNote',
                     ],
                 ],
             'note too long'  => [

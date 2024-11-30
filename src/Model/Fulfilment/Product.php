@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Fulfilment;
+namespace MyParcelNL\Sdk\Model\Fulfilment;
 
-use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\Model\BaseModel;
+use MyParcelNL\Sdk\Support\Helpers;
 
 class Product extends BaseModel
 {

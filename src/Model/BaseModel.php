@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
-use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\Support\Helpers;
 
 abstract class BaseModel
 {

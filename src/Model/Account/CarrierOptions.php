@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Account;
+namespace MyParcelNL\Sdk\Model\Account;
 
-use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\BaseModel;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
 
 class CarrierOptions extends BaseModel
 {
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @var \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     private $carrier;
 
@@ -49,7 +49,7 @@ class CarrierOptions extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     public function getCarrier(): AbstractCarrier
     {

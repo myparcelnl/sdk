@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Fulfilment;
+namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use Exception;
-use MyParcelNL\Sdk\src\Exception\ValidationException;
-use MyParcelNL\Sdk\src\Validator\Order\OrderNoteValidator;
-use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
+use MyParcelNL\Sdk\Exception\ValidationException;
+use MyParcelNL\Sdk\Validator\Order\OrderNoteValidator;
+use MyParcelNL\Sdk\Validator\ValidatorFactory;
 
 class OrderNote
 {
@@ -64,7 +64,7 @@ class OrderNote
     /**
      * @param  null|string $author
      *
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\OrderNote
      */
     public function setAuthor(?string $author): self
     {
@@ -76,7 +76,7 @@ class OrderNote
     /**
      * @param  null|string $note
      *
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\OrderNote
      */
     public function setNote(?string $note): self
     {
@@ -88,7 +88,7 @@ class OrderNote
     /**
      * @param  null|string $orderUuid
      *
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\OrderNote
      */
     public function setOrderUuid(?string $orderUuid): self
     {

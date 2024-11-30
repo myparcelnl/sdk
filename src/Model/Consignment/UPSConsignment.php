@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Consignment;
+namespace MyParcelNL\Sdk\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierUPS;
-use MyParcelNL\Sdk\src\Validator\Consignment\UPSConsignmentValidator;
+use MyParcelNL\Sdk\Model\Carrier\CarrierUPS;
+use MyParcelNL\Sdk\Validator\Consignment\UPSConsignmentValidator;
 
 class UPSConsignment extends AbstractConsignment
 {

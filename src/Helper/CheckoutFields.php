@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Helper;
+namespace MyParcelNL\Sdk\Helper;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class CheckoutFields
 {

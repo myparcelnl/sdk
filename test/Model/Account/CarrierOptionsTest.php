@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Account;
 
-use MyParcelNL\Sdk\src\Model\Account\CarrierOptions;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDPD;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Account\CarrierOptions;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class CarrierOptionsTest extends TestCase

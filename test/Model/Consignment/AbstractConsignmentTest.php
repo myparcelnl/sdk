@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class AbstractConsignmentTest extends TestCase
@@ -36,7 +36,7 @@ class AbstractConsignmentTest extends TestCase
 
     /**
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function testAbstractConsignment(): void
     {

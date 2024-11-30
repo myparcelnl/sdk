@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\PhysicalProperties;
 
 use Faker\Factory;
-use MyParcelNL\Sdk\src\Model\PhysicalProperties;
+use MyParcelNL\Sdk\Model\PhysicalProperties;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class PhysicalPropertiesTest extends TestCase

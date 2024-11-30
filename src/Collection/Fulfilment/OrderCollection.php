@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Collection\Fulfilment;
+namespace MyParcelNL\Sdk\Collection\Fulfilment;
 
 use DateTime;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Concerns\HasCountry;
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder;
-use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use MyParcelNL\Sdk\src\Model\RequestBody;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasCountry;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
+use MyParcelNL\Sdk\Model\Fulfilment\Order;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Model\RequestBody;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Collection;
 
 /**
- * @property \MyParcelNL\Sdk\src\Model\Fulfilment\Order[] $items
+ * @property \MyParcelNL\Sdk\Model\Fulfilment\Order[] $items
  */
 class OrderCollection extends Collection
 {
@@ -31,9 +31,9 @@ class OrderCollection extends Collection
      * @param array  $parameters
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public static function query(string $apiKey, array $parameters = []): self
@@ -51,9 +51,9 @@ class OrderCollection extends Collection
 
     /**
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function save(): self
@@ -104,7 +104,7 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
      *
      * @return array
      * @throws \Exception
@@ -145,7 +145,7 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param \MyParcelNL\Sdk\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return array
      */
@@ -164,7 +164,7 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\MyParcelRequest $request
+     * @param \MyParcelNL\Sdk\Model\MyParcelRequest $request
      *
      * @return self
      */
