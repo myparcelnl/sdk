@@ -32,7 +32,7 @@
         "test:coverage": ["@putenv XDEBUG_MODE=coverage","vendor/bin/phpunit --coverage-html coverage"]
     },
     "require": {
-        "php": ">=7.4.0"
+        "php": ">=7.1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",
