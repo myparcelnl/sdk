@@ -14,7 +14,7 @@ class MinimumItemValueRuleTest extends TestCase
     /**
      * @return array
      */
-    public function provideMinimumItemValueData(): array
+    public static function provideMinimumItemValueData(): array
     {
         return [
             [

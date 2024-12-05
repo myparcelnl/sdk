@@ -22,13 +22,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected $faker;
 
     /**
-     * @param  string $name
-     * @param  array  $data
-     * @param  string $dataName
+     * @param string|null $name
+     * @param array       $data
+     * @param string      $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         $this->faker = Factory::create('nl_NL');
+        if (!$name) {
+            $name = self::class;
+        }
         parent::__construct($name, $data, $dataName);
     }
 

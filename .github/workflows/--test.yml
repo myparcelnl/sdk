@@ -33,7 +33,7 @@ jobs:
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
-          image: ghcr.io/myparcelnl/php-xd:7.2
+          image: ghcr.io/myparcelnl/php-xd:8.2
 
       - name: 'Install composer dependencies'
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
@@ -53,6 +53,7 @@ jobs:
             --env CI=${CI} \
             --env API_KEY_NL=${{ secrets.API_KEY_NL }} \
             --env API_KEY_BE=${{ secrets.API_KEY_BE }} \
+            --env XDEBUG_MODE=coverage \
             ${{ steps.docker.outputs.image }} \
             vendor/bin/phpunit --coverage-clover coverage.xml
 

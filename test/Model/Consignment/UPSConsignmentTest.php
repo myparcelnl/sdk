@@ -14,9 +14,9 @@ class UPSConsignmentTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideUPSConsignmentsData(): array
+    public static function provideUPSConsignmentsData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             'NL -> EU' => [],
         ]);
     }

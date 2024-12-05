@@ -12,13 +12,13 @@ class TrackTraceUrlTest extends TestCase
     /**
      * @return array
      */
-    public function provideTrackTraceData(): array
+    public static function provideTrackTraceData(): array
     {
         return [
             'dutch destination' => [
                 'barcode'     => '3SMYPA00123456',
-                'postal_code' => '2132JE',
-                'cc'          => 'NL',
+                'postalCode'  => '2132JE',
+                'countryCode' => 'NL',
             ],
         ];
     }

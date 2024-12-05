@@ -16,7 +16,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
     ];
     private const CC_FR     = 'FR';
 
-    public function provideInsurancePossibilitiesData(): array
+    public static function provideInsurancePossibilitiesData(): array
     {
         return [
             'NL'       => [
@@ -37,7 +37,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
         ];
     }
 
-    public function provideCanHavePackageTypeData(): array
+    public static function provideCanHavePackageTypeData(): array
     {
         return [
             'NL' => [
@@ -48,7 +48,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
         ];
     }
 
-    public function provideCanHaveDeliveryTypeData(): array
+    public static function provideCanHaveDeliveryTypeData(): array
     {
         return [
             'Standard' => [

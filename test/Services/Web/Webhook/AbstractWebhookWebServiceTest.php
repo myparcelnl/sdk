@@ -18,7 +18,7 @@ class AbstractWebhookWebServiceTest extends TestCase
      * @return array
      * @throws \Exception
      */
-    public function provideWebhookData(): array
+    public static function provideWebhookData(): array
     {
         return [
             'shipment_label_created'             => [new ShipmentLabelCreatedWebhookWebService()],

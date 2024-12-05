@@ -14,11 +14,12 @@ class DpdConsignmentTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideDpdConsignmentsData(): array
+    public static function provideDpdConsignmentsData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset([
             'BE -> BE' => [],
-            'BE -> NL' => $this->getDefaultAddress(),
+            'BE -> NL' => $instance->getDefaultAddress(),
         ]);
     }
 

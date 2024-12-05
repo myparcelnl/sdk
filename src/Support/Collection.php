@@ -1732,6 +1732,10 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
                     return Helpers::toArrayWithoutNull($value);
                 }
 
+                if (is_int($value)) {
+                    return $value;
+                }
+
                 if ($value && method_exists($value, 'toArrayWithoutNull')) {
                     return $value->toArrayWithoutNull();
                 }
@@ -1754,7 +1758,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function jsonSerialize()
     {
         return array_map(function ($value) {
-            if (method_exists($value, 'toArray')) {
+            if (method_exists((string) $value, 'toArray')) {
                 return $value->toArray();
             }
 

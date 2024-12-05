@@ -17,10 +17,11 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
      * @return array
      * @throws \Exception
      */
-    public function provideCreateData(): array
+    public static function provideCreateData(): array
     {
         $date = (new DateTime())->format('Ymd H:i:s');
-        return $this->createProviderDataset([
+        $instance = new self();
+        return $instance->createProviderDataset([
             'DeliveryOptionsV2Adapter'                  => [
                 'carrier' => CarrierPostNL::NAME,
                 'date'    => $date,
@@ -69,7 +70,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'age_check'         => true,
                     'large_format'      => true,
                     'return'            => true,
-                    'label_description' => $this->faker->words(3, true),
+                    'label_description' => $instance->faker->words(3, true),
                 ],
                 'pickupLocation'  => null,
             ],
@@ -85,7 +86,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'age_check'         => true,
                     'large_format'      => true,
                     'return'            => true,
-                    'label_description' => $this->faker->words(3, true),
+                    'label_description' => $instance->faker->words(3, true),
                 ],
                 'pickupLocation'  => [
                     'country'           => AbstractConsignment::CC_NL,

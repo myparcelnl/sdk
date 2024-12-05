@@ -13,9 +13,10 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provide18PlusCheckData(): array
+    public static function provide18PlusCheckData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset([
             'Normal 18+ check'      => [
                 self::AGE_CHECK      => true,
                 self::ONLY_RECIPIENT => true,
@@ -29,7 +30,7 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
             //      self::expected(self::ONLY_RECIPIENT) => true,
             //      self::expected(self::SIGNATURE)      => true,
             //  ],
-            '18+ check EU shipment' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
+            '18+ check EU shipment' => $instance->getDefaultAddress(AbstractConsignment::CC_BE) + [
                     self::AGE_CHECK => true,
                     self::EXCEPTION => 'The age check is not possible with an EU shipment or world shipment',
                 ],
@@ -68,9 +69,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideDigitalStampData(): array
+    public static function provideDigitalStampData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             'Digital stamp 80 grams' => [
                 self::LABEL_DESCRIPTION => 112345,
                 self::PACKAGE_TYPE      => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP,
@@ -95,11 +96,12 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideLargeFormatData(): array
+    public static function provideLargeFormatData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset([
             'Large format national'   => [
-                self::CUSTOMS_DECLARATION => $this->getDefaultCustomsDeclaration(),
+                self::CUSTOMS_DECLARATION => $instance->getDefaultCustomsDeclaration(),
                 self::LARGE_FORMAT        => true,
             ],
             // todo:
@@ -108,8 +110,8 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
             //          self::LARGE_FORMAT                 => true,
             //          self::expected(self::LARGE_FORMAT) => false,
             //      ],
-            'Large format to Belgium' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
-                    self::CUSTOMS_DECLARATION       => $this->getDefaultCustomsDeclaration(
+            'Large format to Belgium' => $instance->getDefaultAddress(AbstractConsignment::CC_BE) + [
+                    self::CUSTOMS_DECLARATION       => $instance->getDefaultCustomsDeclaration(
                         AbstractConsignment::CC_BE
                     ),
                     self::LARGE_FORMAT                   => true,
@@ -123,12 +125,13 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     /**
      * @throws \Exception
      */
-    public function provideShipmentOptionsWithPickupData(): array
+    public static function provideShipmentOptionsWithPickupData(): array
     {
-        return $this->createConsignmentProviderDataset(
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset(
             [
                 'Pickup with shipment options PostNL'     => [
-                    self::DELIVERY_DATE                  => $this->generateDeliveryDate(),
+                    self::DELIVERY_DATE                  => $instance->generateDeliveryDate(),
                     self::ONLY_RECIPIENT                 => true,
                     self::RETURN                         => true,
                     self::SIGNATURE                      => true,
@@ -145,9 +148,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideMailboxData(): array
+    public static function provideMailboxData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             'Mailbox shipment'              => [
                 self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
             ],
@@ -172,9 +175,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideInsuranceData(): array
+    public static function provideInsuranceData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             'EUR 250' => [
                 self::INSURANCE                      => 250,
                 self::expected(self::ONLY_RECIPIENT) => true,
@@ -198,11 +201,12 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function providePickupLocationData(): array
+    public static function providePickupLocationData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset([
             'Pickup location' => [
-                self::DELIVERY_DATE        => $this->generateDeliveryDate(),
+                self::DELIVERY_DATE        => $instance->generateDeliveryDate(),
                 self::DELIVERY_TYPE        => AbstractConsignment::DELIVERY_TYPE_PICKUP,
                 self::PICKUP_CITY          => 'Hoofddorp',
                 self::PICKUP_COUNTRY       => AbstractConsignment::CC_NL,
@@ -219,15 +223,16 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @return array
      * @throws \Exception
      */
-    public function provideReferenceIdentifierData(): array
+    public static function provideReferenceIdentifierData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        $instance = new self();
+        return $instance->createConsignmentProviderDataset([
             //            'normal consignment with reference id'        => [
             //                [self::REFERENCE_IDENTIFIER => $this->generateTimestamp() . '_normal_consignment'],
             //            ],
             'two consignments with reference identifiers' => [
-                [self::REFERENCE_IDENTIFIER => $this->generateTimestamp() . '_2_1'],
-                [self::REFERENCE_IDENTIFIER => $this->generateTimestamp() . '_2_2'],
+                [self::REFERENCE_IDENTIFIER => $instance->generateTimestamp() . '_2_1'],
+                [self::REFERENCE_IDENTIFIER => $instance->generateTimestamp() . '_2_2'],
             ],
         ]);
     }

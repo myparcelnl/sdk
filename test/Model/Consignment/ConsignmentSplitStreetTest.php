@@ -20,9 +20,9 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
      * @return array[]
      * @throws \Exception
      */
-    public function provideSplitStreetData(): array
+    public static function provideSplitStreetData(): array
     {
-        return $this->createConsignmentProviderDataset([
+        return (new self())->createConsignmentProviderDataset([
             [
                 self::FULL_STREET                 => 'Graan voor Visch 19905',
                 self::expected(self::FULL_STREET) => 'Graan voor Visch 19905',

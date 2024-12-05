@@ -73,6 +73,10 @@ class OrderLine extends BaseModel
         $this->product = new Product($data['product'] ?? []);
     }
 
+    public function __toString() {
+        return (string) self::class;
+    }
+
     /**
      * @return array
      */

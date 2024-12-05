@@ -12,7 +12,7 @@ class UtilsTest extends TestCase
     /**
      * @return array
      */
-    public function provideGetKeysWithoutValueData(): array
+    public static function provideGetKeysWithoutValueData(): array
     {
         return [
             [
