@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Consignment;
+namespace MyParcelNL\Sdk\Model\Consignment;
 
 use BadMethodCallException;
 use Exception;
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Concerns\HasCheckoutFields;
-use MyParcelNL\Sdk\src\Concerns\HasCountry;
-use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Exception\ValidationException;
-use MyParcelNL\Sdk\src\Helper\SplitStreet;
-use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
-use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Services\CountryCodes;
-use MyParcelNL\Sdk\src\Services\CountryService;
-use MyParcelNL\Sdk\src\Support\Str;
-use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasCheckoutFields;
+use MyParcelNL\Sdk\Concerns\HasCountry;
+use MyParcelNL\Sdk\Exception\InvalidConsignmentException;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Exception\ValidationException;
+use MyParcelNL\Sdk\Helper\SplitStreet;
+use MyParcelNL\Sdk\Helper\TrackTraceUrl;
+use MyParcelNL\Sdk\Helper\ValidatePostalCode;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\Services\CountryCodes;
+use MyParcelNL\Sdk\Services\CountryService;
+use MyParcelNL\Sdk\Support\Str;
+use MyParcelNL\Sdk\Validator\ValidatorFactory;
 
 abstract class AbstractConsignment
 {
@@ -473,7 +473,7 @@ abstract class AbstractConsignment
     public $items = [];
 
     /**
-     * @var string|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @var string|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     protected $carrierClass;
 
@@ -483,7 +483,7 @@ abstract class AbstractConsignment
     protected $validatorClass;
 
     /**
-     * @var null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @var null|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     private $carrier;
 
@@ -513,7 +513,7 @@ abstract class AbstractConsignment
     private $save_recipient_address = true;
 
     /**
-     * @var null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @var null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     protected $drop_off_point;
 
@@ -533,7 +533,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return null|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return null|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     final public function getCarrier(): ?AbstractCarrier
     {
@@ -652,7 +652,7 @@ abstract class AbstractConsignment
     /**
      * @param int $id
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment
      * @internal
      * @deprecated Use setConsignmentId instead
      */
@@ -710,7 +710,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @param null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return self
      */
@@ -721,7 +721,7 @@ abstract class AbstractConsignment
     }
 
     /**
-     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @return null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     public function getDropOffPoint(): ?DropOffPoint
     {
@@ -952,7 +952,7 @@ abstract class AbstractConsignment
 
     /**
      * @return string|null
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @var bool
      */
     public function getStreet($useStreetAdditionalInfo = false): string
@@ -1030,7 +1030,7 @@ abstract class AbstractConsignment
      * Get entire street.
      *
      * @return string Entire street
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @var bool
      * @todo move to hasCountry
      */
@@ -1193,7 +1193,7 @@ abstract class AbstractConsignment
      * @param array $consignmentEncoded
      *
      * @return array
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function encodeStreet(array $consignmentEncoded): array
     {
@@ -1629,7 +1629,7 @@ abstract class AbstractConsignment
      * @param bool $largeFormat
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setLargeFormat(bool $largeFormat): self
     {
@@ -1687,7 +1687,7 @@ abstract class AbstractConsignment
      * @param bool $ageCheck
      *
      * @return AbstractConsignment
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setAgeCheck(bool $ageCheck): self
     {
@@ -1845,10 +1845,10 @@ abstract class AbstractConsignment
      * A CustomsItem objects with description in the package.
      * Required: Yes for international shipments.
      *
-     * @param \MyParcelNL\Sdk\src\Model\MyParcelCustomsItem $item
+     * @param \MyParcelNL\Sdk\Model\MyParcelCustomsItem $item
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function addItem(MyParcelCustomsItem $item): self
     {
@@ -1920,7 +1920,7 @@ abstract class AbstractConsignment
 
     /**
      * @return bool
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function isPackage(): bool
     {
@@ -2035,7 +2035,7 @@ abstract class AbstractConsignment
      * @param string $shipmentOption
      *
      * @return bool
-     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     * @throws \MyParcelNL\Sdk\Exception\InvalidConsignmentException
      */
     private function validateShipmentOption(string $shipmentOption): bool
     {

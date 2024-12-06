@@ -1,6 +1,6 @@
 <?php
 
-namespace MyParcelNL\Sdk\src\Services;
+namespace MyParcelNL\Sdk\Services;
 
 class CountryService
 {

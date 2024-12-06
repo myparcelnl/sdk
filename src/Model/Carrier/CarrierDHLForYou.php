@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Carrier;
+namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\DHLForYouConsignment;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\DHLForYouConsignment;
 
 class CarrierDHLForYou extends AbstractCarrier
 {

@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Helper;
 
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Test\Bootstrap\CollectionTestCase;
 
 class MyParcelCollectionTest extends CollectionTestCase
 {
     /**
-     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::find
-     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::findMany
-     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::findByReferenceId
-     * @covers \MyParcelNL\Sdk\src\Helper\MyParcelCollection::findManyByReferenceId
+     * @covers \MyParcelNL\Sdk\Helper\MyParcelCollection::find
+     * @covers \MyParcelNL\Sdk\Helper\MyParcelCollection::findMany
+     * @covers \MyParcelNL\Sdk\Helper\MyParcelCollection::findByReferenceId
+     * @covers \MyParcelNL\Sdk\Helper\MyParcelCollection::findManyByReferenceId
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testFindConsignments(): void
@@ -53,8 +53,8 @@ class MyParcelCollectionTest extends CollectionTestCase
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testGenerateReturnConsignments(): void

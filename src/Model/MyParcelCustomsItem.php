@@ -12,15 +12,15 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Services\ConsignmentEncode;
+use MyParcelNL\Sdk\Support\Str;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
@@ -109,7 +109,7 @@ class MyParcelCustomsItem
      * @param int $weight
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setWeight($weight)
     {
@@ -183,7 +183,7 @@ class MyParcelCustomsItem
      * @param null|int $classification
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setClassification(?int $classification): self
     {
@@ -228,7 +228,7 @@ class MyParcelCustomsItem
      * Check if object is fully filled
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function ensureFilled()
     {

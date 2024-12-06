@@ -6,15 +6,15 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateInterval;
 use DateTime;
-use MyParcelNL\Sdk\src\Helper\Utils;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Helper\Utils;
+use MyParcelNL\Sdk\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\Services\Web\DropOffPointWebService;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Str;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 
@@ -94,10 +94,10 @@ class ConsignmentTestCase extends TestCase
 
     /**
      * @param  array                                                     $data
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @deprecated
      */
     protected function addCheckoutData(array $data, AbstractConsignment $consignment): void
@@ -110,7 +110,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Helper\MyParcelCollection $collection
+     * @param  \MyParcelNL\Sdk\Helper\MyParcelCollection $collection
      *
      * @return void
      */
@@ -226,8 +226,8 @@ class ConsignmentTestCase extends TestCase
     /**
      * @param  array $testData
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Helper\MyParcelCollection
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     protected function generateCollection(array $testData = []): MyParcelCollection
@@ -258,8 +258,8 @@ class ConsignmentTestCase extends TestCase
      * @param  array $data
      * @param  bool  $addDefaults
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment|null
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment|null
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     protected function generateConsignment(array $data = [], bool $addDefaults = false): ?AbstractConsignment
@@ -409,7 +409,7 @@ class ConsignmentTestCase extends TestCase
 
     /**
      * @param  array                                                     $testData
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      * @param  string[]|null                                             $only
      */
     protected static function validateConsignmentOptions(
@@ -451,10 +451,10 @@ class ConsignmentTestCase extends TestCase
 
     /**
      * @param                                                            $data
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function addCustomsDeclaration($data, AbstractConsignment $consignment): void
     {
@@ -474,12 +474,12 @@ class ConsignmentTestCase extends TestCase
 
     /**
      * @param                                                            $data
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     private function addDropOffPoint($data, AbstractConsignment $consignment): void

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web;
+namespace MyParcelNL\Sdk\Services\Web;
 
 use BadMethodCallException;
-use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Helper\ValidatePostalCode;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Support\Collection;
 
 class DropOffPointWebService extends AbstractWebService implements CanGetDropOffPoint
 {
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @var \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     private $carrier;
 
     /**
-     * @param  string|int|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
+     * @param  string|int|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier $carrier
      *
      * @throws \Exception
      */
@@ -31,10 +31,10 @@ class DropOffPointWebService extends AbstractWebService implements CanGetDropOff
     /**
      * @param  string $externalIdentifier
      *
-     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function getDropOffPoint(string $externalIdentifier): ?DropOffPoint
@@ -58,10 +58,10 @@ class DropOffPointWebService extends AbstractWebService implements CanGetDropOff
     /**
      * @param  string $postalCode
      *
-     * @return \MyParcelNL\Sdk\src\Support\Collection|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint[]
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Support\Collection|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint[]
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function getDropOffPoints(string $postalCode): Collection
     {

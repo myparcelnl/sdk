@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Validator;
+namespace MyParcelNL\Sdk\Validator;
 
-use MyParcelNL\Sdk\src\Support\Classes;
+use MyParcelNL\Sdk\Support\Classes;
 
 class ValidatorFactory
 {
     /**
      * @param  null|string $validatorClass
      *
-     * @return null|\MyParcelNL\Sdk\src\Validator\AbstractValidator
+     * @return null|\MyParcelNL\Sdk\Validator\AbstractValidator
      * @throws \Exception
      */
     public static function create(?string $validatorClass): ?AbstractValidator

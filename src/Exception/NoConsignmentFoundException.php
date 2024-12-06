@@ -1,6 +1,6 @@
 <?php
 
-namespace MyParcelNL\Sdk\src\Exception;
+namespace MyParcelNL\Sdk\Exception;
 
 class NoConsignmentFoundException extends \Exception
 {

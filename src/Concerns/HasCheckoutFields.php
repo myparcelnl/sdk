@@ -3,11 +3,11 @@
  * @author Reindert Vetter <reindert@myparcel.nl>
  */
 
-namespace MyParcelNL\Sdk\src\Concerns;
+namespace MyParcelNL\Sdk\Concerns;
 
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Helper\CheckoutFields;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Helper\CheckoutFields;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 /**
  * @deprecated
@@ -75,7 +75,7 @@ trait HasCheckoutFields
      * @param string $checkoutData
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @deprecated
      *
      */

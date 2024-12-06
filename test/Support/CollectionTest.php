@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Support;
 
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class CollectionTest extends TestCase

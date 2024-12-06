@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
+namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
 use Exception;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
 {

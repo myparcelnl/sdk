@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Bootstrap;
 
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Helper\MyParcelCollection;
 
 class CollectionTestCase extends ConsignmentTestCase
 {
     protected const CONSIGNMENT_ID = 'consignment_id';
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Helper\MyParcelCollection $collection
+     * @param  \MyParcelNL\Sdk\Helper\MyParcelCollection $collection
      * @param  int[]                                         $ids
      *
      * @return void
@@ -30,8 +30,8 @@ class CollectionTestCase extends ConsignmentTestCase
      * @param  int  $amountOfConsignments
      * @param  bool $addProps
      *
-     * @return \MyParcelNL\Sdk\src\Helper\MyParcelCollection
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Helper\MyParcelCollection
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     protected function generateSimpleCollection(
