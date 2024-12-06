@@ -21,13 +21,13 @@ class DHLParcelConnectConsignmentTest extends ConsignmentTestCase
     {
         $pickupInformation = [
             self::DELIVERY_TYPE => AbstractConsignment::DELIVERY_TYPE_PICKUP,
-            self::PICKUP_STREET => 'Boulevard National',
+            self::PICKUP_STREET => 'Rte des fusilles de la resis',
             self::PICKUP_CITY   => 'Nanterre',
-            self::PICKUP_NUMBER => '134',
+            self::PICKUP_NUMBER => '110',
             self::PICKUP_POSTAL_CODE => '92000',
             self::PICKUP_COUNTRY => 'FR',
-            self::PICKUP_LOCATION_NAME => 'LES 4 SAISONS',
-            self::PICKUP_LOCATION_CODE => '8057-H4100',
+            self::PICKUP_LOCATION_NAME => 'MARCHE D A COTE',
+            self::PICKUP_LOCATION_CODE => 'S2203',
             self::RETAIL_NETWORK_ID => '',
         ];
 

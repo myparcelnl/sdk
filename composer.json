@@ -29,7 +29,7 @@
     ],
     "scripts": {
         "test": "phpunit",
-        "test:coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test:coverage": ["@putenv XDEBUG_MODE=coverage","vendor/bin/phpunit --coverage-html coverage"]
     },
     "require": {
         "php": ">=7.1.0"

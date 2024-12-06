@@ -2,7 +2,7 @@ version: '3.9'
 
 # volumes are not in common, because phpstorm doesn't understand it
 x-common: &common
-  image: ghcr.io/myparcelnl/php-xd:7.2
+  image: ghcr.io/myparcelnl/php-xd:7.1
   init: true
   env_file:
     - .env
