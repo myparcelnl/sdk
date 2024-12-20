@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.20.1](https://github.com/myparcelnl/sdk/compare/v7.20.0...v7.20.1) (2024-12-20)
+
+
+### :bug: Bug Fixes
+
+* allow ark3 as number suffix ([#515](https://github.com/myparcelnl/sdk/issues/515)) ([acf1b2e](https://github.com/myparcelnl/sdk/commit/acf1b2ef4ca3c3127189ddb908a06ab293d40bd2))
+
 ## [7.20.0](https://github.com/myparcelnl/sdk/compare/v7.19.0...v7.20.0) (2024-11-15)
 
 

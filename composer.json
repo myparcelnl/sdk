@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/sdk",
-    "version": "7.20.0",
+    "version": "7.20.1",
     "description": "This package is designed to send and receive data from MyParcel by means of an API.",
     "keywords": [
         "MyParcel",
@@ -29,7 +29,10 @@
     ],
     "scripts": {
         "test": "phpunit",
-        "test:coverage": ["@putenv XDEBUG_MODE=coverage","vendor/bin/phpunit --coverage-html coverage"]
+        "test:coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit --coverage-html coverage"
+        ]
     },
     "require": {
         "php": ">=7.1.0"
