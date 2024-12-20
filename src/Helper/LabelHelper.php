@@ -10,7 +10,7 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\src\Helper;
+namespace MyParcelNL\Sdk\Helper;
 
 class LabelHelper
 {

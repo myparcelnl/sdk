@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Consignment;
+namespace MyParcelNL\Sdk\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
-use MyParcelNL\Sdk\src\Validator\Consignment\BpostConsignmentValidator;
+use MyParcelNL\Sdk\Model\Carrier\CarrierBpost;
+use MyParcelNL\Sdk\Validator\Consignment\BpostConsignmentValidator;
 
 class BpostConsignment extends AbstractConsignment
 {

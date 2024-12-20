@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
-use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderCollection;
-use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderNotesCollection;
-use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
+use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
+use MyParcelNL\Sdk\Collection\Fulfilment\OrderNotesCollection;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderNotesCollectionTest extends TestCase
 {
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function testSave() {
         $apiKey               = $this->getApiKey();

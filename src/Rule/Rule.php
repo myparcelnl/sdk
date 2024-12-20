@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Rule;
+namespace MyParcelNL\Sdk\Rule;
 
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Support\Collection;
 
 abstract class Rule implements RuleInterface
 {
@@ -27,7 +27,7 @@ abstract class Rule implements RuleInterface
     }
 
     /**
-     * @return array|\MyParcelNL\Sdk\src\Support\Collection
+     * @return array|\MyParcelNL\Sdk\Support\Collection
      */
     public function getErrors(): Collection
     {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
 class CustomsDeclaration
 {
@@ -50,7 +50,7 @@ class CustomsDeclaration
     /**
      * @param  int $contents
      *
-     * @return \MyParcelNL\Sdk\src\Model\CustomsDeclaration
+     * @return \MyParcelNL\Sdk\Model\CustomsDeclaration
      */
     public function setContents(int $contents): self
     {
@@ -62,7 +62,7 @@ class CustomsDeclaration
     /**
      * @param  string $invoice
      *
-     * @return \MyParcelNL\Sdk\src\Model\CustomsDeclaration
+     * @return \MyParcelNL\Sdk\Model\CustomsDeclaration
      */
     public function setInvoice(string $invoice): self
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Concerns;
 
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class HasUserAgentTest extends TestCase
