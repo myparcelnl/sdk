@@ -24,6 +24,13 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
     {
         return $this->createConsignmentProviderDataset([
             [
+                self::FULL_STREET                => 'Oosteinderweg 97 Ark3',
+                self::expected(self::FULL_STREET)   => 'Oosteinderweg 97 Ark3',
+                self::expected(self::STREET)        => 'Oosteinderweg',
+                self::expected(self::NUMBER)        => 97,
+                self::expected(self::NUMBER_SUFFIX) => 'Ark3',
+            ],
+            [
                 self::FULL_STREET                 => 'Graan voor Visch 19905',
                 self::expected(self::FULL_STREET) => 'Graan voor Visch 19905',
                 self::expected(self::STREET)      => 'Graan voor Visch',
