@@ -16,6 +16,7 @@ namespace MyParcelNL\Sdk\src\Helper;
 
 use BadMethodCallException;
 use Closure;
+use GuzzleHttp\Exception\BadResponseException;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
@@ -467,7 +468,20 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
-            $this->label_pdf = $request->getResult();
+            /**
+             * When account needs to pay upfront, an array is returned with payment information,
+             * instead of the actual pdf’s. It will throw an unintelligible error when not handled here.
+             */
+            $result = $request->getResult();
+
+            if (!is_string($result) || !preg_match('/^%PDF-1./', $result)) {
+                if (is_array($result) && isset($result['data']['payment_instructions'])) {
+                    throw new ApiException('Received payment link instead of pdf. Check your MyParcel account status.');
+                }
+                throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
+            }
+
+            $this->label_pdf = $result;
         }
 
         $this->setLatestData();
