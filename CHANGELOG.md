@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.21.0](https://github.com/myparcelnl/sdk/compare/v7.20.1...v7.21.0) (2025-01-02)
+
+
+### :sparkles: New Features
+
+* throw relevant error when no pdfs are received ([#516](https://github.com/myparcelnl/sdk/issues/516)) ([35ac23a](https://github.com/myparcelnl/sdk/commit/35ac23a978a7ad9774eaa7d419087363eed889e7))
+
 ## [7.20.1](https://github.com/myparcelnl/sdk/compare/v7.20.0...v7.20.1) (2024-12-20)
 
 
