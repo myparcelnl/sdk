@@ -225,7 +225,7 @@ class MyParcelRequest
         } else {
             $this->headers[] = $requestHeaders;
         }
-file_put_contents('/Applications/MAMP/logs/joeri.log', var_export($this->headers, true), FILE_APPEND);
+
         return $this;
     }
 
