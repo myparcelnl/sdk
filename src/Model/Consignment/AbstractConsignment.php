@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\src\Helper\ValidatePostalCode;
 use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Model\Recipient;
 use MyParcelNL\Sdk\src\Services\CountryCodes;
 use MyParcelNL\Sdk\src\Services\CountryService;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -520,7 +521,9 @@ abstract class AbstractConsignment
     /**
      * @var null|string
      */
-    private $state;
+    private           $state;
+
+    private Recipient $sender;
 
     /**
      * @throws \Exception
@@ -530,6 +533,34 @@ abstract class AbstractConsignment
         $this->carrier = $this->carrierClass
             ? CarrierFactory::createFromClass($this->carrierClass)
             : null;
+    }
+
+    /**
+     * If you set a sender, a feature header will be added to the request.
+     * Exporting the consignment to MyParcel will throw an error if your shop (by apikey) does not have this permission.
+     *
+     * @param Recipient $sender
+     * @return $this
+     */
+    public function setSender(Recipient $sender): AbstractConsignment
+    {
+        $this->sender = $sender;
+
+        return $this;
+    }
+
+    public function hasSender(): bool
+    {
+        return isset($this->sender) && Recipient::class === get_class($this->sender);
+    }
+
+    public function getSender(): ?Recipient
+    {
+        if (!$this->hasSender()) {
+            return null;
+        }
+
+        return $this->sender;
     }
 
     /**

@@ -269,14 +269,19 @@ class MyParcelCollection extends Collection
         $this->addMissingReferenceId();
 
         /* @var MyParcelCollection $consignments */
-        foreach ($this->where('consignment_id', null)->groupBy('api_key') as $consignments) {
+        foreach ($this->where('consignment_id', null)->groupInto(['apiKey', 'sender']) as $consignments) {
+            $headers = MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
+            if ($consignments->first()->hasSender()) {
+                $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
+            }
+
             $data    = (new CollectionEncode($consignments))->encode();
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $consignments->first()->apiKey,
                     $data,
-                    MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT
+                    $headers,
                 )
                 ->sendRequest();
 
