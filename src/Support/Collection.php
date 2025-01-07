@@ -774,6 +774,33 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
+     * Group this collection into separate collections by one or more fields.
+     * Returns an array of separate collections grouped by md5 encoded string of the grouped fields.
+     *
+     * @param array $by
+     * @return array
+     */
+    public function groupInto(array $by): array {
+        $result = [];
+
+        foreach ($this->items as $item) {
+            $group = '';
+            foreach ($by as $key) {
+                $group .= $this->helper->data_get($item, $key);
+            }
+            $group = md5($group);
+
+            if (!isset($result[$group])) {
+                $result[$group] = new static();
+            }
+
+            $result[$group]->push($item);
+        }
+
+        return $result;
+    }
+
+    /**
      * Key an associative array by a field or using a callback.
      *
      * @param  callable|string  $keyBy
