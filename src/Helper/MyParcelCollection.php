@@ -268,7 +268,7 @@ class MyParcelCollection extends Collection
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
 
-        $grouped = $this->where('consignment_id', null)->groupBy(function($item) {
+        $grouped = $this->where('consignment_id', null)->groupBy(function(AbstractConsignment $item) {
             return $item->getApiKey() . ($item->hasSender() ? '-sender' : '');
         });
 
