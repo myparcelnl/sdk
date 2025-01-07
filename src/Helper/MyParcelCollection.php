@@ -285,7 +285,7 @@ class MyParcelCollection extends Collection
                 ->setRequestParameters(
                     $consignments->first()->apiKey,
                     $data,
-                    $headers,
+                    $headers
                 )
                 ->sendRequest();
 
