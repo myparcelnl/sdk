@@ -521,9 +521,9 @@ abstract class AbstractConsignment
     /**
      * @var null|string
      */
-    private           $state;
+    private $state;
 
-    private Recipient $sender;
+    private $sender;
 
     /**
      * @throws \Exception
