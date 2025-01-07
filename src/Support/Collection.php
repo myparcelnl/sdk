@@ -775,17 +775,16 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Group this collection into separate collections by one or more fields.
-     * Returns an array of separate collections grouped by md5 encoded string of the grouped fields.
      *
-     * @param array $by
-     * @return array
+     * @param array $fields
+     * @return Collection of collections grouped by md5 encoded concatenated field values.
      */
-    public function groupInto(array $by): array {
+    public function groupInto(array $fields): self {
         $result = [];
 
         foreach ($this->items as $item) {
             $group = '';
-            foreach ($by as $key) {
+            foreach ($fields as $key) {
                 $group .= $this->helper->data_get($item, $key);
             }
             $group = md5($group);
@@ -797,7 +796,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
             $result[$group]->push($item);
         }
 
-        return $result;
+        return new static($result);
     }
 
     /**
