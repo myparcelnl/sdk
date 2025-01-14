@@ -523,6 +523,9 @@ abstract class AbstractConsignment
      */
     private $state;
 
+    /**
+     * @var null|\MyParcelNL\Sdk\src\Model\Recipient
+     */
     private $sender;
 
     /**
@@ -551,7 +554,7 @@ abstract class AbstractConsignment
 
     public function hasSender(): bool
     {
-        return isset($this->sender) && Recipient::class === get_class($this->sender);
+        return isset($this->sender);
     }
 
     public function getSender(): ?Recipient
