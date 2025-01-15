@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.22.0](https://github.com/myparcelnl/sdk/compare/v7.21.0...v7.22.0) (2025-01-15)
+
+
+### :sparkles: New Features
+
+* allow sender with feature header ([#517](https://github.com/myparcelnl/sdk/issues/517)) ([ce6d623](https://github.com/myparcelnl/sdk/commit/ce6d623e808fceac04941d8102bae2e768086fb6))
+
 ## [7.21.0](https://github.com/myparcelnl/sdk/compare/v7.20.1...v7.21.0) (2025-01-02)
 
 
