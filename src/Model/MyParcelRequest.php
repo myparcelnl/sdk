@@ -40,6 +40,7 @@ class MyParcelRequest
         ];
     public const HEADER_ACCEPT_APPLICATION_PDF       = ['Accept' => 'application/pdf'];
     public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
+    public const HEADER_SET_CUSTOM_SENDER            = ['x-dmp-set-custom-sender' => 'true'];
 
     /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
     public const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
