@@ -23,7 +23,7 @@ class ShipmentOptionsRule extends Rule
      * @param  null|array $required
      * @param  null|array $countrySpecificOptions
      */
-    public function __construct(array $required = null, array $countrySpecificOptions = null)
+    public function __construct(?array $required = null, ?array $countrySpecificOptions = null)
     {
         if (is_array($required)) {
             $this->requiredOptions = $required;

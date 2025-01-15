@@ -536,7 +536,7 @@ class MyParcelCollection extends Collection
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function generateReturnConsignments(bool $sendMail, Closure $modifier = null): self
+    public function generateReturnConsignments(bool $sendMail, ?Closure $modifier = null): self
     {
         // Be sure consignments are created
         $this->createConcepts();

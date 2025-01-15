@@ -99,7 +99,7 @@ class Helpers {
      * @param  mixed  $default
      * @return mixed
      */
-    public function array_first($array, callable $callback = null, $default = null)
+    public function array_first($array, ?callable $callback = null, $default = null)
     {
         return Arr::first($array, $callback, $default);
     }
@@ -161,7 +161,7 @@ class Helpers {
      * @param  mixed  $default
      * @return mixed
      */
-    public function array_last($array, callable $callback = null, $default = null)
+    public function array_last($array, ?callable $callback = null, $default = null)
     {
         return Arr::last($array, $callback, $default);
     }
@@ -639,7 +639,7 @@ class Helpers {
      * @param  callable|null  $callback
      * @return mixed
      */
-    public function optional($value = null, callable $callback = null)
+    public function optional($value = null, ?callable $callback = null)
     {
         if (is_null($callback)) {
             return new Optional($value);
@@ -1038,7 +1038,7 @@ class Helpers {
      * @param  callable|null  $callback
      * @return mixed
      */
-    public function with($value, callable $callback = null)
+    public function with($value, ?callable $callback = null)
     {
         return is_null($callback) ? $value : $callback($value);
     }

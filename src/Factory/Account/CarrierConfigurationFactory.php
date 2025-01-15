@@ -25,7 +25,7 @@ class CarrierConfigurationFactory
     public static function create(
         array  $data,
         bool   $fetchMissingDropOffPoint = false,
-        string $apiKey = null
+        ?string $apiKey = null
     ): CarrierConfiguration {
         $data = self::normalizeCarrier($data);
 
@@ -55,7 +55,7 @@ class CarrierConfigurationFactory
     private static function createFromApi(
         array  $data,
         bool   $fetchMissingDropOffPoint = false,
-        string $apiKey = null
+        ?string $apiKey = null
     ): CarrierConfiguration {
         return self::createWithDropOffPointIdentifier(
             array_merge(
@@ -85,7 +85,7 @@ class CarrierConfigurationFactory
     private static function createWithDropOffPointIdentifier(
         array $data,
         bool $fetchDropOffPoint = false,
-        string $apiKey = null
+        ?string $apiKey = null
     ): CarrierConfiguration {
         $missingDropOffPoint = empty($data['default_drop_off_point']);
         $hasIdentifier       = array_key_exists('default_drop_off_point_identifier', $data) && ! empty($data['default_drop_off_point_identifier']);
