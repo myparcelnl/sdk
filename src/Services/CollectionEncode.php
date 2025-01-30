@@ -55,10 +55,10 @@ class CollectionEncode
     {
         return $this->consignments->groupBy(function (AbstractConsignment $consignment) {
             if ($consignment->isPartOfMultiCollo()) {
-                return $consignment->getReferenceId();
+                return $consignment->getReferenceIdentifier();
             }
 
-            return 'random_to_prevent_multi_collo_' . uniqid();
+            return 'random_to_prevent_multi_collo_' . uniqid('', true);
         })->toArray();
     }
 }

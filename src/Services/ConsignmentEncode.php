@@ -205,12 +205,17 @@ class ConsignmentEncode
             'carrier'   => $consignment->getCarrierId(),
         ];
 
-        if ($consignment->getReferenceId()) {
-            $this->consignmentEncoded['reference_identifier'] = $consignment->getReferenceId();
+
+        if (($sender = $consignment->getSender())) {
+            $this->consignmentEncoded['sender'] = $sender->toArrayWithoutNull();
         }
 
-        if ($consignment->getCompany()) {
-            $this->consignmentEncoded['recipient']['company'] = $consignment->getCompany();
+        if (($id = $consignment->getReferenceIdentifier())) {
+            $this->consignmentEncoded['reference_identifier'] = $id;
+        }
+
+        if (($company = $consignment->getCompany())) {
+            $this->consignmentEncoded['recipient']['company'] = $company;
         }
 
         return $this;
