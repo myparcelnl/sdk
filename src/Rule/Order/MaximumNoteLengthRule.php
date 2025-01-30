@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Rule\Order;
+namespace MyParcelNL\Sdk\Rule\Order;
 
 use Exception;
-use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
-use MyParcelNL\Sdk\src\Rule\Rule;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderNote;
+use MyParcelNL\Sdk\Rule\Rule;
 
 class MaximumNoteLengthRule extends Rule
 {

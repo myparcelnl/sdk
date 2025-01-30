@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Factory\Account;
 
-use MyParcelNL\Sdk\src\Factory\Account\CarrierConfigurationFactory;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Factory\Account\CarrierConfigurationFactory;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class CarrierConfigurationFactoryTest extends TestCase

@@ -10,21 +10,21 @@
  * @since       File available since Release v3.0.0
  */
 
-namespace MyParcelNL\Sdk\src\Factory;
+namespace MyParcelNL\Sdk\Factory;
 
 use BadMethodCallException;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV2Adapter;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV3Adapter;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsV2Adapter;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsV3Adapter;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsAdapterFactory
 {
     /**
      * @param array $deliveryOptionsData
      *
-     * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
+     * @return \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
      * @throws \Exception
      */
     public static function create(array $deliveryOptionsData): AbstractDeliveryOptionsAdapter

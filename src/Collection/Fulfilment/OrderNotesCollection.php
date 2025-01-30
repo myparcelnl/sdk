@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Collection\Fulfilment;
+namespace MyParcelNL\Sdk\Collection\Fulfilment;
 
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\src\Model\Fulfilment\OrderNote;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use MyParcelNL\Sdk\src\Model\RequestBody;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderNote;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Model\RequestBody;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Collection;
 use Throwable;
 
 class OrderNotesCollection extends Collection
@@ -39,7 +39,7 @@ class OrderNotesCollection extends Collection
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Collection\Fulfilment\OrderNotesCollection
+     * @return \MyParcelNL\Sdk\Collection\Fulfilment\OrderNotesCollection
      */
     private function getUniqueOrderUuids(): OrderNotesCollection
     {
@@ -52,9 +52,9 @@ class OrderNotesCollection extends Collection
      * @param  string $orderUuid
      *
      * @return array Indexed array holding the saved order notes.
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     private function saveForOrder(string $orderUuid): array

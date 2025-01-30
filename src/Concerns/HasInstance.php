@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Concerns;
+namespace MyParcelNL\Sdk\Concerns;
 
 trait HasInstance
 {

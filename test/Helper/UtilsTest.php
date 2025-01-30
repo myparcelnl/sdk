@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Helper;
 
-use MyParcelNL\Sdk\src\Helper\Utils;
+use MyParcelNL\Sdk\Helper\Utils;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class UtilsTest extends TestCase

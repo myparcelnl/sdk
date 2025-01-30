@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web\Webhook;
+namespace MyParcelNL\Sdk\Services\Web\Webhook;
 
 class ShopUpdatedWebhookWebService extends AbstractWebhookWebService
 {

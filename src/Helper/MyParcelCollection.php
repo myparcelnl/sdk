@@ -12,31 +12,31 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\src\Helper;
+namespace MyParcelNL\Sdk\Helper;
 
 use BadMethodCallException;
 use Closure;
 use GuzzleHttp\Exception\BadResponseException;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Adapter\ConsignmentAdapter;
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\src\Exception\ApiException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierUPS;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\BaseConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use MyParcelNL\Sdk\src\Services\CollectionEncode;
-use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Adapter\ConsignmentAdapter;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Exception\ApiException;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\Model\Carrier\CarrierUPS;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Services\CollectionEncode;
+use MyParcelNL\Sdk\Services\ConsignmentEncode;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Collection;
+use MyParcelNL\Sdk\Support\Str;
 
 /**
  * Stores all data to communicate with the MyParcel API
  *
- * @property \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $items
+ * @property \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $items
  */
 class MyParcelCollection extends Collection
 {
@@ -93,7 +93,7 @@ class MyParcelCollection extends Collection
     /**
      * Get one consignment
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment
      */
     public function getOneConsignment()
     {
@@ -178,7 +178,7 @@ class MyParcelCollection extends Collection
      * @param AbstractConsignment $consignment
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function addConsignment(AbstractConsignment $consignment): self
     {
@@ -198,7 +198,7 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function addConsignmentByConsignmentIds($ids, $apiKey): self
     {
@@ -218,7 +218,7 @@ class MyParcelCollection extends Collection
      * @param string   $apiKey
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function addConsignmentByReferenceIds($ids, $apiKey): self
     {
@@ -260,9 +260,9 @@ class MyParcelCollection extends Collection
      * Create concepts in MyParcel.
      *
      * @return  $this
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function createConcepts(bool $asUnrelatedReturn = false): self
     {
@@ -331,9 +331,9 @@ class MyParcelCollection extends Collection
      * Delete concepts in MyParcel
      *
      * @return  $this
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function deleteConcepts(): self
     {
@@ -360,9 +360,9 @@ class MyParcelCollection extends Collection
      * @param int $size
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setLatestData($size = 300): self
     {
@@ -396,9 +396,9 @@ class MyParcelCollection extends Collection
      * @param int  $size
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
      */
     public function setLatestDataWithoutIds($key, $size = 300): self
@@ -418,9 +418,9 @@ class MyParcelCollection extends Collection
      *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setLinkOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
@@ -466,9 +466,9 @@ class MyParcelCollection extends Collection
      *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
@@ -514,7 +514,7 @@ class MyParcelCollection extends Collection
      * @param bool $inline_download
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function downloadPdfOfLabels($inline_download = false): void
     {
@@ -542,9 +542,9 @@ class MyParcelCollection extends Collection
      * @param \Closure|null $modifier
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function generateReturnConsignments(bool $sendMail, ?Closure $modifier = null): self
     {
@@ -591,9 +591,9 @@ class MyParcelCollection extends Collection
      * Send return label to customer. The customer can pay and download the label.
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @deprecated Use generateReturnConsignments instead
      */
     public function sendReturnLabelMails(): self
@@ -651,9 +651,9 @@ class MyParcelCollection extends Collection
      *                            into the result.
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public static function query(string $apiKey, $parameters): self
     {
@@ -688,9 +688,9 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public static function find(int $id, string $apiKey): self
     {
@@ -702,9 +702,9 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public static function findMany(array $consignmentIds, string $apiKey): self
     {
@@ -728,9 +728,9 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public static function findByReferenceId(string $id, string $apiKey): self
     {
@@ -742,9 +742,9 @@ class MyParcelCollection extends Collection
      * @param string $apiKey
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public static function findManyByReferenceId(array $referenceIds, string $apiKey): self
     {
@@ -764,7 +764,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Helper\MyParcelCollection|\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $sortedCollection
+     * @param \MyParcelNL\Sdk\Helper\MyParcelCollection|\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $sortedCollection
      *
      * @return self
      */
@@ -819,7 +819,7 @@ class MyParcelCollection extends Collection
     /**
      * Encode ReturnShipment to send to MyParcel
      *
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment[] $consignments
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $consignments
      *
      * @return string
      */
@@ -848,7 +848,7 @@ class MyParcelCollection extends Collection
      * @param $result
      *
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     private function getNewCollectionFromResult($result): self

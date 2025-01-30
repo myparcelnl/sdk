@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
-use MyParcelNL\Sdk\src\Exception\ApiException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
-use MyParcelNL\Sdk\src\Helper\RequestError;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Exception\AccountNotActiveException;
+use MyParcelNL\Sdk\Exception\ApiException;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\Helper\RequestError;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Support\Arr;
 
 class MyParcelRequest
 {
@@ -187,9 +187,9 @@ class MyParcelRequest
      * @param string $uri
      *
      * @return self|bool
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function sendRequest(string $method = 'POST', string $uri = self::REQUEST_TYPE_SHIPMENTS)
@@ -239,7 +239,7 @@ class MyParcelRequest
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\RequestBody|array|string|null $body
+     * @param \MyParcelNL\Sdk\Model\RequestBody|array|string|null $body
      *
      * @return self
      */
@@ -379,8 +379,8 @@ class MyParcelRequest
     /**
      * @param string $url
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
      */
     private function handleErrors(string $url): void
     {

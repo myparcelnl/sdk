@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services;
+namespace MyParcelNL\Sdk\Services;
 
-use MyParcelNL\Sdk\src\Services\Web\CheckApiKeyWebService;
+use MyParcelNL\Sdk\Services\Web\CheckApiKeyWebService;
 
 /**
  * @since      v1.1.7
- * @deprecated use \MyParcelNL\Sdk\src\Services\CheckApiKeyWebService
+ * @deprecated use \MyParcelNL\Sdk\Services\CheckApiKeyWebService
  */
 class CheckApiKeyService extends CheckApiKeyWebService { }

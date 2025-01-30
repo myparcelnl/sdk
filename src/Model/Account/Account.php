@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Account;
+namespace MyParcelNL\Sdk\Model\Account;
 
-use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Model\BaseModel;
+use MyParcelNL\Sdk\Support\Collection;
 
 class Account extends BaseModel
 {
@@ -20,7 +20,7 @@ class Account extends BaseModel
     private $platform_id;
 
     /**
-     * @var Shop[]|\MyParcelNL\Sdk\src\Support\Collection
+     * @var Shop[]|\MyParcelNL\Sdk\Support\Collection
      */
     private $shops;
 
@@ -51,7 +51,7 @@ class Account extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Account\Shop[]|\MyParcelNL\Sdk\src\Support\Collection
+     * @return \MyParcelNL\Sdk\Model\Account\Shop[]|\MyParcelNL\Sdk\Support\Collection
      */
     public function getShops(): Collection
     {

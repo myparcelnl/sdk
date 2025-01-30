@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Web\Webhook;
 
-use MyParcelNL\Sdk\src\Services\Web\Webhook\AbstractWebhookWebService;
-use MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentLabelCreatedWebhookWebService;
-use MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService;
-use MyParcelNL\Sdk\src\Services\Web\Webhook\ShopCarrierAccessibilityUpdatedWebhookWebService;
-use MyParcelNL\Sdk\src\Services\Web\Webhook\ShopCarrierConfigurationUpdatedWebhookWebService;
-use MyParcelNL\Sdk\src\Services\Web\Webhook\ShopUpdatedWebhookWebService;
+use MyParcelNL\Sdk\Services\Web\Webhook\AbstractWebhookWebService;
+use MyParcelNL\Sdk\Services\Web\Webhook\ShipmentLabelCreatedWebhookWebService;
+use MyParcelNL\Sdk\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService;
+use MyParcelNL\Sdk\Services\Web\Webhook\ShopCarrierAccessibilityUpdatedWebhookWebService;
+use MyParcelNL\Sdk\Services\Web\Webhook\ShopCarrierConfigurationUpdatedWebhookWebService;
+use MyParcelNL\Sdk\Services\Web\Webhook\ShopUpdatedWebhookWebService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class AbstractWebhookWebServiceTest extends TestCase
@@ -30,9 +30,9 @@ class AbstractWebhookWebServiceTest extends TestCase
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      * @dataProvider provideWebhookData
      * @doesNotPerformAssertions
@@ -44,12 +44,12 @@ class AbstractWebhookWebServiceTest extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Services\Web\Webhook\AbstractWebhookWebService $webhookWebService
+     * @param  \MyParcelNL\Sdk\Services\Web\Webhook\AbstractWebhookWebService $webhookWebService
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      * @dataProvider provideWebhookData
      * @doesNotPerformAssertions

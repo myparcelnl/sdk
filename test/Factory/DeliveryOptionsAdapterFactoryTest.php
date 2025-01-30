@@ -6,9 +6,9 @@ namespace MyParcelNL\Sdk\Test\Factory;
 
 use BadMethodCallException;
 use DateTime;
-use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class DeliveryOptionsAdapterFactoryTest extends TestCase

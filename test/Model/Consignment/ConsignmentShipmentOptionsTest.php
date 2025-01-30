@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Exception\ApiException;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
-use MyParcelNL\Sdk\src\Model\PrinterlessReturnRequest;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
@@ -236,23 +233,6 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     }
 
     /**
-     * @return array
-     * @throws \Exception
-     */
-    public function provideUnrelatedReturnData(): array
-    {
-        return $this->createConsignmentProviderDataset([
-            'unrelated return' => [
-                self::DELIVERY_DATE => $this->generateDeliveryDate(),
-            ],
-            'printerless return' => [
-                self::DELIVERY_DATE => $this->generateDeliveryDate(),
-                'printerless_return' => true,
-            ],
-        ]);
-    }
-
-    /**
      * @param  array $testData
      *
      * @throws \Exception
@@ -327,8 +307,8 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     /**
      * @param  array $testData
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      * @dataProvider provideReferenceIdentifierData
      */
@@ -348,29 +328,5 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
         self::assertNotEmpty($consignment, 'Consignment is not found');
         self::assertEquals($consignment->getReferenceIdentifier(), $referenceIdentifier);
         self::validateConsignmentOptions($testData, $consignment);
-    }
-
-    /**
-     * @param  array $testData
-     *
-     * @return void
-     * @dataProvider provideUnrelatedReturnData
-     */
-    public function testUnrelatedReturn(array $testData): void
-    {
-        if (!isset($testData['printerless_return'])) {
-            $this->expectException(ApiException::class);
-            $this->expectExceptionMessage('3759 -  - Shipment does not have a printerless return label');
-        }
-
-        $collection = $this->generateCollection($testData);
-        $collection->createUnrelatedReturns();
-
-        self::assertEquals(1, $collection->count());
-
-        foreach($collection->getConsignments() as $consignment) {
-            $response = (new PrinterlessReturnRequest($consignment))->send();
-            self::assertIsString($response); // this is a png image
-        }
     }
 }

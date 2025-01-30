@@ -44,7 +44,6 @@
     },
     "autoload": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\src\\": "src",
             "MyParcelNL\\Sdk\\": "src"
         }
     },

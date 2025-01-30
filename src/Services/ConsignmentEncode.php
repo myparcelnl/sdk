@@ -10,19 +10,19 @@
  * @since       File available since Release v1.1.7
  */
 
-namespace MyParcelNL\Sdk\src\Services;
+namespace MyParcelNL\Sdk\Services;
 
 use Exception;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLParcelConnect;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLEuroplus;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLParcelConnect;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Collection;
+use MyParcelNL\Sdk\Support\Helpers;
 
 class ConsignmentEncode
 {
@@ -51,7 +51,8 @@ class ConsignmentEncode
      * Encode all the data before sending it to MyParcel
      *
      * @return array
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
      */
     public function apiEncode(): array
     {
@@ -74,7 +75,7 @@ class ConsignmentEncode
 
     /**
      * @param array                                                     $consignmentEncoded
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return array
      */
@@ -94,7 +95,6 @@ class ConsignmentEncode
                     'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
                     'hide_sender'       => Helpers::intOrNull($consignment->hasHideSender()),
                     'extra_assurance'   => Helpers::intOrNull($consignment->hasExtraAssurance()),
-                    'printerless_return'=> Helpers::intOrNull($consignment->isPrinterlessReturn()),
                 ]),
             ]
         );
@@ -205,24 +205,18 @@ class ConsignmentEncode
             'carrier'   => $consignment->getCarrierId(),
         ];
 
-
-        if (($sender = $consignment->getSender())) {
-            $this->consignmentEncoded['sender'] = $sender->toArrayWithoutNull();
+        if ($consignment->getReferenceId()) {
+            $this->consignmentEncoded['reference_identifier'] = $consignment->getReferenceId();
         }
 
-        if (($id = $consignment->getReferenceIdentifier())) {
-            $this->consignmentEncoded['reference_identifier'] = $id;
-        }
-
-        if (($company = $consignment->getCompany())) {
-            $this->consignmentEncoded['recipient']['company'] = $company;
+        if ($consignment->getCompany()) {
+            $this->consignmentEncoded['recipient']['company'] = $consignment->getCompany();
         }
 
         return $this;
     }
 
     /**
-     *
      * @return self
      */
     private function encodeStreet(): self
@@ -268,7 +262,7 @@ class ConsignmentEncode
 
     /**
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function encodePhysicalProperties(): self
     {
@@ -295,12 +289,12 @@ class ConsignmentEncode
 
     /**
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function encodeCdCountry(): self
     {
         /**
-         * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+         * @var \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
 
@@ -359,7 +353,7 @@ class ConsignmentEncode
     /**
      * @param AbstractConsignment $consignment
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function validateCdConsignment(AbstractConsignment $consignment): void
     {
@@ -408,7 +402,7 @@ class ConsignmentEncode
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return int
      */
@@ -418,7 +412,7 @@ class ConsignmentEncode
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return int
      */

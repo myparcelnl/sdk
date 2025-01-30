@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web;
+namespace MyParcelNL\Sdk\Services\Web;
 
-use MyParcelNL\Sdk\src\Exception\ApiException;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Exception\ApiException;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 
 /**
  * A service to check if the API key is correct.

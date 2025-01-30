@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Validator\Order;
+namespace MyParcelNL\Sdk\Validator\Order;
 
-use MyParcelNL\Sdk\src\Rule\Consignment\DropOffPointRule;
-use MyParcelNL\Sdk\src\Validator\AbstractValidator;
+use MyParcelNL\Sdk\Rule\Consignment\DropOffPointRule;
+use MyParcelNL\Sdk\Validator\AbstractValidator;
 
 class OrderValidator extends AbstractValidator
 {

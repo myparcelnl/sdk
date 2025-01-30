@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Adapter;
+namespace MyParcelNL\Sdk\Adapter;
 
-use MyParcelNL\Sdk\src\Helper\Utils;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Helper\Utils;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 
 class ConsignmentAdapter
 {
@@ -20,9 +20,9 @@ class ConsignmentAdapter
      * ConsignmentDecode constructor.
      *
      * @param array                                                     $data
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function __construct(array $data, AbstractConsignment $consignment)
     {

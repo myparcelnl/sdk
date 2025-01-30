@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web;
+namespace MyParcelNL\Sdk\Services\Web;
 
-use MyParcelNL\Sdk\src\Model\Account\Account;
+use MyParcelNL\Sdk\Model\Account\Account;
 
 class AccountWebService extends AbstractWebService
 {
     public const ENDPOINT = 'accounts';
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Account\Account
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Model\Account\Account
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function getAccount(): Account
     {
