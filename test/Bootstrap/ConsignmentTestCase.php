@@ -116,7 +116,7 @@ class ConsignmentTestCase extends TestCase
      */
     protected static function assertHasPdfLink(MyParcelCollection $collection): void
     {
-        self::assertRegExp('#^https://api.myparcel.nl/pdfs#', $collection->getLinkOfLabels(), 'Can\'t get link of PDF');
+        self::assertMatchesRegularExpression('#^https://api.myparcel.nl/pdfs#', $collection->getLinkOfLabels(), 'Can\'t get link of PDF');
     }
 
     /**
