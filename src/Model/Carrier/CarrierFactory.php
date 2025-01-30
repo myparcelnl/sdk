@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Carrier;
+namespace MyParcelNL\Sdk\Model\Carrier;
 
 use Exception;
-use MyParcelNL\Sdk\src\Support\Classes;
+use MyParcelNL\Sdk\Support\Classes;
 
 class CarrierFactory
 {
@@ -39,9 +39,9 @@ class CarrierFactory
     }
 
     /**
-     * @param  string|int|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
+     * @param  string|int|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier $carrier
      *
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
     public static function create($carrier): AbstractCarrier
@@ -62,9 +62,9 @@ class CarrierFactory
     }
 
     /**
-     * @param  string|\MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrierClass
+     * @param  string|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier $carrierClass
      *
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
     public static function createFromClass($carrierClass): AbstractCarrier
@@ -75,7 +75,7 @@ class CarrierFactory
     /**
      * @param  int $carrierId
      *
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
     public static function createFromId(int $carrierId): AbstractCarrier
@@ -93,7 +93,7 @@ class CarrierFactory
     /**
      * @param  string $carrierName
      *
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
     public static function createFromName(string $carrierName): AbstractCarrier

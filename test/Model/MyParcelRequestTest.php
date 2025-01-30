@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model;
 
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
 

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Rule\Consignment;
+namespace MyParcelNL\Sdk\Rule\Consignment;
 
-use MyParcelNL\Sdk\src\Rule\Rule;
+use MyParcelNL\Sdk\Rule\Rule;
 
 class MinimumItemValueRule extends Rule
 {
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $validationSubject
+     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $validationSubject
      */
     public function validate($validationSubject): void
     {

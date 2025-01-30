@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Factory;
+namespace MyParcelNL\Sdk\Factory;
 
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class ConsignmentFactory
 {
     /**
      * @param  int $carrierId
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public static function createByCarrierId(int $carrierId): AbstractConsignment
@@ -26,7 +26,7 @@ class ConsignmentFactory
     /**
      * @param  string $carrierName
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment
      * @throws \Exception
      */
     public static function createByCarrierName(string $carrierName): AbstractConsignment
@@ -37,9 +37,9 @@ class ConsignmentFactory
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
+     * @param  \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier $carrier
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment
      */
     public static function createFromCarrier(AbstractCarrier $carrier): AbstractConsignment
     {
@@ -47,9 +47,9 @@ class ConsignmentFactory
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier $carrier
+     * @param  \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier $carrier
      *
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
+     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment
      */
     private static function getConsignmentFromCarrier(AbstractCarrier $carrier): AbstractConsignment
     {

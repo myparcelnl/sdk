@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Carrier;
+namespace MyParcelNL\Sdk\Model\Carrier;
 
 abstract class AbstractCarrier
 {
@@ -32,7 +32,7 @@ abstract class AbstractCarrier
     protected $type;
 
     /**
-     * @return class-string<\MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment>
+     * @return class-string<\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment>
      */
     public function getConsignmentClass(): string
     {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web;
+namespace MyParcelNL\Sdk\Services\Web;
 
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 
 abstract class AbstractWebService
 {
@@ -14,7 +14,7 @@ abstract class AbstractWebService
     use HasUserAgent;
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\MyParcelRequest
+     * @return \MyParcelNL\Sdk\Model\MyParcelRequest
      */
     protected function createRequest(): MyParcelRequest
     {
