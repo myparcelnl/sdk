@@ -26,7 +26,6 @@ class ConsignmentTestCase extends TestCase
     protected const API_KEY               = 'api_key';
     protected const AUTO_DETECT_PICKUP    = 'auto_detect_pickup';
     protected const CARRIER_ID            = 'carrier_id';
-    /** @deprecated */
     protected const CHECKOUT_DATA               = 'checkout_data';
     protected const CITY                        = 'city';
     protected const COMPANY                     = 'company';
@@ -106,7 +105,31 @@ class ConsignmentTestCase extends TestCase
             return;
         }
 
-        $consignment->setPickupAddressFromCheckout($data[self::CHECKOUT_DATA]);
+        $checkoutData = json_decode($data[self::CHECKOUT_DATA], true);
+
+        if (! is_array($checkoutData) ||
+            ! array_key_exists('location', $checkoutData)
+        ) {
+            return;
+        }
+
+        if (null === $consignment->getDeliveryDate()) {
+            $consignment->setDeliveryDate($checkoutData['date']);
+        }
+
+        $consignment
+            ->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP)
+            ->setPickupPostalCode($checkoutData['postal_code'])
+            ->setPickupStreet($checkoutData['street'])
+            ->setPickupCity($checkoutData['city'])
+            ->setPickupNumber($checkoutData['number'])
+            ->setPickupCountry($checkoutData['cc'])
+            ->setPickupLocationName($checkoutData['location'])
+            ->setPickupLocationCode($checkoutData['location_code']);
+
+        if (isset($checkoutData['retail_network_id'])) {
+            $consignment->setRetailNetworkId($checkoutData['retail_network_id']);
+        }
     }
 
     /**

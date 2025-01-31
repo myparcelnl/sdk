@@ -34,7 +34,7 @@ class MyParcelRequestTest extends TestCase
         );
 
         $headers = $request->getHeaders();
-        self::assertContains('MyECommercePlatform/4.4.0', $headers['User-Agent']);
+        self::assertStringContainsString('MyECommercePlatform/4.4.0', $headers['User-Agent']);
     }
 
     /**
