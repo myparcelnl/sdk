@@ -33,7 +33,7 @@ jobs:
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
-          image: ghcr.io/myparcelnl/php-xd:7.1
+          image: ghcr.io/myparcelnl/php-xd:7.4
 
       - name: 'Install composer dependencies'
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
