@@ -87,15 +87,6 @@ trait HasPickupLocation
     }
 
     /**
-     * @return null|string
-     * @deprecated Use getRetailNetworkId instead
-     */
-    public function getPickupNetworkId(): ?string
-    {
-        return $this->getRetailNetworkId();
-    }
-
-    /**
      * @return string|null
      */
     public function getPickupNumber(): ?string
@@ -185,21 +176,6 @@ trait HasPickupLocation
         $this->pickup_location_name = $pickup_location_name;
 
         return $this;
-    }
-
-    /**
-     * Pattern:  [0-9A-Za-z]
-     * Example:  Albert Heijn
-     * Required: Yes for pickup location
-     *
-     * @param  mixed $retailNetworkId
-     *
-     * @return self
-     * @deprecated Use setRetailNetworkId instead
-     */
-    public function setPickupNetworkId($retailNetworkId): AbstractConsignment
-    {
-        return $this->setRetailNetworkId((string) $retailNetworkId);
     }
 
     /**

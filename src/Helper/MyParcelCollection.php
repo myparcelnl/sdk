@@ -133,20 +133,6 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * This is deprecated because there may be multiple consignments with the same reference id
-     *
-     * @param $id
-     *
-     * @return mixed
-     * @deprecated Use getConsignmentsByReferenceId()->first() instead
-     *
-     */
-    public function getConsignmentByReferenceId($id)
-    {
-        return $this->getConsignmentsByReferenceId($id)->first();
-    }
-
-    /**
      * @param int $id
      *
      * @return AbstractConsignment
@@ -225,7 +211,7 @@ class MyParcelCollection extends Collection
         foreach ($ids as $referenceId) {
             $consignment = (new BaseConsignment())
                 ->setApiKey($apiKey)
-                ->setReferenceId($referenceId);
+                ->setReferenceIdentifier($referenceId);
 
             $this->addConsignment($consignment);
         }
@@ -245,8 +231,8 @@ class MyParcelCollection extends Collection
             $consignment->setMultiCollo();
         }
 
-        if ($consignment->isPartOfMultiCollo() && ! $consignment->getReferenceId()) {
-            $consignment->setReferenceId('random_multi_collo_' . uniqid('', true));
+        if ($consignment->isPartOfMultiCollo() && ! $consignment->getReferenceIdentifier()) {
+            $consignment->setReferenceIdentifier('random_multi_collo_' . uniqid('', true));
         }
 
         for ($i = 1; $i <= $amount; $i++) {
@@ -284,7 +270,7 @@ class MyParcelCollection extends Collection
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
-                    $consignments->first()->apiKey,
+                    $consignments->first()->getApiKey(),
                     $data,
                     $headers
                 )
@@ -387,25 +373,6 @@ class MyParcelCollection extends Collection
         $this->items = $newCollection->sortByCollection($this)->items;
 
         return $this;
-    }
-
-    /**
-     * Get all the information about the last created shipments
-     *
-     * @param      $key
-     * @param int  $size
-     *
-     * @return self
-     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
-     * @deprecated use MyParcelCollection::query($key, ['size' => 300]) instead
-     */
-    public function setLatestDataWithoutIds($key, $size = 300): self
-    {
-        $params = ['size' => $size];
-
-        return self::query($key, $params);
     }
 
     /**
@@ -588,20 +555,6 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Send return label to customer. The customer can pay and download the label.
-     *
-     * @return self
-     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
-     * @deprecated Use generateReturnConsignments instead
-     */
-    public function sendReturnLabelMails(): self
-    {
-        return $this->generateReturnConsignments(true);
-    }
-
-    /**
      * Get all consignment ids
      *
      * @param string|null $key
@@ -752,7 +705,7 @@ class MyParcelCollection extends Collection
 
         foreach ($referenceIds as $id) {
             $consignment = new BaseConsignment();
-            $consignment->setReferenceId($id);
+            $consignment->setReferenceIdentifier($id);
             $consignment->setApiKey($apiKey);
 
             $collection->addConsignment($consignment);
@@ -887,8 +840,8 @@ class MyParcelCollection extends Collection
     private function addMissingReferenceId(): void
     {
         $this->transform(function (AbstractConsignment $consignment) {
-            if (! $consignment->getReferenceId()) {
-                $consignment->setReferenceId('random_' . uniqid('', true));
+            if (! $consignment->getReferenceIdentifier()) {
+                $consignment->setReferenceIdentifier('random_' . uniqid('', true));
             }
 
             return $consignment;
@@ -906,7 +859,7 @@ class MyParcelCollection extends Collection
             /**
              * @var AbstractConsignment $consignment
              */
-            return Str::startsWith($consignment->getReferenceId(), $id);
+            return Str::startsWith($consignment->getReferenceIdentifier(), $id);
         });
     }
 

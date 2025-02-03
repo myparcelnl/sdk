@@ -9,30 +9,13 @@ use MyParcelNL\Sdk\Validator\Consignment\BpostConsignmentValidator;
 
 class BpostConsignment extends AbstractConsignment
 {
-    /** @deprecated use $this->getCarrierId() */
-    public const CARRIER_ID     = 2;
-
-    /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME   = 'bpost';
-
-//    public const DEFAULT_WEIGHT = 50;
+    protected const CARRIER_ID     = 2;
+    protected const CARRIER_NAME   = 'bpost';
 
     /**
      * @var int
      */
     public const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 30;
-
-    /**
-     * @var array
-     * @deprecated use getLocalInsurancePossibilities()
-     */
-    public const INSURANCE_POSSIBILITIES_LOCAL = [500, 1000, 1500, 2000];
-
-    /**
-     * @internal
-     * @var int
-     */
-//    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
      * @var string

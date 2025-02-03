@@ -34,24 +34,13 @@ class MyParcelRequest
     /**
      * API headers.
      */
-    public const HEADER_ACCEPT_APPLICATION_PDF                 = ['Accept' => 'application/pdf'];
-    public const HEADER_ACCEPT_IMAGE_PNG                       = ['Accept' => 'image/png'];
-    public const HEADER_CONTENT_TYPE_SHIPMENT                  = ['Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1'];
-    public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT           = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
-    public const HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.unrelated_return_shipment+json;version=1.1; charset=utf-8'];
-    public const HEADER_SET_CUSTOM_SENDER                      = ['x-dmp-set-custom-sender' => 'true'];
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_SHIPMENT = 'Accept: application/json; charset=utf8';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
+    public const HEADER_CONTENT_TYPE_SHIPMENT
+                                                     = [
+            'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
+        ];
+    public const HEADER_ACCEPT_APPLICATION_PDF       = ['Accept' => 'application/pdf'];
+    public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
+    public const HEADER_SET_CUSTOM_SENDER            = ['x-dmp-set-custom-sender' => 'true'];
 
     /**
      * API URL.
@@ -165,7 +154,7 @@ class MyParcelRequest
      *
      * @return mixed
      */
-    public function getResult(?string $key = null, ?string $pluck = null)
+    public function getResult(string $key = null, string $pluck = null)
     {
         if (null === $key) {
             return $this->result;
@@ -344,8 +333,8 @@ class MyParcelRequest
         $referenceIds = [];
 
         foreach ($consignments as $consignment) {
-            if ($consignment->getReferenceId()) {
-                $referenceIds[] = $consignment->getReferenceId();
+            if ($consignment->getReferenceIdentifier()) {
+                $referenceIds[] = $consignment->getReferenceIdentifier();
             }
 
             $key = $consignment->getApiKey();
@@ -426,22 +415,20 @@ class MyParcelRequest
     {
         $response = $request->getResponse();
 
-        /**
-         * The response may contain a pdf or a png (for printerless return).
-         * So we only upgrade 'response' to array when json_decode is successful.
-         */
-        $json_response = json_decode($response['response'], true);
-        if (null !== $json_response) {
-            $response['response'] = $json_response;
-        }
-        $this->response       = $response;
-        $this->result         = $response['response'];
+        if (preg_match('/^%PDF-\d+\.\d+/', $response['response'])) {
+            $this->result   = $response['response'];
+            $this->response = $response;
+        } else {
+            $response['response'] = json_decode($response['response'], true);
+            $this->response       = $response;
+            $this->result         = $response['response'];
 
-        if (false === $this->result) {
-            $this->error = $request->getError();
-        }
+            if ($this->result === false) {
+                $this->error = $request->getError();
+            }
 
-        $this->checkMyParcelErrors();
+            $this->checkMyParcelErrors();
+        }
 
         return $response;
     }

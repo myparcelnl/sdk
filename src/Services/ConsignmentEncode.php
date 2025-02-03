@@ -94,7 +94,6 @@ class ConsignmentEncode
                     'return'            => Helpers::intOrNull($consignment->isReturn()),
                     'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
                     'hide_sender'       => Helpers::intOrNull($consignment->hasHideSender()),
-                    'extra_assurance'   => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
             ]
         );
@@ -107,10 +106,6 @@ class ConsignmentEncode
             $consignmentEncoded['options']['age_check'] = 1;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
-        }
-
-        if ($consignment->hasExtraAssurance()) {
-            $consignmentEncoded['options']['hide_sender'] = 0;
         }
 
         if (in_array($consignment->getCarrierName(), [CarrierDHLEuroplus::NAME, CarrierDHLParcelConnect::NAME])) {
@@ -395,7 +390,7 @@ class ConsignmentEncode
         $secondaryShipments = $this->consignments;
         Arr::forget($secondaryShipments, 0);
         foreach ($secondaryShipments as $secondaryShipment) {
-            $this->consignmentEncoded['secondary_shipments'][] = (object) ['reference_identifier' => $secondaryShipment->getReferenceId()];
+            $this->consignmentEncoded['secondary_shipments'][] = (object) ['reference_identifier' => $secondaryShipment->getReferenceIdentifier()];
         }
 
         return $this;

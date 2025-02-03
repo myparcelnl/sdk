@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateInterval;
 use DateTime;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Helper\Utils;
 use MyParcelNL\Sdk\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\Helper\MyParcelCollection;
@@ -20,12 +21,12 @@ use RuntimeException;
 
 class ConsignmentTestCase extends TestCase
 {
-    public const    ENV_ALLOW_DHL_FOR_YOU = 'ALLOW_DHL_FOR_YOU';
-    protected const ADD_DROPOFF_POINT     = 'add_dropoff_point';
-    protected const AGE_CHECK             = 'age_check';
-    protected const API_KEY               = 'api_key';
-    protected const AUTO_DETECT_PICKUP    = 'auto_detect_pickup';
-    protected const CARRIER_ID            = 'carrier_id';
+    public const    ENV_ALLOW_DHL_FOR_YOU       = 'ALLOW_DHL_FOR_YOU';
+    protected const ADD_DROPOFF_POINT           = 'add_dropoff_point';
+    protected const AGE_CHECK                   = 'age_check';
+    protected const API_KEY                     = 'api_key';
+    protected const AUTO_DETECT_PICKUP          = 'auto_detect_pickup';
+    protected const CARRIER_ID                  = 'carrier_id';
     protected const CHECKOUT_DATA               = 'checkout_data';
     protected const CITY                        = 'city';
     protected const COMPANY                     = 'company';
@@ -76,7 +77,7 @@ class ConsignmentTestCase extends TestCase
     /**
      * Consignment properties whose getters which don't follow the "get<property>" format.
      */
-    private const ALTERNATIVE_GETTERS_MAP = [
+    private const ALTERNATIVE_GETTERS_MAP      = [
         self::AGE_CHECK         => 'hasAgeCheck',
         self::LARGE_FORMAT      => 'isLargeFormat',
         self::ONLY_RECIPIENT    => 'isOnlyRecipient',
@@ -92,11 +93,10 @@ class ConsignmentTestCase extends TestCase
     ];
 
     /**
-     * @param  array                                                     $data
-     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+     * @param array               $data
+     * @param AbstractConsignment $consignment
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @deprecated
      */
     protected function addCheckoutData(array $data, AbstractConsignment $consignment): void
@@ -133,7 +133,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Helper\MyParcelCollection $collection
+     * @param MyParcelCollection $collection
      *
      * @return void
      */
@@ -143,8 +143,8 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array[] $datasets
-     * @param  array   $defaults
+     * @param array[] $datasets
+     * @param array   $defaults
      *
      * @return array
      * @throws \Exception
@@ -165,7 +165,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array $consignmentData
+     * @param array $consignmentData
      *
      * @return array
      * @throws \Exception
@@ -176,7 +176,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array $consignmentData - Array of consignmentData arrays.
+     * @param array $consignmentData - Array of consignmentData arrays.
      *
      * @return array
      */
@@ -186,7 +186,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array $dataset
+     * @param array $dataset
      *
      * @return string
      */
@@ -212,7 +212,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array $testData
+     * @param array $testData
      *
      * @throws \Exception
      */
@@ -223,11 +223,13 @@ class ConsignmentTestCase extends TestCase
         }
 
         $collection = $this->generateCollection($testData);
+        // hier is de retail_network_id aanwezig
         $collection->setLinkOfLabels();
+        // hier niet meer... :-(
 
         $consignment = $collection->getOneConsignment();
         self::assertCount(1, $collection, 'Collection expected to have only one result.');
-        self::assertEquals(true, $consignment->getConsignmentId() > 1, 'No id found');
+        self::assertTrue($consignment->getConsignmentId() > 1, 'No id found');
         self::validateConsignmentOptions($testData, $consignment);
         self::assertHasPdfLink($collection);
 
@@ -237,7 +239,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  string $property
+     * @param string $property
      *
      * @return string
      */
@@ -247,18 +249,16 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array $testData
+     * @param array $testData
      *
-     * @return \MyParcelNL\Sdk\Helper\MyParcelCollection
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @return MyParcelCollection
+     * @throws MissingFieldException
      * @throws \Exception
      */
     protected function generateCollection(array $testData = []): MyParcelCollection
     {
         $testData   = self::normalizeTestData($testData);
-        $collection = (new MyParcelCollection())->setUserAgents([
-            'PHPUnit' => Version::id(),
-        ]);
+        $collection = (new MyParcelCollection())->setUserAgents(['PHPUnit' => Version::id()]);
 
         foreach ($testData as $consignmentData) {
             $consignment = $this->generateConsignment($consignmentData);
@@ -278,11 +278,11 @@ class ConsignmentTestCase extends TestCase
     /**
      * Generates a consignment by given array data. Uses all setters related to entered array values.
      *
-     * @param  array $data
-     * @param  bool  $addDefaults
+     * @param array $data
+     * @param bool  $addDefaults
      *
-     * @return \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment|null
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @return AbstractConsignment|null
+     * @throws MissingFieldException
      * @throws \Exception
      */
     protected function generateConsignment(array $data = [], bool $addDefaults = false): ?AbstractConsignment
@@ -297,7 +297,6 @@ class ConsignmentTestCase extends TestCase
         Utils::fillObject($consignment, $data);
         $this->addDropOffPoint($data, $consignment);
         $this->addCustomsDeclaration($data, $consignment);
-        $this->addCheckoutData($data, $consignment);
 
         return $consignment;
     }
@@ -305,7 +304,7 @@ class ConsignmentTestCase extends TestCase
     /**
      * Creates a delivery date two days in the future.
      *
-     * @param  string $interval
+     * @param string $interval
      *
      * @return string
      * @throws \Exception
@@ -316,7 +315,8 @@ class ConsignmentTestCase extends TestCase
         return (new DateTime())
             ->setTime(0, 0)
             ->add(new DateInterval($interval))
-            ->format('Y-m-d H:m:i');
+            ->format('Y-m-d H:m:i')
+        ;
     }
 
     /**
@@ -326,7 +326,8 @@ class ConsignmentTestCase extends TestCase
     protected function generateUniqueIdentifier(): string
     {
         return $this->generateTimestamp() . '_' . $this->faker->unique()
-                ->firstName();
+                                                              ->firstName()
+        ;
     }
 
     /**
@@ -431,15 +432,16 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array                                                     $testData
-     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
-     * @param  string[]|null                                             $only
+     * @param array               $testData
+     * @param AbstractConsignment $consignment
+     * @param string[]|null       $only
      */
     protected static function validateConsignmentOptions(
         array               $testData,
         AbstractConsignment $consignment,
-        array               $only = null
-    ): void {
+        ?array              $only = null
+    ): void
+    {
         $testData = self::normalizeTestData($testData);
 
         foreach ($testData as $testConsignment) {
@@ -474,15 +476,15 @@ class ConsignmentTestCase extends TestCase
 
     /**
      * @param                                                            $data
-     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+     * @param AbstractConsignment                                        $consignment
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
     private function addCustomsDeclaration($data, AbstractConsignment $consignment): void
     {
         $customsDeclaration = $data[self::CUSTOMS_DECLARATION] ?? null;
-        if (! $customsDeclaration) {
+        if (!$customsDeclaration) {
             return;
         }
 
@@ -497,23 +499,24 @@ class ConsignmentTestCase extends TestCase
 
     /**
      * @param                                                            $data
-     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+     * @param AbstractConsignment                                        $consignment
      *
      * @return void
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws MissingFieldException
      * @throws \Exception
      */
     private function addDropOffPoint($data, AbstractConsignment $consignment): void
     {
-        if (! $data[self::ADD_DROPOFF_POINT]) {
+        if (!$data[self::ADD_DROPOFF_POINT]) {
             return;
         }
 
         $dropOffPoints = (new DropOffPointWebService($consignment->getCarrier()))
             ->setApiKey($this->getApiKey())
-            ->getDropOffPoints($consignment->getPostalCode());
+            ->getDropOffPoints($consignment->getPostalCode())
+        ;
 
         self::assertNotEmpty($dropOffPoints);
 
@@ -538,8 +541,8 @@ class ConsignmentTestCase extends TestCase
     /**
      * Filters given $testData array by removing all values that are not in given array of keys.
      *
-     * @param  array $testData
-     * @param  array $filters - Keys to keep.
+     * @param array $testData
+     * @param array $filters - Keys to keep.
      *
      * @return array
      */
@@ -559,8 +562,8 @@ class ConsignmentTestCase extends TestCase
      * If there is a <property>_expected key in the test data, expect the result to be that value instead of the
      * value of the original property.
      *
-     * @param  string $property
-     * @param  array  $testData
+     * @param string $property
+     * @param array  $testData
      *
      * @return mixed
      */
@@ -572,7 +575,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  string $property
+     * @param string $property
      *
      * @return string
      */
@@ -586,7 +589,7 @@ class ConsignmentTestCase extends TestCase
     }
 
     /**
-     * @param  array $testData
+     * @param array $testData
      *
      * @return array
      */

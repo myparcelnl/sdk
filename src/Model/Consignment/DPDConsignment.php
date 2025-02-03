@@ -23,11 +23,8 @@ class DPDConsignment extends AbstractConsignment
         'CH',
     ];
 
-    /** @deprecated use $this->getCarrierId() */
-    public const CARRIER_ID = 4;
-
-    /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = 'dpd';
+    protected const CARRIER_ID = 4;
+    protected const CARRIER_NAME = 'dpd';
 
     /**
      * @var string
