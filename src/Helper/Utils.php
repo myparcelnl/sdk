@@ -35,7 +35,7 @@ class Utils
      *
      * @return array $emptyValues
      */
-    public static function getKeysWithoutValue(array $array, array $requiredKeys = null): array
+    public static function getKeysWithoutValue(array $array, ?array $requiredKeys = null): array
     {
         $requiredKeys = $requiredKeys ?? array_keys($array);
 
