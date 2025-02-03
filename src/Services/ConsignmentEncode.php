@@ -23,6 +23,7 @@ use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Support\Helpers;
+use MyParcelNL\Sdk\Support\Str;
 
 class ConsignmentEncode
 {

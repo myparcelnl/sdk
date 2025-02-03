@@ -1179,7 +1179,7 @@ abstract class AbstractConsignment
      */
     public function getPerson(): string
     {
-        return $this->person;
+        return Str::limit($this->person, self::PERSON_NAME_MAX_LENGTH);
     }
 
     /**
@@ -1192,7 +1192,7 @@ abstract class AbstractConsignment
      */
     public function setPerson(string $person): self
     {
-        $this->person = Str::limit($person, self::PERSON_NAME_MAX_LENGTH);
+        $this->person = $person;
 
         return $this;
     }
@@ -1202,7 +1202,11 @@ abstract class AbstractConsignment
      */
     public function getCompany(): ?string
     {
-        return $this->company;
+        if (!isset($this->company)) {
+            return null;
+        }
+
+        return Str::limit($this->company, self::COMPANY_NAME_MAX_LENGTH);
     }
 
     /**
@@ -1215,10 +1219,6 @@ abstract class AbstractConsignment
      */
     public function setCompany(?string $company): self
     {
-        if (isset($company)) {
-            $company = Str::limit($company, self::COMPANY_NAME_MAX_LENGTH);
-        }
-
         $this->company = $company;
 
         return $this;
