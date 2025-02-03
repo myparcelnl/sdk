@@ -93,46 +93,6 @@ class ConsignmentTestCase extends TestCase
     ];
 
     /**
-     * @param array               $data
-     * @param AbstractConsignment $consignment
-     *
-     * @return void
-     * @deprecated
-     */
-    protected function addCheckoutData(array $data, AbstractConsignment $consignment): void
-    {
-        if (! array_key_exists(self::CHECKOUT_DATA, $data)) {
-            return;
-        }
-
-        $checkoutData = json_decode($data[self::CHECKOUT_DATA], true);
-
-        if (! is_array($checkoutData) ||
-            ! array_key_exists('location', $checkoutData)
-        ) {
-            return;
-        }
-
-        if (null === $consignment->getDeliveryDate()) {
-            $consignment->setDeliveryDate($checkoutData['date']);
-        }
-
-        $consignment
-            ->setDeliveryType(AbstractConsignment::DELIVERY_TYPE_PICKUP)
-            ->setPickupPostalCode($checkoutData['postal_code'])
-            ->setPickupStreet($checkoutData['street'])
-            ->setPickupCity($checkoutData['city'])
-            ->setPickupNumber($checkoutData['number'])
-            ->setPickupCountry($checkoutData['cc'])
-            ->setPickupLocationName($checkoutData['location'])
-            ->setPickupLocationCode($checkoutData['location_code']);
-
-        if (isset($checkoutData['retail_network_id'])) {
-            $consignment->setRetailNetworkId($checkoutData['retail_network_id']);
-        }
-    }
-
-    /**
      * @param MyParcelCollection $collection
      *
      * @return void
@@ -223,9 +183,7 @@ class ConsignmentTestCase extends TestCase
         }
 
         $collection = $this->generateCollection($testData);
-        // hier is de retail_network_id aanwezig
         $collection->setLinkOfLabels();
-        // hier niet meer... :-(
 
         $consignment = $collection->getOneConsignment();
         self::assertCount(1, $collection, 'Collection expected to have only one result.');
