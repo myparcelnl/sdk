@@ -62,15 +62,6 @@ class AbstractPickupLocationAdapter
 
     /**
      * @return string|null
-     * @deprecated Use getRetailNetworkId instead
-     */
-    public function getPickupNetworkId(): string
-    {
-        return $this->getRetailNetworkId();
-    }
-
-    /**
-     * @return string|null
      */
     public function getRetailNetworkId(): string
     {

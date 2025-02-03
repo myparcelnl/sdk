@@ -9,29 +9,8 @@ use MyParcelNL\Sdk\Validator\Consignment\PostNLConsignmentValidator;
 
 class PostNLConsignment extends AbstractConsignment
 {
-    /** @deprecated use $this->getCarrierId() */
-    public const CARRIER_ID = 1;
-    /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = 'postnl';
-    /**
-     * @var array
-     * @deprecated use getLocalInsurancePossibilities()
-     */
-    public const INSURANCE_POSSIBILITIES_LOCAL
-        = [
-            100,
-            250,
-            500,
-            1000,
-            1500,
-            2000,
-            2500,
-            3000,
-            3500,
-            4000,
-            4500,
-            5000,
-        ];
+    protected const CARRIER_ID = 1;
+    protected const CARRIER_NAME = 'postnl';
 
     /**
      * @var string

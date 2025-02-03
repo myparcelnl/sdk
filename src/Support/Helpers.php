@@ -117,18 +117,6 @@ class Helpers {
     }
 
     /**
-     * Remove one or many array items from a given array using "dot" notation.
-     *
-     * @deprecated Not implemented
-     * @return void
-     * @throws Exception
-     */
-    public function array_forget()
-    {
-        throw new Exception('Not implemented');
-    }
-
-    /**
      * Get an item from an array using "dot" notation.
      *
      * @param  \ArrayAccess|array  $array
@@ -982,8 +970,8 @@ class Helpers {
     {
         $traits = class_uses($trait);
 
-        foreach ($traits as $trait) {
-            $traits += $this->trait_uses_recursive($trait);
+        foreach ($traits as $sub_trait) {
+            $traits += $this->trait_uses_recursive($sub_trait);
         }
 
         return $traits;
