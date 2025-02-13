@@ -35,7 +35,7 @@
         ]
     },
     "require": {
-        "php": ">=7.1.0"
+        "php": "^7.4 || ^8.0"
     },
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",
@@ -44,12 +44,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\": "src"
+            "MyParcelNL\\Sdk\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\Test\\": "test"
+            "MyParcelNL\\Sdk\\Test\\": "test/"
         }
     }
 }
