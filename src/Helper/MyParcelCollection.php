@@ -16,7 +16,6 @@ namespace MyParcelNL\Sdk\Helper;
 
 use BadMethodCallException;
 use Closure;
-use GuzzleHttp\Exception\BadResponseException;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Adapter\ConsignmentAdapter;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
