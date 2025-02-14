@@ -180,7 +180,7 @@ class MyParcelCustomsItem
      *
      * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/internationale-handel-in-goederen/idep-codelijsten
      *
-     * @param null|int|string $classification
+     * @param null|int|string $classification int is allowed for backward compatibility, string will be enforced in next major release
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
