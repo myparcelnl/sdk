@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Consignment;
+namespace MyParcelNL\Sdk\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDPD;
-use MyParcelNL\Sdk\src\Validator\Consignment\DPDConsignmentValidator;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
+use MyParcelNL\Sdk\Validator\Consignment\DPDConsignmentValidator;
 
 class DPDConsignment extends AbstractConsignment
 {
@@ -23,11 +23,8 @@ class DPDConsignment extends AbstractConsignment
         'CH',
     ];
 
-    /** @deprecated use $this->getCarrierId() */
-    public const CARRIER_ID = 4;
-
-    /** @deprecated use $this->getCarrierName() */
-    public const CARRIER_NAME = 'dpd';
+    protected const CARRIER_ID = 4;
+    protected const CARRIER_NAME = 'dpd';
 
     /**
      * @var string

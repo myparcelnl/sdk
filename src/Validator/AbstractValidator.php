@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Validator;
+namespace MyParcelNL\Sdk\Validator;
 
-use MyParcelNL\Sdk\src\Exception\ValidationException;
-use MyParcelNL\Sdk\src\Rule\Rule;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Exception\ValidationException;
+use MyParcelNL\Sdk\Rule\Rule;
+use MyParcelNL\Sdk\Support\Collection;
 
 abstract class AbstractValidator
 {
@@ -26,7 +26,7 @@ abstract class AbstractValidator
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Rule\Rule[]
+     * @return \MyParcelNL\Sdk\Rule\Rule[]
      */
     abstract protected function getRules(): array;
 

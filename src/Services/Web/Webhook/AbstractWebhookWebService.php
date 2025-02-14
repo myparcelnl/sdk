@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web\Webhook;
+namespace MyParcelNL\Sdk\Services\Web\Webhook;
 
-use MyParcelNL\Sdk\src\Model\RequestBody;
-use MyParcelNL\Sdk\src\Services\Web\AbstractWebService;
+use MyParcelNL\Sdk\Model\RequestBody;
+use MyParcelNL\Sdk\Services\Web\AbstractWebService;
 
 abstract class AbstractWebhookWebService extends AbstractWebService
 {
@@ -23,9 +23,9 @@ abstract class AbstractWebhookWebService extends AbstractWebService
      * @param  null|string $hook - Falls back to $this->getHook()
      *
      * @return int
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function subscribe(string $url, ?string $hook = null): int
     {
@@ -44,9 +44,9 @@ abstract class AbstractWebhookWebService extends AbstractWebService
     /**
      * Deletes a webhook subscription by ID.
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function unsubscribe(int $subscriptionId): void
     {

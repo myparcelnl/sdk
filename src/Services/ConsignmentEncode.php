@@ -10,19 +10,20 @@
  * @since       File available since Release v1.1.7
  */
 
-namespace MyParcelNL\Sdk\src\Services;
+namespace MyParcelNL\Sdk\Services;
 
 use Exception;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLEuroplus;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLParcelConnect;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLEuroplus;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLParcelConnect;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Collection;
+use MyParcelNL\Sdk\Support\Helpers;
+use MyParcelNL\Sdk\Support\Str;
 
 class ConsignmentEncode
 {
@@ -51,7 +52,7 @@ class ConsignmentEncode
      * Encode all the data before sending it to MyParcel
      *
      * @return array
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function apiEncode(): array
@@ -75,7 +76,7 @@ class ConsignmentEncode
 
     /**
      * @param array                                                     $consignmentEncoded
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return array
      */
@@ -94,7 +95,6 @@ class ConsignmentEncode
                     'return'            => Helpers::intOrNull($consignment->isReturn()),
                     'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
                     'hide_sender'       => Helpers::intOrNull($consignment->hasHideSender()),
-                    'extra_assurance'   => Helpers::intOrNull($consignment->hasExtraAssurance()),
                 ]),
             ]
         );
@@ -107,10 +107,6 @@ class ConsignmentEncode
             $consignmentEncoded['options']['age_check'] = 1;
         } elseif ($consignment->hasAgeCheck()) {
             throw new InvalidArgumentException('The age check is not possible with an EU shipment or world shipment');
-        }
-
-        if ($consignment->hasExtraAssurance()) {
-            $consignmentEncoded['options']['hide_sender'] = 0;
         }
 
         if (in_array($consignment->getCarrierName(), [CarrierDHLEuroplus::NAME, CarrierDHLParcelConnect::NAME])) {
@@ -267,7 +263,7 @@ class ConsignmentEncode
 
     /**
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function encodePhysicalProperties(): self
     {
@@ -294,12 +290,12 @@ class ConsignmentEncode
 
     /**
      * @return self
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function encodeCdCountry(): self
     {
         /**
-         * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+         * @var \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
 
@@ -358,7 +354,7 @@ class ConsignmentEncode
     /**
      * @param AbstractConsignment $consignment
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function validateCdConsignment(AbstractConsignment $consignment): void
     {
@@ -400,14 +396,14 @@ class ConsignmentEncode
         $secondaryShipments = $this->consignments;
         Arr::forget($secondaryShipments, 0);
         foreach ($secondaryShipments as $secondaryShipment) {
-            $this->consignmentEncoded['secondary_shipments'][] = (object) ['reference_identifier' => $secondaryShipment->getReferenceId()];
+            $this->consignmentEncoded['secondary_shipments'][] = (object) ['reference_identifier' => $secondaryShipment->getReferenceIdentifier()];
         }
 
         return $this;
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return int
      */
@@ -417,7 +413,7 @@ class ConsignmentEncode
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return int
      */

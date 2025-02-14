@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Fulfilment;
+namespace MyParcelNL\Sdk\Model\Fulfilment;
 
-use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Support\Helpers;
+use MyParcelNL\Sdk\Model\BaseModel;
+use MyParcelNL\Sdk\Support\Helpers;
 
 class OrderLine extends BaseModel
 {
@@ -33,7 +33,7 @@ class OrderLine extends BaseModel
     /**
      * The product in this OrderLine.
      *
-     * @var \MyParcelNL\Sdk\src\Model\Fulfilment\Product
+     * @var \MyParcelNL\Sdk\Model\Fulfilment\Product
      */
     private $product;
 
@@ -98,7 +98,7 @@ class OrderLine extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\Product
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\Product
      */
     public function getProduct(): Product
     {
@@ -163,7 +163,7 @@ class OrderLine extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Fulfilment\Product $product
+     * @param  \MyParcelNL\Sdk\Model\Fulfilment\Product $product
      *
      * @return self
      */

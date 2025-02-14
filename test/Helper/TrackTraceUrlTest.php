@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Helper;
 
-use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
+use MyParcelNL\Sdk\Helper\TrackTraceUrl;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class TrackTraceUrlTest extends TestCase

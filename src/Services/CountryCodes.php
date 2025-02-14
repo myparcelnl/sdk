@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services;
+namespace MyParcelNL\Sdk\Services;
 
 final class CountryCodes
 {

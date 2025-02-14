@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Concerns;
 
 use Exception;
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class HasApiKeyTest extends TestCase

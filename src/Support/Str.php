@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); /** @noinspection PhpComposerExtensionStubsInspection */
 
-namespace MyParcelNL\Sdk\src\Support;
+namespace MyParcelNL\Sdk\Support;
 
 use Exception;
 

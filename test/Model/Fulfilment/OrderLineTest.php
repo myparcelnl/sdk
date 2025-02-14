@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
-use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderLineTest extends TestCase
