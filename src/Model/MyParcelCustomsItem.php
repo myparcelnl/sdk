@@ -164,9 +164,9 @@ class MyParcelCustomsItem
 
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getClassification()
+    public function getClassification(): ?string
     {
         return $this->classification;
     }
@@ -180,18 +180,18 @@ class MyParcelCustomsItem
      *
      * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/internationale-handel-in-goederen/idep-codelijsten
      *
-     * @param null|int $classification
+     * @param null|int|string $classification int is allowed for backward compatibility, string will be enforced in next major release
      *
      * @return $this
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setClassification(?int $classification): self
+    public function setClassification($classification): self
     {
         if (! $classification) {
             throw new MissingFieldException('Classification must be set for a MyParcel product');
         }
 
-        $this->classification = substr("$classification", 0, 10);
+        $this->classification = substr((string) $classification, 0, 10);
 
         return $this;
     }
