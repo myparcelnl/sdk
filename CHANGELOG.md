@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.22.1](https://github.com/myparcelnl/sdk/compare/v7.22.0...v7.22.1) (2025-02-18)
+
+
+### :bug: Bug Fixes
+
+* allow leading zero for hs code classification ([#522](https://github.com/myparcelnl/sdk/issues/522)) ([604773f](https://github.com/myparcelnl/sdk/commit/604773f1fcbbc5b6d4803db1183bbf8eba964bb8))
+
 ## [7.22.0](https://github.com/myparcelnl/sdk/compare/v7.21.0...v7.22.0) (2025-01-15)
 
 
