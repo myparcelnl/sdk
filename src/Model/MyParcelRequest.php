@@ -437,7 +437,7 @@ class MyParcelRequest
         $this->response       = $response;
         $this->result         = $response['response'];
 
-        if ($this->result === false) {
+        if (false === $this->result) {
             $this->error = $request->getError();
         }
 
