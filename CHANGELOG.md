@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.23.0](https://github.com/myparcelnl/sdk/compare/v7.22.1...v7.23.0) (2025-03-05)
+
+
+### :sparkles: New Features
+
+* support creating unrelated returns ([#523](https://github.com/myparcelnl/sdk/issues/523)) ([786d1a7](https://github.com/myparcelnl/sdk/commit/786d1a711f4d34bcbf29f8920d488251bfe7f835))
+
 ## [7.22.1](https://github.com/myparcelnl/sdk/compare/v7.22.0...v7.22.1) (2025-02-18)
 
 
