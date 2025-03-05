@@ -264,7 +264,7 @@ class MyParcelCollection extends Collection
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function createConcepts(): self
+    public function createConcepts(bool $asUnrelatedReturn = false): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
@@ -275,12 +275,12 @@ class MyParcelCollection extends Collection
 
         /* @var MyParcelCollection $consignments */
         foreach ($grouped as $consignments) {
-            $headers = MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
+            $headers = $asUnrelatedReturn ? MyParcelRequest::HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT : MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
             if ($consignments->first()->hasSender()) {
                 $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
             }
 
-            $data    = (new CollectionEncode($consignments))->encode();
+            $data    = (new CollectionEncode($consignments))->encode($asUnrelatedReturn ? 'return_shipments' : 'shipments');
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
@@ -303,6 +303,16 @@ class MyParcelCollection extends Collection
         $this->items = $newConsignments;
 
         return $this;
+    }
+
+    /**
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     */
+    public function createUnrelatedReturns(): self
+    {
+        return $this->createConcepts(true);
     }
 
     /**
