@@ -21,6 +21,7 @@ class PrinterlessReturnRequest extends MyParcelRequest
      * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return mixed response can be null, an array (when payment is required), or a string that is a png
      */
     public function send()
     {
@@ -30,6 +31,6 @@ class PrinterlessReturnRequest extends MyParcelRequest
             )
             ->sendRequest('GET', "printerless_return_label/{$this->consignment->getConsignmentId()}");
 
-        return $this->getResult(); // can be null, an array (when payment is required), or a string that is a png
+        return $this->getResult();
     }
 }

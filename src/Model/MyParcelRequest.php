@@ -425,30 +425,23 @@ class MyParcelRequest
     private function setResult(MyParcelCurl $request): array
     {
         $response = $request->getResponse();
-//        if (!isset($GLOBALS['bla'])) {
-//            $GLOBALS['bla'] = 'ballen';
-//        } else {
-//            var_dump($response);
-//            die(' ewjrklweWW3232WW');
-//        }
 
-        if (preg_match('/^%PDF-\d+\.\d+/', $response['response'])) {
-            $this->result   = $response['response'];
-            $this->response = $response;
-        } else {
-            $json_response = json_decode($response['response'], true);
-            if (null !== $json_response) {
-                $response['response'] = $json_response;
-            }
-            $this->response       = $response;
-            $this->result         = $response['response'];
-
-            if ($this->result === false) {
-                $this->error = $request->getError();
-            }
-
-            $this->checkMyParcelErrors();
+        /**
+         * The response may contain a pdf or a png (for printerless return).
+         * So we only upgrade 'response' to array when json_decode is successful.
+         */
+        $json_response = json_decode($response['response'], true);
+        if (null !== $json_response) {
+            $response['response'] = $json_response;
         }
+        $this->response       = $response;
+        $this->result         = $response['response'];
+
+        if ($this->result === false) {
+            $this->error = $request->getError();
+        }
+
+        $this->checkMyParcelErrors();
 
         return $response;
     }

@@ -98,6 +98,7 @@ class PostNLConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_INSURANCE,
             self::SHIPMENT_OPTION_LARGE_FORMAT,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+            self::SHIPMENT_OPTION_PRINTERLESS_RETURN,
             self::SHIPMENT_OPTION_RETURN,
             self::SHIPMENT_OPTION_SIGNATURE,
             self::SHIPMENT_OPTION_RECEIPT_CODE,

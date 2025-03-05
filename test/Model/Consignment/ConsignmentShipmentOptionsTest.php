@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
+use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelRequest;
 use MyParcelNL\Sdk\src\Model\PrinterlessReturnRequest;
@@ -353,11 +354,19 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      * @param  array $testData
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @dataProvider provideUnrelatedReturnData
      */
     public function testUnrelatedReturn(array $testData): void
     {
+        /**
+         * for returns without the property printerless_return set, expect the api error
+         * ‘3759 -  - Shipment does not have a printerless return label’
+         */
+        if (!isset($testData['printerless_return'])) {
+            $this->expectException(ApiException::class);
+            $this->expectExceptionMessageMatches('/3759 */');
+        }
+
         $collection = $this->generateCollection($testData);
         $collection->createUnrelatedReturns();
 
@@ -365,11 +374,7 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
 
         foreach($collection->getConsignments() as $consignment) {
             $response = (new PrinterlessReturnRequest($consignment))->send();
-            if ($consignment->isPrinterlessReturn()) {
-                self::assertIsString($response); // this is a png image
-            }
-//                var_dump($response);
-//            die(' KOEKENBAKKERS');
+            self::assertIsString($response); // this is a png image
         }
     }
 }
