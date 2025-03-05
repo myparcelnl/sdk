@@ -511,6 +511,11 @@ abstract class AbstractConsignment
     /**
      * @var bool
      */
+    private $printerless_return;
+
+    /**
+     * @var bool
+     */
     private $save_recipient_address = true;
 
     /**
@@ -1596,6 +1601,18 @@ abstract class AbstractConsignment
     public function setReturn(bool $return): self
     {
         $this->return = $return && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_RETURN);
+
+        return $this;
+    }
+
+    public function isPrinterlessReturn(): ?bool
+    {
+        return $this->printerless_return;
+    }
+
+    public function setPrinterlessReturn(bool $printerlessReturn): self
+    {
+        $this->printerless_return = $printerlessReturn;// && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_PRINTERLESS_RETURN);
 
         return $this;
     }

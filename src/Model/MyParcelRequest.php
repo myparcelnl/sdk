@@ -35,6 +35,7 @@ class MyParcelRequest
      * API headers.
      */
     public const HEADER_ACCEPT_APPLICATION_PDF                 = ['Accept' => 'application/pdf'];
+    public const HEADER_ACCEPT_IMAGE_PNG                       = ['Accept' => 'image/png'];
     public const HEADER_CONTENT_TYPE_SHIPMENT                  = ['Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1'];
     public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT           = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
     public const HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.unrelated_return_shipment+json;version=1.1; charset=utf-8'];
@@ -424,12 +425,21 @@ class MyParcelRequest
     private function setResult(MyParcelCurl $request): array
     {
         $response = $request->getResponse();
+//        if (!isset($GLOBALS['bla'])) {
+//            $GLOBALS['bla'] = 'ballen';
+//        } else {
+//            var_dump($response);
+//            die(' ewjrklweWW3232WW');
+//        }
 
         if (preg_match('/^%PDF-\d+\.\d+/', $response['response'])) {
             $this->result   = $response['response'];
             $this->response = $response;
         } else {
-            $response['response'] = json_decode($response['response'], true);
+            $json_response = json_decode($response['response'], true);
+            if (null !== $json_response) {
+                $response['response'] = $json_response;
+            }
             $this->response       = $response;
             $this->result         = $response['response'];
 

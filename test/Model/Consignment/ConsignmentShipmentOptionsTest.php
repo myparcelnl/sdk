@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\src\Model\PrinterlessReturnRequest;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
@@ -233,6 +235,23 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     }
 
     /**
+     * @return array
+     * @throws \Exception
+     */
+    public function provideUnrelatedReturnData(): array
+    {
+        return $this->createConsignmentProviderDataset([
+            'unrelated return' => [
+                self::DELIVERY_DATE => $this->generateDeliveryDate(),
+            ],
+            'printerless return' => [
+                self::DELIVERY_DATE => $this->generateDeliveryDate(),
+                'printerless_return' => true,
+            ],
+        ]);
+    }
+
+    /**
      * @param  array $testData
      *
      * @throws \Exception
@@ -328,5 +347,29 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
         self::assertNotEmpty($consignment, 'Consignment is not found');
         self::assertEquals($consignment->getReferenceIdentifier(), $referenceIdentifier);
         self::validateConsignmentOptions($testData, $consignment);
+    }
+
+    /**
+     * @param  array $testData
+     *
+     * @return void
+     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @dataProvider provideUnrelatedReturnData
+     */
+    public function testUnrelatedReturn(array $testData): void
+    {
+        $collection = $this->generateCollection($testData);
+        $collection->createUnrelatedReturns();
+
+        self::assertEquals(1, $collection->count());
+
+        foreach($collection->getConsignments() as $consignment) {
+            $response = (new PrinterlessReturnRequest($consignment))->send();
+            if ($consignment->isPrinterlessReturn()) {
+                self::assertIsString($response); // this is a png image
+            }
+//                var_dump($response);
+//            die(' KOEKENBAKKERS');
+        }
     }
 }
