@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.24.0](https://github.com/myparcelnl/sdk/compare/v7.23.0...v7.24.0) (2025-03-05)
+
+
+### :sparkles: New Features
+
+* support printerless return ([#524](https://github.com/myparcelnl/sdk/issues/524)) ([352de54](https://github.com/myparcelnl/sdk/commit/352de5488f37c510a8f60148748449541a97fce7))
+
 ## [7.23.0](https://github.com/myparcelnl/sdk/compare/v7.22.1...v7.23.0) (2025-03-05)
 
 
