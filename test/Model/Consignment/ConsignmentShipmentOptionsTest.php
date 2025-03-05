@@ -358,13 +358,9 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
      */
     public function testUnrelatedReturn(array $testData): void
     {
-        /**
-         * for returns without the property printerless_return set, expect the api error
-         * ‘3759 -  - Shipment does not have a printerless return label’
-         */
         if (!isset($testData['printerless_return'])) {
             $this->expectException(ApiException::class);
-            $this->expectExceptionMessageMatches('/3759 */');
+            $this->expectExceptionMessage('3759 -  - Shipment does not have a printerless return label');
         }
 
         $collection = $this->generateCollection($testData);
