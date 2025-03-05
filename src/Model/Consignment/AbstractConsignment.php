@@ -1606,11 +1606,19 @@ abstract class AbstractConsignment
         return $this;
     }
 
+    /**
+     * @return null|bool
+     */
     public function isPrinterlessReturn(): ?bool
     {
         return $this->printerless_return;
     }
 
+    /**
+     * @param  bool $printerlessReturn
+     *
+     * @return $this
+     */
     public function setPrinterlessReturn(bool $printerlessReturn): self
     {
         $this->printerless_return = $printerlessReturn && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_PRINTERLESS_RETURN);
