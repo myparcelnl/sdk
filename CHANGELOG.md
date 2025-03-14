@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.25.0](https://github.com/myparcelnl/sdk/compare/v7.24.0...v7.25.0) (2025-03-14)
+
+
+### :sparkles: New Features
+
+* allow delivery date to be used with DHLForYou ([#511](https://github.com/myparcelnl/sdk/issues/511)) ([2d4f6b8](https://github.com/myparcelnl/sdk/commit/2d4f6b83bbd8fa4709617dd7e992db3559fcc5ce))
+
 ## [7.24.0](https://github.com/myparcelnl/sdk/compare/v7.23.0...v7.24.0) (2025-03-05)
 
 
