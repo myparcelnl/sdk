@@ -43,7 +43,14 @@ class CollectionEncode
         $groupedConsignments = $this->groupMultiColloConsignments();
 
         foreach ($groupedConsignments as $consignments) {
-            $data['data'][$key][] = (new ConsignmentEncode($consignments))->apiEncode('return_shipments' === $key);
+            $consignment = (new ConsignmentEncode($consignments))->apiEncode();
+            // switch original recipient to sender for return shipments
+            if ('return_shipments' === $key) {
+                $consignment['sender'] = $consignment['recipient'];
+                // API does not allow state for sender
+                unset($consignment['recipient'], $consignment['sender']['state']);
+            }
+            $data['data'][$key][] = $consignment;
         }
 
         // Remove \\n because json_encode encode \\n for \s
