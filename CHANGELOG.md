@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.25.1](https://github.com/myparcelnl/sdk/compare/v7.25.0...v7.25.1) (2025-03-18)
+
+
+### :bug: Bug Fixes
+
+* use sender for unrelated return ([#525](https://github.com/myparcelnl/sdk/issues/525)) ([a1e8279](https://github.com/myparcelnl/sdk/commit/a1e82790315093a9f0c730199744d707d3e24a6e))
+
 ## [7.25.0](https://github.com/myparcelnl/sdk/compare/v7.24.0...v7.25.0) (2025-03-14)
 
 
