@@ -50,15 +50,13 @@ class ConsignmentEncode
     /**
      * Encode all the data before sending it to MyParcel
      *
-     * @param  bool $splitStreet todo remove this once the API accepts the street as a single field
-     *
      * @return array
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function apiEncode(bool $splitStreet = false): array
+    public function apiEncode(): array
     {
         $this->encodeBase()
-             ->encodeStreet($splitStreet);
+             ->encodeStreet();
 
         $this->consignmentEncoded = self::encodeExtraOptions(
             $this->consignmentEncoded,
@@ -224,14 +222,13 @@ class ConsignmentEncode
     }
 
     /**
-     * @param  bool $splitStreet todo remove once the API accepts the street as a single field
      *
      * @return self
      */
-    private function encodeStreet(bool $splitStreet): self
+    private function encodeStreet(): self
     {
         $consignment              = Arr::first($this->consignments);
-        $this->consignmentEncoded = $consignment->encodeStreet($this->consignmentEncoded, $splitStreet);
+        $this->consignmentEncoded = $consignment->encodeStreet($this->consignmentEncoded);
 
         return $this;
     }

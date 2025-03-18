@@ -1231,22 +1231,12 @@ abstract class AbstractConsignment
 
     /**
      * @param  array $consignmentEncoded
-     * @param  bool  $splitStreet todo remove once the API accepts full street for unrelated returns
      *
      * @return array
      * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function encodeStreet(array $consignmentEncoded, bool $splitStreet = false): array
+    public function encodeStreet(array $consignmentEncoded): array
     {
-        if ($splitStreet) {
-            $consignmentEncoded['recipient']['street'] = $this->getStreet(true);
-            $consignmentEncoded['recipient']['number'] = $this->getNumber();
-            $consignmentEncoded['recipient']['number_suffix'] = $this->getNumberSuffix();
-            $consignmentEncoded['recipient']['box_number'] = $this->getBoxNumber();
-            $consignmentEncoded['recipient']['street_additional_info'] = $this->getStreetAdditionalInfo();
-
-            return $consignmentEncoded;
-        }
         $consignmentEncoded['recipient']['street']                 = $this->getFullStreet(true);
         $consignmentEncoded['recipient']['street_additional_info'] = $this->getStreetAdditionalInfo();
 
