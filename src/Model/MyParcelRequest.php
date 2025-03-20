@@ -418,9 +418,9 @@ class MyParcelRequest
          * The response may contain a pdf or a png (for printerless return).
          * So we only upgrade 'response' to array when json_decode is successful.
          */
-        $json_response = json_decode($response['response'], true);
-        if (null !== $json_response) {
-            $response['response'] = $json_response;
+        $jsonResponse = json_decode($response['response'], true);
+        if (null !== $jsonResponse) {
+            $response['response'] = $jsonResponse;
         }
         $this->response       = $response;
         $this->result         = $response['response'];
