@@ -394,14 +394,18 @@ class MyParcelRequest
      */
     private function instantiateCurl(): MyParcelCurl
     {
-        return (new MyParcelCurl())->setConfig([
-                                                   'header'  => 0,
-                                                   'timeout' => 60,
-                                               ])->addOptions([
-                                                                  CURLOPT_POST           => true,
-                                                                  CURLOPT_FOLLOWLOCATION => true,
-                                                                  CURLOPT_AUTOREFERER    => true,
-                                                              ]);
+        return (new MyParcelCurl())->setConfig(
+            [
+                'header'  => 0,
+                'timeout' => 60,
+            ]
+        )->addOptions(
+            [
+                CURLOPT_POST           => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_AUTOREFERER    => true,
+            ]
+        );
     }
 
     /**
