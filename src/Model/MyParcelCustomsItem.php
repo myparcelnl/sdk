@@ -137,10 +137,12 @@ class MyParcelCustomsItem
      */
     public function setItemValue($item_value): self
     {
-        return $this->setItemValueArray([
-                                            'amount'   => (int) $item_value,
-                                            'currency' => ConsignmentEncode::DEFAULT_CURRENCY,
-                                        ]);
+        return $this->setItemValueArray(
+            [
+                'amount'   => (int) $item_value,
+                'currency' => ConsignmentEncode::DEFAULT_CURRENCY,
+            ]
+        );
     }
 
     /**

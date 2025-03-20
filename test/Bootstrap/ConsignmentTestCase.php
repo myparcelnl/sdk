@@ -283,9 +283,7 @@ class ConsignmentTestCase extends TestCase
      */
     protected function generateUniqueIdentifier(): string
     {
-        return $this->generateTimestamp() . '_' . $this->faker->unique()
-                                                              ->firstName()
-        ;
+        return $this->generateTimestamp() . '_' . $this->faker->unique()->firstName();
     }
 
     /**
