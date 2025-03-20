@@ -34,16 +34,17 @@ abstract class AbstractConsignment
      */
     use HasApiKey;
 
-    public const SHIPMENT_OPTION_AGE_CHECK         = 'age_check';
-    public const SHIPMENT_OPTION_HIDE_SENDER       = 'hide_sender';
-    public const SHIPMENT_OPTION_INSURANCE         = 'insurance';
-    public const SHIPMENT_OPTION_LARGE_FORMAT      = 'large_format';
-    public const SHIPMENT_OPTION_ONLY_RECIPIENT    = 'only_recipient';
-    public const SHIPMENT_OPTION_RETURN            = 'return';
-    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY = 'same_day_delivery';
-    public const SHIPMENT_OPTION_SIGNATURE         = 'signature';
-    public const SHIPMENT_OPTION_COLLECT           = 'collect';
-    public const SHIPMENT_OPTION_RECEIPT_CODE      = 'receipt_code';
+    public const SHIPMENT_OPTION_AGE_CHECK          = 'age_check';
+    public const SHIPMENT_OPTION_HIDE_SENDER        = 'hide_sender';
+    public const SHIPMENT_OPTION_INSURANCE          = 'insurance';
+    public const SHIPMENT_OPTION_LARGE_FORMAT       = 'large_format';
+    public const SHIPMENT_OPTION_ONLY_RECIPIENT     = 'only_recipient';
+    public const SHIPMENT_OPTION_PRINTERLESS_RETURN = 'printerless_return';
+    public const SHIPMENT_OPTION_RETURN             = 'return';
+    public const SHIPMENT_OPTION_SAME_DAY_DELIVERY  = 'same_day_delivery';
+    public const SHIPMENT_OPTION_SIGNATURE          = 'signature';
+    public const SHIPMENT_OPTION_COLLECT            = 'collect';
+    public const SHIPMENT_OPTION_RECEIPT_CODE       = 'receipt_code';
 
     public const SHIPMENT_OPTIONS_TO_CHECK
         = [
@@ -475,6 +476,11 @@ abstract class AbstractConsignment
      * @var bool
      */
     private $auto_detect_pickup = true;
+
+    /**
+     * @var bool
+     */
+    private $printerless_return;
 
     /**
      * @var bool
@@ -1471,6 +1477,26 @@ abstract class AbstractConsignment
     public function setReturn(bool $return): self
     {
         $this->return = $return && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_RETURN);
+
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function isPrinterlessReturn(): ?bool
+    {
+        return $this->printerless_return;
+    }
+
+    /**
+     * @param  bool $printerlessReturn
+     *
+     * @return $this
+     */
+    public function setPrinterlessReturn(bool $printerlessReturn): self
+    {
+        $this->printerless_return = $printerlessReturn && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_PRINTERLESS_RETURN);
 
         return $this;
     }

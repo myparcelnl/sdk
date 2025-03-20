@@ -217,6 +217,8 @@ class Str
             return $value;
         }
 
+        $limit -= mb_strwidth($end, 'UTF-8');
+
         return rtrim(mb_strimwidth($value, 0, $limit, $end, 'UTF-8'));
     }
 

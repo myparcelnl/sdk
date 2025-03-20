@@ -58,7 +58,8 @@ class ConsignmentEncode
     public function apiEncode(): array
     {
         $this->encodeBase()
-             ->encodeStreet();
+             ->encodeStreet()
+        ;
 
         $this->consignmentEncoded = self::encodeExtraOptions(
             $this->consignmentEncoded,
@@ -69,13 +70,14 @@ class ConsignmentEncode
              ->encodePhysicalProperties()
              ->encodeCdCountry()
              ->encodeMultiCollo()
-             ->encodeDropOffPoint();
+             ->encodeDropOffPoint()
+        ;
 
         return $this->consignmentEncoded;
     }
 
     /**
-     * @param array                                                     $consignmentEncoded
+     * @param array                                                 $consignmentEncoded
      * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
      * @return array
@@ -85,17 +87,20 @@ class ConsignmentEncode
         $consignmentEncoded = array_merge_recursive(
             $consignmentEncoded,
             [
-                'options' => Helpers::toArrayWithoutNull([
-                    'package_type'      => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
-                    'label_description' => $consignment->getLabelDescription(),
-                    'only_recipient'    => Helpers::intOrNull($consignment->isOnlyRecipient()),
-                    'signature'         => Helpers::intOrNull($consignment->isSignature()),
-                    'collect'           => Helpers::intOrNull($consignment->hasCollect()),
-                    'receipt_code'      => Helpers::intOrNull($consignment->hasReceiptCode()),
-                    'return'            => Helpers::intOrNull($consignment->isReturn()),
-                    'same_day_delivery' => Helpers::intOrNull($consignment->isSameDayDelivery()),
-                    'hide_sender'       => Helpers::intOrNull($consignment->hasHideSender()),
-                ]),
+                'options' => Helpers::toArrayWithoutNull(
+                    [
+                        'package_type'       => $consignment->getPackageType(AbstractConsignment::DEFAULT_PACKAGE_TYPE),
+                        'label_description'  => $consignment->getLabelDescription(),
+                        'only_recipient'     => Helpers::intOrNull($consignment->isOnlyRecipient()),
+                        'signature'          => Helpers::intOrNull($consignment->isSignature()),
+                        'collect'            => Helpers::intOrNull($consignment->hasCollect()),
+                        'receipt_code'       => Helpers::intOrNull($consignment->hasReceiptCode()),
+                        'return'             => Helpers::intOrNull($consignment->isReturn()),
+                        'same_day_delivery'  => Helpers::intOrNull($consignment->isSameDayDelivery()),
+                        'hide_sender'        => Helpers::intOrNull($consignment->hasHideSender()),
+                        'printerless_return' => Helpers::intOrNull($consignment->isPrinterlessReturn()),
+                    ]
+                ),
             ]
         );
 
@@ -158,7 +163,7 @@ class ConsignmentEncode
             $key   = "options.$option";
             $value = Arr::get($consignmentEncoded, $key);
 
-            if (1 === $value && ! $consignment->canHaveShipmentOption($option)) {
+            if (1 === $value && !$consignment->canHaveShipmentOption($option)) {
                 Arr::forget($consignmentEncoded, $key);
             }
         }
@@ -267,15 +272,15 @@ class ConsignmentEncode
             return $this;
         }
 
-        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP && ! isset($consignment->getPhysicalProperties()['weight'])) {
+        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP && !isset($consignment->getPhysicalProperties()['weight'])) {
             throw new MissingFieldException('Weight in physical properties must be set for digital stamp shipments.');
         }
 
         if (CarrierDHLForYou::NAME === $consignment->getCarrier()->getName()) {
             $consignment->setPhysicalProperties([
-                'weight' => $consignment->getTotalWeight(),
-                'volume' => 1,
-            ]);
+                                                    'weight' => $consignment->getTotalWeight(),
+                                                    'volume' => 1,
+                                                ]);
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
@@ -357,7 +362,7 @@ class ConsignmentEncode
             throw new MissingFieldException('Product data must be set for international MyParcel shipments. Use addItem().');
         }
 
-        if (! in_array(
+        if (!in_array(
             $consignment->getPackageType(),
             [
                 AbstractConsignment::PACKAGE_TYPE_PACKAGE,
@@ -384,7 +389,7 @@ class ConsignmentEncode
     {
         /** @var AbstractConsignment $first */
         $first = Arr::first($this->consignments);
-        if (count($this->consignments) > 1 && ! $first->isPartOfMultiCollo()) {
+        if (count($this->consignments) > 1 && !$first->isPartOfMultiCollo()) {
             throw new Exception("Can not encode multi collo with this consignment.");
         }
 
@@ -425,24 +430,24 @@ class ConsignmentEncode
         $consignment  = Arr::first($this->consignments);
         $dropOffPoint = $consignment->getDropOffPoint();
 
-        if (! $dropOffPoint) {
+        if (!$dropOffPoint) {
             return $this;
         }
 
         $options = new Collection([
-            'box_number'        => $dropOffPoint->getBoxNumber(),
-            'cc'                => $dropOffPoint->getCc(),
-            'city'              => $dropOffPoint->getCity(),
-            'location_code'     => $dropOffPoint->getLocationCode(),
-            'location_name'     => $dropOffPoint->getLocationName(),
-            'number'            => $dropOffPoint->getNumber(),
-            'number_suffix'     => $dropOffPoint->getNumberSuffix(),
-            'postal_code'       => $dropOffPoint->getPostalCode(),
-            'region'            => $dropOffPoint->getRegion(),
-            'retail_network_id' => $dropOffPoint->getRetailNetworkId(),
-            'state'             => $dropOffPoint->getState(),
-            'street'            => $dropOffPoint->getStreet(),
-        ]);
+                                      'box_number'        => $dropOffPoint->getBoxNumber(),
+                                      'cc'                => $dropOffPoint->getCc(),
+                                      'city'              => $dropOffPoint->getCity(),
+                                      'location_code'     => $dropOffPoint->getLocationCode(),
+                                      'location_name'     => $dropOffPoint->getLocationName(),
+                                      'number'            => $dropOffPoint->getNumber(),
+                                      'number_suffix'     => $dropOffPoint->getNumberSuffix(),
+                                      'postal_code'       => $dropOffPoint->getPostalCode(),
+                                      'region'            => $dropOffPoint->getRegion(),
+                                      'retail_network_id' => $dropOffPoint->getRetailNetworkId(),
+                                      'state'             => $dropOffPoint->getState(),
+                                      'street'            => $dropOffPoint->getStreet(),
+                                  ]);
 
         $this->consignmentEncoded['drop_off_point'] = $options->toArrayWithoutNull();
         return $this;

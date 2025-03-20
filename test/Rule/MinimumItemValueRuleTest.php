@@ -79,7 +79,7 @@ class MinimumItemValueRuleTest extends TestCase
                     ->setItemValue($item['value'])
                     ->setAmount(1)
                     ->setWeight(1)
-                    ->setClassification(123456)
+                    ->setClassification('123456')
                     ->setCountry('NL')
                     ->setDescription('test')
             );

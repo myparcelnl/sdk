@@ -380,7 +380,7 @@ class ConsignmentTestCase extends TestCase
                 [
                     self::COUNTRY                     => $country,
                     self::CUSTOMS_ITEM_AMOUNT         => 2,
-                    self::CUSTOMS_ITEM_CLASSIFICATION => 2008,
+                    self::CUSTOMS_ITEM_CLASSIFICATION => '200800',
                     self::CUSTOMS_ITEM_DESCRIPTION    => 'Cool Mobile',
                     self::CUSTOMS_ITEM_ITEM_VALUE     => 40000,
                     self::WEIGHT                      => 2000,

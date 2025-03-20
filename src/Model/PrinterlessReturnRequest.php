@@ -1,16 +1,15 @@
 <?php
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Exception\AccountNotActiveException;
+use MyParcelNL\Sdk\Exception\ApiException;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class PrinterlessReturnRequest extends MyParcelRequest
 {
-    /**
-     * @var \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment
-     */
-    private $consignment;
+    private AbstractConsignment $consignment;
 
     public function __construct(AbstractConsignment $consignment)
     {
@@ -18,18 +17,19 @@ class PrinterlessReturnRequest extends MyParcelRequest
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      * @return mixed response can be null, an array (when payment is required), or a string that is a png
+     * @throws ApiException
+     * @throws MissingFieldException
+     * @throws AccountNotActiveException
      */
     public function send()
     {
         $this->setApiKey($this->consignment->getApiKey())
-            ->setHeaders(
-                MyParcelRequest::HEADER_ACCEPT_IMAGE_PNG + MyParcelRequest::HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT
-            )
-            ->sendRequest('GET', "printerless_return_label/{$this->consignment->getConsignmentId()}");
+             ->setHeaders(
+                 MyParcelRequest::HEADER_ACCEPT_IMAGE_PNG + MyParcelRequest::HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT
+             )
+             ->sendRequest('GET', "printerless_return_label/{$this->consignment->getConsignmentId()}")
+        ;
 
         return $this->getResult();
     }
