@@ -10,11 +10,11 @@
  * @since       File available since Release v2.0.0
  */
 
-namespace MyParcelNL\Sdk\src\Helper;
+namespace MyParcelNL\Sdk\Helper;
 
-use MyParcelNL\Sdk\src\Exception\InvalidConsignmentException;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\FullStreet;
+use MyParcelNL\Sdk\Exception\InvalidConsignmentException;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\FullStreet;
 
 class SplitStreet
 {
@@ -73,7 +73,7 @@ class SplitStreet
      * @param string $local
      * @param string $destination
      *
-     * @return \MyParcelNL\Sdk\src\Model\FullStreet
+     * @return \MyParcelNL\Sdk\Model\FullStreet
      *
      * @throws \Exception
      */
@@ -145,37 +145,12 @@ class SplitStreet
     }
 
     /**
-     * @param string      $fullStreet
-     * @param string      $localCountry
-     * @param string|null $destinationCountry
-     *
-     * @return bool
-     * @deprecated use ValidateStreet::validate instead
-     */
-    public static function isCorrectStreet(string $fullStreet, string $localCountry, ?string $destinationCountry): bool
-    {
-        return ValidateStreet::validate($fullStreet, $localCountry, $destinationCountry);
-    }
-
-    /**
-     * @param string $local
-     * @param string $destination
-     *
-     * @return null|string
-     * @deprecated use ValidateStreet::getStreetRegexByCountry instead
-     */
-    public static function getRegexByCountry(string $local, string $destination): ?string
-    {
-        return ValidateStreet::getStreetRegexByCountry($local, $destination);
-    }
-
-    /**
      * @param string $fullStreet
      * @param int    $result
      * @param array  $matches
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\InvalidConsignmentException
+     * @throws \MyParcelNL\Sdk\Exception\InvalidConsignmentException
      */
     private static function validate(string $fullStreet, int $result, array $matches): void
     {

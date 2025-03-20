@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Helper;
+namespace MyParcelNL\Sdk\Helper;
 
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Arr;
+use MyParcelNL\Sdk\Support\Str;
 
 class Utils
 {

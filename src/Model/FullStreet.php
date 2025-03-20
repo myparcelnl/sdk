@@ -6,7 +6,7 @@
  * Time: 15:49
  */
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
 class FullStreet
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class ConsignmentValidOptionsTest extends ConsignmentTestCase
@@ -70,7 +70,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
      * @param  string $cc
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @dataProvider provideInsurancePossibilitiesData
      */
     public function testInsurancePossibilities(array $data, string $cc, array $expect): void
@@ -90,7 +90,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
      * @param  string $packageType
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @dataProvider provideCanHavePackageTypeData
      */
     public function testCanHavePackageType(array $data, string $packageType, bool $expect): void
@@ -110,7 +110,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
      * @param  string $deliveryType
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @dataProvider provideCanHaveDeliveryTypeData
      */
     public function testCanHaveDeliveryType(array $data, string $deliveryType, bool $expect): void
@@ -125,7 +125,7 @@ class ConsignmentValidOptionsTest extends ConsignmentTestCase
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     private function getConsignment(array $data): AbstractConsignment
     {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Concerns;
+namespace MyParcelNL\Sdk\Concerns;
 
 use Exception;
 
@@ -10,9 +10,8 @@ trait HasApiKey
 {
     /**
      * @var string|null
-     * @deprecated This property will lose public access in the future. Use getApiKey() instead.
      */
-    public $apiKey;
+    protected ?string $apiKey;
 
     /**
      * @return string|null
@@ -27,13 +26,11 @@ trait HasApiKey
      */
     public function ensureHasApiKey(): string
     {
-        $apiKey = $this->getApiKey();
-
-        if (! $apiKey) {
+        if (! isset($this->apiKey) || '' === trim($this->apiKey)) {
             throw new Exception('API key is missing. Please use setApiKey(string) first.');
         }
 
-        return $apiKey;
+        return $this->apiKey;
     }
 
     /**

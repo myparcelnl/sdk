@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.5/phpunit.xsd"
-    colors="true"
-    cacheResult="true"
-    executionOrder="depends,defects">
-    <testsuites>
-        <testsuite name="Unit">
-            <directory>test</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-    <php>
-        <env name="TEST" value="true" />
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" colors="true" cacheResult="true" executionOrder="depends,defects">
+  <coverage>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="Unit">
+      <directory>test</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="TEST" value="true"/>
+  </php>
 </phpunit>

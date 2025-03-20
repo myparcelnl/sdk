@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Rule;
 
-use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
-use MyParcelNL\Sdk\src\Rule\Consignment\MinimumItemValueRule;
+use MyParcelNL\Sdk\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\Rule\Consignment\MinimumItemValueRule;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class MinimumItemValueRuleTest extends TestCase
@@ -79,7 +79,7 @@ class MinimumItemValueRuleTest extends TestCase
                     ->setItemValue($item['value'])
                     ->setAmount(1)
                     ->setWeight(1)
-                    ->setClassification(123456)
+                    ->setClassification('123456')
                     ->setCountry('NL')
                     ->setDescription('test')
             );

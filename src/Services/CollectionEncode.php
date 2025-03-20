@@ -10,10 +10,10 @@
  * @since       File available since Release v1.1.7
  */
 
-namespace MyParcelNL\Sdk\src\Services;
+namespace MyParcelNL\Sdk\Services;
 
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class CollectionEncode
 {
@@ -34,7 +34,7 @@ class CollectionEncode
      * @param  string $key default 'shipments', the key under 'data' in which the shipments will be returned
      *
      * @return string
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function encode(string $key = 'shipments'): string
     {

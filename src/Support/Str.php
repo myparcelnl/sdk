@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); /** @noinspection PhpComposerExtensionStubsInspection */
 
-namespace MyParcelNL\Sdk\src\Support;
+namespace MyParcelNL\Sdk\Support;
 
 use Exception;
 
@@ -216,6 +216,8 @@ class Str
         if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
         }
+
+        $limit -= mb_strwidth($end, 'UTF-8');
 
         return rtrim(mb_strimwidth($value, 0, $limit, $end, 'UTF-8'));
     }

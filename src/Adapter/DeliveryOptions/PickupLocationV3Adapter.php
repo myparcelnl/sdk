@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
+namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
 class PickupLocationV3Adapter extends AbstractPickupLocationAdapter
 {

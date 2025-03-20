@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Fulfilment;
+namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
 use Exception;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
-use MyParcelNL\Sdk\src\Exception\ValidationException;
-use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Model\CustomsDeclaration;
-use MyParcelNL\Sdk\src\Model\PhysicalProperties;
-use MyParcelNL\Sdk\src\Model\PickupLocation;
-use MyParcelNL\Sdk\src\Model\Recipient;
-use MyParcelNL\Sdk\src\Support\Collection;
-use MyParcelNL\Sdk\src\Validator\Order\OrderValidator;
-use MyParcelNL\Sdk\src\Validator\ValidatorFactory;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
+use MyParcelNL\Sdk\Exception\ValidationException;
+use MyParcelNL\Sdk\Model\BaseModel;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Model\CustomsDeclaration;
+use MyParcelNL\Sdk\Model\PhysicalProperties;
+use MyParcelNL\Sdk\Model\PickupLocation;
+use MyParcelNL\Sdk\Model\Recipient;
+use MyParcelNL\Sdk\Support\Collection;
+use MyParcelNL\Sdk\Validator\Order\OrderValidator;
+use MyParcelNL\Sdk\Validator\ValidatorFactory;
 
 class AbstractOrder extends BaseModel
 {
@@ -28,12 +28,12 @@ class AbstractOrder extends BaseModel
     /**
      * The selected delivery options for this order.
      *
-     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
+     * @var \MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
      */
     protected $delivery_options;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @var \MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     protected $dropOffPoint;
 
@@ -52,7 +52,7 @@ class AbstractOrder extends BaseModel
     /**
      * Invoice/billing address of the customer.
      *
-     * @var \MyParcelNL\Sdk\src\Model\Recipient
+     * @var \MyParcelNL\Sdk\Model\Recipient
      */
     protected $invoice_address;
 
@@ -69,7 +69,7 @@ class AbstractOrder extends BaseModel
     protected $order_date;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Support\Collection|\MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine[]
+     * @var \MyParcelNL\Sdk\Support\Collection|\MyParcelNL\Sdk\Model\Fulfilment\OrderLine[]
      */
     protected $order_lines;
 
@@ -81,19 +81,19 @@ class AbstractOrder extends BaseModel
     /**
      * Shipping address of the customer.
      *
-     * @var \MyParcelNL\Sdk\src\Model\Recipient
+     * @var \MyParcelNL\Sdk\Model\Recipient
      */
     protected $recipient;
 
     /**
      * Data from the pickup location.
      *
-     * @var \MyParcelNL\Sdk\src\Model\PickupLocation|null
+     * @var \MyParcelNL\Sdk\Model\PickupLocation|null
      */
     protected $pickupLocation;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Model\PhysicalProperties|null
+     * @var \MyParcelNL\Sdk\Model\PhysicalProperties|null
      */
     protected $physicalProperties;
 
@@ -127,7 +127,7 @@ class AbstractOrder extends BaseModel
     protected $customs_declaration;
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      * @throws \Exception
      */
     public function getCarrier(): AbstractCarrier
@@ -136,7 +136,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return null|\MyParcelNL\Sdk\src\Model\CustomsDeclaration
+     * @return null|\MyParcelNL\Sdk\Model\CustomsDeclaration
      */
     public function getCustomsDeclaration(): ?CustomsDeclaration
     {
@@ -144,7 +144,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
+     * @return \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
      */
     public function getDeliveryOptions(): AbstractDeliveryOptionsAdapter
     {
@@ -152,7 +152,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @return null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     public function getDropOffPoint(): ?DropOffPoint
     {
@@ -176,7 +176,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Recipient
+     * @return \MyParcelNL\Sdk\Model\Recipient
      */
     public function getInvoiceAddress(): Recipient
     {
@@ -218,7 +218,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Support\Collection|\MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine[]
+     * @return \MyParcelNL\Sdk\Support\Collection|\MyParcelNL\Sdk\Model\Fulfilment\OrderLine[]
      */
     public function getOrderLines(): Collection
     {
@@ -234,7 +234,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Recipient
+     * @return \MyParcelNL\Sdk\Model\Recipient
      */
     public function getRecipient(): Recipient
     {
@@ -256,7 +256,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\PickupLocation|null
+     * @return \MyParcelNL\Sdk\Model\PickupLocation|null
      */
     public function getPickupLocation(): ?PickupLocation
     {
@@ -307,7 +307,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param  \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
      *
      * @return self
      */
@@ -318,7 +318,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint $dropOffPoint
+     * @param  null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint $dropOffPoint
      *
      * @return $this
      * @throws \Exception
@@ -352,7 +352,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Recipient $invoiceAddress
+     * @param  \MyParcelNL\Sdk\Model\Recipient $invoiceAddress
      *
      * @return self
      */
@@ -390,7 +390,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine[]|\MyParcelNL\Sdk\src\Support\Collection $orderLines
+     * @param  \MyParcelNL\Sdk\Model\Fulfilment\OrderLine[]|\MyParcelNL\Sdk\Support\Collection $orderLines
      *
      * @return self
      */
@@ -401,7 +401,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Recipient $recipient
+     * @param  \MyParcelNL\Sdk\Model\Recipient $recipient
      *
      * @return self
      */
@@ -422,7 +422,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\PickupLocation|null  $pickupLocation
+     * @param  \MyParcelNL\Sdk\Model\PickupLocation|null  $pickupLocation
      *
      * @return self
      */
@@ -457,7 +457,7 @@ class AbstractOrder extends BaseModel
     /**
      * @param  int $weight
      *
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder
      */
     public function setWeight(int $weight): self
     {

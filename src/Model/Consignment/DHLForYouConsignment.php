@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Consignment;
+namespace MyParcelNL\Sdk\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
-use MyParcelNL\Sdk\src\Validator\Consignment\DHLForYouConsignmentValidator;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\Validator\Consignment\DHLForYouConsignmentValidator;
 
 class DHLForYouConsignment extends AbstractConsignment
 {

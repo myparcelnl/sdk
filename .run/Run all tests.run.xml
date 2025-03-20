@@ -2,7 +2,7 @@
   <configuration default="false" name="Run all tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
     <CommandLine>
       <PhpTestInterpreterSettings>
-        <option name="interpreterName" value="php" />
+        <option name="interpreterName" value="test" />
       </PhpTestInterpreterSettings>
     </CommandLine>
     <TestRunner configuration_file="/app/phpunit.xml" scope="XML" options="--coverage-html coverage" />
