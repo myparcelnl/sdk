@@ -77,8 +77,8 @@ class ConsignmentEncode
     }
 
     /**
-     * @param array                                                 $consignmentEncoded
-     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+     * @param array               $consignmentEncoded
+     * @param AbstractConsignment $consignment
      *
      * @return array
      */
@@ -277,10 +277,11 @@ class ConsignmentEncode
         }
 
         if (CarrierDHLForYou::NAME === $consignment->getCarrier()->getName()) {
-            $consignment->setPhysicalProperties([
-                                                    'weight' => $consignment->getTotalWeight(),
-                                                    'volume' => 1,
-                                                ]);
+            $consignment->setPhysicalProperties(
+                [
+                    'weight' => $consignment->getTotalWeight(),
+                    'volume' => 1,
+                ]);
         }
 
         $this->consignmentEncoded['physical_properties'] = $consignment->getPhysicalProperties();
@@ -295,7 +296,7 @@ class ConsignmentEncode
     private function encodeCdCountry(): self
     {
         /**
-         * @var \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+         * @var AbstractConsignment $consignment
          */
         $consignment = Arr::first($this->consignments);
 
@@ -403,7 +404,7 @@ class ConsignmentEncode
     }
 
     /**
-     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+     * @param AbstractConsignment $consignment
      *
      * @return int
      */
@@ -413,7 +414,7 @@ class ConsignmentEncode
     }
 
     /**
-     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
+     * @param AbstractConsignment $consignment
      *
      * @return int
      */
@@ -434,22 +435,25 @@ class ConsignmentEncode
             return $this;
         }
 
-        $options = new Collection([
-                                      'box_number'        => $dropOffPoint->getBoxNumber(),
-                                      'cc'                => $dropOffPoint->getCc(),
-                                      'city'              => $dropOffPoint->getCity(),
-                                      'location_code'     => $dropOffPoint->getLocationCode(),
-                                      'location_name'     => $dropOffPoint->getLocationName(),
-                                      'number'            => $dropOffPoint->getNumber(),
-                                      'number_suffix'     => $dropOffPoint->getNumberSuffix(),
-                                      'postal_code'       => $dropOffPoint->getPostalCode(),
-                                      'region'            => $dropOffPoint->getRegion(),
-                                      'retail_network_id' => $dropOffPoint->getRetailNetworkId(),
-                                      'state'             => $dropOffPoint->getState(),
-                                      'street'            => $dropOffPoint->getStreet(),
-                                  ]);
+        $options = new Collection(
+            [
+                'box_number'        => $dropOffPoint->getBoxNumber(),
+                'cc'                => $dropOffPoint->getCc(),
+                'city'              => $dropOffPoint->getCity(),
+                'location_code'     => $dropOffPoint->getLocationCode(),
+                'location_name'     => $dropOffPoint->getLocationName(),
+                'number'            => $dropOffPoint->getNumber(),
+                'number_suffix'     => $dropOffPoint->getNumberSuffix(),
+                'postal_code'       => $dropOffPoint->getPostalCode(),
+                'region'            => $dropOffPoint->getRegion(),
+                'retail_network_id' => $dropOffPoint->getRetailNetworkId(),
+                'state'             => $dropOffPoint->getState(),
+                'street'            => $dropOffPoint->getStreet(),
+            ]
+        );
 
         $this->consignmentEncoded['drop_off_point'] = $options->toArrayWithoutNull();
+
         return $this;
     }
 }
