@@ -9,7 +9,7 @@ MyParcel PHP SDK
 
 ## Requirements
 
-- PHP >=7.1
+- PHP >=7.4
 - Composer
 
 See [installation] for further instructions.
