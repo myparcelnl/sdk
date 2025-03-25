@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.0](https://github.com/myparcelnl/sdk/compare/v7.25.1...v8.0.0) (2025-03-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove src from namespace and deprecated items (#520)
+
+### :sparkles: New Features
+
+* remove src from namespace and deprecated items ([#520](https://github.com/myparcelnl/sdk/issues/520)) ([22fe3f0](https://github.com/myparcelnl/sdk/commit/22fe3f02833e232a1ea5d2ae11c13c2847d0c8a3))
+
 ## [7.25.1](https://github.com/myparcelnl/sdk/compare/v7.25.0...v7.25.1) (2025-03-18)
 
 
