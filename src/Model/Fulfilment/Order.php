@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Fulfilment;
+namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter;
-use MyParcelNL\Sdk\src\Model\Recipient;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter;
+use MyParcelNL\Sdk\Model\Recipient;
+use MyParcelNL\Sdk\Support\Collection;
 
 class Order extends AbstractOrder
 {

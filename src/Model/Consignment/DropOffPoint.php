@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Consignment;
+namespace MyParcelNL\Sdk\Model\Consignment;
 
 class DropOffPoint
 {

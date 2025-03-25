@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); /** @noinspection PhpUndefinedClassInspection */
 
-namespace MyParcelNL\Sdk\src\Support;
+namespace MyParcelNL\Sdk\Support;
 
 use Closure;
 use Exception;
@@ -114,18 +114,6 @@ class Helpers {
     public function array_flatten($array, $depth = INF)
     {
         return Arr::flatten($array, $depth);
-    }
-
-    /**
-     * Remove one or many array items from a given array using "dot" notation.
-     *
-     * @deprecated Not implemented
-     * @return void
-     * @throws Exception
-     */
-    public function array_forget()
-    {
-        throw new Exception('Not implemented');
     }
 
     /**
@@ -982,8 +970,8 @@ class Helpers {
     {
         $traits = class_uses($trait);
 
-        foreach ($traits as $trait) {
-            $traits += $this->trait_uses_recursive($trait);
+        foreach ($traits as $sub_trait) {
+            $traits += $this->trait_uses_recursive($sub_trait);
         }
 
         return $traits;

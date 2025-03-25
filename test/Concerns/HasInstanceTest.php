@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Concerns;
 
-use MyParcelNL\Sdk\src\Concerns\HasInstance;
+use MyParcelNL\Sdk\Concerns\HasInstance;
 use PHPUnit\Framework\TestCase;
 
 class HasInstanceTest extends TestCase

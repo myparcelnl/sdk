@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateTime;
 use Faker\Factory;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\Support\Arr;
 use RuntimeException;
 
 class TestCase extends \PHPUnit\Framework\TestCase

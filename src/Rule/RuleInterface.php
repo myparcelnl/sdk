@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Rule;
+namespace MyParcelNL\Sdk\Rule;
 
 interface RuleInterface
 {

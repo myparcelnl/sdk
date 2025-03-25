@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Rule\Consignment;
+namespace MyParcelNL\Sdk\Rule\Consignment;
 
-use MyParcelNL\Sdk\src\Rule\Rule;
+use MyParcelNL\Sdk\Rule\Rule;
 
 class DropOffPointRule extends Rule
 {
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment|\MyParcelNL\Sdk\src\Model\Fulfilment\AbstractOrder $validationSubject
+     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment|\MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder $validationSubject
      */
     public function validate($validationSubject): void
     {

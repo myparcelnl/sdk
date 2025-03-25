@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Account;
+namespace MyParcelNL\Sdk\Model\Account;
 
-use MyParcelNL\Sdk\src\Model\BaseModel;
+use MyParcelNL\Sdk\Model\BaseModel;
 
 class Shop extends BaseModel
 {

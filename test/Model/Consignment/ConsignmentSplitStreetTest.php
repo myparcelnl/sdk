@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Helper\ValidateStreet;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Helper\ValidateStreet;
+use MyParcelNL\Sdk\Model\Carrier\CarrierBpost;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class ConsignmentSplitStreetTest extends ConsignmentTestCase
@@ -541,7 +541,7 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
      *
      * @param  array $testData
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testSplitStreet(array $testData): void

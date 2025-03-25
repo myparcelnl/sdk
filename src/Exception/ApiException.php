@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Exception;
+namespace MyParcelNL\Sdk\Exception;
 
 class ApiException extends \Exception
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
 class RequestBody
 {

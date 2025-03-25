@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Carrier;
+namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
+use MyParcelNL\Sdk\Model\Consignment\BpostConsignment;
 
 class CarrierBpost extends AbstractCarrier
 {

@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Validator\Consignment;
+namespace MyParcelNL\Sdk\Validator\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Rule\Consignment\RestrictCountriesRule;
-use MyParcelNL\Sdk\src\Rule\Consignment\DeliveryDateRule;
-use MyParcelNL\Sdk\src\Rule\Consignment\DropOffPointRule;
-use MyParcelNL\Sdk\src\Rule\Consignment\MaximumWeightRule;
-use MyParcelNL\Sdk\src\Rule\Consignment\ShipmentOptionsRule;
-use MyParcelNL\Sdk\src\Validator\AbstractValidator;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Rule\Consignment\RestrictCountriesRule;
+use MyParcelNL\Sdk\Rule\Consignment\DeliveryDateRule;
+use MyParcelNL\Sdk\Rule\Consignment\DropOffPointRule;
+use MyParcelNL\Sdk\Rule\Consignment\MaximumWeightRule;
+use MyParcelNL\Sdk\Rule\Consignment\ShipmentOptionsRule;
+use MyParcelNL\Sdk\Validator\AbstractValidator;
 
 class DHLEuroplusConsignmentValidator extends AbstractValidator
 {
     /**
-     * @return \MyParcelNL\Sdk\src\Rule\Rule[]
+     * @return \MyParcelNL\Sdk\Rule\Rule[]
      */
     protected function getRules(): array
     {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
+namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
 class AbstractPickupLocationAdapter
 {
@@ -58,15 +58,6 @@ class AbstractPickupLocationAdapter
     public function getLocationCode(): string
     {
         return $this->location_code;
-    }
-
-    /**
-     * @return string|null
-     * @deprecated Use getRetailNetworkId instead
-     */
-    public function getPickupNetworkId(): string
-    {
-        return $this->getRetailNetworkId();
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Adapter\DeliveryOptions;
+namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 abstract class AbstractDeliveryOptionsAdapter
 {
@@ -28,12 +28,12 @@ abstract class AbstractDeliveryOptionsAdapter
     protected $packageType;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter
+     * @var \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractPickupLocationAdapter
      */
     protected $pickupLocation;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractShipmentOptionsAdapter|null
+     * @var \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractShipmentOptionsAdapter|null
      */
     protected $shipmentOptions;
 
@@ -99,7 +99,7 @@ abstract class AbstractDeliveryOptionsAdapter
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractPickupLocationAdapter|null
+     * @return \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractPickupLocationAdapter|null
      */
     public function getPickupLocation(): ?AbstractPickupLocationAdapter
     {
@@ -123,13 +123,7 @@ abstract class AbstractDeliveryOptionsAdapter
             return false;
         }
 
-        return in_array(
-            $this->deliveryType,
-            [
-                AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
-                AbstractConsignment::DELIVERY_TYPE_PICKUP_EXPRESS_NAME,
-            ]
-        );
+        return AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME == $this->deliveryType;
     }
 
     /**

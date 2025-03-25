@@ -12,15 +12,15 @@
  * @since       File available since Release v0.1.0
  */
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Services\ConsignmentEncode;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Services\ConsignmentEncode;
+use MyParcelNL\Sdk\Support\Str;
 
 /**
  * This object is embedded in the MyParcelConsignment object for global shipments and is
@@ -50,7 +50,7 @@ class MyParcelCustomsItem
      *
      * Required: Yes
      *
-     * @param mixed $description
+     * @param mixed                      $description
      * @param string|int|AbstractCarrier $carrier
      * @return $this
      *
@@ -65,7 +65,7 @@ class MyParcelCustomsItem
             $maxLength   = $consignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
         }
 
-        $this->description = Str::limit((string) $description, $maxLength - 3);
+        $this->description = Str::limit((string) $description, $maxLength);
 
         return $this;
     }
@@ -73,22 +73,20 @@ class MyParcelCustomsItem
     /**
      * @return int|null
      */
-    public function getAmount()
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
     /**
-     * The amount of this item in the package. The minimum amount is 1.
-     *
-     * Required: Yes
+     * The amount of this item in the package.
      *
      * @param int $amount
      * @return $this
      */
-    public function setAmount($amount)
+    public function setAmount(int $amount): self
     {
-        $this->amount = (int) $amount;
+        $this->amount = $amount;
 
         return $this;
     }
@@ -96,7 +94,7 @@ class MyParcelCustomsItem
     /**
      * @return int|null
      */
-    public function getWeight()
+    public function getWeight(): ?int
     {
         return $this->weight;
     }
@@ -104,20 +102,18 @@ class MyParcelCustomsItem
     /**
      * The total weight for these items in whole grams. Between 0 and 20000 grams.
      *
-     * Required: Yes
-     *
      * @param int $weight
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
-    public function setWeight($weight)
+    public function setWeight(int $weight): self
     {
-        if ($weight == 0) {
+        if (0 === $weight) {
             throw new MissingFieldException('Weight must be set for a MyParcel product');
         }
 
-        $this->weight = (int) $weight;
+        $this->weight = $weight;
 
         return $this;
     }
@@ -133,11 +129,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * Item value
-     *
-     * Composite type containing integer and currency. The amount is without decimal
-     * separators (in cents).
-     * Required: Yes
+     * Item value in cents in ConsignmentEncode::DEFAULT_CURRENCY.
      *
      * @param int|float|string $item_value
      *
@@ -145,20 +137,28 @@ class MyParcelCustomsItem
      */
     public function setItemValue($item_value): self
     {
-        return $this->setItemValueArray([
-            'amount'   => (int) $item_value,
-            'currency' => ConsignmentEncode::DEFAULT_CURRENCY,
-        ]);
+        return $this->setItemValueArray(
+            [
+                'amount'   => (int) $item_value,
+                'currency' => ConsignmentEncode::DEFAULT_CURRENCY,
+            ]
+        );
     }
 
     /**
-     * @param array $item_value
+     * @param array $amount
+     * Array containing (int) amount and (string) currency. The amount is without decimal
+     * separators (in cents).
      *
      * @return $this
+     * @throws MissingFieldException
      */
-    public function setItemValueArray(array $item_value): self
+    public function setItemValueArray(array $amount): self
     {
-        $this->item_value = $item_value;
+        if (!isset($amount['amount'], $amount['currency'])) {
+            throw new MissingFieldException('Amount and currency must be set.');
+        }
+        $this->item_value = $amount;
         return $this;
     }
 
@@ -180,18 +180,13 @@ class MyParcelCustomsItem
      *
      * @link https://www.cbs.nl/nl-nl/deelnemers-enquetes/deelnemers-enquetes/bedrijven/onderzoek/internationale-handel-in-goederen/idep-codelijsten
      *
-     * @param null|int|string $classification int is allowed for backward compatibility, string will be enforced in next major release
+     * @param string $classification
      *
      * @return $this
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
      */
-    public function setClassification($classification): self
+    public function setClassification(string $classification): self
     {
-        if (! $classification) {
-            throw new MissingFieldException('Classification must be set for a MyParcel product');
-        }
-
-        $this->classification = substr((string) $classification, 0, 10);
+        $this->classification = substr($classification, 0, 10);
 
         return $this;
     }
@@ -199,7 +194,7 @@ class MyParcelCustomsItem
     /**
      * @return string|null
      */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->country;
     }
@@ -217,7 +212,7 @@ class MyParcelCustomsItem
      * @param string $country
      * @return $this
      */
-    public function setCountry($country)
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 
@@ -228,9 +223,9 @@ class MyParcelCustomsItem
      * Check if object is fully filled
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws MissingFieldException
      */
-    public function ensureFilled()
+    public function ensureFilled(): void
     {
         $required = [
             'Description',
@@ -241,7 +236,7 @@ class MyParcelCustomsItem
             'Country',
         ];
         foreach ($required as $methodAlias) {
-            if ($this->{'get' . $methodAlias}() === null) {
+            if ($this->{"get$methodAlias"}() === null) {
                 throw new MissingFieldException("set$methodAlias() must be set");
             }
         }

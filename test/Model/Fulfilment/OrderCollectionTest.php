@@ -6,17 +6,17 @@ namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
 use DateTime;
 use Faker\Factory;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
-use MyParcelNL\Sdk\src\Collection\Fulfilment\OrderCollection;
-use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Model\Fulfilment\Order;
-use MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine;
-use MyParcelNL\Sdk\src\Model\Fulfilment\Product;
-use MyParcelNL\Sdk\src\Model\Recipient;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
+use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
+use MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Model\Fulfilment\Order;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
+use MyParcelNL\Sdk\Model\Fulfilment\Product;
+use MyParcelNL\Sdk\Model\Recipient;
+use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderCollectionTest extends TestCase
@@ -33,9 +33,9 @@ class OrderCollectionTest extends TestCase
     ];
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testQuery(): void
@@ -48,9 +48,9 @@ class OrderCollectionTest extends TestCase
     /**
      * Create 3 Orders, each with 3 filled in OrderLines, put them in an OrderCollection and save them.
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testSave(): void
@@ -85,7 +85,7 @@ class OrderCollectionTest extends TestCase
         $savedOrderCollection->each(
             static function (Order $savedOrder) use (&$i, $orderCollection) {
                 /**
-                 * @var \MyParcelNL\Sdk\src\Model\Fulfilment\Order $originalOrder
+                 * @var \MyParcelNL\Sdk\Model\Fulfilment\Order $originalOrder
                  */
                 $originalOrder = $orderCollection->all()[$i];
 
@@ -127,9 +127,9 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param  \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
      *
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\Order
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\Order
      * @throws \Exception
      */
     protected function generateOrder(AbstractDeliveryOptionsAdapter $deliveryOptions): Order
@@ -148,9 +148,9 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Model\Fulfilment\Product $product
+     * @param  \MyParcelNL\Sdk\Model\Fulfilment\Product $product
      *
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\OrderLine
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\OrderLine
      */
     protected function generateOrderLine(Product $product): OrderLine
     {
@@ -174,7 +174,7 @@ class OrderCollectionTest extends TestCase
     /**
      * @param  int $amount
      *
-     * @return \MyParcelNL\Sdk\src\Support\Collection
+     * @return \MyParcelNL\Sdk\Support\Collection
      */
     protected function generateOrderLines(int $amount = 1): Collection
     {
@@ -190,7 +190,7 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Fulfilment\Product
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\Product
      */
     protected function generateProduct(): Product
     {
@@ -208,7 +208,7 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Recipient
+     * @return \MyParcelNL\Sdk\Model\Recipient
      */
     protected function generateRecipient(): Recipient
     {

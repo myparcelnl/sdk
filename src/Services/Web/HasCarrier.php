@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Services\Web;
+namespace MyParcelNL\Sdk\Services\Web;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
 
 trait HasCarrier
 {

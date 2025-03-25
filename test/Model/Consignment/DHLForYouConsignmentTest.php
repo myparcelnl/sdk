@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLForYou;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 
 class DHLForYouConsignmentTest extends ConsignmentTestCase
@@ -50,8 +50,7 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
      */
     public function testDHLForYouConsignments(array $testData): void
     {
-        $this->markTestSkipped('Skip because of DHL API error');
-        // $this->doConsignmentTest($testData);
+        $this->doConsignmentTest($testData);
     }
 
     /**

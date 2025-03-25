@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model\Account;
+namespace MyParcelNL\Sdk\Model\Account;
 
-use MyParcelNL\Sdk\src\Model\BaseModel;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
-use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
+use MyParcelNL\Sdk\Model\BaseModel;
+use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Services\Web\DropOffPointWebService;
 
 class CarrierConfiguration extends BaseModel
 {
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @var \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     private $carrier;
 
@@ -23,7 +23,7 @@ class CarrierConfiguration extends BaseModel
     private $default_cutoff_time;
 
     /**
-     * @var \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @var \MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     private $default_drop_off_point;
 
@@ -55,9 +55,9 @@ class CarrierConfiguration extends BaseModel
     /**
      * @param  string $apiKey
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function fetchDefaultDropOffPoint(string $apiKey): void
@@ -77,7 +77,7 @@ class CarrierConfiguration extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier
+     * @return \MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     public function getCarrier(): AbstractCarrier
     {
@@ -93,7 +93,7 @@ class CarrierConfiguration extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @return \MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     public function getDefaultDropOffPoint(): ?DropOffPoint
     {
@@ -119,7 +119,7 @@ class CarrierConfiguration extends BaseModel
     /**
      * @param  mixed $defaultDropOffPoint
      *
-     * @return null|\MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint
+     * @return null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
      */
     private function createDropOffPoint($defaultDropOffPoint): ?DropOffPoint
     {

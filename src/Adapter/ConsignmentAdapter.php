@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Adapter;
+namespace MyParcelNL\Sdk\Adapter;
 
-use MyParcelNL\Sdk\src\Helper\Utils;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Helper\Utils;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 
 class ConsignmentAdapter
 {
@@ -20,9 +20,9 @@ class ConsignmentAdapter
      * ConsignmentDecode constructor.
      *
      * @param array                                                     $data
-     * @param \MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment $consignment
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $consignment
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      */
     public function __construct(array $data, AbstractConsignment $consignment)
     {
@@ -137,7 +137,7 @@ class ConsignmentAdapter
                 'pickup_country'       => $pickup['cc'] ?? null,
                 'pickup_location_code' => $pickup['location_code'] ?? null,
                 'pickup_location_name' => $pickup['location_name'] ?? null,
-                'pickup_network_id'    => $pickup['retail_network_id'] ?? '',
+                'retail_network_id'    => $pickup['retail_network_id'] ?? '',
                 'pickup_number'        => $pickup['number'] ?? null,
                 'pickup_postal_code'   => $pickup['postal_code'] ?? null,
                 'pickup_street'        => $pickup['street'] ?? null,

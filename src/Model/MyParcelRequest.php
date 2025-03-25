@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\src\Model;
+namespace MyParcelNL\Sdk\Model;
 
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
-use MyParcelNL\Sdk\src\Exception\ApiException;
-use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\src\Helper\MyParcelCurl;
-use MyParcelNL\Sdk\src\Helper\RequestError;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Exception\AccountNotActiveException;
+use MyParcelNL\Sdk\Exception\ApiException;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
+use MyParcelNL\Sdk\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\Helper\RequestError;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Support\Arr;
 
 class MyParcelRequest
 {
@@ -36,22 +36,10 @@ class MyParcelRequest
      */
     public const HEADER_ACCEPT_APPLICATION_PDF                 = ['Accept' => 'application/pdf'];
     public const HEADER_ACCEPT_IMAGE_PNG                       = ['Accept' => 'image/png'];
-    public const HEADER_CONTENT_TYPE_SHIPMENT                  = ['Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1'];
+    public const HEADER_CONTENT_TYPE_SHIPMENT                  = ['Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',];
     public const HEADER_CONTENT_TYPE_RETURN_SHIPMENT           = ['Content-Type' => 'application/vnd.return_shipment+json; charset=utf-8'];
     public const HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT = ['Content-Type' => 'application/vnd.unrelated_return_shipment+json;version=1.1; charset=utf-8'];
     public const HEADER_SET_CUSTOM_SENDER                      = ['x-dmp-set-custom-sender' => 'true'];
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_SHIPMENT = 'Content-Type: application/vnd.shipment+json;charset=utf-8;version=1.1';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_SHIPMENT = 'Accept: application/json; charset=utf8';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_LABEL_LINK = 'Accept: application/json; charset=utf8';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETRIEVE_LABEL_PDF = 'Accept: application/pdf';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_RETURN = 'Content-Type: application/vnd.return_shipment+json; charset=utf-8';
-    /* @deprecated use HEADER_CONTENT_TYPE_SHIPMENT, HEADER_ACCEPT_APPLICATION_PDF or HEADER_CONTENT_TYPE_RETURN_SHIPMENT */
-    public const REQUEST_HEADER_DELETE = 'Accept: application/json; charset=utf8';
 
     /**
      * API URL.
@@ -139,7 +127,7 @@ class MyParcelRequest
             $params = implode(';', $consignmentIds) . '?size=' . $size;
         } else {
             $referenceIds = $this->getConsignmentReferenceIds($collection, $key);
-            if (! empty($referenceIds)) {
+            if (!empty($referenceIds)) {
                 $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
             }
         }
@@ -165,7 +153,7 @@ class MyParcelRequest
      *
      * @return mixed
      */
-    public function getResult(?string $key = null, ?string $pluck = null)
+    public function getResult(string $key = null, string $pluck = null)
     {
         if (null === $key) {
             return $this->result;
@@ -187,14 +175,14 @@ class MyParcelRequest
      * @param string $uri
      *
      * @return self|bool
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws AccountNotActiveException
+     * @throws ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function sendRequest(string $method = 'POST', string $uri = self::REQUEST_TYPE_SHIPMENTS)
     {
-        if (! $this->checkConfigForRequest()) {
+        if (!$this->checkConfigForRequest()) {
             return false;
         }
 
@@ -239,7 +227,7 @@ class MyParcelRequest
     }
 
     /**
-     * @param \MyParcelNL\Sdk\src\Model\RequestBody|array|string|null $body
+     * @param \MyParcelNL\Sdk\Model\RequestBody|array|string|null $body
      *
      * @return self
      */
@@ -249,7 +237,7 @@ class MyParcelRequest
             $body = $body->toJson();
         }
 
-        if ($body && ! is_string($body)) {
+        if ($body && !is_string($body)) {
             $body = json_encode($body);
         }
 
@@ -294,7 +282,7 @@ class MyParcelRequest
      */
     private function checkMyParcelErrors(): void
     {
-        if (! is_array($this->response['response']) || empty($this->response['response']['errors'])) {
+        if (!is_array($this->response['response']) || empty($this->response['response']['errors'])) {
             return;
         }
 
@@ -344,8 +332,8 @@ class MyParcelRequest
         $referenceIds = [];
 
         foreach ($consignments as $consignment) {
-            if ($consignment->getReferenceId()) {
-                $referenceIds[] = $consignment->getReferenceId();
+            if ($consignment->getReferenceIdentifier()) {
+                $referenceIds[] = $consignment->getReferenceIdentifier();
             }
 
             $key = $consignment->getApiKey();
@@ -379,8 +367,8 @@ class MyParcelRequest
     /**
      * @param string $url
      *
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @throws AccountNotActiveException
+     * @throws ApiException
      */
     private function handleErrors(string $url): void
     {
@@ -406,14 +394,18 @@ class MyParcelRequest
      */
     private function instantiateCurl(): MyParcelCurl
     {
-        return (new MyParcelCurl())->setConfig([
-            'header'  => 0,
-            'timeout' => 60,
-        ])->addOptions([
-            CURLOPT_POST           => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_AUTOREFERER    => true,
-        ]);
+        return (new MyParcelCurl())->setConfig(
+            [
+                'header'  => 0,
+                'timeout' => 60,
+            ]
+        )->addOptions(
+            [
+                CURLOPT_POST           => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_AUTOREFERER    => true,
+            ]
+        );
     }
 
     /**
@@ -430,12 +422,13 @@ class MyParcelRequest
          * The response may contain a pdf or a png (for printerless return).
          * So we only upgrade 'response' to array when json_decode is successful.
          */
-        $json_response = json_decode($response['response'], true);
-        if (null !== $json_response) {
-            $response['response'] = $json_response;
+        $jsonResponse = json_decode($response['response'], true);
+        if (null !== $jsonResponse) {
+            $response['response'] = $jsonResponse;
         }
         $this->response       = $response;
         $this->result         = $response['response'];
+
 
         if (false === $this->result) {
             $this->error = $request->getError();

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services;
 
-use MyParcelNL\Sdk\src\Model\Account\Shop;
-use MyParcelNL\Sdk\src\Services\Web\AccountWebService;
-use MyParcelNL\Sdk\src\Services\Web\CarrierConfigurationWebService;
+use MyParcelNL\Sdk\Model\Account\Shop;
+use MyParcelNL\Sdk\Services\Web\AccountWebService;
+use MyParcelNL\Sdk\Services\Web\CarrierConfigurationWebService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class CarrierConfigurationServiceTest extends TestCase
@@ -21,9 +21,9 @@ class CarrierConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testGetConfiguration(): void
@@ -41,9 +41,9 @@ class CarrierConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testGetConfigurations(): void
@@ -62,10 +62,10 @@ class CarrierConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Account\Shop
-     * @throws \MyParcelNL\Sdk\src\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
+     * @return \MyParcelNL\Sdk\Model\Account\Shop
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     private function getShop(): Shop
