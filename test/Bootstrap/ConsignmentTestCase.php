@@ -43,6 +43,7 @@ class ConsignmentTestCase extends TestCase
     protected const DELIVERY_TYPE               = 'delivery_type';
     protected const EMAIL                       = 'email';
     protected const EXCEPTION                   = 'exception';
+    protected const EXTRA_OPTIONS               = 'extra_options';
     protected const FULL_STREET                 = 'full_street';
     protected const FULL_STREET_INPUT           = 'full_street_input';
     protected const INSURANCE                   = 'insurance';

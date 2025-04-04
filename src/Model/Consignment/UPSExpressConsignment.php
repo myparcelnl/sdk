@@ -35,6 +35,7 @@ class UPSExpressConsignment extends UPSConsignment
             self::SHIPMENT_OPTION_COLLECT,
             self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::EXTRA_OPTION_DELIVERY_SATURDAY,
+            self::SHIPMENT_OPTION_AGE_CHECK,
         ];
     }
 

@@ -30,11 +30,12 @@ class UPSStandardConsignment extends UPSConsignment
     public function getAllowedShipmentOptions(): array
     {
         return [
-            self::SHIPMENT_OPTION_AGE_CHECK,
-            self::SHIPMENT_OPTION_COLLECT,
             self::SHIPMENT_OPTION_INSURANCE,
-            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
             self::SHIPMENT_OPTION_SIGNATURE,
+            self::SHIPMENT_OPTION_COLLECT,
+            self::SHIPMENT_OPTION_ONLY_RECIPIENT,
+            self::EXTRA_OPTION_DELIVERY_SATURDAY,
+            self::SHIPMENT_OPTION_AGE_CHECK,
         ];
     }
 
