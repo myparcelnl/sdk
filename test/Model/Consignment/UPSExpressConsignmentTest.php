@@ -54,6 +54,7 @@ class UPSExpressConsignmentTest extends ConsignmentTestCase
                 self::CITY         => 'Schwanebeck',
                 self::COUNTRY      => 'DE',
                 self::PHONE        => '123456',
+                self::DELIVERY_TYPE => AbstractConsignment::DELIVERY_TYPE_EXPRESS,
             ]
         );
     }
