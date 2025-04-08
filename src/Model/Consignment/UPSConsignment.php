@@ -7,6 +7,9 @@ namespace MyParcelNL\Sdk\Model\Consignment;
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPS;
 use MyParcelNL\Sdk\Validator\Consignment\UPSConsignmentValidator;
 
+/**
+ * @deprecated Use UPSStandardConsignment or UPSExpressConsignment instead
+ */
 class UPSConsignment extends AbstractConsignment
 {
     public const DEFAULT_WEIGHT = 3000;

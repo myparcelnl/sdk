@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Model\Carrier;
 
 use MyParcelNL\Sdk\Model\Consignment\UPSConsignment;
 
+/**
+ * @deprecated Use CarrierUPSStandard (ID: 12) or CarrierUPSExpressSaver (ID: 13) instead
+ */
 class CarrierUPS extends AbstractCarrier
 {
     public const CONSIGNMENT = UPSConsignment::class;
