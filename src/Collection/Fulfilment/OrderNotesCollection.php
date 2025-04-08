@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Collection\Fulfilment;
 
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Exception\AccountNotActiveException;
+use MyParcelNL\Sdk\Exception\ApiException;
+use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Model\Fulfilment\OrderNote;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\RequestBody;
@@ -21,13 +24,13 @@ class OrderNotesCollection extends Collection
     /**
      * @return self Collection of notes that were saved.
      */
-    public function save(): self
+    public function save(?string $apiKey = null): self
     {
         $notes = [];
 
-        $this->getUniqueOrderUuids()->each(function (string $orderUuid) use (&$notes) {
+        $this->getUniqueOrderUuids()->each(function (string $orderUuid) use (&$notes, $apiKey) {
             try {
-                $newNotes = $this->saveForOrder($orderUuid);
+                $newNotes = $this->saveForOrder($orderUuid, $apiKey);
             } catch (Throwable $e) {
                 return;
             }
@@ -49,15 +52,14 @@ class OrderNotesCollection extends Collection
     }
 
     /**
-     * @param  string $orderUuid
-     *
+     * @param string      $orderUuid
+     * @param string|null $apiKey when not provided will use the apiKey set on the collection.
      * @return array Indexed array holding the saved order notes.
-     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
-     * @throws \MyParcelNL\Sdk\Exception\ApiException
-     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
-     * @throws \Exception
+     * @throws AccountNotActiveException
+     * @throws ApiException
+     * @throws MissingFieldException
      */
-    private function saveForOrder(string $orderUuid): array
+    private function saveForOrder(string $orderUuid, ?string $apiKey = null): array
     {
         $orderNotes = $this
             ->filter(static function (OrderNote $orderNote) use ($orderUuid) {
@@ -72,7 +74,7 @@ class OrderNotesCollection extends Collection
         $response = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
-                $this->ensureHasApiKey(),
+                $apiKey ?? $this->ensureHasApiKey(),
                 new RequestBody('order_notes', $orderNotes)
             )
             ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));

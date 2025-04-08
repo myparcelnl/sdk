@@ -6,11 +6,18 @@ namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
 use MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter;
+use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Model\Recipient;
 use MyParcelNL\Sdk\Support\Collection;
 
 class Order extends AbstractOrder
 {
+    /*
+     * Allows setting an API key for each order, so you can create multiple
+     * orders for different shops at the same time. This way you won't have to provide a shop ID.
+     */
+    use HasApiKey;
+
     /**
      * @param  array $data
      *

@@ -186,7 +186,7 @@ class MyParcelCollection extends Collection
      * @return self
      * @throws MissingFieldException
      */
-    public function addConsignmentByConsignmentIds($ids, $apiKey): self
+    public function addConsignmentByConsignmentIds(array $ids, string $apiKey): self
     {
         foreach ($ids as $consignmentId) {
             $consignment = (new BaseConsignment())
@@ -456,17 +456,21 @@ class MyParcelCollection extends Collection
         $this
             ->createConcepts()
             ->setLabelFormat($positions);
-        $conceptIds = $this->getConsignmentIds($key);
 
-        if ($key) {
+        $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
+        $pdfContents = [];
+        file_put_contents('/Applications/MAMP/htdocs/magento246/var/log/joeri.log', var_export($consignmentIdsByApiKey, true) . " <- 45f4589eriwo\n", FILE_APPEND);
+
+        foreach ($consignmentIdsByApiKey as $key => $consignmentIds) {
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    implode(';', $conceptIds) . '/' . $this->getRequestBody(),
+                    implode(';', $consignmentIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL)
+            ;
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
@@ -481,10 +485,11 @@ class MyParcelCollection extends Collection
                 throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
             }
 
-            $this->label_pdf = $result;
+            $pdfContents[] = $result;
         }
+        $this->label_pdf = PdfMerger::merge($pdfContents);
 
-        $this->setLatestData();
+        //$this->setLatestData(); // todo find out what this is for and make it work with multiple api keys
 
         return $this;
     }
@@ -574,6 +579,7 @@ class MyParcelCollection extends Collection
      * @param string|null $key
      *
      * @return array|null
+     * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids with their original api key
      */
     public function getConsignmentIds(string &$key = null): ?array
     {
@@ -589,6 +595,21 @@ class MyParcelCollection extends Collection
         }
 
         return $conceptIds;
+    }
+
+    public function getConsignmentIdsByApiKey(): ?array {
+        $consignmentIds = [];
+
+        /** @var AbstractConsignment $consignment */
+        foreach ($this->where('consignment_id', '!=', null) as $consignment) {
+            $consignmentIds[$consignment->getApiKey()][] = $consignment->getConsignmentId();
+        }
+
+        if (empty($consignmentIds)) {
+            return null;
+        }
+
+        return $consignmentIds;
     }
 
     /**

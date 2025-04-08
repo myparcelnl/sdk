@@ -35,7 +35,8 @@
         ]
     },
     "require": {
-        "php": "^7.4 || ^8.0"
+        "php": "^7.4 || ^8.0",
+        "setasign/fpdi": "^2.6"
     },
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",
