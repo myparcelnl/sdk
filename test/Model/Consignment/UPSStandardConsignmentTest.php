@@ -75,4 +75,4 @@ class UPSStandardConsignmentTest extends ConsignmentTestCase
             ]
         );
     }
-} 
+}
