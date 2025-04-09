@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\Model\Consignment\UPSConsignment;
+use MyParcelNL\Sdk\Model\Consignment\UPSExpressConsignment;
 
-/**
- * @deprecated Use CarrierUPSStandard (ID: 12) or CarrierUPSExpressSaver (ID: 13) instead
- */
-class CarrierUPS extends AbstractCarrier
+class CarrierUPSExpressSaver extends AbstractCarrier
 {
-    public const CONSIGNMENT = UPSConsignment::class;
-    public const HUMAN       = 'UPS';
-    public const ID          = 8;
-    public const NAME        = 'ups';
+    public const CONSIGNMENT = UPSExpressConsignment::class;
+    public const HUMAN       = 'UPS Express Saver';
+    public const ID          = 13;
+    public const NAME        = 'ups_express';
 
     /**
      * @var class-string
