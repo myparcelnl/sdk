@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.0](https://github.com/myparcelnl/sdk/compare/v8.0.0...v8.1.0) (2025-04-09)
+
+
+### :sparkles: New Features
+
+* add support for UPS carrier 12 and 13 ([#526](https://github.com/myparcelnl/sdk/issues/526)) ([8ddfcb6](https://github.com/myparcelnl/sdk/commit/8ddfcb658e51d17ae6ab0fed6b22038486675f8c))
+
 ## [8.0.0](https://github.com/myparcelnl/sdk/compare/v7.25.1...v8.0.0) (2025-03-25)
 
 
