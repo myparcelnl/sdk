@@ -366,17 +366,19 @@ class MyParcelCollection extends Collection
      */
     public function setLatestData(int $size = 300): self
     {
-        $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
-        $collections = [];
+        $collections          = [];
+        $consignmentsByApiKey = $this->groupBy(function ($consignment) {
+            return $consignment->getApiKey();
+        });
 
-        foreach ($consignmentIdsByApiKey as $key => $consignmentIds) {
+        foreach ($consignmentsByApiKey as $key => $consignments) {
             $myParcelRequest = new MyParcelRequest();
 
             $request = $myParcelRequest
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    implode(';', $consignmentIds) . '?size=' . $size
+                    $this->getLatestDataParams($this, $size),
                 )
                 ->sendRequest('GET');
 
@@ -392,6 +394,42 @@ class MyParcelCollection extends Collection
         $this->items = array_merge(...$collections);
 
         return $this;
+    }
+
+
+    private function getLatestDataParams(MyParcelCollection $consignments, int $size): string
+    {
+        $consignmentIds = $consignments->reduce(
+            static function ($carry, $item) {
+                if (($consignmentId = $item->getConsignmentId())) {
+                    $carry[] = $consignmentId;
+                }
+
+                return $carry;
+            },
+            []
+        );
+
+        if ($consignmentIds) {
+            return implode(';', $consignmentIds) . "?size=$size";
+        }
+
+        $referenceIds = $consignments->reduce(
+            static function ($carry, $item) {
+                if (($referenceIdentifier = $item->getReferenceIdentifier())) {
+                    $carry[] = $referenceIdentifier;
+                }
+
+                return $carry;
+            },
+            []
+        );
+
+        if ($referenceIds) {
+            return '?reference_identifier=' . implode(';', $referenceIds) . "&size=$size";
+        }
+
+        return '';
     }
 
     /**

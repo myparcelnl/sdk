@@ -59,11 +59,21 @@ class OrderCollection extends Collection
     public function save(): self
     {
         $collections = [];
-        $grouped = $this->groupBy(
-            function (Order $order) {
-                return $order->getApiKey();
-            }
-        );
+        // for now we default to the common api key of the collection if set, but you should set it on each order
+        if (null !== ($apiKey = $this->getApiKey())) {
+            $grouped = $this->groupBy(
+                function (Order $order) use ($apiKey) {
+                    $order->setApiKey($apiKey);
+                    return $apiKey;
+                }
+            );
+        } else {
+            $grouped = $this->groupBy(
+                static function (Order $order) {
+                    return $order->getApiKey();
+                }
+            );
+        }
 
         /* @var OrderCollection $orders */
         foreach ($grouped as $orders) {
