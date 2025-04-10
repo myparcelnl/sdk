@@ -503,7 +503,6 @@ class MyParcelCollection extends Collection
         $PdfMerger = new FpdfMerge();
 
         $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
-        file_put_contents('/Applications/MAMP/htdocs/magento246/var/log/joeri.log', var_export($positions, true) . " <- positions\n" . var_export($consignmentIdsByApiKey, true) . " <- 45f4589eriwo\n", FILE_APPEND);
 
         foreach ($consignmentIdsByApiKey as $key => $consignmentIds) {
             $request = (new MyParcelRequest())
