@@ -24,13 +24,13 @@ class OrderNotesCollection extends Collection
     /**
      * @return self Collection of notes that were saved.
      */
-    public function save(string $apiKey): self
+    public function save(?string $apiKey): self
     {
         $notes = [];
 
         $this->getUniqueOrderUuids()->each(function (string $orderUuid) use (&$notes, $apiKey) {
             try {
-                $newNotes = $this->saveForOrder($orderUuid, $apiKey);
+                $newNotes = $this->saveForOrder($orderUuid, $apiKey ?? $this->ensureHasApiKey());
             } catch (Throwable $e) {
                 return;
             }
@@ -75,7 +75,7 @@ class OrderNotesCollection extends Collection
         $response = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
             ->setRequestParameters(
-                $apiKey ?? $this->ensureHasApiKey(),
+                $apiKey,
                 new RequestBody('order_notes', $orderNotes)
             )
             ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES))
