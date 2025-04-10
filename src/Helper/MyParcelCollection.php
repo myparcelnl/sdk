@@ -364,27 +364,32 @@ class MyParcelCollection extends Collection
      * @throws ApiException
      * @throws MissingFieldException
      */
-    public function setLatestData($size = 300): self
+    public function setLatestData(int $size = 300): self
     {
-        $myParcelRequest = new MyParcelRequest();
-        $params          = $myParcelRequest->getLatestDataParams($size, $this, $key);
+        $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
+        $collections = [];
 
-        $request = $myParcelRequest
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters(
-                $key,
-                $params
-            )
-            ->sendRequest('GET');
+        foreach ($consignmentIdsByApiKey as $key => $consignmentIds) {
+            $myParcelRequest = new MyParcelRequest();
 
-        if ($request->getResult() === null) {
-            throw new ApiException('Unknown Error in MyParcel API response');
+            $request = $myParcelRequest
+                ->setUserAgents($this->getUserAgent())
+                ->setRequestParameters(
+                    $key,
+                    implode(';', $consignmentIds) . '?size=' . $size
+                )
+                ->sendRequest('GET');
+
+            if (null === $request->getResult()) {
+                throw new ApiException('Unknown Error in MyParcel API response');
+            }
+
+            $result        = $request->getResult('data.shipments');
+            $newCollection = $this->getNewCollectionFromResult($result, $key);
+            $collections[] = $newCollection->sortByCollection($this)->items;
         }
 
-        $result        = $request->getResult('data.shipments');
-        $newCollection = $this->getNewCollectionFromResult($result);
-
-        $this->items = $newCollection->sortByCollection($this)->items;
+        $this->items = array_merge(...$collections);
 
         return $this;
     }
@@ -457,9 +462,10 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
 
+        $PdfMerger = new FpdfMerge();
+
         $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
-        $pdfContents = [];
-        file_put_contents('/Applications/MAMP/htdocs/magento246/var/log/joeri.log', var_export($consignmentIdsByApiKey, true) . " <- 45f4589eriwo\n", FILE_APPEND);
+        file_put_contents('/Applications/MAMP/htdocs/magento246/var/log/joeri.log', var_export($positions, true) . " <- positions\n" . var_export($consignmentIdsByApiKey, true) . " <- 45f4589eriwo\n", FILE_APPEND);
 
         foreach ($consignmentIdsByApiKey as $key => $consignmentIds) {
             $request = (new MyParcelRequest())
@@ -485,11 +491,15 @@ class MyParcelCollection extends Collection
                 throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
             }
 
-            $pdfContents[] = $result;
+            // merge this pdf into the existing pdf
+            $fileResource = fopen('php://memory', 'rb+');
+            fwrite($fileResource, $result);
+            $PdfMerger->add($fileResource);
         }
-        $this->label_pdf = PdfMerger::merge($pdfContents);
 
-        //$this->setLatestData(); // todo find out what this is for and make it work with multiple api keys
+        $this->label_pdf = $PdfMerger->output('S');
+
+        $this->setLatestData();
 
         return $this;
     }
@@ -839,12 +849,9 @@ class MyParcelCollection extends Collection
      * @throws MissingFieldException
      * @throws \Exception
      */
-    private function getNewCollectionFromResult($result): self
+    private function getNewCollectionFromResult($result, $apiKey): self
     {
         $newCollection = new static();
-        /** @var AbstractConsignment $consignment */
-        $consignment = $this->first();
-        $apiKey      = $consignment->getApiKey();
 
         foreach ($result as $shipment) {
             $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
