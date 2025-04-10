@@ -24,7 +24,7 @@ class OrderNotesCollection extends Collection
     /**
      * @return self Collection of notes that were saved.
      */
-    public function save(?string $apiKey = null): self
+    public function save(string $apiKey): self
     {
         $notes = [];
 
@@ -52,14 +52,14 @@ class OrderNotesCollection extends Collection
     }
 
     /**
-     * @param string      $orderUuid
-     * @param string|null $apiKey when not provided will use the apiKey set on the collection.
+     * @param string $orderUuid
+     * @param string $apiKey
      * @return array Indexed array holding the saved order notes.
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
      */
-    private function saveForOrder(string $orderUuid, ?string $apiKey = null): array
+    private function saveForOrder(string $orderUuid, string $apiKey): array
     {
         $orderNotes = $this
             ->filter(static function (OrderNote $orderNote) use ($orderUuid) {
@@ -69,7 +69,8 @@ class OrderNotesCollection extends Collection
                 return $orderNote->toApiObject();
             })
             ->values()
-            ->toArray();
+            ->toArray()
+        ;
 
         $response = (new MyParcelRequest())
             ->setUserAgents($this->getUserAgent())
@@ -77,7 +78,8 @@ class OrderNotesCollection extends Collection
                 $apiKey ?? $this->ensureHasApiKey(),
                 new RequestBody('order_notes', $orderNotes)
             )
-            ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES));
+            ->sendRequest('POST', str_replace('{id}', $orderUuid, MyParcelRequest::REQUEST_TYPE_ORDER_NOTES))
+        ;
 
         return array_map(static function (array $note) use ($orderUuid) {
             $note['orderUuid'] = $orderUuid;
