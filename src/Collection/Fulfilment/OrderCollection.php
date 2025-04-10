@@ -58,16 +58,28 @@ class OrderCollection extends Collection
      */
     public function save(): self
     {
-        $requestBody = new RequestBody('orders', $this->createRequestBody());
-        $request     = (new MyParcelRequest())
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters(
-                $this->ensureHasApiKey(),
-                $requestBody
-            )
-            ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
+        $collections = [];
+        $grouped = $this->groupBy(
+            function (Order $order) {
+                return $order->getApiKey();
+            }
+        );
 
-        return self::createCollectionFromResponse($request);
+        /* @var OrderCollection $orders */
+        foreach ($grouped as $orders) {
+            $requestBody = new RequestBody('orders', $orders->createRequestBody());
+            $request     = (new MyParcelRequest())
+                ->setUserAgents($this->getUserAgent())
+                ->setRequestParameters(
+                    $orders->first()->getApiKey(),
+                    $requestBody
+                )
+                ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
+
+            $collections[] = (self::createCollectionFromResponse($request))->items;
+        }
+
+        return new self(array_merge(...$collections));
     }
 
     /**
