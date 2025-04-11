@@ -378,7 +378,7 @@ class MyParcelCollection extends Collection
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    $this->getLatestDataParams($this, $size),
+                    $this->getLatestDataParams($consignments, $size),
                 )
                 ->sendRequest('GET');
 
