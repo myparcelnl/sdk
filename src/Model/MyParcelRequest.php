@@ -112,30 +112,6 @@ class MyParcelRequest
     }
 
     /**
-     * @param                     $size
-     * @param MyParcelCollection  $collection
-     * @param                     $key
-     *
-     * @return string|null
-     */
-    public function getLatestDataParams($size, MyParcelCollection $collection, &$key): ?string
-    {
-        $params         = null;
-        $consignmentIds = $collection->getConsignmentIds($key);
-
-        if ($consignmentIds !== null) {
-            $params = implode(';', $consignmentIds) . '?size=' . $size;
-        } else {
-            $referenceIds = $this->getConsignmentReferenceIds($collection, $key);
-            if (!empty($referenceIds)) {
-                $params = '?reference_identifier=' . implode(';', $referenceIds) . '&size=' . $size;
-            }
-        }
-
-        return $params;
-    }
-
-    /**
      * Get request url.
      *
      * @return string
@@ -317,29 +293,6 @@ class MyParcelRequest
         }
 
         return $url;
-    }
-
-    /**
-     * Get all consignment ids.
-     *
-     * @param MyParcelCollection|AbstractConsignment[]  $consignments
-     * @param                                           $key
-     *
-     * @return array
-     */
-    private function getConsignmentReferenceIds($consignments, &$key): array
-    {
-        $referenceIds = [];
-
-        foreach ($consignments as $consignment) {
-            if ($consignment->getReferenceIdentifier()) {
-                $referenceIds[] = $consignment->getReferenceIdentifier();
-            }
-
-            $key = $consignment->getApiKey();
-        }
-
-        return $referenceIds;
     }
 
     /**

@@ -11,7 +11,7 @@ trait HasApiKey
     /**
      * @var string|null
      */
-    protected ?string $apiKey;
+    protected ?string $apiKey = null;
 
     /**
      * @return string|null
