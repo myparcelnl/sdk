@@ -50,6 +50,11 @@ class OrderCollection extends Collection
     }
 
     /**
+     * This saves the order collection to the MyParcel API.
+     * For this to work correctly you should set the correct api key on each fulfilment order in the collection.
+     * For backwards compatibility it remains possible to set the api key on the collection itself, when set that
+     * is the api key that will be used for all orders in the collection, to stay consistent with how it was.
+     *
      * @return self
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
