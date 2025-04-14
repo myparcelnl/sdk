@@ -81,17 +81,21 @@ class OrderCollection extends Collection
         }
 
         /* @var OrderCollection $orders */
-        foreach ($grouped as $orders) {
+        foreach ($grouped as $key => $orders) {
             $requestBody = new RequestBody('orders', $orders->createRequestBody());
             $request     = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
-                ->setRequestParameters(
-                    $orders->first()->getApiKey(),
-                    $requestBody
-                )
+                ->setRequestParameters($key, $requestBody)
                 ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
 
-            $collections[] = (self::createCollectionFromResponse($request))->items;
+            $orders = self::createCollectionFromResponse($request);
+            $orders->each(
+                static function (Order $order) use ($key) {
+                    $order->setApiKey($key);
+                }
+            );
+
+            $collections[] = $orders->items;
         }
 
         return new self(array_merge(...$collections));
