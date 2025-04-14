@@ -46,7 +46,7 @@ class OrderNotesCollectionTest extends TestCase
             ++$i;
         }
 
-        $savedNotes = $orderNotesCollection->save($this->getApiKey());
+        $savedNotes = $orderNotesCollection->save();
 
         $this->assertSame($orderNotesCollection->toArray(), $savedNotes->toArray());
     }
