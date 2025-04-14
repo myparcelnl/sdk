@@ -378,7 +378,7 @@ class MyParcelCollection extends Collection
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    $this->getLatestDataParams($consignments, $size),
+                    $myParcelRequest::getLatestDataParameters($consignments, $size),
                 )
                 ->sendRequest('GET');
 
@@ -394,42 +394,6 @@ class MyParcelCollection extends Collection
         $this->items = array_merge(...$collections);
 
         return $this;
-    }
-
-
-    private function getLatestDataParams(MyParcelCollection $consignments, int $size): string
-    {
-        $consignmentIds = $consignments->reduce(
-            static function ($carry, $item) {
-                if (($consignmentId = $item->getConsignmentId())) {
-                    $carry[] = $consignmentId;
-                }
-
-                return $carry;
-            },
-            []
-        );
-
-        if ($consignmentIds) {
-            return implode(';', $consignmentIds) . "?size=$size";
-        }
-
-        $referenceIds = $consignments->reduce(
-            static function ($carry, $item) {
-                if (($referenceIdentifier = $item->getReferenceIdentifier())) {
-                    $carry[] = $referenceIdentifier;
-                }
-
-                return $carry;
-            },
-            []
-        );
-
-        if ($referenceIds) {
-            return '?reference_identifier=' . implode(';', $referenceIds) . "&size=$size";
-        }
-
-        return '';
     }
 
     /**
@@ -626,7 +590,7 @@ class MyParcelCollection extends Collection
      * @param string|null $key
      *
      * @return array|null
-     * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids with their original api key
+     * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids grouped by their original api key
      */
     public function getConsignmentIds(string &$key = null): ?array
     {
@@ -881,12 +845,11 @@ class MyParcelCollection extends Collection
 
     /**
      * @param $result
-     *
+     * @param $apiKey
      * @return self
      * @throws MissingFieldException
-     * @throws \Exception
      */
-    private function getNewCollectionFromResult($result, $apiKey): self
+    private function getNewCollectionFromResult(array $result, string $apiKey): self
     {
         $newCollection = new static();
 

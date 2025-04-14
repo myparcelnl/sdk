@@ -112,6 +112,68 @@ class MyParcelRequest
     }
 
     /**
+     * Will set the by reference $key to the api key of the first consignment in the collection.
+     * @param                    $size
+     * @param MyParcelCollection $collection
+     * @param                    $key
+     * @return string|null
+     * @deprecated use static getLatestDataParameters instead
+     */
+    public function getLatestDataParams($size, MyParcelCollection $collection, &$key): ?string
+    {
+        $key = $collection->first()->getApiKey();
+
+        return self::getLatestDataParameters($collection, $size);
+    }
+
+    /**
+     * Returns the uri as string to use with the MyParcel api to get the latest data for the consignments in the collection.
+     * It uses shipmentIds when available or else the reference identifiers.
+     * NOTE: the supplied collection must contain shipments that all have shipmentIds or all have reference identifiers.
+     * NOTE: shipments in the collection must all have the same api key (or you cannot send the request, obviously).
+     * Returns null when shipmentIds nor reference identifiers are available.
+     *
+     * @param int                $size
+     * @param MyParcelCollection $consignments
+     *
+     * @return string|null
+     */
+    public static function getLatestDataParameters(MyParcelCollection $consignments, int $size): ?string
+    {
+        $consignmentIds = $consignments->reduce(
+            static function ($carry, $item) {
+                if (($consignmentId = $item->getConsignmentId())) {
+                    $carry[] = $consignmentId;
+                }
+
+                return $carry;
+            },
+            []
+        );
+
+        if ($consignmentIds) {
+            return implode(';', $consignmentIds) . "?size=$size";
+        }
+
+        $referenceIds = $consignments->reduce(
+            static function ($carry, $item) {
+                if (($referenceIdentifier = $item->getReferenceIdentifier())) {
+                    $carry[] = $referenceIdentifier;
+                }
+
+                return $carry;
+            },
+            []
+        );
+
+        if ($referenceIds) {
+            return '?reference_identifier=' . implode(';', $referenceIds) . "&size=$size";
+        }
+
+        return null;
+    }
+
+    /**
      * Get request url.
      *
      * @return string

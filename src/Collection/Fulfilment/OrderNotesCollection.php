@@ -22,9 +22,10 @@ class OrderNotesCollection extends Collection
     use HasApiKey;
 
     /**
+     * @param string|null $apiKey
      * @return self Collection of notes that were saved.
      */
-    public function save(?string $apiKey): self
+    public function save(?string $apiKey = null): self
     {
         $notes = [];
 
