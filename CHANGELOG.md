@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.1](https://github.com/myparcelnl/sdk/compare/v8.1.0...v8.1.1) (2025-04-15)
+
+
+### :bug: Bug Fixes
+
+* work with multiple api keys in collections ([#527](https://github.com/myparcelnl/sdk/issues/527)) ([b19fb7b](https://github.com/myparcelnl/sdk/commit/b19fb7b6e4a6e1d3d2f8586d88d49a18038fdfe7))
+
 ## [8.1.0](https://github.com/myparcelnl/sdk/compare/v8.0.0...v8.1.0) (2025-04-09)
 
 
