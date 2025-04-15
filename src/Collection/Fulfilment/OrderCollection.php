@@ -50,6 +50,11 @@ class OrderCollection extends Collection
     }
 
     /**
+     * This saves the order collection to the MyParcel API.
+     * For this to work correctly you should set the correct api key on each fulfilment order in the collection.
+     * For backwards compatibility it remains possible to set the api key on the collection itself, when set that
+     * is the api key that will be used for all orders in the collection, to stay consistent with how it was.
+     *
      * @return self
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
@@ -58,16 +63,42 @@ class OrderCollection extends Collection
      */
     public function save(): self
     {
-        $requestBody = new RequestBody('orders', $this->createRequestBody());
-        $request     = (new MyParcelRequest())
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters(
-                $this->ensureHasApiKey(),
-                $requestBody
-            )
-            ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
+        $collections = [];
+        // for now we default to the common api key of the collection if set, but you should set it on each order
+        if (null !== ($apiKey = $this->getApiKey())) {
+            $grouped = $this->groupBy(
+                function (Order $order) use ($apiKey) {
+                    $order->setApiKey($apiKey);
+                    return $apiKey;
+                }
+            );
+        } else {
+            $grouped = $this->groupBy(
+                static function (Order $order) {
+                    return $order->getApiKey();
+                }
+            );
+        }
 
-        return self::createCollectionFromResponse($request);
+        /* @var OrderCollection $orders */
+        foreach ($grouped as $key => $orders) {
+            $requestBody = new RequestBody('orders', $orders->createRequestBody());
+            $request     = (new MyParcelRequest())
+                ->setUserAgents($this->getUserAgent())
+                ->setRequestParameters($key, $requestBody)
+                ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
+
+            $orders = self::createCollectionFromResponse($request);
+            $orders->each(
+                static function (Order $order) use ($key) {
+                    $order->setApiKey($key);
+                }
+            );
+
+            $collections[] = $orders->items;
+        }
+
+        return new self(array_merge(...$collections));
     }
 
     /**

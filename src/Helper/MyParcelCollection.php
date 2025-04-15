@@ -186,7 +186,7 @@ class MyParcelCollection extends Collection
      * @return self
      * @throws MissingFieldException
      */
-    public function addConsignmentByConsignmentIds($ids, $apiKey): self
+    public function addConsignmentByConsignmentIds(array $ids, string $apiKey): self
     {
         foreach ($ids as $consignmentId) {
             $consignment = (new BaseConsignment())
@@ -364,27 +364,34 @@ class MyParcelCollection extends Collection
      * @throws ApiException
      * @throws MissingFieldException
      */
-    public function setLatestData($size = 300): self
+    public function setLatestData(int $size = 300): self
     {
-        $myParcelRequest = new MyParcelRequest();
-        $params          = $myParcelRequest->getLatestDataParams($size, $this, $key);
+        $collections          = [];
+        $consignmentsByApiKey = $this->groupBy(function ($consignment) {
+            return $consignment->getApiKey();
+        });
 
-        $request = $myParcelRequest
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters(
-                $key,
-                $params
-            )
-            ->sendRequest('GET');
+        foreach ($consignmentsByApiKey as $key => $consignments) {
+            $myParcelRequest = new MyParcelRequest();
 
-        if ($request->getResult() === null) {
-            throw new ApiException('Unknown Error in MyParcel API response');
+            $request = $myParcelRequest
+                ->setUserAgents($this->getUserAgent())
+                ->setRequestParameters(
+                    $key,
+                    $myParcelRequest::getLatestDataParameters($consignments, $size),
+                )
+                ->sendRequest('GET');
+
+            if (null === $request->getResult()) {
+                throw new ApiException('Unknown Error in MyParcel API response');
+            }
+
+            $result        = $request->getResult('data.shipments');
+            $newCollection = $this->getNewCollectionFromResult($result, $key);
+            $collections[] = $newCollection->sortByCollection($this)->items;
         }
 
-        $result        = $request->getResult('data.shipments');
-        $newCollection = $this->getNewCollectionFromResult($result);
-
-        $this->items = $newCollection->sortByCollection($this)->items;
+        $this->items = array_merge(...$collections);
 
         return $this;
     }
@@ -456,17 +463,21 @@ class MyParcelCollection extends Collection
         $this
             ->createConcepts()
             ->setLabelFormat($positions);
-        $conceptIds = $this->getConsignmentIds($key);
 
-        if ($key) {
+        $PdfMerger = new FpdfMerge();
+
+        $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
+
+        foreach ($consignmentIdsByApiKey as $key => $consignmentIds) {
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
                     $key,
-                    implode(';', $conceptIds) . '/' . $this->getRequestBody(),
+                    implode(';', $consignmentIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL)
+            ;
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
@@ -481,8 +492,13 @@ class MyParcelCollection extends Collection
                 throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
             }
 
-            $this->label_pdf = $result;
+            // merge this pdf into the existing pdf
+            $fileResource = fopen('php://memory', 'rb+');
+            fwrite($fileResource, $result);
+            $PdfMerger->add($fileResource);
         }
+
+        $this->label_pdf = $PdfMerger->output('S');
 
         $this->setLatestData();
 
@@ -574,6 +590,7 @@ class MyParcelCollection extends Collection
      * @param string|null $key
      *
      * @return array|null
+     * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids grouped by their original api key
      */
     public function getConsignmentIds(string &$key = null): ?array
     {
@@ -589,6 +606,21 @@ class MyParcelCollection extends Collection
         }
 
         return $conceptIds;
+    }
+
+    public function getConsignmentIdsByApiKey(): ?array {
+        $consignmentIds = [];
+
+        /** @var AbstractConsignment $consignment */
+        foreach ($this->where('consignment_id', '!=', null) as $consignment) {
+            $consignmentIds[$consignment->getApiKey()][] = $consignment->getConsignmentId();
+        }
+
+        if (empty($consignmentIds)) {
+            return null;
+        }
+
+        return $consignmentIds;
     }
 
     /**
@@ -813,17 +845,13 @@ class MyParcelCollection extends Collection
 
     /**
      * @param $result
-     *
+     * @param $apiKey
      * @return self
      * @throws MissingFieldException
-     * @throws \Exception
      */
-    private function getNewCollectionFromResult($result): self
+    private function getNewCollectionFromResult(array $result, string $apiKey): self
     {
         $newCollection = new static();
-        /** @var AbstractConsignment $consignment */
-        $consignment = $this->first();
-        $apiKey      = $consignment->getApiKey();
 
         foreach ($result as $shipment) {
             $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
