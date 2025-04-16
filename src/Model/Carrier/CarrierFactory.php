@@ -19,8 +19,6 @@ class CarrierFactory
         CarrierDHLForYou::class,
         CarrierDHLParcelConnect::class,
         CarrierDHLEuroplus::class,
-        /** @deprecated Use CarrierUPSStandard (ID: 12) or CarrierUPSExpressSaver (ID: 13) instead */
-        CarrierUPS::class,
         CarrierUPSStandard::class,
         CarrierUPSExpressSaver::class,
     ];
