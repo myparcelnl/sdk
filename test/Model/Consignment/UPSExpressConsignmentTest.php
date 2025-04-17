@@ -23,6 +23,7 @@ class UPSExpressConsignmentTest extends ConsignmentTestCase
                 self::POSTAL_CODE => '1234AB',
                 self::CITY => 'Amsterdam',
                 self::FULL_STREET => 'Hoofdstraat 1',
+                self::WEIGHT => 1000, 
             ],
             'NL -> NL with age check' => [
                 self::COUNTRY => AbstractConsignment::CC_NL,
@@ -30,6 +31,7 @@ class UPSExpressConsignmentTest extends ConsignmentTestCase
                 self::CITY => 'Amsterdam',
                 self::FULL_STREET => 'Hoofdstraat 1',
                 self::AGE_CHECK => true,
+                self::WEIGHT => 1000, 
                 self::expected(self::SIGNATURE) => true,
             ],
             'NL -> NL with saturday delivery' => [
@@ -37,6 +39,7 @@ class UPSExpressConsignmentTest extends ConsignmentTestCase
                 self::POSTAL_CODE => '1234AB',
                 self::CITY => 'Amsterdam',
                 self::FULL_STREET => 'Hoofdstraat 1',
+                self::WEIGHT => 1000, 
                 self::EXTRA_OPTIONS => [
                     AbstractConsignment::EXTRA_OPTION_DELIVERY_SATURDAY => true,
                 ],
@@ -72,6 +75,7 @@ class UPSExpressConsignmentTest extends ConsignmentTestCase
                 self::COUNTRY      => 'DE',
                 self::PHONE        => '123456',
                 self::DELIVERY_TYPE => AbstractConsignment::DELIVERY_TYPE_EXPRESS,
+                self::WEIGHT => 1000, 
             ]
         );
     }

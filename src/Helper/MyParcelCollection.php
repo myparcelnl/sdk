@@ -23,7 +23,8 @@ use MyParcelNL\Sdk\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Factory\ConsignmentFactory;
-use MyParcelNL\Sdk\Model\Carrier\CarrierUPS;
+use MyParcelNL\Sdk\Model\Carrier\CarrierUPSStandard;
+use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
@@ -481,7 +482,7 @@ class MyParcelCollection extends Collection
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
-             * instead of the actual pdf’s. It will throw an unintelligible error when not handled here.
+             * instead of the actual pdf's. It will throw an unintelligible error when not handled here.
              */
             $result = $request->getResult();
 
@@ -857,7 +858,7 @@ class MyParcelCollection extends Collection
             $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
 
             //TODO: MY-32524 Make AbstractConsignmentAdapter for carrier specific exceptions
-            if (CarrierUPS::ID === $shipment['carrier_id']) {
+            if (CarrierUPSStandard::ID === $shipment['carrier_id'] || CarrierUPSExpressSaver::ID === $shipment['carrier_id']) {
                 $shipment['barcode'] = $shipment['barcode'] ?: $shipment['external_identifier'];
             }
 
