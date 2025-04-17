@@ -6,13 +6,23 @@ namespace MyParcelNL\Sdk\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPSStandard;
 
-class UPSStandardConsignment extends UPSConsignment
+class UPSStandardConsignment extends AbstractConsignment
 {
+    protected const CARRIER_ID = 12;
+    protected const CARRIER_NAME = 'ups_standard';
 
     /**
      * @var string
      */
     protected $carrierClass = CarrierUPSStandard::class;
+
+    /**
+     * @return string
+     */
+    public function getLocalCountryCode(): string
+    {
+        return self::CC_NL;
+    }
 
     /**
      * @return array|string[]
@@ -73,5 +83,4 @@ class UPSStandardConsignment extends UPSConsignment
             5000,
         ];
     }
-
 }
