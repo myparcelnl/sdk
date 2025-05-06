@@ -6,13 +6,30 @@ namespace MyParcelNL\Sdk\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 
-class UPSExpressConsignment extends UPSConsignment
+class UPSExpressConsignment extends AbstractConsignment
 {
+    public const DEFAULT_WEIGHT = 3000;
+    protected const CARRIER_ID = 13;
+    protected const CARRIER_NAME = 'ups_express';
+    
+    /**
+     * @internal
+     * @var int
+     */
+    public $physical_properties = ['weight' => self::DEFAULT_WEIGHT];
 
     /**
      * @var string
      */
     protected $carrierClass = CarrierUPSExpressSaver::class;
+
+    /**
+     * @return string
+     */
+    public function getLocalCountryCode(): string
+    {
+        return self::CC_NL;
+    }
 
     /**
      * @return array|string[]
