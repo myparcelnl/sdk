@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/myparcelnl/sdk/compare/v8.1.1...v9.0.0) (2025-05-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* delete carrier 8 (UPS) (#529)
+
+### :sparkles: New Features
+
+* delete carrier 8 (UPS) ([#529](https://github.com/myparcelnl/sdk/issues/529)) ([b1b0d34](https://github.com/myparcelnl/sdk/commit/b1b0d34b896a0bfe83d9b82efe08609fed8b0d36))
+
 ## [8.1.1](https://github.com/myparcelnl/sdk/compare/v8.1.0...v8.1.1) (2025-04-15)
 
 
