@@ -24,7 +24,20 @@ class ValidateStreet
         '[a-z][a-z\s]{0,5}'.                // has up to 6 letters with a space
         ')?$~i';
 
-    const SPLIT_STREET_REGEX_BE = '~(?P<box_separator>)(?P<box_number>)(?P<street>.*?)\s(?P<street_suffix>(?P<number>[0-9\-]{0,7}[0-9])(?P<number_suffix>[A-z]{0,4})\s?(?P<box_separator>(?i:' . self::REGEX_BE_BOX_SEPARATORS . ')|\,\s+)*\s?(?P<box_number>[0-9A-z]{0,7}[0-9])?\s?(?:(?P<number_suffix>[A-z]{1,4}$)|))?$~J';
+    /**
+     * Regular expression used to split street name from house number for Belgium.
+     */
+    const SPLIT_STREET_REGEX_BE =
+        '~^' .
+        '(?P<street>[^\d]+?)\s*' .                // Straatnaam (alles tot eerste cijfer)
+        '(?P<number>\d{1,5})' .                    // Huisnummer (1-5 cijfers)
+        '(?:\s*' .
+            '(?P<box_separator>bus|bte|boîte|box|Bus|\/|\-|B)?' . // Optionele bus-separator
+            '\s*' .
+            '(?P<box_number>[0-9A-Za-z]{1,7})?' . // Optioneel busnummer
+        ')?' .
+        '(?:\s*(?P<number_suffix>[A-Za-z]{1,4}))?' . // Optioneel nummer-suffix
+        '$~i';
     const REGEX_BE_BOX_SEPARATORS = SplitStreet::BOX_BTE . '|' . SplitStreet::BOX_EN . '|' . SplitStreet::BOX_FR . '|' . SplitStreet::BOX_NL . '|' . SplitStreet::BOX_DE . '|' . SplitStreet::BOX_SLASH . '|' . SplitStreet::BOX_DASH . '|' . SplitStreet::BOX_B . '.+';
     /**
      * @param string      $fullStreet

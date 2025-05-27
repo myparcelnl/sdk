@@ -516,6 +516,12 @@ class ConsignmentSplitStreetTest extends ConsignmentTestCase
                 self::FULL_STREET => 'No. 7 street',
                 self::COUNTRY     => 'FR',
             ],
+            [
+                self::FULL_STREET                => 'Koning Albert-1 laan, 188',
+                self::expected(self::FULL_STREET)   => 'Koning Albert-1 laan, 188',
+                self::expected(self::STREET)        => 'Koning Albert-1 laan',
+                self::expected(self::NUMBER)        => 188,
+            ],
             // todo:
             //  [
             //      self::FULL_STREET                            => 'Wethouder Fierman Eduard Meerburg senior kade 14 t',
