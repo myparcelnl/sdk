@@ -221,23 +221,26 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param AbstractConsignment $consignment
-     * @param                     $amount
+     * Add multiple unique consignments as a multi collo shipment.
      *
+     * @param array $consignmentDataList  // Array with consignment data per collo (including weight)
+     * @param callable $consignmentFactory // Function that creates a consignment object from data
+     * @param string|null $referenceId     // Optional: a reference_identifier for the entire multi collo shipment
      * @return self
      */
-    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
+    public function addMultiCollo(array $consignmentDataList, callable $consignmentFactory, ?string $referenceId = null): self
     {
-        if ($amount > 1) {
-            $consignment->setMultiCollo();
-        }
+        $referenceId = $referenceId ?? ('multi_collo_' . uniqid('', true));
 
-        if ($consignment->isPartOfMultiCollo() && ! $consignment->getReferenceIdentifier()) {
-            $consignment->setReferenceIdentifier('random_multi_collo_' . uniqid('', true));
-        }
+        foreach ($consignmentDataList as $data) {
+            /** @var AbstractConsignment $consignment */
+            $consignment = $consignmentFactory($data);
 
-        for ($i = 1; $i <= $amount; $i++) {
-            $this->push($consignment);
+            $consignment
+                ->setMultiCollo(true)
+                ->setReferenceIdentifier($referenceId);
+
+            $this->addConsignment($consignment);
         }
 
         return $this;
