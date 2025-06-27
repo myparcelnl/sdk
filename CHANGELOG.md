@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.1](https://github.com/myparcelnl/sdk/compare/v9.0.0...v9.0.1) (2025-06-27)
+
+
+### :bug: Bug Fixes
+
+* update UPS tests ([#534](https://github.com/myparcelnl/sdk/issues/534)) ([dfed8be](https://github.com/myparcelnl/sdk/commit/dfed8be02358266aa5f33dbe82637ae94db81d5f))
+
 ## [9.0.0](https://github.com/myparcelnl/sdk/compare/v8.1.1...v9.0.0) (2025-05-06)
 
 
