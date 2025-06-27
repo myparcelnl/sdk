@@ -73,7 +73,7 @@ class UPSExpressConsignmentTest extends ConsignmentTestCase
                 self::POSTAL_CODE  => '39394',
                 self::CITY         => 'Schwanebeck',
                 self::COUNTRY      => 'DE',
-                self::PHONE        => '123456',
+                self::PHONE        => '0612345678',
                 self::DELIVERY_TYPE => AbstractConsignment::DELIVERY_TYPE_EXPRESS,
                 self::WEIGHT => 1000, 
             ]
