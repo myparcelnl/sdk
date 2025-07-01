@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
-use MyParcelNL\Sdk\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\Helper\MultiColloConsignmentData;
 
 class MultiColloConsignmentTest extends ConsignmentTestCase
 {
@@ -17,17 +18,31 @@ class MultiColloConsignmentTest extends ConsignmentTestCase
         return [
             'two parcels with different weight' => [
                 [
-                    [
-                        self::CARRIER_ID    => CarrierPostNL::ID,
-                        self::API_KEY       => 'irrelevant',
-                        self::TOTAL_WEIGHT  => 1000,
-                    ],
-                    [
-                        self::CARRIER_ID    => CarrierPostNL::ID,
-                        self::API_KEY       => 'irrelevant',
-                        self::TOTAL_WEIGHT  => 2000,
-                    ],
+                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 1000),
+                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 2000),
                 ],
+                true, // should support multi collo
+            ],
+            'one parcel' => [
+                [
+                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 1500),
+                ],
+                true,
+            ],
+            'three parcels' => [
+                [
+                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 500),
+                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 750),
+                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 1250),
+                ],
+                true,
+            ],
+            'carrier without multi collo support' => [
+                [
+                    new MultiColloConsignmentData(CarrierDPD::ID, 'irrelevant', 1000),
+                    new MultiColloConsignmentData(CarrierDPD::ID, 'irrelevant', 2000),
+                ],
+                false, // DPD supports only single collo
             ],
         ];
     }
@@ -35,31 +50,26 @@ class MultiColloConsignmentTest extends ConsignmentTestCase
     /**
      * @dataProvider provideMultiColloData
      */
-    public function testMultiColloWeights(array $parcelsData): void
+    public function testMultiColloWeights(array $consignmentDataList, bool $shouldSupportMultiCollo): void
     {
         $referenceId = 'test-multicollo-123';
         $collection = new MyParcelCollection();
-        $collection->addMultiCollo(
-            array_map(function ($data) use ($referenceId) {
-                $data['reference_identifier'] = $referenceId;
-                return $data;
-            }, $parcelsData),
-            function ($data) {
-                $consignment = ConsignmentFactory::createByCarrierId($data[self::CARRIER_ID]);
-                $consignment->setApiKey($data[self::API_KEY]);
-                $consignment->setTotalWeight($data[self::TOTAL_WEIGHT]);
-                if (isset($data['reference_identifier'])) {
-                    $consignment->setReferenceIdentifier($data['reference_identifier']);
-                }
-                return $consignment;
-            },
-            $referenceId
-        );
+        $exceptionThrown = false;
+        try {
+            $collection->addMultiColloDataList($consignmentDataList, $referenceId);
+        } catch (\Exception $e) {
+            $exceptionThrown = true;
+        }
 
-        self::assertCount(count($parcelsData), $collection, 'Number of parcels in collection does not match.');
+        if (! $shouldSupportMultiCollo) {
+            self::assertTrue($exceptionThrown, 'Expected exception for carrier without multi collo support.');
+            return;
+        }
+
+        self::assertCount(count($consignmentDataList), $collection, 'Number of parcels in collection does not match.');
 
         foreach ($collection as $index => $consignment) {
-            $expectedWeight = $parcelsData[$index][self::TOTAL_WEIGHT];
+            $expectedWeight = $consignmentDataList[$index]->totalWeight;
             self::assertEquals(
                 $expectedWeight,
                 $consignment->getTotalWeight(),

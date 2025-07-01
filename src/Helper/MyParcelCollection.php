@@ -221,29 +221,47 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * Add multiple unique consignments as a multi collo shipment.
+     * Add multiple unique consignments as a multi collo shipment using a data list.
      *
-     * @param array $consignmentDataList  // Array with consignment data per collo (including weight)
-     * @param callable $consignmentFactory // Function that creates a consignment object from data
-     * @param string|null $referenceId     // Optional: a reference_identifier for the entire multi collo shipment
+     * @param MultiColloConsignmentData[] $consignmentDataList
+     * @param string|null $referenceId
      * @return self
      */
-    public function addMultiCollo(array $consignmentDataList, callable $consignmentFactory, ?string $referenceId = null): self
+    public function addMultiColloDataList(array $consignmentDataList, ?string $referenceId = null): self
     {
         $referenceId = $referenceId ?? ('multi_collo_' . uniqid('', true));
 
         foreach ($consignmentDataList as $data) {
-            /** @var AbstractConsignment $consignment */
-            $consignment = $consignmentFactory($data);
-
-            $consignment
-                ->setMultiCollo(true)
-                ->setReferenceIdentifier($referenceId);
-
+            $consignment = \MyParcelNL\Sdk\Factory\ConsignmentFactory::createByCarrierId($data->carrierId);
+            $consignment->setApiKey($data->apiKey);
+            $consignment->setTotalWeight($data->totalWeight);
+            $consignment->setMultiCollo(true);
+            $consignment->setReferenceIdentifier($referenceId);
             $this->addConsignment($consignment);
         }
-
         return $this;
+    }
+
+    /**
+     * Backwards compatible: add multiple consignments with equal weight distribution.
+     *
+     * @param AbstractConsignment $consignment
+     * @param int $amount
+     * @return self
+     */
+    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
+    {
+        $weight = $consignment->getTotalWeight();
+        $perColloWeight = (int) round($weight / $amount);
+        $dataList = [];
+        for ($i = 0; $i < $amount; $i++) {
+            $dataList[] = new \MyParcelNL\Sdk\Helper\MultiColloConsignmentData(
+                $consignment->getCarrierId(),
+                $consignment->getApiKey(),
+                $perColloWeight
+            );
+        }
+        return $this->addMultiColloDataList($dataList);
     }
 
     /**
