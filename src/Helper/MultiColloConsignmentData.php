@@ -25,4 +25,4 @@ class MultiColloConsignmentData
         $this->totalWeight = $totalWeight;
         $this->referenceIdentifier = $referenceIdentifier;
     }
-} 
+}

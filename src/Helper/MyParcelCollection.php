@@ -231,6 +231,16 @@ class MyParcelCollection extends Collection
     {
         $referenceId = $referenceId ?? ('multi_collo_' . uniqid('', true));
 
+        // Check if all carriers support multi collo when multiple consignments are provided
+        if (count($consignmentDataList) > 1) {
+            foreach ($consignmentDataList as $data) {
+                $consignment = \MyParcelNL\Sdk\Factory\ConsignmentFactory::createByCarrierId($data->carrierId);
+                if (!in_array(\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment::EXTRA_OPTION_MULTI_COLLO, $consignment->getAllowedExtraOptions(), true)) {
+                    throw new \Exception('Carrier does not support multi collo shipments.');
+                }
+            }
+        }
+
         foreach ($consignmentDataList as $data) {
             $consignment = \MyParcelNL\Sdk\Factory\ConsignmentFactory::createByCarrierId($data->carrierId);
             $consignment->setApiKey($data->apiKey);
