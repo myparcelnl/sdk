@@ -7,42 +7,69 @@ namespace MyParcelNL\Sdk\Test\Model\Consignment;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
 use MyParcelNL\Sdk\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\Helper\MultiColloConsignmentData;
 
 class MultiColloConsignmentTest extends ConsignmentTestCase
 {
     public function provideMultiColloData(): array
     {
         return [
-            'two parcels with different weight' => [
+            'two parcels with different weight and options' => [
                 [
-                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 1000),
-                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 2000),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(1000)
+                        ->setSignature(true),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(2000)
+                        ->setAgeCheck(true),
                 ],
                 true, // should support multi collo
             ],
             'one parcel' => [
                 [
-                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 1500),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(1500),
                 ],
                 true,
             ],
             'three parcels' => [
                 [
-                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 500),
-                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 750),
-                    new MultiColloConsignmentData(CarrierPostNL::ID, 'irrelevant', 1250),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(500),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(750),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(1250),
                 ],
                 true,
             ],
-            'carrier without multi collo support' => [
+            'different carriers (should fail)' => [
                 [
-                    new MultiColloConsignmentData(CarrierDPD::ID, 'irrelevant', 1000),
-                    new MultiColloConsignmentData(CarrierDPD::ID, 'irrelevant', 2000),
+                    (new PostNLConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(1000),
+                    (new DPDConsignment())
+                        ->setApiKey('irrelevant')
+                        ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
+                        ->setTotalWeight(2000),
                 ],
-                false, // DPD supports only single collo
+                false,
             ],
         ];
     }
@@ -50,40 +77,62 @@ class MultiColloConsignmentTest extends ConsignmentTestCase
     /**
      * @dataProvider provideMultiColloData
      */
-    public function testMultiColloWeights(array $consignmentDataList, bool $shouldSupportMultiCollo): void
+    public function testMultiColloConsignments(array $consignments, bool $shouldSupportMultiCollo): void
     {
-        $referenceId = 'test-multicollo-123';
         $collection = new MyParcelCollection();
         $exceptionThrown = false;
         try {
-            $collection->addMultiColloDataList($consignmentDataList, $referenceId);
+            foreach ($consignments as $consignment) {
+                $collection->addConsignment($consignment);
+            }
         } catch (\Exception $e) {
             $exceptionThrown = true;
         }
 
         if (! $shouldSupportMultiCollo) {
-            self::assertTrue($exceptionThrown, 'Expected exception for carrier without multi collo support.');
+            self::assertTrue($exceptionThrown, 'Expected exception for different carriers.');
             return;
         }
 
-        self::assertCount(count($consignmentDataList), $collection, 'Number of parcels in collection does not match.');
+        self::assertCount(count($consignments), $collection, 'Number of consignments in collection does not match.');
 
+        // Check multi collo properties if more than one consignment
+        if (count($consignments) > 1) {
+            $referenceId = $collection->getConsignments()[0]->getReferenceIdentifier();
+            foreach ($collection as $index => $consignment) {
+                self::assertTrue(
+                    $consignment->isPartOfMultiCollo(),
+                    sprintf('Consignment %d is not marked as multi collo.', $index + 1)
+                );
+                self::assertEquals(
+                    $referenceId,
+                    $consignment->getReferenceIdentifier(),
+                    sprintf('Consignment %d does not have the correct reference identifier.', $index + 1)
+                );
+            }
+        }
+
+        // Check that shipment options and weight are unique per consignment
         foreach ($collection as $index => $consignment) {
-            $expectedWeight = $consignmentDataList[$index]->totalWeight;
             self::assertEquals(
-                $expectedWeight,
+                $consignments[$index]->getTotalWeight(),
                 $consignment->getTotalWeight(),
-                sprintf('Parcel %d does not have the correct weight.', $index + 1)
+                sprintf('Consignment %d does not have the correct weight.', $index + 1)
             );
-            self::assertTrue(
-                $consignment->isPartOfMultiCollo(),
-                sprintf('Parcel %d is not marked as multi collo.', $index + 1)
-            );
-            self::assertEquals(
-                $referenceId,
-                $consignment->getReferenceIdentifier(),
-                sprintf('Parcel %d does not have the correct reference identifier.', $index + 1)
-            );
+            if (method_exists($consignments[$index], 'isSignature')) {
+                self::assertEquals(
+                    $consignments[$index]->isSignature(),
+                    $consignment->isSignature(),
+                    sprintf('Consignment %d does not have the correct signature option.', $index + 1)
+                );
+            }
+            if (method_exists($consignments[$index], 'hasAgeCheck')) {
+                self::assertEquals(
+                    $consignments[$index]->hasAgeCheck(),
+                    $consignment->hasAgeCheck(),
+                    sprintf('Consignment %d does not have the correct age check option.', $index + 1)
+                );
+            }
         }
     }
 }

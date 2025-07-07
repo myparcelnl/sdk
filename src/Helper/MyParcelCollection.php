@@ -172,11 +172,23 @@ class MyParcelCollection extends Collection
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
-
         $consignment->validate();
-
         $this->push($consignment);
 
+        // Check if all consignments have the same carrier
+        $carrierIds = array_map(function($c) { return $c->getCarrierId(); }, $this->items);
+        if (count(array_unique($carrierIds)) > 1) {
+            throw new \Exception('All consignments in a multi collo shipment must have the same carrier.');
+        }
+
+        // If more than one consignment, set multi collo properties
+        if (count($this->items) > 1) {
+            $referenceId = $this->items[0]->getReferenceIdentifier() ?: ('multi_collo_' . uniqid('', true));
+            foreach ($this->items as $c) {
+                $c->setMultiCollo(true);
+                $c->setReferenceIdentifier($referenceId);
+            }
+        }
         return $this;
     }
 
@@ -218,60 +230,6 @@ class MyParcelCollection extends Collection
         }
 
         return $this;
-    }
-
-    /**
-     * Add multiple unique consignments as a multi collo shipment using a data list.
-     *
-     * @param MultiColloConsignmentData[] $consignmentDataList
-     * @param string|null $referenceId
-     * @return self
-     */
-    public function addMultiColloDataList(array $consignmentDataList, ?string $referenceId = null): self
-    {
-        $referenceId = $referenceId ?? ('multi_collo_' . uniqid('', true));
-
-        // Check if all carriers support multi collo when multiple consignments are provided
-        if (count($consignmentDataList) > 1) {
-            foreach ($consignmentDataList as $data) {
-                $consignment = \MyParcelNL\Sdk\Factory\ConsignmentFactory::createByCarrierId($data->carrierId);
-                if (!in_array(\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment::EXTRA_OPTION_MULTI_COLLO, $consignment->getAllowedExtraOptions(), true)) {
-                    throw new \Exception('Carrier does not support multi collo shipments.');
-                }
-            }
-        }
-
-        foreach ($consignmentDataList as $data) {
-            $consignment = \MyParcelNL\Sdk\Factory\ConsignmentFactory::createByCarrierId($data->carrierId);
-            $consignment->setApiKey($data->apiKey);
-            $consignment->setTotalWeight($data->totalWeight);
-            $consignment->setMultiCollo(true);
-            $consignment->setReferenceIdentifier($referenceId);
-            $this->addConsignment($consignment);
-        }
-        return $this;
-    }
-
-    /**
-     * Backwards compatible: add multiple consignments with equal weight distribution.
-     *
-     * @param AbstractConsignment $consignment
-     * @param int $amount
-     * @return self
-     */
-    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
-    {
-        $weight = $consignment->getTotalWeight();
-        $perColloWeight = (int) round($weight / $amount);
-        $dataList = [];
-        for ($i = 0; $i < $amount; $i++) {
-            $dataList[] = new \MyParcelNL\Sdk\Helper\MultiColloConsignmentData(
-                $consignment->getCarrierId(),
-                $consignment->getApiKey(),
-                $perColloWeight
-            );
-        }
-        return $this->addMultiColloDataList($dataList);
     }
 
     /**
