@@ -181,14 +181,17 @@ class MyParcelCollection extends Collection
             throw new \Exception('All consignments in a multi collo shipment must have the same carrier.');
         }
 
-        // If more than one consignment, set multi collo properties
-        if (count($this->items) > 1) {
-            $referenceId = $this->items[0]->getReferenceIdentifier() ?: ('multi_collo_' . uniqid('', true));
+        // Only set multi collo if all reference_identifiers are the same (or not set)
+        $referenceIds = array_map(function($c) { return $c->getReferenceIdentifier(); }, $this->items);
+        $uniqueReferenceIds = array_unique(array_filter($referenceIds));
+        if (count($this->items) > 1 && (count($uniqueReferenceIds) === 1 || count($uniqueReferenceIds) === 0)) {
+            $referenceId = $uniqueReferenceIds[0] ?? ('multi_collo_' . uniqid('', true));
             foreach ($this->items as $c) {
                 $c->setMultiCollo(true);
                 $c->setReferenceIdentifier($referenceId);
             }
         }
+        // Otherwise: do not set multi collo, treat consignments as separate shipments
         return $this;
     }
 
