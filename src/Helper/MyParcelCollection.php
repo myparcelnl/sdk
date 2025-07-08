@@ -175,23 +175,64 @@ class MyParcelCollection extends Collection
         $consignment->validate();
         $this->push($consignment);
 
+        return $this;
+    }
+
+    /**
+     * @param AbstractConsignment $consignment
+     * @param int $amount
+     *
+     * @return self
+     * @throws MissingFieldException
+     */
+    public function addMultiCollo(AbstractConsignment $consignment, int $amount): self
+    {
+        if ($amount <= 1) {
+            $this->addConsignment($consignment);
+            return $this;
+        }
+
+        // Create multiple consignments with equally distributed weight
+        $originalWeight = $consignment->getTotalWeight();
+        $weightPerCollo = $originalWeight / $amount;
+        
+        $consignments = [];
+        for ($i = 1; $i <= $amount; $i++) {
+            $clonedConsignment = clone $consignment;
+            $clonedConsignment->setTotalWeight($weightPerCollo);
+            $consignments[] = $clonedConsignment;
+        }
+
+        return $this->addMultiColloConsignments($consignments);
+    }
+
+    /**
+     * @param AbstractConsignment[] $consignments
+     *
+     * @return self
+     * @throws MissingFieldException
+     * @throws \Exception
+     */
+    public function addMultiColloConsignments(array $consignments): self
+    {
+        if (empty($consignments)) {
+            return $this;
+        }
+
         // Check if all consignments have the same carrier
-        $carrierIds = array_map(function($c) { return $c->getCarrierId(); }, $this->items);
+        $carrierIds = array_map(function($c) { return $c->getCarrierId(); }, $consignments);
         if (count(array_unique($carrierIds)) > 1) {
             throw new \Exception('All consignments in a multi collo shipment must have the same carrier.');
         }
 
-        // Only set multi collo if all reference_identifiers are the same (or not set)
-        $referenceIds = array_map(function($c) { return $c->getReferenceIdentifier(); }, $this->items);
-        $uniqueReferenceIds = array_unique(array_filter($referenceIds));
-        if (count($this->items) > 1 && (count($uniqueReferenceIds) === 1 || count($uniqueReferenceIds) === 0)) {
-            $referenceId = $uniqueReferenceIds[0] ?? ('multi_collo_' . uniqid('', true));
-            foreach ($this->items as $c) {
-                $c->setMultiCollo(true);
-                $c->setReferenceIdentifier($referenceId);
-            }
+        // Set multi collo and reference identifier for all consignments
+        $referenceId = $consignments[0]->getReferenceIdentifier() ?? ('multi_collo_' . uniqid('', true));
+        foreach ($consignments as $consignment) {
+            $consignment->setMultiCollo(true);
+            $consignment->setReferenceIdentifier($referenceId);
+            $this->addConsignment($consignment);
         }
-        // Otherwise: do not set multi collo, treat consignments as separate shipments
+
         return $this;
     }
 
