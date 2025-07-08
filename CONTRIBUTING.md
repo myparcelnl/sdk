@@ -32,13 +32,13 @@ API_KEY_BE="<MyParcelBE API key>"
 Run tests with the following command:
 
 ```bash
-docker compose run --rm php
+docker compose run --rm php composer test
 ```
 
 Create an HTML coverage report:
 
 ```bash
-docker compose run --rm php --coverage-html coverage
+docker compose run --rm test
 ```
 
 > You can use this to make sure your new or updated code has 100% coverage.
