@@ -220,7 +220,9 @@ class MyParcelCollection extends Collection
         }
 
         // Check if all consignments have the same carrier
-        $carrierIds = array_map(function($c) { return $c->getCarrierId(); }, $consignments);
+        $carrierIds = array_map(static function($consignment) {
+            return $consignment->getCarrierId();
+        }, $consignments);
         if (count(array_unique($carrierIds)) > 1) {
             throw new \Exception('All consignments in a multi collo shipment must have the same carrier.');
         }

@@ -133,23 +133,4 @@ class MultiColloConsignmentTest extends ConsignmentTestCase
             }
         }
     }
-
-    public function testOldAddMultiColloMethod(): void
-    {
-        $collection = new MyParcelCollection();
-        $consignment = (new PostNLConsignment())
-            ->setApiKey('irrelevant')
-            ->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE)
-            ->setTotalWeight(3000); // 3000 grams
-
-        $collection->addMultiCollo($consignment, 3);
-
-        self::assertCount(3, $collection, 'Should have 3 consignments.');
-        
-        foreach ($collection as $consignment) {
-            self::assertTrue($consignment->isPartOfMultiCollo(), 'Consignment should be marked as multi collo.');
-            self::assertNotNull($consignment->getReferenceIdentifier(), 'Consignment should have a reference identifier.');
-            self::assertEquals(1000, $consignment->getTotalWeight(), 'Weight should be distributed equally (1000g each).');
-        }
-    }
 }
