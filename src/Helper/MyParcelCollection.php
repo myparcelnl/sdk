@@ -929,4 +929,23 @@ class MyParcelCollection extends Collection
 
         return $returnConsignments;
     }
+
+    public function fetchTrackTraceData(): self
+    {
+        foreach ($this->items as $consignment) {
+            $shipmentId = $consignment->getConsignmentId();
+            $apiKey    = $consignment->getApiKey();
+
+            $request = (new MyParcelRequest())
+                ->setRequestParameters($apiKey)
+                ->sendRequest('GET', "tracktraces/$shipmentId");
+
+            $trackTrace = $request->getResult('data.tracktraces.0');
+
+            if ($trackTrace) {
+                $consignment->setHistory($trackTrace['history'] ?? []);
+            }
+        }
+        return $this;
+    }
 }

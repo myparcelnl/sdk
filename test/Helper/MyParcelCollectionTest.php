@@ -8,6 +8,8 @@ use MyParcelNL\Sdk\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Test\Bootstrap\CollectionTestCase;
+use MyParcelNL\Sdk\Factory\ConsignmentFactory;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
 
 class MyParcelCollectionTest extends CollectionTestCase
 {
@@ -61,8 +63,8 @@ class MyParcelCollectionTest extends CollectionTestCase
     {
         $collection = $this->generateCollection(
             $this->createConsignmentsTestData([
-                [self::LABEL_DESCRIPTION => 'first consignment'],
-                [self::LABEL_DESCRIPTION => 'second consignment'],
+                [self::LABEL_DESCRIPTION => 'first consignment', 'add_dropoff_point' => false],
+                [self::LABEL_DESCRIPTION => 'second consignment', 'add_dropoff_point' => false],
             ])
         );
 
@@ -118,4 +120,28 @@ class MyParcelCollectionTest extends CollectionTestCase
             Arr::pluck($sorted->toArray(), self::REFERENCE_IDENTIFIER)
         );
     }
+
+
+    public function testFetchTrackTraceData(): void
+    {
+        $collection = $this->generateCollection([
+            [
+                self::CONSIGNMENT_ID => 212652776,
+                self::API_KEY        => $this->getApiKey(),
+                self::ADD_DROPOFF_POINT => false,
+            ]
+        ]);
+
+
+
+        $trackTraceData = $collection->fetchTrackTraceData();
+
+        $consignment = $collection->first();
+        $history = $consignment->getHistory();
+
+
+        self::assertInstanceOf(MyParcelCollection::class, $trackTraceData);
+        self::assertNotEmpty($history, 'History should not be empty');
+    }
+
 }

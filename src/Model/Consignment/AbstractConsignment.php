@@ -453,6 +453,11 @@ abstract class AbstractConsignment
     protected $validatorClass;
 
     /**
+     * @var null|array
+     */
+    protected $history;
+
+    /**
      * @var null|\MyParcelNL\Sdk\Model\Carrier\AbstractCarrier
      */
     private $carrier;
@@ -1984,5 +1989,34 @@ abstract class AbstractConsignment
     final public function getCarrierName(): ?string
     {
         return $this->carrier ? $this->carrier->getName() : null;
+    }
+
+    /**
+     * Set the complete Track & Trace history for this consignment.
+     *
+     * This data is retrieved from the Track & Trace API endpoint and contains
+     * information about shipment status changes, timestamps, and scan events.
+     *
+     * @param array $history The full history array returned by the API.
+     *
+     * @return $this
+     */
+    final public function setHistory(array $history): self
+    {
+        $this->history = $history;
+
+        return $this;
+    }
+
+    /**
+     * Get the Track & Trace history for this consignment.
+     *
+     * This data includes all status changes and scan events related to the shipment.
+     *
+     * @return array The history of the consignment.
+     */
+
+    final public function getHistory(): array {
+        return $this->history;
     }
 }
