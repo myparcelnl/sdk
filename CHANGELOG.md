@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.2](https://github.com/myparcelnl/sdk/compare/v9.0.1...v9.0.2) (2025-07-09)
+
+
+### :bug: Bug Fixes
+
+* **php-sdk:** correctly pass attributes for each multi-collo shipment ([#533](https://github.com/myparcelnl/sdk/issues/533)) ([a589056](https://github.com/myparcelnl/sdk/commit/a589056b5981642837f76851a1f575e6d4cd59d1))
+
 ## [9.0.1](https://github.com/myparcelnl/sdk/compare/v9.0.0...v9.0.1) (2025-06-27)
 
 

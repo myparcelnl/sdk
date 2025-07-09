@@ -1,15 +1,14 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * Stores all data to communicate with the MyParcel API
+ *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
  * @author      Reindert Vetter <reindert@myparcel.nl>
+ * @copyright   2010-2020 MyParcel
  * @license     http://creativecommons.org/licenses/by-nc-nd/3.0/nl/deed.en_US  CC BY-NC-ND 3.0 NL
  * @link        https://github.com/myparcelnl/sdk
- * @copyright   2010-2020 MyParcel
  * @since       File available since Release v0.1.0
  */
 
@@ -79,7 +78,7 @@ class MyParcelCollection extends Collection
     private $label_pdf;
 
     /**
-     * @param  bool $keepKeys
+     * @param bool $keepKeys
      *
      * @return AbstractConsignment[]
      */
@@ -107,16 +106,14 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  string|null $id
+     * @param string|null $id
      *
      * @return self
      */
     public function getConsignmentsByReferenceId($id): self
     {
         if ($id === null) {
-            throw new InvalidArgumentException(
-                'Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null'
-            );
+            throw new InvalidArgumentException('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
         if ($this->count() === 1) {
@@ -137,18 +134,18 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  int $id
+     * @param int $id
      *
      * @return AbstractConsignment
      */
     public function getConsignmentByApiId($id)
     {
-        return $this->where('consignment_id', $id)
-            ->first();
+        return $this->where('consignment_id', $id)->first();
     }
 
     /**
      * @return string
+     *
      * this is used by third parties to access the label_pdf variable.
      */
     public function getLabelPdf()
@@ -165,7 +162,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  AbstractConsignment $consignment
+     * @param AbstractConsignment $consignment
      *
      * @return self
      * @throws MissingFieldException
@@ -184,8 +181,68 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  int[]  $ids
-     * @param  string $apiKey
+     * @param AbstractConsignment $consignment
+     * @param int $amount
+     *
+     * @return self
+     * @throws MissingFieldException
+     */
+    public function addMultiCollo(AbstractConsignment $consignment, int $amount): self
+    {
+        if ($amount <= 1) {
+            $this->addConsignment($consignment);
+            return $this;
+        }
+
+        // Create multiple consignments with equally distributed weight
+        $originalWeight = $consignment->getTotalWeight();
+        $weightPerCollo = $originalWeight / $amount;
+
+        $consignments = [];
+        for ($i = 1; $i <= $amount; $i++) {
+            $clonedConsignment = clone $consignment;
+            $clonedConsignment->setTotalWeight($weightPerCollo);
+            $consignments[] = $clonedConsignment;
+        }
+
+        return $this->addMultiColloConsignments($consignments);
+    }
+
+    /**
+     * @param AbstractConsignment[] $consignments
+     *
+     * @return self
+     * @throws MissingFieldException
+     * @throws \Exception
+     */
+    public function addMultiColloConsignments(array $consignments): self
+    {
+        if (empty($consignments)) {
+            return $this;
+        }
+
+        // Check if all consignments have the same carrier
+        $carrierIds = array_map(static function($consignment) {
+            return $consignment->getCarrierId();
+        }, $consignments);
+        if (count(array_unique($carrierIds)) > 1) {
+            throw new \Exception('All consignments in a multi collo shipment must have the same carrier.');
+        }
+
+        // Set multi collo and reference identifier for all consignments
+        $referenceId = $consignments[0]->getReferenceIdentifier() ?? ('multi_collo_' . uniqid('', true));
+        foreach ($consignments as $consignment) {
+            $consignment->setMultiCollo(true);
+            $consignment->setReferenceIdentifier($referenceId);
+            $this->addConsignment($consignment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int[]  $ids
+     * @param string $apiKey
      *
      * @return self
      * @throws MissingFieldException
@@ -204,8 +261,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  string[] $ids
-     * @param  string   $apiKey
+     * @param string[] $ids
+     * @param string   $apiKey
      *
      * @return self
      * @throws MissingFieldException
@@ -218,29 +275,6 @@ class MyParcelCollection extends Collection
                 ->setReferenceIdentifier($referenceId);
 
             $this->addConsignment($consignment);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param  AbstractConsignment $consignment
-     * @param                      $amount
-     *
-     * @return self
-     */
-    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
-    {
-        if ($amount > 1) {
-            $consignment->setMultiCollo();
-        }
-
-        if ($consignment->isPartOfMultiCollo() && ! $consignment->getReferenceIdentifier()) {
-            $consignment->setReferenceIdentifier('random_multi_collo_' . uniqid('', true));
-        }
-
-        for ($i = 1; $i <= $amount; $i++) {
-            $this->push($consignment);
         }
 
         return $this;
@@ -262,8 +296,7 @@ class MyParcelCollection extends Collection
     /**
      * Create concept consignments in MyParcel.
      *
-     * @param  bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
-     *
+     * @param bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
      * @return self
      * @throws AccountNotActiveException
      * @throws ApiException
@@ -271,34 +304,25 @@ class MyParcelCollection extends Collection
      */
     protected function createConsignments(bool $asUnrelatedReturn = false): self
     {
-        $newConsignments =
-            $this->where('consignment_id', '!=', null)
-                ->toArray();
+        $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
 
-        $grouped =
-            $this->where('consignment_id', null)
-                ->groupBy(function (AbstractConsignment $item) {
-                    return $item->getApiKey() . ($item->hasSender() ? '-sender' : '');
-                });
+        $grouped = $this->where('consignment_id', null)->groupBy(function(AbstractConsignment $item) {
+            return $item->getApiKey() . ($item->hasSender() ? '-sender' : '');
+        });
 
         /* @var MyParcelCollection $consignments */
         foreach ($grouped as $consignments) {
-            $headers =
-                $asUnrelatedReturn ? MyParcelRequest::HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT
-                    : MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
-            if ($consignments->first()
-                ->hasSender()) {
+            $headers = $asUnrelatedReturn ? MyParcelRequest::HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT : MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
+            if ($consignments->first()->hasSender()) {
                 $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
             }
 
-            $data    =
-                (new CollectionEncode($consignments))->encode($asUnrelatedReturn ? 'return_shipments' : 'shipments');
+            $data    = (new CollectionEncode($consignments))->encode($asUnrelatedReturn ? 'return_shipments' : 'shipments');
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
                 ->setRequestParameters(
-                    $consignments->first()
-                        ->getApiKey(),
+                    $consignments->first()->getApiKey(),
                     $data,
                     $headers
                 )
@@ -332,7 +356,7 @@ class MyParcelCollection extends Collection
     /**
      * Label prepare wil be active from x number of orders
      *
-     * @param  int $numberOfShipments
+     * @param int $numberOfShipments
      *
      * @return bool
      */
@@ -352,8 +376,7 @@ class MyParcelCollection extends Collection
     public function deleteConcepts(): self
     {
         /* @var AbstractConsignment[] $consignments */
-        foreach ($this->groupBy('api_key')
-                     ->where('consignment_id', '!=', null) as $key => $consignments) {
+        foreach ($this->groupBy('api_key')->where('consignment_id', '!=', null) as $key => $consignments) {
             foreach ($consignments as $consignment) {
                 (new MyParcelRequest())
                     ->setUserAgents($this->getUserAgent())
@@ -372,7 +395,7 @@ class MyParcelCollection extends Collection
      * Get all current data
      * Set id and run this function to update all the information about this shipment
      *
-     * @param  int $size
+     * @param int $size
      *
      * @return self
      * @throws AccountNotActiveException
@@ -414,12 +437,11 @@ class MyParcelCollection extends Collection
     /**
      * Get link of labels
      *
-     * @param  mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
-     *                          Positioning is only applied on the first page with labels. All subsequent pages will
-     *                          use the default positioning `[1,2,3,4]`. Pass an array to specify the positions on an
-     *                          A4 sheet, e.g. `[2,3,4]`. Pass a number to specify the starting position on an A4
-     *                          sheet, e.g. `2`. The following labels will fill the subsequent positions. Pass a falsy
-     *                          value to use an A6 sheet, e.g. `false` or `null`.
+     * @param mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
+     *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
+     *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
+     *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
      * @throws AccountNotActiveException
@@ -463,12 +485,11 @@ class MyParcelCollection extends Collection
      * Receive label PDF
      * After setPdfOfLabels() apiId and barcode is present
      *
-     * @param  mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
-     *                          Positioning is only applied on the first page with labels. All subsequent pages will
-     *                          use the default positioning `[1,2,3,4]`. Pass an array to specify the positions on an
-     *                          A4 sheet, e.g. `[2,3,4]`. Pass a number to specify the starting position on an A4
-     *                          sheet, e.g. `2`. The following labels will fill the subsequent positions. Pass a falsy
-     *                          value to use an A6 sheet, e.g. `false` or `null`.
+     * @param mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
+     *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
+     *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
+     *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
      * @throws AccountNotActiveException
@@ -493,7 +514,8 @@ class MyParcelCollection extends Collection
                     implode(';', $consignmentIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL)
+            ;
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
@@ -501,7 +523,7 @@ class MyParcelCollection extends Collection
              */
             $result = $request->getResult();
 
-            if (! is_string($result) || ! preg_match('/^%PDF-1./', $result)) {
+            if (!is_string($result) || !preg_match('/^%PDF-1./', $result)) {
                 if (is_array($result) && isset($result['data']['payment_instructions'])) {
                     throw new ApiException('Received payment link instead of pdf. Check your MyParcel account status.');
                 }
@@ -524,7 +546,7 @@ class MyParcelCollection extends Collection
     /**
      * Download labels
      *
-     * @param  bool $inline_download
+     * @param bool $inline_download
      *
      * @return void
      * @throws MissingFieldException
@@ -539,10 +561,7 @@ class MyParcelCollection extends Collection
 
         header('Content-Type: application/pdf');
         header('Content-Length: ' . strlen($this->label_pdf));
-        header(
-            'Content-disposition: ' . ($inline_download === true ? "inline"
-                : "attachment") . '; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"'
-        );
+        header('Content-disposition: ' . ($inline_download === true ? "inline" : "attachment") . '; filename="' . self::PREFIX_PDF_FILENAME . gmdate('Y-M-d H-i-s') . '.pdf"');
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -554,8 +573,8 @@ class MyParcelCollection extends Collection
     /**
      * Send return label to customer. The customer can pay and download the label.
      *
-     * @param  bool          $sendMail
-     * @param  \Closure|null $modifier
+     * @param bool          $sendMail
+     * @param \Closure|null $modifier
      *
      * @return self
      * @throws AccountNotActiveException
@@ -591,9 +610,7 @@ class MyParcelCollection extends Collection
 
         $returnIds = Arr::pluck(Arr::get($result, 'data.ids'), 'id');
         if (! $returnIds || count($returnIds) < 1) {
-            throw new InvalidArgumentException(
-                'Can\'t send return label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data
-            );
+            throw new InvalidArgumentException('Can\'t send return label to customer. Please create an issue on GitHub or contact MyParcel; support@myparcel.nl. Note this request body: ' . $data);
         }
 
         $returnConsignments = (new MyParcelCollection())
@@ -608,7 +625,7 @@ class MyParcelCollection extends Collection
     /**
      * Get all consignment ids
      *
-     * @param  string|null $key
+     * @param string|null $key
      *
      * @return array|null
      * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids grouped by their original api key
@@ -629,8 +646,7 @@ class MyParcelCollection extends Collection
         return $conceptIds;
     }
 
-    public function getConsignmentIdsByApiKey(): ?array
-    {
+    public function getConsignmentIdsByApiKey(): ?array {
         $consignmentIds = [];
 
         /** @var AbstractConsignment $consignment */
@@ -664,8 +680,8 @@ class MyParcelCollection extends Collection
     /**
      * To search and filter consignments by certain values
      *
-     * @param  string $apiKey
-     * @param  mixed  $parameters May be an array or object containing properties.
+     * @param string $apiKey
+     * @param mixed  $parameters May be an array or object containing properties.
      *                            If query_data is an array, it may be a simple one-dimensional structure,
      *                            or an array of arrays (which in turn may contain other arrays).
      *                            If query_data is an object, then only public properties will be incorporated
@@ -697,12 +713,7 @@ class MyParcelCollection extends Collection
         }
 
         foreach ($request->getResult()['data']['shipments'] as $shipment) {
-            $consignmentAdapter =
-                new ConsignmentAdapter(
-                    $shipment,
-                    (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])
-                        ->setApiKey($apiKey))
-                );
+            $consignmentAdapter = new ConsignmentAdapter($shipment, (ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey)));
             $collection->addConsignment($consignmentAdapter->getConsignment());
         }
 
@@ -710,8 +721,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  int    $id
-     * @param  string $apiKey
+     * @param int    $id
+     * @param string $apiKey
      *
      * @return self
      * @throws AccountNotActiveException
@@ -724,8 +735,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  array  $consignmentIds
-     * @param  string $apiKey
+     * @param array  $consignmentIds
+     * @param string $apiKey
      *
      * @return self
      * @throws AccountNotActiveException
@@ -750,8 +761,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  string $id
-     * @param  string $apiKey
+     * @param string $id
+     * @param string $apiKey
      *
      * @return self
      * @throws AccountNotActiveException
@@ -764,8 +775,8 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  array  $referenceIds
-     * @param  string $apiKey
+     * @param array  $referenceIds
+     * @param string $apiKey
      *
      * @return self
      * @throws AccountNotActiveException
@@ -790,7 +801,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Helper\MyParcelCollection|\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $sortedCollection
+     * @param \MyParcelNL\Sdk\Helper\MyParcelCollection|\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $sortedCollection
      *
      * @return self
      */
@@ -799,9 +810,7 @@ class MyParcelCollection extends Collection
         $result = new MyParcelCollection();
 
         foreach ($sortedCollection as $sorted) {
-            $consignment =
-                $this->where('consignment_id', $sorted->getConsignmentId())
-                    ->first();
+            $consignment = $this->where('consignment_id', $sorted->getConsignmentId())->first();
 
             if ($consignment) {
                 $result[] = $consignment;
@@ -816,12 +825,11 @@ class MyParcelCollection extends Collection
     /**
      * Sets label format settings
      *
-     * @param  mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
-     *                          Positioning is only applied on the first page with labels. All subsequent pages will
-     *                          use the default positioning `[1,2,3,4]`. Pass an array to specify the positions on an
-     *                          A4 sheet, e.g. `[2,3,4]`. Pass a number to specify the starting position on an A4
-     *                          sheet, e.g. `2`. The following labels will fill the subsequent positions. Pass a falsy
-     *                          value to use an A6 sheet, e.g. `false` or `null`.
+     * @param mixed $positions The position(s) of the label(s) on an A4 sheet or false for an A6 sheet.
+     *                          Positioning is only applied on the first page with labels. All subsequent pages will use the default positioning `[1,2,3,4]`.
+     *                          Pass an array to specify the positions on an A4 sheet, e.g. `[2,3,4]`.
+     *                          Pass a number to specify the starting position on an A4 sheet, e.g. `2`. The following labels will fill the subsequent positions.
+     *                          Pass a falsy value to use an A6 sheet, e.g. `false` or `null`.
      *
      * @return self
      */
@@ -848,7 +856,7 @@ class MyParcelCollection extends Collection
     /**
      * Encode ReturnShipment to send to MyParcel
      *
-     * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $consignments
+     * @param \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment[] $consignments
      *
      * @return string
      */
@@ -876,7 +884,6 @@ class MyParcelCollection extends Collection
     /**
      * @param $result
      * @param $apiKey
-     *
      * @return self
      * @throws MissingFieldException
      */
@@ -885,9 +892,7 @@ class MyParcelCollection extends Collection
         $newCollection = new static();
 
         foreach ($result as $shipment) {
-            $consignment =
-                ConsignmentFactory::createByCarrierId($shipment['carrier_id'])
-                    ->setApiKey($apiKey);
+            $consignment = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
 
             //TODO: MY-32524 Make AbstractConsignmentAdapter for carrier specific exceptions
             if (CarrierUPSStandard::ID === $shipment['carrier_id'] || CarrierUPSExpressSaver::ID === $shipment['carrier_id']) {
@@ -896,21 +901,13 @@ class MyParcelCollection extends Collection
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
             $isMultiCollo       = ! empty($shipment['secondary_shipments']);
-            $newCollection->addConsignment(
-                $consignmentAdapter->getConsignment()
-                    ->setMultiCollo($isMultiCollo)
-            );
+            $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
                 $secondaryShipment  = Arr::arrayMergeRecursiveDistinct($shipment, $secondaryShipment);
-                $consignment        =
-                    ConsignmentFactory::createByCarrierId($shipment['carrier_id'])
-                        ->setApiKey($apiKey);
+                $consignment        = ConsignmentFactory::createByCarrierId($shipment['carrier_id'])->setApiKey($apiKey);
                 $consignmentAdapter = new ConsignmentAdapter($secondaryShipment, $consignment);
-                $newCollection->addConsignment(
-                    $consignmentAdapter->getConsignment()
-                        ->setMultiCollo($isMultiCollo)
-                );
+                $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
             }
         }
 
@@ -932,7 +929,7 @@ class MyParcelCollection extends Collection
     }
 
     /**
-     * @param  mixed $id
+     * @param mixed $id
      *
      * @return self
      */
@@ -949,8 +946,8 @@ class MyParcelCollection extends Collection
     /**
      * Let the user of the SDK adjust the return consignment by means of a callback.
      *
-     * @param  array|AbstractConsignment[] $parentConsignments
-     * @param  \Closure|null               $modifier
+     * @param array|AbstractConsignment[] $parentConsignments
+     * @param \Closure|null               $modifier
      *
      * @return array|AbstractConsignment[]
      */
