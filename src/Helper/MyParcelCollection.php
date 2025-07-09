@@ -172,10 +172,68 @@ class MyParcelCollection extends Collection
         if ($consignment->getApiKey() === null) {
             throw new MissingFieldException('First set the API key with setApiKey() before running addConsignment()');
         }
-
         $consignment->validate();
-
         $this->push($consignment);
+
+        return $this;
+    }
+
+    /**
+     * @param AbstractConsignment $consignment
+     * @param int $amount
+     *
+     * @return self
+     * @throws MissingFieldException
+     */
+    public function addMultiCollo(AbstractConsignment $consignment, int $amount): self
+    {
+        if ($amount <= 1) {
+            $this->addConsignment($consignment);
+            return $this;
+        }
+
+        // Create multiple consignments with equally distributed weight
+        $originalWeight = $consignment->getTotalWeight();
+        $weightPerCollo = $originalWeight / $amount;
+        
+        $consignments = [];
+        for ($i = 1; $i <= $amount; $i++) {
+            $clonedConsignment = clone $consignment;
+            $clonedConsignment->setTotalWeight($weightPerCollo);
+            $consignments[] = $clonedConsignment;
+        }
+
+        return $this->addMultiColloConsignments($consignments);
+    }
+
+    /**
+     * @param AbstractConsignment[] $consignments
+     *
+     * @return self
+     * @throws MissingFieldException
+     * @throws \Exception
+     */
+    public function addMultiColloConsignments(array $consignments): self
+    {
+        if (empty($consignments)) {
+            return $this;
+        }
+
+        // Check if all consignments have the same carrier
+        $carrierIds = array_map(static function($consignment) {
+            return $consignment->getCarrierId();
+        }, $consignments);
+        if (count(array_unique($carrierIds)) > 1) {
+            throw new \Exception('All consignments in a multi collo shipment must have the same carrier.');
+        }
+
+        // Set multi collo and reference identifier for all consignments
+        $referenceId = $consignments[0]->getReferenceIdentifier() ?? ('multi_collo_' . uniqid('', true));
+        foreach ($consignments as $consignment) {
+            $consignment->setMultiCollo(true);
+            $consignment->setReferenceIdentifier($referenceId);
+            $this->addConsignment($consignment);
+        }
 
         return $this;
     }
@@ -215,29 +273,6 @@ class MyParcelCollection extends Collection
                 ->setReferenceIdentifier($referenceId);
 
             $this->addConsignment($consignment);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param AbstractConsignment $consignment
-     * @param                     $amount
-     *
-     * @return self
-     */
-    public function addMultiCollo(AbstractConsignment $consignment, $amount): self
-    {
-        if ($amount > 1) {
-            $consignment->setMultiCollo();
-        }
-
-        if ($consignment->isPartOfMultiCollo() && ! $consignment->getReferenceIdentifier()) {
-            $consignment->setReferenceIdentifier('random_multi_collo_' . uniqid('', true));
-        }
-
-        for ($i = 1; $i <= $amount; $i++) {
-            $this->push($consignment);
         }
 
         return $this;
