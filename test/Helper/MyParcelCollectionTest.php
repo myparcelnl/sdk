@@ -127,8 +127,7 @@ class MyParcelCollectionTest extends CollectionTestCase
         $collection = $this->generateCollection([
             [
                 self::CONSIGNMENT_ID => 212652776,
-                self::API_KEY        => $this->getApiKey(),
-                self::ADD_DROPOFF_POINT => false,
+                self::API_KEY        => $this->getApiKey()
             ]
         ]);
 
@@ -138,10 +137,14 @@ class MyParcelCollectionTest extends CollectionTestCase
 
         $consignment = $collection->first();
         $history = $consignment->getHistory();
+        $trackTraceUrl = $consignment->getTrackTraceUrl();
 
 
         self::assertInstanceOf(MyParcelCollection::class, $trackTraceData);
         self::assertNotEmpty($history, 'History should not be empty');
+        self::assertNotEmpty($trackTraceUrl, 'Track trace URL should not be empty');
+
+
     }
 
 }
