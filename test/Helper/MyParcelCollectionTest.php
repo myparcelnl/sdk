@@ -124,9 +124,12 @@ class MyParcelCollectionTest extends CollectionTestCase
 
     public function testFetchTrackTraceData(): void
     {
+
+        self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'Requires real shipment with accessible track&trace');
+
         $collection = $this->generateCollection([
             [
-                self::CONSIGNMENT_ID => 212652776,
+                self::CONSIGNMENT_ID => 212652776, // Example consignment ID, replace with a valid one
                 self::API_KEY        => $this->getApiKey()
             ]
         ]);
