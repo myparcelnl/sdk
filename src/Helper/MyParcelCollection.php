@@ -964,4 +964,32 @@ class MyParcelCollection extends Collection
 
         return $returnConsignments;
     }
+
+    /**
+     * Fetches track & trace data for all consignments in the collection via the MyParcel API.
+     * This method calls the tracktraces/{id} endpoint for each consignment and sets the resulting
+     * history and track trace link on the consignment object using setHistory() and setTrackTraceUrl().
+     *
+     * @return self
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     */
+    public function fetchTrackTraceData(): self
+    {
+        foreach ($this->items as $consignment) {
+            $shipmentId = $consignment->getConsignmentId();
+            $apiKey     = $consignment->getApiKey();
+
+            $request = (new MyParcelRequest())
+                ->setRequestParameters($apiKey)
+                ->sendRequest('GET', "tracktraces/$shipmentId");
+
+            $trackTraceData = $request->getResult('data.tracktraces.0');
+
+            if ($trackTraceData) {
+                $consignment->setHistory($trackTraceData['history'] ?? []);
+                $consignment->setTrackTraceUrl($trackTraceData['link_tracktrace'] ?? null);
+            }
+        }
+        return $this;
+    }
 }

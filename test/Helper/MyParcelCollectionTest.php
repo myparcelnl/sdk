@@ -118,4 +118,32 @@ class MyParcelCollectionTest extends CollectionTestCase
             Arr::pluck($sorted->toArray(), self::REFERENCE_IDENTIFIER)
         );
     }
+
+    public function testFetchTrackTraceData(): void
+    {
+
+        self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'Requires real shipment with accessible track&trace');
+
+        $collection = $this->generateCollection([
+            [
+                self::CONSIGNMENT_ID => 212652776, // Example consignment ID, replace with a valid one
+                self::API_KEY        => $this->getApiKey()
+            ]
+        ]);
+
+
+
+        $trackTraceData = $collection->fetchTrackTraceData();
+
+        $consignment = $collection->first();
+        $history = $consignment->getHistory();
+        $trackTraceUrl = $consignment->getTrackTraceUrl();
+
+
+        self::assertInstanceOf(MyParcelCollection::class, $trackTraceData);
+        self::assertNotEmpty($history, 'History should not be empty');
+        self::assertNotEmpty($trackTraceUrl, 'Track trace URL should not be empty');
+
+
+    }
 }
