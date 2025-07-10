@@ -32,6 +32,19 @@ class AbstractConsignmentTest extends TestCase
         'status'              => 99,
         'external_identifier' => '123456789',
         'barcode'             => '3STOIS912345678',
+        'history'             => [
+            [
+                'status' => 1,
+                'time'   => '2023-01-01 12:00:00',
+                'text'   => 'Test status',
+            ],
+            [
+                'status' => 2,
+                'time'   => '2023-01-02 12:00:00',
+                'text'   => 'Test status 2',
+            ],
+        ],
+        'link_tracktrace'     => 'https://postnl.nl/tracktrace/?B=3SMYPA126329191&P=2182KD&D=NL&T=C&L=NL',
     ];
 
     /**
@@ -63,7 +76,9 @@ class AbstractConsignmentTest extends TestCase
             ->setShopId(self::TEST_DATA['shop_id'])
             ->setStatus(self::TEST_DATA['status'])
             ->setExternalIdentifier(self::TEST_DATA['external_identifier'])
-            ->setBarcode(self::TEST_DATA['barcode']);
+            ->setBarcode(self::TEST_DATA['barcode'])
+            ->setHistory(self::TEST_DATA['history'])
+            ->setTrackTraceUrl(self::TEST_DATA['link_tracktrace']);
 
         self::assertEquals(self::TEST_DATA['cc'], $consignment->getCountry());
         self::assertEquals(self::TEST_DATA['city'], $consignment->getCity());
@@ -85,5 +100,7 @@ class AbstractConsignmentTest extends TestCase
         self::assertEquals(self::TEST_DATA['status'], $consignment->getStatus());
         self::assertEquals(self::TEST_DATA['external_identifier'], $consignment->getExternalIdentifier());
         self::assertEquals(self::TEST_DATA['barcode'], $consignment->getBarcode());
+        self::assertEquals(self::TEST_DATA['history'], $consignment->getHistory());
+        self::assertEquals(self::TEST_DATA['link_tracktrace'], $consignment->getTrackTraceUrl());
     }
 }
