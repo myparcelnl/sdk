@@ -118,4 +118,39 @@ class MyParcelCollectionTest extends CollectionTestCase
             Arr::pluck($sorted->toArray(), self::REFERENCE_IDENTIFIER)
         );
     }
+
+    /**
+     * Tests fetching track & trace data for multiple consignments with different API keys.
+     * Asserts that each consignment receives a valid track & trace URL and a non-null history array.
+     *
+     * @return void
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     */
+    public function testFetchTrackTraceData(): void
+    {
+        self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'Requires real shipment with accessible track&trace');
+
+        $collection = $this->generateCollection([
+            [
+                self::CONSIGNMENT_ID => 212652776,
+                self::API_KEY        => $this->getApiKey(),
+            ],
+            [
+                self::CONSIGNMENT_ID => 212639182,
+                self::API_KEY        => $this->getApiKey(),
+            ]
+
+        ]);
+
+        $collection->fetchTrackTraceData();
+
+        foreach ($collection as $consignment) {
+            $history       = $consignment->getHistory();
+            $trackTraceUrl = $consignment->getTrackTraceUrl();
+
+            self::assertNotNull($history, 'History should not be empty');
+            self::assertNotEmpty($trackTraceUrl, 'Track trace URL should not be empty');
+
+        }
+    }
 }
