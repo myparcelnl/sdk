@@ -463,7 +463,6 @@ abstract class AbstractConsignment
     protected $history;
 
     /**
-    /**
      * @var null|string
      */
     protected $trackTraceUrl;
@@ -2025,7 +2024,7 @@ abstract class AbstractConsignment
     /**
      * Set the URL for tracking and tracing this consignment.
      *
-     * @param  string $trackTraceUrl
+     * @param  null|string $trackTraceUrl
      *
      * @return $this
      */

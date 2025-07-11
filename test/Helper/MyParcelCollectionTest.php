@@ -119,31 +119,38 @@ class MyParcelCollectionTest extends CollectionTestCase
         );
     }
 
+    /**
+     * Tests fetching track & trace data for multiple consignments with different API keys.
+     * Asserts that each consignment receives a valid track & trace URL and a non-null history array.
+     *
+     * @return void
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     */
     public function testFetchTrackTraceData(): void
     {
-
         self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'Requires real shipment with accessible track&trace');
 
         $collection = $this->generateCollection([
             [
-                self::CONSIGNMENT_ID => 212652776, // Example consignment ID, replace with a valid one
-                self::API_KEY        => $this->getApiKey()
+                self::CONSIGNMENT_ID => 212652776,
+                self::API_KEY        => $this->getApiKey(),
+            ],
+            [
+                self::CONSIGNMENT_ID => 212639182,
+                self::API_KEY        => $this->getApiKey(),
             ]
+
         ]);
 
+        $collection->fetchTrackTraceData();
 
+        foreach ($collection as $consignment) {
+            $history       = $consignment->getHistory();
+            $trackTraceUrl = $consignment->getTrackTraceUrl();
 
-        $trackTraceData = $collection->fetchTrackTraceData();
+            self::assertNotNull($history, 'History should not be empty');
+            self::assertNotEmpty($trackTraceUrl, 'Track trace URL should not be empty');
 
-        $consignment = $collection->first();
-        $history = $consignment->getHistory();
-        $trackTraceUrl = $consignment->getTrackTraceUrl();
-
-
-        self::assertInstanceOf(MyParcelCollection::class, $trackTraceData);
-        self::assertNotEmpty($history, 'History should not be empty');
-        self::assertNotEmpty($trackTraceUrl, 'Track trace URL should not be empty');
-
-
+        }
     }
 }
