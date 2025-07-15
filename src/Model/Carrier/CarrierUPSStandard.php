@@ -11,7 +11,7 @@ class CarrierUPSStandard extends AbstractCarrier
     public const CONSIGNMENT = UPSStandardConsignment::class;
     public const HUMAN       = 'UPS Standard';
     public const ID          = 12;
-    public const NAME        = 'ups_standard';
+    public const NAME        = 'upsstandard';
 
     /**
      * @var class-string

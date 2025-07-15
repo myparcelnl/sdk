@@ -9,9 +9,6 @@ use MyParcelNL\Sdk\Validator\Consignment\PostNLConsignmentValidator;
 
 class PostNLConsignment extends AbstractConsignment
 {
-    protected const CARRIER_ID = 1;
-    protected const CARRIER_NAME = 'postnl';
-
     /**
      * @var string
      */

@@ -23,9 +23,6 @@ class DPDConsignment extends AbstractConsignment
         'CH',
     ];
 
-    protected const CARRIER_ID = 4;
-    protected const CARRIER_NAME = 'dpd';
-
     /**
      * @var string
      */

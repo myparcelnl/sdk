@@ -6,12 +6,10 @@ namespace MyParcelNL\Sdk\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 
-class UPSExpressConsignment extends AbstractConsignment
+class UPSExpressSaverConsignment extends AbstractConsignment
 {
     public const DEFAULT_WEIGHT = 3000;
-    protected const CARRIER_ID = 13;
-    protected const CARRIER_NAME = 'ups_express';
-    
+
     /**
      * @internal
      * @var int
