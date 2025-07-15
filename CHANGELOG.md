@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.0](https://github.com/myparcelnl/sdk/compare/v9.0.2...v10.0.0) (2025-07-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* use correct ups constants (#538)
+
+### :bug: Bug Fixes
+
+* use correct ups constants ([#538](https://github.com/myparcelnl/sdk/issues/538)) ([983f39f](https://github.com/myparcelnl/sdk/commit/983f39f8f52cfd37a62cfb23f5281cdc06b02b13))
+
 ## [9.0.2](https://github.com/myparcelnl/sdk/compare/v9.0.1...v9.0.2) (2025-07-09)
 
 
