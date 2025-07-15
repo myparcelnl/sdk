@@ -9,8 +9,6 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierUPSStandard;
 class UPSStandardConsignment extends AbstractConsignment
 {
     public const DEFAULT_WEIGHT = 3000;
-    protected const CARRIER_ID = 12;
-    protected const CARRIER_NAME = 'ups_standard';
 
     /**
      * @internal

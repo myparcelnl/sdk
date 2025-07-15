@@ -9,9 +9,6 @@ use MyParcelNL\Sdk\Validator\Consignment\BpostConsignmentValidator;
 
 class BpostConsignment extends AbstractConsignment
 {
-    protected const CARRIER_ID     = 2;
-    protected const CARRIER_NAME   = 'bpost';
-
     /**
      * @var int
      */
