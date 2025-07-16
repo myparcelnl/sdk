@@ -128,24 +128,32 @@ class MyParcelCollectionTest extends CollectionTestCase
      */
     public function testFetchTrackTraceData(): void
     {
+        $apiKey = $this->getApiKey();
 
         $collection = $this->generateCollection(
             $this->createConsignmentsTestData([
-                [self::REFERENCE_IDENTIFIER => 'consignment_one'],
-                [self::REFERENCE_IDENTIFIER => 'consignment_two'],
+                [self::REFERENCE_IDENTIFIER => 'consignment_one', self::API_KEY => $apiKey],
+                [self::REFERENCE_IDENTIFIER => 'consignment_two', self::API_KEY => $apiKey],
             ])
         );
 
         $collection->setLinkOfLabels();
+
+        foreach ($collection as $consignment) {
+            self::assertNotNull($consignment->getConsignmentId(), 'Shipment ID is null.');
+        }
+
         $collection->fetchTrackTraceData();
 
         foreach ($collection as $consignment) {
             $history       = $consignment->getHistory();
             $trackTraceUrl = $consignment->getTrackTraceUrl();
 
-            self::assertNotNull($history);
-            self::assertStringStartsWith('http', $trackTraceUrl);
+            self::assertIsArray($history, 'History has to be an array.');
+            self::assertNotNull($history, 'History cant be null.');
 
+            self::assertStringStartsWith('http', $trackTraceUrl, 'Track & Trace link is invalid.');
         }
     }
+
 }
