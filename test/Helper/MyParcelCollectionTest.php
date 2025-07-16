@@ -128,28 +128,23 @@ class MyParcelCollectionTest extends CollectionTestCase
      */
     public function testFetchTrackTraceData(): void
     {
-        self::skipUnlessEnabled(self::ENV_TEST_ORDERS, 'Requires real shipment with accessible track&trace');
 
-        $collection = $this->generateCollection([
-            [
-                self::CONSIGNMENT_ID => 212652776,
-                self::API_KEY        => $this->getApiKey(),
-            ],
-            [
-                self::CONSIGNMENT_ID => 212639182,
-                self::API_KEY        => $this->getApiKey(),
-            ]
+        $collection = $this->generateCollection(
+            $this->createConsignmentsTestData([
+                [self::REFERENCE_IDENTIFIER => 'consignment_one'],
+                [self::REFERENCE_IDENTIFIER => 'consignment_two'],
+            ])
+        );
 
-        ]);
-
+        $collection->setLinkOfLabels();
         $collection->fetchTrackTraceData();
 
         foreach ($collection as $consignment) {
             $history       = $consignment->getHistory();
             $trackTraceUrl = $consignment->getTrackTraceUrl();
 
-            self::assertNotNull($history, 'History should not be empty');
-            self::assertNotEmpty($trackTraceUrl, 'Track trace URL should not be empty');
+            self::assertNotNull($history);
+            self::assertStringStartsWith('http', $trackTraceUrl);
 
         }
     }
