@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.1](https://github.com/myparcelnl/sdk/compare/v10.0.0...v10.0.1) (2025-07-18)
+
+
+### :bug: Bug Fixes
+
+* **api:** add TrackTraces endpoint support to Consignment ([#537](https://github.com/myparcelnl/sdk/issues/537)) ([2ed938b](https://github.com/myparcelnl/sdk/commit/2ed938bba2d7453c5131b44f73f94cdd93a3a6ba))
+
 ## [10.0.0](https://github.com/myparcelnl/sdk/compare/v9.0.2...v10.0.0) (2025-07-15)
 
 
