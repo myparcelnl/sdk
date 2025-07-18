@@ -36,6 +36,8 @@ class UPSExpressSaverConsignment extends AbstractConsignment
     {
         return [
             self::DELIVERY_TYPE_EXPRESS_NAME,
+            self::DELIVERY_TYPE_PICKUP_NAME,
+
         ];
     }
 
@@ -66,6 +68,17 @@ class UPSExpressSaverConsignment extends AbstractConsignment
         }
 
         return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedShipmentOptionsForPickup(): array
+    {
+        return [
+            self::SHIPMENT_OPTION_INSURANCE,
+            self::SHIPMENT_OPTION_SIGNATURE,
+        ];
     }
 
     /**
