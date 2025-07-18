@@ -458,6 +458,16 @@ abstract class AbstractConsignment
     private $carrier;
 
     /**
+     * @var null|array
+     */
+    protected $history;
+
+    /**
+     * @var null|string
+     */
+    protected $trackTraceUrl;
+
+    /**
      * @var bool
      */
     private $hide_sender;
@@ -1984,5 +1994,54 @@ abstract class AbstractConsignment
     final public function getCarrierName(): ?string
     {
         return $this->carrier ? $this->carrier->getName() : null;
+    }
+
+    /**
+     * Set the complete Track & Trace history for this consignment.
+     *
+     * @param  array $history
+     *
+     * @return $this
+     */
+    final public function setHistory(array $history): self
+    {
+        $this->history = $history;
+
+        return $this;
+    }
+
+    /**
+     * Get the Track & Trace history for this consignment.
+     *
+     * @return array
+     */
+
+    final public function getHistory(): array
+    {
+        return $this->history;
+    }
+
+    /**
+     * Set the URL for tracking and tracing this consignment.
+     *
+     * @param  null|string $trackTraceUrl
+     *
+     * @return $this
+     */
+    final public function setTrackTraceUrl(?string $trackTraceUrl): self
+    {
+        $this->trackTraceUrl = $trackTraceUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get the URL for tracking and tracing this consignment.
+     *
+     * @return string|null
+     */
+    final public function getTrackTraceUrl(): ?string
+    {
+        return $this->trackTraceUrl;
     }
 }

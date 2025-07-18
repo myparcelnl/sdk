@@ -964,4 +964,42 @@ class MyParcelCollection extends Collection
 
         return $returnConsignments;
     }
+
+    /**
+     * Fetches track & trace data for all consignments in the collection via the MyParcel API.
+     * Groups consignments by API key, collects their consignment IDs, and retrieves the track & trace
+     * data. Works with one or multiple consignments.
+     *
+     * @return $this
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     */
+    public function fetchTrackTraceData(): self
+    {
+        $grouped =
+            $this->where('consignment_id', '!=', null)
+                ->groupBy(function (AbstractConsignment $item) {
+                    return $item->getApiKey();
+                });
+
+        foreach ($grouped as $apiKey => $consignments) {
+            $shipmentIds =
+                $consignments->pluck('consignment_id')
+                    ->all();
+            $uri         = 'tracktraces/' . implode(';', $shipmentIds);
+            $request     = (new MyParcelRequest())
+                ->setRequestParameters($apiKey)
+                ->sendRequest('GET', $uri);
+
+            foreach ($request->getResult('data.tracktraces') as $trackTraceData) {
+                $consignment = $this->getConsignmentByApiId($trackTraceData['shipment_id']);
+
+                if ($consignment) {
+                    $consignment->setHistory($trackTraceData['history'] ?? []);
+                    $consignment->setTrackTraceUrl($trackTraceData['link_tracktrace'] ?? null);
+                }
+            }
+        }
+
+        return $this;
+    }
 }
