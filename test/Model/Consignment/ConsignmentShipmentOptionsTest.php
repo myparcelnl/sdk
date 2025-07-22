@@ -364,7 +364,7 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
     {
         if (!isset($testData['printerless_return'])) {
             $this->expectException(ApiException::class);
-            $this->expectExceptionMessage('3759 -  - Shipment does not have a printerless return label');
+            $this->expectExceptionMessage('HTTP status 422 - 3759 - Shipment does not have a printerless return label');
         }
 
         $collection = $this->generateCollection($testData);
@@ -372,7 +372,7 @@ class ConsignmentShipmentOptionsTest extends ConsignmentTestCase
 
         self::assertEquals(1, $collection->count());
 
-        foreach($collection->getConsignments() as $consignment) {
+        foreach ($collection->getConsignments() as $consignment) {
             $response = (new PrinterlessReturnRequest($consignment))->send();
             self::assertIsString($response); // this is a png image
         }
