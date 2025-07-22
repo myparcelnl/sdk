@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
@@ -9,13 +11,13 @@ class PickupLocationV3Adapter extends AbstractPickupLocationAdapter
      */
     public function __construct(array $data)
     {
-        $this->location_name     = $data['location_name'];
-        $this->location_code     = $data['location_code'];
-        $this->retail_network_id = $data['retail_network_id'] ?? '';
-        $this->street            = $data['street'];
-        $this->number            = $data['number'];
-        $this->postal_code       = $data['postal_code'];
-        $this->city              = $data['city'];
-        $this->cc                = $data['cc'];
+        $this->location_name     = $data['location_name'] ?? '';
+        $this->location_code     = $data['location_code'] ?? '';
+        $this->retail_network_id = $data['retail_network_id'] ?? null;
+        $this->street            = $data['street'] ?? '';
+        $this->number            = $data['number'] ?? '';
+        $this->postal_code       = $data['postal_code'] ?? '';
+        $this->city              = $data['city'] ?? '';
+        $this->cc                = $data['cc'] ?? '';
     }
 }
