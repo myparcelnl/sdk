@@ -41,7 +41,7 @@ jobs:
           image: ghcr.io/myparcelnl/php-xd:${{ matrix.php-version }}
 
       - name: 'Install composer dependencies'
-        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
+        if: github.actor != 'dependabot[bot]'
         run: |
           docker run \
             --volume $PWD:/app \
