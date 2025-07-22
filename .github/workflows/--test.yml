@@ -49,7 +49,19 @@ jobs:
             ${{ steps.docker.outputs.image }} \
             composer install --no-progress --no-scripts --no-plugins
 
+      - name: 'Determine test strategy'
+        id: test-strategy
+        run: |
+          if [[ "${{ matrix.php-version }}" == "8.4" && "${{ github.actor }}" != "dependabot[bot]" && "${{ steps.cache-coverage.outputs.cache-hit }}" != "true" ]]; then
+            echo "run-coverage=true" >> $GITHUB_OUTPUT
+            echo "run-normal=false" >> $GITHUB_OUTPUT
+          else
+            echo "run-coverage=false" >> $GITHUB_OUTPUT
+            echo "run-normal=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: 'Run tests'
+        if: steps.test-strategy.outputs.run-normal == 'true'
         run: |
           docker run \
             --volume $PWD:/app \
@@ -61,7 +73,7 @@ jobs:
 
       # Run coverage only for the latest php version
       - name: 'Run tests (with coverage)'
-        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true' && matrix.php-version == '8.4'
+        if: steps.test-strategy.outputs.run-coverage == 'true'
         run: |
           docker run \
             --volume $PWD:/app \
@@ -73,10 +85,10 @@ jobs:
             vendor/bin/phpunit --coverage-clover coverage.xml
 
       - name: 'Get coverage file from container'
-        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
+        if: steps.test-strategy.outputs.run-coverage == 'true'
         run: |
           docker cp $(docker ps -alq):/app/coverage.xml .
 
       - name: 'Update code coverage'
-        if: github.actor != 'dependabot[bot]'
+        if: steps.test-strategy.outputs.run-coverage == 'true'
         uses: codecov/codecov-action@v4

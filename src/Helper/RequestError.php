@@ -33,7 +33,7 @@ class RequestError
      *
      * @return int
      */
-    private static function getHttpStatusCode(array $error): string
+    private static function getHttpStatusCode(array $error): ?string
     {
         return array_key_exists('status', $error) ? 'HTTP status ' . $error['status'] : null;
     }
