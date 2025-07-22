@@ -6,34 +6,38 @@ on:
 jobs:
   test:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
     permissions:
       contents: read
       packages: write
     steps:
-      - uses: myparcelnl/actions/setup-app-credentials@v3
+      - uses: myparcelnl/actions/setup-app-credentials@v4
         id: credentials
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: github.actor != 'dependabot[bot]'
         with:
           token: ${{ steps.credentials.outputs.token }}
 
       - name: 'Handle coverage cache'
         if: github.actor != 'dependabot[bot]'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-coverage
         with:
           path: ./coverage.xml
-          key: ${{ runner.os }}-coverage-${{ hashFiles('./src/**', './test/**') }}
+          key: ${{ runner.os }}-${{ matrix.php-version }}-coverage-${{ hashFiles('./src/**', './test/**') }}
 
-      - uses: myparcelnl/actions/pull-docker-image@v3
+      - uses: myparcelnl/actions/pull-docker-image@v4
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
-          image: ghcr.io/myparcelnl/php-xd:7.4
+          image: ghcr.io/myparcelnl/php-xd:${{ matrix.php-version }}
 
       - name: 'Install composer dependencies'
         if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
@@ -46,7 +50,18 @@ jobs:
             composer install --no-progress --no-scripts --no-plugins
 
       - name: 'Run tests'
-        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
+        run: |
+          docker run \
+            --volume $PWD:/app \
+            --env CI=${CI} \
+            --env API_KEY_NL=${{ secrets.API_KEY_NL }} \
+            --env API_KEY_BE=${{ secrets.API_KEY_BE }} \
+            ${{ steps.docker.outputs.image }} \
+            vendor/bin/phpunit
+
+      # Run coverage only for the latest php version
+      - name: 'Run tests (with coverage)'
+        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true' && matrix.php-version == '8.4'
         run: |
           docker run \
             --volume $PWD:/app \
@@ -64,4 +79,4 @@ jobs:
 
       - name: 'Update code coverage'
         if: github.actor != 'dependabot[bot]'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
