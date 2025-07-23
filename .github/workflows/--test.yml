@@ -35,7 +35,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.php-version }}-coverage-${{ hashFiles('./src/**', './test/**') }}
 
       - uses: myparcelnl/actions/pull-docker-image@v4
-        if: github.actor != 'dependabot[bot]' && steps.cache-coverage.outputs.cache-hit != 'true'
+        if: github.actor != 'dependabot[bot]'
         id: docker
         with:
           image: ghcr.io/myparcelnl/php-xd:${{ matrix.php-version }}
