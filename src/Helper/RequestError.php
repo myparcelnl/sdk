@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Helper;
 
@@ -17,12 +19,23 @@ class RequestError
     {
         return implode(
             ' - ',
-            [
+            array_filter([
+                self::getHttpStatusCode($error),
                 self::getErrorCode($error),
                 self::getErrorHumanMessage($error),
                 self::getErrorMessage($error, $result),
-            ]
+            ])
         );
+    }
+
+    /**
+     * @param array $error
+     *
+     * @return int
+     */
+    private static function getHttpStatusCode(array $error): ?string
+    {
+        return array_key_exists('status', $error) ? 'HTTP status ' . $error['status'] : null;
     }
 
     /**
@@ -30,17 +43,15 @@ class RequestError
      *
      * @return int
      */
-    private static function getErrorCode($error): int
+    private static function getErrorCode(array $error): ?int
     {
-        $code = '';
-
         if (array_key_exists('code', $error)) {
-            $code = $error['code'];
+            return (int) $error['code'];
         } elseif (array_key_exists('fields', $error)) {
-            $code = $error['fields'][0];
+            return (int) $error['fields'][0];
         }
 
-        return (int) $code;
+        return null;
     }
 
     /**
@@ -48,9 +59,9 @@ class RequestError
      *
      * @return string
      */
-    private static function getErrorHumanMessage($error): string
+    private static function getErrorHumanMessage(array $error): ?string
     {
-        return array_key_exists('human', $error) ? $error['human'][0] : '';
+        return array_key_exists('human', $error) ? $error['human'][0] : null;
     }
 
     /**
@@ -59,7 +70,7 @@ class RequestError
      *
      * @return string
      */
-    private static function getErrorMessage($error, array $result): string
+    private static function getErrorMessage(array $error, array $result): string
     {
         if (array_key_exists('message', $result)) {
             $message = $result['message'];

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Support;
 
@@ -117,7 +119,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public static function times($number, ?callable $callback = null)
     {
         if ($number < 1) {
-            return new static;
+            return new static();
         }
 
         if (is_null($callback)) {
@@ -205,7 +207,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
 
         $collection = isset($key) ? $this->pluck($key) : $this;
 
-        $counts = new self;
+        $counts = new self();
 
         $collection->each(function ($value) use ($counts) {
             $counts[$value] = isset($counts[$value]) ? $counts[$value] + 1 : 1;
@@ -242,7 +244,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         if (func_num_args() === 1) {
             if ($this->useAsCallable($key)) {
-                $placeholder = new stdClass;
+                $placeholder = new stdClass();
 
                 return $this->first($key, $placeholder) !== $placeholder;
             }
@@ -284,7 +286,8 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function crossJoin(...$lists)
     {
         return new static(Arr::crossJoin(
-            $this->items, ...array_map([$this, 'getArrayableItems'], $lists)
+            $this->items,
+            ...array_map([$this, 'getArrayableItems'], $lists)
         ));
     }
 
@@ -757,7 +760,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
                 $groupKey = is_bool($groupKey) ? (int) $groupKey : $groupKey;
 
                 if (! array_key_exists($groupKey, $results)) {
-                    $results[$groupKey] = new static;
+                    $results[$groupKey] = new static();
                 }
 
                 $results[$groupKey]->offsetSet($preserveKeys ? $key : null, $value);
@@ -855,7 +858,8 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function intersectByKeys($items)
     {
         return new static(array_intersect_key(
-            $this->items, $this->getArrayableItems($items)
+            $this->items,
+            $this->getArrayableItems($items)
         ));
     }
 
@@ -1185,7 +1189,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function partition($key, $operator = null, $value = null)
     {
-        $partitions = [new static, new static];
+        $partitions = [new static(), new static()];
 
         $callback = func_num_args() === 1
             ? $this->valueRetriever($key)
@@ -1413,7 +1417,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function split($numberOfGroups)
     {
         if ($this->isEmpty()) {
-            return new static;
+            return new static();
         }
 
         $groupSize = ceil($this->count() / $numberOfGroups);
@@ -1430,7 +1434,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function chunk($size)
     {
         if ($size <= 0) {
-            return new static;
+            return new static();
         }
 
         $chunks = [];
@@ -1712,11 +1716,13 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         return array_map(
             static function ($value) {
-            if ($value && (is_object($value) || is_string($value)) && method_exists($value, 'toArray')) {
-                return $value->toArray();
-            }
-            return $value;
-        }, $this->items);
+                if ($value && (is_object($value) || is_string($value)) && method_exists($value, 'toArray')) {
+                    return $value->toArray();
+                }
+                return $value;
+            },
+            $this->items
+        );
     }
 
     /**
@@ -1728,16 +1734,22 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         return array_map(
             static function ($value) {
+                if (!$value) {
+                    return $value;
+                }
+
                 if (is_array($value)) {
                     return Helpers::toArrayWithoutNull($value);
                 }
 
-                if ($value && method_exists($value, 'toArrayWithoutNull')) {
-                    return $value->toArrayWithoutNull();
-                }
+                if (is_object($value) || is_string($value)) {
+                    if (method_exists($value, 'toArrayWithoutNull')) {
+                        return $value->toArrayWithoutNull();
+                    }
 
-                if ($value && method_exists($value, 'toArray')) {
-                    return $value->toArray();
+                    if ($value && method_exists($value, 'toArray')) {
+                        return $value->toArray();
+                    }
                 }
 
                 return $value;

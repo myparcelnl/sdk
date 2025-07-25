@@ -397,8 +397,7 @@ class ConsignmentTestCase extends TestCase
         array               $testData,
         AbstractConsignment $consignment,
         ?array              $only = null
-    ): void
-    {
+    ): void {
         $testData = self::normalizeTestData($testData);
 
         foreach ($testData as $testConsignment) {
@@ -466,7 +465,7 @@ class ConsignmentTestCase extends TestCase
      */
     private function addDropOffPoint($data, AbstractConsignment $consignment): void
     {
-        if (!$data[self::ADD_DROPOFF_POINT]) {
+        if (!\array_key_exists(self::ADD_DROPOFF_POINT, $data)) {
             return;
         }
 
