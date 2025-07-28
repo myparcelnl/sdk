@@ -87,4 +87,4 @@ jobs:
 
       - name: 'Update code coverage'
         if: steps.test-strategy.outputs.run-coverage == 'true'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
