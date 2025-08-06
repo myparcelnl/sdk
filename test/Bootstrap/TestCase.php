@@ -33,6 +33,24 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Set up mock for all tests
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Enable mocking if not explicitly disabled
+        if (getenv('MP_SDK_TEST') !== 'false') {
+            // Register the mock class if available
+            if (class_exists('\MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl')) {
+                \MyParcelNL\Sdk\Model\MyParcelRequest::setOverride(
+                    '\MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl'
+                );
+            }
+        }
+    }
+
+    /**
      * @param  string $name
      *
      * @return string|null

@@ -12,5 +12,6 @@
   </testsuites>
   <php>
     <env name="TEST" value="true"/>
+    <env name="MP_SDK_TEST" value="true"/>
   </php>
 </phpunit>
