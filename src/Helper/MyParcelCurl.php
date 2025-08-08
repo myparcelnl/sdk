@@ -127,6 +127,7 @@ class MyParcelCurl
             return $this->handleHeaderLine($curl, $headerLine, $headers);
         });
 
+
         $response = curl_exec($resource);
 
         // Check the return value of curl_exec()

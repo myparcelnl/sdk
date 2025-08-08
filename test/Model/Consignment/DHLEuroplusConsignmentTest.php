@@ -6,6 +6,8 @@ namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierDHLEuroplus;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
+use MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl;
+use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
 
 class DHLEuroplusConsignmentTest extends ConsignmentTestCase
 {
@@ -41,6 +43,30 @@ class DHLEuroplusConsignmentTest extends ConsignmentTestCase
      */
     public function testDHLEuroPlusConsignments(array $testData): void
     {
+        // Clear and prepare mock responses using dataset
+        MockMyParcelCurl::$responseQueue = [];
+        
+        // Get the appropriate response set from the dataset
+        $responses = ShipmentResponses::getDHLEuroplusFlow([
+            'reference_identifier' => $testData[self::REFERENCE_IDENTIFIER] ?? null,
+            'signature' => $testData[self::SIGNATURE] ?? false,
+            'insurance' => $testData[self::INSURANCE] ?? 0,
+            'package_type' => $testData[self::PACKAGE_TYPE] ?? 1,
+            'country' => $testData[self::COUNTRY] ?? 'DE',
+            'postal_code' => $testData[self::POSTAL_CODE] ?? '39394',
+            'city' => $testData[self::CITY] ?? 'Schwanebeck',
+            'person' => $testData[self::PERSON] ?? 'Test Person',
+            'company' => $testData[self::COMPANY] ?? 'MyParcel',
+            'email' => $testData[self::EMAIL] ?? 'spam@myparcel.nl',
+            'phone' => $testData[self::PHONE] ?? '123456',
+        ]);
+        
+        // Queue all responses
+        foreach ($responses as $response) {
+            MockMyParcelCurl::addResponse($response);
+        }
+        
+        // Run the actual test
         $this->doConsignmentTest($testData);
     }
 

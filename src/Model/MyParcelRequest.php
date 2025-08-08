@@ -87,6 +87,11 @@ class MyParcelRequest
     private $result;
 
     /**
+     * @var string|null
+     */
+    private static ?string $override = null;
+
+    /**
      * @return array
      */
     public function getResponse(): array
@@ -409,6 +414,15 @@ class MyParcelRequest
      */
     private function instantiateCurl(): MyParcelCurl
     {
+        $mockEnabled = getenv('MP_SDK_TEST');
+        
+        // Use mock if enabled and override is set
+        if ($mockEnabled && $mockEnabled !== 'false' && self::$override) {
+            $mockClass = self::$override;
+            return new $mockClass();
+        }
+        
+        // Use real curl
         return (new MyParcelCurl())->setConfig(
             [
                 'header'  => 0,
@@ -421,6 +435,11 @@ class MyParcelRequest
                 CURLOPT_AUTOREFERER    => true,
             ]
         );
+    }
+
+    public static function setOverride(string $class): void
+    {
+        self::$override = $class;
     }
 
     /**
