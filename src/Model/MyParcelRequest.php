@@ -87,9 +87,11 @@ class MyParcelRequest
     private $result;
 
     /**
-     * @var string|null
+     * Factory hook so tests can inject a different Curl implementation.
+     * This is NOT test logic: production stays on the default MyParcelCurl when no factory is set.
+     * @var null|callable(): \MyParcelNL\Sdk\Helper\MyParcelCurl
      */
-    private static ?string $override = null;
+    private static $curlFactory = null;
 
     /**
      * @return array
@@ -414,15 +416,15 @@ class MyParcelRequest
      */
     private function instantiateCurl(): MyParcelCurl
     {
-        $mockEnabled = getenv('MP_SDK_TEST');
-        
-        // Use mock if enabled and override is set
-        if ($mockEnabled && $mockEnabled !== 'false' && self::$override) {
-            $mockClass = self::$override;
-            return new $mockClass();
+        if (self::$curlFactory) {
+            $curl = (self::$curlFactory)();
+            if (! $curl instanceof MyParcelCurl) {
+                throw new \RuntimeException('Curl factory must return instance of MyParcelCurl');
+            }
+            return $curl;
         }
-        
-        // Use real curl
+
+        // Default real curl in production
         return (new MyParcelCurl())->setConfig(
             [
                 'header'  => 0,
@@ -437,9 +439,13 @@ class MyParcelRequest
         );
     }
 
-    public static function setOverride(string $class): void
+    /**
+     * Set (or unset) the Curl factory. Intended for tests via bootstrap or the test itself.
+     * @param null|callable(): \MyParcelNL\Sdk\Helper\MyParcelCurl $factory
+     */
+    public static function setCurlFactory(?callable $factory): void
     {
-        self::$override = $class;
+        self::$curlFactory = $factory;
     }
 
     /**

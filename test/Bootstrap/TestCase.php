@@ -6,11 +6,16 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateTime;
 use Faker\Factory;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use MyParcelNL\Sdk\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Arr;
 use RuntimeException;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
     protected const ENV_API_KEY_BE  = 'API_KEY_BE';
     protected const ENV_API_KEY_NL  = 'API_KEY_NL';
     protected const ENV_CI          = 'CI';
@@ -33,21 +38,27 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Set up mock for all tests
+     * Set up for each test
      */
     protected function setUp(): void
     {
         parent::setUp();
+        // Reset factory to ensure clean state between tests
+        MyParcelRequest::setCurlFactory(null);
+        // Mockery integration handles mock cleanup automatically
+    }
+    
+    /**
+     * Create a mock of MyParcelCurl and inject it into MyParcelRequest
+     * 
+     * @return \Mockery\MockInterface|MyParcelCurl
+     */
+    protected function mockCurl()
+    {
+        $mock = Mockery::mock(MyParcelCurl::class);
+        MyParcelRequest::setCurlFactory(fn() => $mock);
         
-        // Enable mocking if not explicitly disabled
-        if (getenv('MP_SDK_TEST') !== 'false') {
-            // Register the mock class if available
-            if (class_exists('\MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl')) {
-                \MyParcelNL\Sdk\Model\MyParcelRequest::setOverride(
-                    '\MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl'
-                );
-            }
-        }
+        return $mock;
     }
 
     /**
