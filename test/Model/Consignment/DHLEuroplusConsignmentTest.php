@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierDHLEuroplus;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
-use MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl;
 use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
 
 class DHLEuroplusConsignmentTest extends ConsignmentTestCase
@@ -43,8 +42,8 @@ class DHLEuroplusConsignmentTest extends ConsignmentTestCase
      */
     public function testDHLEuroPlusConsignments(array $testData): void
     {
-        // Clear and prepare mock responses using dataset
-        MockMyParcelCurl::$responseQueue = [];
+        // Mock HTTP client for API calls
+        $mockCurl = $this->mockCurl();
         
         // Get the appropriate response set from the dataset
         $responses = ShipmentResponses::getDHLEuroplusFlow([
@@ -61,9 +60,18 @@ class DHLEuroplusConsignmentTest extends ConsignmentTestCase
             'phone' => $testData[self::PHONE] ?? '123456',
         ]);
         
-        // Queue all responses
+        // Set up mock expectations for each response from the dataset
         foreach ($responses as $response) {
-            MockMyParcelCurl::addResponse($response);
+            $mockCurl->shouldReceive('write')
+                ->once()
+                ->with(\Mockery::type('string'), \Mockery::type('string'), \Mockery::type('array'), \Mockery::type('string'))
+                ->andReturn('');
+            $mockCurl->shouldReceive('getResponse')
+                ->once()
+                ->andReturn($response);
+            $mockCurl->shouldReceive('close')
+                ->once()
+                ->andReturnSelf();
         }
         
         // Run the actual test

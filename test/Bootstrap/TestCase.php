@@ -40,13 +40,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Set up for each test
      */
+    // test/Bootstrap/TestCase.php
     protected function setUp(): void
     {
         parent::setUp();
-        // Reset factory to ensure clean state between tests
-        MyParcelRequest::setCurlFactory(null);
-        // Mockery integration handles mock cleanup automatically
+        MyParcelRequest::setCurlFactory(static function () {
+            throw new \RuntimeException('No Curl mock provided. Call $this->mockCurl() in your test.');
+        });
     }
+
     
     /**
      * Create a mock of MyParcelCurl and inject it into MyParcelRequest

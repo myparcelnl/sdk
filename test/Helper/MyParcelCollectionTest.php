@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Test\Helper;
 
 use Mockery;
 use MyParcelNL\Sdk\Helper\MyParcelCollection;
-use MyParcelNL\Sdk\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Arr;

@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Test\Helper;
 
 use MyParcelNL\Sdk\Helper\TrackTraceUrl;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl;
 
 
 class TrackTraceUrlTest extends TestCase

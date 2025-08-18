@@ -2,36 +2,13 @@
 
 ## Overview
 
-This document describes how to use API mocking in the SDK tests to eliminate real HTTP calls and create deterministic, fast tests.
+This document describes how to use **Mockery** for API mocking in the SDK tests to eliminate real HTTP calls and create deterministic, fast tests.
 
 ## Prerequisites
 
-### 1. Environment Setup
+### 1. Test Base Class
+Your test MUST extend `TestCase` to access the Mockery-based mocking system:
 
-The mock system requires `MP_SDK_TEST=true` to be set. This needs to be configured in two places:
-
-#### For Local Development
-In `phpunit.xml`:
-```xml
-<php>
-    <env name="MP_SDK_TEST" value="true"/>
-</php>
-```
-
-#### For CI/GitHub Actions
-In `.github/workflows/--test.yml`:
-```yaml
-docker run \
-  --volume $PWD:/app \
-  --env MP_SDK_TEST=true \
-  # ... other env vars ...
-  vendor/bin/phpunit
-```
-
-This ensures the mock is active in both local development and CI environments.
-
-### 2. Test Base Class
-Your test MUST extend `TestCase` to enable automatic mocking:
 ```php
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -47,16 +24,20 @@ class MyTest extends TestCase
 ```php
 public function testMyFeature()
 {
-    // Clear the queue
-    MockMyParcelCurl::clearQueue();
-    
-    // Add your mock response
-    MockMyParcelCurl::addResponse([
+    // 1. Prepare mock response
+    $mockResponse = [
         'response' => json_encode(['data' => ['result' => 'success']]),
+        'headers' => [],
         'code' => 200
-    ]);
+    ];
     
-    // Run your test code
+    // 2. Set up Mockery expectations
+    $mockCurl = $this->mockCurl();
+    $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+    $mockCurl->shouldReceive('getResponse')->once()->andReturn($mockResponse);
+    $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+    
+    // 3. Run your test code
     // ...
 }
 ```
@@ -65,18 +46,24 @@ public function testMyFeature()
 ```php
 public function testConsignment(array $testData): void
 {
-    // Clear the queue
-    MockMyParcelCurl::clearQueue();
+    // 1. Prepare mock responses
+    $createResponse = ['response' => json_encode(['data' => ['ids' => [['id' => 123]]]]), 'code' => 201];
+    $labelResponse = ['response' => json_encode(['data' => ['pdf' => ['url' => 'test-url']]]), 'code' => 200];
     
-    // Use a dataset for standard flows
-    $responses = ShipmentResponses::getPostNLFlow($testData);
+    // 2. Set up Mockery expectations for multiple calls
+    $mockCurl = $this->mockCurl();
     
-    // Queue all responses
-    foreach ($responses as $response) {
-        MockMyParcelCurl::addResponse($response);
-    }
+    // First call: create shipment
+    $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+    $mockCurl->shouldReceive('getResponse')->once()->andReturn($createResponse);
+    $mockCurl->shouldReceive('close')->once()->andReturnSelf();
     
-    // Run the test
+    // Second call: get labels
+    $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+    $mockCurl->shouldReceive('getResponse')->once()->andReturn($labelResponse);
+    $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+    
+    // 3. Run the test
     $this->doConsignmentTest($testData);
 }
 ```
@@ -85,15 +72,16 @@ public function testConsignment(array $testData): void
 
 ### How It Works
 
-1. **Environment Detection**: When `MP_SDK_TEST=true`, the SDK uses `MockMyParcelCurl` instead of real HTTP calls
-2. **Queue System**: Tests queue responses that are returned in FIFO order
+1. **Mockery Integration**: All HTTP calls are automatically mocked using Mockery framework
+2. **Expectation-Based**: Tests define expectations for API calls using `shouldReceive()`
 3. **Automatic Setup**: `TestCase::setUp()` automatically enables mocking for all tests
 
 ### Key Components
 
-- **MockMyParcelCurl**: Queue-based mock that replaces `MyParcelCurl`
-- **ShipmentResponses**: Dataset with reusable API responses
-- **TestCase**: Base class that sets up the mock environment
+- **Mockery**: Modern PHP mocking framework that replaces all HTTP calls
+- **TestCase::mockCurl()**: Method that provides Mockery mock instances
+- **ShipmentResponses**: Dataset with reusable API responses (still available for reference)
+- **TestCase**: Base class that integrates Mockery mocking
 
 ## Datasets
 
@@ -122,65 +110,86 @@ public function testConsignment(array $testData): void
 
 ### Example 1: Test with success response
 ```php
-MockMyParcelCurl::clearQueue();
-MockMyParcelCurl::addResponse([
+$mockResponse = [
     'response' => json_encode(['data' => ['ids' => [['id' => 12345]]]]),
+    'headers' => [],
     'code' => 200
-]);
+];
+
+$mockCurl = $this->mockCurl();
+$mockCurl->shouldReceive('write')->once()->andReturnSelf();
+$mockCurl->shouldReceive('getResponse')->once()->andReturn($mockResponse);
+$mockCurl->shouldReceive('close')->once()->andReturnSelf();
 ```
 
 ### Example 2: Test with error response
 ```php
-MockMyParcelCurl::clearQueue();
-MockMyParcelCurl::addResponse(
-    ShipmentResponses::errorResponse(3505, 'Invalid postal code', 422)
-);
+$errorResponse = [
+    'response' => json_encode([
+        'message' => 'Invalid postal code',
+        'errors' => [['code' => 3505, 'message' => 'Invalid postal code']]
+    ]),
+    'headers' => [],
+    'code' => 422
+];
+
+$mockCurl = $this->mockCurl();
+$mockCurl->shouldReceive('write')->once()->andReturnSelf();
+$mockCurl->shouldReceive('getResponse')->once()->andReturn($errorResponse);
+$mockCurl->shouldReceive('close')->once()->andReturnSelf();
 ```
 
-### Example 3: Adding a new carrier
-Add a new method to `ShipmentResponses.php`:
+### Example 3: Multiple API calls with different responses
 ```php
-public static function getMyNewCarrierFlow(array $testData = []): array
-{
-    return self::getStandardShipmentFlow([
-        'carrier_id' => 99, // Your carrier ID
-        'recipient' => [
-            // Carrier-specific defaults
-        ],
-        'options' => [
-            // Carrier-specific options
-        ],
-    ]);
-}
+$response1 = ['response' => json_encode(['data' => ['ids' => [['id' => 1]]]]), 'code' => 201];
+$response2 = ['response' => json_encode(['data' => ['pdf' => ['url' => 'test-url']]]), 'code' => 200];
+
+$mockCurl = $this->mockCurl();
+
+// First call
+$mockCurl->shouldReceive('write')->once()->andReturnSelf();
+$mockCurl->shouldReceive('getResponse')->once()->andReturn($response1);
+$mockCurl->shouldReceive('close')->once()->andReturnSelf();
+
+// Second call
+$mockCurl->shouldReceive('write')->once()->andReturnSelf();
+$mockCurl->shouldReceive('getResponse')->once()->andReturn($response2);
+$mockCurl->shouldReceive('close')->once()->andReturnSelf();
 ```
 
 ## Best Practices
 
-1. **Always clear the queue**: Start each test with `MockMyParcelCurl::clearQueue()`
-2. **Queue order matters**: Responses are consumed in FIFO order
-3. **Use test constants**: Use constants from `ConsignmentTestCase` (e.g., `self::SIGNATURE`, `self::EMAIL`)
-4. **Match real API**: Ensure mock responses match the real API structure
-5. **Test errors too**: Don't forget to test error scenarios
+1. **Count your API calls**: Ensure your `shouldReceive('...')->once()` (or `times(N)`) matches actual calls
+2. **Order matters**: Mockery validates expectations in the order they are defined
+3. **Use realistic responses**: Create mock responses that closely mimic real API output
+4. **Test error scenarios**: Mock error responses with appropriate HTTP status codes
+5. **Use `$this->mockCurl()`**: Always get mock instances from the TestCase method
 
 ## Troubleshooting
 
-### "Queue has 0 responses"
-- You forgot to add responses
-- Or the queue was cleared after adding responses
+### "Method write(<Any Arguments>) should be called exactly N times but called M times"
+- Your expectations don't match the actual number of API calls
+- Count how many HTTP requests your test code makes
+- Update your `shouldReceive('write')->times(N)` to match
+
+### "No matching handler found"
+- You're missing a `shouldReceive()` expectation for a method call
+- Add expectations for all methods: `write()`, `getResponse()`, `close()`
 
 ### "Invalid argument supplied for foreach"
-- A required field is missing in your response (e.g., `secondary_shipments`)
+- A required field is missing in your mock response
 - Check the error message for which field is missing
+- Verify your mock response structure matches the real API
 
-### Test fails with wrong value
-- Check if you're passing all test data to the dataset
-- Look in the dataset to see which defaults are being used
-- Verify the response structure matches what the SDK expects
+### Test fails with unexpected values
+- Check if your mock response data matches what the test expects
+- Verify you're returning the correct HTTP status codes
+- Ensure response structure matches real API responses
 
-### Mock not being used
-- Ensure `MP_SDK_TEST=true` is set
-- Verify `TestCase::setUp()` is being called
-- Check that your test extends the correct base class
+### Mock expectations not being verified
+- Make sure you're calling `$mockCurl = $this->mockCurl()` 
+- Verify your test extends `TestCase` which integrates Mockery
+- Check that Mockery is properly installed as a dependency
 
 ## Migration Guide
 

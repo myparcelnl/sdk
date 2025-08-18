@@ -8,8 +8,6 @@ use MyParcelNL\Sdk\Factory\Account\CarrierConfigurationFactory;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
-use MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl;
 
 class CarrierConfigurationFactoryTest extends TestCase
 {
@@ -75,31 +73,44 @@ class CarrierConfigurationFactoryTest extends TestCase
      */
     public function testCreateCarrierConfiguration(array $testData): void
     {
+        $needsApiCall = array_key_exists('configuration', $testData) &&
+                       array_key_exists('default_drop_off_point', $testData['configuration']) &&
+                       !empty($testData['configuration']['default_drop_off_point']);
 
-        MockMyParcelCurl::addResponse([
-            'response' => json_encode([
-            'data' => [
-                'drop_off_points' => [
-                    [
-                        'cc' => 'NL',
-                        'city' => 'Amsterdam',
-                        'location_code' => '171963',
-                        'location_name' => 'Test Drop Off Point',
-                        'number' => '123',
-                        'number_suffix' => null,
-                        'postal_code' => '1000AA',
-                        'region' => null,
-                        'retail_network_id' => null,
-                        'state' => null,
-                        'street' => 'Teststraat'
+        if ($needsApiCall) {
+            // Mock response for GET /drop_off_points
+            $mockResponse = [
+                'response' => json_encode([
+                    'data' => [
+                        'drop_off_points' => [
+                            [
+                                'cc' => 'NL',
+                                'city' => 'Amsterdam',
+                                'location_code' => '171963',
+                                'location_name' => 'Test Drop Off Point',
+                                'number' => '123',
+                                'number_suffix' => null,
+                                'postal_code' => '1000AA',
+                                'region' => null,
+                                'retail_network_id' => null,
+                                'state' => null,
+                                'street' => 'Teststraat'
+                            ]
+                        ]
                     ]
-                ]
-            ]
-            ])
-        ]);
+                ]),
+                'headers' => [],
+                'code' => 200
+            ];
+
+            // Mock the cURL client
+            $mockCurl = $this->mockCurl();
+            $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+            $mockCurl->shouldReceive('getResponse')->once()->andReturn($mockResponse);
+            $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+        }
 
         $carrierConfiguration = CarrierConfigurationFactory::create($testData, true, $this->getApiKey());
-
 
         self::assertInstanceOf(DropOffPoint::class, $carrierConfiguration->getDefaultDropOffPoint());
     }

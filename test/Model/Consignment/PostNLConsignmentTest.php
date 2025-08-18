@@ -7,7 +7,6 @@ namespace MyParcelNL\Sdk\Test\Model\Consignment;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
-use MyParcelNL\Sdk\Test\Mock\MockMyParcelCurl;
 use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
 class PostNLConsignmentTest extends ConsignmentTestCase
 {
@@ -57,9 +56,6 @@ class PostNLConsignmentTest extends ConsignmentTestCase
      */
     public function testPostNLConsignments(array $testData): void
     {
-        // Clear and prepare mock responses using dataset
-        MockMyParcelCurl::$responseQueue = [];
-
         // Parse FULL_STREET into street and number if needed
         $street = $testData[self::STREET] ?? 'Antareslaan';
         $number = $testData[self::NUMBER] ?? '31';
@@ -72,7 +68,6 @@ class PostNLConsignmentTest extends ConsignmentTestCase
             $number = $parts[1] ?? $number;
         }
         
-
         // Apply PostNL business logic
         $ageCheck = $testData[self::AGE_CHECK] ?? false;
         $signature = $testData[self::SIGNATURE] ?? false;
@@ -105,9 +100,22 @@ class PostNLConsignmentTest extends ConsignmentTestCase
             'large_format' => $testData[self::LARGE_FORMAT] ?? false,
         ]);
 
-        // Queue all responses
+        // Create mock curl client using parent helper method
+        $mockCurl = $this->mockCurl();
+        
+        // Set up expectations for each HTTP call
         foreach ($responses as $response) {
-            MockMyParcelCurl::addResponse($response);
+            $mockCurl->shouldReceive('write')
+                     ->once()
+                     ->andReturnSelf();
+                     
+            $mockCurl->shouldReceive('getResponse')
+                     ->once()
+                     ->andReturn($response);
+                     
+            $mockCurl->shouldReceive('close')
+                     ->once()
+                     ->andReturnSelf();
         }
 
         // Run the actual test
