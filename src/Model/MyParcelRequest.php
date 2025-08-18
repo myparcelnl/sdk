@@ -88,7 +88,6 @@ class MyParcelRequest
 
     /**
      * Factory hook so tests can inject a different Curl implementation.
-     * This is NOT test logic: production stays on the default MyParcelCurl when no factory is set.
      * @var null|callable(): \MyParcelNL\Sdk\Helper\MyParcelCurl
      */
     private static $curlFactory = null;
