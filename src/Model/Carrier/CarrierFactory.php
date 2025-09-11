@@ -21,6 +21,7 @@ class CarrierFactory
         CarrierDHLEuroplus::class,
         CarrierUPSStandard::class,
         CarrierUPSExpressSaver::class,
+        CarrierGLS::class,
     ];
 
     /**

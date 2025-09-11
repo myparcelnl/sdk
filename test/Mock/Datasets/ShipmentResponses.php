@@ -528,4 +528,65 @@ class ShipmentResponses
     {
         return self::getUPSFlow($testData, 13); // UPS Express carrier ID
     }
+    
+    /**
+     * GLS specific response set
+     */
+    public static function getGLSFlow(array $testData = []): array
+    {
+        $country = $testData['country'] ?? 'NL';
+        $deliveryType = $testData['delivery_type'] ?? 2; // Standard delivery
+
+        $insuranceAmount = max(10000, $testData['insurance'] ?? 10000);
+        
+        // Outside NL signature required by default
+        $signature = $testData['signature'] ?? ($country !== 'NL');
+        
+        $shipmentData = [
+            'reference_identifier' => $testData['reference_identifier'] ?? null,
+            'carrier_id' => 14,
+            'recipient' => [
+                'cc' => $country,
+                'postal_code' => $testData['postal_code'] ?? '2132JE',
+                'city' => $testData['city'] ?? 'Hoofddorp',
+                'street' => $testData['street'] ?? 'Antareslaan',
+                'number' => $testData['number'] ?? '31',
+                'person' => $testData['person'] ?? 'Test Person',
+                'company' => $testData['company'] ?? 'MyParcel',
+                'email' => $testData['email'] ?? 'test@myparcel.nl',
+                'phone' => $testData['phone'] ?? '0612345678',
+            ],
+            'options' => [
+                'signature' => $signature,
+                'insurance' => [
+                    'amount' => $insuranceAmount,
+                    'currency' => 'EUR'
+                ],
+                'only_recipient' => $testData['only_recipient'] ?? false,
+                'package_type' => $testData['package_type'] ?? 1,
+                'delivery_type' => $deliveryType,
+            ],
+        ];
+        
+        // Saturday delivery  NL
+        if ($country === 'NL' && isset($testData['extra_options']['delivery_saturday'])) {
+            $shipmentData['options']['delivery_saturday'] = $testData['extra_options']['delivery_saturday'];
+        }
+        
+        // Pickup location data if pickup delivery
+        if ($deliveryType == 4 && isset($testData['pickup_location_code'])) {
+            $shipmentData['pickup'] = [
+                'location_code' => $testData['pickup_location_code'],
+                'location_name' => $testData['pickup_location_name'] ?? '',
+                'street' => $testData['pickup_street'] ?? '',
+                'number' => $testData['pickup_number'] ?? '',
+                'postal_code' => $testData['pickup_postal_code'] ?? '',
+                'city' => $testData['pickup_city'] ?? '',
+                'cc' => $testData['pickup_country'] ?? $country,
+                'retail_network_id' => $testData['retail_network_id'] ?? '',
+            ];
+        }
+        
+        return self::getStandardShipmentFlow($shipmentData);
+    }
 }
