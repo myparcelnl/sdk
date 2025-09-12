@@ -72,6 +72,7 @@ class GLSConsignmentTest extends ConsignmentTestCase
                 self::FULL_STREET => 'Antareslaan 31',
                 self::PACKAGE_TYPE => AbstractConsignment::PACKAGE_TYPE_MAILBOX,
                 self::expected(self::INSURANCE) => 10000,
+        ],
         ]);
     }
 
