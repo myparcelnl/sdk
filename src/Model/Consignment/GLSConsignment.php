@@ -140,7 +140,6 @@ class GLSConsignment extends AbstractConsignment
     {
         parent::setCountry($cc);
         
-        // Buiten NL is handtekening altijd verplicht
         if ($cc !== self::CC_NL) {
             $this->setSignature(true);
         }
