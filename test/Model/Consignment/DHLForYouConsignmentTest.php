@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierDHLForYou;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
+use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
 
 class DHLForYouConsignmentTest extends ConsignmentTestCase
 {
@@ -50,6 +51,42 @@ class DHLForYouConsignmentTest extends ConsignmentTestCase
      */
     public function testDHLForYouConsignments(array $testData): void
     {
+        // Mock HTTP client for API calls
+        $mockCurl = $this->mockCurl();
+        
+        // Get the appropriate response set from the dataset
+        $responses = ShipmentResponses::getDHLForYouFlow([
+            'reference_identifier' => $testData[self::REFERENCE_IDENTIFIER] ?? null,
+            'same_day_delivery' => $testData[self::SAME_DAY_DELIVERY] ?? false,
+            'hide_sender' => $testData[self::HIDE_SENDER] ?? false,
+            'insurance' => $testData[self::INSURANCE] ?? 0,
+            'return' => $testData[self::RETURN] ?? false,
+            'age_check' => $testData[self::AGE_CHECK] ?? false,
+            'only_recipient' => $testData[self::ONLY_RECIPIENT] ?? false,
+            'package_type' => $testData[self::PACKAGE_TYPE] ?? 1,
+            'country' => $testData[self::COUNTRY] ?? 'NL',
+            'postal_code' => $testData[self::POSTAL_CODE] ?? '6825ME',
+            'city' => $testData[self::CITY] ?? 'Arnhem',
+            'person' => $testData[self::PERSON] ?? 'Test Person',
+            'company' => $testData[self::COMPANY] ?? 'MyParcel',
+            'email' => $testData[self::EMAIL] ?? 'spam@myparcel.nl',
+            'phone' => $testData[self::PHONE] ?? '123456',
+        ]);
+        
+        // Set up mock expectations for each response from the dataset
+        foreach ($responses as $response) {
+            $mockCurl->shouldReceive('write')
+                ->once()
+                ->with(\Mockery::type('string'), \Mockery::type('string'), \Mockery::type('array'), \Mockery::type('string'))
+                ->andReturn('');
+            $mockCurl->shouldReceive('getResponse')
+                ->once()
+                ->andReturn($response);
+            $mockCurl->shouldReceive('close')
+                ->once()
+                ->andReturnSelf();
+        }
+
         $this->doConsignmentTest($testData);
     }
 

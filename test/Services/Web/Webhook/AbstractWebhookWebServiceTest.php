@@ -35,10 +35,29 @@ class AbstractWebhookWebServiceTest extends TestCase
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      * @dataProvider provideWebhookData
-     * @doesNotPerformAssertions
      */
     public function testSubscribe(AbstractWebhookWebService $webhookWebService): void
     {
+        // Mock response for POST /webhook_subscriptions
+        $mockResponse = [
+            'response' => json_encode([
+                'data' => [
+                    'ids' => [
+                        [
+                            'id' => 12345
+                        ]
+                    ]
+                ]
+            ]),
+            'headers' => [],
+            'code' => 200
+        ];
+
+        $mockCurl = $this->mockCurl();
+        $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($mockResponse);
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+
         $service = (new $webhookWebService())->setApiKey($this->getApiKey());
         $service->subscribe('https://webhook.site');
     }
@@ -52,10 +71,44 @@ class AbstractWebhookWebServiceTest extends TestCase
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      * @dataProvider provideWebhookData
-     * @doesNotPerformAssertions
      */
     public function testUnsubscribe(AbstractWebhookWebService $webhookWebService): void
     {
+        // Mock response for POST /webhook_subscriptions (subscribe call)
+        $subscribeMockResponse = [
+            'response' => json_encode([
+                'data' => [
+                    'ids' => [
+                        [
+                            'id' => 12345
+                        ]
+                    ]
+                ]
+            ]),
+            'headers' => [],
+            'code' => 200
+        ];
+
+        // Mock response for DELETE /webhook_subscriptions/:id (unsubscribe call)
+        $unsubscribeMockResponse = [
+            'response' => json_encode([]),
+            'headers' => [],
+            'code' => 200
+        ];
+
+        // Mock the cURL client
+        $mockCurl = $this->mockCurl();
+        
+        // First call: POST subscribe
+        $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($subscribeMockResponse);
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+        
+        // Second call: DELETE unsubscribe
+        $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($unsubscribeMockResponse);
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+
         $service = (new $webhookWebService())->setApiKey($this->getApiKey());
         $id      = $service->subscribe('https://webhook.site');
 

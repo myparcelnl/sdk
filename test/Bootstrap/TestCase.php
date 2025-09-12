@@ -6,11 +6,16 @@ namespace MyParcelNL\Sdk\Test\Bootstrap;
 
 use DateTime;
 use Faker\Factory;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use MyParcelNL\Sdk\Helper\MyParcelCurl;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Arr;
 use RuntimeException;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
     protected const ENV_API_KEY_BE  = 'API_KEY_BE';
     protected const ENV_API_KEY_NL  = 'API_KEY_NL';
     protected const ENV_CI          = 'CI';
@@ -30,6 +35,32 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         $this->faker = Factory::create('nl_NL');
         parent::__construct($name, $data, $dataName);
+    }
+
+    /**
+     * Set up for each test
+     */
+    // test/Bootstrap/TestCase.php
+    protected function setUp(): void
+    {
+        parent::setUp();
+        MyParcelRequest::setCurlFactory(static function () {
+            throw new \RuntimeException('No Curl mock provided. Call $this->mockCurl() in your test.');
+        });
+    }
+
+    
+    /**
+     * Create a mock of MyParcelCurl and inject it into MyParcelRequest
+     * 
+     * @return \Mockery\MockInterface|MyParcelCurl
+     */
+    protected function mockCurl()
+    {
+        $mock = Mockery::mock(MyParcelCurl::class);
+        MyParcelRequest::setCurlFactory(fn() => $mock);
+        
+        return $mock;
     }
 
     /**

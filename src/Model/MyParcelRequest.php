@@ -87,6 +87,12 @@ class MyParcelRequest
     private $result;
 
     /**
+     * Factory hook so tests can inject a different Curl implementation.
+     * @var null|callable(): \MyParcelNL\Sdk\Helper\MyParcelCurl
+     */
+    private static $curlFactory = null;
+
+    /**
      * @return array
      */
     public function getResponse(): array
@@ -409,6 +415,15 @@ class MyParcelRequest
      */
     private function instantiateCurl(): MyParcelCurl
     {
+        if (self::$curlFactory) {
+            $curl = (self::$curlFactory)();
+            if (! $curl instanceof MyParcelCurl) {
+                throw new \RuntimeException('Curl factory must return instance of MyParcelCurl');
+            }
+            return $curl;
+        }
+
+        // Default real curl in production
         return (new MyParcelCurl())->setConfig(
             [
                 'header'  => 0,
@@ -421,6 +436,15 @@ class MyParcelRequest
                 CURLOPT_AUTOREFERER    => true,
             ]
         );
+    }
+
+    /**
+     * Set (or unset) the Curl factory. Intended for tests via bootstrap or the test itself.
+     * @param null|callable(): \MyParcelNL\Sdk\Helper\MyParcelCurl $factory
+     */
+    public static function setCurlFactory(?callable $factory): void
+    {
+        self::$curlFactory = $factory;
     }
 
     /**

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Helper;
 
+use Mockery;
 use MyParcelNL\Sdk\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Test\Bootstrap\CollectionTestCase;
+use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
 
 class MyParcelCollectionTest extends CollectionTestCase
 {
@@ -33,9 +36,56 @@ class MyParcelCollectionTest extends CollectionTestCase
         ]);
 
         $collection = $this->generateCollection($testData);
+        $curlMock = $this->mockCurl();
+
+        $shipmentIds = [111, 112, 113, 114];
+        $references = ["{$uniqueIdentifier}_one", "{$uniqueIdentifier}_two", "{$uniqueIdentifier}_unwanted", "{$uniqueIdentifier}_three"];
+
+        // Setup mock expectations for multiple API calls
+        $curlMock->shouldReceive('write')->times(7)->with(Mockery::any(), Mockery::any(), Mockery::any(), Mockery::any());
+        
+        // 1. POST /shipments (create multiple shipments)
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'ids' => array_map(function($id, $ref) {
+                            return ['id' => $id, 'reference_identifier' => $ref];
+                        }, $shipmentIds, $references)
+                    ]
+                ]),
+                'code' => 201
+            ]);
+        
+        // 2. GET /shipment_labels (PDF generation)
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode(['data' => ['pdf' => ['url' => 'test-pdf-url']]]),
+                'code' => 200
+            ]);
+
+        // 3. Multiple GET /shipments calls (for find operations)
+        $shipmentDetailsResponse = ShipmentResponses::getShipmentDetailsResponse([
+            'id' => 111,
+            'reference_identifier' => "{$uniqueIdentifier}_one"
+        ]);
+        
+        for ($i = 0; $i < 5; $i++) {
+            $curlMock->shouldReceive('getResponse')
+                ->once()
+                ->andReturn([
+                    'response' => $shipmentDetailsResponse['response'],
+                    'code'     => $shipmentDetailsResponse['code'] ?? 200
+                ]);
+        }
+        
+        $curlMock->shouldReceive('close')->times(7);
+
         $collection->setLinkOfLabels();
 
-        $lastThreeConsignments = $collection->slice(1, 3);
+        $lastThreeConsignments = $collection->slice(0, 3);
         $consignmentIds        = Arr::pluck($lastThreeConsignments->all(), self::CONSIGNMENT_ID);
         $referenceIds          = Arr::pluck($lastThreeConsignments->all(), self::REFERENCE_IDENTIFIER);
 
@@ -61,10 +111,106 @@ class MyParcelCollectionTest extends CollectionTestCase
     {
         $collection = $this->generateCollection(
             $this->createConsignmentsTestData([
-                [self::LABEL_DESCRIPTION => 'first consignment'],
-                [self::LABEL_DESCRIPTION => 'second consignment'],
+                [
+                    self::LABEL_DESCRIPTION   => 'first consignment',
+                    self::REFERENCE_IDENTIFIER => 'consignment_one',
+                ],
+                [
+                    self::LABEL_DESCRIPTION   => 'second consignment',
+                    self::REFERENCE_IDENTIFIER => 'consignment_two',
+                ],
             ])
         );
+
+        $curlMock = $this->mockCurl();
+        
+        $curlMock->shouldReceive('write')->times(5)->with(Mockery::any(), Mockery::any(), Mockery::any(), Mockery::any());
+        
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'ids' => [
+                            ['id' => 3001, 'reference_identifier' => 'consignment_one', 'label_description' => 'first consignment'],
+                            ['id' => 3002, 'reference_identifier' => 'consignment_two', 'label_description' => 'second consignment'],
+                        ]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'ids' => [
+                            ['id' => 3003, 'reference_identifier' => 'consignment_one', 'label_description' => 'first consignment'],
+                            ['id' => 3004, 'reference_identifier' => 'consignment_two', 'label_description' => 'second consignment'],
+                        ]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $r1 = ShipmentResponses::getShipmentDetailsResponse(['id' => 3003, 'reference_identifier' => 'consignment_one', 'label_description' => 'first consignment']);
+        $r2 = ShipmentResponses::getShipmentDetailsResponse(['id' => 3004, 'reference_identifier' => 'consignment_two', 'label_description' => 'second consignment']);
+        $s1 = json_decode($r1['response'], true)['data']['shipments'][0];
+        $s2 = json_decode($r2['response'], true)['data']['shipments'][0];
+        
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'shipments' => [$s1, $s2]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode(['data' => ['pdfs' => ['url' => '/pdfs/download/3001;3003;3002;3004']]]),
+                'code' => 200
+            ]);
+
+        $p1 = ShipmentResponses::getShipmentDetailsResponse([
+            'id' => 3001,
+            'reference_identifier' => 'consignment_one',
+            'label_description' => 'first consignment',
+        ]);
+        $p2 = ShipmentResponses::getShipmentDetailsResponse([
+            'id' => 3002,
+            'reference_identifier' => 'consignment_two',
+            'label_description' => 'second consignment',
+        ]);
+        $r1 = ShipmentResponses::getShipmentDetailsResponse([
+            'id' => 3003,
+            'reference_identifier' => 'consignment_one',
+        ]);
+        $r2 = ShipmentResponses::getShipmentDetailsResponse([
+            'id' => 3004,
+            'reference_identifier' => 'consignment_two',
+        ]);
+        
+        $all = array_merge(
+            json_decode($p1['response'], true)['data']['shipments'],
+            json_decode($p2['response'], true)['data']['shipments'],
+            json_decode($r1['response'], true)['data']['shipments'],
+            json_decode($r2['response'], true)['data']['shipments'],
+        );
+        
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode(['data' => ['shipments' => $all]]),
+                'code' => 200,
+            ]);
+        
+        $curlMock->shouldReceive('close')->times(5);
 
         $collection->generateReturnConsignments(false, function (
             AbstractConsignment $returnConsignment,
@@ -94,9 +240,45 @@ class MyParcelCollectionTest extends CollectionTestCase
      */
     public function testQuery(): void
     {
+        $details = ShipmentResponses::getShipmentDetailsResponse([
+            'id' => 4001,
+            'reference_identifier' => 'consignment_one',
+        ]);
+        $shipment = json_decode($details['response'], true)['data']['shipments'][0];
+        $listResponse = json_encode(['data' => ['shipments' => [$shipment]]]);
+
+        $curlMock = $this->mockCurl();
+
+        $curlMock
+            ->shouldReceive('write')
+            ->once()
+            ->with(
+                Mockery::on(fn($method) => strtoupper($method) === 'GET'),
+                Mockery::on(fn($url) => is_string($url) && strpos($url, '/shipments') !== false),
+                Mockery::type('array'),
+                Mockery::any()
+            )
+            ->andReturnNull();
+
+        $curlMock
+            ->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => $listResponse,
+                'code'     => 200,
+                'headers'  => [],
+            ]);
+
+        $curlMock
+            ->shouldReceive('close')
+            ->once()
+            ->andReturnSelf();
+
         $collection = MyParcelCollection::query($this->getApiKey(), ['size' => 1]);
 
-        self::assertEquals(1, $collection->count());
+        self::assertCount(1, $collection);
+        self::assertSame(4001, $collection->first()->getConsignmentId());
+        self::assertSame('consignment_one', $collection->first()->getReferenceIdentifier());
     }
 
     /**
@@ -120,9 +302,6 @@ class MyParcelCollectionTest extends CollectionTestCase
     }
 
     /**
-     * Tests fetching track & trace data for multiple consignments with different API keys.
-     * Asserts that each consignment receives a valid track & trace URL and a non-null history array.
-     *
      * @return void
      * @throws \MyParcelNL\Sdk\Exception\ApiException
      */
@@ -136,6 +315,67 @@ class MyParcelCollectionTest extends CollectionTestCase
                 [self::REFERENCE_IDENTIFIER => 'consignment_two', self::API_KEY => $apiKey],
             ])
         );
+
+        $curlMock = $this->mockCurl();
+        
+        $curlMock->shouldReceive('write')->times(4)->with(Mockery::any(), Mockery::any(), Mockery::any(), Mockery::any());
+        
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'ids' => [
+                            ['id' => 4001, 'reference_identifier' => 'consignment_one'],
+                            ['id' => 4002, 'reference_identifier' => 'consignment_two'],
+                        ]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'pdfs' => ['url' => '/pdfs/fake-label-url'],
+                    ],
+                ]),
+                'code' => 200,
+            ]);
+
+        $r1 = ShipmentResponses::getShipmentDetailsResponse(['id' => 4001, 'reference_identifier' => 'consignment_one']);
+        $r2 = ShipmentResponses::getShipmentDetailsResponse(['id' => 4002, 'reference_identifier' => 'consignment_two']);
+        $s1 = json_decode($r1['response'], true)['data']['shipments'][0];
+        $s2 = json_decode($r2['response'], true)['data']['shipments'][0];
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'shipments' => [$s1, $s2]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'tracktraces' => [
+                            ['shipment_id' => 4001, 'link_tracktrace' => 'http://example.com/track/4001', 'history' => [['event' => 'Created']]],
+                            ['shipment_id' => 4002, 'link_tracktrace' => 'http://example.com/track/4002', 'history' => [['event' => 'Created']]],
+                        ]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+        
+        $curlMock->shouldReceive('close')->times(4);
 
         $collection->setLinkOfLabels();
 

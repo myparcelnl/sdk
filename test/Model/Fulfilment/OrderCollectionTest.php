@@ -40,7 +40,38 @@ class OrderCollectionTest extends TestCase
      */
     public function testQuery(): void
     {
-        $collection = OrderCollection::query($this->getApiKey());
+        $apiKey = $this->getApiKey();
+        $mockResponse = [
+            'response' => json_encode([
+                'data' => [
+                    'orders' => [
+                        [
+                            'uuid' => 'test-uuid-1',
+                            'external_identifier' => 'test-external-id-1',
+                            'language' => 'NL',
+                            'status' => 'processing',
+                            'type' => 'test'
+                        ],
+                        [
+                            'uuid' => 'test-uuid-2',
+                            'external_identifier' => 'test-external-id-2',
+                            'language' => 'NL',
+                            'status' => 'processing',
+                            'type' => 'test'
+                        ]
+                    ]
+                ]
+            ]),
+            'headers' => [],
+            'code' => 200
+        ];
+        
+        $mockCurl = $this->mockCurl();
+        $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($mockResponse);
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+        
+        $collection = OrderCollection::query($apiKey);
 
         self::assertNotEmpty($collection->toArray());
     }
@@ -77,7 +108,16 @@ class OrderCollectionTest extends TestCase
             $order->setWeight($orderLines->sum('weight'));
             $orderCollection->push($order);
         }
-
+        
+        // Prepare mock response for the save API call
+        $saveResponse = $this->prepareSaveResponse($orderCollection);
+        
+        // Set up the mock
+        $mockCurl = $this->mockCurl();
+        $mockCurl->shouldReceive('write')->once()->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($saveResponse);
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+        
         $savedOrderCollection = $orderCollection->save();
         self::assertEquals($savedOrderCollection->count(), $orderCollection->count());
 
@@ -221,5 +261,65 @@ class OrderCollectionTest extends TestCase
             ->setPhone($this->faker->phoneNumber)
             ->setPostalCode($this->faker->postcode)
             ->setStreet(substr($this->faker->streetAddress, 0, 40));
+    }
+    
+    /**
+     * Prepares a mock API response for saving orders
+     * 
+     * @param \MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection $orderCollection
+     * 
+     * @return array
+     */
+    protected function prepareSaveResponse(OrderCollection $orderCollection): array
+    {
+        $responseData = [];
+        
+        // Copy all orders and assign UUIDs and other server-generated fields
+        foreach ($orderCollection as $index => $order) {
+            // Build the response data structure that matches what the API returns
+            $orderData = [
+                // Top-level order fields
+                'uuid' => $order->getUuid() ?: "generated-uuid-{$index}",
+                'external_identifier' => $order->getExternalIdentifier(),
+                'fulfilment_partner_identifier' => $order->getFulfilmentPartnerIdentifier(),
+                'language' => $order->getLanguage(),
+                'order_date' => $order->getOrderDateString('Y-m-d H:i:s'),
+                'status' => $order->getStatus(),
+                'type' => $order->getType(),
+                'order_shipments' => [],
+                
+                // Invoice address
+                'invoice_address' => $order->getInvoiceAddress() ? $order->getInvoiceAddress()->toArray() : [],
+                
+                // Order lines with UUIDs
+                'order_lines' => [],
+                
+                // Shipment data (nested structure expected by Order constructor)
+                'shipment' => [
+                    'recipient' => $order->getRecipient() ? $order->getRecipient()->toArray() : [],
+                ]
+            ];
+            
+            // Add order lines with UUIDs
+            if ($order->getOrderLines()) {
+                foreach ($order->getOrderLines() as $lineIndex => $orderLine) {
+                    $lineData = $orderLine->toArray();
+                    $lineData['uuid'] = $orderLine->getUuid() ?: "generated-line-uuid-{$index}-{$lineIndex}";
+                    $orderData['order_lines'][] = $lineData;
+                }
+            }
+            
+            $responseData[] = $orderData;
+        }
+        
+        return [
+            'response' => json_encode([
+                'data' => [
+                    'orders' => $responseData
+                ]
+            ]),
+            'headers' => [],
+            'code' => 200
+        ];
     }
 }

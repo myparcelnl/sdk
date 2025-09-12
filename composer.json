@@ -38,6 +38,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",
+        "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^9.6.22",
         "psr/container": "~1.0.0"
     },

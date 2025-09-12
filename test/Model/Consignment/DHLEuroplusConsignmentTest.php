@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Test\Model\Consignment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierDHLEuroplus;
 use MyParcelNL\Sdk\Test\Bootstrap\ConsignmentTestCase;
+use MyParcelNL\Sdk\Test\Mock\Datasets\ShipmentResponses;
 
 class DHLEuroplusConsignmentTest extends ConsignmentTestCase
 {
@@ -41,6 +42,39 @@ class DHLEuroplusConsignmentTest extends ConsignmentTestCase
      */
     public function testDHLEuroPlusConsignments(array $testData): void
     {
+        // Mock HTTP client for API calls
+        $mockCurl = $this->mockCurl();
+        
+        // Get the appropriate response set from the dataset
+        $responses = ShipmentResponses::getDHLEuroplusFlow([
+            'reference_identifier' => $testData[self::REFERENCE_IDENTIFIER] ?? null,
+            'signature' => $testData[self::SIGNATURE] ?? false,
+            'insurance' => $testData[self::INSURANCE] ?? 0,
+            'package_type' => $testData[self::PACKAGE_TYPE] ?? 1,
+            'country' => $testData[self::COUNTRY] ?? 'DE',
+            'postal_code' => $testData[self::POSTAL_CODE] ?? '39394',
+            'city' => $testData[self::CITY] ?? 'Schwanebeck',
+            'person' => $testData[self::PERSON] ?? 'Test Person',
+            'company' => $testData[self::COMPANY] ?? 'MyParcel',
+            'email' => $testData[self::EMAIL] ?? 'spam@myparcel.nl',
+            'phone' => $testData[self::PHONE] ?? '123456',
+        ]);
+        
+        // Set up mock expectations for each response from the dataset
+        foreach ($responses as $response) {
+            $mockCurl->shouldReceive('write')
+                ->once()
+                ->with(\Mockery::type('string'), \Mockery::type('string'), \Mockery::type('array'), \Mockery::type('string'))
+                ->andReturn('');
+            $mockCurl->shouldReceive('getResponse')
+                ->once()
+                ->andReturn($response);
+            $mockCurl->shouldReceive('close')
+                ->once()
+                ->andReturnSelf();
+        }
+        
+        // Run the actual test
         $this->doConsignmentTest($testData);
     }
 
