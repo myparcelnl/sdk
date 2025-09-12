@@ -131,24 +131,6 @@ class GLSConsignment extends AbstractConsignment
     }
 
     /**
-     * Override setCountry to automatically enable signature for non-NL countries
-     *
-     * @param string $cc
-     * @return self
-     */
-    public function setCountry(string $cc): self
-    {
-        parent::setCountry($cc);
-        
-        // Buiten NL is handtekening altijd verplicht
-        if ($cc !== self::CC_NL) {
-            $this->setSignature(true);
-        }
-        
-        return $this;
-    }
-
-    /**
      * Check if Saturday delivery is only available for NL
      *
      * @param string $option

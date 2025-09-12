@@ -4,6 +4,17 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Mock\Datasets;
 
+use MyParcelNL\Sdk\Model\Carrier\CarrierBpost;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLEuroplus;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLForYou;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDHLParcelConnect;
+use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
+use MyParcelNL\Sdk\Model\Carrier\CarrierGLS;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
+use MyParcelNL\Sdk\Model\Carrier\CarrierUPSStandard;
+use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+
 /**
  * Dataset for common shipment API responses
  */
@@ -54,11 +65,11 @@ class ShipmentResponses
         $defaults = [
             'id' => 12345678,
             'barcode' => '3SMYPA' . rand(100000000, 999999999),
-            'status' => 1,
+            'status' => AbstractConsignment::STATUS_CONCEPT,
             'shop_id' => 12345,
             'account_id' => 67890,
             'reference_identifier' => 'test-ref',
-            'carrier_id' => 1,
+            'carrier_id' => CarrierPostNL::ID,
             'delivery_date' => null,
             'options' => [
                 'signature' => false,
@@ -67,13 +78,13 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'return' => false,
-                'package_type' => 1,
+                'package_type' => AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'only_recipient' => false,
                 'age_check' => false,
                 'large_format' => false,
             ],
             'recipient' => [
-                'cc' => 'NL',
+                'cc' => AbstractConsignment::CC_NL,
                 'postal_code' => '2132JE',
                 'city' => 'Hoofddorp',
                 'street' => 'Antareslaan',
@@ -84,7 +95,7 @@ class ShipmentResponses
                 'phone' => '0612345678',
             ],
             'sender' => [
-                'cc' => 'NL',
+                'cc' => AbstractConsignment::CC_NL,
                 'postal_code' => '2132JE',
                 'city' => 'Hoofddorp',
                 'street' => 'Antareslaan',
@@ -161,7 +172,7 @@ class ShipmentResponses
     {
         return self::getStandardShipmentFlow([
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 11,
+            'carrier_id' => CarrierDHLEuroplus::ID,
             'recipient' => [
                 'cc' => $testData['country'] ?? 'DE',
                 'postal_code' => $testData['postal_code'] ?? '39394',
@@ -180,7 +191,7 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'return' => false,
-                'package_type' => $testData['package_type'] ?? 1,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
             ],
         ]);
     }
@@ -192,9 +203,9 @@ class ShipmentResponses
     {
         return self::getStandardShipmentFlow([
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 9,
+            'carrier_id' => CarrierDHLForYou::ID,
             'recipient' => [
-                'cc' => $testData['country'] ?? 'NL',
+                'cc' => $testData['country'] ?? AbstractConsignment::CC_NL,
                 'postal_code' => $testData['postal_code'] ?? '6825ME',
                 'city' => $testData['city'] ?? 'Arnhem',
                 'street' => 'Meander',
@@ -211,7 +222,7 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'return' => $testData['return'] ?? false,
-                'package_type' => $testData['package_type'] ?? 1,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'only_recipient' => $testData['only_recipient'] ?? false,
                 'age_check' => $testData['age_check'] ?? false,
                 'same_day_delivery' => $testData['same_day_delivery'] ?? false,
@@ -227,7 +238,7 @@ class ShipmentResponses
     {
         $shipmentData = [
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 10,
+            'carrier_id' => CarrierDHLParcelConnect::ID,
             'recipient' => [
                 'cc' => $testData['country'] ?? 'FR',
                 'postal_code' => $testData['postal_code'] ?? '92000',
@@ -246,8 +257,8 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'return' => false,
-                'package_type' => $testData['package_type'] ?? 1,
-                'delivery_type' => $testData['delivery_type'] ?? 4,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type' => $testData['delivery_type'] ?? AbstractConsignment::DELIVERY_TYPE_PICKUP,
             ],
         ];
         
@@ -275,9 +286,9 @@ class ShipmentResponses
     {
         return self::getStandardShipmentFlow([
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 4,
+            'carrier_id' => CarrierDPD::ID,
             'recipient' => [
-                'cc' => $testData['country'] ?? 'NL',
+                'cc' => $testData['country'] ?? AbstractConsignment::CC_NL,
                 'postal_code' => $testData['postal_code'] ?? '2132JE',
                 'city' => $testData['city'] ?? 'Hoofddorp',
                 'street' => $testData['street'] ?? 'Antareslaan',
@@ -294,7 +305,7 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'return' => $testData['return'] ?? false,
-                'package_type' => $testData['package_type'] ?? 1,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
             ],
         ]);
     }
@@ -305,7 +316,7 @@ class ShipmentResponses
     public static function getBpostFlow(array $testData = []): array
     {
         // Default to BE address, but use NL address if country is NL
-        $isNL = ($testData['country'] ?? 'BE') === 'NL';
+        $isNL = ($testData['country'] ?? AbstractConsignment::CC_BE) === AbstractConsignment::CC_NL;
         $defaultStreet = $isNL ? 'Antareslaan' : 'Adriaan Brouwerstraat';
         $defaultNumber = $isNL ? '31' : '16';
         $defaultPostalCode = $isNL ? '2132JE' : '2000';
@@ -313,9 +324,9 @@ class ShipmentResponses
         
         return self::getStandardShipmentFlow([
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 2, // bpost correct ID
+            'carrier_id' => CarrierBpost::ID,
             'recipient' => [
-                'cc' => $testData['country'] ?? 'BE',
+                'cc' => $testData['country'] ?? AbstractConsignment::CC_BE,
                 'postal_code' => $testData['postal_code'] ?? $defaultPostalCode,
                 'city' => $testData['city'] ?? $defaultCity,
                 'street' => $testData['street'] ?? $defaultStreet,
@@ -332,8 +343,8 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'return' => $testData['return'] ?? false,
-                'package_type' => $testData['package_type'] ?? 1,
-                'delivery_type' => $testData['delivery_type'] ?? 2,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type' => $testData['delivery_type'] ?? AbstractConsignment::DELIVERY_TYPE_STANDARD,
                 'only_recipient' => $testData['only_recipient'] ?? false,
             ],
         ]);
@@ -345,10 +356,10 @@ class ShipmentResponses
     public static function getUPSFlow(array $testData = [], int $carrierId = 14): array
     {
         $country = $testData['country'] ?? 'DE';
-        $defaultStreet = $country === 'DE' ? 'Feldstrasse' : ($country === 'NL' ? 'Hoofdstraat' : 'Antareslaan');
-        $defaultNumber = $country === 'DE' ? '17' : ($country === 'NL' ? '1' : '31');
-        $defaultPostalCode = $country === 'DE' ? '39394' : ($country === 'NL' ? '1234AB' : '2132JE');
-        $defaultCity = $country === 'DE' ? 'Schwanebeck' : ($country === 'NL' ? 'Amsterdam' : 'Hoofddorp');
+        $defaultStreet = $country === 'DE' ? 'Feldstrasse' : ($country === AbstractConsignment::CC_NL ? 'Hoofdstraat' : 'Antareslaan');
+        $defaultNumber = $country === 'DE' ? '17' : ($country === AbstractConsignment::CC_NL ? '1' : '31');
+        $defaultPostalCode = $country === 'DE' ? '39394' : ($country === AbstractConsignment::CC_NL ? '1234AB' : '2132JE');
+        $defaultCity = $country === 'DE' ? 'Schwanebeck' : ($country === AbstractConsignment::CC_NL ? 'Amsterdam' : 'Hoofddorp');
         
         $hasPickupLocationCode = !empty($testData['pickup_location_code']);
         $hasRequiredPickupFields = !empty($testData['pickup_street']) 
@@ -356,11 +367,11 @@ class ShipmentResponses
             && !empty($testData['pickup_postal_code'])
             && !empty($testData['pickup_location_name']);
         
-        $requestedDeliveryType = $testData['delivery_type'] ?? ($carrierId === 13 ? 3 : 2);
+        $requestedDeliveryType = $testData['delivery_type'] ?? ($carrierId === CarrierUPSExpressSaver::ID ? AbstractConsignment::DELIVERY_TYPE_EVENING : AbstractConsignment::DELIVERY_TYPE_STANDARD);
         $actualDeliveryType = $requestedDeliveryType;
         
-        if ($requestedDeliveryType == 4 && $hasPickupLocationCode && !$hasRequiredPickupFields) {
-            $actualDeliveryType = $carrierId === 13 ? 7 : 2;
+        if ($requestedDeliveryType == AbstractConsignment::DELIVERY_TYPE_PICKUP && $hasPickupLocationCode && !$hasRequiredPickupFields) {
+            $actualDeliveryType = $carrierId === CarrierUPSExpressSaver::ID ? AbstractConsignment::DELIVERY_TYPE_EXPRESS : AbstractConsignment::DELIVERY_TYPE_STANDARD;
         }
         
         $shipmentData = [
@@ -378,13 +389,13 @@ class ShipmentResponses
                 'phone' => $testData['phone'] ?? '0612345678',
             ],
             'options' => [
-                'signature' => $testData['signature'] ?? ($testData['age_check'] ?? false), // Age check implies signature
+                'signature' => $testData['signature'] ?? ($testData['age_check'] ?? false),
                 'insurance' => [
                     'amount' => $testData['insurance'] ?? 0,
                     'currency' => 'EUR'
                 ],
                 'return' => $testData['return'] ?? false,
-                'package_type' => $testData['package_type'] ?? 1,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'delivery_type' => $actualDeliveryType,
                 'age_check' => $testData['age_check'] ?? false,
             ],
@@ -401,7 +412,7 @@ class ShipmentResponses
                 'cc' => $testData['pickup_country'] ?? $country,
                 'retail_network_id' => $testData['retail_network_id'] ?? '',
             ];
-            $shipmentData['options']['delivery_type'] = 4;
+            $shipmentData['options']['delivery_type'] = AbstractConsignment::DELIVERY_TYPE_PICKUP;
         } else if ($hasPickupLocationCode && !$hasRequiredPickupFields) {
             $shipmentData['pickup'] = [
                 'location_code' => '',
@@ -430,9 +441,9 @@ class ShipmentResponses
     public static function getPostNLFlow(array $testData = []): array
     {
         // Auto-detect pickup logic: if auto_detect_pickup is true, set delivery_type to pickup
-        $deliveryType = $testData['delivery_type'] ?? 2; // Default to standard delivery
+        $deliveryType = $testData['delivery_type'] ?? AbstractConsignment::DELIVERY_TYPE_STANDARD;
         if (isset($testData['auto_detect_pickup']) && $testData['auto_detect_pickup'] === true) {
-            $deliveryType = 4; // Pickup delivery type
+            $deliveryType = AbstractConsignment::DELIVERY_TYPE_PICKUP;
         }
         
         // Check if we have pickup location code and required fields
@@ -444,10 +455,10 @@ class ShipmentResponses
         
         $shipmentData = [
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 1, // PostNL carrier ID
+            'carrier_id' => CarrierPostNL::ID,
             'total_weight' => $testData['total_weight'] ?? null,
             'recipient' => [
-                'cc' => $testData['country'] ?? 'NL',
+                'cc' => $testData['country'] ?? AbstractConsignment::CC_NL,
                 'postal_code' => $testData['postal_code'] ?? '2132JE',
                 'city' => $testData['city'] ?? 'Hoofddorp',
                 'street' => $testData['street'] ?? 'Antareslaan',
@@ -458,7 +469,7 @@ class ShipmentResponses
                 'phone' => $testData['phone'] ?? '0612345678',
             ],
             'options' => [
-                'signature' => $testData['signature'] ?? ($testData['age_check'] ?? false), // Age check implies signature
+                'signature' => $testData['signature'] ?? ($testData['age_check'] ?? false),
                 'only_recipient' => $testData['only_recipient'] ?? false,
                 'insurance' => [
                     'amount' => $testData['insurance'] ?? 0,
@@ -467,7 +478,7 @@ class ShipmentResponses
                 'return' => $testData['return'] ?? false,
                 'age_check' => $testData['age_check'] ?? false,
                 'large_format' => $testData['large_format'] ?? false,
-                'package_type' => $testData['package_type'] ?? 1,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'delivery_type' => $deliveryType,
                 'delivery_date' => $testData['delivery_date'] ?? null,
             ],
@@ -492,10 +503,10 @@ class ShipmentResponses
                 'number' => $testData['pickup_number'] ?? '',
                 'postal_code' => $testData['pickup_postal_code'] ?? '',
                 'city' => $testData['pickup_city'] ?? '',
-                'cc' => $testData['pickup_country'] ?? $testData['country'] ?? 'NL',
+                'cc' => $testData['pickup_country'] ?? $testData['country'] ?? AbstractConsignment::CC_NL,
                 'retail_network_id' => $testData['retail_network_id'] ?? '',
             ];
-            $shipmentData['options']['delivery_type'] = 4; // Pickup delivery type
+            $shipmentData['options']['delivery_type'] = AbstractConsignment::DELIVERY_TYPE_PICKUP;
         } else if ($hasPickupLocationCode && !$hasRequiredPickupFields) {
             // Clear pickup location when validation fails
             $shipmentData['pickup'] = [
@@ -518,7 +529,7 @@ class ShipmentResponses
      */
     public static function getUPSStandardFlow(array $testData = []): array
     {
-        return self::getUPSFlow($testData, 12); // UPS Standard carrier ID
+        return self::getUPSFlow($testData, CarrierUPSStandard::ID);
     }
     
     /**
@@ -526,7 +537,7 @@ class ShipmentResponses
      */
     public static function getUPSExpressFlow(array $testData = []): array
     {
-        return self::getUPSFlow($testData, 13); // UPS Express carrier ID
+        return self::getUPSFlow($testData, CarrierUPSExpressSaver::ID);
     }
     
     /**
@@ -534,17 +545,17 @@ class ShipmentResponses
      */
     public static function getGLSFlow(array $testData = []): array
     {
-        $country = $testData['country'] ?? 'NL';
-        $deliveryType = $testData['delivery_type'] ?? 2; // Standard delivery
+        $country = $testData['country'] ?? AbstractConsignment::CC_NL;
+        $deliveryType = $testData['delivery_type'] ?? AbstractConsignment::DELIVERY_TYPE_STANDARD;
 
         $insuranceAmount = max(10000, $testData['insurance'] ?? 10000);
         
         // Outside NL signature required by default
-        $signature = $testData['signature'] ?? ($country !== 'NL');
+        $signature = $testData['signature'] ?? ($country !== AbstractConsignment::CC_NL);
         
         $shipmentData = [
             'reference_identifier' => $testData['reference_identifier'] ?? null,
-            'carrier_id' => 14,
+            'carrier_id' => CarrierGLS::ID,
             'recipient' => [
                 'cc' => $country,
                 'postal_code' => $testData['postal_code'] ?? '2132JE',
@@ -563,18 +574,18 @@ class ShipmentResponses
                     'currency' => 'EUR'
                 ],
                 'only_recipient' => $testData['only_recipient'] ?? false,
-                'package_type' => $testData['package_type'] ?? 1,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
                 'delivery_type' => $deliveryType,
             ],
         ];
         
         // Saturday delivery  NL
-        if ($country === 'NL' && isset($testData['extra_options']['delivery_saturday'])) {
+        if ($country === AbstractConsignment::CC_NL && isset($testData['extra_options']['delivery_saturday'])) {
             $shipmentData['options']['delivery_saturday'] = $testData['extra_options']['delivery_saturday'];
         }
         
         // Pickup location data if pickup delivery
-        if ($deliveryType == 4 && isset($testData['pickup_location_code'])) {
+        if ($deliveryType == AbstractConsignment::DELIVERY_TYPE_PICKUP && isset($testData['pickup_location_code'])) {
             $shipmentData['pickup'] = [
                 'location_code' => $testData['pickup_location_code'],
                 'location_name' => $testData['pickup_location_name'] ?? '',

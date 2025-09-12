@@ -33,7 +33,7 @@ class GLSConsignmentTest extends ConsignmentTestCase
                 self::POSTAL_CODE => '39394',
                 self::CITY => 'Schwanebeck',
                 self::FULL_STREET => 'Feldstrasse 17',
-                self::expected(self::SIGNATURE) => true,
+                self::SIGNATURE => true,
                 self::expected(self::INSURANCE) => 10000,
             ],
             
@@ -115,7 +115,7 @@ class GLSConsignmentTest extends ConsignmentTestCase
             'phone' => $testData[self::PHONE] ?? '0612345678',
             'signature' => $testData[self::SIGNATURE] ?? null,
             'only_recipient' => $testData[self::ONLY_RECIPIENT] ?? false,
-            'insurance' => $testData[self::INSURANCE] ?? 10000, // €100 minimum
+            'insurance' => $testData[self::INSURANCE] ?? 10000,
             'extra_options' => $testData[self::EXTRA_OPTIONS] ?? [],
             'pickup_street' => $testData[self::PICKUP_STREET] ?? null,
             'pickup_city' => $testData[self::PICKUP_CITY] ?? null,
