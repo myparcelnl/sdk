@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.2.0](https://github.com/myparcelnl/sdk/compare/v10.1.0...v10.2.0) (2025-09-15)
+
+
+### :sparkles: New Features
+
+* add GLS support ([#549](https://github.com/myparcelnl/sdk/issues/549)) ([2440625](https://github.com/myparcelnl/sdk/commit/24406259a3e5b7f40dbaab0eb117e84ad9b66a05))
+
 ## [10.1.0](https://github.com/myparcelnl/sdk/compare/v10.0.1...v10.1.0) (2025-07-25)
 
 
