@@ -8,7 +8,8 @@ use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
 interface CapabilitiesClientInterface
 {
     /**
-     * Vraagt capabilities op bij de Core API.
+     * Fetch capabilities from the Core API.
      */
-    public function getCapabilities(CapabilitiesRequest $request);
+    public function getCapabilities(CapabilitiesRequest $request): CapabilitiesResponse;
+
 }
