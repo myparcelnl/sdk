@@ -1,34 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Sdk\Services\CoreApi;
 
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
-use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 
 final class HttpCapabilitiesClient implements CapabilitiesClientInterface
 {
-    /** @var CapabilitiesMapper */
-    private $mapper;
+    private CapabilitiesMapper $mapper;
 
-    public function __construct(CapabilitiesMapper $mapper)
+    public function __construct(?CapabilitiesMapper $mapper = null)
     {
-        $this->mapper = $mapper;
+        $this->mapper = $mapper ?? new CapabilitiesMapper();
     }
 
     public function getCapabilities(CapabilitiesRequest $request): CapabilitiesResponse
     {
-        // 1) Haal de gegenereerde DefaultApi via onze factory
-        $api = CapabilitiesClientFactory::make(); // evt. make($sandboxUrl)
+        // Guard: country code is mandatory
+        if (null === $request->getCountryCode() || '' === trim($request->getCountryCode())) {
+            throw new \InvalidArgumentException('countryCode is required for capabilities request.');
+        }
 
-        // 2) Map jouw SDK-request naar het generated request-model
+        $api = CapabilitiesClientFactory::make();
         $coreReq = $this->mapper->mapToCoreApi($request);
 
-        // 3) Call de Core API
-        $coreRes = $api->shipmentsCapabilitiesPost($coreReq);
+        $userAgent = sprintf(
+            'MyParcelSDK/%s; PHP/%s',
+            \defined('\MyParcelNL\Sdk\Sdk::VERSION') ? \MyParcelNL\Sdk\Sdk::VERSION : 'dev',
+            PHP_VERSION
+        );
 
-        // 4) Map terug naar jouw stabiele SDK-response
+        $coreRes = $api->postCapabilities($userAgent, $coreReq);
+
         return $this->mapper->mapFromCoreApi($coreRes);
     }
 }
