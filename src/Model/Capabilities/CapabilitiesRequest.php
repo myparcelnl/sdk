@@ -3,19 +3,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
-use MyParcelNL\Sdk\Model\Capabilities\Enum\Carrier as CarrierEnum;
-use MyParcelNL\Sdk\Model\Capabilities\Enum\DeliveryType as DeliveryEnum;
-use MyParcelNL\Sdk\Model\Capabilities\Enum\Direction as DirectionEnum;
-use MyParcelNL\Sdk\Model\Capabilities\Enum\PackageType as PackageEnum;
-
 /**
  * SDK-side request object for capabilities lookup.
  *
  * Required: countryCode
- * Optional: shopId, carrier, deliveryType, packageType, direction
- *
- * NOTE: Request 'options', 'sender' and 'physical_properties' are intentionally not included yet.
- *       We'll add them once the SDK modeling is decided (see mapper TODOs).
+ * Optional: shopId, carrier, deliveryType, packageType, direction, sender, options, physicalProperties
  */
 class CapabilitiesRequest
 {
@@ -36,6 +28,15 @@ class CapabilitiesRequest
 
     /** @var string|null */
     private $direction;
+
+    /** @var array|null */
+    private $sender;
+
+    /** @var array|null */
+    private $options;
+
+    /** @var array|null */
+    private $physicalProperties;
 
     /**
      * Keep constructor minimal: only the required field for immutability & clarity.
@@ -65,28 +66,49 @@ class CapabilitiesRequest
     public function withDeliveryType(?string $deliveryType): self
     {
         $clone = clone $this;
-        $clone->deliveryType = DeliveryEnum::normalize($deliveryType);
+        $clone->deliveryType = $deliveryType; // validation in CapabilitiesMapper
         return $clone;
     }
 
     public function withPackageType(?string $packageType): self
     {
         $clone = clone $this;
-        $clone->packageType = PackageEnum::normalize($packageType);
+        $clone->packageType = $packageType; // validation in CapabilitiesMapper with generated allowable values
         return $clone;
     }
 
     public function withCarrier(?string $carrier): self
     {
         $clone = clone $this;
-        $clone->carrier = CarrierEnum::normalize($carrier);
+        $clone->carrier = $carrier; // validation in CapabilitiesMapper with RefTypesCarrierV2
         return $clone;
     }
 
     public function withDirection(?string $direction): self
     {
         $clone = clone $this;
-        $clone->direction = DirectionEnum::normalize($direction);
+        $clone->direction = $direction; // validation in CapabilitiesMapper with generated allowable values
+        return $clone;
+    }
+
+    public function withSender(?array $sender): self
+    {
+        $clone = clone $this;
+        $clone->sender = $sender; // validation and object creation in CapabilitiesMapper
+        return $clone;
+    }
+
+    public function withOptions(?array $options): self
+    {
+        $clone = clone $this;
+        $clone->options = $options; // validation and object creation in CapabilitiesMapper
+        return $clone;
+    }
+
+    public function withPhysicalProperties(?array $physicalProperties): self
+    {
+        $clone = clone $this;
+        $clone->physicalProperties = $physicalProperties; // validation and object creation in CapabilitiesMapper
         return $clone;
     }
 
@@ -120,5 +142,20 @@ class CapabilitiesRequest
     public function getDirection(): ?string
     {
         return $this->direction;
+    }
+
+    public function getSender(): ?array
+    {
+        return $this->sender;
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    public function getPhysicalProperties(): ?array
+    {
+        return $this->physicalProperties;
     }
 }
