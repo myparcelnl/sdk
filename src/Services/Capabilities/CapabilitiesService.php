@@ -12,10 +12,8 @@ use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 
 /**
  * Thin service facade for capabilities lookup.
- * 
- * Provides a stable API for fetching carrier capabilities while hiding 
- * low-level client/mapper details. Future enhancements (caching, retries, 
- * feature flags) can be added here without breaking consumer code.
+ *
+ * Future enhancements (caching, retries, feature flags) can be added here.
  */
 final class CapabilitiesService implements CapabilitiesServiceInterface
 {
@@ -29,9 +27,9 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
     /**
      * Fetch capabilities for the given request.
      *
-     * @param CapabilitiesRequest $request The capabilities request
-     * @return CapabilitiesResponse The capabilities response
-     * @throws \MyParcelNL\Sdk\Exception\ApiException If the API request fails
+     * @param CapabilitiesRequest $request
+     * @return CapabilitiesResponse
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
      */
     public function get(CapabilitiesRequest $request): CapabilitiesResponse
     {

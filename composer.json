@@ -31,6 +31,10 @@
         "test:coverage": [
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit --coverage-html coverage"
+        ],
+        "generate:capabilities": [
+            "yarn install",
+            "yarn openapi:generate:capabilities"
         ]
     },
     "require": {

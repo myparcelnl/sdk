@@ -47,6 +47,30 @@ Make as many commits as you'd like. We use [Conventional Commits] and [semantic-
 - Please explain what you changed and why
 - We will review your code and thoroughly test it before squashing and merging your pull request
 
+## Generated Code (Capabilities API Client)
+
+Some parts of this SDK use generated code from OpenAPI specifications to ensure zero-code rollouts for new carriers, delivery types, and other enumerations.
+
+### Generated Files Location
+- `src/Services/CoreApi/Generated/Capabilities/` - **DO NOT EDIT MANUALLY**
+
+### Regenerating Code
+```bash
+# Install dependencies first (if not done already)
+yarn install
+
+# Regenerate capabilities client
+composer generate:capabilities
+```
+
+### Important Notes for Development
+- Generated files should **never** be manually edited
+- Changes to the API client must be made in the OpenAPI specification  
+- Current spec URL: `https://api.myparcel.nl/openapi.min.json`
+- **Known Issue:** Core API team is currently fixing spec issues, generation may fail temporarily
+
+---
+
 [@commitlint/config-conventional]: https://github.com/conventional-changelog/commitlint
 
 [Conventional Commits]: https://www.conventionalcommits.org/en/v1.0.0/#summary
