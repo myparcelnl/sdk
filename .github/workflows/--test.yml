@@ -14,7 +14,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: myparcelnl/actions/setup-app-credentials@v4
+      - uses: myparcelnl/actions/setup-app-credentials@v5
         id: credentials
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
@@ -33,7 +33,7 @@ jobs:
           path: ./coverage.xml
           key: ${{ runner.os }}-${{ matrix.php-version }}-coverage-${{ hashFiles('./src/**', './test/**') }}
 
-      - uses: myparcelnl/actions/pull-docker-image@v4
+      - uses: myparcelnl/actions/pull-docker-image@v5
         if: github.actor != 'dependabot[bot]'
         id: docker
         with:

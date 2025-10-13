@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     if: github.event.issue.pull_request
     steps:
-      - uses: myparcelnl/actions/setup-app-credentials@v4
+      - uses: myparcelnl/actions/setup-app-credentials@v5
         id: credentials
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
