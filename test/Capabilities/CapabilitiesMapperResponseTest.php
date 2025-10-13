@@ -74,6 +74,45 @@ final class CapabilitiesMapperResponseTest extends TestCase
         $this->assertNull($res->getCarrier());
     }
 
+    public function testMapFromCoreApiCarrierStaysNullAfterInconsistency(): void
+    {
+        // Result 1: POSTNL
+        $fake1 = Mockery::mock();
+        $fake1->shouldReceive('getPackageTypes')->andReturn([]);
+        $fake1->shouldReceive('getDeliveryTypes')->andReturn([]);
+        $fake1->shouldReceive('getOptions')->andReturn((object) []);
+        $fake1->shouldReceive('getCarrier')->andReturn('POSTNL');
+        $fake1->shouldReceive('getTransactionTypes')->andReturn([]);
+        $fake1->shouldReceive('getCollo')->andReturnNull();
+
+        // Result 2: DHL (different from POSTNL, so carrier becomes null)
+        $fake2 = Mockery::mock();
+        $fake2->shouldReceive('getPackageTypes')->andReturn([]);
+        $fake2->shouldReceive('getDeliveryTypes')->andReturn([]);
+        $fake2->shouldReceive('getOptions')->andReturn((object) []);
+        $fake2->shouldReceive('getCarrier')->andReturn('DHL');
+        $fake2->shouldReceive('getTransactionTypes')->andReturn([]);
+        $fake2->shouldReceive('getCollo')->andReturnNull();
+
+        // Result 3: UPS (should NOT override null, bug scenario)
+        $fake3 = Mockery::mock();
+        $fake3->shouldReceive('getPackageTypes')->andReturn([]);
+        $fake3->shouldReceive('getDeliveryTypes')->andReturn([]);
+        $fake3->shouldReceive('getOptions')->andReturn((object) []);
+        $fake3->shouldReceive('getCarrier')->andReturn('UPS');
+        $fake3->shouldReceive('getTransactionTypes')->andReturn([]);
+        $fake3->shouldReceive('getCollo')->andReturnNull();
+
+        $core = Mockery::mock(CapabilitiesResponsesCapabilitiesV2::class);
+        $core->shouldReceive('getResults')->andReturn([$fake1, $fake2, $fake3]);
+
+        $mapper = new CapabilitiesMapper();
+        $res    = $mapper->mapFromCoreApi($core);
+
+        // Carrier should be null, NOT 'UPS' (the bug Joeri found)
+        $this->assertNull($res->getCarrier(), 'Carrier should stay null after inconsistency, not be overwritten by subsequent results');
+    }
+
     public function testMapFromCoreApiEmptyResults(): void
     {
         $core = Mockery::mock(CapabilitiesResponsesCapabilitiesV2::class);
