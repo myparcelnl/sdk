@@ -7,12 +7,10 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use MyParcel\CoreApi\Generated\Capabilities\Api\ShipmentApi;
 use MyParcel\CoreApi\Generated\Capabilities\Configuration;
-use MyParcelNL\Sdk\Model\MyParcelRequest;
 
 /**
  * Factory to create the generated ShipmentApi client with proper configuration.
  *
- * - API key can be passed explicitly or falls back to ENV vars.
  * - Accept header is forced to v2 for the capabilities endpoint.
  */
 final class CapabilitiesClientFactory
@@ -23,15 +21,14 @@ final class CapabilitiesClientFactory
 
     public static function make($apiKey = null, $baseUri = null)
     {
-        // 1) Resolve API key: param > ENV > empty string
-        if (null === $apiKey || '' === $apiKey) {
-            $apiKey = getenv('API_KEY_NL') ?: getenv('API_KEY_BE') ?: '';
-        }
+        // 1) Resolve API key with future-proof fallback
+        $resolvedKey = self::resolveApiKey($apiKey);
 
-        // 2) Encode API key via MyParcelRequest
-        $req = new MyParcelRequest();
-        $req->setApiKey($apiKey);
-        $encoded = $req->getEncodedApiKey();
+        // 2) Encode API key
+        if ('' === $resolvedKey) {
+            throw new \InvalidArgumentException('API key cannot be empty');
+        }
+        $encoded = base64_encode($resolvedKey);
 
         $host = $baseUri ?: self::DEFAULT_BASE_URI;
 
@@ -59,4 +56,26 @@ final class CapabilitiesClientFactory
 
         return new ShipmentApi($http, $config);
     }
+
+    private static function resolveApiKey(?string $apiKey): string
+    {
+        if (null !== $apiKey && '' !== $apiKey) {
+            return $apiKey;
+        }
+
+        // New unified API_KEY (future-proof)
+        $unifiedKey = getenv('API_KEY');
+        if ($unifiedKey && '' !== $unifiedKey) {
+            return $unifiedKey;
+        }
+
+        // Legacy fallback (deprecated but still supported)
+        $legacyKey = getenv('API_KEY_NL') ?: getenv('API_KEY_BE');
+        if ($legacyKey && '' !== $legacyKey) {
+            return $legacyKey;
+        }
+
+        return '';
+    }
+
 }
