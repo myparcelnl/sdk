@@ -197,8 +197,6 @@ class CapabilitiesMapper
     /**
      * Map the Core API response to the immutable SDK response model.
      *
-     * We merge across ALL 'results' instead of taking just the first one
-     * to avoid silently dropping capabilities.
      *
      * NOTE: Response 'physical_properties' are not mapped in the response as they are input-only fields.
      *       For now we expose option *keys* to signal presence.
@@ -216,6 +214,7 @@ class CapabilitiesMapper
         $optionKeys       = [];
         $transactionTypes = [];
         $carrier          = null; // keep only if consistent across results
+        $carrierInconsistent = false; // track if carrier inconsistency was found
         $colloMax         = null; // keep the highest max found
 
         foreach ($results as $res) {
@@ -227,12 +226,15 @@ class CapabilitiesMapper
             $optionsObj  = (array) $res->getOptions();
             $optionKeys  = array_values(array_unique(array_merge($optionKeys, array_keys($optionsObj))));
 
-            // Carrier: ensure consistency across results, otherwise null
-            $resCarrier = $res->getCarrier();
-            if (null === $carrier) {
-                $carrier = $resCarrier;
-            } elseif ($carrier !== $resCarrier) {
-                $carrier = null;
+            // Carrier: ensure consistency across results, once inconsistent stay null
+            if (!$carrierInconsistent) {
+                $resCarrier = $res->getCarrier();
+                if (null === $carrier) {
+                    $carrier = $resCarrier;
+                } elseif ($carrier !== $resCarrier) {
+                    $carrier = null;
+                    $carrierInconsistent = true; // Mark as inconsistent, prevent future overwrites
+                }
             }
 
             // Transaction types: merge & dedupe
