@@ -33,8 +33,8 @@
             "vendor/bin/phpunit --coverage-html coverage"
         ],
         "generate:capabilities": [
-            "yarn install",
-            "yarn openapi:generate:capabilities"
+            "docker compose run --rm openapi-swagger-codegen",
+            "composer dump-autoload -o"
         ]
     },
     "require": {
@@ -51,7 +51,10 @@
         "psr-4": {
             "MyParcelNL\\Sdk\\": "src/",
             "MyParcel\\CoreApi\\Generated\\Capabilities\\": "src/Services/CoreApi/Generated/Capabilities/lib"
-        }
+        },
+        "exclude-from-classmap": [
+            "src/Services/CoreApi/Generated/*"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
