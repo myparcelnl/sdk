@@ -1,29 +1,44 @@
 # Generated Code – Do Not Edit
 
-This directory contains auto-generated client code from the MyParcel Core API OpenAPI specification (Capabilities v2).
+This directory contains auto-generated client code for the **MyParcel Core API** (Capabilities v2), generated via **Swagger Codegen v3** in a Docker container.
+
+---
 
 ## Important Warning
 
-**DO NOT modify these files manually!** Any manual changes will be overwritten when the code is regenerated.
+**DO NOT modify these files manually!**  
+Any manual changes will be overwritten when the client is regenerated.
+
+---
 
 ## Regenerating the Client
 
 To update the generated client code:
 
-1. Ensure you have Yarn installed: `yarn --version`
-2. Install dependencies: `yarn install`
-3. Regenerate the client: `composer generate:capabilities`
+1. Make sure you have Docker installed
+2. Regenerate the client using Composer (this runs Swagger Codegen in Docker):
+   ```
+   composer generate:capabilities
+   ```
+3. Re-dump the autoloader if needed:
+   ```
+   composer dump-autoload -o
+   ```
 
 ## What's Generated
 
 - API client classes (`lib/Api/`)
-- Model classes including enums (`lib/Model/`)
-- Configuration and helper classes
-- 
+- Model and enum classes (`lib/Model/`)
+- Configuration and helper classes (`lib/Configuration.php`, etc.)
 
-In the future, this directory will not be committed to Git. Instead:
-- Generated code will be created during GitHub Actions release builds
-- The generated code will be included in published Composer packages
-- The `main` branch will remain clean of generated files
+## Implementation Notes
 
-For more information, see `CONTRIBUTING.md`.
+- **Generator**: swaggerapi/swagger-codegen-cli-v3:3.0.57
+- **Specification source**: https://api.myparcel.nl/openapi.yaml
+- **Output path**: `src/Services/CoreApi/Generated/Capabilities/lib/`
+
+## CI/CD
+
+In future releases, generated code may be produced automatically in GitHub Actions and distributed only through published Composer packages. The main branch should remain clean of regenerated artifacts.
+
+For contribution guidelines, see `CONTRIBUTING.md`.

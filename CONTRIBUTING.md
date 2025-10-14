@@ -49,25 +49,34 @@ Make as many commits as you'd like. We use [Conventional Commits] and [semantic-
 
 ## Generated Code (Capabilities API Client)
 
-Some parts of this SDK use generated code from OpenAPI specifications to ensure zero-code rollouts for new carriers, delivery types, and other enumerations.
+Some parts of this SDK use **generated code** from the Core API specification to ensure zero-maintenance updates for new carriers, delivery types, and configuration options.
 
 ### Generated Files Location
-- `src/Services/CoreApi/Generated/Capabilities/` - **DO NOT EDIT MANUALLY**
+
+- `src/Services/CoreApi/Generated/Capabilities/` — **DO NOT EDIT MANUALLY**
 
 ### Regenerating Code
-```bash
-# Install dependencies first (if not done already)
-yarn install
 
-# Regenerate capabilities client
+```bash
+# Make sure Docker is available
+docker --version
+
+# Regenerate the Capabilities client
 composer generate:capabilities
 ```
 
-### Important Notes for Development
-- Generated files should **never** be manually edited
-- Changes to the API client must be made in the OpenAPI specification  
-- Current spec URL: `https://api.myparcel.nl/openapi.min.json`
-- **Known Issue:** Core API team is currently fixing spec issues, generation may fail temporarily
+This command runs `swaggerapi/swagger-codegen-cli-v3` inside a Docker container, using the specification at:
+
+```
+https://api.myparcel.nl/openapi.yaml
+```
+
+### Notes for Development
+
+- Do not edit any files under `Generated/Capabilities` manually
+- All changes must originate from the Core API specification
+- The generated code is produced by Swagger Codegen v3, not OpenAPI Generator
+- The generation command automatically refreshes autoloading via Composer
 
 ---
 
