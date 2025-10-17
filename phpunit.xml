@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" colors="true" cacheResult="true" executionOrder="depends,defects">
+<phpunit bootstrap="bootstrap.php" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" colors="true" cacheResult="true" executionOrder="depends,defects">
   <coverage>
     <include>
       <directory suffix=".php">./src</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">./src/Services/CoreApi/Generated</directory>
+    </exclude>
   </coverage>
   <testsuites>
     <testsuite name="Unit">
