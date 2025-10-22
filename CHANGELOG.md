@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.0](https://github.com/myparcelnl/sdk/compare/v10.2.0...v10.3.0) (2025-10-22)
+
+
+### :sparkles: New Features
+
+* refactor platform naming to proposition for future API transition ([#554](https://github.com/myparcelnl/sdk/issues/554)) ([a4c4640](https://github.com/myparcelnl/sdk/commit/a4c4640164bad79fd82419509b452a99de9e361e))
+
 ## [10.2.0](https://github.com/myparcelnl/sdk/compare/v10.1.0...v10.2.0) (2025-09-15)
 
 
