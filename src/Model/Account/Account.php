@@ -16,8 +16,9 @@ class Account extends BaseModel
 
     /**
      * @var int
+     * Primary storage is proposition_id for future-forward approach
      */
-    private $platform_id;
+    private $proposition_id;
 
     /**
      * @var Shop[]|\MyParcelNL\Sdk\Support\Collection
@@ -29,9 +30,13 @@ class Account extends BaseModel
      */
     public function __construct(array $data)
     {
-        $this->id          = $data['id'];
-        $this->platform_id = $data['platform_id'];
-        $this->shops       = (new Collection($data['shops']))->mapInto(Shop::class);
+        $this->id = $data['id'];
+        
+        // Support both current API (platform_id) and future API (proposition_id)
+        // Store as proposition_id internally for clean future transition
+        $this->proposition_id = $data['proposition_id'] ?? $data['platform_id'];
+        
+        $this->shops = (new Collection($data['shops']))->mapInto(Shop::class);
     }
 
     /**
@@ -44,10 +49,19 @@ class Account extends BaseModel
 
     /**
      * @return int
+     * @deprecated Use getPropositionId() instead. Will be removed in next major version.
      */
     public function getPlatformId(): int
     {
-        return $this->platform_id;
+        return $this->proposition_id; // Legacy method accessing proposition data
+    }
+
+    /**
+     * @return int
+     */
+    public function getPropositionId(): int
+    {
+        return $this->proposition_id;
     }
 
     /**
@@ -61,12 +75,16 @@ class Account extends BaseModel
     /**
      * @return array
      */
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return [
-            'id'          => $this->getId(),
-            'platform_id' => $this->getPlatformId(),
-            'shops'       => $this->getShops(),
+            'id'             => $this->getId(),
+            'proposition_id' => $this->getPropositionId(), // Primary/future format
+            'platform_id'    => $this->getPlatformId(),    // Legacy format for compatibility
+            'shops'          => $this->getShops(),
         ];
     }
 }

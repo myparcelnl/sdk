@@ -43,10 +43,24 @@ trait HasUserAgent
      * @param  string|null $version
      *
      * @return self
+     * @deprecated Use setUserAgentForProposition() instead. Will be removed in next major version.
      */
     public function setUserAgent(string $platform, ?string $version): self
     {
         $this->userAgent[$platform] = $version;
+
+        return $this;
+    }
+
+    /**
+     * @param  string      $proposition
+     * @param  string|null $version
+     *
+     * @return self
+     */
+    public function setUserAgentForProposition(string $proposition, ?string $version): self
+    {
+        $this->userAgent[$proposition] = $version;
 
         return $this;
     }

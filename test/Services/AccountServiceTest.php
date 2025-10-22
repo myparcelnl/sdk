@@ -47,12 +47,19 @@ class AccountServiceTest extends TestCase
             ->setApiKey($this->getApiKey())
             ->getAccount();
 
-        self::assertArrayHasKey('id', $result->toArray());
-        self::assertArrayHasKey('platform_id', $result->toArray());
-        self::assertArrayHasKey('shops', $result->toArray());
+        // Test array contains both old and new keys for forward/backward compatibility
+        $array = $result->toArray();
+        self::assertArrayHasKey('id', $array);
+        self::assertArrayHasKey('platform_id', $array); // Legacy - always present
+        self::assertArrayHasKey('proposition_id', $array); // New - always present
+        self::assertArrayHasKey('shops', $array);
         
+        // Test both legacy and new methods return same data
         self::assertEquals(12345, $result->getId());
-        self::assertEquals(1, $result->getPlatformId());
+        self::assertEquals(1, $result->getPlatformId()); // Legacy method
+        self::assertEquals(1, $result->getPropositionId()); // New method
+        self::assertEquals($result->getPlatformId(), $result->getPropositionId()); // Should be equal
+        
         self::assertCount(1, $result->getShops());
         self::assertEquals(67890, $result->getShops()->first()->getId());
         self::assertEquals('Test Shop', $result->getShops()->first()->getName());
