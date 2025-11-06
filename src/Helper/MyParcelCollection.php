@@ -493,7 +493,7 @@ class MyParcelCollection extends Collection
              */
             $result = $request->getResult();
 
-            if (!is_string($result) || !preg_match('/^%PDF-1./', $result)) {
+            if (!is_string($result) || !preg_match('/^%PDF-\d/', $result)) {
                 if (is_array($result) && isset($result['data']['payment_instructions'])) {
                     throw new ApiException('Received payment link instead of pdf. Check your MyParcel account status.');
                 }
