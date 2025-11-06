@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.1](https://github.com/myparcelnl/sdk/compare/v10.3.0...v10.3.1) (2025-11-06)
+
+
+### :bug: Bug Fixes
+
+* accept pdf’s of any version ([#557](https://github.com/myparcelnl/sdk/issues/557)) ([be4c0c6](https://github.com/myparcelnl/sdk/commit/be4c0c6fdb88ac08013423aa9d65f63f287b2a6d))
+
 ## [10.3.0](https://github.com/myparcelnl/sdk/compare/v10.2.0...v10.3.0) (2025-10-22)
 
 
