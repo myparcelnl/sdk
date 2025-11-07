@@ -44,6 +44,8 @@ class ConsignmentTestCase extends TestCase
     protected const EMAIL                       = 'email';
     protected const EXCEPTION                   = 'exception';
     protected const EXTRA_OPTIONS               = 'extra_options';
+    protected const FRESH_FOOD                  = 'fresh_food';
+    protected const FROZEN                      = 'frozen';
     protected const FULL_STREET                 = 'full_street';
     protected const FULL_STREET_INPUT           = 'full_street_input';
     protected const INSURANCE                   = 'insurance';
@@ -63,6 +65,7 @@ class ConsignmentTestCase extends TestCase
     protected const PICKUP_POSTAL_CODE          = 'pickup_postal_code';
     protected const PICKUP_STREET               = 'pickup_street';
     protected const POSTAL_CODE                 = 'postal_code';
+    protected const RECEIPT_CODE                = 'receipt_code';
     protected const REFERENCE_IDENTIFIER        = 'reference_identifier';
     protected const REGION                      = 'region';
     protected const RETAIL_NETWORK_ID           = 'retail_network_id';
@@ -87,6 +90,9 @@ class ConsignmentTestCase extends TestCase
         self::HIDE_SENDER       => 'hasHideSender',
         self::EXTRA_ASSURANCE   => 'hasExtraAssurance',
         self::SAME_DAY_DELIVERY => 'isSameDayDelivery',
+        self::FRESH_FOOD        => 'hasFreshFood',
+        self::FROZEN            => 'hasFrozen',
+        self::RECEIPT_CODE      => 'hasReceiptCode',
     ];
     private const EXPECTED_SUFFIX              = '_expected';
     private const KEYS_EXCLUDED_FROM_TEST_NAME = [
