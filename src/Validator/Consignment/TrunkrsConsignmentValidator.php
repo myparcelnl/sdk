@@ -17,7 +17,6 @@ class TrunkrsConsignmentValidator extends AbstractValidator
     {
         return [
             new ShipmentOptionsRule(),
-            new MinimumWeightRule(),
         ];
     }
 }
