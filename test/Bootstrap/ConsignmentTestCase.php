@@ -60,6 +60,7 @@ class ConsignmentTestCase extends TestCase
     protected const PHONE                       = 'phone';
     protected const PICKUP_CITY                 = 'pickup_city';
     protected const PICKUP_COUNTRY              = 'pickup_country';
+    protected const PICKUP_LOCATION_CODE        = 'pickup_location_code';
     protected const PICKUP_LOCATION_NAME        = 'pickup_location_name';
     protected const PICKUP_NUMBER               = 'pickup_number';
     protected const PICKUP_POSTAL_CODE          = 'pickup_postal_code';
