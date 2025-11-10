@@ -30,7 +30,7 @@ class TrunkrsConsignment extends AbstractConsignment
     public function getAllowedDeliveryTypes(): array
     {
         return [
-            self::DELIVERY_TYPE_EVENING_NAME,
+            self::DELIVERY_TYPE_STANDARD_NAME,
         ];
     }
 
