@@ -251,8 +251,10 @@ class ConsignmentEncode
                 'number'            => $consignment->getPickupNumber(),
                 'location_name'     => $consignment->getPickupLocationName(),
                 'location_code'     => $consignment->getPickupLocationCode(),
-                'retail_network_id' => $consignment->getRetailNetworkId(),
             ];
+            if (($retailNetworkId = $consignment->getRetailNetworkId())) {
+                $this->consignmentEncoded['pickup']['retail_network_id'] = $retailNetworkId;
+            }
         }
 
         $this->consignmentEncoded['general_settings']['save_recipient_address']     = $this->normalizeAutoSaveRecipientAddress($consignment);
