@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.2](https://github.com/myparcelnl/sdk/compare/v10.3.1...v10.3.2) (2025-11-11)
+
+
+### :bug: Bug Fixes
+
+* prevent api error retail network id null value found ([#561](https://github.com/myparcelnl/sdk/issues/561)) ([3dbf72c](https://github.com/myparcelnl/sdk/commit/3dbf72c454f27de102a1c667dfe055b5d14bb661))
+
 ## [10.3.1](https://github.com/myparcelnl/sdk/compare/v10.3.0...v10.3.1) (2025-11-06)
 
 
