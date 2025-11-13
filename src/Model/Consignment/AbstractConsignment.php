@@ -1588,7 +1588,7 @@ abstract class AbstractConsignment
      */
     public function setLargeFormat(bool $largeFormat): self
     {
-        $this->large_format = $largeFormat && $this->isPackage();
+        $this->large_format = $largeFormat && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_LARGE_FORMAT) && $this->isPackage();
 
         return $this;
     }
