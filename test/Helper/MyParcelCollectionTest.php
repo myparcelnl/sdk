@@ -396,4 +396,101 @@ class MyParcelCollectionTest extends CollectionTestCase
         }
     }
 
+    /**
+     * Test direct printing functionality
+     *
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function testPrintDirect(): void
+    {
+        $uniqueIdentifier = $this->generateTimestamp();
+        $testData = $this->createConsignmentsTestData([
+            [self::REFERENCE_IDENTIFIER => "{$uniqueIdentifier}_one"],
+            [self::REFERENCE_IDENTIFIER => "{$uniqueIdentifier}_two"],
+        ]);
+
+        $collection = $this->generateCollection($testData);
+        $curlMock = $this->mockCurl();
+
+        $shipmentIds = [111, 112];
+        $printerGroupId = '55b53b20-91aa-4a53-8bb2-c4c120df9921';
+
+        // Setup mock expectations
+        // 1. POST /shipments (create shipments)
+        $curlMock->shouldReceive('write')
+            ->once()
+            ->with('POST', Mockery::any(), Mockery::any(), Mockery::any())
+            ->andReturn('');
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'ids' => [
+                            ['id' => $shipmentIds[0], 'reference_identifier' => "{$uniqueIdentifier}_one"],
+                            ['id' => $shipmentIds[1], 'reference_identifier' => "{$uniqueIdentifier}_two"],
+                        ]
+                    ]
+                ]),
+                'code' => 201
+            ]);
+
+        // 2. POST /shipments/print (direct print)
+        $curlMock->shouldReceive('write')
+            ->once()
+            ->with('POST', Mockery::any(), Mockery::any(), Mockery::any())
+            ->andReturn('');
+
+        $printResponse = ShipmentResponses::directPrintResponse($shipmentIds);
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn($printResponse);
+
+        // 3. GET /shipments (setLatestData)
+        $curlMock->shouldReceive('write')
+            ->once()
+            ->with('GET', Mockery::any(), Mockery::any(), Mockery::any())
+            ->andReturn('');
+
+        $shipment1Response = json_decode(ShipmentResponses::getShipmentDetailsResponse([
+            'id' => $shipmentIds[0],
+            'reference_identifier' => "{$uniqueIdentifier}_one"
+        ])['response'], true);
+        
+        $shipment2Response = json_decode(ShipmentResponses::getShipmentDetailsResponse([
+            'id' => $shipmentIds[1],
+            'reference_identifier' => "{$uniqueIdentifier}_two"
+        ])['response'], true);
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'shipments' => [
+                            $shipment1Response['data']['shipments'][0],
+                            $shipment2Response['data']['shipments'][0],
+                        ]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $curlMock->shouldReceive('close')->times(3);
+
+        // Execute direct print
+        $result = $collection->printDirect($printerGroupId);
+
+        // Assertions
+        self::assertIsArray($result);
+        self::assertArrayHasKey($this->getApiKey(), $result);
+        self::assertArrayHasKey('data', $result[$this->getApiKey()]);
+        self::assertEquals('queued', $result[$this->getApiKey()]['data']['status']);
+        self::assertEquals($shipmentIds, $result[$this->getApiKey()]['data']['shipment_ids']);
+    }
+
 }
