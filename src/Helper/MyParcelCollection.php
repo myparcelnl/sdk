@@ -27,6 +27,7 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierUPSStandard;
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
+use MyParcelNL\Sdk\Model\DirectPrintRequest;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Services\CollectionEncode;
 use MyParcelNL\Sdk\Services\ConsignmentEncode;
@@ -562,6 +563,36 @@ class MyParcelCollection extends Collection
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         echo $this->label_pdf;
         exit;
+    }
+
+    /**
+     * Print labels directly to a printer
+     *
+     * @param string $printerGroupId The ID of the printer group to print to
+     *
+     * @return array The API response
+     * @throws AccountNotActiveException
+     * @throws ApiException
+     * @throws MissingFieldException
+     */
+    public function printDirect(string $printerGroupId): array
+    {
+        // Ensure consignments are created first
+        $this->createConcepts();
+
+        $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
+        $results = [];
+
+        foreach ($consignmentIdsByApiKey as $apiKey => $consignmentIds) {
+            $request = new DirectPrintRequest($apiKey, $printerGroupId, $consignmentIds);
+            $request->setUserAgents($this->getUserAgent());
+            
+            $results[$apiKey] = $request->send();
+        }
+
+        $this->setLatestData();
+
+        return $results;
     }
 
     /**
