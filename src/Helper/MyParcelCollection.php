@@ -116,10 +116,6 @@ class MyParcelCollection extends Collection
             throw new InvalidArgumentException('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
-        if ($this->count() === 1) {
-            return new static($this->items);
-        }
-
         return $this->where('reference_identifier', $id);
     }
 
