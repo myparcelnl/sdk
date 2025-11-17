@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Web;
 
 use MyParcelNL\Sdk\Model\Account\PrinterGroup;
+use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Collection;
 
 class PrinterGroupWebService extends AbstractWebService
 {
-    public const ENDPOINT = 'printer_groups';
+    public const ENDPOINT = 'printer-groups';
 
     /**
      * Get all printer groups for the account
@@ -22,10 +23,17 @@ class PrinterGroupWebService extends AbstractWebService
     public function getPrinterGroups(): Collection
     {
         $request = $this->createRequest()
+            ->setBaseUrl(MyParcelRequest::PRINTING_API_URL)
             ->sendRequest('GET', self::ENDPOINT);
 
-        $result = $request->getResult('data.printer_groups');
-
+        // Try both possible response structures
+        $result = $request->getResult('results');
+        
+        if (!is_array($result)) {
+            // Fallback to data.printer_groups structure
+            $result = $request->getResult('data.printer_groups');
+        }
+        
         if (!is_array($result)) {
             return new Collection();
         }
