@@ -419,7 +419,8 @@ class MyParcelCollectionTest extends CollectionTestCase
         $printerGroupId = '55b53b20-91aa-4a53-8bb2-c4c120df9921';
 
         // Setup mock expectations
-        // 1. POST /shipments (create shipments)
+        // 1. POST /shipments (create shipments with direct print header)
+        // Based on new implementation: printDirect creates shipments AND prints in one request
         $curlMock->shouldReceive('write')
             ->once()
             ->with('POST', Mockery::any(), Mockery::any(), Mockery::any())
@@ -433,24 +434,16 @@ class MyParcelCollectionTest extends CollectionTestCase
                         'ids' => [
                             ['id' => $shipmentIds[0], 'reference_identifier' => "{$uniqueIdentifier}_one"],
                             ['id' => $shipmentIds[1], 'reference_identifier' => "{$uniqueIdentifier}_two"],
+                        ],
+                        'pdf' => [
+                            'url' => '/pdfs/test-print-job'
                         ]
                     ]
                 ]),
                 'code' => 201
             ]);
 
-        // 2. POST /shipments/print (direct print)
-        $curlMock->shouldReceive('write')
-            ->once()
-            ->with('POST', Mockery::any(), Mockery::any(), Mockery::any())
-            ->andReturn('');
-
-        $printResponse = ShipmentResponses::directPrintResponse($shipmentIds);
-        $curlMock->shouldReceive('getResponse')
-            ->once()
-            ->andReturn($printResponse);
-
-        // 3. GET /shipments (setLatestData)
+        // 2. GET /shipments (setLatestData)
         $curlMock->shouldReceive('write')
             ->once()
             ->with('GET', Mockery::any(), Mockery::any(), Mockery::any())
@@ -480,7 +473,7 @@ class MyParcelCollectionTest extends CollectionTestCase
                 'code' => 200
             ]);
 
-        $curlMock->shouldReceive('close')->times(3);
+        $curlMock->shouldReceive('close')->times(2);
 
         // Execute direct print
         $result = $collection->printDirect($printerGroupId);
@@ -489,8 +482,9 @@ class MyParcelCollectionTest extends CollectionTestCase
         self::assertIsArray($result);
         self::assertArrayHasKey($this->getApiKey(), $result);
         self::assertArrayHasKey('data', $result[$this->getApiKey()]);
-        self::assertEquals('queued', $result[$this->getApiKey()]['data']['status']);
-        self::assertEquals($shipmentIds, $result[$this->getApiKey()]['data']['shipment_ids']);
+        // The API returns the same structure as createConcepts (with ids and pdf)
+        self::assertArrayHasKey('ids', $result[$this->getApiKey()]['data']);
+        self::assertCount(2, $result[$this->getApiKey()]['data']['ids']);
     }
 
 }
