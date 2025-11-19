@@ -213,7 +213,7 @@ class MyParcelRequest
      */
     public function getRequestUrl(): string
     {
-        if ($this->baseUrl !== null) {
+        if (null !== $this->baseUrl) {
             return $this->baseUrl;
         }
         return getenv('MYPARCEL_API_BASE_URL') ?: self::REQUEST_URL;
@@ -228,6 +228,7 @@ class MyParcelRequest
     public function setBaseUrl(string $baseUrl): self
     {
         $this->baseUrl = $baseUrl;
+
         return $this;
     }
 
