@@ -575,7 +575,7 @@ class MyParcelCollection extends Collection
      * @throws ApiException
      * @throws MissingFieldException
      */
-    public function generateReturnConsignments(bool $sendMail, Closure $modifier = null): self
+    public function generateReturnConsignments(bool $sendMail, ?Closure $modifier = null): self
     {
         // Be sure consignments are created
         $this->createConcepts();
@@ -624,7 +624,7 @@ class MyParcelCollection extends Collection
      * @return array|null
      * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids grouped by their original api key
      */
-    public function getConsignmentIds(string &$key = null): ?array
+    public function getConsignmentIds(?string &$key = null): ?array
     {
         $conceptIds = [];
         /** @var AbstractConsignment $consignment */

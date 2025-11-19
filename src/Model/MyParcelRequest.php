@@ -197,7 +197,7 @@ class MyParcelRequest
      *
      * @return mixed
      */
-    public function getResult(string $key = null, string $pluck = null)
+    public function getResult(?string $key = null, ?string $pluck = null)
     {
         if (null === $key) {
             return $this->result;
