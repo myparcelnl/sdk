@@ -79,6 +79,13 @@ class MyParcelCollection extends Collection
     private $label_pdf;
 
     /**
+     * Last API results from createConsignments when printerGroupId was provided
+     *
+     * @var array
+     */
+    private $lastCreateResults = [];
+
+    /**
      * @param bool $keepKeys
      *
      * @return AbstractConsignment[]
@@ -292,12 +299,13 @@ class MyParcelCollection extends Collection
      * Create concept consignments in MyParcel.
      *
      * @param bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
+     * @param string|null $printerGroupId if provided, will send shipments directly to printer instead of returning PDF
      * @return self
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
      */
-    protected function createConsignments(bool $asUnrelatedReturn = false): self
+    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
@@ -313,6 +321,12 @@ class MyParcelCollection extends Collection
                 $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
             }
 
+            // Add direct print header if printer group ID is provided
+            if (null !== $printerGroupId) {
+                $directPrintHeader = MyParcelRequest::getDirectPrintAcceptHeader($printerGroupId);
+                $headers['Accept'] = $directPrintHeader['Accept'];
+            }
+
             $data    = (new CollectionEncode($consignments))->encode($asUnrelatedReturn ? 'return_shipments' : 'shipments');
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
@@ -322,6 +336,13 @@ class MyParcelCollection extends Collection
                     $headers
                 )
                 ->sendRequest();
+
+            // Store results if printerGroupId was provided (for printDirect)
+            if (null !== $printerGroupId) {
+                $result = $request->getResult();
+                $apiKey = $consignments->first()->getApiKey();
+                $this->lastCreateResults[$apiKey] = $result;
+            }
 
             /**
              * Loop through the returned ids and add each consignment id to a consignment.
@@ -420,6 +441,9 @@ class MyParcelCollection extends Collection
             }
 
             $result        = $request->getResult('data.shipments');
+            if (null === $result || !is_array($result)) {
+                continue;
+            }
             $newCollection = $this->getNewCollectionFromResult($result, $key);
             $collections[] = $newCollection->sortByCollection($this)->items;
         }
@@ -568,9 +592,8 @@ class MyParcelCollection extends Collection
     /**
      * Print labels directly to a printer
      * 
-     * This method creates shipments (concepts) and sends them directly to a printer in one request.
-     * Based on the PDK implementation, it uses the same logic as createConsignments() but with
-     * a special Accept header that tells the API to print directly instead of returning a PDF.
+     * This method uses createConsignments() with a printer group ID to send shipments
+     * directly to a printer instead of returning a PDF.
      *
      * @param string $printerGroupId The ID of the printer group to print to
      *
@@ -581,72 +604,18 @@ class MyParcelCollection extends Collection
      */
     public function printDirect(string $printerGroupId): array
     {
-        $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
-        $this->addMissingReferenceId();
-
-        $grouped = $this->where('consignment_id', null)->groupBy(function(AbstractConsignment $item) {
-            return $item->getApiKey() . ($item->hasSender() ? '-sender' : '');
-        });
-
-        $results = [];
-
-        /* @var MyParcelCollection $consignments */
-        foreach ($grouped as $consignments) {
-            // Use the same headers as createConsignments
-            $headers = MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
-            if ($consignments->first()->hasSender()) {
-                $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
-            }
-            
-            // Add the special Accept header for direct printing
-            // This is the ONLY difference from createConsignments()
-            $directPrintHeader = MyParcelRequest::getDirectPrintAcceptHeader($printerGroupId);
-            $headers = array_merge($headers, $directPrintHeader);
-
-            $data    = (new CollectionEncode($consignments))->encode('shipments');
-            $request = (new MyParcelRequest())
-                ->setUserAgents($this->getUserAgent())
-                ->setRequestParameters(
-                    $consignments->first()->getApiKey(),
-                    $data,
-                    $headers
-                )
-                ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_SHIPMENTS);
-
-            try {
-                $result = $request->getResult();
-                $apiKey = $consignments->first()->getApiKey();
-                $results[$apiKey] = $result;
-                
-                // Update consignments with the returned IDs (same as createConsignments)
-                $responseShipments = $request->getResult('data.ids');
-                foreach ($responseShipments as $responseShipment) {
-                    $matchedConsignments = $this->getConsignmentsByReferenceId($responseShipment['reference_identifier']);
-                    $consignment = clone $matchedConsignments->pop();
-                    $newConsignments[] = $consignment->setConsignmentId($responseShipment['id']);
-                }
-            } catch (ApiException $e) {
-                $response = $request->getResponse();
-                $errorMessage = $e->getMessage();
-                
-                if ($response && isset($response['response'])) {
-                    $responseData = is_string($response['response']) 
-                        ? json_decode($response['response'], true) 
-                        : $response['response'];
-                    
-                    if ($responseData && isset($responseData['errors'])) {
-                        $errorMessage .= "\n\nFull error details:\n" . json_encode($responseData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-                    }
-                }
-                
-                throw new ApiException($errorMessage);
-            }
-        }
-
-        $this->items = $newConsignments;
+        // Reset results storage
+        $this->lastCreateResults = [];
+        
+        // Use createConsignments with printerGroupId parameter
+        // This will store results in lastCreateResults property
+        $this->createConsignments(false, $printerGroupId);
+        
+        // Fetch latest data for the created consignments
         $this->setLatestData();
-
-        return $results;
+        
+        // Return the stored results
+        return $this->lastCreateResults;
     }
 
     /**

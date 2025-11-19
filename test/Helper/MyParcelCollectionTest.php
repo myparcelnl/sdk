@@ -459,6 +459,11 @@ class MyParcelCollectionTest extends CollectionTestCase
             'reference_identifier' => "{$uniqueIdentifier}_two"
         ])['response'], true);
 
+        // Ensure the response is valid (not null)
+        if (null === $shipment1Response || null === $shipment2Response) {
+            throw new \Exception('Failed to decode shipment responses');
+        }
+
         $curlMock->shouldReceive('getResponse')
             ->once()
             ->andReturn([
