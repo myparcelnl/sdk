@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Validator\Consignment;
 
-use MyParcelNL\Sdk\Rule\Consignment\MinimumWeightRule;
 use MyParcelNL\Sdk\Rule\Consignment\ShipmentOptionsRule;
 use MyParcelNL\Sdk\Validator\AbstractValidator;
 
