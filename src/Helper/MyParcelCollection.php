@@ -190,8 +190,7 @@ class MyParcelCollection extends Collection
 
         // Create multiple consignments with equally distributed weight
         $originalWeight = $consignment->getTotalWeight();
-        $weightPerCollo = $originalWeight / $amount;
-        
+        $weightPerCollo = (int) ($originalWeight / $amount);
         $consignments = [];
         for ($i = 1; $i <= $amount; $i++) {
             $clonedConsignment = clone $consignment;
