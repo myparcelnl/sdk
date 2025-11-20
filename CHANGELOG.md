@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.3](https://github.com/myparcelnl/sdk/compare/v10.3.2...v10.3.3) (2025-11-20)
+
+
+### :bug: Bug Fixes
+
+* Fix the rule to check for both NL and BE and correct the insurance value by converting to cents ([#555](https://github.com/myparcelnl/sdk/issues/555)) ([7508828](https://github.com/myparcelnl/sdk/commit/75088288f5daccddc5241d845d080f3d1d84a769))
+
 ## [10.3.2](https://github.com/myparcelnl/sdk/compare/v10.3.1...v10.3.2) (2025-11-11)
 
 
