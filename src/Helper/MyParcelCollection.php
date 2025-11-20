@@ -413,12 +413,12 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest('GET');
 
-            if (null === $request->getResult()) {
+            $result = $request->getResult();
+            if (false === isset($result['data']['shipments'])) {
                 throw new ApiException('Unknown Error in MyParcel API response');
             }
 
-            $result        = $request->getResult('data.shipments');
-            $newCollection = $this->getNewCollectionFromResult($result, $key);
+            $newCollection = $this->getNewCollectionFromResult($result['data']['shipments'], $key);
             $collections[] = $newCollection->sortByCollection($this)->items;
         }
 
