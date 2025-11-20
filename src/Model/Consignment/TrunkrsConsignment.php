@@ -102,36 +102,4 @@ class TrunkrsConsignment extends AbstractConsignment
     {
         return self::CC_NL;
     }
-
-    /**
-     * @return int[]
-     */
-    protected function getLocalInsurancePossibilities(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getEuInsurancePossibilities(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return array
-     */
-    protected function getNlToBeInsurancePossibilities(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getRowInsurancePossibilities(): array
-    {
-        return [];
-    }
 }
