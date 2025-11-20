@@ -132,9 +132,9 @@ class ConsignmentEncode
         if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL === $consignment->getPackageType()) {
             $consignmentEncoded['options']['large_format'] = 0;
 
-            if (AbstractConsignment::CC_NL !== $consignment->getCountry()
+            if (!in_array($consignment->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])
                 && self::MAX_INSURANCE_PACKETS_ROW < $consignment->getInsurance() * 100) {
-                $consignmentEncoded['options']['insurance']['amount'] = self::MAX_INSURANCE_PACKETS_ROW;
+                $consignmentEncoded['options']['insurance']['amount'] = self::MAX_INSURANCE_PACKETS_ROW * 100;
             }
 
             if (in_array($consignment->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
