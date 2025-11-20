@@ -893,7 +893,7 @@ class MyParcelCollection extends Collection
             }
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
-            $isMultiCollo       = ! empty($shipment['secondary_shipments']);
+            $isMultiCollo       = ! empty($shipment['multi_collo_main_shipment_id']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {
