@@ -223,7 +223,7 @@ class MyParcelCollection extends Collection
         }
 
         // Set multi collo and reference identifier for all consignments
-        $referenceId = $consignments[0]->getReferenceIdentifier() ?? ('multi_collo_' . uniqid('', true));
+        $referenceId = $consignments[0]->getReferenceIdentifier() ?: ('multi_collo_' . uniqid('', true));
         foreach ($consignments as $consignment) {
             $consignment->setMultiCollo(true);
             $consignment->setReferenceIdentifier($referenceId);
