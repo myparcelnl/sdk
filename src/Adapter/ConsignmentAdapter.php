@@ -92,7 +92,7 @@ class ConsignmentAdapter
         }
 
         /**
-         * For AI Agent: when adding shipment options to the SDK, add them here as well. The order matters.
+         * Note: when adding shipment options to the SDK, add them here as well. The order matters.
          */
         Utils::fillObject($this->consignment, [
             'package_type'  => $options['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
