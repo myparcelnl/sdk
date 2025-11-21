@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.5](https://github.com/myparcelnl/sdk/compare/v10.3.4...v10.3.5) (2025-11-21)
+
+
+### :bug: Bug Fixes
+
+* prevent unallowed combinations of shipment options ([#562](https://github.com/myparcelnl/sdk/issues/562)) ([8841e65](https://github.com/myparcelnl/sdk/commit/8841e65c8609a4ee467d60eec4ca260ccc1352ea))
+
 ## [10.3.4](https://github.com/myparcelnl/sdk/compare/v10.3.3...v10.3.4) (2025-11-21)
 
 
