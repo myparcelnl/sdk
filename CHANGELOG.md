@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.6](https://github.com/myparcelnl/sdk/compare/v10.3.5...v10.3.6) (2025-11-21)
+
+
+### :bug: Bug Fixes
+
+* fix some php 8.4 deprecated errors ([#566](https://github.com/myparcelnl/sdk/issues/566)) ([b73fb86](https://github.com/myparcelnl/sdk/commit/b73fb86194818fbda1692e489e0e48a437ce71ac))
+
 ## [10.3.5](https://github.com/myparcelnl/sdk/compare/v10.3.4...v10.3.5) (2025-11-21)
 
 
