@@ -79,13 +79,6 @@ class MyParcelCollection extends Collection
     private $label_pdf;
 
     /**
-     * Last API results from createConsignments when printerGroupId was provided
-     *
-     * @var array
-     */
-    private $lastCreateResults = [];
-
-    /**
      * @param bool $keepKeys
      *
      * @return AbstractConsignment[]
@@ -300,12 +293,13 @@ class MyParcelCollection extends Collection
      *
      * @param bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
      * @param string|null $printerGroupId if provided, will send shipments directly to printer instead of returning PDF
+     * @param array|null $resultsByApiKey optional reference to store API results (used by printDirect)
      * @return self
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
      */
-    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null): self
+    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null, ?array &$resultsByApiKey = null): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
@@ -337,11 +331,11 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest();
 
-            // Store results if printerGroupId was provided (for printDirect)
-            if (null !== $printerGroupId) {
+            // Store results if requested (for printDirect)
+            if (null !== $resultsByApiKey) {
                 $result = $request->getResult();
                 $apiKey = $consignments->first()->getApiKey();
-                $this->lastCreateResults[$apiKey] = $result;
+                $resultsByApiKey[$apiKey] = $result;
             }
 
             /**
@@ -593,7 +587,8 @@ class MyParcelCollection extends Collection
      * Print labels directly to a printer
      * 
      * This method uses createConsignments() with a printer group ID to send shipments
-     * directly to a printer instead of returning a PDF.
+     * directly to a printer instead of returning a PDF. The API response structure is
+     * the same as createConcepts(), with an additional 'pdf' field.
      *
      * @param string $printerGroupId The ID of the printer group to print to
      *
@@ -604,18 +599,11 @@ class MyParcelCollection extends Collection
      */
     public function printDirect(string $printerGroupId): array
     {
-        // Reset results storage
-        $this->lastCreateResults = [];
-        
-        // Use createConsignments with printerGroupId parameter
-        // This will store results in lastCreateResults property
-        $this->createConsignments(false, $printerGroupId);
-        
-        // Fetch latest data for the created consignments
+        $results = [];
+        $this->createConsignments(false, $printerGroupId, $results);
         $this->setLatestData();
-        
-        // Return the stored results
-        return $this->lastCreateResults;
+
+        return $results;
     }
 
     /**
