@@ -299,7 +299,7 @@ class MyParcelCollection extends Collection
      * @throws ApiException
      * @throws MissingFieldException
      */
-    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null, ?array &$resultsByApiKey = null): self
+    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
@@ -331,12 +331,7 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest();
 
-            // Store results if requested (for printDirect)
-            if (null !== $resultsByApiKey) {
-                $result = $request->getResult();
-                $apiKey = $consignments->first()->getApiKey();
-                $resultsByApiKey[$apiKey] = $result;
-            }
+
 
             /**
              * Loop through the returned ids and add each consignment id to a consignment.
@@ -527,8 +522,7 @@ class MyParcelCollection extends Collection
                     implode(';', $consignmentIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL)
-            ;
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
@@ -597,13 +591,12 @@ class MyParcelCollection extends Collection
      * @throws ApiException
      * @throws MissingFieldException
      */
-    public function printDirect(string $printerGroupId): array
+    public function printDirect(string $printerGroupId): self
     {
-        $results = [];
-        $this->createConsignments(false, $printerGroupId, $results);
+        $this->createConsignments(false, $printerGroupId);
         $this->setLatestData();
 
-        return $results;
+        return $this;
     }
 
     /**
