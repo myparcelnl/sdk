@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.4](https://github.com/myparcelnl/sdk/compare/v10.3.3...v10.3.4) (2025-11-21)
+
+
+### :bug: Bug Fixes
+
+* return correct shipment by api key ([#564](https://github.com/myparcelnl/sdk/issues/564)) ([7286dd0](https://github.com/myparcelnl/sdk/commit/7286dd0bc65c6cde6d2974e439732cb00de3afb4))
+
 ## [10.3.3](https://github.com/myparcelnl/sdk/compare/v10.3.2...v10.3.3) (2025-11-20)
 
 
