@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.4.0](https://github.com/myparcelnl/sdk/compare/v10.3.6...v10.4.0) (2025-11-24)
+
+
+### :sparkles: New Features
+
+* add trunkrs ([#559](https://github.com/myparcelnl/sdk/issues/559)) ([b4c3820](https://github.com/myparcelnl/sdk/commit/b4c3820ef14ace6f93732f1cf97d228586c7dcd1))
+
 ## [10.3.6](https://github.com/myparcelnl/sdk/compare/v10.3.5...v10.3.6) (2025-11-21)
 
 
