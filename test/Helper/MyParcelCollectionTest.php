@@ -396,4 +396,29 @@ class MyParcelCollectionTest extends CollectionTestCase
         }
     }
 
+    public function testSetLatestDataThrowsExceptionWhenNoShipments(): void
+    {
+        $collection = $this->generateCollection(
+            $this->createConsignmentsTestData([
+                [self::REFERENCE_IDENTIFIER => 'no_shipments_test'],
+            ])
+        );
+
+        $curlMock = $this->mockCurl();
+
+        $curlMock->shouldReceive('write')->once();
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode(['data' => []]), // No 'shipments' key
+                'code'     => 200,
+            ]);
+        $curlMock->shouldReceive('close')->once();
+
+        $this->expectException(\MyParcelNL\Sdk\Exception\ApiException::class);
+        $this->expectExceptionMessage('Unknown Error in MyParcel API response');
+
+        $collection->setLatestData();
+    }
+
 }
