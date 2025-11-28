@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.4.1](https://github.com/myparcelnl/sdk/compare/v10.4.0...v10.4.1) (2025-11-28)
+
+
+### :bug: Bug Fixes
+
+* return multicollo correctly ([#567](https://github.com/myparcelnl/sdk/issues/567)) ([07380db](https://github.com/myparcelnl/sdk/commit/07380db119a8e7851df1c56e28d0e8cfe0d90506))
+
 ## [10.4.0](https://github.com/myparcelnl/sdk/compare/v10.3.6...v10.4.0) (2025-11-24)
 
 
