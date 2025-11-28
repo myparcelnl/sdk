@@ -19,16 +19,14 @@ class PrinterGroupServiceTest extends TestCase
     {
         $mockResponse = [
             'response' => json_encode([
-                'data' => [
-                    'printer_groups' => [
-                        [
-                            'id' => '55b53b20-91aa-4a53-8bb2-c4c120df9921',
-                            'name' => 'Test Printer Group'
-                        ],
-                        [
-                            'id' => 'd72fd4bf-7d5a-4c25-bffc-140c4c817260',
-                            'name' => 'Another Printer Group'
-                        ]
+                'results' => [
+                    [
+                        'id' => '55b53b20-91aa-4a53-8bb2-c4c120df9921',
+                        'name' => 'Test Printer Group'
+                    ],
+                    [
+                        'id' => 'd72fd4bf-7d5a-4c25-bffc-140c4c817260',
+                        'name' => 'Another Printer Group'
                     ]
                 ]
             ]),
@@ -46,11 +44,11 @@ class PrinterGroupServiceTest extends TestCase
             ->getPrinterGroups();
 
         self::assertCount(2, $result);
-        
+
         $firstGroup = $result->first();
         self::assertEquals('55b53b20-91aa-4a53-8bb2-c4c120df9921', $firstGroup->getId());
         self::assertEquals('Test Printer Group', $firstGroup->getName());
-        
+
         $secondGroup = $result->last();
         self::assertEquals('d72fd4bf-7d5a-4c25-bffc-140c4c817260', $secondGroup->getId());
         self::assertEquals('Another Printer Group', $secondGroup->getName());
@@ -66,9 +64,7 @@ class PrinterGroupServiceTest extends TestCase
     {
         $mockResponse = [
             'response' => json_encode([
-                'data' => [
-                    'printer_groups' => []
-                ]
+                'results' => []
             ]),
             'headers' => [],
             'code' => 200
@@ -96,7 +92,7 @@ class PrinterGroupServiceTest extends TestCase
     {
         $mockResponse = [
             'response' => json_encode([
-                'data' => []
+                'results' => []
             ]),
             'headers' => [],
             'code' => 200
@@ -114,4 +110,3 @@ class PrinterGroupServiceTest extends TestCase
         self::assertCount(0, $result);
     }
 }
-
