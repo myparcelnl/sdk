@@ -293,7 +293,6 @@ class MyParcelCollection extends Collection
      *
      * @param bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
      * @param string|null $printerGroupId if provided, will send shipments directly to printer instead of returning PDF
-     * @param array|null $resultsByApiKey optional reference to store API results (used by printDirect)
      * @return self
      * @throws AccountNotActiveException
      * @throws ApiException
