@@ -26,14 +26,8 @@ class PrinterGroupWebService extends AbstractWebService
             ->setBaseUrl(MyParcelRequest::PRINTING_API_URL)
             ->sendRequest('GET', self::ENDPOINT);
 
-        // The API may return printer groups in different structures depending on version
-        // Try 'results' first (PDK standard), then fallback to 'data.printer_groups'
         $result = $request->getResult('results');
-        
-        if (!is_array($result)) {
-            $result = $request->getResult('data.printer_groups');
-        }
-        
+
         if (!is_array($result)) {
             return new Collection();
         }
@@ -42,4 +36,3 @@ class PrinterGroupWebService extends AbstractWebService
             ->mapInto(PrinterGroup::class);
     }
 }
-
