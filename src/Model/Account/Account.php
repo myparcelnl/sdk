@@ -78,7 +78,7 @@ class Account extends BaseModel
         return $this->shops;
     }
 
-    public function getGeneralSettings(): Collection
+    public function getGeneralSettings(): GeneralSettings
     {
         return $this->generalSettings;
     }
@@ -92,10 +92,11 @@ class Account extends BaseModel
     public function toArray(): array
     {
         return [
-            'id'             => $this->getId(),
-            'proposition_id' => $this->getPropositionId(), // Primary/future format
-            'platform_id'    => $this->getPlatformId(),    // Legacy format for compatibility
-            'shops'          => $this->getShops(),
+            'id'               => $this->getId(),
+            'proposition_id'   => $this->getPropositionId(), // Primary/future format
+            'platform_id'      => $this->getPlatformId(),    // Legacy format for compatibility
+            'shops'            => $this->getShops(),
+            'general_settings' => $this->getGeneralSettings(),
         ];
     }
 }
