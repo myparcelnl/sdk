@@ -42,7 +42,7 @@ class Account extends BaseModel
         $this->proposition_id = $data['proposition_id'] ?? $data['platform_id'];
         
         $this->shops = (new Collection($data['shops']))->mapInto(Shop::class);
-        $this->generalSettings = new GeneralSettings($data['general_settings']);
+        $this->generalSettings = new GeneralSettings($data['general_settings'] ?? array());
     }
 
     /**
