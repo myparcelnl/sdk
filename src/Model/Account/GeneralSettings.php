@@ -23,9 +23,9 @@ class GeneralSettings extends BaseModel
     private bool $postnlMailboxInternational;
 
     /**
-     * @param  array $options
+     * @param  null|array $options
      */
-    public function __construct(array $options)
+    public function __construct(?array $options = array())
     {
         $this->allowPrinterlessReturn         = (bool) $options['allow_printerless_return'];
         $this->hasCarrierCbsContract          = (bool) $options['has_carrier_cbs_contract'];
@@ -75,5 +75,19 @@ class GeneralSettings extends BaseModel
     public function hasPostnlMailboxInternational(): bool
     {
         return $this->postnlMailboxInternational;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'allow_printerless_return'           => $this->allowPrinterlessReturn,
+            'has_carrier_cbs_contract'           => $this->hasCarrierCbsContract,
+            'has_carrier_contract'               => $this->hasCarrierContract,
+            'has_carrier_small_package_contract' => $this->hasCarrierSmallPackageContract,
+            'is_test'                            => $this->isTest,
+            'my_returns'                         => $this->myReturns,
+            'order_mode'                         => $this->orderMode,
+            'postnl_mailbox_international'       => $this->postnlMailboxInternational,
+        ];
     }
 }
