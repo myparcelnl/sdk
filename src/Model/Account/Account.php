@@ -10,20 +10,25 @@ use MyParcelNL\Sdk\Support\Collection;
 class Account extends BaseModel
 {
     /**
+     * @var \MyParcelNL\Sdk\Support\Collection
+     */
+    private GeneralSettings $generalSettings;
+
+    /**
      * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @var int
      * Primary storage is proposition_id for future-forward approach
      */
-    private $proposition_id;
+    private int $proposition_id;
 
     /**
      * @var Shop[]|\MyParcelNL\Sdk\Support\Collection
      */
-    private $shops;
+    private Collection $shops;
 
     /**
      * @param  array $data
@@ -37,6 +42,7 @@ class Account extends BaseModel
         $this->proposition_id = $data['proposition_id'] ?? $data['platform_id'];
         
         $this->shops = (new Collection($data['shops']))->mapInto(Shop::class);
+        $this->generalSettings = new GeneralSettings($data['general_settings']);
     }
 
     /**
@@ -70,6 +76,11 @@ class Account extends BaseModel
     public function getShops(): Collection
     {
         return $this->shops;
+    }
+
+    public function getGeneralSettings(): Collection
+    {
+        return $this->generalSettings;
     }
 
     /**
