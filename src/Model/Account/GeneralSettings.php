@@ -27,14 +27,14 @@ class GeneralSettings extends BaseModel
      */
     public function __construct(?array $options = array())
     {
-        $this->allowPrinterlessReturn         = (bool) $options['allow_printerless_return'];
-        $this->hasCarrierCbsContract          = (bool) $options['has_carrier_cbs_contract'];
-        $this->hasCarrierContract             = (bool) $options['has_carrier_contract'];
-        $this->hasCarrierSmallPackageContract = (bool) $options['has_carrier_small_package_contract'];
-        $this->isTest                         = (bool) $options['is_test'];
+        $this->allowPrinterlessReturn         = (bool) ($options['allow_printerless_return'] ?? null);
+        $this->hasCarrierCbsContract          = (bool) ($options['has_carrier_cbs_contract'] ?? null);
+        $this->hasCarrierContract             = (bool) ($options['has_carrier_contract'] ?? null);
+        $this->hasCarrierSmallPackageContract = (bool) ($options['has_carrier_small_package_contract'] ?? null);
+        $this->isTest                         = (bool) ($options['is_test'] ?? null);
         $this->myReturns                      = 'active' === $options['my_returns'];
-        $this->orderMode                      = (bool) $options['order_mode'];
-        $this->postnlMailboxInternational     = (bool) $options['postnl_mailbox_international'];
+        $this->orderMode                      = (bool) ($options['order_mode'] ?? null);
+        $this->postnlMailboxInternational     = (bool) ($options['postnl_mailbox_international'] ?? null);
     }
 
     public function allowPrinterlessReturn(): bool
