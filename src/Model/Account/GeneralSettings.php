@@ -32,7 +32,7 @@ class GeneralSettings extends BaseModel
         $this->hasCarrierContract             = (bool) ($options['has_carrier_contract'] ?? null);
         $this->hasCarrierSmallPackageContract = (bool) ($options['has_carrier_small_package_contract'] ?? null);
         $this->isTest                         = (bool) ($options['is_test'] ?? null);
-        $this->myReturns                      = 'active' === $options['my_returns'];
+        $this->myReturns                      = 'active' === ($options['my_returns'] ?? null);
         $this->orderMode                      = (bool) ($options['order_mode'] ?? null);
         $this->postnlMailboxInternational     = (bool) ($options['postnl_mailbox_international'] ?? null);
     }
