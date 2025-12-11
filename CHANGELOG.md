@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.5.0](https://github.com/myparcelnl/sdk/compare/v10.4.1...v10.5.0) (2025-12-11)
+
+
+### :sparkles: New Features
+
+* expose account general settings ([#568](https://github.com/myparcelnl/sdk/issues/568)) ([5475570](https://github.com/myparcelnl/sdk/commit/5475570815298c7deac34ad1c2a226b31938add2))
+
 ## [10.4.1](https://github.com/myparcelnl/sdk/compare/v10.4.0...v10.4.1) (2025-11-28)
 
 
