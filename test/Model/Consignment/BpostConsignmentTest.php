@@ -100,7 +100,6 @@ class BpostConsignmentTest extends ConsignmentTestCase
             parent::getDefaultConsignmentData(),
             $this->getDefaultAddress(AbstractConsignment::CC_BE),
             [
-                self::API_KEY => $this->getApiKey(self::ENV_API_KEY_BE),
                 self::CARRIER_ID => CarrierBpost::ID,
                 self::WEIGHT => 1500,
             ]

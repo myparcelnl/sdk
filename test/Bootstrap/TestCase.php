@@ -16,8 +16,6 @@ use RuntimeException;
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     use MockeryPHPUnitIntegration;
-    protected const ENV_API_KEY_BE  = 'API_KEY_BE';
-    protected const ENV_API_KEY_NL  = 'API_KEY_NL';
     protected const ENV_CI          = 'CI';
     protected const ENV_TEST_ORDERS = 'TEST_ORDERS';
 
@@ -61,25 +59,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
         MyParcelRequest::setCurlFactory(fn() => $mock);
         
         return $mock;
-    }
-
-    /**
-     * @param  string $name
-     *
-     * @return string|null
-     * @throws \Exception
-     */
-    public function getEnvironmentVariable(string $name): ?string
-    {
-        $value = $_ENV[$name] ?? null;
-
-        if (null === $value) {
-            throw new RuntimeException(
-                "Environment variable '$name' is missing. Add it up in the env file at '/.env' and try again."
-            );
-        }
-
-        return (string) $value;
     }
 
     /**
@@ -148,14 +127,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param  string $key
-     *
      * @return string|null
      * @throws \Exception
      */
-    protected function getApiKey(string $key = self::ENV_API_KEY_NL): ?string
+    protected function getApiKey(): ?string
     {
-        return $this->getEnvironmentVariable($key);
+        return 'mock_api_key';
     }
 
     /**

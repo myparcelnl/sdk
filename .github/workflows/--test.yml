@@ -66,8 +66,6 @@ jobs:
           docker run \
             --volume $PWD:/app \
             --env CI=${CI} \
-            --env API_KEY_NL=${{ secrets.API_KEY_NL }} \
-            --env API_KEY_BE=${{ secrets.API_KEY_BE }} \
             ${{ steps.docker.outputs.image }} \
             vendor/bin/phpunit
 
@@ -79,8 +77,6 @@ jobs:
             --volume $PWD:/app \
             --env CI=${CI} \
             --env XDEBUG_MODE=coverage \
-            --env API_KEY_NL=${{ secrets.API_KEY_NL }} \
-            --env API_KEY_BE=${{ secrets.API_KEY_BE }} \
             ${{ steps.docker.outputs.image }} \
             vendor/bin/phpunit --coverage-clover coverage.xml
 
