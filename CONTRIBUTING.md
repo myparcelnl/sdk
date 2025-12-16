@@ -17,18 +17,6 @@
 
 ### Running PHPUnit
 
-If you haven't done so, prepare an `.env` file:
-
-```bash
-cp .env.template .env
-```
-
-```dotenv
-# .env
-API_KEY_NL="<MyParcelNL API key>"
-API_KEY_BE="<MyParcelBE API key>"
-```
-
 Run tests with the following command:
 
 ```bash

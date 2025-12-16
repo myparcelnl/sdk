@@ -90,7 +90,6 @@ class DpdConsignmentTest extends ConsignmentTestCase
             parent::getDefaultConsignmentData(),
             $this->getDefaultAddress(AbstractConsignment::CC_BE),
             [
-                self::API_KEY => $this->getApiKey(self::ENV_API_KEY_BE),
                 self::CARRIER_ID => CarrierDPD::ID,
                 self::WEIGHT => 100,
             ]
