@@ -191,8 +191,7 @@ class MyParcelCollection extends Collection
 
         // Create multiple consignments with equally distributed weight
         $originalWeight = $consignment->getTotalWeight();
-        $weightPerCollo = $originalWeight / $amount;
-        
+        $weightPerCollo = (int) ($originalWeight / $amount);
         $consignments = [];
         for ($i = 1; $i <= $amount; $i++) {
             $clonedConsignment = clone $consignment;
@@ -225,7 +224,7 @@ class MyParcelCollection extends Collection
         }
 
         // Set multi collo and reference identifier for all consignments
-        $referenceId = $consignments[0]->getReferenceIdentifier() ?? ('multi_collo_' . uniqid('', true));
+        $referenceId = $consignments[0]->getReferenceIdentifier() ?: 'multi_collo_' . uniqid('', true);
         foreach ($consignments as $consignment) {
             $consignment->setMultiCollo(true);
             $consignment->setReferenceIdentifier($referenceId);
@@ -424,15 +423,12 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest('GET');
 
-            if (null === $request->getResult()) {
+            $result = $request->getResult();
+            if (false === isset($result['data']['shipments'])) {
                 throw new ApiException('Unknown Error in MyParcel API response');
             }
 
-            $result        = $request->getResult('data.shipments');
-            if (null === $result || !is_array($result)) {
-                continue;
-            }
-            $newCollection = $this->getNewCollectionFromResult($result, $key);
+            $newCollection = $this->getNewCollectionFromResult($result['data']['shipments'], $key);
             $collections[] = $newCollection->sortByCollection($this)->items;
         }
 
@@ -928,7 +924,7 @@ class MyParcelCollection extends Collection
             }
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
-            $isMultiCollo       = ! empty($shipment['secondary_shipments']);
+            $isMultiCollo       = ! empty($shipment['multi_collo_main_shipment_id']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {

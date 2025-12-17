@@ -2,8 +2,6 @@
 x-common: &common
   image: ghcr.io/myparcelnl/php-xd:7.4
   init: true
-  env_file:
-    - .env
 
 services:
   php:
