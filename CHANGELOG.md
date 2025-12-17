@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.6.0](https://github.com/myparcelnl/sdk/compare/v10.5.0...v10.6.0) (2025-12-17)
+
+
+### :sparkles: New Features
+
+* add direct printing ([#563](https://github.com/myparcelnl/sdk/issues/563)) ([23ef818](https://github.com/myparcelnl/sdk/commit/23ef81892494a86720979ed790f8212121fce615))
+
 ## [10.5.0](https://github.com/myparcelnl/sdk/compare/v10.4.1...v10.5.0) (2025-12-11)
 
 
