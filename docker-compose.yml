@@ -15,3 +15,18 @@ services:
     volumes:
       - ./:/app
     command: [ 'composer', 'test:coverage' ]
+
+  openapi-swagger-codegen:
+    image: swaggerapi/swagger-codegen-cli-v3:3.0.57
+    volumes:
+      - type: bind
+        source: ./
+        target: /local
+    command: >
+      generate
+      --resolve-fully
+      --input-spec            https://api.myparcel.nl/openapi.yaml
+      --lang                  php
+      --output                /local/src/Services/CoreApi/Generated/Capabilities
+      --additional-properties packageName=MyParcel\CoreApi\Generated\Capabilities,invokerPackage=MyParcel\CoreApi\Generated\Capabilities,modelPackage=Model,phpLegacySupport=false
+    profiles: [ openapi ]
