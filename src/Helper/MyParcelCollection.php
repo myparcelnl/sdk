@@ -28,6 +28,7 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Services\CollectionEncode;
 use MyParcelNL\Sdk\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\Support\Arr;
@@ -290,12 +291,13 @@ class MyParcelCollection extends Collection
      * Create concept consignments in MyParcel.
      *
      * @param bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
+     * @param string|null $printerGroupId if provided, will send shipments directly to printer instead of returning PDF
      * @return self
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
      */
-    protected function createConsignments(bool $asUnrelatedReturn = false): self
+    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
@@ -311,6 +313,12 @@ class MyParcelCollection extends Collection
                 $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
             }
 
+            // Add direct print header if printer group ID is provided
+            if (null !== $printerGroupId) {
+                $directPrintHeader = MyParcelRequest::getDirectPrintAcceptHeader($printerGroupId);
+                $headers['Accept'] = $directPrintHeader['Accept'];
+            }
+
             $data    = (new CollectionEncode($consignments))->encode($asUnrelatedReturn ? 'return_shipments' : 'shipments');
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
@@ -320,6 +328,8 @@ class MyParcelCollection extends Collection
                     $headers
                 )
                 ->sendRequest();
+
+
 
             /**
              * Loop through the returned ids and add each consignment id to a consignment.
@@ -507,8 +517,7 @@ class MyParcelCollection extends Collection
                     implode(';', $consignmentIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL)
-            ;
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
@@ -561,6 +570,28 @@ class MyParcelCollection extends Collection
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         echo $this->label_pdf;
         exit;
+    }
+
+    /**
+     * Print labels directly to a printer
+     * 
+     * This method uses createConsignments() with a printer group ID to send shipments
+     * directly to a printer instead of returning a PDF. The API response structure is
+     * the same as createConcepts(), with an additional 'pdf' field.
+     *
+     * @param string $printerGroupId The ID of the printer group to print to
+     *
+     * @return array The API response, grouped by API key
+     * @throws AccountNotActiveException
+     * @throws ApiException
+     * @throws MissingFieldException
+     */
+    public function printDirect(string $printerGroupId): self
+    {
+        $this->createConsignments(false, $printerGroupId);
+        $this->setLatestData();
+
+        return $this;
     }
 
     /**

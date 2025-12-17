@@ -59,6 +59,23 @@ class ShipmentResponses
     }
     
     /**
+     * Direct print response (POST /shipments/print)
+     */
+    public static function directPrintResponse(array $shipmentIds): array
+    {
+        return [
+            'response' => json_encode([
+                'data' => [
+                    'print_job_id' => 'print-job-' . uniqid('', true),
+                    'shipment_ids' => $shipmentIds,
+                    'status' => 'queued'
+                ]
+            ]),
+            'code' => 200
+        ];
+    }
+    
+    /**
      * Get shipment details response (GET /shipments/{id})
      */
     public static function getShipmentDetailsResponse(array $params): array

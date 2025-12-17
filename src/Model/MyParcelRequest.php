@@ -26,6 +26,7 @@ class MyParcelRequest
     public const REQUEST_TYPE_SHIPMENTS               = 'shipments';
     public const REQUEST_TYPE_RETRIEVE_LABEL          = 'shipment_labels';
     public const REQUEST_TYPE_RETRIEVE_PREPARED_LABEL = 'v2/shipment_labels';
+    public const REQUEST_TYPE_PRINT_SHIPMENTS         = 'shipments/print';
     public const REQUEST_TYPE_ORDERS                  = 'fulfilment/orders';
     public const REQUEST_TYPE_ORDER_NOTES             = 'fulfilment/orders/{id}/notes';
 
@@ -42,9 +43,25 @@ class MyParcelRequest
     public const HEADER_SET_CUSTOM_SENDER                      = ['x-dmp-set-custom-sender' => 'true'];
 
     /**
+     * Create Accept header for direct printing
+     *
+     * @param string $printerGroupId
+     * @return array
+     */
+    public static function getDirectPrintAcceptHeader(string $printerGroupId): array
+    {
+        return ['Accept' => "application/vnd.shipment_label+json+print;printer-group-id=$printerGroupId"];
+    }
+
+    /**
      * API URL.
      */
     public const REQUEST_URL = 'https://api.myparcel.nl';
+    
+    /**
+     * Printing API URL (for printer groups and direct printing endpoints)
+     */
+    public const PRINTING_API_URL = 'https://printing.api.myparcel.nl';
 
     /**
      * Error codes.
@@ -114,6 +131,9 @@ class MyParcelRequest
      */
     public function getHeaders(): array
     {
+        // Merge default headers with custom headers
+        // Custom headers (second array) will override default headers (first array) for duplicate keys
+        // This ensures that custom Accept headers (like direct printing) override the default
         return array_merge($this->getDefaultHeaders(), $this->headers);
     }
 
@@ -180,13 +200,36 @@ class MyParcelRequest
     }
 
     /**
+     * Base URL for requests (can be overridden for printing API)
+     * 
+     * @var string|null
+     */
+    private $baseUrl = null;
+
+    /**
      * Get request url.
      *
      * @return string
      */
     public function getRequestUrl(): string
     {
+        if (null !== $this->baseUrl) {
+            return $this->baseUrl;
+        }
         return getenv('MYPARCEL_API_BASE_URL') ?: self::REQUEST_URL;
+    }
+    
+    /**
+     * Set a custom base URL for this request (e.g., for printing API)
+     *
+     * @param string $baseUrl
+     * @return self
+     */
+    public function setBaseUrl(string $baseUrl): self
+    {
+        $this->baseUrl = $baseUrl;
+
+        return $this;
     }
 
     /**
