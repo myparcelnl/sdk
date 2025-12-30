@@ -96,7 +96,7 @@ class Account extends BaseModel
             'proposition_id'   => $this->getPropositionId(), // Primary/future format
             'platform_id'      => $this->getPlatformId(),    // Legacy format for compatibility
             'shops'            => $this->getShops(),
-            'general_settings' => $this->getGeneralSettings(),
+            'general_settings' => $this->getGeneralSettings()->toArray(),
         ];
     }
 }
