@@ -86,16 +86,13 @@ class Account extends BaseModel
     /**
      * @return array
      */
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
             'id'               => $this->getId(),
             'proposition_id'   => $this->getPropositionId(), // Primary/future format
             'platform_id'      => $this->getPlatformId(),    // Legacy format for compatibility
-            'shops'            => $this->getShops(),
+            'shops'            => $this->getShops(), // should be ->toArray() as well, but kept for legacy purposes
             'general_settings' => $this->getGeneralSettings()->toArray(),
         ];
     }
