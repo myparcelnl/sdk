@@ -15,5 +15,6 @@ class ShipmentOptionsV2Adapter extends AbstractShipmentOptionsAdapter
         $this->signature      = $shipmentOptions["signature"] ?? null;
         $this->only_recipient = $shipmentOptions["only_recipient"] ?? null;
         $this->insurance      = $shipmentOptions["insurance"] ?? null;
+        $this->priority_delivery = $shipmentOptions["priority_delivery"] ?? null;
     }
 }

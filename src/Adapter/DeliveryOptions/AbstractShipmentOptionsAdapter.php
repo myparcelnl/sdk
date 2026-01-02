@@ -66,6 +66,11 @@ abstract class AbstractShipmentOptionsAdapter
     protected $extra_assurance;
 
     /**
+     * @var bool|null
+     */
+    protected $priority_delivery;
+
+    /**
      * @return bool|null
      */
     public function hasSignature(): ?bool
@@ -142,6 +147,14 @@ abstract class AbstractShipmentOptionsAdapter
     public function isSameDayDelivery(): ?bool
     {
         return $this->same_day_delivery;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isPriorityDelivery(): ?bool
+    {
+        return $this->priority_delivery;
     }
 
     /**
@@ -246,6 +259,16 @@ abstract class AbstractShipmentOptionsAdapter
     }
 
     /**
+     * @param null|bool $priorityDelivery
+     *
+     * @return void
+     */
+    public function setPriorityDelivery(?bool $priorityDelivery): void
+    {
+        $this->priority_delivery = $priorityDelivery;
+    }
+
+    /**
      * @param null|bool $hideSender
      *
      * @return void
@@ -293,6 +316,7 @@ abstract class AbstractShipmentOptionsAdapter
             'label_description' => $this->getLabelDescription(),
             'hide_sender'       => $this->hasHideSender(),
             'extra_assurance'   => $this->hasExtraAssurance(),
+            'priority_delivery' => $this->isPriorityDelivery(),
         ];
     }
 }

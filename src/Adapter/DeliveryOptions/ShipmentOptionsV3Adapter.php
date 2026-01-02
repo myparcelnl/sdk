@@ -21,5 +21,6 @@ class ShipmentOptionsV3Adapter extends AbstractShipmentOptionsAdapter
         $this->signature         = $shipmentOptions['signature'] ?? null;
         $this->collect           = $shipmentOptions['collect'] ?? null;
         $this->receipt_code      = $shipmentOptions['receipt_code'] ?? null;
+        $this->priority_delivery = $shipmentOptions['priority_delivery'] ?? null;
     }
 }
