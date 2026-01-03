@@ -23,9 +23,7 @@ class PostNLConsignmentTest extends ConsignmentTestCase
                     self::expected(self::ONLY_RECIPIENT) => false,
                     self::expected(self::SIGNATURE)      => false,
                 ],
-            'BE -> BE' => $this->getDefaultAddress(AbstractConsignment::CC_BE) + [
-                    self::API_KEY => $this->getApiKey(self::ENV_API_KEY_BE),
-                ],
+            'BE -> BE' => $this->getDefaultAddress(AbstractConsignment::CC_BE),
             'AgeCheck' => [
                 self::AGE_CHECK => true,
                 self::expected(self::ONLY_RECIPIENT) => true,

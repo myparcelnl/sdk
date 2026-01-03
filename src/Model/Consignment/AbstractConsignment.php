@@ -46,6 +46,8 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_COLLECT            = 'collect';
     public const SHIPMENT_OPTION_RECEIPT_CODE       = 'receipt_code';
     public const SHIPMENT_OPTION_PRIORITY_DELIVERY  = 'priority_delivery';
+    public const SHIPMENT_OPTION_FRESH_FOOD         = 'fresh_food';
+    public const SHIPMENT_OPTION_FROZEN             = 'frozen';
 
     public const SHIPMENT_OPTIONS_TO_CHECK
         = [
@@ -58,6 +60,8 @@ abstract class AbstractConsignment
             self::SHIPMENT_OPTION_COLLECT,
             self::SHIPMENT_OPTION_RECEIPT_CODE,
             self::SHIPMENT_OPTION_PRIORITY_DELIVERY,
+            self::SHIPMENT_OPTION_FRESH_FOOD,
+            self::SHIPMENT_OPTION_FROZEN,
         ];
 
     public const EXTRA_OPTION_DELIVERY_DATE     = 'delivery_date';
@@ -413,6 +417,18 @@ abstract class AbstractConsignment
      * @var bool|null
      */
     public $age_check;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
+    public $fresh_food;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
+    public $frozen;
 
     /**
      * @internal
@@ -1616,7 +1632,7 @@ abstract class AbstractConsignment
      */
     public function setLargeFormat(bool $largeFormat): self
     {
-        $this->large_format = $largeFormat && $this->isPackage();
+        $this->large_format = $largeFormat && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_LARGE_FORMAT) && $this->isPackage();
 
         return $this;
     }
@@ -1653,6 +1669,52 @@ abstract class AbstractConsignment
     public function setAgeCheck(bool $ageCheck): self
     {
         $this->age_check = $ageCheck && $this->isPackage();
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasFreshFood(): ?bool
+    {
+        return $this->fresh_food;
+    }
+
+    /**
+     * Fresh food option
+     * Required: No.
+     *
+     * @param bool $freshFood
+     *
+     * @return self
+     */
+    public function setFreshFood(bool $freshFood): self
+    {
+        $this->fresh_food = $freshFood;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasFrozen(): ?bool
+    {
+        return $this->frozen;
+    }
+
+    /**
+     * Frozen option
+     * Required: No.
+     *
+     * @param bool $frozen
+     *
+     * @return self
+     */
+    public function setFrozen(bool $frozen): self
+    {
+        $this->frozen = $frozen;
 
         return $this;
     }

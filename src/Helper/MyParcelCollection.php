@@ -28,6 +28,7 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Services\CollectionEncode;
 use MyParcelNL\Sdk\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\Support\Arr;
@@ -116,10 +117,6 @@ class MyParcelCollection extends Collection
             throw new InvalidArgumentException('Can\'t run getConsignmentsByReferenceId() because referenceId can\'t be null');
         }
 
-        if ($this->count() === 1) {
-            return new static($this->items);
-        }
-
         return $this->where('reference_identifier', $id);
     }
 
@@ -194,8 +191,7 @@ class MyParcelCollection extends Collection
 
         // Create multiple consignments with equally distributed weight
         $originalWeight = $consignment->getTotalWeight();
-        $weightPerCollo = $originalWeight / $amount;
-        
+        $weightPerCollo = (int) ($originalWeight / $amount);
         $consignments = [];
         for ($i = 1; $i <= $amount; $i++) {
             $clonedConsignment = clone $consignment;
@@ -228,7 +224,7 @@ class MyParcelCollection extends Collection
         }
 
         // Set multi collo and reference identifier for all consignments
-        $referenceId = $consignments[0]->getReferenceIdentifier() ?? ('multi_collo_' . uniqid('', true));
+        $referenceId = $consignments[0]->getReferenceIdentifier() ?: 'multi_collo_' . uniqid('', true);
         foreach ($consignments as $consignment) {
             $consignment->setMultiCollo(true);
             $consignment->setReferenceIdentifier($referenceId);
@@ -295,12 +291,13 @@ class MyParcelCollection extends Collection
      * Create concept consignments in MyParcel.
      *
      * @param bool $asUnrelatedReturn default false will create normal consignments, supply true for unrelated returns
+     * @param string|null $printerGroupId if provided, will send shipments directly to printer instead of returning PDF
      * @return self
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
      */
-    protected function createConsignments(bool $asUnrelatedReturn = false): self
+    protected function createConsignments(bool $asUnrelatedReturn = false, ?string $printerGroupId = null): self
     {
         $newConsignments = $this->where('consignment_id', '!=', null)->toArray();
         $this->addMissingReferenceId();
@@ -316,6 +313,12 @@ class MyParcelCollection extends Collection
                 $headers += MyParcelRequest::HEADER_SET_CUSTOM_SENDER;
             }
 
+            // Add direct print header if printer group ID is provided
+            if (null !== $printerGroupId) {
+                $directPrintHeader = MyParcelRequest::getDirectPrintAcceptHeader($printerGroupId);
+                $headers['Accept'] = $directPrintHeader['Accept'];
+            }
+
             $data    = (new CollectionEncode($consignments))->encode($asUnrelatedReturn ? 'return_shipments' : 'shipments');
             $request = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
@@ -325,6 +328,8 @@ class MyParcelCollection extends Collection
                     $headers
                 )
                 ->sendRequest();
+
+
 
             /**
              * Loop through the returned ids and add each consignment id to a consignment.
@@ -418,12 +423,12 @@ class MyParcelCollection extends Collection
                 )
                 ->sendRequest('GET');
 
-            if (null === $request->getResult()) {
+            $result = $request->getResult();
+            if (false === isset($result['data']['shipments'])) {
                 throw new ApiException('Unknown Error in MyParcel API response');
             }
 
-            $result        = $request->getResult('data.shipments');
-            $newCollection = $this->getNewCollectionFromResult($result, $key);
+            $newCollection = $this->getNewCollectionFromResult($result['data']['shipments'], $key);
             $collections[] = $newCollection->sortByCollection($this)->items;
         }
 
@@ -512,8 +517,7 @@ class MyParcelCollection extends Collection
                     implode(';', $consignmentIds) . '/' . $this->getRequestBody(),
                     MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
                 )
-                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL)
-            ;
+                ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
 
             /**
              * When account needs to pay upfront, an array is returned with payment information,
@@ -569,6 +573,28 @@ class MyParcelCollection extends Collection
     }
 
     /**
+     * Print labels directly to a printer
+     * 
+     * This method uses createConsignments() with a printer group ID to send shipments
+     * directly to a printer instead of returning a PDF. The API response structure is
+     * the same as createConcepts(), with an additional 'pdf' field.
+     *
+     * @param string $printerGroupId The ID of the printer group to print to
+     *
+     * @return array The API response, grouped by API key
+     * @throws AccountNotActiveException
+     * @throws ApiException
+     * @throws MissingFieldException
+     */
+    public function printDirect(string $printerGroupId): self
+    {
+        $this->createConsignments(false, $printerGroupId);
+        $this->setLatestData();
+
+        return $this;
+    }
+
+    /**
      * Send return label to customer. The customer can pay and download the label.
      *
      * @param bool          $sendMail
@@ -579,7 +605,7 @@ class MyParcelCollection extends Collection
      * @throws ApiException
      * @throws MissingFieldException
      */
-    public function generateReturnConsignments(bool $sendMail, Closure $modifier = null): self
+    public function generateReturnConsignments(bool $sendMail, ?Closure $modifier = null): self
     {
         // Be sure consignments are created
         $this->createConcepts();
@@ -628,7 +654,7 @@ class MyParcelCollection extends Collection
      * @return array|null
      * @deprecated use getConsignmentIdsByApiKey() to get the consignment ids grouped by their original api key
      */
-    public function getConsignmentIds(string &$key = null): ?array
+    public function getConsignmentIds(?string &$key = null): ?array
     {
         $conceptIds = [];
         /** @var AbstractConsignment $consignment */
@@ -898,7 +924,7 @@ class MyParcelCollection extends Collection
             }
 
             $consignmentAdapter = new ConsignmentAdapter($shipment, $consignment);
-            $isMultiCollo       = ! empty($shipment['secondary_shipments']);
+            $isMultiCollo       = ! empty($shipment['multi_collo_main_shipment_id']);
             $newCollection->addConsignment($consignmentAdapter->getConsignment()->setMultiCollo($isMultiCollo));
 
             foreach ($shipment['secondary_shipments'] as $secondaryShipment) {

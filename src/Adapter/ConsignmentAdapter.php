@@ -91,22 +91,28 @@ class ConsignmentAdapter
             $options['insurance']['amount'] /= 100;
         }
 
+        /**
+         * Note: when adding shipment options to the SDK, add them here as well. The order matters.
+         */
         Utils::fillObject($this->consignment, [
-            'package_type'      => $options['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
-            'delivery_date'     => $options['delivery_date'] ?? null,
-            'delivery_type'     => $options['delivery_type'] ?? AbstractConsignment::DEFAULT_DELIVERY_TYPE,
-            'age_check'         => (bool) ($options['age_check'] ?? false),
-            'extra_assurance'   => (bool) ($options['extra_assurance'] ?? false),
-            'hide_sender'       => (bool) ($options['hide_sender'] ?? false),
-            'large_format'      => (bool) ($options['large_format'] ?? false),
-            'only_recipient'    => (bool) ($options['only_recipient'] ?? false),
-            'return'            => (bool) ($options['return'] ?? false),
-            'same_day_delivery' => (bool) ($options['same_day_delivery'] ?? false),
-            'signature'         => (bool) ($options['signature'] ?? false),
-            'collect'           => (bool) ($options['collect'] ?? false),
-            'receipt_code'      => (bool) ($options['receipt_code'] ?? false),
-            'insurance'         => $options['insurance']['amount'] ?? 0,
-            'label_description' => $options['label_description'] ?? null,
+            'package_type'  => $options['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+            'delivery_date' => $options['delivery_date'] ?? null,
+            'delivery_type' => $options['delivery_type'] ?? AbstractConsignment::DEFAULT_DELIVERY_TYPE,
+
+            AbstractConsignment::SHIPMENT_OPTION_AGE_CHECK      => (bool) ($options['age_check'] ?? false),
+            'extra_assurance'                                   => (bool) ($options['extra_assurance'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_HIDE_SENDER    => (bool) ($options['hide_sender'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_LARGE_FORMAT   => (bool) ($options['large_format'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_ONLY_RECIPIENT => (bool) ($options['only_recipient'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_RETURN         => (bool) ($options['return'] ?? false),
+            'same_day_delivery'                                 => (bool) ($options['same_day_delivery'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_SIGNATURE      => (bool) ($options['signature'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_COLLECT        => (bool) ($options['collect'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_RECEIPT_CODE   => (bool) ($options['receipt_code'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_FRESH_FOOD     => (bool) ($options['fresh_food'] ?? false),
+            AbstractConsignment::SHIPMENT_OPTION_FROZEN         => (bool) ($options['frozen'] ?? false),
+            'insurance'                                         => $options['insurance']['amount'] ?? 0,
+            'label_description'                                 => $options['label_description'] ?? null,
         ]);
 
         return $this;

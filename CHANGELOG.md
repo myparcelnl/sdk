@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.6.0](https://github.com/myparcelnl/sdk/compare/v10.5.0...v10.6.0) (2025-12-17)
+
+
+### :sparkles: New Features
+
+* add direct printing ([#563](https://github.com/myparcelnl/sdk/issues/563)) ([23ef818](https://github.com/myparcelnl/sdk/commit/23ef81892494a86720979ed790f8212121fce615))
+
+## [10.5.0](https://github.com/myparcelnl/sdk/compare/v10.4.1...v10.5.0) (2025-12-11)
+
+
+### :sparkles: New Features
+
+* expose account general settings ([#568](https://github.com/myparcelnl/sdk/issues/568)) ([5475570](https://github.com/myparcelnl/sdk/commit/5475570815298c7deac34ad1c2a226b31938add2))
+
+## [10.4.1](https://github.com/myparcelnl/sdk/compare/v10.4.0...v10.4.1) (2025-11-28)
+
+
+### :bug: Bug Fixes
+
+* return multicollo correctly ([#567](https://github.com/myparcelnl/sdk/issues/567)) ([07380db](https://github.com/myparcelnl/sdk/commit/07380db119a8e7851df1c56e28d0e8cfe0d90506))
+
+## [10.4.0](https://github.com/myparcelnl/sdk/compare/v10.3.6...v10.4.0) (2025-11-24)
+
+
+### :sparkles: New Features
+
+* add trunkrs ([#559](https://github.com/myparcelnl/sdk/issues/559)) ([b4c3820](https://github.com/myparcelnl/sdk/commit/b4c3820ef14ace6f93732f1cf97d228586c7dcd1))
+
+## [10.3.6](https://github.com/myparcelnl/sdk/compare/v10.3.5...v10.3.6) (2025-11-21)
+
+
+### :bug: Bug Fixes
+
+* fix some php 8.4 deprecated errors ([#566](https://github.com/myparcelnl/sdk/issues/566)) ([b73fb86](https://github.com/myparcelnl/sdk/commit/b73fb86194818fbda1692e489e0e48a437ce71ac))
+
+## [10.3.5](https://github.com/myparcelnl/sdk/compare/v10.3.4...v10.3.5) (2025-11-21)
+
+
+### :bug: Bug Fixes
+
+* prevent unallowed combinations of shipment options ([#562](https://github.com/myparcelnl/sdk/issues/562)) ([8841e65](https://github.com/myparcelnl/sdk/commit/8841e65c8609a4ee467d60eec4ca260ccc1352ea))
+
+## [10.3.4](https://github.com/myparcelnl/sdk/compare/v10.3.3...v10.3.4) (2025-11-21)
+
+
+### :bug: Bug Fixes
+
+* return correct shipment by api key ([#564](https://github.com/myparcelnl/sdk/issues/564)) ([7286dd0](https://github.com/myparcelnl/sdk/commit/7286dd0bc65c6cde6d2974e439732cb00de3afb4))
+
+## [10.3.3](https://github.com/myparcelnl/sdk/compare/v10.3.2...v10.3.3) (2025-11-20)
+
+
+### :bug: Bug Fixes
+
+* Fix the rule to check for both NL and BE and correct the insurance value by converting to cents ([#555](https://github.com/myparcelnl/sdk/issues/555)) ([7508828](https://github.com/myparcelnl/sdk/commit/75088288f5daccddc5241d845d080f3d1d84a769))
+
 ## [10.3.2](https://github.com/myparcelnl/sdk/compare/v10.3.1...v10.3.2) (2025-11-11)
 
 

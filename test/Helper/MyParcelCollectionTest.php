@@ -43,21 +43,21 @@ class MyParcelCollectionTest extends CollectionTestCase
 
         // Setup mock expectations for multiple API calls
         $curlMock->shouldReceive('write')->times(7)->with(Mockery::any(), Mockery::any(), Mockery::any(), Mockery::any());
-        
+
         // 1. POST /shipments (create multiple shipments)
         $curlMock->shouldReceive('getResponse')
             ->once()
             ->andReturn([
                 'response' => json_encode([
                     'data' => [
-                        'ids' => array_map(function($id, $ref) {
+                        'ids' => array_map(function ($id, $ref) {
                             return ['id' => $id, 'reference_identifier' => $ref];
                         }, $shipmentIds, $references)
                     ]
                 ]),
                 'code' => 201
             ]);
-        
+
         // 2. GET /shipment_labels (PDF generation)
         $curlMock->shouldReceive('getResponse')
             ->once()
@@ -71,7 +71,7 @@ class MyParcelCollectionTest extends CollectionTestCase
             'id' => 111,
             'reference_identifier' => "{$uniqueIdentifier}_one"
         ]);
-        
+
         for ($i = 0; $i < 5; $i++) {
             $curlMock->shouldReceive('getResponse')
                 ->once()
@@ -80,7 +80,7 @@ class MyParcelCollectionTest extends CollectionTestCase
                     'code'     => $shipmentDetailsResponse['code'] ?? 200
                 ]);
         }
-        
+
         $curlMock->shouldReceive('close')->times(7);
 
         $collection->setLinkOfLabels();
@@ -123,9 +123,9 @@ class MyParcelCollectionTest extends CollectionTestCase
         );
 
         $curlMock = $this->mockCurl();
-        
+
         $curlMock->shouldReceive('write')->times(5)->with(Mockery::any(), Mockery::any(), Mockery::any(), Mockery::any());
-        
+
         $curlMock->shouldReceive('getResponse')
             ->once()
             ->andReturn([
@@ -158,7 +158,7 @@ class MyParcelCollectionTest extends CollectionTestCase
         $r2 = ShipmentResponses::getShipmentDetailsResponse(['id' => 3004, 'reference_identifier' => 'consignment_two', 'label_description' => 'second consignment']);
         $s1 = json_decode($r1['response'], true)['data']['shipments'][0];
         $s2 = json_decode($r2['response'], true)['data']['shipments'][0];
-        
+
         $curlMock->shouldReceive('getResponse')
             ->once()
             ->andReturn([
@@ -195,21 +195,21 @@ class MyParcelCollectionTest extends CollectionTestCase
             'id' => 3004,
             'reference_identifier' => 'consignment_two',
         ]);
-        
+
         $all = array_merge(
             json_decode($p1['response'], true)['data']['shipments'],
             json_decode($p2['response'], true)['data']['shipments'],
             json_decode($r1['response'], true)['data']['shipments'],
             json_decode($r2['response'], true)['data']['shipments'],
         );
-        
+
         $curlMock->shouldReceive('getResponse')
             ->once()
             ->andReturn([
                 'response' => json_encode(['data' => ['shipments' => $all]]),
                 'code' => 200,
             ]);
-        
+
         $curlMock->shouldReceive('close')->times(5);
 
         $collection->generateReturnConsignments(false, function (
@@ -317,9 +317,9 @@ class MyParcelCollectionTest extends CollectionTestCase
         );
 
         $curlMock = $this->mockCurl();
-        
+
         $curlMock->shouldReceive('write')->times(4)->with(Mockery::any(), Mockery::any(), Mockery::any(), Mockery::any());
-        
+
         $curlMock->shouldReceive('getResponse')
             ->once()
             ->andReturn([
@@ -374,7 +374,7 @@ class MyParcelCollectionTest extends CollectionTestCase
                 ]),
                 'code' => 200
             ]);
-        
+
         $curlMock->shouldReceive('close')->times(4);
 
         $collection->setLinkOfLabels();
@@ -394,6 +394,127 @@ class MyParcelCollectionTest extends CollectionTestCase
 
             self::assertStringStartsWith('http', $trackTraceUrl, 'Track & Trace link is invalid.');
         }
+    }
+
+    /**
+     * Test direct printing functionality
+     *
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function testPrintDirect(): void
+    {
+        $uniqueIdentifier = $this->generateTimestamp();
+        $testData = $this->createConsignmentsTestData([
+            [self::REFERENCE_IDENTIFIER => "{$uniqueIdentifier}_one"],
+            [self::REFERENCE_IDENTIFIER => "{$uniqueIdentifier}_two"],
+        ]);
+
+        $collection = $this->generateCollection($testData);
+        $curlMock = $this->mockCurl();
+
+        $shipmentIds = [111, 112];
+        $printerGroupId = '55b53b20-91aa-4a53-8bb2-c4c120df9921';
+
+        // Setup mock expectations
+        // 1. POST /shipments (create shipments with direct print header)
+        // Based on new implementation: printDirect creates shipments AND prints in one request
+        $curlMock->shouldReceive('write')
+            ->once()
+            ->with('POST', Mockery::any(), Mockery::any(), Mockery::any())
+            ->andReturn('');
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'ids' => [
+                            ['id' => $shipmentIds[0], 'reference_identifier' => "{$uniqueIdentifier}_one"],
+                            ['id' => $shipmentIds[1], 'reference_identifier' => "{$uniqueIdentifier}_two"],
+                        ],
+                        'pdf' => [
+                            'url' => '/pdfs/test-print-job'
+                        ]
+                    ]
+                ]),
+                'code' => 201
+            ]);
+
+        // 2. GET /shipments (setLatestData)
+        $curlMock->shouldReceive('write')
+            ->once()
+            ->with('GET', Mockery::any(), Mockery::any(), Mockery::any())
+            ->andReturn('');
+
+        $shipment1Response = json_decode(ShipmentResponses::getShipmentDetailsResponse([
+            'id' => $shipmentIds[0],
+            'reference_identifier' => "{$uniqueIdentifier}_one"
+        ])['response'], true);
+
+        $shipment2Response = json_decode(ShipmentResponses::getShipmentDetailsResponse([
+            'id' => $shipmentIds[1],
+            'reference_identifier' => "{$uniqueIdentifier}_two"
+        ])['response'], true);
+
+        // Ensure the response is valid (not null)
+        if (null === $shipment1Response || null === $shipment2Response) {
+            throw new \Exception('Failed to decode shipment responses');
+        }
+
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode([
+                    'data' => [
+                        'shipments' => [
+                            $shipment1Response['data']['shipments'][0],
+                            $shipment2Response['data']['shipments'][0],
+                        ]
+                    ]
+                ]),
+                'code' => 200
+            ]);
+
+        $curlMock->shouldReceive('close')->times(2);
+
+        // Execute direct print
+        $result = $collection->printDirect($printerGroupId);
+
+        // Assertions
+        self::assertInstanceOf(MyParcelCollection::class, $result);
+        self::assertSame($collection, $result);
+
+        // Verify that consignments have IDs (setLatestData was called)
+        foreach ($collection as $consignment) {
+            self::assertNotNull($consignment->getConsignmentId());
+        }
+    }
+    public function testSetLatestDataThrowsExceptionWhenNoShipments(): void
+    {
+        $collection = $this->generateCollection(
+            $this->createConsignmentsTestData([
+                [self::REFERENCE_IDENTIFIER => 'no_shipments_test'],
+            ])
+        );
+
+        $curlMock = $this->mockCurl();
+
+        $curlMock->shouldReceive('write')->once();
+        $curlMock->shouldReceive('getResponse')
+            ->once()
+            ->andReturn([
+                'response' => json_encode(['data' => []]), // No 'shipments' key
+                'code'     => 200,
+            ]);
+        $curlMock->shouldReceive('close')->once();
+
+        $this->expectException(\MyParcelNL\Sdk\Exception\ApiException::class);
+        $this->expectExceptionMessage('Unknown Error in MyParcel API response');
+
+        $collection->setLatestData();
     }
 
 }

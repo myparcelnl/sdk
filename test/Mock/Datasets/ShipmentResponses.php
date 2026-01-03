@@ -11,6 +11,7 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierDHLParcelConnect;
 use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
 use MyParcelNL\Sdk\Model\Carrier\CarrierGLS;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Carrier\CarrierTrunkrs;
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Carrier\CarrierUPSStandard;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
@@ -51,6 +52,23 @@ class ShipmentResponses
                     'pdfs' => [
                         'url' => '/pdfs/download/' . $shipmentId
                     ]
+                ]
+            ]),
+            'code' => 200
+        ];
+    }
+    
+    /**
+     * Direct print response (POST /shipments/print)
+     */
+    public static function directPrintResponse(array $shipmentIds): array
+    {
+        return [
+            'response' => json_encode([
+                'data' => [
+                    'print_job_id' => 'print-job-' . uniqid('', true),
+                    'shipment_ids' => $shipmentIds,
+                    'status' => 'queued'
                 ]
             ]),
             'code' => 200
@@ -599,5 +617,38 @@ class ShipmentResponses
         }
         
         return self::getStandardShipmentFlow($shipmentData);
+    }
+    
+    /**
+     * Trunkrs specific response set
+     */
+    public static function getTrunkrsFlow(array $testData = []): array
+    {
+        return self::getStandardShipmentFlow([
+            'reference_identifier' => $testData['reference_identifier'] ?? null,
+            'carrier_id' => CarrierTrunkrs::ID,
+            'recipient' => [
+                'cc' => $testData['country'] ?? AbstractConsignment::CC_NL,
+                'postal_code' => $testData['postal_code'] ?? '2132JE',
+                'city' => $testData['city'] ?? 'Hoofddorp',
+                'street' => $testData['street'] ?? 'Antareslaan',
+                'number' => $testData['number'] ?? '31',
+                'person' => $testData['person'] ?? 'Test Person',
+                'company' => $testData['company'] ?? 'MyParcel',
+                'email' => $testData['email'] ?? 'test@myparcel.nl',
+                'phone' => $testData['phone'] ?? '0612345678',
+            ],
+            'options' => [
+                'signature' => $testData['signature'] ?? false,
+                'only_recipient' => $testData['only_recipient'] ?? false,
+                'age_check' => $testData['age_check'] ?? false,
+                'receipt_code' => $testData['receipt_code'] ?? false,
+                'fresh_food' => $testData['fresh_food'] ?? false,
+                'frozen' => $testData['frozen'] ?? false,
+                'same_day_delivery' => $testData['same_day_delivery'] ?? false,
+                'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type' => AbstractConsignment::DELIVERY_TYPE_EVENING,
+            ],
+        ]);
     }
 }
