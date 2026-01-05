@@ -99,6 +99,7 @@ class ConsignmentEncode
                         'same_day_delivery'  => Helpers::intOrNull($consignment->isSameDayDelivery()),
                         'hide_sender'        => Helpers::intOrNull($consignment->hasHideSender()),
                         'printerless_return' => Helpers::intOrNull($consignment->isPrinterlessReturn()),
+                        'priority_delivery'  => Helpers::intOrNull($consignment->isPriorityDelivery()),
                     ]
                 ),
             ]

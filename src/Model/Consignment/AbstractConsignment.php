@@ -45,6 +45,7 @@ abstract class AbstractConsignment
     public const SHIPMENT_OPTION_SIGNATURE          = 'signature';
     public const SHIPMENT_OPTION_COLLECT            = 'collect';
     public const SHIPMENT_OPTION_RECEIPT_CODE       = 'receipt_code';
+    public const SHIPMENT_OPTION_PRIORITY_DELIVERY  = 'priority_delivery';
     public const SHIPMENT_OPTION_FRESH_FOOD         = 'fresh_food';
     public const SHIPMENT_OPTION_FROZEN             = 'frozen';
 
@@ -58,6 +59,7 @@ abstract class AbstractConsignment
             self::SHIPMENT_OPTION_SIGNATURE,
             self::SHIPMENT_OPTION_COLLECT,
             self::SHIPMENT_OPTION_RECEIPT_CODE,
+            self::SHIPMENT_OPTION_PRIORITY_DELIVERY,
             self::SHIPMENT_OPTION_FRESH_FOOD,
             self::SHIPMENT_OPTION_FROZEN,
         ];
@@ -397,6 +399,12 @@ abstract class AbstractConsignment
      * @var bool|null
      */
     public $same_day_delivery;
+
+    /**
+     * @internal
+     * @var bool|null
+     */
+    public $priority_delivery;
 
     /**
      * @internal
@@ -1544,6 +1552,26 @@ abstract class AbstractConsignment
     {
         $this->same_day_delivery = $sameDay
                                    && in_array(self::SHIPMENT_OPTION_SAME_DAY_DELIVERY, $this->getAllowedShipmentOptions(), true);
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isPriorityDelivery(): ?bool
+    {
+        return $this->priority_delivery;
+    }
+
+    /**
+     * @param bool $priorityDelivery
+     *
+     * @return self
+     */
+    public function setPriorityDelivery(bool $priorityDelivery): self
+    {
+        $this->priority_delivery = $priorityDelivery && $this->canHaveShipmentOption(self::SHIPMENT_OPTION_PRIORITY_DELIVERY);
 
         return $this;
     }

@@ -78,6 +78,7 @@ class PostNLConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_RETURN,
             self::SHIPMENT_OPTION_SIGNATURE,
             self::SHIPMENT_OPTION_RECEIPT_CODE,
+            self::SHIPMENT_OPTION_PRIORITY_DELIVERY,
         ];
     }
 
@@ -111,6 +112,21 @@ class PostNLConsignment extends AbstractConsignment
             self::SHIPMENT_OPTION_INSURANCE,
             self::SHIPMENT_OPTION_SIGNATURE,
         ];
+    }
+
+    /**
+     * @param string $option
+     *
+     * @return bool
+     */
+    public function canHaveShipmentOption(string $option): bool
+    {
+        // Priority delivery is ONLY allowed for mailbox (BBP) package type
+        if (self::SHIPMENT_OPTION_PRIORITY_DELIVERY === $option) {
+            return self::PACKAGE_TYPE_MAILBOX === $this->getPackageType();
+        }
+
+        return parent::canHaveShipmentOption($option);
     }
 
     /**
