@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.0](https://github.com/myparcelnl/sdk/compare/v10.6.0...v10.7.0) (2026-01-05)
+
+
+### :sparkles: New Features
+
+* add priority_delivery option for PostNL mailbox (BBP Prio 24h) ([#571](https://github.com/myparcelnl/sdk/issues/571)) ([d50f1e2](https://github.com/myparcelnl/sdk/commit/d50f1e2e2b8b98becb96640af36c2eea20473afa))
+
 ## [10.6.0](https://github.com/myparcelnl/sdk/compare/v10.5.0...v10.6.0) (2025-12-17)
 
 
