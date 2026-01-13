@@ -50,6 +50,7 @@ class ShipmentOptionsRule extends Rule
             AbstractConsignment::SHIPMENT_OPTION_SIGNATURE         => $validationSubject->isSignature(),
             AbstractConsignment::SHIPMENT_OPTION_COLLECT           => $validationSubject->hasCollect(),
             AbstractConsignment::SHIPMENT_OPTION_RECEIPT_CODE      => $validationSubject->hasReceiptCode(),
+            AbstractConsignment::SHIPMENT_OPTION_PRIORITY_DELIVERY => $validationSubject->isPriorityDelivery(),
             AbstractConsignment::SHIPMENT_OPTION_SAME_DAY_DELIVERY => $validationSubject->isSameDayDelivery(),
         ];
 
