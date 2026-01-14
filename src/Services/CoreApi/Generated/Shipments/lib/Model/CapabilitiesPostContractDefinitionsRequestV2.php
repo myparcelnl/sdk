@@ -367,7 +367,7 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
      *
      * @return boolean
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists($offset)
     {
         return isset($this->container[$offset]);
     }
@@ -380,7 +380,7 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet(mixed $offset)
+    public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -393,7 +393,7 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
      *
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -409,7 +409,7 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
      *
      * @return void
      */
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
     }

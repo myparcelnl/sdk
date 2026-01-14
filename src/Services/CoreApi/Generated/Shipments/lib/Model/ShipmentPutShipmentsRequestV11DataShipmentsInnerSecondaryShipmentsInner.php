@@ -1074,7 +1074,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
      *
      * @return boolean
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists($offset)
     {
         return isset($this->container[$offset]);
     }
@@ -1087,7 +1087,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet(mixed $offset)
+    public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -1100,7 +1100,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
      *
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -1116,7 +1116,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
      *
      * @return void
      */
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
     }

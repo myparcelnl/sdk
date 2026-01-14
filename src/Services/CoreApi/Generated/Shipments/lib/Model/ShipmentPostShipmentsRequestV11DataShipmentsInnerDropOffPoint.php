@@ -715,7 +715,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint implements M
      *
      * @return boolean
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists($offset)
     {
         return isset($this->container[$offset]);
     }
@@ -728,7 +728,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint implements M
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet(mixed $offset)
+    public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -741,7 +741,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint implements M
      *
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -757,7 +757,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint implements M
      *
      * @return void
      */
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
     }
