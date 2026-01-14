@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2Recipient as CoreRecipientV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2Sender as CoreSenderV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2Options as CoreOptionsV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties as CorePhysicalPropertiesV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLength;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidth;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeight;
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\RefTypesCarrierV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\RefTypesDeliveryTypeV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Recipient as CoreRecipientV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Sender as CoreSenderV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Options as CoreOptionsV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties as CorePhysicalPropertiesV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLength;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidth;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeight;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPackageTypeV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrierV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\RefTypesDeliveryTypeV2;
 
 class CapabilitiesMapper
 {
@@ -62,10 +63,10 @@ class CapabilitiesMapper
             // Invalid carriers are ignored (no exception thrown)
         }
 
-        // Optional: package type - validate with generated allowable values
+        // Optional: package type - validate with RefShipmentPackageTypeV2
         if ($request->getPackageType()) {
             $packageType = $request->getPackageType();
-            $allowedPackageTypes = (new CoreRequestV2())->getPackageTypeAllowableValues();
+            $allowedPackageTypes = RefShipmentPackageTypeV2::getAllowableEnumValues();
             if (in_array($packageType, $allowedPackageTypes, true)) {
                 $core->setPackageType($packageType);
             }

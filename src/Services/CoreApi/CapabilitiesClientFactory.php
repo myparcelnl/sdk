@@ -5,8 +5,8 @@ namespace MyParcelNL\Sdk\Services\CoreApi;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use MyParcel\CoreApi\Generated\Capabilities\Api\ShipmentApi;
-use MyParcel\CoreApi\Generated\Capabilities\Configuration;
+use MyParcel\CoreApi\Generated\Shipments\Api\ShipmentApi;
+use MyParcel\CoreApi\Generated\Shipments\Configuration;
 
 /**
  * Factory to create the generated ShipmentApi client with proper configuration.
@@ -19,7 +19,7 @@ final class CapabilitiesClientFactory
     public const CAPABILITIES_PATH = '/shipments/capabilities';
     public const ACCEPT_V2         = 'application/json;charset=utf-8;version=2.0';
 
-    public static function make($apiKey = null, $baseUri = null)
+    public static function make($apiKey = null, $baseUri = null, $userAgent = null)
     {
         // 1) Resolve API key with future-proof fallback
         $resolvedKey = self::resolveApiKey($apiKey);
@@ -36,6 +36,9 @@ final class CapabilitiesClientFactory
         $config = new Configuration();
         $config->setHost($host);
         $config->setAccessToken($encoded);
+        if ($userAgent) {
+            $config->setUserAgent($userAgent);
+        }
 
         // 4) Add middleware to force Accept header for capabilities endpoint
         $stack = HandlerStack::create();

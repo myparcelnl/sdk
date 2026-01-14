@@ -1,45 +1,63 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
 /**
- * SDK-side request object for capabilities lookup.
+ * Request DTO used for capabilities lookups.
  *
- * Required: countryCode
- * Optional: shopId, carrier, deliveryType, packageType, direction, sender, options, physicalProperties
+ * @see \MyParcelNL\Sdk\Mapper\CapabilitiesMapper
  */
 class CapabilitiesRequest
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $countryCode;
 
-    /** @var int|null */
+    /**
+     * @var int|null
+     */
     private $shopId;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $deliveryType;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $packageType;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $carrier;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $direction;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     private $sender;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     private $options;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     private $physicalProperties;
 
     /**
-     * Keep constructor minimal: only the required field for immutability & clarity.
+     * @param  string $countryCode
      */
     public function __construct(string $countryCode)
     {
@@ -47,113 +65,186 @@ class CapabilitiesRequest
     }
 
     /**
-     * Convenience named constructor.
+     * @param  string $countryCode
+     *
+     * @return self
      */
     public static function forCountry(string $countryCode): self
     {
         return new self($countryCode);
     }
 
-    // -------- immutable withers (with normalization) --------
-
+    /**
+     * @param  int|null $shopId
+     *
+     * @return self
+     */
     public function withShopId(?int $shopId): self
     {
         $clone = clone $this;
         $clone->shopId = $shopId;
+
         return $clone;
     }
 
+    /**
+     * @param  string|null $deliveryType
+     *
+     * @return self
+     */
     public function withDeliveryType(?string $deliveryType): self
     {
         $clone = clone $this;
-        $clone->deliveryType = $deliveryType; // validation in CapabilitiesMapper
+        $clone->deliveryType = $deliveryType;
+
         return $clone;
     }
 
+    /**
+     * @param  string|null $packageType
+     *
+     * @return self
+     */
     public function withPackageType(?string $packageType): self
     {
         $clone = clone $this;
-        $clone->packageType = $packageType; // validation in CapabilitiesMapper with generated allowable values
+        $clone->packageType = $packageType;
+
         return $clone;
     }
 
+    /**
+     * @param  string|null $carrier
+     *
+     * @return self
+     */
     public function withCarrier(?string $carrier): self
     {
         $clone = clone $this;
-        $clone->carrier = $carrier; // validation in CapabilitiesMapper with RefTypesCarrierV2
+        $clone->carrier = $carrier;
+
         return $clone;
     }
 
+    /**
+     * @param  string|null $direction
+     *
+     * @return self
+     */
     public function withDirection(?string $direction): self
     {
         $clone = clone $this;
-        $clone->direction = $direction; // validation in CapabilitiesMapper with generated allowable values
+        $clone->direction = $direction;
+
         return $clone;
     }
 
+    /**
+     * @param  array|null $sender
+     *
+     * @return self
+     */
     public function withSender(?array $sender): self
     {
         $clone = clone $this;
-        $clone->sender = $sender; // validation and object creation in CapabilitiesMapper
+        $clone->sender = $sender;
+
         return $clone;
     }
 
+    /**
+     * @param  array|null $options
+     *
+     * @return self
+     */
     public function withOptions(?array $options): self
     {
         $clone = clone $this;
-        $clone->options = $options; // validation and object creation in CapabilitiesMapper
+        $clone->options = $options;
+
         return $clone;
     }
 
+    /**
+     * @param  array|null $physicalProperties
+     *
+     * @return self
+     */
     public function withPhysicalProperties(?array $physicalProperties): self
     {
         $clone = clone $this;
-        $clone->physicalProperties = $physicalProperties; // validation and object creation in CapabilitiesMapper
+        $clone->physicalProperties = $physicalProperties;
+
         return $clone;
     }
 
-    // -------- getters --------
-
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
 
+    /**
+     * @return int|null
+     */
     public function getShopId(): ?int
     {
         return $this->shopId;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryType(): ?string
     {
         return $this->deliveryType;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPackageType(): ?string
     {
         return $this->packageType;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCarrier(): ?string
     {
         return $this->carrier;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDirection(): ?string
     {
         return $this->direction;
     }
 
+    /**
+     * @return array|null
+     */
     public function getSender(): ?array
     {
         return $this->sender;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): ?array
     {
         return $this->options;
     }
 
+    /**
+     * @return array|null
+     */
     public function getPhysicalProperties(): ?array
     {
         return $this->physicalProperties;

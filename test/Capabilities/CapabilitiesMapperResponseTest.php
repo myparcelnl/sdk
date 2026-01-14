@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesResponsesCapabilitiesV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Mockery;
@@ -19,7 +19,7 @@ final class CapabilitiesMapperResponseTest extends TestCase
         $fake1->shouldReceive('getOptions')->andReturn((object) ['signature' => true, 'only_recipient' => false]);
         $fake1->shouldReceive('getCarrier')->andReturn('POSTNL');
         $fake1->shouldReceive('getTransactionTypes')->andReturn(['B2C']);
-        $collo1 = Mockery::mock(\MyParcel\CoreApi\Generated\Capabilities\Model\RefCapabilitiesResponseCollo::class);
+        $collo1 = Mockery::mock(\MyParcel\CoreApi\Generated\Shipments\Model\RefCapabilitiesResponseCollo::class);
         $collo1->shouldReceive('getMax')->andReturn(3);
         $fake1->shouldReceive('getCollo')->andReturn($collo1);
 
@@ -29,7 +29,7 @@ final class CapabilitiesMapperResponseTest extends TestCase
         $fake2->shouldReceive('getOptions')->andReturn((object) ['only_recipient' => true, 'receipt_code' => true]);
         $fake2->shouldReceive('getCarrier')->andReturn('POSTNL');
         $fake2->shouldReceive('getTransactionTypes')->andReturn(['B2B']);
-        $collo2 = Mockery::mock(\MyParcel\CoreApi\Generated\Capabilities\Model\RefCapabilitiesResponseCollo::class);
+        $collo2 = Mockery::mock(\MyParcel\CoreApi\Generated\Shipments\Model\RefCapabilitiesResponseCollo::class);
         $collo2->shouldReceive('getMax')->andReturn(5);
         $fake2->shouldReceive('getCollo')->andReturn($collo2);
 

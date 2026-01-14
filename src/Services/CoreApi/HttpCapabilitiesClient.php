@@ -24,16 +24,16 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
             throw new \InvalidArgumentException('countryCode is required for capabilities request.');
         }
 
-        $api = CapabilitiesClientFactory::make();
-        $coreReq = $this->mapper->mapToCoreApi($request);
-
         $userAgent = sprintf(
             'MyParcelSDK/%s; PHP/%s',
             \defined('\MyParcelNL\Sdk\Sdk::VERSION') ? \MyParcelNL\Sdk\Sdk::VERSION : 'dev',
             PHP_VERSION
         );
 
-        $coreRes = $api->postCapabilities($userAgent, $coreReq);
+        $api = CapabilitiesClientFactory::make(null, null, $userAgent);
+        $coreReq = $this->mapper->mapToCoreApi($request);
+
+        $coreRes = $api->postCapabilities($coreReq);
 
         return $this->mapper->mapFromCoreApi($coreRes);
     }

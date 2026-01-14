@@ -32,8 +32,8 @@
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit --coverage-html coverage"
         ],
-        "generate:capabilities": [
-            "docker compose run --rm openapi-swagger-codegen",
+        "generate:api": [
+            "docker compose run --rm generate-api",
             "composer dump-autoload -o"
         ]
     },
@@ -50,7 +50,7 @@
     "autoload": {
         "psr-4": {
             "MyParcelNL\\Sdk\\": "src/",
-            "MyParcel\\CoreApi\\Generated\\Capabilities\\": "src/Services/CoreApi/Generated/Capabilities/lib"
+            "MyParcel\\CoreApi\\Generated\\Shipments\\": "src/Services/CoreApi/Generated/Shipments/lib"
         },
         "exclude-from-classmap": [
             "src/Services/CoreApi/Generated/*"

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
-use MyParcel\CoreApi\Generated\Capabilities\Model\CapabilitiesPostCapabilitiesRequestV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\RefShipmentPackageTypeV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\RefTypesCarrierV2;
-use MyParcel\CoreApi\Generated\Capabilities\Model\RefTypesDeliveryTypeV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPackageTypeV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrierV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
