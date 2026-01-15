@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.1](https://github.com/myparcelnl/sdk/compare/v10.7.0...v10.7.1) (2026-01-15)
+
+
+### :bug: Bug Fixes
+
+* pass priority delivery to order api ([#572](https://github.com/myparcelnl/sdk/issues/572)) ([e473da4](https://github.com/myparcelnl/sdk/commit/e473da4cce5ef92381be3e1a8be48770e2a68224))
+
 ## [10.7.0](https://github.com/myparcelnl/sdk/compare/v10.6.0...v10.7.0) (2026-01-05)
 
 
