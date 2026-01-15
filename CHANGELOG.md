@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.2](https://github.com/myparcelnl/sdk/compare/v10.7.1...v10.7.2) (2026-01-15)
+
+
+### :bug: Bug Fixes
+
+* correctly to array account general settings ([#570](https://github.com/myparcelnl/sdk/issues/570)) ([33831a9](https://github.com/myparcelnl/sdk/commit/33831a9cfd180b2180e271ac0a3cef3bddc201c1))
+
 ## [10.7.1](https://github.com/myparcelnl/sdk/compare/v10.7.0...v10.7.1) (2026-01-15)
 
 
