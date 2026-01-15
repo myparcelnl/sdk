@@ -162,6 +162,7 @@ class OrderCollection extends Collection
             'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
             'large_format'      => (int) $shipmentOptions->hasLargeFormat(),
             'return'            => (int) $shipmentOptions->isReturn(),
+            'priority_delivery' => (int) $shipmentOptions->isPriorityDelivery(),
             'label_description' => (string) $shipmentOptions->getLabelDescription(),
         ];
 
