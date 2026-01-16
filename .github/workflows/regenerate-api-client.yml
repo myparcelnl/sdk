@@ -1,0 +1,80 @@
+name: Regenerate API Client
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # weekly on Monday 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: regenerate-api-client
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP + Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      # Needed because composer dump-autoload is in the script (and scripts usually require dependencies)
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Generate API client
+        run: composer generate:api
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Stage only the generated output (prevents e.g. lockfiles from being accidentally included)
+      - name: Stage generated files only
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git reset
+          git add src/Services/CoreApi/Generated
+
+      - name: Setup app credentials
+        if: steps.diff.outputs.changed == 'true'
+        id: credentials
+        uses: myparcelnl/actions/setup-app-credentials@v4
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.credentials.outputs.token }}
+          branch: chore/regenerate-api-client
+          delete-branch: true
+          commit-message: "chore(api): regenerate Core API client"
+          title: "chore(api): regenerate Core API client"
+          body: |
+            Automated regeneration of the Core API client.
+
+            - Generated via `composer generate:api` (docker compose generate-api)
+            - Source spec: https://api.myparcel.nl/openapi.min.json
+          labels: |
+            automated
+            api-client
+            generated
