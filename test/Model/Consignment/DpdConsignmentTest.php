@@ -20,6 +20,21 @@ class DpdConsignmentTest extends ConsignmentTestCase
         return $this->createConsignmentProviderDataset([
             'BE -> BE' => [],
             'BE -> NL' => $this->getDefaultAddress(),
+            'BE -> DE Pickup' => [
+                self::COUNTRY => 'DE',
+                self::POSTAL_CODE => '67061',
+                self::CITY => 'Ludwigshafen',
+                self::FULL_STREET => 'Wittelsbachstraße 46',
+                self::DELIVERY_TYPE => AbstractConsignment::DELIVERY_TYPE_PICKUP,
+                self::PICKUP_COUNTRY => 'DE',
+                self::PICKUP_POSTAL_CODE => '67061',
+                self::PICKUP_CITY => 'Ludwigshafen',
+                self::PICKUP_STREET => 'Wittelsbachstraße',
+                self::PICKUP_NUMBER => '46',
+                self::PICKUP_LOCATION_NAME => 'Watan Lebensmittel',
+                self::PICKUP_LOCATION_CODE => '8df1366c-fd0b-4c7e-a739-08a7197e9b70',
+                self::RETAIL_NETWORK_ID => 'pickup',
+            ],
         ]);
     }
 
@@ -61,6 +76,15 @@ class DpdConsignmentTest extends ConsignmentTestCase
             'email' => $testData[self::EMAIL] ?? 'test@myparcel.nl',
             'phone' => $testData[self::PHONE] ?? '0612345678',
             'weight' => $testData[self::WEIGHT] ?? 100,
+            'delivery_type' => $testData[self::DELIVERY_TYPE] ?? AbstractConsignment::DELIVERY_TYPE_STANDARD,
+            'pickup_location_code' => $testData[self::PICKUP_LOCATION_CODE] ?? null,
+            'pickup_location_name' => $testData[self::PICKUP_LOCATION_NAME] ?? null,
+            'pickup_street' => $testData[self::PICKUP_STREET] ?? null,
+            'pickup_number' => $testData[self::PICKUP_NUMBER] ?? null,
+            'pickup_postal_code' => $testData[self::PICKUP_POSTAL_CODE] ?? null,
+            'pickup_city' => $testData[self::PICKUP_CITY] ?? null,
+            'pickup_country' => $testData[self::PICKUP_COUNTRY] ?? null,
+            'retail_network_id' => $testData[self::RETAIL_NETWORK_ID] ?? null,
         ]);
         
         // Set up mock expectations for each response from the dataset

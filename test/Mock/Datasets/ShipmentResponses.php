@@ -302,7 +302,17 @@ class ShipmentResponses
      */
     public static function getDpdFlow(array $testData = []): array
     {
-        return self::getStandardShipmentFlow([
+        $deliveryType = $testData['delivery_type'] ?? AbstractConsignment::DELIVERY_TYPE_STANDARD;
+        
+        // Check if we have pickup location code and required fields
+        $hasPickupLocationCode = !empty($testData['pickup_location_code']);
+        $hasRequiredPickupFields = 
+            !empty($testData['pickup_city']) && 
+            !empty($testData['pickup_postal_code']) && 
+            !empty($testData['pickup_street']) &&
+            !empty($testData['pickup_number']);
+        
+        $shipmentData = [
             'reference_identifier' => $testData['reference_identifier'] ?? null,
             'carrier_id' => CarrierDPD::ID,
             'recipient' => [
@@ -324,8 +334,26 @@ class ShipmentResponses
                 ],
                 'return' => $testData['return'] ?? false,
                 'package_type' => $testData['package_type'] ?? AbstractConsignment::PACKAGE_TYPE_PACKAGE,
+                'delivery_type' => $deliveryType,
             ],
-        ]);
+        ];
+        
+        // Add pickup location data only if all required fields are present
+        if ($hasPickupLocationCode && $hasRequiredPickupFields) {
+            $shipmentData['pickup'] = [
+                'location_code' => $testData['pickup_location_code'],
+                'location_name' => $testData['pickup_location_name'] ?? '',
+                'street' => $testData['pickup_street'] ?? '',
+                'number' => $testData['pickup_number'] ?? '',
+                'postal_code' => $testData['pickup_postal_code'] ?? '',
+                'city' => $testData['pickup_city'] ?? '',
+                'cc' => $testData['pickup_country'] ?? $testData['country'] ?? AbstractConsignment::CC_NL,
+                'retail_network_id' => $testData['retail_network_id'] ?? '',
+            ];
+            $shipmentData['options']['delivery_type'] = AbstractConsignment::DELIVERY_TYPE_PICKUP;
+        }
+        
+        return self::getStandardShipmentFlow($shipmentData);
     }
     
     /**
