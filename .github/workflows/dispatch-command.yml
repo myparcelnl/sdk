@@ -15,7 +15,7 @@ jobs:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
 
-      - uses: peter-evans/slash-command-dispatch@v3
+      - uses: peter-evans/slash-command-dispatch@v5
         with:
           token: ${{ steps.credentials.outputs.token }}
           commands: |
