@@ -27,7 +27,7 @@ jobs:
 
       - name: 'Handle coverage cache'
         if: github.actor != 'dependabot[bot]'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: cache-coverage
         with:
           path: ./coverage.xml
