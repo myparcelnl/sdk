@@ -7,13 +7,14 @@ on:
   schedule:
     - cron: "0 6 * * 1" # weekly on Monday 06:00 UTC
   workflow_dispatch:
+
 permissions:
-  contents: write
-  pull-requests: write
+  contents:  write
+  pull-requests:  write
 
 concurrency:
   group: regenerate-api-client
-  cancel-in-progress: false
+  cancel-in-progress:  false
 
 jobs:
   regenerate:
@@ -28,7 +29,7 @@ jobs:
       - name: Set up PHP + Composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version:  "8.2"
           tools: composer
 
       # Needed because composer dump-autoload is in the script (and scripts usually require dependencies)
@@ -38,8 +39,11 @@ jobs:
       - name: Generate API client
         run: composer generate:api
 
+      - name: Fix generated code for PHP 7.4 compatibility
+        run:  ./scripts/fix-generated-php74.sh
+
       - name: Detect changes
-        id: diff
+        id:  diff
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -49,32 +53,33 @@ jobs:
 
       # Stage only the generated output (prevents e.g. lockfiles from being accidentally included)
       - name: Stage generated files only
-        if: steps.diff.outputs.changed == 'true'
-        run: |
+        if: steps.diff.outputs. changed == 'true'
+        run:  |
           git reset
           git add src/Services/CoreApi/Generated
 
       - name: Setup app credentials
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.diff. outputs.changed == 'true'
         id: credentials
         uses: myparcelnl/actions/setup-app-credentials@v4
         with:
-          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          app-id: ${{ secrets. MYPARCEL_APP_ID }}
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
 
       - name: Create Pull Request
-        if: steps.diff.outputs.changed == 'true'
+        if:  steps.diff.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ steps.credentials.outputs.token }}
+          token: ${{ steps.credentials.outputs. token }}
           branch: chore/regenerate-api-client
           delete-branch: true
           commit-message: "chore(api): regenerate Core API client"
           title: "chore(api): regenerate Core API client"
-          body: |
-            Automated regeneration of the Core API client.
+          body:  |
+            Automated regeneration of the Core API client. 
 
-            - Generated via `composer generate:api` (docker compose generate-api)
+            - Generated via `composer generate:api`
+            - Fixed for PHP 7.4 compatibility via `scripts/fix-generated-php74.sh`
             - Source spec: https://api.myparcel.nl/openapi.min.json
           labels: |
             automated
