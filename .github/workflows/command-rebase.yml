@@ -8,7 +8,7 @@ jobs:
   rebase:
     runs-on: ubuntu-22.04
     steps:
-      - uses: myparcelnl/actions/setup-app-credentials@v4
+      - uses: myparcelnl/actions/setup-app-credentials@v5
         id: credentials
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
