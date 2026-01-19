@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.3](https://github.com/myparcelnl/sdk/compare/v10.7.2...v10.7.3) (2026-01-19)
+
+
+### :bug: Bug Fixes
+
+* **support:** fix strings limit length being influenced by the trim marker ([#575](https://github.com/myparcelnl/sdk/issues/575)) ([43934f2](https://github.com/myparcelnl/sdk/commit/43934f2f73832ee0e279248d4741418b6ba5ebca))
+
 ## [10.7.2](https://github.com/myparcelnl/sdk/compare/v10.7.1...v10.7.2) (2026-01-15)
 
 
