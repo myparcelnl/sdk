@@ -40,7 +40,7 @@ jobs:
         run: composer generate:api
 
       - name: Fix generated code for PHP 7.4 compatibility
-        run:  ./scripts/fix-generated-php74.sh
+        run: ./scripts/fix-generated-php74.sh
 
       - name: Detect changes
         id:  diff

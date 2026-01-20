@@ -34,7 +34,6 @@
         ],
         "generate:api": [
             "docker compose run --rm generate-api",
-            "docker compose run --rm fix-generated-php74",
             "composer dump-autoload -o"
         ]
     },
