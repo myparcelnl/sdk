@@ -1,6 +1,6 @@
 <?php
 /**
- * ShipmentPostShipmentsRequestDataShipmentsInner
+ * ShipmentRequest
  *
  * PHP version 8.1
  *
@@ -33,7 +33,7 @@ use \ArrayAccess;
 use \MyParcel\CoreApi\Generated\Shipments\ObjectSerializer;
 
 /**
- * ShipmentPostShipmentsRequestDataShipmentsInner Class Doc Comment
+ * ShipmentRequest Class Doc Comment
  *
  * @category Class
  * @package  MyParcel\CoreApi\Generated\Shipments
@@ -41,7 +41,7 @@ use \MyParcel\CoreApi\Generated\Shipments\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, ArrayAccess, \JsonSerializable
+class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
       *
       * @var string
       */
-    protected static $openAPIModelName = 'shipment_post_shipments_request_data_shipments_inner';
+    protected static $openAPIModelName = 'ShipmentRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +60,9 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     protected static $openAPITypes = [
         'account_id' => 'int',
         'shop_id' => 'int',
+        'contract_id' => 'int',
         'reference_identifier' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerReferenceIdentifier',
-        'recipient' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestDataShipmentsInnerRecipient',
+        'recipient' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient',
         'sender' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentSender',
         'recipients' => 'float[]',
         'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties',
@@ -69,12 +70,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'customs_declaration' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentCustomsDeclaration',
         'carrier' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrier',
         'pickup' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPickup',
-        'multi_colli' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli',
+        'drop_off_point' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint',
         'note' => 'string',
         'status' => 'int',
         'delivered' => 'int',
         'general_settings' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings',
-        'hidden' => 'int'
+        'secondary_shipments' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner[]',
+        'collection_contact' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact',
+        'hidden' => 'int',
+        'shipped_items' => '\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerShippedItemsInner[]'
     ];
 
     /**
@@ -87,6 +91,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     protected static $openAPIFormats = [
         'account_id' => null,
         'shop_id' => null,
+        'contract_id' => null,
         'reference_identifier' => null,
         'recipient' => null,
         'sender' => null,
@@ -96,12 +101,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'customs_declaration' => null,
         'carrier' => null,
         'pickup' => null,
-        'multi_colli' => null,
+        'drop_off_point' => null,
         'note' => null,
         'status' => null,
         'delivered' => null,
         'general_settings' => null,
-        'hidden' => null
+        'secondary_shipments' => null,
+        'collection_contact' => null,
+        'hidden' => null,
+        'shipped_items' => null
     ];
 
     /**
@@ -112,6 +120,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     protected static array $openAPINullables = [
         'account_id' => false,
         'shop_id' => false,
+        'contract_id' => false,
         'reference_identifier' => false,
         'recipient' => false,
         'sender' => false,
@@ -121,12 +130,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'customs_declaration' => false,
         'carrier' => false,
         'pickup' => false,
-        'multi_colli' => false,
+        'drop_off_point' => false,
         'note' => false,
         'status' => false,
         'delivered' => false,
         'general_settings' => false,
-        'hidden' => false
+        'secondary_shipments' => false,
+        'collection_contact' => false,
+        'hidden' => false,
+        'shipped_items' => false
     ];
 
     /**
@@ -217,6 +229,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     protected static $attributeMap = [
         'account_id' => 'account_id',
         'shop_id' => 'shop_id',
+        'contract_id' => 'contract_id',
         'reference_identifier' => 'reference_identifier',
         'recipient' => 'recipient',
         'sender' => 'sender',
@@ -226,12 +239,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'customs_declaration' => 'customs_declaration',
         'carrier' => 'carrier',
         'pickup' => 'pickup',
-        'multi_colli' => 'multi-colli',
+        'drop_off_point' => 'drop_off_point',
         'note' => 'note',
         'status' => 'status',
         'delivered' => 'delivered',
         'general_settings' => 'general_settings',
-        'hidden' => 'hidden'
+        'secondary_shipments' => 'secondary_shipments',
+        'collection_contact' => 'collection_contact',
+        'hidden' => 'hidden',
+        'shipped_items' => 'shipped_items'
     ];
 
     /**
@@ -242,6 +258,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     protected static $setters = [
         'account_id' => 'setAccountId',
         'shop_id' => 'setShopId',
+        'contract_id' => 'setContractId',
         'reference_identifier' => 'setReferenceIdentifier',
         'recipient' => 'setRecipient',
         'sender' => 'setSender',
@@ -251,12 +268,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'customs_declaration' => 'setCustomsDeclaration',
         'carrier' => 'setCarrier',
         'pickup' => 'setPickup',
-        'multi_colli' => 'setMultiColli',
+        'drop_off_point' => 'setDropOffPoint',
         'note' => 'setNote',
         'status' => 'setStatus',
         'delivered' => 'setDelivered',
         'general_settings' => 'setGeneralSettings',
-        'hidden' => 'setHidden'
+        'secondary_shipments' => 'setSecondaryShipments',
+        'collection_contact' => 'setCollectionContact',
+        'hidden' => 'setHidden',
+        'shipped_items' => 'setShippedItems'
     ];
 
     /**
@@ -267,6 +287,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     protected static $getters = [
         'account_id' => 'getAccountId',
         'shop_id' => 'getShopId',
+        'contract_id' => 'getContractId',
         'reference_identifier' => 'getReferenceIdentifier',
         'recipient' => 'getRecipient',
         'sender' => 'getSender',
@@ -276,12 +297,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'customs_declaration' => 'getCustomsDeclaration',
         'carrier' => 'getCarrier',
         'pickup' => 'getPickup',
-        'multi_colli' => 'getMultiColli',
+        'drop_off_point' => 'getDropOffPoint',
         'note' => 'getNote',
         'status' => 'getStatus',
         'delivered' => 'getDelivered',
         'general_settings' => 'getGeneralSettings',
-        'hidden' => 'getHidden'
+        'secondary_shipments' => 'getSecondaryShipments',
+        'collection_contact' => 'getCollectionContact',
+        'hidden' => 'getHidden',
+        'shipped_items' => 'getShippedItems'
     ];
 
     /**
@@ -398,6 +422,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     {
         $this->setIfExists('account_id', $data ?? [], null);
         $this->setIfExists('shop_id', $data ?? [], null);
+        $this->setIfExists('contract_id', $data ?? [], null);
         $this->setIfExists('reference_identifier', $data ?? [], null);
         $this->setIfExists('recipient', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
@@ -407,12 +432,15 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         $this->setIfExists('customs_declaration', $data ?? [], null);
         $this->setIfExists('carrier', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
-        $this->setIfExists('multi_colli', $data ?? [], null);
+        $this->setIfExists('drop_off_point', $data ?? [], null);
         $this->setIfExists('note', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('delivered', $data ?? [], null);
         $this->setIfExists('general_settings', $data ?? [], null);
+        $this->setIfExists('secondary_shipments', $data ?? [], null);
+        $this->setIfExists('collection_contact', $data ?? [], null);
         $this->setIfExists('hidden', $data ?? [], null);
+        $this->setIfExists('shipped_items', $data ?? [], null);
     }
 
     /**
@@ -442,9 +470,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     {
         $invalidProperties = [];
 
-        if ($this->container['recipient'] === null) {
-            $invalidProperties[] = "'recipient' can't be null";
-        }
         if (!is_null($this->container['recipients']) && (count($this->container['recipients']) < 1)) {
             $invalidProperties[] = "invalid value for 'recipients', number of items must be greater than or equal to 1.";
         }
@@ -473,6 +498,10 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
             );
         }
 
+        if (!is_null($this->container['secondary_shipments']) && (count($this->container['secondary_shipments']) < 1)) {
+            $invalidProperties[] = "invalid value for 'secondary_shipments', number of items must be greater than or equal to 1.";
+        }
+
         $allowedValues = $this->getHiddenAllowableValues();
         if (!is_null($this->container['hidden']) && !in_array($this->container['hidden'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -480,6 +509,10 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
                 $this->container['hidden'],
                 implode("', '", $allowedValues)
             );
+        }
+
+        if (!is_null($this->container['shipped_items']) && (count($this->container['shipped_items']) < 0)) {
+            $invalidProperties[] = "invalid value for 'shipped_items', number of items must be greater than or equal to 0.";
         }
 
         return $invalidProperties;
@@ -552,6 +585,33 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     }
 
     /**
+     * Gets contract_id
+     *
+     * @return int|null
+     */
+    public function getContractId()
+    {
+        return $this->container['contract_id'];
+    }
+
+    /**
+     * Sets contract_id
+     *
+     * @param int|null $contract_id contract_id
+     *
+     * @return self
+     */
+    public function setContractId($contract_id)
+    {
+        if (is_null($contract_id)) {
+            throw new \InvalidArgumentException('non-nullable contract_id cannot be null');
+        }
+        $this->container['contract_id'] = $contract_id;
+
+        return $this;
+    }
+
+    /**
      * Gets reference_identifier
      *
      * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerReferenceIdentifier|null
@@ -581,7 +641,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Gets recipient
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestDataShipmentsInnerRecipient
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient|null
      */
     public function getRecipient()
     {
@@ -591,7 +651,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Sets recipient
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestDataShipmentsInnerRecipient $recipient recipient
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient|null $recipient recipient
      *
      * @return self
      */
@@ -657,7 +717,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
 
 
         if ((count($recipients) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $recipients when calling ShipmentPostShipmentsRequestDataShipmentsInner., number of items must be greater than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $recipients when calling ShipmentRequest., number of items must be greater than or equal to 1.');
         }
         $this->container['recipients'] = $recipients;
 
@@ -800,28 +860,28 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     }
 
     /**
-     * Gets multi_colli
+     * Gets drop_off_point
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli|null
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint|null
      */
-    public function getMultiColli()
+    public function getDropOffPoint()
     {
-        return $this->container['multi_colli'];
+        return $this->container['drop_off_point'];
     }
 
     /**
-     * Sets multi_colli
+     * Sets drop_off_point
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli|null $multi_colli multi_colli
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint|null $drop_off_point drop_off_point
      *
      * @return self
      */
-    public function setMultiColli($multi_colli)
+    public function setDropOffPoint($drop_off_point)
     {
-        if (is_null($multi_colli)) {
-            throw new \InvalidArgumentException('non-nullable multi_colli cannot be null');
+        if (is_null($drop_off_point)) {
+            throw new \InvalidArgumentException('non-nullable drop_off_point cannot be null');
         }
-        $this->container['multi_colli'] = $multi_colli;
+        $this->container['drop_off_point'] = $drop_off_point;
 
         return $this;
     }
@@ -955,6 +1015,65 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     }
 
     /**
+     * Gets secondary_shipments
+     *
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner[]|null
+     */
+    public function getSecondaryShipments()
+    {
+        return $this->container['secondary_shipments'];
+    }
+
+    /**
+     * Sets secondary_shipments
+     *
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner[]|null $secondary_shipments secondary_shipments
+     *
+     * @return self
+     */
+    public function setSecondaryShipments($secondary_shipments)
+    {
+        if (is_null($secondary_shipments)) {
+            throw new \InvalidArgumentException('non-nullable secondary_shipments cannot be null');
+        }
+
+
+        if ((count($secondary_shipments) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $secondary_shipments when calling ShipmentRequest., number of items must be greater than or equal to 1.');
+        }
+        $this->container['secondary_shipments'] = $secondary_shipments;
+
+        return $this;
+    }
+
+    /**
+     * Gets collection_contact
+     *
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact|null
+     */
+    public function getCollectionContact()
+    {
+        return $this->container['collection_contact'];
+    }
+
+    /**
+     * Sets collection_contact
+     *
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact|null $collection_contact collection_contact
+     *
+     * @return self
+     */
+    public function setCollectionContact($collection_contact)
+    {
+        if (is_null($collection_contact)) {
+            throw new \InvalidArgumentException('non-nullable collection_contact cannot be null');
+        }
+        $this->container['collection_contact'] = $collection_contact;
+
+        return $this;
+    }
+
+    /**
      * Gets hidden
      *
      * @return int|null
@@ -987,6 +1106,38 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
             );
         }
         $this->container['hidden'] = $hidden;
+
+        return $this;
+    }
+
+    /**
+     * Gets shipped_items
+     *
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerShippedItemsInner[]|null
+     */
+    public function getShippedItems()
+    {
+        return $this->container['shipped_items'];
+    }
+
+    /**
+     * Sets shipped_items
+     *
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerShippedItemsInner[]|null $shipped_items shipped_items
+     *
+     * @return self
+     */
+    public function setShippedItems($shipped_items)
+    {
+        if (is_null($shipped_items)) {
+            throw new \InvalidArgumentException('non-nullable shipped_items cannot be null');
+        }
+
+
+        if ((count($shipped_items) < 0)) {
+            throw new \InvalidArgumentException('invalid length for $shipped_items when calling ShipmentRequest., number of items must be greater than or equal to 0.');
+        }
+        $this->container['shipped_items'] = $shipped_items;
 
         return $this;
     }
