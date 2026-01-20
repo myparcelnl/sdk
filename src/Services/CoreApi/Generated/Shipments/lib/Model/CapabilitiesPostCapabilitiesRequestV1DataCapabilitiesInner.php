@@ -63,7 +63,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'sender' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender',
         'carrier_id' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefCapabilitiesSharedCarrier',
         'package_type' => 'float',
-        'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties',
+        'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties',
         'options' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions',
         'delivery_type' => 'float',
         'shipment_type' => 'float',
@@ -632,7 +632,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Gets physical_properties
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties|null
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties|null
      */
     public function getPhysicalProperties()
     {
@@ -642,7 +642,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Sets physical_properties
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties|null $physical_properties physical_properties
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties|null $physical_properties physical_properties
      *
      * @return self
      */
@@ -800,7 +800,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -813,7 +813,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -826,7 +826,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -842,7 +842,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }

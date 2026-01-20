@@ -59,12 +59,12 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
       */
     protected static $openAPITypes = [
         'shop_id' => 'int',
-        'recipient' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Recipient',
-        'sender' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Sender',
+        'recipient' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesRecipient',
+        'sender' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesSender',
         'pickup' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPickupV2',
         'carrier' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrierV2',
         'package_type' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPackageTypeV2',
-        'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties',
+        'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties',
         'options' => '\MyParcel\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV2Options',
         'delivery_type' => 'string',
         'direction' => 'string',
@@ -459,7 +459,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets recipient
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Recipient
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesRecipient
      */
     public function getRecipient()
     {
@@ -469,7 +469,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets recipient
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Recipient $recipient recipient
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesRecipient $recipient recipient
      *
      * @return self
      */
@@ -486,7 +486,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets sender
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Sender|null
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesSender|null
      */
     public function getSender()
     {
@@ -496,7 +496,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets sender
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Sender|null $sender sender
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesSender|null $sender sender
      *
      * @return self
      */
@@ -594,7 +594,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets physical_properties
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties|null
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties|null
      */
     public function getPhysicalProperties()
     {
@@ -604,7 +604,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets physical_properties
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties|null $physical_properties physical_properties
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties|null $physical_properties physical_properties
      *
      * @return self
      */
@@ -757,7 +757,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -770,7 +770,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -783,7 +783,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -799,7 +799,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }

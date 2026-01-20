@@ -90,6 +90,7 @@ Class | Method | HTTP request | Description
 *NotificationApi* | [**getNotificationTemplates**](docs/Api/NotificationApi.md#getnotificationtemplates) | **GET** /notification_groups/{notification_group_id}/notification_templates | Get notification templates
 *NotificationApi* | [**postNotificationGroups**](docs/Api/NotificationApi.md#postnotificationgroups) | **POST** /notification_groups | Create notification groups
 *NotificationApi* | [**putNotificationTemplate**](docs/Api/NotificationApi.md#putnotificationtemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id} | Update notification template
+*NotificationApi* | [**sendTestNotification**](docs/Api/NotificationApi.md#sendtestnotification) | **POST** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/test | Send test notification
 *ShipmentApi* | [**deleteShipments**](docs/Api/ShipmentApi.md#deleteshipments) | **DELETE** /shipments/{ids} | Delete Shipment
 *ShipmentApi* | [**getShipments**](docs/Api/ShipmentApi.md#getshipments) | **GET** /shipments | Gets a list of Shipments, optionally filtered using parameters.
 *ShipmentApi* | [**getShipmentsById**](docs/Api/ShipmentApi.md#getshipmentsbyid) | **GET** /shipments/{ids} | Get shipments by id.
@@ -107,6 +108,8 @@ Class | Method | HTTP request | Description
 - [AccountDefsLocationPropertiesNumber](docs/Model/AccountDefsLocationPropertiesNumber.md)
 - [AccountDefsPlatformPropertiesId](docs/Model/AccountDefsPlatformPropertiesId.md)
 - [BillingDefsCurrency](docs/Model/BillingDefsCurrency.md)
+- [CapabilitiesOptions](docs/Model/CapabilitiesOptions.md)
+- [CapabilitiesPhysicalProperties](docs/Model/CapabilitiesPhysicalProperties.md)
 - [CapabilitiesPostCapabilitiesRequestV1](docs/Model/CapabilitiesPostCapabilitiesRequestV1.md)
 - [CapabilitiesPostCapabilitiesRequestV1Data](docs/Model/CapabilitiesPostCapabilitiesRequestV1Data.md)
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner.md)
@@ -114,23 +117,17 @@ Class | Method | HTTP request | Description
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient.md)
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender.md)
 - [CapabilitiesPostCapabilitiesRequestV2](docs/Model/CapabilitiesPostCapabilitiesRequestV2.md)
-- [CapabilitiesPostCapabilitiesRequestV2Options](docs/Model/CapabilitiesPostCapabilitiesRequestV2Options.md)
-- [CapabilitiesPostCapabilitiesRequestV2PhysicalProperties](docs/Model/CapabilitiesPostCapabilitiesRequestV2PhysicalProperties.md)
-- [CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight](docs/Model/CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight.md)
-- [CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLength](docs/Model/CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLength.md)
-- [CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeight](docs/Model/CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeight.md)
-- [CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidth](docs/Model/CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidth.md)
-- [CapabilitiesPostCapabilitiesRequestV2Recipient](docs/Model/CapabilitiesPostCapabilitiesRequestV2Recipient.md)
-- [CapabilitiesPostCapabilitiesRequestV2Sender](docs/Model/CapabilitiesPostCapabilitiesRequestV2Sender.md)
 - [CapabilitiesPostContractDefinitionsRequestV1](docs/Model/CapabilitiesPostContractDefinitionsRequestV1.md)
 - [CapabilitiesPostContractDefinitionsRequestV1Data](docs/Model/CapabilitiesPostContractDefinitionsRequestV1Data.md)
 - [CapabilitiesPostContractDefinitionsRequestV2](docs/Model/CapabilitiesPostContractDefinitionsRequestV2.md)
+- [CapabilitiesRecipient](docs/Model/CapabilitiesRecipient.md)
 - [CapabilitiesResponsesCapabilitiesV1](docs/Model/CapabilitiesResponsesCapabilitiesV1.md)
 - [CapabilitiesResponsesCapabilitiesV1Data](docs/Model/CapabilitiesResponsesCapabilitiesV1Data.md)
 - [CapabilitiesResponsesCapabilitiesV2](docs/Model/CapabilitiesResponsesCapabilitiesV2.md)
 - [CapabilitiesResponsesContractDefinitionsV1](docs/Model/CapabilitiesResponsesContractDefinitionsV1.md)
 - [CapabilitiesResponsesContractDefinitionsV1Data](docs/Model/CapabilitiesResponsesContractDefinitionsV1Data.md)
 - [CapabilitiesResponsesContractDefinitionsV2](docs/Model/CapabilitiesResponsesContractDefinitionsV2.md)
+- [CapabilitiesSender](docs/Model/CapabilitiesSender.md)
 - [CommonDefsDownloadUrl](docs/Model/CommonDefsDownloadUrl.md)
 - [CommonErrorSystem](docs/Model/CommonErrorSystem.md)
 - [CommonErrorUser](docs/Model/CommonErrorUser.md)
@@ -159,6 +156,10 @@ Class | Method | HTTP request | Description
 - [NotificationPutNotificationTemplateRequest](docs/Model/NotificationPutNotificationTemplateRequest.md)
 - [NotificationResponsesNotificationGroups](docs/Model/NotificationResponsesNotificationGroups.md)
 - [NotificationResponsesNotificationTemplates](docs/Model/NotificationResponsesNotificationTemplates.md)
+- [PhysicalPropertiesHeight](docs/Model/PhysicalPropertiesHeight.md)
+- [PhysicalPropertiesLength](docs/Model/PhysicalPropertiesLength.md)
+- [PhysicalPropertiesWeight](docs/Model/PhysicalPropertiesWeight.md)
+- [PhysicalPropertiesWidth](docs/Model/PhysicalPropertiesWidth.md)
 - [RatesPostRatesRequestV1](docs/Model/RatesPostRatesRequestV1.md)
 - [RatesPostRatesRequestV1Data](docs/Model/RatesPostRatesRequestV1Data.md)
 - [RatesPostRatesRequestV1DataRatesInner](docs/Model/RatesPostRatesRequestV1DataRatesInner.md)

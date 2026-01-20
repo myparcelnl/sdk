@@ -389,7 +389,7 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -402,7 +402,7 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -415,7 +415,7 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -431,7 +431,7 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }

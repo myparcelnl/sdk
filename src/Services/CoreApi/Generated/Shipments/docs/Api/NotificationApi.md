@@ -15,6 +15,7 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 | [**getNotificationTemplates()**](NotificationApi.md#getNotificationTemplates) | **GET** /notification_groups/{notification_group_id}/notification_templates | Get notification templates |
 | [**postNotificationGroups()**](NotificationApi.md#postNotificationGroups) | **POST** /notification_groups | Create notification groups |
 | [**putNotificationTemplate()**](NotificationApi.md#putNotificationTemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id} | Update notification template |
+| [**sendTestNotification()**](NotificationApi.md#sendTestNotification) | **POST** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/test | Send test notification |
 
 
 ## `deleteNotificationGroups()`
@@ -553,6 +554,67 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `sendTestNotification()`
+
+```php
+sendTestNotification($notification_group_id, $notification_template_id)
+```
+
+Send test notification
+
+Send a test notification using a specific notification template associated with a specific notification group. The test notification is sent to the email address of the logged-in user.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: bearer
+$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$notification_group_id = 56; // int | The ID of the notification group.
+$notification_template_id = 56; // int | The ID of the notification template.
+
+try {
+    $apiInstance->sendTestNotification($notification_group_id, $notification_template_id);
+} catch (Exception $e) {
+    echo 'Exception when calling NotificationApi->sendTestNotification: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **notification_group_id** | **int**| The ID of the notification group. | |
+| **notification_template_id** | **int**| The ID of the notification template. | |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)

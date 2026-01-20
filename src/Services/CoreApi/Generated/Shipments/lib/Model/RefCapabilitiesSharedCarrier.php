@@ -56,6 +56,10 @@ class RefCapabilitiesSharedCarrier
 
     public const NUMBER_12 = 12;
 
+    public const NUMBER_13 = 13;
+
+    public const NUMBER_14 = 14;
+
     public const NUMBER_15 = 15;
 
     public const NUMBER_16 = 16;
@@ -75,6 +79,8 @@ class RefCapabilitiesSharedCarrier
             self::NUMBER_10,
             self::NUMBER_11,
             self::NUMBER_12,
+            self::NUMBER_13,
+            self::NUMBER_14,
             self::NUMBER_15,
             self::NUMBER_16,
             self::NUMBER_17

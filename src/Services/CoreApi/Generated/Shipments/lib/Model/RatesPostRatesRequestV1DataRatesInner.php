@@ -64,7 +64,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => 'Null',
         'carrier_id' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrier',
         'package_type' => '\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPackageType',
-        'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties',
+        'physical_properties' => '\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties',
         'options' => '\MyParcel\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV1DataRatesInnerOptions',
         'delivery_type' => 'float',
         'shipment_type' => 'float',
@@ -641,7 +641,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Gets physical_properties
      *
-     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties|null
+     * @return \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties|null
      */
     public function getPhysicalProperties()
     {
@@ -651,7 +651,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Sets physical_properties
      *
-     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties|null $physical_properties physical_properties
+     * @param \MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties|null $physical_properties physical_properties
      *
      * @return self
      */
@@ -841,7 +841,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -854,7 +854,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -867,7 +867,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -883,7 +883,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }

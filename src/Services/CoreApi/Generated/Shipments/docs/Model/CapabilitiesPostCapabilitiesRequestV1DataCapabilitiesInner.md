@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **sender** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender**](CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender.md) |  | [optional]
 **carrier_id** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefCapabilitiesSharedCarrier**](RefCapabilitiesSharedCarrier.md) |  | [optional]
 **package_type** | **float** |  | [optional]
-**physical_properties** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties**](CapabilitiesPostCapabilitiesRequestV2PhysicalProperties.md) |  | [optional]
+**physical_properties** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties**](CapabilitiesPhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions**](CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions.md) |  | [optional]
 **delivery_type** | **float** |  | [optional]
 **shipment_type** | **float** |  | [optional]

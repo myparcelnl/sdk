@@ -102,6 +102,9 @@ class NotificationApi
         'putNotificationTemplate' => [
             'application/json',
         ],
+        'sendTestNotification' => [
+            'application/json',
+        ],
     ];
 
     /**
@@ -2587,6 +2590,268 @@ class NotificationApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation sendTestNotification
+     *
+     * Send test notification
+     *
+     * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
+     *
+     * @throws \MyParcel\CoreApi\Generated\Shipments\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function sendTestNotification($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    {
+        $this->sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, $contentType);
+    }
+
+    /**
+     * Operation sendTestNotificationWithHttpInfo
+     *
+     * Send test notification
+     *
+     * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
+     *
+     * @throws \MyParcel\CoreApi\Generated\Shipments\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    {
+        $request = $this->sendTestNotificationRequest($notification_group_id, $notification_template_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                
+                
+            }
+        
+            if ($this->responseWithinRangeCode('4XX', $e->getCode())) {
+                $data = ObjectSerializer::deserialize(
+                    $e->getResponseBody(),
+                    '\MyParcel\CoreApi\Generated\Shipments\Model\CommonResponsesUserError',
+                    $e->getResponseHeaders()
+                );
+                $e->setResponseObject($data);
+                throw $e;
+            }
+            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
+                $data = ObjectSerializer::deserialize(
+                    $e->getResponseBody(),
+                    '\MyParcel\CoreApi\Generated\Shipments\Model\CommonResponsesSystemError',
+                    $e->getResponseHeaders()
+                );
+                $e->setResponseObject($data);
+                throw $e;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation sendTestNotificationAsync
+     *
+     * Send test notification
+     *
+     * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function sendTestNotificationAsync($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    {
+        return $this->sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation sendTestNotificationAsyncWithHttpInfo
+     *
+     * Send test notification
+     *
+     * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    {
+        $returnType = '';
+        $request = $this->sendTestNotificationRequest($notification_group_id, $notification_template_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'sendTestNotification'
+     *
+     * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function sendTestNotificationRequest($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    {
+
+        // verify the required parameter 'notification_group_id' is set
+        if ($notification_group_id === null || (is_array($notification_group_id) && count($notification_group_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $notification_group_id when calling sendTestNotification'
+            );
+        }
+
+        // verify the required parameter 'notification_template_id' is set
+        if ($notification_template_id === null || (is_array($notification_template_id) && count($notification_template_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $notification_template_id when calling sendTestNotification'
+            );
+        }
+
+
+        $resourcePath = '/notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/test';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($notification_group_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'notification_group_id' . '}',
+                ObjectSerializer::toPathValue($notification_group_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($notification_template_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'notification_template_id' . '}',
+                ObjectSerializer::toPathValue($notification_template_id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

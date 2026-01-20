@@ -54,11 +54,15 @@ class RefCapabilitiesSharedCarrierV2
 
     public const DPD = 'DPD';
 
+    public const GLS = 'GLS';
+
     public const INPOST = 'INPOST';
 
     public const POSTNL = 'POSTNL';
 
     public const TRUNKRS = 'TRUNKRS';
+
+    public const UPS_EXPRESS_SAVER = 'UPS_EXPRESS_SAVER';
 
     public const UPS_STANDARD = 'UPS_STANDARD';
 
@@ -74,9 +78,11 @@ class RefCapabilitiesSharedCarrierV2
             self::DHL_FOR_YOU,
             self::DHL_PARCEL_CONNECT,
             self::DPD,
+            self::GLS,
             self::INPOST,
             self::POSTNL,
             self::TRUNKRS,
+            self::UPS_EXPRESS_SAVER,
             self::UPS_STANDARD
         ];
     }

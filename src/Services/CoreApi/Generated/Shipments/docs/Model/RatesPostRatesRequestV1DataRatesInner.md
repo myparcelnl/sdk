@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **pickup** | [**Null**](Null.md) |  | [optional]
 **carrier_id** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
 **package_type** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPackageType**](RefShipmentPackageType.md) |  |
-**physical_properties** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties**](CapabilitiesPostCapabilitiesRequestV2PhysicalProperties.md) |  | [optional]
+**physical_properties** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties**](CapabilitiesPhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV1DataRatesInnerOptions**](RatesPostRatesRequestV1DataRatesInnerOptions.md) |  | [optional]
 **delivery_type** | **float** |  | [optional]
 **shipment_type** | **float** |  | [optional]
