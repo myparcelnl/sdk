@@ -12,5 +12,6 @@ inlineSchemaNameMappings:
   capabilities_post_capabilities_request_v2_physicalProperties_width: PhysicalPropertiesWidth
   capabilities_post_capabilities_request_v2_physicalProperties_weight: PhysicalPropertiesWeight
   
-  # Shipment V1.1 - test mapping
+  # Shipment V1.1 - test mappings
   shipment_post_shipments_request_v1_1_data_shipments_inner: ShipmentRequest
+  shipment_post_shipments_request_v1_1_data_shipments_inner_secondary_shipments_inner: SecondaryShipmentRequest
