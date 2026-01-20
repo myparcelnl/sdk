@@ -323,7 +323,7 @@ class RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2 implements ModelInter
      *
      * @return boolean
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists($offset)
     {
         return isset($this->container[$offset]);
     }
@@ -336,7 +336,7 @@ class RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2 implements ModelInter
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet(mixed $offset)
+    public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
     }
@@ -349,7 +349,7 @@ class RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2 implements ModelInter
      *
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -365,7 +365,7 @@ class RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2 implements ModelInter
      *
      * @return void
      */
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
     }
