@@ -27,6 +27,7 @@ services:
       --input-spec            https://api.myparcel.nl/openapi.min.json
       --generator-name        php
       --output                /local/src/Services/CoreApi/Generated/Shipments
+      --config                /local/openapi-generator-mapper.yml
       --global-property       apiTests=false,modelTests=false
       --additional-properties packageName=MyParcel\\CoreApi\\Generated\\Shipments,invokerPackage=MyParcel\\CoreApi\\Generated\\Shipments,modelPackage=Model,srcBasePath=lib,apiPackage=Api
     profiles: [ openapi ]

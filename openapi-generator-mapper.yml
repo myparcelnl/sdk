@@ -1,0 +1,13 @@
+# OpenAPI Generator configuration
+# Maps inline schema names to shorter, cleaner class names
+
+inlineSchemaNameMappings:
+  # Capabilities V2 - used in CapabilitiesMapper
+  capabilities_post_capabilities_request_v2_recipient: CapabilitiesRecipient
+  capabilities_post_capabilities_request_v2_sender: CapabilitiesSender
+  capabilities_post_capabilities_request_v2_options: CapabilitiesOptions
+  capabilities_post_capabilities_request_v2_physicalProperties: CapabilitiesPhysicalProperties
+  capabilities_post_capabilities_request_v2_physicalProperties_height: PhysicalPropertiesHeight
+  capabilities_post_capabilities_request_v2_physicalProperties_length: PhysicalPropertiesLength
+  capabilities_post_capabilities_request_v2_physicalProperties_width: PhysicalPropertiesWidth
+  capabilities_post_capabilities_request_v2_physicalProperties_weight: PhysicalPropertiesWeight

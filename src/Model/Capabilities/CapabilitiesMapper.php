@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
 use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Recipient as CoreRecipientV2;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Sender as CoreSenderV2;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Options as CoreOptionsV2;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties as CorePhysicalPropertiesV2;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLength;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidth;
-use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeight;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesRecipient as CoreRecipientV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesSender as CoreSenderV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesOptions as CoreOptionsV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalProperties as CorePhysicalPropertiesV2;
+use MyParcel\CoreApi\Generated\Shipments\Model\PhysicalPropertiesHeight;
+use MyParcel\CoreApi\Generated\Shipments\Model\PhysicalPropertiesLength;
+use MyParcel\CoreApi\Generated\Shipments\Model\PhysicalPropertiesWidth;
+use MyParcel\CoreApi\Generated\Shipments\Model\PhysicalPropertiesWeight;
 use MyParcel\CoreApi\Generated\Shipments\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
 use MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentPackageTypeV2;
 use MyParcel\CoreApi\Generated\Shipments\Model\RefTypesCarrierV2;
@@ -162,28 +162,28 @@ class CapabilitiesMapper
             $physical = new CorePhysicalPropertiesV2();
             
             if (isset($physicalData['height'])) {
-                $height = new CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight();
+                $height = new PhysicalPropertiesHeight();
                 $height->setValue($physicalData['height']['value']);
                 $height->setUnit($physicalData['height']['unit']);
                 $physical->setHeight($height);
             }
             
             if (isset($physicalData['width'])) {
-                $width = new CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidth();
+                $width = new PhysicalPropertiesWidth();
                 $width->setValue($physicalData['width']['value']);
                 $width->setUnit($physicalData['width']['unit']);
                 $physical->setWidth($width);
             }
             
             if (isset($physicalData['length'])) {
-                $length = new CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLength();
+                $length = new PhysicalPropertiesLength();
                 $length->setValue($physicalData['length']['value']);
                 $length->setUnit($physicalData['length']['unit']);
                 $physical->setLength($length);
             }
             
             if (isset($physicalData['weight'])) {
-                $weight = new CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeight();
+                $weight = new PhysicalPropertiesWeight();
                 $weight->setValue($physicalData['weight']['value']);
                 $weight->setUnit($physicalData['weight']['unit']);
                 $physical->setWeight($weight);
