@@ -4,6 +4,8 @@
 inlineSchemaNameMappings:
   # Capabilities V2 - used in CapabilitiesMapper
   capabilities_post_capabilities_request_v2_recipient: CapabilitiesRecipientV2
+  # tijdelijk test:
+  CapabilitiesRecipientCountryCode: CapabilitiesRecipientCountryCodeV2
   capabilities_post_capabilities_request_v2_sender: CapabilitiesSenderV2
   capabilities_post_capabilities_request_v2_options: CapabilitiesOptionsV2
   capabilities_post_capabilities_request_v2_physicalProperties: CapabilitiesPhysicalPropertiesV2
