@@ -1,6 +1,9 @@
 name: Regenerate API Client
 
 on:
+  push:
+    branches:
+      - feat/capabilities-client
   schedule:
     - cron: "0 6 * * 1" # weekly on Monday 06:00 UTC
   workflow_dispatch:
