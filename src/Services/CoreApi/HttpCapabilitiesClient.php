@@ -30,7 +30,12 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
             PHP_VERSION
         );
 
-        $api = CapabilitiesClientFactory::make(null, null, $userAgent);
+        $api = CapabilitiesClientFactory::make(
+            apiKey: null,
+            baseUri: null,
+            userAgent: $userAgent,
+            capabilitiesAcceptHeader: CapabilitiesClientFactory::ACCEPT_V2
+        );
         $coreReq = $this->mapper->mapToCoreApi($request);
 
         $coreRes = $api->postCapabilities($coreReq);
