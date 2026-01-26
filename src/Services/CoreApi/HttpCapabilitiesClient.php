@@ -31,10 +31,10 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
         );
 
         $api = CapabilitiesClientFactory::make(
-            apiKey: null,
-            baseUri: null,
-            userAgent: $userAgent,
-            capabilitiesAcceptHeader: CapabilitiesClientFactory::ACCEPT_V2
+            null,
+            null,
+            $userAgent,
+            CapabilitiesClientFactory::ACCEPT_V2
         );
         $coreReq = $this->mapper->mapToCoreApi($request);
 
