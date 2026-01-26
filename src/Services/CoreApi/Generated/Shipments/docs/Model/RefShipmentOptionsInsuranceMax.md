@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**insurance** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentOptionsInsuranceMaxAllOfInsurance**](RefShipmentOptionsInsuranceMaxAllOfInsurance.md) |  | [optional]
+**insurance** | **object** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

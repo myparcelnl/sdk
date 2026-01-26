@@ -4,21 +4,21 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**person** | **mixed** |  |
-**company** | **mixed** |  | [optional]
-**street** | **mixed** |  |
-**street_additional_info** | **mixed** |  | [optional]
-**number** | **mixed** |  | [optional]
-**number_suffix** | **mixed** |  | [optional]
-**postal_code** | **mixed** |  | [optional]
-**city** | **mixed** |  |
-**state** | **mixed** |  | [optional]
+**person** | **string** |  |
+**company** | **string** |  | [optional]
+**street** | **string** |  |
+**street_additional_info** | **string** |  | [optional]
+**number** | **string** |  | [optional]
+**number_suffix** | **string** |  | [optional]
+**postal_code** | **string** |  | [optional]
+**city** | **string** |  |
+**state** | **string** |  | [optional]
+**area** | **string** |  | [optional]
+**phone** | **string** |  | [optional]
 **cc** | **string** |  |
 **region** | **string** |  | [optional]
-**area** | **mixed** |  | [optional]
-**phone** | **mixed** |  | [optional]
 **email** | **string** |  | [optional]
-**secondary_emails** | [**\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentDefsShipmentSenderPropertiesEmail[]**](ShipmentDefsShipmentSenderPropertiesEmail.md) |  | [optional]
+**secondary_emails** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentDefsShipmentSenderPropertiesEmail[]**](ShipmentDefsShipmentSenderPropertiesEmail.md) |  | [optional]
 **box_number** | **string** |  | [optional]
 **eori_number** | **string** |  | [optional]
 **vat_number** | **string** |  | [optional]

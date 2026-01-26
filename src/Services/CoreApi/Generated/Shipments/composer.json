@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^7.4 || ^8.0",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -30,9 +30,9 @@
         "friendsofphp/php-cs-fixer": "^3.5"
     },
     "autoload": {
-        "psr-4": { "MyParcel\\CoreApi\\Generated\\Shipments\\" : "lib/" }
+        "psr-4": { "MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments\\" : "lib/" }
     },
     "autoload-dev": {
-        "psr-4": { "MyParcel\\CoreApi\\Generated\\Shipments\\Test\\" : "test/" }
+        "psr-4": { "MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments\\Test\\" : "test/" }
     }
 }

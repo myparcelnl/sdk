@@ -17,8 +17,8 @@ Name | Type | Description | Notes
 **area** | **string** |  | [optional]
 **person** | **string** |  |
 **company** | **string** |  | [optional]
-**email** | [**\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md) |  | [optional]
-**secondary_emails** | [**\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail[]**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md) |  | [optional]
+**email** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md) |  | [optional]
+**secondary_emails** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentRecipientSecondaryEmailsInner[]**](RefShipmentRecipientSecondaryEmailsInner.md) |  | [optional]
 **phone** | **string** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

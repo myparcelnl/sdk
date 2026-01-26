@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**base** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1**](RefRatesResponsePriceCompositionPriceV1.md) |  |
-**charges** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
-**discounts** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
-**options** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
-**other** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
-**total** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1**](RefRatesResponsePriceCompositionPriceV1.md) |  |
+**base** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1**](RefRatesResponsePriceCompositionPriceV1.md) |  |
+**charges** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
+**discounts** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
+**options** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
+**other** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1[]**](RefRatesResponsePriceCompositionPriceV1.md) |  |
+**total** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefRatesResponsePriceCompositionPriceV1**](RefRatesResponsePriceCompositionPriceV1.md) |  |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

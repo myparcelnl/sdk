@@ -50,11 +50,8 @@
     "autoload": {
         "psr-4": {
             "MyParcelNL\\Sdk\\": "src/",
-            "MyParcel\\CoreApi\\Generated\\Shipments\\": "src/Services/CoreApi/Generated/Shipments/lib"
-        },
-        "exclude-from-classmap": [
-            "src/Services/CoreApi/Generated/*"
-        ]
+            "MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments\\": "src/Services/CoreApi/Generated/Shipments/lib"
+        }
     },
     "autoload-dev": {
         "psr-4": {

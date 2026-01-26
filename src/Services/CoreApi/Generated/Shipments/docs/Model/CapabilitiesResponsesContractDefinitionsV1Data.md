@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**capabilities** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1[]**](RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1.md) | A superset of V1 Capabilities for the contracts within a user&#39;s account. | [optional]
+**capabilities** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1[]**](RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1.md) | A superset of V1 Capabilities for the contracts within a user&#39;s account. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

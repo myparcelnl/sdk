@@ -16,6 +16,6 @@ Name | Type | Description | Notes
 **person** | **string** |  |
 **company** | **string** |  | [optional]
 **phone** | **string** |  | [optional]
-**email** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefShipmentSenderEmail**](RefShipmentSenderEmail.md) |  | [optional]
+**email** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentSenderEmail**](RefShipmentSenderEmail.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

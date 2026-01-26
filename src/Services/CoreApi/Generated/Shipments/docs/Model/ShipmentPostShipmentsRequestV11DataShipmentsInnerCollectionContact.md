@@ -11,11 +11,11 @@ Name | Type | Description | Notes
 **first_name** | **string** |  | [optional]
 **gender** | **string** |  | [optional]
 **last_name** | **string** |  |
-**number** | [**\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContactNumber**](ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContactNumber.md) |  |
-**number_suffix** | **string** |  | [optional]
+**number** | **string** |  |
+**number_suffix** | [**Null**](Null.md) |  | [optional]
 **phone** | **string** |  |
 **postal_code** | **string** |  |
 **street** | **string** |  |
-**street_additional_info** | **string** |  | [optional]
+**street_additional_info** | [**Null**](Null.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

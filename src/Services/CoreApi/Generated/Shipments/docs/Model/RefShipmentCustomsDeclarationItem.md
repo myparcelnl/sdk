@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **description** | **string** |  |
 **amount** | **int** |  |
 **weight** | **int** |  |
-**item_value** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefTypesMoney**](RefTypesMoney.md) |  |
+**item_value** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesMoney**](RefTypesMoney.md) |  |
 **classification** | **string** |  |
 **country** | **string** |  | [optional]
 

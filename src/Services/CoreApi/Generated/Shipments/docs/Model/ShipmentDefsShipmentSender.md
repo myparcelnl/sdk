@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **area** | **string** |  | [optional]
 **phone** | **string** |  | [optional]
 **email** | **string** |  | [optional]
-**secondary_emails** | [**\MyParcel\CoreApi\Generated\Shipments\Model\ShipmentDefsShipmentSenderPropertiesEmail[]**](ShipmentDefsShipmentSenderPropertiesEmail.md) |  | [optional]
+**secondary_emails** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentDefsShipmentSenderPropertiesEmail[]**](ShipmentDefsShipmentSenderPropertiesEmail.md) |  | [optional]
 **box_number** | **string** |  | [optional]
 **eori_number** | **string** |  | [optional]
 **vat_number** | **string** |  | [optional]

@@ -1,4 +1,4 @@
-# MyParcel\CoreApi\Generated\Shipments
+# MyParcelNL\Sdk\CoreApi\Generated\Shipments
 
 Allows MyParcel users to query delivery options, pickup & drop off locations with opening hours, register & trace shipments, print labels and more.
 
@@ -8,7 +8,8 @@ For more information, please visit [https://developer.myparcel.nl/contact.html](
 
 ### Requirements
 
-PHP 8.1 and later.
+PHP 7.4 and later.
+Should also work with PHP 8.0.
 
 ### Composer
 
@@ -36,7 +37,7 @@ Download the files and include `autoload.php`:
 
 ```php
 <?php
-require_once('/path/to/MyParcel\CoreApi\Generated\Shipments/vendor/autoload.php');
+require_once('/path/to/MyParcelNL\Sdk\CoreApi\Generated\Shipments/vendor/autoload.php');
 ```
 
 ## Getting Started
@@ -50,15 +51,15 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure HTTP basic authorization: apiKey
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()
               ->setUsername('YOUR_USERNAME')
               ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\DefaultApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\DefaultApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -108,26 +109,29 @@ Class | Method | HTTP request | Description
 - [AccountDefsLocationPropertiesNumber](docs/Model/AccountDefsLocationPropertiesNumber.md)
 - [AccountDefsPlatformPropertiesId](docs/Model/AccountDefsPlatformPropertiesId.md)
 - [BillingDefsCurrency](docs/Model/BillingDefsCurrency.md)
-- [CapabilitiesOptions](docs/Model/CapabilitiesOptions.md)
-- [CapabilitiesPhysicalProperties](docs/Model/CapabilitiesPhysicalProperties.md)
+- [CapabilitiesOptionsV2](docs/Model/CapabilitiesOptionsV2.md)
+- [CapabilitiesPhysicalPropertiesV2](docs/Model/CapabilitiesPhysicalPropertiesV2.md)
 - [CapabilitiesPostCapabilitiesRequestV1](docs/Model/CapabilitiesPostCapabilitiesRequestV1.md)
 - [CapabilitiesPostCapabilitiesRequestV1Data](docs/Model/CapabilitiesPostCapabilitiesRequestV1Data.md)
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner.md)
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions.md)
+- [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerPickup](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerPickup.md)
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient.md)
 - [CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender](docs/Model/CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender.md)
 - [CapabilitiesPostCapabilitiesRequestV2](docs/Model/CapabilitiesPostCapabilitiesRequestV2.md)
+- [CapabilitiesPostCapabilitiesRequestV2Pickup](docs/Model/CapabilitiesPostCapabilitiesRequestV2Pickup.md)
+- [CapabilitiesPostCapabilitiesRequestV2PickupLocation](docs/Model/CapabilitiesPostCapabilitiesRequestV2PickupLocation.md)
 - [CapabilitiesPostContractDefinitionsRequestV1](docs/Model/CapabilitiesPostContractDefinitionsRequestV1.md)
 - [CapabilitiesPostContractDefinitionsRequestV1Data](docs/Model/CapabilitiesPostContractDefinitionsRequestV1Data.md)
 - [CapabilitiesPostContractDefinitionsRequestV2](docs/Model/CapabilitiesPostContractDefinitionsRequestV2.md)
-- [CapabilitiesRecipient](docs/Model/CapabilitiesRecipient.md)
+- [CapabilitiesRecipientV2](docs/Model/CapabilitiesRecipientV2.md)
 - [CapabilitiesResponsesCapabilitiesV1](docs/Model/CapabilitiesResponsesCapabilitiesV1.md)
 - [CapabilitiesResponsesCapabilitiesV1Data](docs/Model/CapabilitiesResponsesCapabilitiesV1Data.md)
 - [CapabilitiesResponsesCapabilitiesV2](docs/Model/CapabilitiesResponsesCapabilitiesV2.md)
 - [CapabilitiesResponsesContractDefinitionsV1](docs/Model/CapabilitiesResponsesContractDefinitionsV1.md)
 - [CapabilitiesResponsesContractDefinitionsV1Data](docs/Model/CapabilitiesResponsesContractDefinitionsV1Data.md)
 - [CapabilitiesResponsesContractDefinitionsV2](docs/Model/CapabilitiesResponsesContractDefinitionsV2.md)
-- [CapabilitiesSender](docs/Model/CapabilitiesSender.md)
+- [CapabilitiesSenderV2](docs/Model/CapabilitiesSenderV2.md)
 - [CommonDefsDownloadUrl](docs/Model/CommonDefsDownloadUrl.md)
 - [CommonErrorSystem](docs/Model/CommonErrorSystem.md)
 - [CommonErrorUser](docs/Model/CommonErrorUser.md)
@@ -156,10 +160,10 @@ Class | Method | HTTP request | Description
 - [NotificationPutNotificationTemplateRequest](docs/Model/NotificationPutNotificationTemplateRequest.md)
 - [NotificationResponsesNotificationGroups](docs/Model/NotificationResponsesNotificationGroups.md)
 - [NotificationResponsesNotificationTemplates](docs/Model/NotificationResponsesNotificationTemplates.md)
-- [PhysicalPropertiesHeight](docs/Model/PhysicalPropertiesHeight.md)
-- [PhysicalPropertiesLength](docs/Model/PhysicalPropertiesLength.md)
-- [PhysicalPropertiesWeight](docs/Model/PhysicalPropertiesWeight.md)
-- [PhysicalPropertiesWidth](docs/Model/PhysicalPropertiesWidth.md)
+- [PhysicalPropertiesHeightV2](docs/Model/PhysicalPropertiesHeightV2.md)
+- [PhysicalPropertiesLengthV2](docs/Model/PhysicalPropertiesLengthV2.md)
+- [PhysicalPropertiesWeightV2](docs/Model/PhysicalPropertiesWeightV2.md)
+- [PhysicalPropertiesWidthV2](docs/Model/PhysicalPropertiesWidthV2.md)
 - [RatesPostRatesRequestV1](docs/Model/RatesPostRatesRequestV1.md)
 - [RatesPostRatesRequestV1Data](docs/Model/RatesPostRatesRequestV1Data.md)
 - [RatesPostRatesRequestV1DataRatesInner](docs/Model/RatesPostRatesRequestV1DataRatesInner.md)
@@ -223,7 +227,6 @@ Class | Method | HTTP request | Description
 - [RefShipmentOptionsDeliveryTypeDeliveryDate](docs/Model/RefShipmentOptionsDeliveryTypeDeliveryDate.md)
 - [RefShipmentOptionsInsurance](docs/Model/RefShipmentOptionsInsurance.md)
 - [RefShipmentOptionsInsuranceMax](docs/Model/RefShipmentOptionsInsuranceMax.md)
-- [RefShipmentOptionsInsuranceMaxAllOfInsurance](docs/Model/RefShipmentOptionsInsuranceMaxAllOfInsurance.md)
 - [RefShipmentOptionsLabelDescription](docs/Model/RefShipmentOptionsLabelDescription.md)
 - [RefShipmentOptionsOptions](docs/Model/RefShipmentOptionsOptions.md)
 - [RefShipmentOptionsOptionsReturns](docs/Model/RefShipmentOptionsOptionsReturns.md)
@@ -237,13 +240,14 @@ Class | Method | HTTP request | Description
 - [RefShipmentPackageTypeV2](docs/Model/RefShipmentPackageTypeV2.md)
 - [RefShipmentPickup](docs/Model/RefShipmentPickup.md)
 - [RefShipmentPickupV2](docs/Model/RefShipmentPickupV2.md)
+- [RefShipmentRecipientSecondaryEmailsInner](docs/Model/RefShipmentRecipientSecondaryEmailsInner.md)
 - [RefShipmentReferenceIdentifier](docs/Model/RefShipmentReferenceIdentifier.md)
 - [RefShipmentSender](docs/Model/RefShipmentSender.md)
 - [RefShipmentSenderEmail](docs/Model/RefShipmentSenderEmail.md)
 - [RefShipmentShipmentOptions](docs/Model/RefShipmentShipmentOptions.md)
 - [RefShipmentShipmentOptionsReturns](docs/Model/RefShipmentShipmentOptionsReturns.md)
 - [RefShipmentShipmentOptionsReturnsOptions](docs/Model/RefShipmentShipmentOptionsReturnsOptions.md)
-- [RefShipmentShipmentOptionsReturnsOptionsAllOfContribution](docs/Model/RefShipmentShipmentOptionsReturnsOptionsAllOfContribution.md)
+- [RefShipmentShipmentOptionsReturnsOptionsContribution](docs/Model/RefShipmentShipmentOptionsReturnsOptionsContribution.md)
 - [RefShipmentTransactionStatus](docs/Model/RefShipmentTransactionStatus.md)
 - [RefShipmentType](docs/Model/RefShipmentType.md)
 - [RefTypesCarrier](docs/Model/RefTypesCarrier.md)
@@ -257,25 +261,35 @@ Class | Method | HTTP request | Description
 - [RefTypesPriceEuro](docs/Model/RefTypesPriceEuro.md)
 - [RefTypesTransactionTypes](docs/Model/RefTypesTransactionTypes.md)
 - [RefTypesValueWithUnit](docs/Model/RefTypesValueWithUnit.md)
+- [SecondaryShipmentRequest](docs/Model/SecondaryShipmentRequest.md)
 - [SecondaryShipmentResource](docs/Model/SecondaryShipmentResource.md)
 - [ShipmentDefsExternalProviderPropertiesDisplayName](docs/Model/ShipmentDefsExternalProviderPropertiesDisplayName.md)
 - [ShipmentDefsShipment](docs/Model/ShipmentDefsShipment.md)
+- [ShipmentDefsShipmentCollectionContact](docs/Model/ShipmentDefsShipmentCollectionContact.md)
+- [ShipmentDefsShipmentCurrency](docs/Model/ShipmentDefsShipmentCurrency.md)
+- [ShipmentDefsShipmentCustomsDeclaration](docs/Model/ShipmentDefsShipmentCustomsDeclaration.md)
+- [ShipmentDefsShipmentExternalProvider](docs/Model/ShipmentDefsShipmentExternalProvider.md)
+- [ShipmentDefsShipmentExternalProviderId](docs/Model/ShipmentDefsShipmentExternalProviderId.md)
+- [ShipmentDefsShipmentLinkConsumerPortal](docs/Model/ShipmentDefsShipmentLinkConsumerPortal.md)
+- [ShipmentDefsShipmentOptions](docs/Model/ShipmentDefsShipmentOptions.md)
+- [ShipmentDefsShipmentOrigin](docs/Model/ShipmentDefsShipmentOrigin.md)
+- [ShipmentDefsShipmentParentId](docs/Model/ShipmentDefsShipmentParentId.md)
 - [ShipmentDefsShipmentPartnerTracktracesInner](docs/Model/ShipmentDefsShipmentPartnerTracktracesInner.md)
 - [ShipmentDefsShipmentPaymentStatus](docs/Model/ShipmentDefsShipmentPaymentStatus.md)
-- [ShipmentDefsShipmentPropertiesCollectionContact](docs/Model/ShipmentDefsShipmentPropertiesCollectionContact.md)
-- [ShipmentDefsShipmentPropertiesCurrency](docs/Model/ShipmentDefsShipmentPropertiesCurrency.md)
-- [ShipmentDefsShipmentPropertiesCustomsDeclaration](docs/Model/ShipmentDefsShipmentPropertiesCustomsDeclaration.md)
-- [ShipmentDefsShipmentPropertiesExternalProvider](docs/Model/ShipmentDefsShipmentPropertiesExternalProvider.md)
 - [ShipmentDefsShipmentPropertiesLinkConsumerPortal](docs/Model/ShipmentDefsShipmentPropertiesLinkConsumerPortal.md)
+- [ShipmentDefsShipmentPropertiesMultiColloMainShipmentId](docs/Model/ShipmentDefsShipmentPropertiesMultiColloMainShipmentId.md)
 - [ShipmentDefsShipmentPropertiesOptions](docs/Model/ShipmentDefsShipmentPropertiesOptions.md)
 - [ShipmentDefsShipmentPropertiesRecipient](docs/Model/ShipmentDefsShipmentPropertiesRecipient.md)
 - [ShipmentDefsShipmentPropertiesRegion](docs/Model/ShipmentDefsShipmentPropertiesRegion.md)
 - [ShipmentDefsShipmentRecipient](docs/Model/ShipmentDefsShipmentRecipient.md)
+- [ShipmentDefsShipmentRegion](docs/Model/ShipmentDefsShipmentRegion.md)
 - [ShipmentDefsShipmentSender](docs/Model/ShipmentDefsShipmentSender.md)
 - [ShipmentDefsShipmentSenderPropertiesEmail](docs/Model/ShipmentDefsShipmentSenderPropertiesEmail.md)
 - [ShipmentDefsShipmentStatus](docs/Model/ShipmentDefsShipmentStatus.md)
+- [ShipmentDefsShipmentStatusAnyOf](docs/Model/ShipmentDefsShipmentStatusAnyOf.md)
 - [ShipmentDefsShipmentStatusBasic](docs/Model/ShipmentDefsShipmentStatusBasic.md)
 - [ShipmentParametersLabelPosition](docs/Model/ShipmentParametersLabelPosition.md)
+- [ShipmentParametersLabelPositionAnyOf](docs/Model/ShipmentParametersLabelPositionAnyOf.md)
 - [ShipmentParametersPackageType](docs/Model/ShipmentParametersPackageType.md)
 - [ShipmentParametersPaperSize](docs/Model/ShipmentParametersPaperSize.md)
 - [ShipmentParametersShipmentType](docs/Model/ShipmentParametersShipmentType.md)
@@ -284,9 +298,10 @@ Class | Method | HTTP request | Description
 - [ShipmentPostReturnShipmentsRequest](docs/Model/ShipmentPostReturnShipmentsRequest.md)
 - [ShipmentPostReturnShipmentsRequestData](docs/Model/ShipmentPostReturnShipmentsRequestData.md)
 - [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.md)
-- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfGeneralSettings](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfGeneralSettings.md)
-- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfPhysicalProperties](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfPhysicalProperties.md)
-- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfSender](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfSender.md)
+- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings.md)
+- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties.md)
+- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender.md)
+- [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSenderEmail](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSenderEmail.md)
 - [ShipmentPostShipmentsRequest](docs/Model/ShipmentPostShipmentsRequest.md)
 - [ShipmentPostShipmentsRequestData](docs/Model/ShipmentPostShipmentsRequestData.md)
 - [ShipmentPostShipmentsRequestDataShipmentsInner](docs/Model/ShipmentPostShipmentsRequestDataShipmentsInner.md)
@@ -294,22 +309,20 @@ Class | Method | HTTP request | Description
 - [ShipmentPostShipmentsRequestDataShipmentsInnerRecipient](docs/Model/ShipmentPostShipmentsRequestDataShipmentsInnerRecipient.md)
 - [ShipmentPostShipmentsRequestV11](docs/Model/ShipmentPostShipmentsRequestV11.md)
 - [ShipmentPostShipmentsRequestV11Data](docs/Model/ShipmentPostShipmentsRequestV11Data.md)
-- [ShipmentPostShipmentsRequestV11DataShipmentsInner](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInner.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact.md)
-- [ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContactNumber](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContactNumber.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md)
-- [ShipmentPostShipmentsRequestV11DataShipmentsInnerReferenceIdentifier](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerReferenceIdentifier.md)
-- [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerGeneralSettings](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerGeneralSettings.md)
+- [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerShippedItemsInner](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerShippedItemsInner.md)
 - [ShipmentPostUnrelatedReturnShipmentsRequest](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequest.md)
 - [ShipmentPostUnrelatedReturnShipmentsRequestData](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestData.md)
 - [ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner.md)
+- [ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties.md)
 - [ShipmentPutShipmentsRequest](docs/Model/ShipmentPutShipmentsRequest.md)
 - [ShipmentPutShipmentsRequestData](docs/Model/ShipmentPutShipmentsRequestData.md)
 - [ShipmentPutShipmentsRequestDataShipmentsInner](docs/Model/ShipmentPutShipmentsRequestDataShipmentsInner.md)
@@ -320,11 +333,10 @@ Class | Method | HTTP request | Description
 - [ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact](docs/Model/ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact.md)
 - [ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient](docs/Model/ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient.md)
 - [ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner](docs/Model/ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner.md)
-- [ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient](docs/Model/ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient.md)
+- [ShipmentRequest](docs/Model/ShipmentRequest.md)
 - [ShipmentResponsesShipmentIds](docs/Model/ShipmentResponsesShipmentIds.md)
 - [ShipmentResponsesShipmentIdsData](docs/Model/ShipmentResponsesShipmentIdsData.md)
 - [ShipmentResponsesShipmentIdsDataIdsInner](docs/Model/ShipmentResponsesShipmentIdsDataIdsInner.md)
-- [ShipmentResponsesShipmentIdsPropertiesDataPropertiesIdsInner](docs/Model/ShipmentResponsesShipmentIdsPropertiesDataPropertiesIdsInner.md)
 - [ShipmentResponsesShipmentLabels](docs/Model/ShipmentResponsesShipmentLabels.md)
 - [ShipmentResponsesShipmentLabelsData](docs/Model/ShipmentResponsesShipmentLabelsData.md)
 - [ShipmentResponsesShipmentLabelsDataOneOf](docs/Model/ShipmentResponsesShipmentLabelsDataOneOf.md)
@@ -363,5 +375,5 @@ info@myparcel.nl
 This PHP package is automatically generated by the [OpenAPI Generator](https://openapi-generator.tech) project:
 
 - API version: `2025-02-13`
-    - Generator version: `7.19.0-SNAPSHOT`
+    - Generator version: `7.12.0`
 - Build package: `org.openapitools.codegen.languages.PhpClientCodegen`

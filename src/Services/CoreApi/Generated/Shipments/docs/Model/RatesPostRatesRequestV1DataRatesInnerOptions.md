@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **age_check** | **object** | Requires age verification option | [optional]
-**cash_on_delivery** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV1DataRatesInnerOptionsCashOnDelivery**](RatesPostRatesRequestV1DataRatesInnerOptionsCashOnDelivery.md) |  | [optional]
+**cash_on_delivery** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV1DataRatesInnerOptionsCashOnDelivery**](RatesPostRatesRequestV1DataRatesInnerOptionsCashOnDelivery.md) |  | [optional]
 **collect** | **object** | Scheduled collection option | [optional]
 **cooled_delivery** | **object** | Cooled delivery option | [optional]
 **drop_off_at_postal_point** | **object** | Deliver at postal point option | [optional]
@@ -20,6 +20,6 @@ Name | Type | Description | Notes
 **saturday_delivery** | **object** | Saturday delivery option | [optional]
 **signature** | **object** | Requires signature option | [optional]
 **tracked** | **object** | Tracking option | [optional]
-**insurance** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV1DataRatesInnerOptionsInsurance**](RatesPostRatesRequestV1DataRatesInnerOptionsInsurance.md) |  | [optional]
+**insurance** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RatesPostRatesRequestV1DataRatesInnerOptionsInsurance**](RatesPostRatesRequestV1DataRatesInnerOptionsInsurance.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -1,6 +1,4 @@
-# MyParcel\CoreApi\Generated\Shipments\DefaultApi
-
-
+# MyParcelNL\Sdk\CoreApi\Generated\Shipments\DefaultApi
 
 All URIs are relative to https://api.myparcel.nl, except if the operation defines another base path.
 
@@ -12,7 +10,7 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 ## `getIndex()`
 
 ```php
-getIndex(): \MyParcel\CoreApi\Generated\Shipments\Model\GetIndex200Response
+getIndex(): \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\GetIndex200Response
 ```
 
 
@@ -25,15 +23,15 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure HTTP basic authorization: apiKey
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()
               ->setUsername('YOUR_USERNAME')
               ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\DefaultApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\DefaultApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -54,7 +52,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**\MyParcel\CoreApi\Generated\Shipments\Model\GetIndex200Response**](../Model/GetIndex200Response.md)
+[**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\GetIndex200Response**](../Model/GetIndex200Response.md)
 
 ### Authorization
 

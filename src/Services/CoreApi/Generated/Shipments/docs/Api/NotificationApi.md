@@ -1,6 +1,4 @@
-# MyParcel\CoreApi\Generated\Shipments\NotificationApi
-
-
+# MyParcelNL\Sdk\CoreApi\Generated\Shipments\NotificationApi
 
 All URIs are relative to https://api.myparcel.nl, except if the operation defines another base path.
 
@@ -36,10 +34,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -95,10 +93,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -154,10 +152,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -215,10 +213,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -274,10 +272,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -320,7 +318,7 @@ void (empty response body)
 ## `getNotificationGroups()`
 
 ```php
-getNotificationGroups($shop_id): \MyParcel\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups
+getNotificationGroups($shop_id): \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups
 ```
 
 Get notification groups
@@ -335,16 +333,16 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$shop_id = new \MyParcel\CoreApi\Generated\Shipments\Model\\MyParcel\CoreApi\Generated\Shipments\Model\CommonParametersIds(); // \MyParcel\CoreApi\Generated\Shipments\Model\CommonParametersIds
+$shop_id = new \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CommonParametersIds(); // \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CommonParametersIds
 
 try {
     $result = $apiInstance->getNotificationGroups($shop_id);
@@ -358,11 +356,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **shop_id** | [**\MyParcel\CoreApi\Generated\Shipments\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **shop_id** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
 
 ### Return type
 
-[**\MyParcel\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups**](../Model/NotificationResponsesNotificationGroups.md)
+[**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups**](../Model/NotificationResponsesNotificationGroups.md)
 
 ### Authorization
 
@@ -380,7 +378,7 @@ try {
 ## `getNotificationTemplates()`
 
 ```php
-getNotificationTemplates($notification_group_id): \MyParcel\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationTemplates
+getNotificationTemplates($notification_group_id): \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationTemplates
 ```
 
 Get notification templates
@@ -395,10 +393,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -422,7 +420,7 @@ try {
 
 ### Return type
 
-[**\MyParcel\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationTemplates**](../Model/NotificationResponsesNotificationTemplates.md)
+[**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationTemplates**](../Model/NotificationResponsesNotificationTemplates.md)
 
 ### Authorization
 
@@ -440,7 +438,7 @@ try {
 ## `postNotificationGroups()`
 
 ```php
-postNotificationGroups($notification_post_notification_group_request): \MyParcel\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups
+postNotificationGroups($notification_post_notification_group_request): \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups
 ```
 
 Create notification groups
@@ -455,16 +453,16 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$notification_post_notification_group_request = new \MyParcel\CoreApi\Generated\Shipments\Model\NotificationPostNotificationGroupRequest(); // \MyParcel\CoreApi\Generated\Shipments\Model\NotificationPostNotificationGroupRequest | Request body for creating notification groups.
+$notification_post_notification_group_request = new \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationPostNotificationGroupRequest(); // \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationPostNotificationGroupRequest | Request body for creating notification groups.
 
 try {
     $result = $apiInstance->postNotificationGroups($notification_post_notification_group_request);
@@ -478,11 +476,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **notification_post_notification_group_request** | [**\MyParcel\CoreApi\Generated\Shipments\Model\NotificationPostNotificationGroupRequest**](../Model/NotificationPostNotificationGroupRequest.md)| Request body for creating notification groups. | |
+| **notification_post_notification_group_request** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationPostNotificationGroupRequest**](../Model/NotificationPostNotificationGroupRequest.md)| Request body for creating notification groups. | |
 
 ### Return type
 
-[**\MyParcel\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups**](../Model/NotificationResponsesNotificationGroups.md)
+[**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationResponsesNotificationGroups**](../Model/NotificationResponsesNotificationGroups.md)
 
 ### Authorization
 
@@ -515,10 +513,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
@@ -526,7 +524,7 @@ $apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
 );
 $notification_group_id = 56; // int | The ID of the notification group.
 $notification_template_id = 56; // int | The ID of the notification template.
-$notification_put_notification_template_request = new \MyParcel\CoreApi\Generated\Shipments\Model\NotificationPutNotificationTemplateRequest(); // \MyParcel\CoreApi\Generated\Shipments\Model\NotificationPutNotificationTemplateRequest | Request body for updating a notification template.
+$notification_put_notification_template_request = new \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationPutNotificationTemplateRequest(); // \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationPutNotificationTemplateRequest | Request body for updating a notification template.
 
 try {
     $apiInstance->putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request);
@@ -541,7 +539,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
-| **notification_put_notification_template_request** | [**\MyParcel\CoreApi\Generated\Shipments\Model\NotificationPutNotificationTemplateRequest**](../Model/NotificationPutNotificationTemplateRequest.md)| Request body for updating a notification template. | |
+| **notification_put_notification_template_request** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\NotificationPutNotificationTemplateRequest**](../Model/NotificationPutNotificationTemplateRequest.md)| Request body for updating a notification template. | |
 
 ### Return type
 
@@ -578,10 +576,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: bearer
-$config = MyParcel\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new MyParcel\CoreApi\Generated\Shipments\Api\NotificationApi(
+$apiInstance = new MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\NotificationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),

@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **company** | **string** |  |
 **street** | **string** |  |
 **street_additional_info** | **string** |  | [optional]
-**number** | [**\MyParcel\CoreApi\Generated\Shipments\Model\AccountDefsLocationPropertiesNumber**](AccountDefsLocationPropertiesNumber.md) |  |
+**number** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\AccountDefsLocationPropertiesNumber**](AccountDefsLocationPropertiesNumber.md) |  |
 **number_suffix** | **string** |  | [optional]
 **postal_code** | **string** |  |
 **city** | **string** |  |

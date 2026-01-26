@@ -17,7 +17,7 @@ services:
     command: [ 'composer', 'test:coverage' ]
 
   generate-api:
-    image: openapitools/openapi-generator-cli:latest
+    image: openapitools/openapi-generator-cli:v7.12.0
     volumes:
       - type: bind
         source: ./
@@ -29,7 +29,7 @@ services:
       --output                /local/src/Services/CoreApi/Generated/Shipments
       --config                /local/openapi-generator-mapper.yml
       --global-property       apiTests=false,modelTests=false
-      --additional-properties packageName=MyParcel\\CoreApi\\Generated\\Shipments,invokerPackage=MyParcel\\CoreApi\\Generated\\Shipments,modelPackage=Model,srcBasePath=lib,apiPackage=Api
+      --additional-properties packageName=MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments,invokerPackage=MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments,modelPackage=Model,srcBasePath=lib,apiPackage=Api
     profiles: [ openapi ]
 
   fix-generated-php74:

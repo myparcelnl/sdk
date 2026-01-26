@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **shop_id** | **int** |  |
-**package_type** | [**Null**](Null.md) |  | [optional]
+**package_type** | **mixed** |  | [optional]
 **country_code** | **string** | ISO 3166-1 alpha-2 country code | [optional]
 **shipment_direction** | **string** |  |
 

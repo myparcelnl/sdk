@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **int** |  |
 **notification_group_id** | **int** |  |
-**type** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefNotificationNotificationTemplateType**](RefNotificationNotificationTemplateType.md) |  |
+**type** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefNotificationNotificationTemplateType**](RefNotificationNotificationTemplateType.md) |  |
 **subject** | **string** |  |
 **body** | **string** |  |
 **active** | **bool** |  |

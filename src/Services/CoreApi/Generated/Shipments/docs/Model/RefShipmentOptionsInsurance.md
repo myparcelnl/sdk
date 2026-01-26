@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**insurance** | [**\MyParcel\CoreApi\Generated\Shipments\Model\RefTypesPriceEuro**](RefTypesPriceEuro.md) |  | [optional]
+**insurance** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesPriceEuro**](RefTypesPriceEuro.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
