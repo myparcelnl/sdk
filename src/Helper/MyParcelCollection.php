@@ -28,12 +28,12 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
-use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Services\CollectionEncode;
 use MyParcelNL\Sdk\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Support\Str;
+use setasign\Fpdi\Fpdi;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -505,7 +505,7 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
 
-        $PdfMerger = new FpdfMerge();
+        $pdf = new Fpdi();
 
         $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
 
@@ -535,10 +535,21 @@ class MyParcelCollection extends Collection
             // merge this pdf into the existing pdf
             $fileResource = fopen('php://memory', 'rb+');
             fwrite($fileResource, $result);
-            $PdfMerger->add($fileResource);
+
+            $pageCount = $pdf->setSourceFile($fileResource);
+
+            for ($n = 1; $n <= $pageCount; $n++) {
+                // Import page, get dimensions and add a blank page to the document
+                $tplIdx = $pdf->importPage($n);
+                $specs  = $pdf->getTemplateSize($tplIdx);
+                $pdf->addPage($specs['orientation'], [$specs['width'], $specs['height']]);
+
+                // Place the imported page on the blank page
+                $pdf->useTemplate($tplIdx);
+            }
         }
 
-        $this->label_pdf = $PdfMerger->output('S');
+        $this->label_pdf = $pdf->Output('S');
 
         $this->setLatestData();
 
