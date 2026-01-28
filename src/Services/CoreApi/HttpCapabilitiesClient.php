@@ -19,10 +19,6 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
 
     public function getCapabilities(CapabilitiesRequest $request): CapabilitiesResponse
     {
-        // Guard: country code is mandatory
-        if (null === $request->getCountryCode() || '' === trim($request->getCountryCode())) {
-            throw new \InvalidArgumentException('countryCode is required for capabilities request.');
-        }
 
         $userAgent = sprintf(
             'MyParcelSDK/%s; PHP/%s',

@@ -178,16 +178,17 @@ class CapabilitiesMapper
 
     /**
      * Explicit mappings where the Core API v2 setter name differs semantically from the option key.
+     * New options should flow through via the fallback setter mapping.
      */
     private const KNOWN_OPTION_SETTERS = [
-        ShipmentOptionKey::SIGNATURE          => 'setRequiresSignature',
-        ShipmentOptionKey::ONLY_RECIPIENT     => 'setRecipientOnlyDelivery',
-        ShipmentOptionKey::AGE_CHECK          => 'setRequiresAgeVerification',
-        ShipmentOptionKey::RECEIPT_CODE       => 'setRequiresReceiptCode',
-        ShipmentOptionKey::LARGE_FORMAT       => 'setOversizedPackage',
-        ShipmentOptionKey::PRINTERLESS_RETURN => 'setPrintReturnLabelAtDropOff',
-        ShipmentOptionKey::COLLECT            => 'setScheduledCollection',
-        ShipmentOptionKey::RETURN             => 'setReturnOnFirstFailedDelivery',
+        'signature'          => 'setRequiresSignature',
+        'only_recipient'     => 'setRecipientOnlyDelivery',
+        'age_check'          => 'setRequiresAgeVerification',
+        'receipt_code'       => 'setRequiresReceiptCode',
+        'large_format'       => 'setOversizedPackage',
+        'printerless_return' => 'setPrintReturnLabelAtDropOff',
+        'collect'            => 'setScheduledCollection',
+        'return'             => 'setReturnOnFirstFailedDelivery',
     ];
 
     /**
