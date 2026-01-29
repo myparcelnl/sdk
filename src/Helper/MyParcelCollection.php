@@ -34,6 +34,7 @@ use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Support\Str;
 use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\PdfParserException;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -498,6 +499,7 @@ class MyParcelCollection extends Collection
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
+     * @throws PdfParserException
      */
     public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
@@ -505,7 +507,7 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
 
-        $pdf = new Fpdi();
+        $fpdi = new Fpdi();
 
         $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
 
@@ -536,20 +538,24 @@ class MyParcelCollection extends Collection
             $fileResource = fopen('php://memory', 'rb+');
             fwrite($fileResource, $result);
 
-            $pageCount = $pdf->setSourceFile($fileResource);
+            $pageCount = $fpdi->setSourceFile($fileResource);
 
-            for ($n = 1; $n <= $pageCount; $n++) {
+            for ($i = 1; $i <= $pageCount; $i++) {
                 // Import page, get dimensions and add a blank page to the document
-                $tplIdx = $pdf->importPage($n);
-                $specs  = $pdf->getTemplateSize($tplIdx);
-                $pdf->addPage($specs['orientation'], [$specs['width'], $specs['height']]);
+                try {
+                    $templateIndex = $fpdi->importPage($i);
+                } catch (\Throwable $e) {
+                    throw new PdfParserException("Could not import pdf $i ($e)\nAfter requesting ids: " . implode(';', $consignmentIds));
+                }
+                $specs = $fpdi->getTemplateSize($templateIndex);
+                $fpdi->addPage($specs['orientation'], [$specs['width'], $specs['height']]);
 
                 // Place the imported page on the blank page
-                $pdf->useTemplate($tplIdx);
+                $fpdi->useTemplate($templateIndex);
             }
         }
 
-        $this->label_pdf = $pdf->Output('S');
+        $this->label_pdf = $fpdi->Output('S');
 
         $this->setLatestData();
 
@@ -585,7 +591,7 @@ class MyParcelCollection extends Collection
 
     /**
      * Print labels directly to a printer
-     * 
+     *
      * This method uses createConsignments() with a printer group ID to send shipments
      * directly to a printer instead of returning a PDF. The API response structure is
      * the same as createConcepts(), with an additional 'pdf' field.
