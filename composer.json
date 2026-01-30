@@ -31,10 +31,15 @@
         "test:coverage": [
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit --coverage-html coverage"
+        ],
+        "generate:api": [
+            "docker compose run --rm generate-api",
+            "composer dump-autoload -o"
         ]
     },
     "require": {
         "php": "^7.4 || ^8.0",
+        "guzzlehttp/guzzle": "^7.10"
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6"
     },
@@ -46,7 +51,8 @@
     },
     "autoload": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\": "src/"
+            "MyParcelNL\\Sdk\\": "src/",
+            "MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments\\": "src/Services/CoreApi/Generated/Shipments/lib"
         }
     },
     "autoload-dev": {

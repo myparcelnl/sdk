@@ -15,3 +15,26 @@ services:
     volumes:
       - ./:/app
     command: [ 'composer', 'test:coverage' ]
+
+  generate-api:
+    image: openapitools/openapi-generator-cli:v7.12.0
+    volumes:
+      - type: bind
+        source: ./
+        target: /local
+    command: >
+      generate
+      --input-spec            https://api.myparcel.nl/openapi.min.json
+      --generator-name        php
+      --output                /local/src/Services/CoreApi/Generated/Shipments
+      --config                /local/openapi-generator-mapper.yml
+      --global-property       apiTests=false,modelTests=false
+      --additional-properties packageName=MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments,invokerPackage=MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments,modelPackage=Model,srcBasePath=lib,apiPackage=Api
+    profiles: [ openapi ]
+
+  fix-generated-php74:
+    <<: *common
+    volumes:
+      - ./:/app
+    command: [ 'sh', '-c', './scripts/fix-generated-php74.sh' ]
+    profiles: [ openapi ]
