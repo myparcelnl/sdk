@@ -28,12 +28,13 @@ use MyParcelNL\Sdk\Model\Carrier\CarrierUPSExpressSaver;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\Consignment\BaseConsignment;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
-use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Services\CollectionEncode;
 use MyParcelNL\Sdk\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Support\Str;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\PdfParserException;
 
 /**
  * Stores all data to communicate with the MyParcel API
@@ -498,6 +499,7 @@ class MyParcelCollection extends Collection
      * @throws AccountNotActiveException
      * @throws ApiException
      * @throws MissingFieldException
+     * @throws PdfParserException
      */
     public function setPdfOfLabels($positions = self::DEFAULT_A4_POSITION): self
     {
@@ -505,7 +507,7 @@ class MyParcelCollection extends Collection
             ->createConcepts()
             ->setLabelFormat($positions);
 
-        $PdfMerger = new FpdfMerge();
+        $fpdi = new Fpdi();
 
         $consignmentIdsByApiKey = $this->getConsignmentIdsByApiKey();
 
@@ -535,10 +537,25 @@ class MyParcelCollection extends Collection
             // merge this pdf into the existing pdf
             $fileResource = fopen('php://memory', 'rb+');
             fwrite($fileResource, $result);
-            $PdfMerger->add($fileResource);
+
+            $pageCount = $fpdi->setSourceFile($fileResource);
+
+            for ($i = 1; $i <= $pageCount; $i++) {
+                // Import page, get dimensions and add a blank page to the document
+                try {
+                    $templateIndex = $fpdi->importPage($i);
+                } catch (\Throwable $e) {
+                    throw new PdfParserException("Could not import pdf $i ($e)\nAfter requesting ids: " . implode(';', $consignmentIds));
+                }
+                $specs = $fpdi->getTemplateSize($templateIndex);
+                $fpdi->addPage($specs['orientation'], [$specs['width'], $specs['height']]);
+
+                // Place the imported page on the blank page
+                $fpdi->useTemplate($templateIndex);
+            }
         }
 
-        $this->label_pdf = $PdfMerger->output('S');
+        $this->label_pdf = $fpdi->Output('S');
 
         $this->setLatestData();
 
@@ -574,7 +591,7 @@ class MyParcelCollection extends Collection
 
     /**
      * Print labels directly to a printer
-     * 
+     *
      * This method uses createConsignments() with a printer group ID to send shipments
      * directly to a printer instead of returning a PDF. The API response structure is
      * the same as createConcepts(), with an additional 'pdf' field.
