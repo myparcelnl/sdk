@@ -74,10 +74,11 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.credentials.outputs.token }}
-          branch: chore/regenerate-api-client
+          base: v11
+          branch: chore/regenerate-api-client-v11
           delete-branch: true
-          commit-message: "chore(api): regenerate Core API client"
-          title: "chore(api): regenerate Core API client"
+          commit-message: "chore(api): regenerate Core API client (v11)"
+          title: "chore(api): regenerate Core API client (v11)"
           body: |
             Automated regeneration of the Core API client.
 
