@@ -138,11 +138,7 @@ class ConsignmentEncode
                 $consignmentEncoded['options']['insurance']['amount'] = self::MAX_INSURANCE_PACKETS_ROW * 100;
             }
 
-            if (in_array($consignment->getCountry(), [AbstractConsignment::CC_NL, AbstractConsignment::CC_BE])) {
-                $consignmentEncoded['options']['tracked'] = 0;
-            } else {
-                $consignmentEncoded['options']['tracked'] = 1;
-            }
+            $consignmentEncoded['options']['tracked'] = 1;
         }
 
         foreach ($consignment->getMandatoryShipmentOptions() as $option) {
