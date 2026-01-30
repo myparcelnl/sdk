@@ -1,0 +1,9 @@
+# # ShipmentPostUnrelatedReturnShipmentsRequest
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**data** | [**\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostUnrelatedReturnShipmentsRequestData**](ShipmentPostUnrelatedReturnShipmentsRequestData.md) |  |
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

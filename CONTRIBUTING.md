@@ -47,6 +47,39 @@ Make as many commits as you'd like. We use [Conventional Commits] and [semantic-
 - Please explain what you changed and why
 - We will review your code and thoroughly test it before squashing and merging your pull request
 
+## Generated Code (API Client)
+
+Some parts of this SDK use **generated code** from the Core API specification to ensure zero-maintenance updates for new carriers, delivery types, and configuration options.
+
+### Generated Files Location
+
+- `src/Services/CoreApi/Generated/Shipments/` — **DO NOT EDIT MANUALLY**
+
+### Regenerating Code
+
+```bash
+# Make sure Docker is available
+docker --version
+
+# Regenerate the API client (includes shipments, capabilities, notifications)
+composer generate:api
+```
+
+This command runs `openapitools/openapi-generator-cli` inside a Docker container, using the specification at:
+
+```
+https://api.myparcel.nl/openapi.min.json
+```
+
+### Notes for Development
+
+- Do not edit any files under `Generated/Shipments` manually
+- All changes must originate from the Core API specification
+- The generated code is produced by OpenAPI Generator (supports OpenAPI 3.1)
+- The generation command automatically refreshes autoloading via Composer
+
+---
+
 [@commitlint/config-conventional]: https://github.com/conventional-changelog/commitlint
 
 [Conventional Commits]: https://www.conventionalcommits.org/en/v1.0.0/#summary

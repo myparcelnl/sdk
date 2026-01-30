@@ -4,6 +4,9 @@
     <include>
       <directory suffix=".php">./src</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">./src/Services/CoreApi/Generated</directory>
+    </exclude>
   </coverage>
   <testsuites>
     <testsuite name="Unit">
