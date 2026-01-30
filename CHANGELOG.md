@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.5](https://github.com/myparcelnl/sdk/compare/v10.7.4...v10.7.5) (2026-01-30)
+
+
+### :bug: Bug Fixes
+
+* output standard compliant pdfs ([#583](https://github.com/myparcelnl/sdk/issues/583)) ([3b2252d](https://github.com/myparcelnl/sdk/commit/3b2252dba8b56cfe9a854ca69d5ad9e08a65cd20))
+
+## [10.7.4](https://github.com/myparcelnl/sdk/compare/v10.7.3...v10.7.4) (2026-01-19)
+
+
+### :bug: Bug Fixes
+
+* make test for dpd location code ([#560](https://github.com/myparcelnl/sdk/issues/560)) ([59829df](https://github.com/myparcelnl/sdk/commit/59829df42086327c4071e0281fbbb27396ddd815))
+
 ## [10.7.3](https://github.com/myparcelnl/sdk/compare/v10.7.2...v10.7.3) (2026-01-19)
 
 
