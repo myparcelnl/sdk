@@ -1,0 +1,91 @@
+name: Regenerate API Client
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # weekly on Monday 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: regenerate-api-client
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Composer install in PHP 7.4 (our image includes composer)
+      - name: Install dependencies (PHP 7.4)
+        run: |
+          docker run --rm -t \
+            -v "${{ github.workspace }}:/app" \
+            -w /app \
+            ghcr.io/myparcelnl/php-xd:7.4 \
+            composer install --no-interaction --no-progress
+
+      # Generate client using pinned openapi-generator (v7.12.0) from docker-compose
+      - name: Generate API client (pinned generator)
+        run: |
+          docker compose --profile openapi run --rm generate-api
+
+      # Optimize autoload in PHP 7.4 (so the generated code + SDK autoload is consistent)
+      - name: Dump optimized autoload (PHP 7.4)
+        run: |
+          docker run --rm -t \
+            -v "${{ github.workspace }}:/app" \
+            -w /app \
+            ghcr.io/myparcelnl/php-xd:7.4 \
+            composer dump-autoload -o
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stage generated files only
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git reset
+          git add src/Services/CoreApi/Generated
+
+      - name: Setup app credentials
+        if: steps.diff.outputs.changed == 'true'
+        id: credentials
+        uses: myparcelnl/actions/setup-app-credentials@v4
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.credentials.outputs.token }}
+          base: v11
+          branch: chore/regenerate-api-client-v11
+          delete-branch: true
+          commit-message: "chore(api): regenerate Core API client (v11)"
+          title: "chore(api): regenerate Core API client (v11)"
+          body: |
+            Automated regeneration of the Core API client.
+
+            - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator v7.12.0)
+            - Composer steps run in `ghcr.io/myparcelnl/php-xd:7.4`
+            - Source spec: https://api.myparcel.nl/openapi.min.json
+          labels: |
+            automated
+            api-client
+            generated
