@@ -39,7 +39,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "guzzlehttp/guzzle": "^7.10"
+        "guzzlehttp/guzzle": "^7.10",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6"
     },
