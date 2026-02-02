@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment;
 
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInner as GeneratedShipment;
+use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentRequest;
 
 /**
  * SDK-facing Shipment model.
@@ -15,7 +15,7 @@ use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsReques
  *
  * If we ever need SDK-specific helpers, we can add them here without breaking existing imports.
  */
-class Shipment extends GeneratedShipment
+class Shipment extends ShipmentRequest
 {
     /**
      * @param array<string, mixed>|null $data
