@@ -31,10 +31,3 @@ services:
       --global-property       apiTests=false,modelTests=false
       --additional-properties packageName=MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments,invokerPackage=MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments,modelPackage=Model,srcBasePath=lib,apiPackage=Api
     profiles: [ openapi ]
-
-  fix-generated-php74:
-    <<: *common
-    volumes:
-      - ./:/app
-    command: [ 'sh', '-c', './scripts/fix-generated-php74.sh' ]
-    profiles: [ openapi ]
