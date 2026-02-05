@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
+use MyParcelNL\Sdk\Model\Shipment\Shipment;
+
 /**
  * Request DTO used for capabilities lookups.
  *
@@ -249,4 +251,41 @@ class CapabilitiesRequest
     {
         return $this->physicalProperties;
     }
+
+    public static function fromShipment(Shipment $shipment): self
+    {
+        $recipient = $shipment->getRecipient();
+        $cc = $recipient ? $recipient->getCc() : null;
+
+        if (! $cc) {
+            throw new \InvalidArgumentException(
+                'Recipient with country code (cc) is required for capabilities.'
+            );
+        }
+
+        $request = self::forCountry((string) $cc);
+
+        $pp = $shipment->getPhysicalProperties();
+        if (! $pp) {
+            return $request;
+        }
+
+        $physical = [];
+
+        if (null !== $pp->getWeight()) {
+            $physical['weight'] = ['value' => (float) $pp->getWeight(), 'unit' => 'g'];
+        }
+        if (null !== $pp->getHeight()) {
+            $physical['height'] = ['value' => (float) $pp->getHeight(), 'unit' => 'cm'];
+        }
+        if (null !== $pp->getLength()) {
+            $physical['length'] = ['value' => (float) $pp->getLength(), 'unit' => 'cm'];
+        }
+        if (null !== $pp->getWidth()) {
+            $physical['width']  = ['value' => (float) $pp->getWidth(),  'unit' => 'cm'];
+        }
+
+        return $physical ? $request->withPhysicalProperties($physical) : $request;
+    }
+
 }
