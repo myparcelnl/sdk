@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - v11
 
   merge_group:
 
