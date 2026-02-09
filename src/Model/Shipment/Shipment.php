@@ -98,8 +98,11 @@ class Shipment extends ShipmentRequest
      */
     public function withCarrier(string $carrier): self
     {
-        // Map to API id and set directly; generated setter accepts string id at runtime.
-        return $this->setCarrier(Carrier::toId($carrier));
+        // Map to API id constant; annotate for IDEs expecting RefTypesCarrier.
+        /** @var \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesCarrier $ref */
+        $ref = Carrier::toApiRef($carrier);
+
+        return $this->setCarrier($ref);
     }
 
     /**
@@ -115,8 +118,10 @@ class Shipment extends ShipmentRequest
             $this->setOptions($options);
         }
 
-        // Map to API id and set directly; generated setter accepts string id at runtime.
-        $options->setPackageType(PackageType::toId($packageType));
+        // Map to API id constant; annotate for IDEs expecting RefShipmentPackageType.
+        /** @var \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentPackageType $ref */
+        $ref = PackageType::toApiRef($packageType);
+        $options->setPackageType($ref);
 
         return $this;
     }

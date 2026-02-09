@@ -21,9 +21,11 @@ final class PackageType
     public const ENVELOPE = 'ENVELOPE';
 
     /**
-     * Map SDK-level package type to API id string.
+     * Map SDK-level package type to API reference.
+     *
+     * @return RefShipmentPackageType
      */
-    public static function toId(string $packageType): string
+    public static function toApiRef(string $packageType): string
     {
         $map = self::map();
 

@@ -31,19 +31,19 @@ final class ShipmentConvenienceTest extends TestCase
         $this->assertSame(RefShipmentPackageType::_2, $shipment->getOptions()->getPackageType());
     }
 
-    public function testCarrierToIdThrowsOnUnknown(): void
+    public function testCarrierToApiRefThrowsOnUnknown(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Unknown carrier 'FOO'");
 
-        Carrier::toId('FOO');
+        Carrier::toApiRef('FOO');
     }
 
-    public function testPackageTypeToIdThrowsOnUnknown(): void
+    public function testPackageTypeToApiRefThrowsOnUnknown(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Unknown package type 'FOO'");
 
-        PackageType::toId('FOO');
+        PackageType::toApiRef('FOO');
     }
 }

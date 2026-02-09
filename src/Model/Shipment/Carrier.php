@@ -28,9 +28,11 @@ final class Carrier
     public const POSTE_ITALIANE = 'POSTE_ITALIANE';
 
     /**
-     * Map SDK-level carrier name to API id string.
+     * Map SDK-level carrier name to API carrier reference.
+     *
+     * @return RefTypesCarrier
      */
-    public static function toId(string $carrier): string
+    public static function toApiRef(string $carrier): string
     {
         $map = self::map();
 
