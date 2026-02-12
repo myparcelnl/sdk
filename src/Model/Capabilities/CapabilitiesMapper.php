@@ -14,7 +14,6 @@ use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesLengthV2;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesWidthV2;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesWeightV2;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptionKey;
 
 class CapabilitiesMapper
 {
