@@ -255,37 +255,54 @@ class CapabilitiesRequest
     public static function fromShipment(Shipment $shipment): self
     {
         $recipient = $shipment->getRecipient();
-        $cc = $recipient ? $recipient->getCc() : null;
+        $countryCode = $recipient ? $recipient->getCc() : null;
 
-        if (! $cc) {
+        if (! $countryCode) {
             throw new \InvalidArgumentException(
                 'Recipient with country code (cc) is required for capabilities.'
             );
         }
 
-        $request = self::forCountry((string) $cc);
+        $request = self::forCountry((string) $countryCode);
 
-        $pp = $shipment->getPhysicalProperties();
-        if (! $pp) {
+        $physicalProperties = $shipment->getPhysicalProperties();
+        if (! $physicalProperties) {
             return $request;
         }
 
-        $physical = [];
+        $projectedPhysicalProperties = [];
 
-        if (null !== $pp->getWeight()) {
-            $physical['weight'] = ['value' => (float) $pp->getWeight(), 'unit' => 'g'];
-        }
-        if (null !== $pp->getHeight()) {
-            $physical['height'] = ['value' => (float) $pp->getHeight(), 'unit' => 'cm'];
-        }
-        if (null !== $pp->getLength()) {
-            $physical['length'] = ['value' => (float) $pp->getLength(), 'unit' => 'cm'];
-        }
-        if (null !== $pp->getWidth()) {
-            $physical['width']  = ['value' => (float) $pp->getWidth(),  'unit' => 'cm'];
+        if (null !== $physicalProperties->getWeight()) {
+            $projectedPhysicalProperties['weight'] = [
+                'value' => (float) $physicalProperties->getWeight(),
+                'unit'  => 'g',
+            ];
         }
 
-        return $physical ? $request->withPhysicalProperties($physical) : $request;
+        if (null !== $physicalProperties->getHeight()) {
+            $projectedPhysicalProperties['height'] = [
+                'value' => (float) $physicalProperties->getHeight(),
+                'unit'  => 'cm',
+            ];
+        }
+
+        if (null !== $physicalProperties->getLength()) {
+            $projectedPhysicalProperties['length'] = [
+                'value' => (float) $physicalProperties->getLength(),
+                'unit'  => 'cm',
+            ];
+        }
+
+        if (null !== $physicalProperties->getWidth()) {
+            $projectedPhysicalProperties['width'] = [
+                'value' => (float) $physicalProperties->getWidth(),
+                'unit'  => 'cm',
+            ];
+        }
+
+        return $projectedPhysicalProperties
+            ? $request->withPhysicalProperties($projectedPhysicalProperties)
+            : $request;
     }
 
 }

@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\Model\Shipment;
 
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentRequest;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient as RecipientModel;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties as PhysicalModel;
+use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties as PhysicalPropertiesModel;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentShipmentOptions as ShipmentOptionsModel;
 
 /**
@@ -62,7 +62,7 @@ class Shipment extends ShipmentRequest
     public function setPhysicalProperties($physicalProperties)
     {
         if (is_array($physicalProperties)) {
-            $physicalProperties = new PhysicalModel($physicalProperties);
+            $physicalProperties = new PhysicalPropertiesModel($physicalProperties);
         }
 
         return parent::setPhysicalProperties($physicalProperties);
@@ -71,16 +71,16 @@ class Shipment extends ShipmentRequest
     /**
      * Convenience helper to set recipient country code.
      */
-    public function withRecipientCc(string $cc): self
+    public function withRecipientCountryCode(string $countryCode): self
     {
-        return $this->setRecipient(['cc' => $cc]);
+        return $this->setRecipient(['cc' => $countryCode]);
     }
 
     /**
      * Convenience helper to set weight in grams.
-     * @param int|float $grams
+     * @param int $grams.
      */
-    public function withWeight($grams): self
+    public function withWeight(int $grams): self
     {
         return $this->setPhysicalProperties(['weight' => $grams]);
     }
@@ -115,13 +115,13 @@ class Shipment extends ShipmentRequest
 
         if (null === $options) {
             $options = new ShipmentOptionsModel();
-            $this->setOptions($options);
         }
 
-        // Map to API id constant; annotate for IDEs expecting RefShipmentPackageType.
-        /** @var \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentPackageType $ref */
-        $ref = PackageType::toApiRef($packageType);
-        $options->setPackageType($ref);
+        $packageTypeRef = PackageType::toApiRef($packageType);
+        $options->setPackageType($packageTypeRef);
+
+        // Re-assign explicitly to make the mutation flow obvious for maintainers.
+        $this->setOptions($options);
 
         return $this;
     }
