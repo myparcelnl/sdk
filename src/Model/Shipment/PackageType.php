@@ -37,6 +37,14 @@ final class PackageType
     }
 
     /**
+     * Map SDK-level package type to numeric API id.
+     */
+    public static function toId(string $packageType): int
+    {
+        return (int) self::toApiRef($packageType);
+    }
+
+    /**
      * Check if the given SDK-level package type is valid.
      */
     public static function isValid(string $packageType): bool

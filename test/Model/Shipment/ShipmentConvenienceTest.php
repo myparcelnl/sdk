@@ -28,7 +28,8 @@ final class ShipmentConvenienceTest extends TestCase
         $shipment = (new Shipment())
             ->withCarrier(Carrier::POSTNL);
 
-        $this->assertSame(RefTypesCarrier::_1, $shipment->getCarrier());
+        $this->assertIsInt($shipment->getCarrier());
+        $this->assertSame((int) RefTypesCarrier::_1, $shipment->getCarrier());
     }
 
     public function testWithPackageTypeCreatesOptionsIfMissingAndSetsId(): void
@@ -37,7 +38,8 @@ final class ShipmentConvenienceTest extends TestCase
             ->withPackageType(PackageType::MAILBOX);
 
         $this->assertNotNull($shipment->getOptions());
-        $this->assertSame(RefShipmentPackageType::_2, $shipment->getOptions()->getPackageType());
+        $this->assertIsInt($shipment->getOptions()->getPackageType());
+        $this->assertSame((int) RefShipmentPackageType::_2, $shipment->getOptions()->getPackageType());
     }
 
     public function testWithWeightSetsWeight(): void
