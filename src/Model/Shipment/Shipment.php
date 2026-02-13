@@ -26,6 +26,25 @@ class Shipment extends ShipmentRequest
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
+
+        $recipient = $this->getRecipient();
+        if (is_array($recipient)) {
+            $this->setRecipient($recipient);
+        }
+
+        $physicalProperties = $this->getPhysicalProperties();
+        if (is_array($physicalProperties)) {
+            $this->setPhysicalProperties($physicalProperties);
+        }
+
+        $options = $this->getOptions();
+        if (is_array($options) || $options instanceof GeneratedShipmentOptionsModel) {
+            $this->setOptions($options);
+        }
+
+        if (null !== $this->getCarrier()) {
+            $this->setCarrier($this->getCarrier());
+        }
     }
 
     /**
@@ -34,6 +53,21 @@ class Shipment extends ShipmentRequest
     public static function fromArray(array $data): self
     {
         return new self($data);
+    }
+
+    /**
+     * TEMP WORKAROUND (remove after CoreAPI spec/codegen fix):
+     * Force known shipment fields to scalar types expected by API validation.
+     *
+     * @return array<string, string>
+     */
+    public static function openAPITypes()
+    {
+        $types = parent::openAPITypes();
+        $types['reference_identifier'] = 'string';
+        $types['carrier'] = 'int';
+
+        return $types;
     }
 
     /**
@@ -66,6 +100,48 @@ class Shipment extends ShipmentRequest
         }
 
         return parent::setPhysicalProperties($physicalProperties);
+    }
+
+    /**
+     * Accept both generated model or array, but always store as SDK ShipmentOptions wrapper.
+     *
+     * TEMP WORKAROUND: wrapper exists to normalize package_type serialization for
+     * current generated-client behavior. Remove when upstream/generated types are stable.
+     *
+     * @param mixed $options
+     * @return self
+     */
+    public function setOptions($options)
+    {
+        if ($options instanceof GeneratedShipmentOptionsModel && ! $options instanceof ShipmentOptions) {
+            $optionsData = json_decode(json_encode($options), true);
+            $options = new ShipmentOptions(is_array($optionsData) ? $optionsData : []);
+        } elseif (is_array($options)) {
+            $options = new ShipmentOptions($options);
+        }
+
+        return parent::setOptions($options);
+    }
+
+    /**
+     * Normalize numeric-string carrier ids to integers before serialization.
+     *
+     * TEMP WORKAROUND: generated enums currently expose numeric ids as strings.
+     *
+     * @param int|string $carrier
+     * @return self
+     */
+    public function setCarrier($carrier)
+    {
+        if (is_string($carrier)) {
+            if (ctype_digit($carrier)) {
+                $carrier = (int) $carrier;
+            } elseif (Carrier::isValid($carrier)) {
+                $carrier = Carrier::toId($carrier);
+            }
+        }
+
+        return parent::setCarrier($carrier);
     }
 
     /**

@@ -7,20 +7,16 @@ namespace MyParcelNL\Sdk\Services\CoreApi;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Utils;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\ShipmentApi;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration;
 use Psr\Http\Message\RequestInterface;
 
 /**
  * Factory for creating the generated ShipmentApi client.
- *
- * Default behaviour:
- * - The SDK itself uses Capabilities API v2
- * - External consumers can disable or override the Accept header if needed
  */
-final class CapabilitiesClientFactory
+final class ShipmentApiFactory
 {
-
     public const DEFAULT_BASE_URI = 'https://api.myparcel.nl';
 
     public const CAPABILITIES_PATH = '/shipments/capabilities';
@@ -42,20 +38,15 @@ final class CapabilitiesClientFactory
         ?string $userAgent = null,
         ?string $capabilitiesAcceptHeader = self::ACCEPT_V2
     ): ShipmentApi {
-        // Resolve API key from argument or environment variables
         $resolvedKey = self::resolveApiKey($apiKey);
 
         if ('' === $resolvedKey) {
             throw new \InvalidArgumentException('API key cannot be empty');
         }
 
-        // Encode API key as required by the generated client
         $encoded = base64_encode($resolvedKey);
-
-        // Determine API host
         $host = $baseUri ?: self::DEFAULT_BASE_URI;
 
-        // Configure the generated client
         $config = new Configuration();
         $config->setHost($host);
         $config->setAccessToken($encoded);
@@ -64,17 +55,62 @@ final class CapabilitiesClientFactory
             $config->setUserAgent($userAgent);
         }
 
-        // Build a Guzzle handler stack
         $stack = HandlerStack::create();
 
-        /**
-         * Optionally force the Accept header for the capabilities endpoint.
-         *
-         * This ensures:
-         * - The SDK itself always talks to Capabilities v2
-         * - Other endpoints remain untouched
-         * - External consumers can opt out by passing null
-         */
+        // TEMP WORKAROUND (remove after CoreAPI spec/codegen fix):
+        // The generated OpenAPI enums (RefTypesCarrier, RefShipmentPackageType)
+        // serialize carrier/package_type as strings (e.g. "1") while the API
+        // validates these fields as integers for POST /shipments.
+        //
+        // This middleware normalizes only the known shipment enum fields in the
+        // outgoing JSON body so we can keep using the generated ShipmentApi client.
+        //
+        // Removal criteria:
+        // - generated PHP client serializes carrier/package_type as numeric values
+        // - live smoke for ShipmentCollection::createConcepts() passes without casts
+        $stack->push(Middleware::mapRequest(
+            static function (RequestInterface $request): RequestInterface {
+                $contentType = $request->getHeaderLine('Content-Type');
+
+                if (false === strpos($contentType, 'shipment+json')) {
+                    return $request;
+                }
+
+                $body = (string) $request->getBody();
+
+                if ('' === $body) {
+                    return $request;
+                }
+
+                $decoded = json_decode($body, true);
+
+                if (! is_array($decoded) || ! isset($decoded['data']['shipments'])) {
+                    return $request;
+                }
+
+                $changed = false;
+
+                foreach ($decoded['data']['shipments'] as &$shipment) {
+                    if (isset($shipment['carrier']) && is_string($shipment['carrier']) && is_numeric($shipment['carrier'])) {
+                        $shipment['carrier'] = (int) $shipment['carrier'];
+                        $changed = true;
+                    }
+
+                    if (isset($shipment['options']['package_type']) && is_string($shipment['options']['package_type']) && is_numeric($shipment['options']['package_type'])) {
+                        $shipment['options']['package_type'] = (int) $shipment['options']['package_type'];
+                        $changed = true;
+                    }
+                }
+                unset($shipment);
+
+                if (! $changed) {
+                    return $request;
+                }
+
+                return $request->withBody(Utils::streamFor(json_encode($decoded)));
+            }
+        ), 'normalize_shipment_enums');
+
         if (null !== $capabilitiesAcceptHeader) {
             $stack->push(Middleware::mapRequest(
                 static function (RequestInterface $request) use ($capabilitiesAcceptHeader): RequestInterface {
@@ -89,7 +125,6 @@ final class CapabilitiesClientFactory
             ));
         }
 
-        // Create the HTTP client
         $http = new GuzzleClient([
             'base_uri' => $host,
             'timeout'  => 10,
@@ -97,7 +132,6 @@ final class CapabilitiesClientFactory
             'debug'    => false,
         ]);
 
-        // Return the generated API client
         return new ShipmentApi($http, $config);
     }
 

@@ -26,11 +26,11 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
             PHP_VERSION
         );
 
-        $api = CapabilitiesClientFactory::make(
+        $api = ShipmentApiFactory::make(
             null,
             null,
             $userAgent,
-            CapabilitiesClientFactory::ACCEPT_V2
+            ShipmentApiFactory::ACCEPT_V2
         );
         $coreReq = $this->mapper->mapToCoreApi($request);
 
