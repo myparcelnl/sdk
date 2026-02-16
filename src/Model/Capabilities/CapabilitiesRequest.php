@@ -347,5 +347,4 @@ class CapabilitiesRequest
             ? $request->withPhysicalProperties($projectedPhysicalProperties)
             : $request;
     }
-
 }
