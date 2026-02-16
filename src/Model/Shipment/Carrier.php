@@ -44,6 +44,14 @@ final class Carrier
     }
 
     /**
+     * Map SDK-level carrier name to numeric API id.
+     */
+    public static function toId(string $carrier): int
+    {
+        return (int) self::toApiRef($carrier);
+    }
+
+    /**
      * Check if the given SDK-level carrier name is valid.
      */
     public static function isValid(string $carrier): bool
