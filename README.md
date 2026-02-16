@@ -18,6 +18,16 @@ See [installation] for further instructions.
 
 For examples, guides and in-depth information, visit the [PHP SDK documentation] on the [MyParcel Developer Portal].
 
+## Capabilities (v11)
+
+The SDK supports capability checks based on a generic Shipment model.
+
+- Available:
+  - `CapabilitiesRequest::fromShipment(Shipment)`
+  - `CapabilitiesService::fromShipment(Shipment)`
+- Minimal projection (country + physical properties)
+- Capabilities carrier must be set explicitly by the caller (no automatic mapping from shipment carrier). Use the generated Capabilities domain enums if needed.
+
 ## Support
 
 For questions and support please contact us via [support@myparcel.nl](mailto:support@myparcel.nl) or chat with our

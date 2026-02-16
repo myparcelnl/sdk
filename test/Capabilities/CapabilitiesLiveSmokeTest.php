@@ -44,6 +44,13 @@ final class CapabilitiesLiveSmokeTest extends TestCase
 
         try {
             $response = $this->service->get($request);
+        } catch (\MyParcelNL\Sdk\CoreApi\Generated\Shipments\ApiException $e) {
+            if (strpos($e->getMessage(), 'Could not resolve host') !== false ||
+                strpos($e->getMessage(), 'cURL error 6') !== false) {
+                $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
+                return;
+            }
+            throw $e;
         } catch (\InvalidArgumentException $e) {
             // Handle known issue: OpenAPI spec vs API response mismatch for units like 'dm3'
             if (strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
@@ -81,6 +88,59 @@ final class CapabilitiesLiveSmokeTest extends TestCase
         // Minimal but real check
         $this->assertBasicShape($response);
         $this->assertNotEmpty($response->getPackageTypes(), 'Expected at least one package type for NL.');
+    }
+
+    /**
+     * Live smoke using fromShipment() path (recipient + weight only).
+     */
+    public function testFromShipmentLiveNlMinimal(): void
+    {
+        $shipment = (new \MyParcelNL\Sdk\Model\Shipment\Shipment())
+            ->setRecipient(['cc' => 'NL'])
+            ->setPhysicalProperties(['weight' => 500]);
+
+        try {
+            $response = $this->service->fromShipment($shipment);
+        } catch (\MyParcelNL\Sdk\CoreApi\Generated\Shipments\ApiException $e) {
+            if (strpos($e->getMessage(), 'Could not resolve host') !== false ||
+                strpos($e->getMessage(), 'cURL error 6') !== false) {
+                $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
+                return;
+            }
+            throw $e;
+        } catch (\InvalidArgumentException $e) {
+            if (strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
+                strpos($e->getMessage(), "Invalid value 'cm3' for 'unit'") !== false ||
+                strpos($e->getMessage(), "Invalid value 'l' for 'unit'") !== false ||
+                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false) {
+                $this->markTestSkipped(
+                    'Skipping live smoke test: OpenAPI spec/API response mismatch for volume units. ' .
+                    'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
+                    'Original error: ' . $e->getMessage()
+                );
+                return;
+            }
+            throw $e;
+        } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            $this->markTestSkipped('Skipping live smoke: connection error: ' . $e->getMessage());
+            return;
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $code = $e->getResponse() ? $e->getResponse()->getStatusCode() : 0;
+
+            if ($code >= 500 || $code === 429) {
+                $this->markTestSkipped(sprintf(
+                    'Skipping live smoke due to transient API error: HTTP %s: %s',
+                    $code,
+                    $e->getMessage()
+                ));
+                return;
+            }
+
+            throw $e;
+        }
+
+        $this->assertBasicShape($response);
+        $this->assertIsArray($response->getPackageTypes());
     }
 
     /**

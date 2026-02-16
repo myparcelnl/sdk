@@ -7,8 +7,10 @@ namespace MyParcelNL\Sdk\Services\Capabilities;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
+
 
 /**
  * Thin service facade for capabilities lookup.
@@ -34,5 +36,10 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
     public function get(CapabilitiesRequest $request): CapabilitiesResponse
     {
         return $this->client->getCapabilities($request);
+    }
+
+    public function fromShipment(Shipment $shipment): CapabilitiesResponse
+    {
+        return $this->get(CapabilitiesRequest::fromShipment($shipment));
     }
 }

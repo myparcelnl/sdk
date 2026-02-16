@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
+use MyParcelNL\Sdk\Model\Shipment\Shipment;
+
 /**
  * Request DTO used for capabilities lookups.
  *
@@ -268,11 +270,81 @@ class CapabilitiesRequest
         return $this->physicalProperties;
     }
 
-    /**
+    /** 
      * @return array|null
      */
     public function getPickup(): ?array
     {
         return $this->pickup;
+    }
+
+     /**
+     * Create a CapabilitiesRequest from a Shipment.
+     *
+     * Note: Only extracts country code (from recipient) and physical properties from the shipment.
+     * Other shipment properties (carrier, package type, options, etc.) are not automatically included.
+     * Use the `with*()` methods on the returned instance to add additional properties:
+     *
+     * Example:
+     * $request = CapabilitiesRequest::fromShipment($shipment)
+     *     ->withCarrier(Carrier::POSTNL)
+     *     ->withPackageType(PackageType::PACKAGE);
+     *
+     * @param  \MyParcelNL\Sdk\Model\Shipment\Shipment $shipment
+     *
+     * @return self
+     * @throws \InvalidArgumentException When recipient country code is missing
+     */
+    public static function fromShipment(Shipment $shipment): self
+    {
+        $recipient = $shipment->getRecipient();
+        $countryCode = $recipient ? $recipient->getCc() : null;
+
+        if (! $countryCode) {
+            throw new \InvalidArgumentException(
+                'Recipient with country code (cc) is required for capabilities.'
+            );
+        }
+
+        $request = self::forCountry((string) $countryCode);
+
+        $physicalProperties = $shipment->getPhysicalProperties();
+        if (! $physicalProperties) {
+            return $request;
+        }
+
+        $projectedPhysicalProperties = [];
+
+        if (null !== $physicalProperties->getWeight()) {
+            $projectedPhysicalProperties['weight'] = [
+                'value' => (float) $physicalProperties->getWeight(),
+                'unit'  => 'g',
+            ];
+        }
+
+        if (null !== $physicalProperties->getHeight()) {
+            $projectedPhysicalProperties['height'] = [
+                'value' => (float) $physicalProperties->getHeight(),
+                'unit'  => 'cm',
+            ];
+        }
+
+        if (null !== $physicalProperties->getLength()) {
+            $projectedPhysicalProperties['length'] = [
+                'value' => (float) $physicalProperties->getLength(),
+                'unit'  => 'cm',
+            ];
+        }
+
+        if (null !== $physicalProperties->getWidth()) {
+            $projectedPhysicalProperties['width'] = [
+                'value' => (float) $physicalProperties->getWidth(),
+                'unit'  => 'cm',
+            ];
+        }
+
+        return $projectedPhysicalProperties
+            ? $request->withPhysicalProperties($projectedPhysicalProperties)
+            : $request;
     }
 }
