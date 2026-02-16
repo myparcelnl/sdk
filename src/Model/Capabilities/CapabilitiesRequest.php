@@ -57,6 +57,11 @@ class CapabilitiesRequest
     private $physicalProperties;
 
     /**
+     * @var array|null
+     */
+    private $pickup;
+
+    /**
      * @param  string $countryCode
      */
     public function __construct(string $countryCode)
@@ -179,6 +184,19 @@ class CapabilitiesRequest
     }
 
     /**
+     * @param  array|null $pickup
+     *
+     * @return self
+     */
+    public function withPickup(?array $pickup): self
+    {
+        $clone = clone $this;
+        $clone->pickup = $pickup;
+
+        return $clone;
+    }
+
+    /**
      * @return string|null
      */
     public function getCountryCode(): ?string
@@ -248,5 +266,13 @@ class CapabilitiesRequest
     public function getPhysicalProperties(): ?array
     {
         return $this->physicalProperties;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getPickup(): ?array
+    {
+        return $this->pickup;
     }
 }
