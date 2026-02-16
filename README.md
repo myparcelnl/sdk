@@ -18,7 +18,7 @@ See [installation] for further instructions.
 
 For examples, guides and in-depth information, visit the [PHP SDK documentation] on the [MyParcel Developer Portal].
 
-## Capabilities (v11)
+## Capabilities
 
 The SDK supports capability checks based on a generic Shipment model.
 
