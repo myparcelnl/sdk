@@ -252,6 +252,23 @@ class CapabilitiesRequest
         return $this->physicalProperties;
     }
 
+    /**
+     * Create a CapabilitiesRequest from a Shipment.
+     *
+     * Note: Only extracts country code (from recipient) and physical properties from the shipment.
+     * Other shipment properties (carrier, package type, options, etc.) are not automatically included.
+     * Use the `with*()` methods on the returned instance to add additional properties:
+     *
+     * Example:
+     * $request = CapabilitiesRequest::fromShipment($shipment)
+     *     ->withCarrier(Carrier::POSTNL)
+     *     ->withPackageType(PackageType::PACKAGE);
+     *
+     * @param  \MyParcelNL\Sdk\Model\Shipment\Shipment $shipment
+     *
+     * @return self
+     * @throws \InvalidArgumentException When recipient country code is missing
+     */
     public static function fromShipment(Shipment $shipment): self
     {
         $recipient = $shipment->getRecipient();
