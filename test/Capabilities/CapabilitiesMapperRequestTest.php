@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PickupLocation;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesDeliveryTypeV2;
@@ -21,7 +22,12 @@ final class CapabilitiesMapperRequestTest extends TestCase
             ->withDeliveryType(RefTypesDeliveryTypeV2::STANDARD_DELIVERY)
             ->withCarrier(RefTypesCarrierV2::POSTNL)
             ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
-            ->withDirection(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND);
+            ->withDirection(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND)
+            ->withPickup([
+                'location' => [
+                    'type' => CapabilitiesPostCapabilitiesRequestV2PickupLocation::TYPE_RETAIL,
+                ],
+            ]);
 
         $mapper  = new CapabilitiesMapper();
         $coreReq = $mapper->mapToCoreApi($req);
@@ -32,6 +38,12 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertSame(RefTypesCarrierV2::POSTNL, $coreReq->getCarrier());
         $this->assertSame(RefShipmentPackageTypeV2::PACKAGE, $coreReq->getPackageType());
         $this->assertSame(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND, $coreReq->getDirection());
+        $this->assertNotNull($coreReq->getPickup());
+        $this->assertNotNull($coreReq->getPickup()->getLocation());
+        $this->assertSame(
+            CapabilitiesPostCapabilitiesRequestV2PickupLocation::TYPE_RETAIL,
+            $coreReq->getPickup()->getLocation()->getType()
+        );
     }
 
     public function testMapToCoreApiAllowsMinimalPayload(): void
@@ -52,6 +64,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertNull($coreReq->getSender());
         $this->assertNull($coreReq->getOptions());
         $this->assertNull($coreReq->getPhysicalProperties());
+        $this->assertNull($coreReq->getPickup());
     }
 
     public function testMapToCoreApiMapsSenderAndPhysicalProperties(): void
