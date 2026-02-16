@@ -66,6 +66,8 @@ class RefCapabilitiesSharedCarrier
 
     public const NUMBER_17 = 17;
 
+    public const NUMBER_18 = 18;
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -83,7 +85,8 @@ class RefCapabilitiesSharedCarrier
             self::NUMBER_14,
             self::NUMBER_15,
             self::NUMBER_16,
-            self::NUMBER_17
+            self::NUMBER_17,
+            self::NUMBER_18
         ];
     }
 }

@@ -6,8 +6,11 @@ namespace MyParcelNL\Sdk\Services\Capabilities;
 
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Model\Shipment\Shipment;
 
 interface CapabilitiesServiceInterface
 {
     public function get(CapabilitiesRequest $request): CapabilitiesResponse;
+
+    public function fromShipment(Shipment $shipment): CapabilitiesResponse;
 }

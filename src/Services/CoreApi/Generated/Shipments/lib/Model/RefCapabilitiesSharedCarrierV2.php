@@ -58,6 +58,8 @@ class RefCapabilitiesSharedCarrierV2
 
     public const INPOST = 'INPOST';
 
+    public const POSTE_ITALIANE = 'POSTE_ITALIANE';
+
     public const POSTNL = 'POSTNL';
 
     public const TRUNKRS = 'TRUNKRS';
@@ -80,6 +82,7 @@ class RefCapabilitiesSharedCarrierV2
             self::DPD,
             self::GLS,
             self::INPOST,
+            self::POSTE_ITALIANE,
             self::POSTNL,
             self::TRUNKRS,
             self::UPS_EXPRESS_SAVER,
