@@ -522,11 +522,6 @@ abstract class AbstractConsignment
     private $save_recipient_address = true;
 
     /**
-     * @var null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
-     */
-    protected $drop_off_point;
-
-    /**
      * @var null|string
      */
     private $state;
@@ -705,25 +700,6 @@ abstract class AbstractConsignment
         $this->consignment_id = $id;
 
         return $this;
-    }
-
-    /**
-     * @param null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint $dropOffPoint
-     *
-     * @return self
-     */
-    public function setDropOffPoint(?DropOffPoint $dropOffPoint): self
-    {
-        $this->drop_off_point = $dropOffPoint;
-        return $this;
-    }
-
-    /**
-     * @return null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
-     */
-    public function getDropOffPoint(): ?DropOffPoint
-    {
-        return $this->drop_off_point;
     }
 
     /**

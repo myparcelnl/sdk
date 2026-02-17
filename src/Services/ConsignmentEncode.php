@@ -70,7 +70,6 @@ class ConsignmentEncode
              ->encodePhysicalProperties()
              ->encodeCdCountry()
              ->encodeMultiCollo()
-             ->encodeDropOffPoint()
         ;
 
         return $this->consignmentEncoded;
@@ -410,39 +409,5 @@ class ConsignmentEncode
     private function normalizeAutoSaveRecipientAddress(AbstractConsignment $consignment): int
     {
         return (int) $consignment->isSaveRecipientAddress();
-    }
-
-    /**
-     * @return self
-     */
-    private function encodeDropOffPoint(): self
-    {
-        $consignment  = Arr::first($this->consignments);
-        $dropOffPoint = $consignment->getDropOffPoint();
-
-        if (!$dropOffPoint) {
-            return $this;
-        }
-
-        $options = new Collection(
-            [
-                'box_number'        => $dropOffPoint->getBoxNumber(),
-                'cc'                => $dropOffPoint->getCc(),
-                'city'              => $dropOffPoint->getCity(),
-                'location_code'     => $dropOffPoint->getLocationCode(),
-                'location_name'     => $dropOffPoint->getLocationName(),
-                'number'            => $dropOffPoint->getNumber(),
-                'number_suffix'     => $dropOffPoint->getNumberSuffix(),
-                'postal_code'       => $dropOffPoint->getPostalCode(),
-                'region'            => $dropOffPoint->getRegion(),
-                'retail_network_id' => $dropOffPoint->getRetailNetworkId(),
-                'state'             => $dropOffPoint->getState(),
-                'street'            => $dropOffPoint->getStreet(),
-            ]
-        );
-
-        $this->consignmentEncoded['drop_off_point'] = $options->toArrayWithoutNull();
-
-        return $this;
     }
 }
