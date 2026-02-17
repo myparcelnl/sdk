@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Validator\Order;
 
-use MyParcelNL\Sdk\Rule\Consignment\DropOffPointRule;
 use MyParcelNL\Sdk\Validator\AbstractValidator;
 
 class OrderValidator extends AbstractValidator
@@ -14,8 +13,6 @@ class OrderValidator extends AbstractValidator
      */
     protected function getRules(): array
     {
-        return [
-            new DropOffPointRule(),
-        ];
+        return [];
     }
 }
