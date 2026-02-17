@@ -5,7 +5,6 @@ namespace MyParcelNL\Sdk\Adapter;
 
 use MyParcelNL\Sdk\Helper\Utils;
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 
 class ConsignmentAdapter
 {
@@ -34,8 +33,7 @@ class ConsignmentAdapter
             ->setPhysicalProperties()
             ->setExtraOptions()
             ->setRecipient()
-            ->setPickup()
-            ->addDropOffPoint();
+            ->setPickup();
     }
 
     /**
@@ -44,22 +42,6 @@ class ConsignmentAdapter
     public function getConsignment(): AbstractConsignment
     {
         return $this->consignment;
-    }
-
-    /**
-     * @return $this
-     */
-    private function addDropOffPoint(): self
-    {
-        $receivedDropOffPoint = $this->data['drop_off_point'] ?? null;
-
-        if (! $receivedDropOffPoint) {
-            return $this;
-        }
-
-        $this->consignment->setDropOffPoint(new DropOffPoint($receivedDropOffPoint));
-
-        return $this;
     }
 
     /**
