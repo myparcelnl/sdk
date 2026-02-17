@@ -111,8 +111,6 @@ class OrderCollection extends Collection
             function (Order $order) {
                 $order->validate();
                 $deliveryOptions     = $order->getDeliveryOptions();
-                $dropOffPoint        = $order->getDropOffPoint();
-                $dropOffPointAsArray = $dropOffPoint ? $this->getDropOffPointAsArray($dropOffPoint) : null;
 
                 return [
                     'external_identifier'           => $order->getExternalIdentifier(),
@@ -125,7 +123,6 @@ class OrderCollection extends Collection
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($deliveryOptions),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
-                        'drop_off_point'      => $dropOffPointAsArray,
                         'customs_declaration' => $order->getCustomsDeclaration(),
                         'physical_properties' => $order->getPhysicalProperties()->toArray(),
                     ],
