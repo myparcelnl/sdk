@@ -1,0 +1,5 @@
+# Shared configuration values for OpenAPI Generator configuration files.
+generatorName: php
+globalProperties:
+  apiTests: false
+  modelTests: false

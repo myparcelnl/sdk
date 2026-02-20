@@ -51,13 +51,17 @@
     },
     "autoload": {
         "psr-4": {
-            "MyParcelNL\\Sdk\\": "src/",
-            "MyParcelNL\\Sdk\\CoreApi\\Generated\\Shipments\\": "src/Services/CoreApi/Generated/Shipments/lib"
+            "MyParcelNL\\Sdk\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "MyParcelNL\\Sdk\\Test\\": "test/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }
