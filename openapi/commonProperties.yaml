@@ -1,0 +1,5 @@
+# Common values for the additionalProperties section of the OpenAPI Generator configuration files.
+# This file is included in the individual configuration files using the !include directive.
+modelPackage: Model
+srcBasePath: .
+apiPackage: Api

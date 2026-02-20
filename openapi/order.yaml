@@ -1,0 +1,9 @@
+'!include': 'common.yaml'
+
+# OpenAPI Generator configuration
+inputSpec: https://order.api.myparcel.nl/openapi.json
+outputDir: src/Client/Generated/OrderApi
+additionalProperties:
+  '!include': 'commonProperties.yaml'
+  packageName: MyParcelNL\Sdk\Client\Generated\OrderApi
+  invokerPackage: MyParcelNL\Sdk\Client\Generated\OrderApi

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 
 /**
  * SDK-level carrier references with readable names.

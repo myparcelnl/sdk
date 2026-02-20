@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment;
 
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentRequest;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient as RecipientModel;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties as PhysicalPropertiesModel;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentShipmentOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentRequest;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient as RecipientModel;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties as PhysicalPropertiesModel;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions as ShipmentOptionsModel;
 
 /**
  * SDK-facing Shipment model.
@@ -99,7 +99,7 @@ class Shipment extends ShipmentRequest
     public function withCarrier(string $carrier): self
     {
         // Map to API id constant; annotate for IDEs expecting RefTypesCarrier.
-        /** @var \MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesCarrier $ref */
+        /** @var \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier $ref */
         $ref = Carrier::toApiRef($carrier);
 
         return $this->setCarrier($ref);

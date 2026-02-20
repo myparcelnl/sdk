@@ -67,7 +67,7 @@ final class CapabilitiesRequestFromShipmentTest extends TestCase
 
         $req = CapabilitiesRequest::fromShipment($shipment)
             ->withShopId(18)
-            ->withCarrier(\MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefCapabilitiesSharedCarrierV2::POSTNL);
+            ->withCarrier(\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2::POSTNL);
 
         $this->assertSame('NL', $req->getCountryCode());
         $this->assertSame(18, $req->getShopId());

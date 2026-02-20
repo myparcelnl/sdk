@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentPackageType;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Model\Shipment\Carrier;
 use MyParcelNL\Sdk\Model\Shipment\PackageType;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;

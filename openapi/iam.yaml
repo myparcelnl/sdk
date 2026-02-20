@@ -1,0 +1,9 @@
+'!include': 'common.yaml'
+
+# OpenAPI Generator configuration
+inputSpec: https://iam.api.myparcel.nl/openapi.json
+outputDir: src/Client/Generated/IamApi
+additionalProperties:
+  '!include': 'commonProperties.yaml'
+  packageName: MyParcelNL\Sdk\Client\Generated\IamApi
+  invokerPackage: MyParcelNL\Sdk\Client\Generated\IamApi

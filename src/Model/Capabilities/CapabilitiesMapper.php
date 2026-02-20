@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesRecipientV2 as CoreRecipientV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesSenderV2 as CoreSenderV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesOptionsV2 as CoreOptionsV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesPhysicalPropertiesV2 as CorePhysicalPropertiesV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2Pickup as CorePickupV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesPostCapabilitiesRequestV2PickupLocation as CorePickupLocationV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesHeightV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesLengthV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesWidthV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\PhysicalPropertiesWeightV2;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2 as CoreRecipientV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2 as CoreSenderV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2 as CoreOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2 as CorePhysicalPropertiesV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Pickup as CorePickupV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PickupLocation as CorePickupLocationV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesHeightV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesLengthV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWidthV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
 
 class CapabilitiesMapper
 {
