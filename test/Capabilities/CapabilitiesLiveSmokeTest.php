@@ -44,23 +44,27 @@ final class CapabilitiesLiveSmokeTest extends TestCase
 
         try {
             $response = $this->service->get($request);
-        } catch (\MyParcelNL\Sdk\CoreApi\Generated\Shipments\ApiException $e) {
-            if (strpos($e->getMessage(), 'Could not resolve host') !== false ||
-                strpos($e->getMessage(), 'cURL error 6') !== false) {
+        } catch (\MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException $e) {
+            if (
+                strpos($e->getMessage(), 'Could not resolve host') !== false ||
+                strpos($e->getMessage(), 'cURL error 6') !== false
+            ) {
                 $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
                 return;
             }
             throw $e;
         } catch (\InvalidArgumentException $e) {
             // Handle known issue: OpenAPI spec vs API response mismatch for units like 'dm3'
-            if (strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
+            if (
+                strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
                 strpos($e->getMessage(), "Invalid value 'cm3' for 'unit'") !== false ||
                 strpos($e->getMessage(), "Invalid value 'l' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false) {
+                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false
+            ) {
                 $this->markTestSkipped(
                     'Skipping live smoke test: OpenAPI spec/API response mismatch for volume units. ' .
-                    'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
-                    'Original error: ' . $e->getMessage()
+                        'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
+                        'Original error: ' . $e->getMessage()
                 );
                 return;
             }
@@ -101,22 +105,26 @@ final class CapabilitiesLiveSmokeTest extends TestCase
 
         try {
             $response = $this->service->fromShipment($shipment);
-        } catch (\MyParcelNL\Sdk\CoreApi\Generated\Shipments\ApiException $e) {
-            if (strpos($e->getMessage(), 'Could not resolve host') !== false ||
-                strpos($e->getMessage(), 'cURL error 6') !== false) {
+        } catch (\MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException $e) {
+            if (
+                strpos($e->getMessage(), 'Could not resolve host') !== false ||
+                strpos($e->getMessage(), 'cURL error 6') !== false
+            ) {
                 $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
                 return;
             }
             throw $e;
         } catch (\InvalidArgumentException $e) {
-            if (strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
+            if (
+                strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
                 strpos($e->getMessage(), "Invalid value 'cm3' for 'unit'") !== false ||
                 strpos($e->getMessage(), "Invalid value 'l' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false) {
+                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false
+            ) {
                 $this->markTestSkipped(
                     'Skipping live smoke test: OpenAPI spec/API response mismatch for volume units. ' .
-                    'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
-                    'Original error: ' . $e->getMessage()
+                        'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
+                        'Original error: ' . $e->getMessage()
                 );
                 return;
             }

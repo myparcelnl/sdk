@@ -2,7 +2,7 @@ name: Regenerate API Client
 
 on:
   schedule:
-    - cron: "0 6 * * 1" # weekly on Monday 06:00 UTC
+    - cron: '0 6 * * 1' # weekly on Monday 06:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -59,7 +59,7 @@ jobs:
         if: steps.diff.outputs.changed == 'true'
         run: |
           git reset
-          git add src/Services/CoreApi/Generated
+          git add src/Client/Generated
 
       - name: Setup app credentials
         if: steps.diff.outputs.changed == 'true'
@@ -77,14 +77,13 @@ jobs:
           base: v11
           branch: chore/regenerate-api-client-v11
           delete-branch: true
-          commit-message: "chore(api): regenerate Core API client (v11)"
-          title: "chore(api): regenerate Core API client (v11)"
+          commit-message: 'chore(api): regenerate API clients'
+          title: 'chore(api): regenerate API clients'
           body: |
-            Automated regeneration of the Core API client.
+            Automated regeneration of various API clients.
 
             - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator v7.12.0)
             - Composer steps run in `ghcr.io/myparcelnl/php-xd:7.4`
-            - Source spec: https://api.myparcel.nl/openapi.min.json
           labels: |
             automated
             api-client
