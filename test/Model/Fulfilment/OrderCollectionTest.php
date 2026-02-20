@@ -184,7 +184,7 @@ class OrderCollectionTest extends TestCase
             ->setLanguage('NL')
             ->setType($this->faker->word)
             ->setOrderDate((new DateTime())->format('Y-M-d'))
-            ->setDropOffPoint(new DropOffPoint(self::DROP_OFF_POINT));
+            ;
     }
 
     /**
