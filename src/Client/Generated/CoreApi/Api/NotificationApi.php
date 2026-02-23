@@ -156,15 +156,16 @@ class NotificationApi
      * Delete notification groups
      *
      * @param  string $ids One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function deleteNotificationGroups($ids, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
+    public function deleteNotificationGroups($ids, $user_agent, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
     {
-        $this->deleteNotificationGroupsWithHttpInfo($ids, $contentType);
+        $this->deleteNotificationGroupsWithHttpInfo($ids, $user_agent, $contentType);
     }
 
     /**
@@ -173,15 +174,16 @@ class NotificationApi
      * Delete notification groups
      *
      * @param  string $ids One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function deleteNotificationGroupsWithHttpInfo($ids, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
+    public function deleteNotificationGroupsWithHttpInfo($ids, $user_agent, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
     {
-        $request = $this->deleteNotificationGroupsRequest($ids, $contentType);
+        $request = $this->deleteNotificationGroupsRequest($ids, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -223,14 +225,15 @@ class NotificationApi
      * Delete notification groups
      *
      * @param  string $ids One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteNotificationGroupsAsync($ids, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
+    public function deleteNotificationGroupsAsync($ids, $user_agent, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
     {
-        return $this->deleteNotificationGroupsAsyncWithHttpInfo($ids, $contentType)
+        return $this->deleteNotificationGroupsAsyncWithHttpInfo($ids, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -244,15 +247,16 @@ class NotificationApi
      * Delete notification groups
      *
      * @param  string $ids One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteNotificationGroupsAsyncWithHttpInfo($ids, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
+    public function deleteNotificationGroupsAsyncWithHttpInfo($ids, $user_agent, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
     {
         $returnType = '';
-        $request = $this->deleteNotificationGroupsRequest($ids, $contentType);
+        $request = $this->deleteNotificationGroupsRequest($ids, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -281,18 +285,26 @@ class NotificationApi
      * Create request for operation 'deleteNotificationGroups'
      *
      * @param  string $ids One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function deleteNotificationGroupsRequest($ids, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
+    public function deleteNotificationGroupsRequest($ids, $user_agent, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
     {
 
         // verify the required parameter 'ids' is set
         if ($ids === null || (is_array($ids) && count($ids) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $ids when calling deleteNotificationGroups'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling deleteNotificationGroups'
             );
         }
 
@@ -305,6 +317,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($ids !== null) {
@@ -379,15 +395,16 @@ class NotificationApi
      * Disable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function disableAllNotificationTemplatesByGroup($notification_group_id, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
+    public function disableAllNotificationTemplatesByGroup($notification_group_id, $user_agent, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
     {
-        $this->disableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $contentType);
+        $this->disableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $user_agent, $contentType);
     }
 
     /**
@@ -396,15 +413,16 @@ class NotificationApi
      * Disable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function disableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
+    public function disableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $user_agent, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
     {
-        $request = $this->disableAllNotificationTemplatesByGroupRequest($notification_group_id, $contentType);
+        $request = $this->disableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -446,14 +464,15 @@ class NotificationApi
      * Disable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function disableAllNotificationTemplatesByGroupAsync($notification_group_id, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
+    public function disableAllNotificationTemplatesByGroupAsync($notification_group_id, $user_agent, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
     {
-        return $this->disableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $contentType)
+        return $this->disableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -467,15 +486,16 @@ class NotificationApi
      * Disable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function disableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
+    public function disableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $user_agent, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
     {
         $returnType = '';
-        $request = $this->disableAllNotificationTemplatesByGroupRequest($notification_group_id, $contentType);
+        $request = $this->disableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -504,18 +524,26 @@ class NotificationApi
      * Create request for operation 'disableAllNotificationTemplatesByGroup'
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function disableAllNotificationTemplatesByGroupRequest($notification_group_id, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
+    public function disableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
         if ($notification_group_id === null || (is_array($notification_group_id) && count($notification_group_id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $notification_group_id when calling disableAllNotificationTemplatesByGroup'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling disableAllNotificationTemplatesByGroup'
             );
         }
 
@@ -528,6 +556,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {
@@ -603,15 +635,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function disableNotificationTemplate($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
+    public function disableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
     {
-        $this->disableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $contentType);
+        $this->disableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $contentType);
     }
 
     /**
@@ -621,15 +654,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function disableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
+    public function disableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
     {
-        $request = $this->disableNotificationTemplateRequest($notification_group_id, $notification_template_id, $contentType);
+        $request = $this->disableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -672,14 +706,15 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function disableNotificationTemplateAsync($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
+    public function disableNotificationTemplateAsync($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
     {
-        return $this->disableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $contentType)
+        return $this->disableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -694,15 +729,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function disableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
+    public function disableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
     {
         $returnType = '';
-        $request = $this->disableNotificationTemplateRequest($notification_group_id, $notification_template_id, $contentType);
+        $request = $this->disableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -732,12 +768,13 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function disableNotificationTemplateRequest($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
+    public function disableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
@@ -754,6 +791,13 @@ class NotificationApi
             );
         }
 
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling disableNotificationTemplate'
+            );
+        }
+
 
         $resourcePath = '/notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/disable';
         $formParams = [];
@@ -763,6 +807,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {
@@ -845,15 +893,16 @@ class NotificationApi
      * Enable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function enableAllNotificationTemplatesByGroup($notification_group_id, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
+    public function enableAllNotificationTemplatesByGroup($notification_group_id, $user_agent, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
     {
-        $this->enableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $contentType);
+        $this->enableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $user_agent, $contentType);
     }
 
     /**
@@ -862,15 +911,16 @@ class NotificationApi
      * Enable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function enableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
+    public function enableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $user_agent, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
     {
-        $request = $this->enableAllNotificationTemplatesByGroupRequest($notification_group_id, $contentType);
+        $request = $this->enableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -912,14 +962,15 @@ class NotificationApi
      * Enable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function enableAllNotificationTemplatesByGroupAsync($notification_group_id, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
+    public function enableAllNotificationTemplatesByGroupAsync($notification_group_id, $user_agent, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
     {
-        return $this->enableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $contentType)
+        return $this->enableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -933,15 +984,16 @@ class NotificationApi
      * Enable all notification templates in a notification group
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function enableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
+    public function enableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $user_agent, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
     {
         $returnType = '';
-        $request = $this->enableAllNotificationTemplatesByGroupRequest($notification_group_id, $contentType);
+        $request = $this->enableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -970,18 +1022,26 @@ class NotificationApi
      * Create request for operation 'enableAllNotificationTemplatesByGroup'
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function enableAllNotificationTemplatesByGroupRequest($notification_group_id, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
+    public function enableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
         if ($notification_group_id === null || (is_array($notification_group_id) && count($notification_group_id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $notification_group_id when calling enableAllNotificationTemplatesByGroup'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling enableAllNotificationTemplatesByGroup'
             );
         }
 
@@ -994,6 +1054,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {
@@ -1069,15 +1133,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function enableNotificationTemplate($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
+    public function enableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
     {
-        $this->enableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $contentType);
+        $this->enableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $contentType);
     }
 
     /**
@@ -1087,15 +1152,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function enableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
+    public function enableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
     {
-        $request = $this->enableNotificationTemplateRequest($notification_group_id, $notification_template_id, $contentType);
+        $request = $this->enableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1138,14 +1204,15 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function enableNotificationTemplateAsync($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
+    public function enableNotificationTemplateAsync($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
     {
-        return $this->enableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $contentType)
+        return $this->enableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1160,15 +1227,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function enableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
+    public function enableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
     {
         $returnType = '';
-        $request = $this->enableNotificationTemplateRequest($notification_group_id, $notification_template_id, $contentType);
+        $request = $this->enableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1198,12 +1266,13 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function enableNotificationTemplateRequest($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
+    public function enableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
@@ -1220,6 +1289,13 @@ class NotificationApi
             );
         }
 
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling enableNotificationTemplate'
+            );
+        }
+
 
         $resourcePath = '/notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/enable';
         $formParams = [];
@@ -1229,6 +1305,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {
@@ -1310,6 +1390,7 @@ class NotificationApi
      *
      * Get notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id shop_id (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
@@ -1317,9 +1398,9 @@ class NotificationApi
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function getNotificationGroups($shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
+    public function getNotificationGroups($user_agent, $shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
     {
-        list($response) = $this->getNotificationGroupsWithHttpInfo($shop_id, $contentType);
+        list($response) = $this->getNotificationGroupsWithHttpInfo($user_agent, $shop_id, $contentType);
         return $response;
     }
 
@@ -1328,6 +1409,7 @@ class NotificationApi
      *
      * Get notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
@@ -1335,9 +1417,9 @@ class NotificationApi
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getNotificationGroupsWithHttpInfo($shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
+    public function getNotificationGroupsWithHttpInfo($user_agent, $shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
     {
-        $request = $this->getNotificationGroupsRequest($shop_id, $contentType);
+        $request = $this->getNotificationGroupsRequest($user_agent, $shop_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1457,15 +1539,16 @@ class NotificationApi
      *
      * Get notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getNotificationGroupsAsync($shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
+    public function getNotificationGroupsAsync($user_agent, $shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
     {
-        return $this->getNotificationGroupsAsyncWithHttpInfo($shop_id, $contentType)
+        return $this->getNotificationGroupsAsyncWithHttpInfo($user_agent, $shop_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1478,16 +1561,17 @@ class NotificationApi
      *
      * Get notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getNotificationGroupsAsyncWithHttpInfo($shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
+    public function getNotificationGroupsAsyncWithHttpInfo($user_agent, $shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups';
-        $request = $this->getNotificationGroupsRequest($shop_id, $contentType);
+        $request = $this->getNotificationGroupsRequest($user_agent, $shop_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1528,14 +1612,22 @@ class NotificationApi
     /**
      * Create request for operation 'getNotificationGroups'
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getNotificationGroupsRequest($shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
+    public function getNotificationGroupsRequest($user_agent, $shop_id = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
     {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling getNotificationGroups'
+            );
+        }
 
 
 
@@ -1556,6 +1648,10 @@ class NotificationApi
             false // required
         ) ?? []);
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
 
 
@@ -1622,15 +1718,16 @@ class NotificationApi
      * Get notification templates
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function getNotificationTemplates($notification_group_id, string $contentType = self::contentTypes['getNotificationTemplates'][0])
+    public function getNotificationTemplates($notification_group_id, $user_agent, string $contentType = self::contentTypes['getNotificationTemplates'][0])
     {
-        list($response) = $this->getNotificationTemplatesWithHttpInfo($notification_group_id, $contentType);
+        list($response) = $this->getNotificationTemplatesWithHttpInfo($notification_group_id, $user_agent, $contentType);
         return $response;
     }
 
@@ -1640,15 +1737,16 @@ class NotificationApi
      * Get notification templates
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getNotificationTemplatesWithHttpInfo($notification_group_id, string $contentType = self::contentTypes['getNotificationTemplates'][0])
+    public function getNotificationTemplatesWithHttpInfo($notification_group_id, $user_agent, string $contentType = self::contentTypes['getNotificationTemplates'][0])
     {
-        $request = $this->getNotificationTemplatesRequest($notification_group_id, $contentType);
+        $request = $this->getNotificationTemplatesRequest($notification_group_id, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1769,14 +1867,15 @@ class NotificationApi
      * Get notification templates
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getNotificationTemplatesAsync($notification_group_id, string $contentType = self::contentTypes['getNotificationTemplates'][0])
+    public function getNotificationTemplatesAsync($notification_group_id, $user_agent, string $contentType = self::contentTypes['getNotificationTemplates'][0])
     {
-        return $this->getNotificationTemplatesAsyncWithHttpInfo($notification_group_id, $contentType)
+        return $this->getNotificationTemplatesAsyncWithHttpInfo($notification_group_id, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1790,15 +1889,16 @@ class NotificationApi
      * Get notification templates
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getNotificationTemplatesAsyncWithHttpInfo($notification_group_id, string $contentType = self::contentTypes['getNotificationTemplates'][0])
+    public function getNotificationTemplatesAsyncWithHttpInfo($notification_group_id, $user_agent, string $contentType = self::contentTypes['getNotificationTemplates'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates';
-        $request = $this->getNotificationTemplatesRequest($notification_group_id, $contentType);
+        $request = $this->getNotificationTemplatesRequest($notification_group_id, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1840,18 +1940,26 @@ class NotificationApi
      * Create request for operation 'getNotificationTemplates'
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getNotificationTemplatesRequest($notification_group_id, string $contentType = self::contentTypes['getNotificationTemplates'][0])
+    public function getNotificationTemplatesRequest($notification_group_id, $user_agent, string $contentType = self::contentTypes['getNotificationTemplates'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
         if ($notification_group_id === null || (is_array($notification_group_id) && count($notification_group_id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $notification_group_id when calling getNotificationTemplates'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling getNotificationTemplates'
             );
         }
 
@@ -1864,6 +1972,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {
@@ -1937,6 +2049,7 @@ class NotificationApi
      *
      * Create notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest $notification_post_notification_group_request Request body for creating notification groups. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
@@ -1944,9 +2057,9 @@ class NotificationApi
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function postNotificationGroups($notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
+    public function postNotificationGroups($user_agent, $notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
     {
-        list($response) = $this->postNotificationGroupsWithHttpInfo($notification_post_notification_group_request, $contentType);
+        list($response) = $this->postNotificationGroupsWithHttpInfo($user_agent, $notification_post_notification_group_request, $contentType);
         return $response;
     }
 
@@ -1955,6 +2068,7 @@ class NotificationApi
      *
      * Create notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest $notification_post_notification_group_request Request body for creating notification groups. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
@@ -1962,9 +2076,9 @@ class NotificationApi
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function postNotificationGroupsWithHttpInfo($notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
+    public function postNotificationGroupsWithHttpInfo($user_agent, $notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
     {
-        $request = $this->postNotificationGroupsRequest($notification_post_notification_group_request, $contentType);
+        $request = $this->postNotificationGroupsRequest($user_agent, $notification_post_notification_group_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2084,15 +2198,16 @@ class NotificationApi
      *
      * Create notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest $notification_post_notification_group_request Request body for creating notification groups. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function postNotificationGroupsAsync($notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
+    public function postNotificationGroupsAsync($user_agent, $notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
     {
-        return $this->postNotificationGroupsAsyncWithHttpInfo($notification_post_notification_group_request, $contentType)
+        return $this->postNotificationGroupsAsyncWithHttpInfo($user_agent, $notification_post_notification_group_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2105,16 +2220,17 @@ class NotificationApi
      *
      * Create notification groups
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest $notification_post_notification_group_request Request body for creating notification groups. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function postNotificationGroupsAsyncWithHttpInfo($notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
+    public function postNotificationGroupsAsyncWithHttpInfo($user_agent, $notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups';
-        $request = $this->postNotificationGroupsRequest($notification_post_notification_group_request, $contentType);
+        $request = $this->postNotificationGroupsRequest($user_agent, $notification_post_notification_group_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2155,14 +2271,22 @@ class NotificationApi
     /**
      * Create request for operation 'postNotificationGroups'
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest $notification_post_notification_group_request Request body for creating notification groups. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function postNotificationGroupsRequest($notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
+    public function postNotificationGroupsRequest($user_agent, $notification_post_notification_group_request, string $contentType = self::contentTypes['postNotificationGroups'][0])
     {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling postNotificationGroups'
+            );
+        }
 
         // verify the required parameter 'notification_post_notification_group_request' is set
         if ($notification_post_notification_group_request === null || (is_array($notification_post_notification_group_request) && count($notification_post_notification_group_request) === 0)) {
@@ -2180,6 +2304,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
 
 
@@ -2254,6 +2382,7 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest $notification_put_notification_template_request Request body for updating a notification template. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
@@ -2261,9 +2390,9 @@ class NotificationApi
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
+    public function putNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
     {
-        $this->putNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $contentType);
+        $this->putNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, $contentType);
     }
 
     /**
@@ -2273,6 +2402,7 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest $notification_put_notification_template_request Request body for updating a notification template. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
@@ -2280,9 +2410,9 @@ class NotificationApi
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function putNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
+    public function putNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
     {
-        $request = $this->putNotificationTemplateRequest($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $contentType);
+        $request = $this->putNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2325,15 +2455,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest $notification_put_notification_template_request Request body for updating a notification template. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function putNotificationTemplateAsync($notification_group_id, $notification_template_id, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
+    public function putNotificationTemplateAsync($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
     {
-        return $this->putNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $contentType)
+        return $this->putNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2348,16 +2479,17 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest $notification_put_notification_template_request Request body for updating a notification template. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function putNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
+    public function putNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
     {
         $returnType = '';
-        $request = $this->putNotificationTemplateRequest($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $contentType);
+        $request = $this->putNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2387,13 +2519,14 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest $notification_put_notification_template_request Request body for updating a notification template. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function putNotificationTemplateRequest($notification_group_id, $notification_template_id, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
+    public function putNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request, string $contentType = self::contentTypes['putNotificationTemplate'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
@@ -2407,6 +2540,13 @@ class NotificationApi
         if ($notification_template_id === null || (is_array($notification_template_id) && count($notification_template_id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $notification_template_id when calling putNotificationTemplate'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling putNotificationTemplate'
             );
         }
 
@@ -2426,6 +2566,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {
@@ -2516,15 +2660,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function sendTestNotification($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    public function sendTestNotification($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['sendTestNotification'][0])
     {
-        $this->sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, $contentType);
+        $this->sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $contentType);
     }
 
     /**
@@ -2534,15 +2679,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    public function sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['sendTestNotification'][0])
     {
-        $request = $this->sendTestNotificationRequest($notification_group_id, $notification_template_id, $contentType);
+        $request = $this->sendTestNotificationRequest($notification_group_id, $notification_template_id, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2585,14 +2731,15 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function sendTestNotificationAsync($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    public function sendTestNotificationAsync($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['sendTestNotification'][0])
     {
-        return $this->sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, $contentType)
+        return $this->sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2607,15 +2754,16 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    public function sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['sendTestNotification'][0])
     {
         $returnType = '';
-        $request = $this->sendTestNotificationRequest($notification_group_id, $notification_template_id, $contentType);
+        $request = $this->sendTestNotificationRequest($notification_group_id, $notification_template_id, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2645,12 +2793,13 @@ class NotificationApi
      *
      * @param  int $notification_group_id The ID of the notification group. (required)
      * @param  int $notification_template_id The ID of the notification template. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function sendTestNotificationRequest($notification_group_id, $notification_template_id, string $contentType = self::contentTypes['sendTestNotification'][0])
+    public function sendTestNotificationRequest($notification_group_id, $notification_template_id, $user_agent, string $contentType = self::contentTypes['sendTestNotification'][0])
     {
 
         // verify the required parameter 'notification_group_id' is set
@@ -2667,6 +2816,13 @@ class NotificationApi
             );
         }
 
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling sendTestNotification'
+            );
+        }
+
 
         $resourcePath = '/notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/test';
         $formParams = [];
@@ -2676,6 +2832,10 @@ class NotificationApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
         // path params
         if ($notification_group_id !== null) {

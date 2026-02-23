@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration**](RefShipmentCustomsDeclaration.md) |  | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  | [optional]
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup**](RefShipmentPickup.md) |  | [optional]
-**drop_off_point** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint**](ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint.md) |  | [optional]
+**drop_off_point** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint**](ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint.md) |  | [optional]
 **note** | **string** |  | [optional]
 **status** | **int** |  | [optional]
 **delivered** | **int** |  | [optional]

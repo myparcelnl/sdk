@@ -8,6 +8,8 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 | [**getShipments()**](ShipmentApi.md#getShipments) | **GET** /shipments | Gets a list of Shipments, optionally filtered using parameters. |
 | [**getShipmentsById()**](ShipmentApi.md#getShipmentsById) | **GET** /shipments/{ids} | Get shipments by id. |
 | [**getShipmentsLabels()**](ShipmentApi.md#getShipmentsLabels) | **GET** /shipment_labels/{ids} | Get Shipment labels |
+| [**getTrackTraces()**](ShipmentApi.md#getTrackTraces) | **GET** /tracktraces | Track Shipment |
+| [**getTrackTracesByIds()**](ShipmentApi.md#getTrackTracesByIds) | **GET** /tracktraces/{ids} | Track Shipment |
 | [**postCapabilities()**](ShipmentApi.md#postCapabilities) | **POST** /shipments/capabilities | List shipment capabilities |
 | [**postCapabilitiesContractDefinitions()**](ShipmentApi.md#postCapabilitiesContractDefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user. |
 | [**postRates()**](ShipmentApi.md#postRates) | **POST** /shipments/rates | List shipment rates |
@@ -32,11 +34,6 @@ This operation can be used to delete shipments for which a label has not yet bee
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -71,7 +68,7 @@ void (empty response body)
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -98,11 +95,6 @@ This operation returns a list of Shipments available to this User.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -178,7 +170,7 @@ try {
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -205,11 +197,6 @@ Get shipments by id.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -247,7 +234,7 @@ try {
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -274,11 +261,6 @@ Get Shipment labels
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -321,7 +303,7 @@ void (empty response body)
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -332,10 +314,148 @@ void (empty response body)
 [[Back to Model list]](../../README.md#models)
 [[Back to README]](../../README.md)
 
+## `getTrackTraces()`
+
+```php
+getTrackTraces($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces
+```
+
+Track Shipment
+
+Get detailed Track & Trace information for one or more shipments.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
+$barcode = 'barcode_example'; // string
+$country_code = 'country_code_example'; // string
+$external_identifier = 'external_identifier_example'; // string
+$extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
+$postal_code = 'postal_code_example'; // string | Postal Code
+$sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
+
+try {
+    $result = $apiInstance->getTrackTraces($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ShipmentApi->getTrackTraces: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **barcode** | **string**|  | [optional] |
+| **country_code** | **string**|  | [optional] |
+| **external_identifier** | **string**|  | [optional] |
+| **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
+| **postal_code** | **string**| Postal Code | [optional] |
+| **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces**](../Model/ShipmentResponsesTracktraces.md)
+
+### Authorization
+
+[bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `getTrackTracesByIds()`
+
+```php
+getTrackTracesByIds($ids, $user_agent, $sort, $extra_info): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces
+```
+
+Track Shipment
+
+Get detailed Track & Trace information for one or more shipments.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
+$sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
+$extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
+
+try {
+    $result = $apiInstance->getTrackTracesByIds($ids, $user_agent, $sort, $extra_info);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ShipmentApi->getTrackTracesByIds: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **ids** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**](../Model/.md)| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
+| **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces**](../Model/ShipmentResponsesTracktraces.md)
+
+### Authorization
+
+[bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
 ## `postCapabilities()`
 
 ```php
-postCapabilities($capabilities_post_capabilities_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2
+postCapabilities($user_agent, $capabilities_post_capabilities_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2
 ```
 
 List shipment capabilities
@@ -359,10 +479,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $capabilities_post_capabilities_request_v2 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 | Request body for capabilities endpoint.
 
 try {
-    $result = $apiInstance->postCapabilities($capabilities_post_capabilities_request_v2);
+    $result = $apiInstance->postCapabilities($user_agent, $capabilities_post_capabilities_request_v2);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postCapabilities: ', $e->getMessage(), PHP_EOL;
@@ -373,6 +494,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **capabilities_post_capabilities_request_v2** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2**](../Model/CapabilitiesPostCapabilitiesRequestV2.md)| Request body for capabilities endpoint. | |
 
 ### Return type
@@ -533,11 +655,6 @@ Add shipments allows you to create standard and related return shipments.
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
-
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -580,7 +697,7 @@ try {
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -594,7 +711,7 @@ try {
 ## `postUnrelatedReturnShipments()`
 
 ```php
-postUnrelatedReturnShipments(): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl
+postUnrelatedReturnShipments($user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl
 ```
 
 Generate unrelated return shipment URL
@@ -608,15 +725,20 @@ This endpoint is often used by external parties to facilitate return shipments o
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
 
 $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postUnrelatedReturnShipments();
+    $result = $apiInstance->postUnrelatedReturnShipments($user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postUnrelatedReturnShipments: ', $e->getMessage(), PHP_EOL;
@@ -625,7 +747,9 @@ try {
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -633,7 +757,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -660,11 +784,6 @@ This operation can be used to update certain fields of a shipment. The fields th
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -699,7 +818,7 @@ void (empty response body)
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 

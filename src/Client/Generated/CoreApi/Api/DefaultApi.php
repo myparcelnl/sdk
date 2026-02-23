@@ -126,30 +126,32 @@ class DefaultApi
     /**
      * Operation getIndex
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getIndex'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex200Response|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function getIndex(string $contentType = self::contentTypes['getIndex'][0])
+    public function getIndex($user_agent, string $contentType = self::contentTypes['getIndex'][0])
     {
-        list($response) = $this->getIndexWithHttpInfo($contentType);
+        list($response) = $this->getIndexWithHttpInfo($user_agent, $contentType);
         return $response;
     }
 
     /**
      * Operation getIndexWithHttpInfo
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getIndex'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex200Response|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getIndexWithHttpInfo(string $contentType = self::contentTypes['getIndex'][0])
+    public function getIndexWithHttpInfo($user_agent, string $contentType = self::contentTypes['getIndex'][0])
     {
-        $request = $this->getIndexRequest($contentType);
+        $request = $this->getIndexRequest($user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -265,14 +267,15 @@ class DefaultApi
     /**
      * Operation getIndexAsync
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getIndex'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getIndexAsync(string $contentType = self::contentTypes['getIndex'][0])
+    public function getIndexAsync($user_agent, string $contentType = self::contentTypes['getIndex'][0])
     {
-        return $this->getIndexAsyncWithHttpInfo($contentType)
+        return $this->getIndexAsyncWithHttpInfo($user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -283,15 +286,16 @@ class DefaultApi
     /**
      * Operation getIndexAsyncWithHttpInfo
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getIndex'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getIndexAsyncWithHttpInfo(string $contentType = self::contentTypes['getIndex'][0])
+    public function getIndexAsyncWithHttpInfo($user_agent, string $contentType = self::contentTypes['getIndex'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex200Response';
-        $request = $this->getIndexRequest($contentType);
+        $request = $this->getIndexRequest($user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -332,13 +336,21 @@ class DefaultApi
     /**
      * Create request for operation 'getIndex'
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getIndex'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getIndexRequest(string $contentType = self::contentTypes['getIndex'][0])
+    public function getIndexRequest($user_agent, string $contentType = self::contentTypes['getIndex'][0])
     {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling getIndex'
+            );
+        }
 
 
         $resourcePath = '/';
@@ -349,6 +361,10 @@ class DefaultApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
 
 
@@ -383,10 +399,6 @@ class DefaultApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
-        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();

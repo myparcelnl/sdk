@@ -65,7 +65,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'assigned_user_id' => 'string',
         'billing_details' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails',
         'customer_reference' => 'string',
-        'external_references' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences',
+        'external_references' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences',
         'lines' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Line[]',
         'notes' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Note[]',
         'packages' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageResponse[]',
@@ -676,7 +676,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets external_references
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences|null
      */
     public function getExternalReferences()
     {
@@ -686,7 +686,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets external_references
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences|null $external_references external_references
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences|null $external_references external_references
      *
      * @return self
      */

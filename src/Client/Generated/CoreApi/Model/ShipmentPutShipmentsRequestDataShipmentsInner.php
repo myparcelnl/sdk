@@ -72,7 +72,7 @@ class ShipmentPutShipmentsRequestDataShipmentsInner implements ModelInterface, A
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup',
         'note' => 'string',
-        'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings',
+        'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings',
         'hidden' => 'int'
     ];
 
@@ -845,7 +845,7 @@ class ShipmentPutShipmentsRequestDataShipmentsInner implements ModelInterface, A
     /**
      * Gets general_settings
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings|null
      */
     public function getGeneralSettings()
     {
@@ -855,7 +855,7 @@ class ShipmentPutShipmentsRequestDataShipmentsInner implements ModelInterface, A
     /**
      * Sets general_settings
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings|null $general_settings general_settings
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings|null $general_settings general_settings
      *
      * @return self
      */

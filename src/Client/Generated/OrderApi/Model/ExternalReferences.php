@@ -35,7 +35,6 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * ExternalReferences Class Doc Comment
  *
  * @category Class
- * @description The external references of the order.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -43,7 +42,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  */
 class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    public const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = 'source';
 
     /**
       * The original name of the model.
@@ -58,8 +57,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
       * @var string[]
       */
     protected static $openAPITypes = [
-        'ecommerce_platform' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform',
-        'sales_channel' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceSalesChannel'
+        'source' => 'string',
+        'sales_channel' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceSalesChannel',
+        'ecommerce_platform' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform'
     ];
 
     /**
@@ -70,8 +70,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'ecommerce_platform' => null,
-        'sales_channel' => null
+        'source' => null,
+        'sales_channel' => null,
+        'ecommerce_platform' => null
     ];
 
     /**
@@ -80,8 +81,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'ecommerce_platform' => false,
-        'sales_channel' => false
+        'source' => false,
+        'sales_channel' => false,
+        'ecommerce_platform' => false
     ];
 
     /**
@@ -170,8 +172,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $attributeMap = [
-        'ecommerce_platform' => 'ecommercePlatform',
-        'sales_channel' => 'salesChannel'
+        'source' => 'source',
+        'sales_channel' => 'salesChannel',
+        'ecommerce_platform' => 'ecommercePlatform'
     ];
 
     /**
@@ -180,8 +183,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $setters = [
-        'ecommerce_platform' => 'setEcommercePlatform',
-        'sales_channel' => 'setSalesChannel'
+        'source' => 'setSource',
+        'sales_channel' => 'setSalesChannel',
+        'ecommerce_platform' => 'setEcommercePlatform'
     ];
 
     /**
@@ -190,8 +194,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $getters = [
-        'ecommerce_platform' => 'getEcommercePlatform',
-        'sales_channel' => 'getSalesChannel'
+        'source' => 'getSource',
+        'sales_channel' => 'getSalesChannel',
+        'ecommerce_platform' => 'getEcommercePlatform'
     ];
 
     /**
@@ -235,6 +240,19 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
         return self::$openAPIModelName;
     }
 
+    public const SOURCE_MYPARCEL_SHOP = 'MYPARCEL_SHOP';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getSourceAllowableValues()
+    {
+        return [
+            self::SOURCE_MYPARCEL_SHOP,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -251,8 +269,12 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('ecommerce_platform', $data ?? [], null);
+        $this->setIfExists('source', $data ?? [], null);
         $this->setIfExists('sales_channel', $data ?? [], null);
+        $this->setIfExists('ecommerce_platform', $data ?? [], null);
+
+        // Initialize discriminator property with the model name.
+        $this->container['source'] = static::$openAPIModelName;
     }
 
     /**
@@ -282,11 +304,23 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $invalidProperties = [];
 
-        if ($this->container['ecommerce_platform'] === null) {
-            $invalidProperties[] = "'ecommerce_platform' can't be null";
+        if ($this->container['source'] === null) {
+            $invalidProperties[] = "'source' can't be null";
         }
+        $allowedValues = $this->getSourceAllowableValues();
+        if (!is_null($this->container['source']) && !in_array($this->container['source'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'source', must be one of '%s'",
+                $this->container['source'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['sales_channel'] === null) {
             $invalidProperties[] = "'sales_channel' can't be null";
+        }
+        if ($this->container['ecommerce_platform'] === null) {
+            $invalidProperties[] = "'ecommerce_platform' can't be null";
         }
         return $invalidProperties;
     }
@@ -304,28 +338,38 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
 
 
     /**
-     * Gets ecommerce_platform
+     * Gets source
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform
+     * @return string
      */
-    public function getEcommercePlatform()
+    public function getSource()
     {
-        return $this->container['ecommerce_platform'];
+        return $this->container['source'];
     }
 
     /**
-     * Sets ecommerce_platform
+     * Sets source
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform $ecommerce_platform ecommerce_platform
+     * @param string $source source
      *
      * @return self
      */
-    public function setEcommercePlatform($ecommerce_platform)
+    public function setSource($source)
     {
-        if (is_null($ecommerce_platform)) {
-            throw new \InvalidArgumentException('non-nullable ecommerce_platform cannot be null');
+        if (is_null($source)) {
+            throw new \InvalidArgumentException('non-nullable source cannot be null');
         }
-        $this->container['ecommerce_platform'] = $ecommerce_platform;
+        $allowedValues = $this->getSourceAllowableValues();
+        if (!in_array($source, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'source', must be one of '%s'",
+                    $source,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['source'] = $source;
 
         return $this;
     }
@@ -353,6 +397,33 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable sales_channel cannot be null');
         }
         $this->container['sales_channel'] = $sales_channel;
+
+        return $this;
+    }
+
+    /**
+     * Gets ecommerce_platform
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform
+     */
+    public function getEcommercePlatform()
+    {
+        return $this->container['ecommerce_platform'];
+    }
+
+    /**
+     * Sets ecommerce_platform
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform $ecommerce_platform ecommerce_platform
+     *
+     * @return self
+     */
+    public function setEcommercePlatform($ecommerce_platform)
+    {
+        if (is_null($ecommerce_platform)) {
+            throw new \InvalidArgumentException('non-nullable ecommerce_platform cannot be null');
+        }
+        $this->container['ecommerce_platform'] = $ecommerce_platform;
 
         return $this;
     }

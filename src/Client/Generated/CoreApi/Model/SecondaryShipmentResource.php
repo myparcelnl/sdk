@@ -705,15 +705,15 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!preg_match("/^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/", $this->container['created'])) {
-            $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/.";
+        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", $this->container['created'])) {
+            $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.";
         }
 
         if ($this->container['modified'] === null) {
             $invalidProperties[] = "'modified' can't be null";
         }
-        if (!preg_match("/^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/", $this->container['modified'])) {
-            $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/.";
+        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", $this->container['modified'])) {
+            $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.";
         }
 
         if ($this->container['created_by'] === null) {
@@ -1998,7 +1998,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets created
      *
-     * @param string $created created
+     * @param string $created Represents a date and time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` represents a zero-padded second, `00` through `60` (where `60` is only used to denote an added leap second)
      *
      * @return self
      */
@@ -2008,8 +2008,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable created cannot be null');
         }
 
-        if ((!preg_match("/^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/", ObjectSerializer::toString($created)))) {
-            throw new \InvalidArgumentException("invalid value for \$created when calling SecondaryShipmentResource., must conform to the pattern /^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/.");
+        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", ObjectSerializer::toString($created)))) {
+            throw new \InvalidArgumentException("invalid value for \$created when calling SecondaryShipmentResource., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.");
         }
 
         $this->container['created'] = $created;
@@ -2030,7 +2030,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets modified
      *
-     * @param string $modified modified
+     * @param string $modified Represents a date and time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` represents a zero-padded second, `00` through `60` (where `60` is only used to denote an added leap second)
      *
      * @return self
      */
@@ -2040,8 +2040,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable modified cannot be null');
         }
 
-        if ((!preg_match("/^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/", ObjectSerializer::toString($modified)))) {
-            throw new \InvalidArgumentException("invalid value for \$modified when calling SecondaryShipmentResource., must conform to the pattern /^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d/.");
+        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", ObjectSerializer::toString($modified)))) {
+            throw new \InvalidArgumentException("invalid value for \$modified when calling SecondaryShipmentResource., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.");
         }
 
         $this->container['modified'] = $modified;

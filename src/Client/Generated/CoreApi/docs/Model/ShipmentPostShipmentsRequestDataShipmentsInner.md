@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 **note** | **string** |  | [optional]
 **status** | **int** |  | [optional]
 **delivered** | **int** |  | [optional]
-**general_settings** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings**](ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings.md) |  | [optional]
+**general_settings** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings**](ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings.md) |  | [optional]
 **hidden** | **int** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
