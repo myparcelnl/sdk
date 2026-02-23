@@ -64,7 +64,7 @@ class ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner implem
         'email' => 'string',
         'name' => 'string',
         'cc' => 'string',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
         'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings',
@@ -528,7 +528,7 @@ class ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner implem
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender|null
      */
     public function getSender()
     {
@@ -538,7 +538,7 @@ class ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner implem
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender|null $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender|null $sender sender
      *
      * @return self
      */

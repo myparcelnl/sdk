@@ -10,7 +10,7 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 ## `getIndex()`
 
 ```php
-getIndex(): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex200Response
+getIndex($user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex200Response
 ```
 
 
@@ -22,11 +22,6 @@ getIndex(): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex200Response
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
-
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -37,9 +32,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\DefaultApi(
     new GuzzleHttp\Client(),
     $config
 );
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getIndex();
+    $result = $apiInstance->getIndex($user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->getIndex: ', $e->getMessage(), PHP_EOL;
@@ -48,7 +44,9 @@ try {
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -56,7 +54,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+[bearer](../../README.md#bearer)
 
 ### HTTP request headers
 

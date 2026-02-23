@@ -50,11 +50,6 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 
-// Configure HTTP basic authorization: apiKey
-$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
-
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -65,9 +60,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\DefaultApi(
     new GuzzleHttp\Client(),
     $config
 );
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getIndex();
+    $result = $apiInstance->getIndex($user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->getIndex: ', $e->getMessage(), PHP_EOL;
@@ -96,6 +92,8 @@ Class | Method | HTTP request | Description
 *ShipmentApi* | [**getShipments**](docs/Api/ShipmentApi.md#getshipments) | **GET** /shipments | Gets a list of Shipments, optionally filtered using parameters.
 *ShipmentApi* | [**getShipmentsById**](docs/Api/ShipmentApi.md#getshipmentsbyid) | **GET** /shipments/{ids} | Get shipments by id.
 *ShipmentApi* | [**getShipmentsLabels**](docs/Api/ShipmentApi.md#getshipmentslabels) | **GET** /shipment_labels/{ids} | Get Shipment labels
+*ShipmentApi* | [**getTrackTraces**](docs/Api/ShipmentApi.md#gettracktraces) | **GET** /tracktraces | Track Shipment
+*ShipmentApi* | [**getTrackTracesByIds**](docs/Api/ShipmentApi.md#gettracktracesbyids) | **GET** /tracktraces/{ids} | Track Shipment
 *ShipmentApi* | [**postCapabilities**](docs/Api/ShipmentApi.md#postcapabilities) | **POST** /shipments/capabilities | List shipment capabilities
 *ShipmentApi* | [**postCapabilitiesContractDefinitions**](docs/Api/ShipmentApi.md#postcapabilitiescontractdefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user.
 *ShipmentApi* | [**postRates**](docs/Api/ShipmentApi.md#postrates) | **POST** /shipments/rates | List shipment rates
@@ -136,8 +134,10 @@ Class | Method | HTTP request | Description
 - [CapabilitiesResponsesContractDefinitionsV1Data](docs/Model/CapabilitiesResponsesContractDefinitionsV1Data.md)
 - [CapabilitiesResponsesContractDefinitionsV2](docs/Model/CapabilitiesResponsesContractDefinitionsV2.md)
 - [CapabilitiesSenderV2](docs/Model/CapabilitiesSenderV2.md)
+- [CommonDefsDateTime](docs/Model/CommonDefsDateTime.md)
 - [CommonDefsDownloadUrl](docs/Model/CommonDefsDownloadUrl.md)
 - [CommonDefsPrice](docs/Model/CommonDefsPrice.md)
+- [CommonDefsTimeZoneType](docs/Model/CommonDefsTimeZoneType.md)
 - [CommonErrorSystem](docs/Model/CommonErrorSystem.md)
 - [CommonErrorUser](docs/Model/CommonErrorUser.md)
 - [CommonErrorUserCode](docs/Model/CommonErrorUserCode.md)
@@ -283,7 +283,12 @@ Class | Method | HTTP request | Description
 - [RefTypesValueWithUnit](docs/Model/RefTypesValueWithUnit.md)
 - [SecondaryShipmentRequest](docs/Model/SecondaryShipmentRequest.md)
 - [SecondaryShipmentResource](docs/Model/SecondaryShipmentResource.md)
+- [ShipmentDefsCarrierTrackTraceEvent](docs/Model/ShipmentDefsCarrierTrackTraceEvent.md)
+- [ShipmentDefsDeliveryMomentPropertiesTimeFrame](docs/Model/ShipmentDefsDeliveryMomentPropertiesTimeFrame.md)
+- [ShipmentDefsDeliveryMomentPropertiesType](docs/Model/ShipmentDefsDeliveryMomentPropertiesType.md)
 - [ShipmentDefsExternalProviderPropertiesDisplayName](docs/Model/ShipmentDefsExternalProviderPropertiesDisplayName.md)
+- [ShipmentDefsExternalTrackTraceLink](docs/Model/ShipmentDefsExternalTrackTraceLink.md)
+- [ShipmentDefsMainStatus](docs/Model/ShipmentDefsMainStatus.md)
 - [ShipmentDefsShipment](docs/Model/ShipmentDefsShipment.md)
 - [ShipmentDefsShipmentCollectionContact](docs/Model/ShipmentDefsShipmentCollectionContact.md)
 - [ShipmentDefsShipmentCurrency](docs/Model/ShipmentDefsShipmentCurrency.md)
@@ -308,6 +313,11 @@ Class | Method | HTTP request | Description
 - [ShipmentDefsShipmentStatus](docs/Model/ShipmentDefsShipmentStatus.md)
 - [ShipmentDefsShipmentStatusAnyOf](docs/Model/ShipmentDefsShipmentStatusAnyOf.md)
 - [ShipmentDefsShipmentStatusBasic](docs/Model/ShipmentDefsShipmentStatusBasic.md)
+- [ShipmentDefsTrackTrace](docs/Model/ShipmentDefsTrackTrace.md)
+- [ShipmentDefsTrackTraceProofOfDelivery](docs/Model/ShipmentDefsTrackTraceProofOfDelivery.md)
+- [ShipmentDefsTrackTraceProofOfDeliveryAnyOf](docs/Model/ShipmentDefsTrackTraceProofOfDeliveryAnyOf.md)
+- [ShipmentDefsTrackTraceStatus](docs/Model/ShipmentDefsTrackTraceStatus.md)
+- [ShipmentDefsTrackingLocation](docs/Model/ShipmentDefsTrackingLocation.md)
 - [ShipmentParametersLabelPosition](docs/Model/ShipmentParametersLabelPosition.md)
 - [ShipmentParametersLabelPositionAnyOf](docs/Model/ShipmentParametersLabelPositionAnyOf.md)
 - [ShipmentParametersPackageType](docs/Model/ShipmentParametersPackageType.md)
@@ -325,6 +335,7 @@ Class | Method | HTTP request | Description
 - [ShipmentPostShipmentsRequest](docs/Model/ShipmentPostShipmentsRequest.md)
 - [ShipmentPostShipmentsRequestData](docs/Model/ShipmentPostShipmentsRequestData.md)
 - [ShipmentPostShipmentsRequestDataShipmentsInner](docs/Model/ShipmentPostShipmentsRequestDataShipmentsInner.md)
+- [ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings](docs/Model/ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings.md)
 - [ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli](docs/Model/ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli.md)
 - [ShipmentPostShipmentsRequestDataShipmentsInnerRecipient](docs/Model/ShipmentPostShipmentsRequestDataShipmentsInnerRecipient.md)
 - [ShipmentPostShipmentsRequestV11](docs/Model/ShipmentPostShipmentsRequestV11.md)
@@ -335,6 +346,7 @@ Class | Method | HTTP request | Description
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md)
+- [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerGeneralSettings](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerGeneralSettings.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties.md)
 - [ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient](docs/Model/ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient.md)
@@ -343,6 +355,7 @@ Class | Method | HTTP request | Description
 - [ShipmentPostUnrelatedReturnShipmentsRequestData](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestData.md)
 - [ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner.md)
 - [ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties.md)
+- [ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender](docs/Model/ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender.md)
 - [ShipmentPutShipmentsRequest](docs/Model/ShipmentPutShipmentsRequest.md)
 - [ShipmentPutShipmentsRequestData](docs/Model/ShipmentPutShipmentsRequestData.md)
 - [ShipmentPutShipmentsRequestDataShipmentsInner](docs/Model/ShipmentPutShipmentsRequestDataShipmentsInner.md)
@@ -371,6 +384,8 @@ Class | Method | HTTP request | Description
 - [ShipmentResponsesShipmentLabelsDataOneOfPdf](docs/Model/ShipmentResponsesShipmentLabelsDataOneOfPdf.md)
 - [ShipmentResponsesShipments](docs/Model/ShipmentResponsesShipments.md)
 - [ShipmentResponsesShipmentsData](docs/Model/ShipmentResponsesShipmentsData.md)
+- [ShipmentResponsesTracktraces](docs/Model/ShipmentResponsesTracktraces.md)
+- [ShipmentResponsesTracktracesData](docs/Model/ShipmentResponsesTracktracesData.md)
 
 ## Authorization
 
@@ -378,10 +393,6 @@ Authentication schemes defined for the API:
 ### bearer
 
 - **Type**: Bearer authentication
-
-### apiKey
-
-- **Type**: HTTP basic authentication
 
 ## Tests
 

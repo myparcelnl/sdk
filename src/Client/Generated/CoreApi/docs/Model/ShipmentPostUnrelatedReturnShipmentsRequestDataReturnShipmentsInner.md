@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **email** | **string** |  | [optional]
 **name** | **string** |  | [optional]
 **cc** | **string** |  | [optional]
-**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender**](ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender.md) |  | [optional]
+**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender**](ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerSender.md) |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties**](ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInnerPhysicalProperties.md) |  | [optional]
 **customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration**](RefShipmentCustomsDeclaration.md) |  | [optional]
 **general_settings** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings**](ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings.md) |  | [optional]

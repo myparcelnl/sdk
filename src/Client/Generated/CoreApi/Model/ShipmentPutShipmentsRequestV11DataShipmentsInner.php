@@ -72,9 +72,9 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup',
-        'drop_off_point' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint',
+        'drop_off_point' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint',
         'note' => 'string',
-        'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings',
+        'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings',
         'multi_collo_main_shipment_id' => 'int',
         'secondary_shipments' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner[]',
         'collection_contact' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact',
@@ -895,7 +895,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
     /**
      * Gets drop_off_point
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint|null
      */
     public function getDropOffPoint()
     {
@@ -905,7 +905,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
     /**
      * Sets drop_off_point
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint|null $drop_off_point drop_off_point
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint|null $drop_off_point drop_off_point
      *
      * @return self
      */
@@ -949,7 +949,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
     /**
      * Gets general_settings
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings|null
      */
     public function getGeneralSettings()
     {
@@ -959,7 +959,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
     /**
      * Sets general_settings
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings|null $general_settings general_settings
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings|null $general_settings general_settings
      *
      * @return self
      */
