@@ -27,25 +27,6 @@ class Shipment extends ShipmentRequest
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
-
-        $recipient = $this->getRecipient();
-        if (is_array($recipient)) {
-            $this->setRecipient($recipient);
-        }
-
-        $physicalProperties = $this->getPhysicalProperties();
-        if (is_array($physicalProperties)) {
-            $this->setPhysicalProperties($physicalProperties);
-        }
-
-        $options = $this->getOptions();
-        if (is_array($options) || $options instanceof ShipmentOptionsModel) {
-            $this->setOptions($options);
-        }
-
-        if (null !== $this->getCarrier()) {
-            $this->setCarrier($this->getCarrier());
-        }
     }
 
     /**
@@ -54,6 +35,78 @@ class Shipment extends ShipmentRequest
     public static function fromArray(array $data): self
     {
         return new self($data);
+    }
+
+    /**
+     * Lazily normalize recipient after generated model hydration.
+     *
+     * @return RecipientModel|null
+     */
+    public function getRecipient()
+    {
+        $recipient = parent::getRecipient();
+
+        if (is_array($recipient)) {
+            $this->setRecipient($recipient);
+
+            return parent::getRecipient();
+        }
+
+        return $recipient;
+    }
+
+    /**
+     * Lazily normalize physical properties after generated model hydration.
+     *
+     * @return PhysicalPropertiesModel|null
+     */
+    public function getPhysicalProperties()
+    {
+        $physicalProperties = parent::getPhysicalProperties();
+
+        if (is_array($physicalProperties)) {
+            $this->setPhysicalProperties($physicalProperties);
+
+            return parent::getPhysicalProperties();
+        }
+
+        return $physicalProperties;
+    }
+
+    /**
+     * Lazily normalize options after generated model hydration.
+     *
+     * @return ShipmentOptions
+     */
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+
+        if (is_array($options) || ($options instanceof ShipmentOptionsModel && ! $options instanceof ShipmentOptions)) {
+            $this->setOptions($options);
+
+            return parent::getOptions();
+        }
+
+        return $options;
+    }
+
+    /**
+     * Lazily normalize carrier after generated model hydration.
+     *
+     * @return int|string|null
+     */
+    public function getCarrier()
+    {
+        $carrier = parent::getCarrier();
+
+        if (is_string($carrier) && (ctype_digit($carrier) || Carrier::isValid($carrier))) {
+            $this->setCarrier($carrier);
+
+            return parent::getCarrier();
+        }
+
+        return $carrier;
     }
 
     /**
