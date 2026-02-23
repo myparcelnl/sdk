@@ -25,10 +25,24 @@ class ShipmentOptions extends RefShipmentShipmentOptions
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
+    }
 
-        if (null !== $this->getPackageType()) {
-            $this->setPackageType($this->getPackageType());
+    /**
+     * Lazily normalize package_type after generated model hydration.
+     *
+     * @return int|string|null
+     */
+    public function getPackageType()
+    {
+        $packageType = parent::getPackageType();
+
+        if (is_string($packageType)) {
+            $this->setPackageType($packageType);
+
+            return parent::getPackageType();
         }
+
+        return $packageType;
     }
 
     /**
