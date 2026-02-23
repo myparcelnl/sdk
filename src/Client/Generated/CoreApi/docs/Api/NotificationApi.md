@@ -19,7 +19,7 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 ## `deleteNotificationGroups()`
 
 ```php
-deleteNotificationGroups($ids)
+deleteNotificationGroups($ids, $user_agent)
 ```
 
 Delete notification groups
@@ -44,9 +44,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     $config
 );
 $ids = 'ids_example'; // string | One or more notification group IDs. Separate multiple IDs using `;`.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->deleteNotificationGroups($ids);
+    $apiInstance->deleteNotificationGroups($ids, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->deleteNotificationGroups: ', $e->getMessage(), PHP_EOL;
 }
@@ -57,6 +58,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **string**| One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -78,7 +80,7 @@ void (empty response body)
 ## `disableAllNotificationTemplatesByGroup()`
 
 ```php
-disableAllNotificationTemplatesByGroup($notification_group_id)
+disableAllNotificationTemplatesByGroup($notification_group_id, $user_agent)
 ```
 
 Disable all notification templates in a notification group
@@ -103,9 +105,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     $config
 );
 $notification_group_id = 56; // int | The ID of the notification group.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->disableAllNotificationTemplatesByGroup($notification_group_id);
+    $apiInstance->disableAllNotificationTemplatesByGroup($notification_group_id, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->disableAllNotificationTemplatesByGroup: ', $e->getMessage(), PHP_EOL;
 }
@@ -116,6 +119,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -137,7 +141,7 @@ void (empty response body)
 ## `disableNotificationTemplate()`
 
 ```php
-disableNotificationTemplate($notification_group_id, $notification_template_id)
+disableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent)
 ```
 
 Disable notification template
@@ -163,9 +167,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
 );
 $notification_group_id = 56; // int | The ID of the notification group.
 $notification_template_id = 56; // int | The ID of the notification template.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->disableNotificationTemplate($notification_group_id, $notification_template_id);
+    $apiInstance->disableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->disableNotificationTemplate: ', $e->getMessage(), PHP_EOL;
 }
@@ -177,6 +182,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -198,7 +204,7 @@ void (empty response body)
 ## `enableAllNotificationTemplatesByGroup()`
 
 ```php
-enableAllNotificationTemplatesByGroup($notification_group_id)
+enableAllNotificationTemplatesByGroup($notification_group_id, $user_agent)
 ```
 
 Enable all notification templates in a notification group
@@ -223,9 +229,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     $config
 );
 $notification_group_id = 56; // int | The ID of the notification group.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->enableAllNotificationTemplatesByGroup($notification_group_id);
+    $apiInstance->enableAllNotificationTemplatesByGroup($notification_group_id, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->enableAllNotificationTemplatesByGroup: ', $e->getMessage(), PHP_EOL;
 }
@@ -236,6 +243,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -257,7 +265,7 @@ void (empty response body)
 ## `enableNotificationTemplate()`
 
 ```php
-enableNotificationTemplate($notification_group_id, $notification_template_id)
+enableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent)
 ```
 
 Enable notification template
@@ -283,9 +291,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
 );
 $notification_group_id = 56; // int | The ID of the notification group.
 $notification_template_id = 56; // int | The ID of the notification template.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->enableNotificationTemplate($notification_group_id, $notification_template_id);
+    $apiInstance->enableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->enableNotificationTemplate: ', $e->getMessage(), PHP_EOL;
 }
@@ -297,6 +306,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -318,7 +328,7 @@ void (empty response body)
 ## `getNotificationGroups()`
 
 ```php
-getNotificationGroups($shop_id): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
+getNotificationGroups($user_agent, $shop_id): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
 ```
 
 Get notification groups
@@ -342,10 +352,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     new GuzzleHttp\Client(),
     $config
 );
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
 
 try {
-    $result = $apiInstance->getNotificationGroups($shop_id);
+    $result = $apiInstance->getNotificationGroups($user_agent, $shop_id);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->getNotificationGroups: ', $e->getMessage(), PHP_EOL;
@@ -356,6 +367,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
 
 ### Return type
@@ -378,7 +390,7 @@ try {
 ## `getNotificationTemplates()`
 
 ```php
-getNotificationTemplates($notification_group_id): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates
+getNotificationTemplates($notification_group_id, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates
 ```
 
 Get notification templates
@@ -403,9 +415,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     $config
 );
 $notification_group_id = 56; // int | The ID of the notification group.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getNotificationTemplates($notification_group_id);
+    $result = $apiInstance->getNotificationTemplates($notification_group_id, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->getNotificationTemplates: ', $e->getMessage(), PHP_EOL;
@@ -417,6 +430,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 
@@ -438,7 +452,7 @@ try {
 ## `postNotificationGroups()`
 
 ```php
-postNotificationGroups($notification_post_notification_group_request): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
+postNotificationGroups($user_agent, $notification_post_notification_group_request): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
 ```
 
 Create notification groups
@@ -462,10 +476,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     new GuzzleHttp\Client(),
     $config
 );
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $notification_post_notification_group_request = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest | Request body for creating notification groups.
 
 try {
-    $result = $apiInstance->postNotificationGroups($notification_post_notification_group_request);
+    $result = $apiInstance->postNotificationGroups($user_agent, $notification_post_notification_group_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->postNotificationGroups: ', $e->getMessage(), PHP_EOL;
@@ -476,6 +491,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **notification_post_notification_group_request** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest**](../Model/NotificationPostNotificationGroupRequest.md)| Request body for creating notification groups. | |
 
 ### Return type
@@ -498,7 +514,7 @@ try {
 ## `putNotificationTemplate()`
 
 ```php
-putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request)
+putNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request)
 ```
 
 Update notification template
@@ -524,10 +540,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
 );
 $notification_group_id = 56; // int | The ID of the notification group.
 $notification_template_id = 56; // int | The ID of the notification template.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $notification_put_notification_template_request = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest | Request body for updating a notification template.
 
 try {
-    $apiInstance->putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request);
+    $apiInstance->putNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->putNotificationTemplate: ', $e->getMessage(), PHP_EOL;
 }
@@ -539,6 +556,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **notification_put_notification_template_request** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest**](../Model/NotificationPutNotificationTemplateRequest.md)| Request body for updating a notification template. | |
 
 ### Return type
@@ -561,7 +579,7 @@ void (empty response body)
 ## `sendTestNotification()`
 
 ```php
-sendTestNotification($notification_group_id, $notification_template_id)
+sendTestNotification($notification_group_id, $notification_template_id, $user_agent)
 ```
 
 Send test notification
@@ -587,9 +605,10 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
 );
 $notification_group_id = 56; // int | The ID of the notification group.
 $notification_template_id = 56; // int | The ID of the notification template.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->sendTestNotification($notification_group_id, $notification_template_id);
+    $apiInstance->sendTestNotification($notification_group_id, $notification_template_id, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->sendTestNotification: ', $e->getMessage(), PHP_EOL;
 }
@@ -601,6 +620,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
 

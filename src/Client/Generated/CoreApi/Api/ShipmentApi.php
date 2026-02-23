@@ -84,6 +84,12 @@ class ShipmentApi
         'getShipmentsLabels' => [
             'application/json',
         ],
+        'getTrackTraces' => [
+            'application/json',
+        ],
+        'getTrackTracesByIds' => [
+            'application/json',
+        ],
         'postCapabilities' => [
             'application/json;charset=utf-8;version=2.0',
             'application/json;charset=utf-8',
@@ -370,10 +376,6 @@ class ShipmentApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
-        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -744,7 +746,16 @@ class ShipmentApi
             );
         }
 
-
+        if ($barcode !== null && strlen($barcode) > 24) {
+            throw new \InvalidArgumentException('invalid length for "$barcode" when calling ShipmentApi.getShipments, must be smaller than or equal to 24.');
+        }
+        if ($barcode !== null && strlen($barcode) < 6) {
+            throw new \InvalidArgumentException('invalid length for "$barcode" when calling ShipmentApi.getShipments, must be bigger than or equal to 6.');
+        }
+        if ($barcode !== null && !preg_match("/^[a-zA-Z0-9\\-\\s]+$/", $barcode)) {
+            throw new \InvalidArgumentException("invalid value for \"barcode\" when calling ShipmentApi.getShipments, must conform to the pattern /^[a-zA-Z0-9\\-\\s]+$/.");
+        }
+        
 
 
 
@@ -1013,10 +1024,6 @@ class ShipmentApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
-        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -1364,10 +1371,6 @@ class ShipmentApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
-        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -1703,10 +1706,847 @@ class ShipmentApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getTrackTraces
+     *
+     * Track Shipment
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $barcode barcode (optional)
+     * @param  string|null $country_code country_code (optional)
+     * @param  string|null $external_identifier external_identifier (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     */
+    public function getTrackTraces($user_agent, $barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, string $contentType = self::contentTypes['getTrackTraces'][0])
+    {
+        list($response) = $this->getTrackTracesWithHttpInfo($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getTrackTracesWithHttpInfo
+     *
+     * Track Shipment
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $barcode (optional)
+     * @param  string|null $country_code (optional)
+     * @param  string|null $external_identifier (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getTrackTracesWithHttpInfo($user_agent, $barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, string $contentType = self::contentTypes['getTrackTraces'][0])
+    {
+        $request = $this->getTrackTracesRequest($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 404:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                
+                
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getTrackTracesAsync
+     *
+     * Track Shipment
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $barcode (optional)
+     * @param  string|null $country_code (optional)
+     * @param  string|null $external_identifier (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getTrackTracesAsync($user_agent, $barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, string $contentType = self::contentTypes['getTrackTraces'][0])
+    {
+        return $this->getTrackTracesAsyncWithHttpInfo($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getTrackTracesAsyncWithHttpInfo
+     *
+     * Track Shipment
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $barcode (optional)
+     * @param  string|null $country_code (optional)
+     * @param  string|null $external_identifier (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getTrackTracesAsyncWithHttpInfo($user_agent, $barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, string $contentType = self::contentTypes['getTrackTraces'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces';
+        $request = $this->getTrackTracesRequest($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getTrackTraces'
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $barcode (optional)
+     * @param  string|null $country_code (optional)
+     * @param  string|null $external_identifier (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getTrackTracesRequest($user_agent, $barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, string $contentType = self::contentTypes['getTrackTraces'][0])
+    {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling getTrackTraces'
+            );
+        }
+
+        if ($barcode !== null && strlen($barcode) > 24) {
+            throw new \InvalidArgumentException('invalid length for "$barcode" when calling ShipmentApi.getTrackTraces, must be smaller than or equal to 24.');
+        }
+        if ($barcode !== null && strlen($barcode) < 6) {
+            throw new \InvalidArgumentException('invalid length for "$barcode" when calling ShipmentApi.getTrackTraces, must be bigger than or equal to 6.');
+        }
+        if ($barcode !== null && !preg_match("/^[a-zA-Z0-9\\-\\s]+$/", $barcode)) {
+            throw new \InvalidArgumentException("invalid value for \"barcode\" when calling ShipmentApi.getTrackTraces, must conform to the pattern /^[a-zA-Z0-9\\-\\s]+$/.");
+        }
+        
+        if ($country_code !== null && strlen($country_code) > 2) {
+            throw new \InvalidArgumentException('invalid length for "$country_code" when calling ShipmentApi.getTrackTraces, must be smaller than or equal to 2.');
+        }
+        if ($country_code !== null && strlen($country_code) < 2) {
+            throw new \InvalidArgumentException('invalid length for "$country_code" when calling ShipmentApi.getTrackTraces, must be bigger than or equal to 2.');
+        }
+        if ($country_code !== null && !preg_match("/^[A-Za-z]{2}$/", $country_code)) {
+            throw new \InvalidArgumentException("invalid value for \"country_code\" when calling ShipmentApi.getTrackTraces, must conform to the pattern /^[A-Za-z]{2}$/.");
+        }
+        
+        if ($external_identifier !== null && strlen($external_identifier) > 24) {
+            throw new \InvalidArgumentException('invalid length for "$external_identifier" when calling ShipmentApi.getTrackTraces, must be smaller than or equal to 24.');
+        }
+        if ($external_identifier !== null && strlen($external_identifier) < 6) {
+            throw new \InvalidArgumentException('invalid length for "$external_identifier" when calling ShipmentApi.getTrackTraces, must be bigger than or equal to 6.');
+        }
+        if ($external_identifier !== null && !preg_match("/^[a-zA-Z0-9\\-\\s]+$/", $external_identifier)) {
+            throw new \InvalidArgumentException("invalid value for \"external_identifier\" when calling ShipmentApi.getTrackTraces, must conform to the pattern /^[a-zA-Z0-9\\-\\s]+$/.");
+        }
+        
+        if ($extra_info !== null && !preg_match("/^(?:;*(delivery_moment|returnable|signature)(?=;|$)(?!.*;\\1(?:;|$)))+;*$/", $extra_info)) {
+            throw new \InvalidArgumentException("invalid value for \"extra_info\" when calling ShipmentApi.getTrackTraces, must conform to the pattern /^(?:;*(delivery_moment|returnable|signature)(?=;|$)(?!.*;\\1(?:;|$)))+;*$/.");
+        }
+        
+        if ($postal_code !== null && strlen($postal_code) > 12) {
+            throw new \InvalidArgumentException('invalid length for "$postal_code" when calling ShipmentApi.getTrackTraces, must be smaller than or equal to 12.');
+        }
+        if ($postal_code !== null && strlen($postal_code) < 2) {
+            throw new \InvalidArgumentException('invalid length for "$postal_code" when calling ShipmentApi.getTrackTraces, must be bigger than or equal to 2.');
+        }
+        if ($postal_code !== null && !preg_match("/^[a-zA-Z0-9\\-\\s]{2,12}$/", $postal_code)) {
+            throw new \InvalidArgumentException("invalid value for \"postal_code\" when calling ShipmentApi.getTrackTraces, must conform to the pattern /^[a-zA-Z0-9\\-\\s]{2,12}$/.");
+        }
+        
+
+
+        $resourcePath = '/tracktraces';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $barcode,
+            'barcode', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $country_code,
+            'country_code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $external_identifier,
+            'external_identifier', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $extra_info,
+            'extra_info', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $postal_code,
+            'postal_code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getTrackTracesByIds
+     *
+     * Track Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     */
+    public function getTrackTracesByIds($ids, $user_agent, $sort = null, $extra_info = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
+    {
+        list($response) = $this->getTrackTracesByIdsWithHttpInfo($ids, $user_agent, $sort, $extra_info, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getTrackTracesByIdsWithHttpInfo
+     *
+     * Track Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getTrackTracesByIdsWithHttpInfo($ids, $user_agent, $sort = null, $extra_info = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
+    {
+        $request = $this->getTrackTracesByIdsRequest($ids, $user_agent, $sort, $extra_info, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                
+                
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getTrackTracesByIdsAsync
+     *
+     * Track Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getTrackTracesByIdsAsync($ids, $user_agent, $sort = null, $extra_info = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
+    {
+        return $this->getTrackTracesByIdsAsyncWithHttpInfo($ids, $user_agent, $sort, $extra_info, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getTrackTracesByIdsAsyncWithHttpInfo
+     *
+     * Track Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getTrackTracesByIdsAsyncWithHttpInfo($ids, $user_agent, $sort = null, $extra_info = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces';
+        $request = $this->getTrackTracesByIdsRequest($ids, $user_agent, $sort, $extra_info, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getTrackTracesByIds'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
+     * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getTrackTracesByIdsRequest($ids, $user_agent, $sort = null, $extra_info = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
+    {
+
+        // verify the required parameter 'ids' is set
+        if ($ids === null || (is_array($ids) && count($ids) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ids when calling getTrackTracesByIds'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling getTrackTracesByIds'
+            );
+        }
+
+
+        if ($extra_info !== null && !preg_match("/^(?:;*(delivery_moment|returnable|signature)(?=;|$)(?!.*;\\1(?:;|$)))+;*$/", $extra_info)) {
+            throw new \InvalidArgumentException("invalid value for \"extra_info\" when calling ShipmentApi.getTrackTracesByIds, must conform to the pattern /^(?:;*(delivery_moment|returnable|signature)(?=;|$)(?!.*;\\1(?:;|$)))+;*$/.");
+        }
+        
+
+        $resourcePath = '/tracktraces/{ids}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $extra_info,
+            'extra_info', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
+
+        // path params
+        if ($ids !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ids' . '}',
+                ObjectSerializer::toPathValue($ids),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -1738,6 +2578,7 @@ class ShipmentApi
      *
      * List shipment capabilities
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 $capabilities_post_capabilities_request_v2 Request body for capabilities endpoint. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
@@ -1745,9 +2586,9 @@ class ShipmentApi
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function postCapabilities($capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
+    public function postCapabilities($user_agent, $capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
     {
-        list($response) = $this->postCapabilitiesWithHttpInfo($capabilities_post_capabilities_request_v2, $contentType);
+        list($response) = $this->postCapabilitiesWithHttpInfo($user_agent, $capabilities_post_capabilities_request_v2, $contentType);
         return $response;
     }
 
@@ -1756,6 +2597,7 @@ class ShipmentApi
      *
      * List shipment capabilities
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 $capabilities_post_capabilities_request_v2 Request body for capabilities endpoint. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
@@ -1763,9 +2605,9 @@ class ShipmentApi
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function postCapabilitiesWithHttpInfo($capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
+    public function postCapabilitiesWithHttpInfo($user_agent, $capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
     {
-        $request = $this->postCapabilitiesRequest($capabilities_post_capabilities_request_v2, $contentType);
+        $request = $this->postCapabilitiesRequest($user_agent, $capabilities_post_capabilities_request_v2, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1920,15 +2762,16 @@ class ShipmentApi
      *
      * List shipment capabilities
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 $capabilities_post_capabilities_request_v2 Request body for capabilities endpoint. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function postCapabilitiesAsync($capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
+    public function postCapabilitiesAsync($user_agent, $capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
     {
-        return $this->postCapabilitiesAsyncWithHttpInfo($capabilities_post_capabilities_request_v2, $contentType)
+        return $this->postCapabilitiesAsyncWithHttpInfo($user_agent, $capabilities_post_capabilities_request_v2, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1941,16 +2784,17 @@ class ShipmentApi
      *
      * List shipment capabilities
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 $capabilities_post_capabilities_request_v2 Request body for capabilities endpoint. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function postCapabilitiesAsyncWithHttpInfo($capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
+    public function postCapabilitiesAsyncWithHttpInfo($user_agent, $capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2';
-        $request = $this->postCapabilitiesRequest($capabilities_post_capabilities_request_v2, $contentType);
+        $request = $this->postCapabilitiesRequest($user_agent, $capabilities_post_capabilities_request_v2, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1991,14 +2835,22 @@ class ShipmentApi
     /**
      * Create request for operation 'postCapabilities'
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 $capabilities_post_capabilities_request_v2 Request body for capabilities endpoint. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function postCapabilitiesRequest($capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
+    public function postCapabilitiesRequest($user_agent, $capabilities_post_capabilities_request_v2, string $contentType = self::contentTypes['postCapabilities'][0])
     {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling postCapabilities'
+            );
+        }
 
         // verify the required parameter 'capabilities_post_capabilities_request_v2' is set
         if ($capabilities_post_capabilities_request_v2 === null || (is_array($capabilities_post_capabilities_request_v2) && count($capabilities_post_capabilities_request_v2) === 0)) {
@@ -2016,6 +2868,10 @@ class ShipmentApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
 
 
@@ -3218,10 +4074,6 @@ class ShipmentApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
-        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -3253,15 +4105,16 @@ class ShipmentApi
      *
      * Generate unrelated return shipment URL
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function postUnrelatedReturnShipments(string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
+    public function postUnrelatedReturnShipments($user_agent, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
     {
-        list($response) = $this->postUnrelatedReturnShipmentsWithHttpInfo($contentType);
+        list($response) = $this->postUnrelatedReturnShipmentsWithHttpInfo($user_agent, $contentType);
         return $response;
     }
 
@@ -3270,15 +4123,16 @@ class ShipmentApi
      *
      * Generate unrelated return shipment URL
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function postUnrelatedReturnShipmentsWithHttpInfo(string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
+    public function postUnrelatedReturnShipmentsWithHttpInfo($user_agent, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
     {
-        $request = $this->postUnrelatedReturnShipmentsRequest($contentType);
+        $request = $this->postUnrelatedReturnShipmentsRequest($user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3433,14 +4287,15 @@ class ShipmentApi
      *
      * Generate unrelated return shipment URL
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function postUnrelatedReturnShipmentsAsync(string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
+    public function postUnrelatedReturnShipmentsAsync($user_agent, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
     {
-        return $this->postUnrelatedReturnShipmentsAsyncWithHttpInfo($contentType)
+        return $this->postUnrelatedReturnShipmentsAsyncWithHttpInfo($user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3453,15 +4308,16 @@ class ShipmentApi
      *
      * Generate unrelated return shipment URL
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function postUnrelatedReturnShipmentsAsyncWithHttpInfo(string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
+    public function postUnrelatedReturnShipmentsAsyncWithHttpInfo($user_agent, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl';
-        $request = $this->postUnrelatedReturnShipmentsRequest($contentType);
+        $request = $this->postUnrelatedReturnShipmentsRequest($user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3502,13 +4358,21 @@ class ShipmentApi
     /**
      * Create request for operation 'postUnrelatedReturnShipments'
      *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function postUnrelatedReturnShipmentsRequest(string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
+    public function postUnrelatedReturnShipmentsRequest($user_agent, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
     {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling postUnrelatedReturnShipments'
+            );
+        }
 
 
         $resourcePath = '/return_shipments';
@@ -3519,6 +4383,10 @@ class ShipmentApi
         $multipart = false;
 
 
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
 
 
 
@@ -3553,6 +4421,10 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -3795,10 +4667,6 @@ class ShipmentApi
             }
         }
 
-        // this endpoint requires HTTP basic authentication
-        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
-        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();

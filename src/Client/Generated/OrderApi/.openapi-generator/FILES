@@ -48,6 +48,8 @@ Model/EditNotePostRequestInner.php
 Model/ExternalReferenceEcommercePlatform.php
 Model/ExternalReferenceSalesChannel.php
 Model/ExternalReferences.php
+Model/ExternalReferencesMyParcelShop.php
+Model/ExternalReferencesSalesChannel.php
 Model/GeoAreaCode.php
 Model/LabelWithBarcode.php
 Model/LabelWithBarcodeCreatedBy.php
@@ -66,6 +68,7 @@ Model/NoteFromImportedNotedAt.php
 Model/NoteFromImportedUpdatedAt.php
 Model/NoteFromPrincipal.php
 Model/Order.php
+Model/OrderExternalReferences.php
 Model/OrderOrderedAt.php
 Model/OrderStatus.php
 Model/OrdersGet200Response.php
@@ -194,6 +197,8 @@ docs/Model/EditNotePostRequestInner.md
 docs/Model/ExternalReferenceEcommercePlatform.md
 docs/Model/ExternalReferenceSalesChannel.md
 docs/Model/ExternalReferences.md
+docs/Model/ExternalReferencesMyParcelShop.md
+docs/Model/ExternalReferencesSalesChannel.md
 docs/Model/GeoAreaCode.md
 docs/Model/LabelWithBarcode.md
 docs/Model/LabelWithBarcodeCreatedBy.md
@@ -211,6 +216,7 @@ docs/Model/NoteFromImportedNotedAt.md
 docs/Model/NoteFromImportedUpdatedAt.md
 docs/Model/NoteFromPrincipal.md
 docs/Model/Order.md
+docs/Model/OrderExternalReferences.md
 docs/Model/OrderOrderedAt.md
 docs/Model/OrderStatus.md
 docs/Model/OrdersGet200Response.md

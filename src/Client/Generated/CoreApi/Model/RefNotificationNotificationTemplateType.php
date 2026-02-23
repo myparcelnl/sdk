@@ -48,6 +48,8 @@ class RefNotificationNotificationTemplateType
 
     public const FIRST_SCAN = 'FIRST_SCAN';
 
+    public const _RETURN = 'RETURN';
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -56,7 +58,8 @@ class RefNotificationNotificationTemplateType
     {
         return [
             self::LABEL_DOWNLOAD,
-            self::FIRST_SCAN
+            self::FIRST_SCAN,
+            self::_RETURN
         ];
     }
 }

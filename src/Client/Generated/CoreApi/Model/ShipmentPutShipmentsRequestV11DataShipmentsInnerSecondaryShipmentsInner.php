@@ -69,7 +69,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup',
-        'drop_off_point' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint',
+        'drop_off_point' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint',
         'note' => 'string',
         'status' => 'int',
         'delivered' => 'int',
@@ -815,7 +815,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
     /**
      * Gets drop_off_point
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint|null
      */
     public function getDropOffPoint()
     {
@@ -825,7 +825,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
     /**
      * Sets drop_off_point
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint|null $drop_off_point drop_off_point
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerDropOffPoint|null $drop_off_point drop_off_point
      *
      * @return self
      */

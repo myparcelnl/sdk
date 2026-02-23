@@ -73,7 +73,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'note' => 'string',
         'status' => 'int',
         'delivered' => 'int',
-        'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings',
+        'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings',
         'hidden' => 'int'
     ];
 
@@ -932,7 +932,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Gets general_settings
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings|null
      */
     public function getGeneralSettings()
     {
@@ -942,7 +942,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Sets general_settings
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerGeneralSettings|null $general_settings general_settings
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings|null $general_settings general_settings
      *
      * @return self
      */
