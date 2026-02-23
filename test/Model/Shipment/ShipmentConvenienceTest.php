@@ -23,10 +23,10 @@ final class ShipmentConvenienceTest extends TestCase
         $this->assertSame('NL', $shipment->getRecipient()->getCc());
     }
 
-    public function testWithCarrierSetsCarrierId(): void
+    public function testSetCarrierAcceptsSdkCarrierNameAndStoresId(): void
     {
         $shipment = (new Shipment())
-            ->withCarrier(Carrier::POSTNL);
+            ->setCarrier(Carrier::POSTNL);
 
         $this->assertSame(RefTypesCarrier::POSTNL, $shipment->getCarrier());
     }

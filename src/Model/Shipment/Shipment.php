@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment;
 
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentRequest;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient as RecipientModel;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties as PhysicalPropertiesModel;
@@ -38,7 +39,7 @@ class Shipment extends ShipmentRequest
         }
 
         $options = $this->getOptions();
-        if (is_array($options) || $options instanceof GeneratedShipmentOptionsModel) {
+        if (is_array($options) || $options instanceof ShipmentOptionsModel) {
             $this->setOptions($options);
         }
 
@@ -75,13 +76,21 @@ class Shipment extends ShipmentRequest
      * Keeps the Shipment instance type-stable so downstream code can rely on
      * generated getters without array handling.
      *
-     * @param  mixed $recipient
+     * @param array<string, mixed>|RecipientModel $recipient
      * @return self
      */
     public function setRecipient($recipient)
     {
         if (is_array($recipient)) {
             $recipient = new RecipientModel($recipient);
+        } elseif (! $recipient instanceof RecipientModel) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Recipient must be an array or %s, got %s',
+                    RecipientModel::class,
+                    is_object($recipient) ? get_class($recipient) : gettype($recipient)
+                )
+            );
         }
 
         return parent::setRecipient($recipient);
@@ -90,13 +99,21 @@ class Shipment extends ShipmentRequest
     /**
      * Accept both generated model or array, but ALWAYS store as generated model.
      *
-     * @param  mixed $physicalProperties
+     * @param array<string, mixed>|PhysicalPropertiesModel $physicalProperties
      * @return self
      */
     public function setPhysicalProperties($physicalProperties)
     {
         if (is_array($physicalProperties)) {
             $physicalProperties = new PhysicalPropertiesModel($physicalProperties);
+        } elseif (! $physicalProperties instanceof PhysicalPropertiesModel) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Physical properties must be an array or %s, got %s',
+                    PhysicalPropertiesModel::class,
+                    is_object($physicalProperties) ? get_class($physicalProperties) : gettype($physicalProperties)
+                )
+            );
         }
 
         return parent::setPhysicalProperties($physicalProperties);
@@ -108,16 +125,25 @@ class Shipment extends ShipmentRequest
      * TEMP WORKAROUND: wrapper exists to normalize package_type serialization for
      * current generated-client behavior. Remove when upstream/generated types are stable.
      *
-     * @param mixed $options
+     * @param array<string, mixed>|ShipmentOptionsModel|ShipmentOptions $options
      * @return self
      */
     public function setOptions($options)
     {
-        if ($options instanceof GeneratedShipmentOptionsModel && ! $options instanceof ShipmentOptions) {
+        if ($options instanceof ShipmentOptionsModel && ! $options instanceof ShipmentOptions) {
             $optionsData = json_decode(json_encode($options), true);
             $options = new ShipmentOptions(is_array($optionsData) ? $optionsData : []);
         } elseif (is_array($options)) {
             $options = new ShipmentOptions($options);
+        } elseif (! $options instanceof ShipmentOptions) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Options must be an array, %s or %s, got %s',
+                    ShipmentOptions::class,
+                    ShipmentOptionsModel::class,
+                    is_object($options) ? get_class($options) : gettype($options)
+                )
+            );
         }
 
         return parent::setOptions($options);
@@ -146,19 +172,40 @@ class Shipment extends ShipmentRequest
 
     /**
      * Convenience helper to set recipient country code.
+     * Updates only `cc` and keeps any existing recipient fields intact.
      */
     public function withRecipientCountryCode(string $countryCode): self
     {
-        return $this->setRecipient(['cc' => $countryCode]);
+        $recipient = $this->getRecipient();
+        $recipientData = is_array($recipient) ? $recipient : json_decode(json_encode($recipient), true);
+
+        if (! is_array($recipientData)) {
+            $recipientData = [];
+        }
+
+        $recipientData['cc'] = $countryCode;
+
+        return $this->setRecipient($recipientData);
     }
 
     /**
      * Convenience helper to set weight in grams.
+     * Updates only `weight` and keeps any existing physical properties intact.
+     *
      * @param int $grams.
      */
     public function withWeight(int $grams): self
     {
-        return $this->setPhysicalProperties(['weight' => $grams]);
+        $physicalProperties = $this->getPhysicalProperties();
+        $physicalPropertiesData = is_array($physicalProperties) ? $physicalProperties : json_decode(json_encode($physicalProperties), true);
+
+        if (! is_array($physicalPropertiesData)) {
+            $physicalPropertiesData = [];
+        }
+
+        $physicalPropertiesData['weight'] = $grams;
+
+        return $this->setPhysicalProperties($physicalPropertiesData);
     }
 
     /**
@@ -170,18 +217,6 @@ class Shipment extends ShipmentRequest
     }
 
     /**
-     * Convenience helper to set carrier using SDK-level constant.
-     */
-    public function withCarrier(string $carrier): self
-    {
-        // Map to API id constant; annotate for IDEs expecting RefTypesCarrier.
-        /** @var \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier $ref */
-        $ref = Carrier::toApiRef($carrier);
-
-        return $this->setCarrier($ref);
-    }
-
-    /**
      * Convenience helper to set package type using SDK-level constant.
      * Package type is nested under shipment options.
      */
@@ -190,7 +225,7 @@ class Shipment extends ShipmentRequest
         $options = $this->getOptions();
 
         if (null === $options) {
-            $options = new ShipmentOptionsModel();
+            $options = new ShipmentOptions();
         }
 
         $packageTypeRef = PackageType::toApiRef($packageType);

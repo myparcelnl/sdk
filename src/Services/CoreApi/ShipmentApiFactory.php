@@ -8,8 +8,8 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Utils;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Api\ShipmentApi;
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Configuration;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -67,7 +67,7 @@ final class ShipmentApiFactory
         //
         // Removal criteria:
         // - generated PHP client serializes carrier/package_type as numeric values
-        // - live smoke for ShipmentCollection::createConcepts() passes without casts
+        // - live smoke for ShipmentCreateService::create() passes without casts
         $stack->push(Middleware::mapRequest(
             static function (RequestInterface $request): RequestInterface {
                 $contentType = $request->getHeaderLine('Content-Type');

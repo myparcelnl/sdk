@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment;
 
-use MyParcelNL\Sdk\CoreApi\Generated\Shipments\Model\RefShipmentShipmentOptions;
+use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
 
 /**
  * SDK wrapper around generated shipment options.
@@ -54,6 +55,8 @@ class ShipmentOptions extends RefShipmentShipmentOptions
                 $packageType = (int) $packageType;
             } elseif (PackageType::isValid($packageType)) {
                 $packageType = PackageType::toId($packageType);
+            } else {
+                throw new InvalidArgumentException("Unknown package type '{$packageType}'");
             }
         }
 

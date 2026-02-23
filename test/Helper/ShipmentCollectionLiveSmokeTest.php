@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Helper;
 
-use MyParcelNL\Sdk\Helper\ShipmentCollection;
+use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Carrier;
 use MyParcelNL\Sdk\Model\Shipment\PackageType;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 /**
  * @group live
  *
- * Live smoke test for ShipmentCollection (Phase 2).
+ * Live smoke test for ShipmentCollection.
  * Verifies the full create-flow against the real MyParcel API.
  * Skipped when no API key is present (API_KEY_NL / API_KEY_BE / API_KEY).
  */
@@ -43,13 +44,13 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
     public function testAddShipmentAndGetShipments(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
+        $collection = new ShipmentCollection();
 
         self::assertSame(0, $collection->count());
         self::assertSame([], $collection->getShipments());
 
         $shipment = $this->createMinimalNlShipment();
-        $collection->addShipment($shipment);
+        $collection->add($shipment);
 
         self::assertSame(1, $collection->count());
         self::assertSame([$shipment], $collection->getShipments());
@@ -57,12 +58,12 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
     public function testAddShipmentsMultiple(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
+        $collection = new ShipmentCollection();
 
         $s1 = $this->createMinimalNlShipment('smoke-multi-1');
         $s2 = $this->createMinimalNlShipment('smoke-multi-2');
 
-        $collection->addShipments([$s1, $s2]);
+        $collection->addMany([$s1, $s2]);
 
         self::assertSame(2, $collection->count());
         self::assertSame([$s1, $s2], $collection->getShipments());
@@ -70,12 +71,12 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
     public function testClearShipmentsCollection(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipment($this->createMinimalNlShipment());
+        $collection = new ShipmentCollection();
+        $collection->add($this->createMinimalNlShipment());
 
         self::assertSame(1, $collection->count());
 
-        $collection->clearShipmentsCollection();
+        $collection->clear();
 
         self::assertSame(0, $collection->count());
         self::assertSame([], $collection->getShipments());
@@ -90,11 +91,12 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
         $refId = 'smoke-single-' . uniqid('', true);
         $shipment = $this->createMinimalNlShipment($refId);
 
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipment($shipment);
+        $collection = new ShipmentCollection();
+        $collection->add($shipment);
+        $createService = new ShipmentCreateService($this->liveApiKey);
 
         try {
-            $result = $collection->createConcepts();
+            $result = $createService->create($collection);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
@@ -114,14 +116,15 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
         $ref1 = 'smoke-batch-1-' . uniqid('', true);
         $ref2 = 'smoke-batch-2-' . uniqid('', true);
 
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipments([
+        $collection = new ShipmentCollection();
+        $collection->addMany([
             $this->createMinimalNlShipment($ref1),
             $this->createMinimalNlShipment($ref2),
         ]);
+        $createService = new ShipmentCreateService($this->liveApiKey);
 
         try {
-            $result = $collection->createConcepts();
+            $result = $createService->create($collection);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
@@ -145,11 +148,12 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
         // (the generated model doesn't allow null, so we simply don't set one)
         $shipment = $this->createMinimalNlShipment();
 
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipment($shipment);
+        $collection = new ShipmentCollection();
+        $collection->add($shipment);
+        $createService = new ShipmentCreateService($this->liveApiKey);
 
         try {
-            $result = $collection->createConcepts();
+            $result = $createService->create($collection);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
@@ -166,11 +170,12 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
     public function testCreateConceptsWithFormatAndPositions(): void
     {
         $refId = 'smoke-format-' . uniqid('', true);
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipment($this->createMinimalNlShipment($refId));
+        $collection = new ShipmentCollection();
+        $collection->add($this->createMinimalNlShipment($refId));
+        $createService = new ShipmentCreateService($this->liveApiKey);
 
         try {
-            $result = $collection->createConcepts('A4', '1;2;3;4');
+            $result = $createService->create($collection, 'A4', '1;2;3;4');
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
@@ -188,10 +193,11 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
     public function testCreateConceptsThrowsWhenEmpty(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
+        $collection = new ShipmentCollection();
+        $createService = new ShipmentCreateService($this->liveApiKey);
 
         $this->expectException(\InvalidArgumentException::class);
-        $collection->createConcepts();
+        $createService->create($collection);
     }
 
     // ------------------------------------------------------------------
@@ -200,14 +206,15 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
     public function testCollectionIsReusableAfterClear(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
+        $collection = new ShipmentCollection();
+        $createService = new ShipmentCreateService($this->liveApiKey);
 
         // First batch
         $ref1 = 'smoke-reuse-1-' . uniqid('', true);
-        $collection->addShipment($this->createMinimalNlShipment($ref1));
+        $collection->add($this->createMinimalNlShipment($ref1));
 
         try {
-            $result1 = $collection->createConcepts();
+            $result1 = $createService->create($collection);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
@@ -216,14 +223,14 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
         self::assertCount(1, $result1);
 
         // Clear and add second batch
-        $collection->clearShipmentsCollection();
+        $collection->clear();
         self::assertSame(0, $collection->count());
 
         $ref2 = 'smoke-reuse-2-' . uniqid('', true);
-        $collection->addShipment($this->createMinimalNlShipment($ref2));
+        $collection->add($this->createMinimalNlShipment($ref2));
 
         try {
-            $result2 = $collection->createConcepts();
+            $result2 = $createService->create($collection);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
@@ -244,7 +251,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
     private function createMinimalNlShipment(?string $referenceIdentifier = null): Shipment
     {
         $shipment = (new Shipment())
-            ->withCarrier(Carrier::POSTNL)
+            ->setCarrier(Carrier::POSTNL)
             ->withPackageType(PackageType::PACKAGE)
             ->withWeight(1000)
             ->setRecipient([

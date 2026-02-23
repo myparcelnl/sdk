@@ -8,7 +8,10 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 
 /**
- * SDK-level package type references with readable names.
+ * Enum-like translator for shipment package types.
+ *
+ * This is intentionally not a request model. It maps readable SDK constants to
+ * generated Core API references.
  */
 final class PackageType
 {
