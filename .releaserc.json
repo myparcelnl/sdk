@@ -1,0 +1,10 @@
+{
+  "extends": "@myparcel/semantic-release-config/github-composer",
+  "branches": [
+    "main",
+    {
+      "name": "v11",
+      "prerelease": "beta"
+    }
+  ]
+}
