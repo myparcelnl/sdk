@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.1](https://github.com/myparcelnl/sdk/compare/v10.7.5...v11.0.0-beta.1) (2026-02-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** add clients for iam- and order (v2) services (#590)
+* **capabilities:** add capabilities functionality to the SDK (#551)
+
+### :bug: Bug Fixes
+
+* conform to json standard in composer ([4bee915](https://github.com/myparcelnl/sdk/commit/4bee915c15e84b2fa952fbbe153ee0e75333a1cd))
+* **v11:** Shipment extends correct generated class ([f00275f](https://github.com/myparcelnl/sdk/commit/f00275f8b0b8462cc48b3dda97f0d955ef225478))
+
+
+### :sparkles: New Features
+
+* add pickup support to capabilities request ([9b59497](https://github.com/myparcelnl/sdk/commit/9b5949704db837835c96bc814fdcad30e857d2e6))
+* **api:** add clients for iam- and order (v2) services ([#590](https://github.com/myparcelnl/sdk/issues/590)) ([bc75b9d](https://github.com/myparcelnl/sdk/commit/bc75b9dabaa43adc3a3ca2315f0e0e63bd3b5875))
+* capabilities from shipments ([#584](https://github.com/myparcelnl/sdk/issues/584)) ([7178156](https://github.com/myparcelnl/sdk/commit/71781561a1a2a2dd7ee574a78ac01181a7f5e307))
+* **capabilities:** add capabilities functionality to the SDK ([#551](https://github.com/myparcelnl/sdk/issues/551)) ([c286a44](https://github.com/myparcelnl/sdk/commit/c286a44cc8675dd51cf97dbd82517161f45a66be))
+
 ## [10.7.5](https://github.com/myparcelnl/sdk/compare/v10.7.4...v10.7.5) (2026-01-30)
 
 
