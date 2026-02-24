@@ -12,6 +12,15 @@ use MyParcelNL\Sdk\Helper\LabelHelper;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use setasign\Fpdi\Fpdi;
 
+/**
+ * Service for retrieving shipment labels (link/PDF) by shipment IDs.
+ *
+ * Intentionally uses MyParcelRequest for now:
+ * - generated ShipmentApi::getShipmentsLabels() currently returns no response body,
+ *   while this service needs to read label URLs and raw PDF bytes.
+ * - prepared labels endpoint (/v2/shipment_labels/{ids}) is not covered by the
+ *   generated ShipmentApi operation set.
+ */
 final class ShipmentLabelsService
 {
     use HasUserAgent;

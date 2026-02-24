@@ -6,12 +6,13 @@ namespace MyParcelNL\Sdk\Test\Services;
 
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use MyParcelNL\Sdk\Helper\ShipmentCollection;
+use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\Shipment\Carrier;
 use MyParcelNL\Sdk\Model\Shipment\PackageType;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
+use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -40,11 +41,12 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testSetLinkOfLabelsForCreatedShipment(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipment($this->createMinimalNlShipment('smoke-label-' . uniqid('', true)));
+        $collection = new ShipmentCollection();
+        $collection->add($this->createMinimalNlShipment('smoke-label-' . uniqid('', true)));
 
         try {
-            $created = $collection->createConcepts();
+            $createService = new ShipmentCreateService($this->liveApiKey);
+            $created = $createService->create($collection);
             $shipmentIds = array_keys($created);
 
             $labels = new ShipmentLabelsService($this->liveApiKey);
@@ -61,35 +63,31 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testFetchTrackTraceDataForCreatedShipment(): void
     {
-        $collection = new ShipmentCollection($this->liveApiKey);
-        $collection->addShipment($this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true)));
+        $collection = new ShipmentCollection();
+        $collection->add($this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true)));
 
         try {
-            $created = $collection->createConcepts();
+            $createService = new ShipmentCreateService($this->liveApiKey);
+            $created = $createService->create($collection);
             $shipmentIds = array_keys($created);
+            $shipmentId = (int) $shipmentIds[0];
 
             $trackTrace = new ShipmentTrackTraceService($this->liveApiKey);
-            $result = $trackTrace->fetchTrackTraceData($shipmentIds);
+            $result = $this->fetchTrackTraceWithRetry($trackTrace, $shipmentIds, $shipmentId);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
         }
 
         self::assertIsArray($result);
-
-        foreach ($shipmentIds as $shipmentId) {
-            if (! isset($result[$shipmentId])) {
-                continue;
-            }
-
-            self::assertSame($shipmentId, (int) $result[$shipmentId]['shipment_id']);
-        }
+        self::assertArrayHasKey($shipmentId, $result, 'Expected tracktrace for created shipment was not returned.');
+        self::assertSame($shipmentId, (int) $result[$shipmentId]->getShipmentId());
     }
 
     private function createMinimalNlShipment(string $referenceIdentifier): Shipment
     {
         return (new Shipment())
-            ->withCarrier(Carrier::POSTNL)
+            ->setCarrier(Carrier::POSTNL)
             ->withPackageType(PackageType::PACKAGE)
             ->withWeight(1000)
             ->setRecipient([
@@ -134,5 +132,35 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         throw $e;
+    }
+
+    /**
+     * Poll track & trace endpoint briefly to account for eventual consistency.
+     *
+     * @param int[] $shipmentIds
+     * @return array<int, mixed>
+     */
+    private function fetchTrackTraceWithRetry(
+        ShipmentTrackTraceService $trackTraceService,
+        array $shipmentIds,
+        int $expectedShipmentId,
+        int $attempts = 5,
+        int $sleepMilliseconds = 1000
+    ): array {
+        $lastResult = [];
+
+        for ($attempt = 1; $attempt <= $attempts; $attempt++) {
+            $lastResult = $trackTraceService->fetchTrackTraceData($shipmentIds);
+
+            if (isset($lastResult[$expectedShipmentId])) {
+                return $lastResult;
+            }
+
+            if ($attempt < $attempts) {
+                usleep($sleepMilliseconds * 1000);
+            }
+        }
+
+        return $lastResult;
     }
 }

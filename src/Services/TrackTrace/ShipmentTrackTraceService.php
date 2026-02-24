@@ -5,23 +5,26 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\TrackTrace;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTrace;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 final class ShipmentTrackTraceService
 {
     use HasUserAgent;
 
-    private string $apiKey;
+    private ShipmentApi $api;
 
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, ?ShipmentApi $api = null, ?string $baseUri = null)
     {
-        $this->apiKey = $apiKey;
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $baseUri);
     }
 
     /**
      * @param int[] $shipmentIds
-     * @return array<int, array<string, mixed>>
+     * @return array<int, ShipmentDefsTrackTrace>
      */
     public function fetchTrackTraceData(array $shipmentIds): array
     {
@@ -29,27 +32,33 @@ final class ShipmentTrackTraceService
             throw new InvalidArgumentException('At least one shipment ID is required');
         }
 
-        $uri = 'tracktraces/' . implode(';', $shipmentIds);
+        $response = $this->api->getTrackTracesByIds(
+            implode(';', $shipmentIds),
+            $this->getUserAgentHeader()
+        );
 
-        $request = (new MyParcelRequest())
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters($this->apiKey)
-            ->sendRequest('GET', $uri);
+        return $this->mapTrackTracesByShipmentId($response);
+    }
 
-        $trackTraces = $request->getResult('data.tracktraces') ?? [];
+    /**
+     * @return array<int, ShipmentDefsTrackTrace>
+     */
+    private function mapTrackTracesByShipmentId(ShipmentResponsesTracktraces $response): array
+    {
+        $data = $response->getData();
 
-        if (! is_array($trackTraces)) {
+        if (null === $data || ! is_array($data->getTracktraces())) {
             return [];
         }
 
         $result = [];
 
-        foreach ($trackTraces as $trackTrace) {
-            if (! is_array($trackTrace) || ! isset($trackTrace['shipment_id'])) {
+        foreach ($data->getTracktraces() as $trackTrace) {
+            if (! $trackTrace instanceof ShipmentDefsTrackTrace) {
                 continue;
             }
 
-            $result[(int) $trackTrace['shipment_id']] = $trackTrace;
+            $result[(int) $trackTrace->getShipmentId()] = $trackTrace;
         }
 
         return $result;
