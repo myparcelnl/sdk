@@ -11,6 +11,11 @@ use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
 
+/**
+ * Direct print flow for shipments.
+ *
+ * @todo migrate to generated ShipmentApi when direct-print request/headers are supported in OpenAPI spec/client.
+ */
 final class ShipmentPrintService
 {
     use HasUserAgent;
@@ -29,6 +34,8 @@ final class ShipmentPrintService
      * Direct print requires a custom Accept header with printer-group-id.
      * The generated client cannot inject this header per call, so this flow
      * intentionally uses MyParcelRequest.
+     *
+     * @todo migrate to generated ShipmentApi call once direct-print contract is available in spec/client.
      *
      * @return array<int, string|null> Mapping shipment id => reference identifier.
      */
