@@ -8,7 +8,9 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Model\Shipment\Carrier;
 use MyParcelNL\Sdk\Model\Shipment\PackageType;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
@@ -75,7 +77,7 @@ final class ShipmentConvenienceTest extends TestCase
     public function testGetCarrierLazilyNormalizesSdkNameToId(): void
     {
         $shipment = new Shipment([
-            'carrier' => Carrier::POSTNL,
+            'carrier' => RefTypesCarrierV2::POSTNL,
         ]);
 
         $carrier = $shipment->getCarrier();
@@ -87,7 +89,7 @@ final class ShipmentConvenienceTest extends TestCase
     public function testSetCarrierAcceptsSdkCarrierNameAndStoresId(): void
     {
         $shipment = (new Shipment())
-            ->setCarrier(Carrier::POSTNL);
+            ->setCarrier(RefTypesCarrierV2::POSTNL);
 
         $this->assertSame(RefTypesCarrier::POSTNL, $shipment->getCarrier());
     }
@@ -95,7 +97,7 @@ final class ShipmentConvenienceTest extends TestCase
     public function testWithPackageTypeCreatesOptionsIfMissingAndSetsId(): void
     {
         $shipment = (new Shipment())
-            ->withPackageType(PackageType::MAILBOX);
+            ->withPackageType(RefShipmentPackageTypeV2::MAILBOX);
 
         $this->assertNotNull($shipment->getOptions());
         $this->assertSame(RefShipmentPackageType::MAILBOX, $shipment->getOptions()->getPackageType());

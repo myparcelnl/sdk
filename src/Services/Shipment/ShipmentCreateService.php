@@ -13,21 +13,21 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
 
 final class ShipmentCreateService
 {
     use HasUserAgent;
-
-    private const MAX_SHIPMENTS_PER_CALL = 100;
+    use EnsuresShipmentReferenceIds;
 
     private ShipmentApi $api;
 
     public function __construct(
         string $apiKey,
         ?ShipmentApi $api = null,
-        ?string $baseUri = null
+        ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $baseUri);
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
     }
 
     /**
@@ -41,7 +41,7 @@ final class ShipmentCreateService
      */
     public function create(ShipmentCollection $collection, $format = null, $positions = null): array
     {
-        $shipments = $collection->getShipments(false);
+        $shipments = $collection->values()->all();
 
         $this->validateBeforeCreate($shipments);
         $this->ensureReferenceIds($shipments);
@@ -69,25 +69,6 @@ final class ShipmentCreateService
     {
         if (empty($shipments)) {
             throw new InvalidArgumentException('At least one shipment must be added before calling create().');
-        }
-
-        // Mirrors generated model validation in ShipmentPostShipmentsRequestV11Data::setShipments().
-        if (count($shipments) > self::MAX_SHIPMENTS_PER_CALL) {
-            throw new InvalidArgumentException(
-                sprintf('Maximum %d shipments per call', self::MAX_SHIPMENTS_PER_CALL)
-            );
-        }
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function ensureReferenceIds(array $shipments): void
-    {
-        foreach ($shipments as $shipment) {
-            if (! $shipment->getReferenceIdentifier()) {
-                $shipment->setReferenceIdentifier('sdk_' . uniqid('', true));
-            }
         }
     }
 
@@ -127,7 +108,7 @@ final class ShipmentCreateService
         foreach ($responseData->getIds() as $index => $idObject) {
             $referenceIdentifier = $this->normalizeReferenceIdentifier($idObject->getReferenceIdentifier());
 
-            // TEMP WORKAROUND (remove after CoreAPI spec/codegen fix):
+            // @todo remove after CoreAPI spec/codegen fix:
             // Generated client may deserialize reference_identifier as wrapper object.
             if (null === $referenceIdentifier && isset($requestReferences[$index])) {
                 $referenceIdentifier = $requestReferences[$index];
@@ -140,7 +121,7 @@ final class ShipmentCreateService
     }
 
     /**
-     * TEMP WORKAROUND (remove after CoreAPI spec/codegen fix):
+     * @todo remove after CoreAPI spec/codegen fix:
      * Normalize generated reference_identifier values to scalar strings.
      */
     private function normalizeReferenceIdentifier($referenceIdentifier): ?string

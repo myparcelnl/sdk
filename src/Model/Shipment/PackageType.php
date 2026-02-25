@@ -4,91 +4,55 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment;
 
-use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Model\Shipment\Mapping\PackageTypeApiMapping;
 
 /**
- * Enum-like translator for shipment package types.
+ * Thin translator between public package type enum values and shipment v1 ids.
  *
- * This is intentionally not a request model. It maps readable SDK constants to
- * generated Core API references.
+ * Public values come from generated v2 refs.
+ * Request payload values for shipment create remain generated v1 ids.
  */
 final class PackageType
 {
-    public const PACKAGE = 'PACKAGE';
-    public const MAILBOX = 'MAILBOX';
-    public const LETTER = 'LETTER';
-    public const DIGITAL_STAMP = 'DIGITAL_STAMP';
-    public const PALLET = 'PALLET';
-    public const SMALL_PACKAGE = 'SMALL_PACKAGE';
-    public const ENVELOPE = 'ENVELOPE';
-
     /**
-     * Map SDK-level package type to API reference.
-     *
-     * @return RefShipmentPackageType
+     * @return string RefShipmentPackageType value.
      */
     public static function toApiRef(string $packageType): int
     {
-        $map = self::map();
-
-        if (! isset($map[$packageType])) {
-            throw new InvalidArgumentException("Unknown package type '{$packageType}'");
-        }
-
-        return $map[$packageType];
+        return self::mapping()->enumToApiRef($packageType);
     }
 
-    /**
-     * Map SDK-level package type to numeric API id.
-     */
     public static function toId(string $packageType): int
     {
-        return (int) self::toApiRef($packageType);
+        return self::mapping()->enumToId($packageType);
     }
 
-    /**
-     * Check if the given SDK-level package type is valid.
-     */
+    public static function fromId(int $id): string
+    {
+        return self::mapping()->idToEnum($id);
+    }
+
     public static function isValid(string $packageType): bool
     {
-        return isset(self::map()[$packageType]);
+        return self::mapping()->isValid($packageType);
     }
 
     /**
-     * Get all available SDK-level package types.
-     *
-     * @return string[]
+     * @return string[] List of generated v2 package type enum values.
      */
     public static function all(): array
     {
-        return [
-            self::PACKAGE,
-            self::MAILBOX,
-            self::LETTER,
-            self::DIGITAL_STAMP,
-            self::PALLET,
-            self::SMALL_PACKAGE,
-            self::ENVELOPE,
-        ];
+        return self::mapping()->all();
     }
 
-    /**
-     * Internal source of truth for name -> id mapping.
-     *
-     * @return array<string, string>
-     */
-    private static function map(): array
+    private static function mapping(): PackageTypeApiMapping
     {
-        // @TODO: Temporary map for compatibility, should be dynamic in the future
-        return [
-            self::PACKAGE => RefShipmentPackageType::PACKAGE,
-            self::MAILBOX => RefShipmentPackageType::MAILBOX,
-            self::LETTER => RefShipmentPackageType::UNFRANKED,
-            self::DIGITAL_STAMP => RefShipmentPackageType::DIGITAL_STAMP,
-            self::PALLET => RefShipmentPackageType::PALLET,
-            self::SMALL_PACKAGE => RefShipmentPackageType::SMALL_PACKAGE,
-            self::ENVELOPE => RefShipmentPackageType::ENVELOPE,
-        ];
+        static $mapping;
+
+        if (null === $mapping) {
+            $mapping = new PackageTypeApiMapping();
+        }
+
+        return $mapping;
     }
 }

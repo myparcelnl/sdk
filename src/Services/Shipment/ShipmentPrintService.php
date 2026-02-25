@@ -9,12 +9,12 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
 
 final class ShipmentPrintService
 {
     use HasUserAgent;
-
-    private const MAX_SHIPMENTS_PER_CALL = 100;
+    use EnsuresShipmentReferenceIds;
 
     private string $apiKey;
 
@@ -26,11 +26,15 @@ final class ShipmentPrintService
     /**
      * Create shipments and send labels directly to the given printer group.
      *
+     * Direct print requires a custom Accept header with printer-group-id.
+     * The generated client cannot inject this header per call, so this flow
+     * intentionally uses MyParcelRequest.
+     *
      * @return array<int, string|null> Mapping shipment id => reference identifier.
      */
     public function print(ShipmentCollection $collection, string $printerGroupId): array
     {
-        $shipments = $collection->getShipments(false);
+        $shipments = $collection->values()->all();
 
         $this->validateBeforePrint($shipments);
         $this->ensureReferenceIds($shipments);
@@ -55,24 +59,6 @@ final class ShipmentPrintService
     {
         if (empty($shipments)) {
             throw new InvalidArgumentException('At least one shipment must be added before calling print().');
-        }
-
-        if (count($shipments) > self::MAX_SHIPMENTS_PER_CALL) {
-            throw new InvalidArgumentException(
-                sprintf('Maximum %d shipments per call', self::MAX_SHIPMENTS_PER_CALL)
-            );
-        }
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function ensureReferenceIds(array $shipments): void
-    {
-        foreach ($shipments as $shipment) {
-            if (! $shipment->getReferenceIdentifier()) {
-                $shipment->setReferenceIdentifier('sdk_' . uniqid('', true));
-            }
         }
     }
 

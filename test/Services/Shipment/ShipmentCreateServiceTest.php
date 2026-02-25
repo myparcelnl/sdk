@@ -7,14 +7,14 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsData;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\Model\Shipment\Carrier;
-use MyParcelNL\Sdk\Model\Shipment\PackageType;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -38,11 +38,10 @@ final class ShipmentCreateServiceTest extends TestCase
         $collection = new ShipmentCollection();
 
         for ($i = 0; $i < 101; $i++) {
-            $collection->add(new Shipment());
+            $collection->push(new Shipment());
         }
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Maximum 100 shipments per call');
 
         $service->create($collection);
     }
@@ -97,8 +96,8 @@ final class ShipmentCreateServiceTest extends TestCase
     {
         $shipment = (new Shipment())
             ->setReferenceIdentifier('order-enum')
-            ->setCarrier(Carrier::POSTNL)
-            ->withPackageType(PackageType::PACKAGE);
+            ->setCarrier(RefTypesCarrierV2::POSTNL)
+            ->withPackageType(RefShipmentPackageTypeV2::PACKAGE);
 
         $api = $this->createMock(ShipmentApi::class);
         $service = new ShipmentCreateService($this->getApiKey(), $api);

@@ -110,7 +110,7 @@ class Shipment extends ShipmentRequest
     }
 
     /**
-     * TEMP WORKAROUND (remove after CoreAPI spec/codegen fix):
+     * @todo remove after CoreAPI spec/codegen fix:
      * Force known shipment fields to scalar types expected by API validation.
      *
      * @return array<string, string>
@@ -175,8 +175,7 @@ class Shipment extends ShipmentRequest
     /**
      * Accept both generated model or array, but always store as SDK ShipmentOptions wrapper.
      *
-     * TEMP WORKAROUND: wrapper exists to normalize package_type serialization for
-     * current generated-client behavior. Remove when upstream/generated types are stable.
+     * @todo remove wrapper-specific normalization after CoreAPI spec/codegen fix.
      *
      * @param array<string, mixed>|ShipmentOptionsModel|ShipmentOptions $options
      * @return self
@@ -205,7 +204,7 @@ class Shipment extends ShipmentRequest
     /**
      * Normalize numeric-string carrier ids to integers before serialization.
      *
-     * TEMP WORKAROUND: generated enums currently expose numeric ids as strings.
+     * @todo remove normalization after generated enums serialize numeric ids correctly.
      *
      * @param int|string $carrier
      * @return self

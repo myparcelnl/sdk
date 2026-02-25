@@ -23,127 +23,43 @@ use MyParcelNL\Sdk\Support\Collection;
 final class ShipmentCollection extends Collection
 {
     /**
-     * @param Shipment[] $shipments
-     */
-    public function __construct(array $shipments = [])
-    {
-        parent::__construct();
-        $this->setShipments($shipments);
-    }
-
-    /**
-     * Replace all items in the collection.
+     * Push shipments onto the collection.
      *
-     * @param Shipment[] $shipments
+     * @param mixed ...$values
      */
-    public function setShipments(array $shipments): self
+    public function push(...$values): self
     {
-        $this->assertShipmentArray($shipments);
-        $this->items = array_values($shipments);
+        $this->assertShipmentArray($values);
 
-        return $this;
-    }
-
-    /**
-     * Add a single shipment to the collection.
-     */
-    public function add(Shipment $shipment): self
-    {
-        $this->push($shipment);
-
-        return $this;
-    }
-
-    /**
-     * Add multiple shipments to the collection.
-     *
-     * @param Shipment[] $shipments
-     */
-    public function addMany(array $shipments): self
-    {
-        $this->assertShipmentArray($shipments);
-
-        foreach ($shipments as $shipment) {
-            $this->push($shipment);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get collection items.
-     *
-     * @return Shipment[]
-     */
-    public function getShipments(bool $keepKeys = true): array
-    {
-        return $keepKeys ? $this->all() : array_values($this->all());
-    }
-
-    /**
-     * Get the first shipment or null when the collection is empty.
-     */
-    public function firstShipment(): ?Shipment
-    {
-        $shipment = $this->first();
-
-        return $shipment instanceof Shipment ? $shipment : null;
-    }
-
-    /**
-     * Get the last shipment or null when the collection is empty.
-     */
-    public function lastShipment(): ?Shipment
-    {
-        $shipment = $this->last();
-
-        return $shipment instanceof Shipment ? $shipment : null;
+        return parent::push(...$values);
     }
 
     /**
      * Filter by exact reference identifier.
      */
-    public function filterByReferenceId(string $referenceIdentifier): self
+    public function whereReferenceIdentifier(string $referenceIdentifier): self
     {
-        return new self(array_values(array_filter(
-            $this->items,
-            static function ($shipment) use ($referenceIdentifier): bool {
-                return $shipment instanceof Shipment
-                    && $shipment->getReferenceIdentifier() === $referenceIdentifier;
-            }
-        )));
+        return $this
+            ->where('reference_identifier', $referenceIdentifier)
+            ->values();
     }
 
     /**
      * Filter by reference identifier prefix.
      */
-    public function filterByReferenceIdPrefix(string $referencePrefix): self
+    public function whereReferenceIdentifierPrefix(string $referencePrefix): self
     {
-        return new self(array_values(array_filter(
-            $this->items,
-            static function ($shipment) use ($referencePrefix): bool {
+        return $this
+            ->filter(static function ($shipment) use ($referencePrefix): bool {
                 if (! $shipment instanceof Shipment) {
                     return false;
                 }
 
                 $referenceIdentifier = $shipment->getReferenceIdentifier();
-                if (! is_string($referenceIdentifier) || '' === $referenceIdentifier) {
-                    return false;
-                }
 
-                return 0 === strpos($referenceIdentifier, $referencePrefix);
-            }
-        )));
-    }
-
-    /**
-     * Clear all items from the collection.
-     */
-    public function clear(): self
-    {
-        $this->items = [];
-
-        return $this;
+                return is_string($referenceIdentifier) && 0 === strpos($referenceIdentifier, $referencePrefix);
+            })
+            ->values();
     }
 
     /**
@@ -156,5 +72,17 @@ final class ShipmentCollection extends Collection
                 throw new InvalidArgumentException('All items must be instances of ' . Shipment::class);
             }
         }
+    }
+
+    /**
+     * @param mixed $items
+     * @return array<int, Shipment>
+     */
+    protected function getArrayableItems($items)
+    {
+        $array = parent::getArrayableItems($items);
+        $this->assertShipmentArray($array);
+
+        return array_values($array);
     }
 }

@@ -19,52 +19,40 @@ final class ShipmentCollectionTest extends TestCase
         new ShipmentCollection([new Shipment(), new \stdClass()]);
     }
 
-    public function testSetShipmentsReplacesItems(): void
-    {
-        $collection = new ShipmentCollection([new Shipment()]);
-        $replacement = [new Shipment(), new Shipment()];
-
-        $collection->setShipments($replacement);
-
-        self::assertSame(2, $collection->count());
-        self::assertSame($replacement, $collection->getShipments());
-    }
-
-    public function testAddAndAddMany(): void
+    public function testPushSingleAndMultipleItems(): void
     {
         $shipmentOne = new Shipment();
         $shipmentTwo = new Shipment();
         $shipmentThree = new Shipment();
 
         $collection = new ShipmentCollection();
-        $collection->add($shipmentOne)->addMany([$shipmentTwo, $shipmentThree]);
+        $collection->push($shipmentOne)->push($shipmentTwo, $shipmentThree);
 
         self::assertSame(3, $collection->count());
-        self::assertSame([$shipmentOne, $shipmentTwo, $shipmentThree], $collection->getShipments());
+        self::assertSame([$shipmentOne, $shipmentTwo, $shipmentThree], $collection->all());
     }
 
-    public function testAddManyThrowsForNonShipmentValues(): void
+    public function testPushThrowsForNonShipmentValues(): void
     {
         $collection = new ShipmentCollection();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All items must be instances of ' . Shipment::class);
 
-        $collection->addMany([new Shipment(), new \stdClass()]);
+        $collection->push(new Shipment(), new \stdClass());
     }
 
-    public function testGetShipmentsWithoutKeysReturnsReindexedArray(): void
+    public function testValuesReturnsReindexedCollection(): void
     {
         $shipmentOne = new Shipment();
         $shipmentTwo = new Shipment();
 
-        $collection = new ShipmentCollection();
-        $collection->addMany([$shipmentOne, $shipmentTwo]);
+        $collection = new ShipmentCollection([10 => $shipmentOne, 20 => $shipmentTwo]);
 
-        self::assertSame([$shipmentOne, $shipmentTwo], $collection->getShipments(false));
+        self::assertSame([$shipmentOne, $shipmentTwo], $collection->values()->all());
     }
 
-    public function testFirstAndLastShipment(): void
+    public function testFirstAndLast(): void
     {
         $shipmentOne = new Shipment();
         $shipmentTwo = new Shipment();
@@ -72,33 +60,33 @@ final class ShipmentCollectionTest extends TestCase
 
         $collection = new ShipmentCollection([$shipmentOne, $shipmentTwo, $shipmentThree]);
 
-        self::assertSame($shipmentOne, $collection->firstShipment());
-        self::assertSame($shipmentThree, $collection->lastShipment());
+        self::assertSame($shipmentOne, $collection->first());
+        self::assertSame($shipmentThree, $collection->last());
     }
 
-    public function testFirstAndLastShipmentReturnNullForEmptyCollection(): void
+    public function testFirstAndLastReturnNullForEmptyCollection(): void
     {
         $collection = new ShipmentCollection();
 
-        self::assertNull($collection->firstShipment());
-        self::assertNull($collection->lastShipment());
+        self::assertNull($collection->first());
+        self::assertNull($collection->last());
     }
 
-    public function testFilterByReferenceId(): void
+    public function testWhereReferenceIdentifier(): void
     {
         $shipmentOne = (new Shipment())->setReferenceIdentifier('order-100');
         $shipmentTwo = (new Shipment())->setReferenceIdentifier('order-200');
         $shipmentThree = (new Shipment())->setReferenceIdentifier('order-100');
 
         $collection = new ShipmentCollection([$shipmentOne, $shipmentTwo, $shipmentThree]);
-        $matches = $collection->filterByReferenceId('order-100');
+        $matches = $collection->whereReferenceIdentifier('order-100');
 
         self::assertInstanceOf(ShipmentCollection::class, $matches);
         self::assertCount(2, $matches);
-        self::assertSame([$shipmentOne, $shipmentThree], $matches->getShipments(false));
+        self::assertSame([$shipmentOne, $shipmentThree], $matches->all());
     }
 
-    public function testFilterByReferenceIdPrefix(): void
+    public function testWhereReferenceIdentifierPrefix(): void
     {
         $shipmentOne = (new Shipment())->setReferenceIdentifier('group-A-001');
         $shipmentTwo = (new Shipment())->setReferenceIdentifier('group-A-002');
@@ -106,22 +94,22 @@ final class ShipmentCollectionTest extends TestCase
         $shipmentFour = new Shipment(); // null reference
 
         $collection = new ShipmentCollection([$shipmentOne, $shipmentTwo, $shipmentThree, $shipmentFour]);
-        $matches = $collection->filterByReferenceIdPrefix('group-A-');
+        $matches = $collection->whereReferenceIdentifierPrefix('group-A-');
 
         self::assertInstanceOf(ShipmentCollection::class, $matches);
         self::assertCount(2, $matches);
-        self::assertSame([$shipmentOne, $shipmentTwo], $matches->getShipments(false));
+        self::assertSame([$shipmentOne, $shipmentTwo], $matches->all());
     }
 
-    public function testClear(): void
+    public function testSpliceCanClearCollection(): void
     {
         $collection = new ShipmentCollection([new Shipment(), new Shipment()]);
 
         self::assertSame(2, $collection->count());
 
-        $collection->clear();
+        $collection->splice(0);
 
         self::assertSame(0, $collection->count());
-        self::assertSame([], $collection->getShipments());
+        self::assertSame([], $collection->all());
     }
 }

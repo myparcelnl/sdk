@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
 /**
  * SDK wrapper around generated shipment options.
  *
- * TEMP WORKAROUND (remove after CoreAPI spec/codegen fix):
+ * @todo remove after CoreAPI spec/codegen fix:
  * Keep package_type serialization aligned with API expectations while generated
  * enums expose numeric ids as strings.
  *

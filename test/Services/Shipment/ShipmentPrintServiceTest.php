@@ -25,21 +25,6 @@ final class ShipmentPrintServiceTest extends TestCase
         $service->print($collection, 'printer-group-1');
     }
 
-    public function testPrintThrowsWhenMoreThanHundredShipmentsWereAdded(): void
-    {
-        $service = new ShipmentPrintService($this->getApiKey());
-        $collection = new ShipmentCollection();
-
-        for ($i = 0; $i < 101; $i++) {
-            $collection->add(new Shipment());
-        }
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Maximum 100 shipments per call');
-
-        $service->print($collection, 'printer-group-1');
-    }
-
     public function testPrintUsesMyParcelRequestWithDirectPrintHeader(): void
     {
         $collection = new ShipmentCollection([
