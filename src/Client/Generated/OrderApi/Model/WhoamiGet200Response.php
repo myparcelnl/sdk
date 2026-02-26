@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  MyParcelNL\Sdk\Client\Generated\IamApi
+ * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,16 +26,16 @@
  * Do not edit the class manually.
  */
 
-namespace MyParcelNL\Sdk\Client\Generated\IamApi\Model;
+namespace MyParcelNL\Sdk\Client\Generated\OrderApi\Model;
 
 use \ArrayAccess;
-use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
+use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
 
 /**
  * WhoamiGet200Response Class Doc Comment
  *
  * @category Class
- * @package  MyParcelNL\Sdk\Client\Generated\IamApi
+ * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,13 +58,13 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
       */
     protected static $openAPITypes = [
         'account_id' => 'string',
-        'platform' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform',
-        'principal' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal',
-        'role' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Role',
+        'platform' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Platform',
+        'principal' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Principal',
+        'role' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Role',
         'shop_ids' => 'string[]',
-        'features' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]',
-        'fulfilment_platforms' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]',
-        'impersonator' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200ResponseImpersonator'
+        'features' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Feature[]',
+        'fulfilment_platforms' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\FulfilmentPlatform[]',
+        'impersonator' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\WhoamiGet200ResponseImpersonator'
     ];
 
     /**
@@ -422,7 +422,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets platform
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Platform
      */
     public function getPlatform()
     {
@@ -432,7 +432,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets platform
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform $platform platform
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Platform $platform platform
      *
      * @return self
      */
@@ -449,7 +449,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets principal
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Principal
      */
     public function getPrincipal()
     {
@@ -459,7 +459,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets principal
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal $principal principal
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Principal $principal principal
      *
      * @return self
      */
@@ -476,7 +476,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets role
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Role
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Role
      */
     public function getRole()
     {
@@ -486,7 +486,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets role
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Role $role role
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Role $role role
      *
      * @return self
      */
@@ -537,7 +537,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets features
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Feature[]|null
      */
     public function getFeatures()
     {
@@ -547,7 +547,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets features
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]|null $features features
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Feature[]|null $features features
      *
      * @return self
      */
@@ -571,7 +571,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets fulfilment_platforms
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\FulfilmentPlatform[]|null
      */
     public function getFulfilmentPlatforms()
     {
@@ -581,7 +581,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets fulfilment_platforms
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]|null $fulfilment_platforms fulfilment_platforms
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\FulfilmentPlatform[]|null $fulfilment_platforms fulfilment_platforms
      *
      * @return self
      */
@@ -605,7 +605,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets impersonator
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200ResponseImpersonator|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\WhoamiGet200ResponseImpersonator|null
      */
     public function getImpersonator()
     {
@@ -615,7 +615,7 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets impersonator
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200ResponseImpersonator|null $impersonator impersonator
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\WhoamiGet200ResponseImpersonator|null $impersonator impersonator
      *
      * @return self
      */
