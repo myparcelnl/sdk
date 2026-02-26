@@ -18,10 +18,12 @@ services:
 
   generate-api:
     image: openapitools/openapi-generator-cli:v7.12.0
+    environment:
+      - JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=1
     volumes:
       - type: bind
         source: ./
         target: /local
     command: >
-      batch /local/openapi/coreapi.yaml /local/openapi/order.yaml /local/openapi/iam.yaml --includes-base-dir=/local/openapi --root-dir=/local
+      batch /local/openapi/coreapi.yaml /local/openapi/order.yaml /local/openapi/iam.yaml --includes-base-dir=/local/openapi --root-dir=/local --threads=1
     profiles: [openapi]
