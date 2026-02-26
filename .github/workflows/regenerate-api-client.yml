@@ -77,13 +77,12 @@ jobs:
           base: v11
           branch: chore/regenerate-api-client-v11
           delete-branch: true
-          commit-message: 'chore(api): regenerate API clients'
-          title: 'chore(api): regenerate API clients'
+          commit-message: 'feat(api): update API clients'
+          title: 'feat(api): update API clients'
           body: |
-            Automated regeneration of various API clients.
+            Automated update of OpenAPI-based clients in the SDK based on changes in the MyParcel OpenAPI schemas.
 
             - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator v7.12.0)
-            - Composer steps run in `ghcr.io/myparcelnl/php-xd:7.4`
           labels: |
             automated
             api-client
