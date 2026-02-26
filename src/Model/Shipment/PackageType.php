@@ -11,17 +11,11 @@ use MyParcelNL\Sdk\Model\Shipment\Mapping\PackageTypeApiMapping;
  *
  * Public values come from generated v2 refs.
  * Request payload values for shipment create remain generated v1 ids.
+ *
+ * @todo Introduce a shared shipment domain model interface if this class gains stateful attributes later.
  */
 final class PackageType
 {
-    /**
-     * @return string RefShipmentPackageType value.
-     */
-    public static function toApiRef(string $packageType): int
-    {
-        return self::mapping()->enumToApiRef($packageType);
-    }
-
     public static function toId(string $packageType): int
     {
         return self::mapping()->enumToId($packageType);
@@ -38,7 +32,7 @@ final class PackageType
     }
 
     /**
-     * @return string[] List of generated v2 package type enum values.
+     * @return array<string, string> key = v2 enum value, value = v1 shipment id.
      */
     public static function all(): array
     {

@@ -280,8 +280,8 @@ class Shipment extends ShipmentRequest
             $options = new ShipmentOptions();
         }
 
-        $packageTypeRef = PackageType::toApiRef($packageType);
-        $options->setPackageType($packageTypeRef);
+        $packageTypeId = PackageType::toId($packageType);
+        $options->setPackageType($packageTypeId);
 
         // Re-assign explicitly to make the mutation flow obvious for maintainers.
         $this->setOptions($options);

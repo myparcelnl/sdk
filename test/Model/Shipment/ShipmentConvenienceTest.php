@@ -119,19 +119,19 @@ final class ShipmentConvenienceTest extends TestCase
         (new Shipment())->withWeight(500.5);
     }
 
-    public function testCarrierToApiRefThrowsOnUnknown(): void
+    public function testCarrierToIdThrowsOnUnknown(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Unknown carrier 'FOO'");
 
-        Carrier::toApiRef('FOO');
+        Carrier::toId('FOO');
     }
 
-    public function testPackageTypeToApiRefThrowsOnUnknown(): void
+    public function testPackageTypeToIdThrowsOnUnknown(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Unknown package type 'FOO'");
 
-        PackageType::toApiRef('FOO');
+        PackageType::toId('FOO');
     }
 }

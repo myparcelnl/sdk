@@ -11,17 +11,11 @@ use MyParcelNL\Sdk\Model\Shipment\Mapping\CarrierApiMapping;
  *
  * Public values come from generated v2 refs.
  * Request payload values for shipment create remain generated v1 ids.
+ *
+ * @todo Introduce a shared shipment domain model interface if this class gains stateful attributes later.
  */
 final class Carrier
 {
-    /**
-     * @return string RefTypesCarrier value.
-     */
-    public static function toApiRef(string $carrier): int
-    {
-        return self::mapping()->enumToApiRef($carrier);
-    }
-
     public static function toId(string $carrier): int
     {
         return self::mapping()->enumToId($carrier);
@@ -38,7 +32,7 @@ final class Carrier
     }
 
     /**
-     * @return string[] List of generated v2 carrier enum values.
+     * @return array<string, string> key = v2 enum value, value = v1 shipment id.
      */
     public static function all(): array
     {
