@@ -58,7 +58,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
       * @var string[]
       */
     protected static $openAPITypes = [
-        'results' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]'
+        'items' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]'
     ];
 
     /**
@@ -69,7 +69,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'results' => null
+        'items' => null
     ];
 
     /**
@@ -78,7 +78,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'results' => false
+        'items' => false
     ];
 
     /**
@@ -167,7 +167,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
      * @var string[]
      */
     protected static $attributeMap = [
-        'results' => 'results'
+        'items' => 'items'
     ];
 
     /**
@@ -176,7 +176,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
      * @var string[]
      */
     protected static $setters = [
-        'results' => 'setResults'
+        'items' => 'setItems'
     ];
 
     /**
@@ -185,7 +185,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
      * @var string[]
      */
     protected static $getters = [
-        'results' => 'getResults'
+        'items' => 'getItems'
     ];
 
     /**
@@ -245,7 +245,7 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('results', $data ?? [], null);
+        $this->setIfExists('items', $data ?? [], null);
     }
 
     /**
@@ -275,8 +275,8 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
     {
         $invalidProperties = [];
 
-        if ($this->container['results'] === null) {
-            $invalidProperties[] = "'results' can't be null";
+        if ($this->container['items'] === null) {
+            $invalidProperties[] = "'items' can't be null";
         }
         return $invalidProperties;
     }
@@ -294,28 +294,28 @@ class CapabilitiesResponsesContractDefinitionsV2 implements ModelInterface, Arra
 
 
     /**
-     * Gets results
+     * Gets items
      *
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
      */
-    public function getResults()
+    public function getItems()
     {
-        return $this->container['results'];
+        return $this->container['items'];
     }
 
     /**
-     * Sets results
+     * Sets items
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[] $results A superset of V2 Capabilities for the contracts within a user's account.
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[] $items A superset of V2 Capabilities for the contracts within a user's account.
      *
      * @return self
      */
-    public function setResults($results)
+    public function setItems($items)
     {
-        if (is_null($results)) {
-            throw new \InvalidArgumentException('non-nullable results cannot be null');
+        if (is_null($items)) {
+            throw new \InvalidArgumentException('non-nullable items cannot be null');
         }
-        $this->container['results'] = $results;
+        $this->container['items'] = $items;
 
         return $this;
     }

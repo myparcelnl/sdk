@@ -326,8 +326,8 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['account_id'] === null) {
             $invalidProperties[] = "'account_id' can't be null";
         }
-        if ((mb_strlen($this->container['account_id']) > 36)) {
-            $invalidProperties[] = "invalid value for 'account_id', the character length must be smaller than or equal to 36.";
+        if ((mb_strlen($this->container['account_id']) > 50)) {
+            $invalidProperties[] = "invalid value for 'account_id', the character length must be smaller than or equal to 50.";
         }
 
         if ((mb_strlen($this->container['account_id']) < 1)) {
@@ -407,8 +407,8 @@ class WhoamiGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
         if (is_null($account_id)) {
             throw new \InvalidArgumentException('non-nullable account_id cannot be null');
         }
-        if ((mb_strlen($account_id) > 36)) {
-            throw new \InvalidArgumentException('invalid length for $account_id when calling WhoamiGet200Response., must be smaller than or equal to 36.');
+        if ((mb_strlen($account_id) > 50)) {
+            throw new \InvalidArgumentException('invalid length for $account_id when calling WhoamiGet200Response., must be smaller than or equal to 50.');
         }
         if ((mb_strlen($account_id) < 1)) {
             throw new \InvalidArgumentException('invalid length for $account_id when calling WhoamiGet200Response., must be bigger than or equal to 1.');
