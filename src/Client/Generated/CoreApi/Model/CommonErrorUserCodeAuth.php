@@ -44,21 +44,45 @@ class CommonErrorUserCodeAuth
     /**
      * Possible values of this enum
      */
-    public const _3000 = '3000';
+    /**
+     * Access Denied
+     */
+    public const ACCESS_DENIED = 3000;
 
-    public const _3001 = '3001';
+    /**
+     * Permission Denied
+     */
+    public const PERMISSION_DENIED = 3001;
 
-    public const _3002 = '3002';
+    /**
+     * Session Token Not Found
+     */
+    public const SESSION_TOKEN_NOT_FOUND = 3002;
 
-    public const _3003 = '3003';
+    /**
+     * Last login attempt failed
+     */
+    public const LAST_LOGIN_ATTEMPT_FAILED = 3003;
 
-    public const _3004 = '3004';
+    /**
+     * Max login attempts reached
+     */
+    public const MAX_LOGIN_ATTEMPTS_REACHED = 3004;
 
-    public const _3005 = '3005';
+    /**
+     * Session Token Invalidated
+     */
+    public const SESSION_TOKEN_INVALIDATED = 3005;
 
-    public const _3006 = '3006';
+    /**
+     * Invalid JWT Token
+     */
+    public const INVALID_JWT_TOKEN = 3006;
 
-    public const _3007 = '3007';
+    /**
+     * User Not Found in Auth Context
+     */
+    public const USER_NOT_FOUND_IN_AUTHCONTEXT = 3007;
 
     /**
      * Gets allowable values of the enum
@@ -67,14 +91,14 @@ class CommonErrorUserCodeAuth
     public static function getAllowableEnumValues()
     {
         return [
-            self::_3000,
-            self::_3001,
-            self::_3002,
-            self::_3003,
-            self::_3004,
-            self::_3005,
-            self::_3006,
-            self::_3007
+            self::ACCESS_DENIED,
+            self::PERMISSION_DENIED,
+            self::SESSION_TOKEN_NOT_FOUND,
+            self::LAST_LOGIN_ATTEMPT_FAILED,
+            self::MAX_LOGIN_ATTEMPTS_REACHED,
+            self::SESSION_TOKEN_INVALIDATED,
+            self::INVALID_JWT_TOKEN,
+            self::USER_NOT_FOUND_IN_AUTHCONTEXT
         ];
     }
 }

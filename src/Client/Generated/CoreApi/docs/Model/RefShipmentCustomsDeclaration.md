@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**contents** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclarationContents**](RefShipmentCustomsDeclarationContents.md) |  |
+**contents** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsCustomsShipmentType**](ShipmentDefsCustomsShipmentType.md) |  |
 **invoice** | **string** |  | [optional]
 **eori_number** | **string** |  | [optional]
 **vat_number** | **string** |  | [optional]
