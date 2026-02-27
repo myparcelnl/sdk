@@ -43,17 +43,17 @@ class RefShipmentBpostBpostPugoType
     /**
      * Possible values of this enum
      */
-    public const _0 = '0';
+    public const UNKNOWN = 0;
 
-    public const _1 = '1';
+    public const POST_OFFICE = 1;
 
-    public const _2 = '2';
+    public const POST_POINT = 2;
 
-    public const _4 = '4';
+    public const PARCEL_LOCKER = 4;
 
-    public const _8 = '8';
+    public const CLICK_COLLECT = 8;
 
-    public const _16 = '16';
+    public const PARCEL_POINT = 16;
 
     /**
      * Gets allowable values of the enum
@@ -62,12 +62,12 @@ class RefShipmentBpostBpostPugoType
     public static function getAllowableEnumValues()
     {
         return [
-            self::_0,
-            self::_1,
-            self::_2,
-            self::_4,
-            self::_8,
-            self::_16
+            self::UNKNOWN,
+            self::POST_OFFICE,
+            self::POST_POINT,
+            self::PARCEL_LOCKER,
+            self::CLICK_COLLECT,
+            self::PARCEL_POINT
         ];
     }
 }

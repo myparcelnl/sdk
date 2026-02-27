@@ -58,7 +58,7 @@ class RefShipmentCustomsDeclaration implements ModelInterface, ArrayAccess, \Jso
       * @var string[]
       */
     protected static $openAPITypes = [
-        'contents' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclarationContents',
+        'contents' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsCustomsShipmentType',
         'invoice' => 'string',
         'eori_number' => 'string',
         'vat_number' => 'string',
@@ -371,7 +371,7 @@ class RefShipmentCustomsDeclaration implements ModelInterface, ArrayAccess, \Jso
     /**
      * Gets contents
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclarationContents
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsCustomsShipmentType
      */
     public function getContents()
     {
@@ -381,7 +381,7 @@ class RefShipmentCustomsDeclaration implements ModelInterface, ArrayAccess, \Jso
     /**
      * Sets contents
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclarationContents $contents contents
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsCustomsShipmentType $contents contents
      *
      * @return self
      */

@@ -43,21 +43,21 @@ class RefShipmentType
     /**
      * Possible values of this enum
      */
-    public const NUMBER_1 = 1;
+    public const STANDARD = 1;
 
-    public const NUMBER_2 = 2;
+    public const _RETURN = 2;
 
-    public const NUMBER_3 = 3;
+    public const MULTI_COLLO = 3;
 
-    public const NUMBER_4 = 4;
+    public const LABEL_PACKAGE = 4;
 
-    public const NUMBER_5 = 5;
+    public const RETURN_ERS = 5;
 
-    public const NUMBER_6 = 6;
+    public const RETURN_SPECIAL = 6;
 
-    public const NUMBER_7 = 7;
+    public const EXPRESS = 7;
 
-    public const NUMBER_8 = 8;
+    public const FULFILMENT = 8;
 
     /**
      * Gets allowable values of the enum
@@ -66,14 +66,14 @@ class RefShipmentType
     public static function getAllowableEnumValues()
     {
         return [
-            self::NUMBER_1,
-            self::NUMBER_2,
-            self::NUMBER_3,
-            self::NUMBER_4,
-            self::NUMBER_5,
-            self::NUMBER_6,
-            self::NUMBER_7,
-            self::NUMBER_8
+            self::STANDARD,
+            self::_RETURN,
+            self::MULTI_COLLO,
+            self::LABEL_PACKAGE,
+            self::RETURN_ERS,
+            self::RETURN_SPECIAL,
+            self::EXPRESS,
+            self::FULFILMENT
         ];
     }
 }

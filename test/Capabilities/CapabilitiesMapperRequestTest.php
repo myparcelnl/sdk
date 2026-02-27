@@ -19,7 +19,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
     {
         $req = CapabilitiesRequest::forCountry('NL')
             ->withShopId(42)
-            ->withDeliveryType(RefTypesDeliveryTypeV2::STANDARD_DELIVERY)
+            ->withDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
             ->withCarrier(RefTypesCarrierV2::POSTNL)
             ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
             ->withDirection(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND)
@@ -34,7 +34,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
 
         $this->assertSame('NL', $coreReq->getRecipient()->getCountryCode());
         $this->assertSame(42, $coreReq->getShopId());
-        $this->assertSame(RefTypesDeliveryTypeV2::STANDARD_DELIVERY, $coreReq->getDeliveryType());
+        $this->assertSame(RefTypesDeliveryTypeV2::STANDARD, $coreReq->getDeliveryType());
         $this->assertSame(RefTypesCarrierV2::POSTNL, $coreReq->getCarrier());
         $this->assertSame(RefShipmentPackageTypeV2::PACKAGE, $coreReq->getPackageType());
         $this->assertSame(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND, $coreReq->getDirection());
