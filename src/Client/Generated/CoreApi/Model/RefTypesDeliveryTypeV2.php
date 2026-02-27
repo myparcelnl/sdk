@@ -43,19 +43,19 @@ class RefTypesDeliveryTypeV2
     /**
      * Possible values of this enum
      */
-    public const EARLY_MORNING_DELIVERY = 'EARLY_MORNING_DELIVERY';
+    public const MORNING = 'MORNING_DELIVERY';
 
-    public const EVENING_DELIVERY = 'EVENING_DELIVERY';
+    public const STANDARD = 'STANDARD_DELIVERY';
 
-    public const EXPRESS_DELIVERY = 'EXPRESS_DELIVERY';
+    public const EVENING = 'EVENING_DELIVERY';
 
-    public const MORNING_DELIVERY = 'MORNING_DELIVERY';
+    public const PICKUP = 'PICKUP_DELIVERY';
 
-    public const PICKUP_DELIVERY = 'PICKUP_DELIVERY';
+    public const SAME_DAY = 'SAME_DAY_DELIVERY';
 
-    public const SAME_DAY_DELIVERY = 'SAME_DAY_DELIVERY';
+    public const EXPRESS = 'EXPRESS_DELIVERY';
 
-    public const STANDARD_DELIVERY = 'STANDARD_DELIVERY';
+    public const EARLY_MORNING = 'EARLY_MORNING_DELIVERY';
 
     /**
      * Gets allowable values of the enum
@@ -64,13 +64,13 @@ class RefTypesDeliveryTypeV2
     public static function getAllowableEnumValues()
     {
         return [
-            self::EARLY_MORNING_DELIVERY,
-            self::EVENING_DELIVERY,
-            self::EXPRESS_DELIVERY,
-            self::MORNING_DELIVERY,
-            self::PICKUP_DELIVERY,
-            self::SAME_DAY_DELIVERY,
-            self::STANDARD_DELIVERY
+            self::MORNING,
+            self::STANDARD,
+            self::EVENING,
+            self::PICKUP,
+            self::SAME_DAY,
+            self::EXPRESS,
+            self::EARLY_MORNING
         ];
     }
 }

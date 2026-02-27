@@ -44,13 +44,25 @@ class RefShipmentLabelPrintingPosition
     /**
      * Possible values of this enum
      */
-    public const _1 = '1';
+    /**
+     * Top-Left Quadrant
+     */
+    public const TOP_LEFT_QUADRANT = 1;
 
-    public const _2 = '2';
+    /**
+     * Top-Right Quadrant
+     */
+    public const TOP_RIGHT_QUADRANT = 2;
 
-    public const _3 = '3';
+    /**
+     * Bottom-Left Quadrant
+     */
+    public const BOTTOM_LEFT_QUADRANT = 3;
 
-    public const _4 = '4';
+    /**
+     * Bottom-Right Quadrant
+     */
+    public const BOTTOM_RIGHT_QUADRANT = 4;
 
     /**
      * Gets allowable values of the enum
@@ -59,10 +71,10 @@ class RefShipmentLabelPrintingPosition
     public static function getAllowableEnumValues()
     {
         return [
-            self::_1,
-            self::_2,
-            self::_3,
-            self::_4
+            self::TOP_LEFT_QUADRANT,
+            self::TOP_RIGHT_QUADRANT,
+            self::BOTTOM_LEFT_QUADRANT,
+            self::BOTTOM_RIGHT_QUADRANT
         ];
     }
 }

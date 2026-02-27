@@ -827,7 +827,7 @@ class ShipmentApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $delayed,
             'delayed', // param base name
-            'anyOf&lt;boolean,integer,number,number,string&gt;', // openApiType
+            'anyOf&lt;boolean,integer,number,string&gt;', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -836,7 +836,7 @@ class ShipmentApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $delivered,
             'delivered', // param base name
-            'anyOf&lt;common_parameters_boolean,string&gt;', // openApiType
+            'CommonParametersFilterValidateBool', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -863,7 +863,7 @@ class ShipmentApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $hidden,
             'hidden', // param base name
-            'anyOf&lt;common_parameters_boolean,string&gt;', // openApiType
+            'CommonParametersFilterValidateBool', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -1636,7 +1636,7 @@ class ShipmentApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $positions,
             'positions', // param base name
-            'anyOf&lt;_ref_shipment_label_printing_position,shipment_parameters_label_position_anyOf,string&gt;', // openApiType
+            'anyOf&lt;_ref_shipment_label_printing_position,string&gt;', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -4005,7 +4005,7 @@ class ShipmentApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $positions,
             'positions', // param base name
-            'anyOf&lt;_ref_shipment_label_printing_position,shipment_parameters_label_position_anyOf,string&gt;', // openApiType
+            'anyOf&lt;_ref_shipment_label_printing_position,string&gt;', // openApiType
             'form', // style
             true, // explode
             false // required

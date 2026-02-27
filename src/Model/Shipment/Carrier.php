@@ -32,7 +32,7 @@ final class Carrier
      *
      * @return RefTypesCarrier
      */
-    public static function toApiRef(string $carrier): string
+    public static function toApiRef(string $carrier): int
     {
         $map = self::map();
 
@@ -79,25 +79,26 @@ final class Carrier
     /**
      * Internal source of truth for name -> id mapping.
      *
-     * @return array<string, string>
+     * @return array<string, int>
      */
     private static function map(): array
     {
+        // @TODO: Temporary map for compatibility, should be dynamic in the future
         return [
-            self::POSTNL => RefTypesCarrier::_1,
-            self::BPOST => RefTypesCarrier::_2,
-            self::CHEAP_CARGO => RefTypesCarrier::_3,
-            self::DPD => RefTypesCarrier::_4,
-            self::DHL_FOR_YOU => RefTypesCarrier::_9,
-            self::DHL_PARCEL_CONNECT => RefTypesCarrier::_10,
-            self::DHL_EUROPLUS => RefTypesCarrier::_11,
-            self::UPS_STANDARD => RefTypesCarrier::_12,
-            self::UPS_EXPRESS_SAVER => RefTypesCarrier::_13,
-            self::GLS => RefTypesCarrier::_14,
-            self::BRT => RefTypesCarrier::_15,
-            self::TRUNKRS => RefTypesCarrier::_16,
-            self::INPOST => RefTypesCarrier::_17,
-            self::POSTE_ITALIANE => RefTypesCarrier::_18,
+            self::POSTNL => RefTypesCarrier::POSTNL,
+            self::BPOST => RefTypesCarrier::BPOST,
+            self::CHEAP_CARGO => RefTypesCarrier::CHEAP_CARGO,
+            self::DPD => RefTypesCarrier::DPD,
+            self::DHL_FOR_YOU => RefTypesCarrier::DHL_FOR_YOU,
+            self::DHL_PARCEL_CONNECT => RefTypesCarrier::DHL_PARCEL_CONNECT,
+            self::DHL_EUROPLUS => RefTypesCarrier::DHL_EUROPLUS,
+            self::UPS_STANDARD => RefTypesCarrier::UPS_STANDARD,
+            self::UPS_EXPRESS_SAVER => RefTypesCarrier::UPS_EXPRESS_SAVER,
+            self::GLS => RefTypesCarrier::GLS,
+            self::BRT => RefTypesCarrier::BRT,
+            self::TRUNKRS => RefTypesCarrier::TRUNKRS,
+            self::INPOST => RefTypesCarrier::INPOST,
+            self::POSTE_ITALIANE => RefTypesCarrier::POSTE_ITALIANE,
         ];
     }
 }

@@ -25,7 +25,7 @@ final class PackageType
      *
      * @return RefShipmentPackageType
      */
-    public static function toApiRef(string $packageType): string
+    public static function toApiRef(string $packageType): int
     {
         $map = self::map();
 
@@ -69,14 +69,15 @@ final class PackageType
      */
     private static function map(): array
     {
+        // @TODO: Temporary map for compatibility, should be dynamic in the future
         return [
-            self::PACKAGE => RefShipmentPackageType::_1,
-            self::MAILBOX => RefShipmentPackageType::_2,
-            self::LETTER => RefShipmentPackageType::_3,
-            self::DIGITAL_STAMP => RefShipmentPackageType::_4,
-            self::PALLET => RefShipmentPackageType::_5,
-            self::SMALL_PACKAGE => RefShipmentPackageType::_6,
-            self::ENVELOPE => RefShipmentPackageType::_7,
+            self::PACKAGE => RefShipmentPackageType::PACKAGE,
+            self::MAILBOX => RefShipmentPackageType::MAILBOX,
+            self::LETTER => RefShipmentPackageType::UNFRANKED,
+            self::DIGITAL_STAMP => RefShipmentPackageType::DIGITAL_STAMP,
+            self::PALLET => RefShipmentPackageType::PALLET,
+            self::SMALL_PACKAGE => RefShipmentPackageType::SMALL_PACKAGE,
+            self::ENVELOPE => RefShipmentPackageType::ENVELOPE,
         ];
     }
 }

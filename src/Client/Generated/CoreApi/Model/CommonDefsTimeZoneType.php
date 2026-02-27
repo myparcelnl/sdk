@@ -43,11 +43,25 @@ class CommonDefsTimeZoneType
     /**
      * Possible values of this enum
      */
-    public const _1 = '1';
+    /**
+     * None
+     */
+    public const NONE = 0;
 
-    public const _2 = '2';
+    /**
+     * A UTC offset, such as &#x60;+01:00&#x60;
+     */
+    public const OFFSET = 1;
 
-    public const _3 = '3';
+    /**
+     * A timezone abbreviation, such as &#x60;CET&#x60;
+     */
+    public const ABBREVIATION = 2;
+
+    /**
+     * A timezone identifier, such as &#x60;Europe/Amsterdam&#x60;
+     */
+    public const IDENTIFIER = 3;
 
     /**
      * Gets allowable values of the enum
@@ -56,9 +70,10 @@ class CommonDefsTimeZoneType
     public static function getAllowableEnumValues()
     {
         return [
-            self::_1,
-            self::_2,
-            self::_3
+            self::NONE,
+            self::OFFSET,
+            self::ABBREVIATION,
+            self::IDENTIFIER
         ];
     }
 }

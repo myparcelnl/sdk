@@ -1,6 +1,6 @@
 <?php
 /**
- * CommonParametersFilterValidateBool
+ * ShipmentDefsCustomsShipmentType
  *
  * PHP version 7.4
  *
@@ -31,43 +31,27 @@ namespace MyParcelNL\Sdk\Client\Generated\CoreApi\Model;
 use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
- * CommonParametersFilterValidateBool Class Doc Comment
+ * ShipmentDefsCustomsShipmentType Class Doc Comment
  *
  * @category Class
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class CommonParametersFilterValidateBool
+class ShipmentDefsCustomsShipmentType
 {
     /**
      * Possible values of this enum
      */
-    public const FALSE = 'false';
+    public const COMMERCIAL_GOODS = 1;
 
-    public const TRUE = 'true';
+    public const COMMERCIAL_SAMPLE = 2;
 
-    public const _0 = '0';
+    public const DOCUMENTS = 3;
 
-    public const _1 = '1';
+    public const GIFT = 4;
 
-    public const _02 = '0';
-
-    public const _12 = '1';
-
-    public const FALSE2 = 'false';
-
-    public const TRUE2 = 'true';
-
-    public const OFF = 'off';
-
-    public const ON = 'on';
-
-    public const NO = 'no';
-
-    public const YES = 'yes';
-
-    public const EMPTY = '';
+    public const RETURNED_GOODS = 5;
 
     /**
      * Gets allowable values of the enum
@@ -76,19 +60,11 @@ class CommonParametersFilterValidateBool
     public static function getAllowableEnumValues()
     {
         return [
-            self::FALSE,
-            self::TRUE,
-            self::_0,
-            self::_1,
-            self::_02,
-            self::_12,
-            self::FALSE2,
-            self::TRUE2,
-            self::OFF,
-            self::ON,
-            self::NO,
-            self::YES,
-            self::EMPTY
+            self::COMMERCIAL_GOODS,
+            self::COMMERCIAL_SAMPLE,
+            self::DOCUMENTS,
+            self::GIFT,
+            self::RETURNED_GOODS
         ];
     }
 }

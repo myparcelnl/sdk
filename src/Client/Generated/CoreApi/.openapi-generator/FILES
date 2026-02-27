@@ -140,7 +140,6 @@ Model/RefRatesResponseRateV2.php
 Model/RefShipmentAddressV2.php
 Model/RefShipmentBpostBpostPugoType.php
 Model/RefShipmentCustomsDeclaration.php
-Model/RefShipmentCustomsDeclarationContents.php
 Model/RefShipmentCustomsDeclarationItem.php
 Model/RefShipmentGeneralSettings.php
 Model/RefShipmentGeneralSettingsTracktrace.php
@@ -187,6 +186,7 @@ Model/RefTypesValueWithUnit.php
 Model/SecondaryShipmentRequest.php
 Model/SecondaryShipmentResource.php
 Model/ShipmentDefsCarrierTrackTraceEvent.php
+Model/ShipmentDefsCustomsShipmentType.php
 Model/ShipmentDefsDeliveryMomentPropertiesTimeFrame.php
 Model/ShipmentDefsDeliveryMomentPropertiesType.php
 Model/ShipmentDefsExternalProviderPropertiesDisplayName.php
@@ -214,15 +214,12 @@ Model/ShipmentDefsShipmentRegion.php
 Model/ShipmentDefsShipmentSender.php
 Model/ShipmentDefsShipmentSenderPropertiesEmail.php
 Model/ShipmentDefsShipmentStatus.php
-Model/ShipmentDefsShipmentStatusAnyOf.php
-Model/ShipmentDefsShipmentStatusBasic.php
 Model/ShipmentDefsTrackTrace.php
 Model/ShipmentDefsTrackTraceProofOfDelivery.php
 Model/ShipmentDefsTrackTraceProofOfDeliveryAnyOf.php
 Model/ShipmentDefsTrackTraceStatus.php
 Model/ShipmentDefsTrackingLocation.php
 Model/ShipmentParametersLabelPosition.php
-Model/ShipmentParametersLabelPositionAnyOf.php
 Model/ShipmentParametersPackageType.php
 Model/ShipmentParametersPaperSize.php
 Model/ShipmentParametersShipmentType.php
@@ -428,7 +425,6 @@ docs/Model/RefRatesResponseRateV2.md
 docs/Model/RefShipmentAddressV2.md
 docs/Model/RefShipmentBpostBpostPugoType.md
 docs/Model/RefShipmentCustomsDeclaration.md
-docs/Model/RefShipmentCustomsDeclarationContents.md
 docs/Model/RefShipmentCustomsDeclarationItem.md
 docs/Model/RefShipmentGeneralSettings.md
 docs/Model/RefShipmentGeneralSettingsTracktrace.md
@@ -475,6 +471,7 @@ docs/Model/RefTypesValueWithUnit.md
 docs/Model/SecondaryShipmentRequest.md
 docs/Model/SecondaryShipmentResource.md
 docs/Model/ShipmentDefsCarrierTrackTraceEvent.md
+docs/Model/ShipmentDefsCustomsShipmentType.md
 docs/Model/ShipmentDefsDeliveryMomentPropertiesTimeFrame.md
 docs/Model/ShipmentDefsDeliveryMomentPropertiesType.md
 docs/Model/ShipmentDefsExternalProviderPropertiesDisplayName.md
@@ -502,15 +499,12 @@ docs/Model/ShipmentDefsShipmentRegion.md
 docs/Model/ShipmentDefsShipmentSender.md
 docs/Model/ShipmentDefsShipmentSenderPropertiesEmail.md
 docs/Model/ShipmentDefsShipmentStatus.md
-docs/Model/ShipmentDefsShipmentStatusAnyOf.md
-docs/Model/ShipmentDefsShipmentStatusBasic.md
 docs/Model/ShipmentDefsTrackTrace.md
 docs/Model/ShipmentDefsTrackTraceProofOfDelivery.md
 docs/Model/ShipmentDefsTrackTraceProofOfDeliveryAnyOf.md
 docs/Model/ShipmentDefsTrackTraceStatus.md
 docs/Model/ShipmentDefsTrackingLocation.md
 docs/Model/ShipmentParametersLabelPosition.md
-docs/Model/ShipmentParametersLabelPositionAnyOf.md
 docs/Model/ShipmentParametersPackageType.md
 docs/Model/ShipmentParametersPaperSize.md
 docs/Model/ShipmentParametersShipmentType.md

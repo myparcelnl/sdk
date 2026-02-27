@@ -34,7 +34,7 @@ use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
  * RefTypesCarrierV2 Class Doc Comment
  *
  * @category Class
- * @description This enumeration represents the Carriers as strings. The value is in SCREAMING_SNAKE_CASE.
+ * @description This enumeration represents the Carriers. The value is the Carrier id.
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -44,34 +44,79 @@ class RefTypesCarrierV2
     /**
      * Possible values of this enum
      */
-    public const BOL = 'BOL';
-
-    public const BPOST = 'BPOST';
-
-    public const BRT = 'BRT';
-
-    public const CHEAP_CARGO = 'CHEAP_CARGO';
-
-    public const DHL_FOR_YOU = 'DHL_FOR_YOU';
-
-    public const DHL_EUROPLUS = 'DHL_EUROPLUS';
-
-    public const DHL_PARCEL_CONNECT = 'DHL_PARCEL_CONNECT';
-
-    public const DPD = 'DPD';
-
-    public const GLS = 'GLS';
-
+    /**
+     * PostNL
+     */
     public const POSTNL = 'POSTNL';
 
-    public const TRUNKRS = 'TRUNKRS';
+    /**
+     * bpost
+     */
+    public const BPOST = 'BPOST';
 
-    public const UPS_EXPRESS_SAVER = 'UPS_EXPRESS_SAVER';
+    /**
+     * Cheap Cargo
+     */
+    public const CHEAP_CARGO = 'CHEAP_CARGO';
 
+    /**
+     * DPD
+     */
+    public const DPD = 'DPD';
+
+    /**
+     * Bol.com
+     */
+    public const BOL = 'BOL';
+
+    /**
+     * DHL For You
+     */
+    public const DHL_FOR_YOU = 'DHL_FOR_YOU';
+
+    /**
+     * DHL Parcel Connect
+     */
+    public const DHL_PARCEL_CONNECT = 'DHL_PARCEL_CONNECT';
+
+    /**
+     * DHL Europlus
+     */
+    public const DHL_EUROPLUS = 'DHL_EUROPLUS';
+
+    /**
+     * UPS Standard
+     */
     public const UPS_STANDARD = 'UPS_STANDARD';
 
+    /**
+     * UPS Express Saver
+     */
+    public const UPS_EXPRESS_SAVER = 'UPS_EXPRESS_SAVER';
+
+    /**
+     * GLS
+     */
+    public const GLS = 'GLS';
+
+    /**
+     * BRT
+     */
+    public const BRT = 'BRT';
+
+    /**
+     * Trunkrs
+     */
+    public const TRUNKRS = 'TRUNKRS';
+
+    /**
+     * InPost
+     */
     public const INPOST = 'INPOST';
 
+    /**
+     * PosteItaliane
+     */
     public const POSTE_ITALIANE = 'POSTE_ITALIANE';
 
     /**
@@ -81,19 +126,19 @@ class RefTypesCarrierV2
     public static function getAllowableEnumValues()
     {
         return [
-            self::BOL,
-            self::BPOST,
-            self::BRT,
-            self::CHEAP_CARGO,
-            self::DHL_FOR_YOU,
-            self::DHL_EUROPLUS,
-            self::DHL_PARCEL_CONNECT,
-            self::DPD,
-            self::GLS,
             self::POSTNL,
-            self::TRUNKRS,
-            self::UPS_EXPRESS_SAVER,
+            self::BPOST,
+            self::CHEAP_CARGO,
+            self::DPD,
+            self::BOL,
+            self::DHL_FOR_YOU,
+            self::DHL_PARCEL_CONNECT,
+            self::DHL_EUROPLUS,
             self::UPS_STANDARD,
+            self::UPS_EXPRESS_SAVER,
+            self::GLS,
+            self::BRT,
+            self::TRUNKRS,
             self::INPOST,
             self::POSTE_ITALIANE
         ];
