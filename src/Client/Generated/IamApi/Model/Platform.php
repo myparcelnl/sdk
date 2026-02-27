@@ -42,8 +42,6 @@ class Platform
     /**
      * Possible values of this enum
      */
-    public const FLESPAKKET = 'FLESPAKKET';
-
     public const MYPARCEL_BE = 'MYPARCEL_BE';
 
     public const MYPARCEL_NL = 'MYPARCEL_NL';
@@ -57,7 +55,6 @@ class Platform
     public static function getAllowableEnumValues()
     {
         return [
-            self::FLESPAKKET,
             self::MYPARCEL_BE,
             self::MYPARCEL_NL,
             self::MYPARCEL_IT

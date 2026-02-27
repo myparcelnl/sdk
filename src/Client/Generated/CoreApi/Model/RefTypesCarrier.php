@@ -44,41 +44,95 @@ class RefTypesCarrier
     /**
      * Possible values of this enum
      */
-    public const _1 = '1';
+    /**
+     * PostNL
+     */
+    public const POSTNL = 1;
 
-    public const _2 = '2';
+    /**
+     * bpost
+     */
+    public const BPOST = 2;
 
-    public const _3 = '3';
+    /**
+     * Cheap Cargo
+     */
+    public const CHEAP_CARGO = 3;
 
-    public const _4 = '4';
+    /**
+     * DPD
+     */
+    public const DPD = 4;
 
-    public const _5 = '5';
+    /**
+     * Instabox
+     */
+    public const INSTABOX = 5;
 
-    public const _6 = '6';
+    /**
+     * DHL
+     */
+    public const DHL_CHEAP_CARGO = 6;
 
-    public const _7 = '7';
+    /**
+     * Bol.com
+     */
+    public const BOL = 7;
 
-    public const _8 = '8';
+    /**
+     * UPS
+     */
+    public const UPS = 8;
 
-    public const _9 = '9';
+    /**
+     * DHL For You
+     */
+    public const DHL_FOR_YOU = 9;
 
-    public const _10 = '10';
+    /**
+     * DHL Parcel Connect
+     */
+    public const DHL_PARCEL_CONNECT = 10;
 
-    public const _11 = '11';
+    /**
+     * DHL Europlus
+     */
+    public const DHL_EUROPLUS = 11;
 
-    public const _12 = '12';
+    /**
+     * UPS Standard
+     */
+    public const UPS_STANDARD = 12;
 
-    public const _13 = '13';
+    /**
+     * UPS Express Saver
+     */
+    public const UPS_EXPRESS_SAVER = 13;
 
-    public const _14 = '14';
+    /**
+     * GLS
+     */
+    public const GLS = 14;
 
-    public const _15 = '15';
+    /**
+     * BRT
+     */
+    public const BRT = 15;
 
-    public const _16 = '16';
+    /**
+     * Trunkrs
+     */
+    public const TRUNKRS = 16;
 
-    public const _17 = '17';
+    /**
+     * InPost
+     */
+    public const INPOST = 17;
 
-    public const _18 = '18';
+    /**
+     * PosteItaliane
+     */
+    public const POSTE_ITALIANE = 18;
 
     /**
      * Gets allowable values of the enum
@@ -87,24 +141,24 @@ class RefTypesCarrier
     public static function getAllowableEnumValues()
     {
         return [
-            self::_1,
-            self::_2,
-            self::_3,
-            self::_4,
-            self::_5,
-            self::_6,
-            self::_7,
-            self::_8,
-            self::_9,
-            self::_10,
-            self::_11,
-            self::_12,
-            self::_13,
-            self::_14,
-            self::_15,
-            self::_16,
-            self::_17,
-            self::_18
+            self::POSTNL,
+            self::BPOST,
+            self::CHEAP_CARGO,
+            self::DPD,
+            self::INSTABOX,
+            self::DHL_CHEAP_CARGO,
+            self::BOL,
+            self::UPS,
+            self::DHL_FOR_YOU,
+            self::DHL_PARCEL_CONNECT,
+            self::DHL_EUROPLUS,
+            self::UPS_STANDARD,
+            self::UPS_EXPRESS_SAVER,
+            self::GLS,
+            self::BRT,
+            self::TRUNKRS,
+            self::INPOST,
+            self::POSTE_ITALIANE
         ];
     }
 }

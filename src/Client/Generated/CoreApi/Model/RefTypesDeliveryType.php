@@ -43,19 +43,19 @@ class RefTypesDeliveryType
     /**
      * Possible values of this enum
      */
-    public const _1 = '1';
+    public const MORNING = 1;
 
-    public const _2 = '2';
+    public const STANDARD = 2;
 
-    public const _3 = '3';
+    public const EVENING = 3;
 
-    public const _4 = '4';
+    public const PICKUP = 4;
 
-    public const _6 = '6';
+    public const SAME_DAY = 6;
 
-    public const _7 = '7';
+    public const EXPRESS = 7;
 
-    public const _8 = '8';
+    public const EARLY_MORNING = 8;
 
     /**
      * Gets allowable values of the enum
@@ -64,13 +64,13 @@ class RefTypesDeliveryType
     public static function getAllowableEnumValues()
     {
         return [
-            self::_1,
-            self::_2,
-            self::_3,
-            self::_4,
-            self::_6,
-            self::_7,
-            self::_8
+            self::MORNING,
+            self::STANDARD,
+            self::EVENING,
+            self::PICKUP,
+            self::SAME_DAY,
+            self::EXPRESS,
+            self::EARLY_MORNING
         ];
     }
 }

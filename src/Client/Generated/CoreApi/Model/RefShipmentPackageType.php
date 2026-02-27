@@ -44,19 +44,40 @@ class RefShipmentPackageType
     /**
      * Possible values of this enum
      */
-    public const _1 = '1';
+    /**
+     * Regular package.
+     */
+    public const PACKAGE = 1;
 
-    public const _2 = '2';
+    /**
+     * Shipment that fits through a mailbox slot.
+     */
+    public const MAILBOX = 2;
 
-    public const _3 = '3';
+    /**
+     * The label is unpaid meaning that you will need to pay when dropping off the letter/package.
+     */
+    public const UNFRANKED = 3;
 
-    public const _4 = '4';
+    /**
+     * Digital Stamp
+     */
+    public const DIGITAL_STAMP = 4;
 
-    public const _5 = '5';
+    /**
+     * Pallet
+     */
+    public const PALLET = 5;
 
-    public const _6 = '6';
+    /**
+     * Small Package
+     */
+    public const SMALL_PACKAGE = 6;
 
-    public const _7 = '7';
+    /**
+     * Small and light shipment that fits through a mailbox slot.
+     */
+    public const ENVELOPE = 7;
 
     /**
      * Gets allowable values of the enum
@@ -65,13 +86,13 @@ class RefShipmentPackageType
     public static function getAllowableEnumValues()
     {
         return [
-            self::_1,
-            self::_2,
-            self::_3,
-            self::_4,
-            self::_5,
-            self::_6,
-            self::_7
+            self::PACKAGE,
+            self::MAILBOX,
+            self::UNFRANKED,
+            self::DIGITAL_STAMP,
+            self::PALLET,
+            self::SMALL_PACKAGE,
+            self::ENVELOPE
         ];
     }
 }
