@@ -8,7 +8,6 @@ use MyParcelNL\Sdk\Services\Web\Webhook\AbstractWebhookWebService;
 use MyParcelNL\Sdk\Services\Web\Webhook\ShipmentLabelCreatedWebhookWebService;
 use MyParcelNL\Sdk\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService;
 use MyParcelNL\Sdk\Services\Web\Webhook\ShopCarrierAccessibilityUpdatedWebhookWebService;
-use MyParcelNL\Sdk\Services\Web\Webhook\ShopCarrierConfigurationUpdatedWebhookWebService;
 use MyParcelNL\Sdk\Services\Web\Webhook\ShopUpdatedWebhookWebService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -24,7 +23,6 @@ class AbstractWebhookWebServiceTest extends TestCase
             'shipment_label_created'             => [new ShipmentLabelCreatedWebhookWebService()],
             'shipment_status_change'             => [new ShipmentStatusChangeWebhookWebService()],
             'shop_carrier_accessibility_updated' => [new ShopCarrierAccessibilityUpdatedWebhookWebService()],
-            'shop_carrier_configuration_updated' => [new ShopCarrierConfigurationUpdatedWebhookWebService()],
             'shop_updated'                       => [new ShopUpdatedWebhookWebService()],
         ];
     }

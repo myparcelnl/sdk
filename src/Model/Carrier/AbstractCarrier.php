@@ -72,12 +72,4 @@ abstract class AbstractCarrier
     {
         return $this->type;
     }
-
-    /**
-     * @return bool
-     */
-    public function isDropOffPointRequired(): bool
-    {
-        return false;
-    }
 }

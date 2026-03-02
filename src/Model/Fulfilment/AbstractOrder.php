@@ -11,7 +11,6 @@ use MyParcelNL\Sdk\Exception\ValidationException;
 use MyParcelNL\Sdk\Model\BaseModel;
 use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
 use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\PhysicalProperties;
 use MyParcelNL\Sdk\Model\PickupLocation;
@@ -31,11 +30,6 @@ class AbstractOrder extends BaseModel
      * @var \MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
      */
     protected $delivery_options;
-
-    /**
-     * @var \MyParcelNL\Sdk\Model\Consignment\DropOffPoint
-     */
-    protected $dropOffPoint;
 
     /**
      * The unique identifier of the order in your webshop.
@@ -149,14 +143,6 @@ class AbstractOrder extends BaseModel
     public function getDeliveryOptions(): AbstractDeliveryOptionsAdapter
     {
         return $this->delivery_options;
-    }
-
-    /**
-     * @return null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint
-     */
-    public function getDropOffPoint(): ?DropOffPoint
-    {
-        return $this->dropOffPoint;
     }
 
     /**
@@ -314,18 +300,6 @@ class AbstractOrder extends BaseModel
     public function setDeliveryOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): self
     {
         $this->delivery_options = $deliveryOptions;
-        return $this;
-    }
-
-    /**
-     * @param  null|\MyParcelNL\Sdk\Model\Consignment\DropOffPoint $dropOffPoint
-     *
-     * @return $this
-     * @throws \Exception
-     */
-    public function setDropOffPoint(?DropOffPoint $dropOffPoint): self
-    {
-        $this->dropOffPoint = $dropOffPoint;
         return $this;
     }
 
