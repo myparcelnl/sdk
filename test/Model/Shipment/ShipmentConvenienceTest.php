@@ -63,7 +63,7 @@ final class ShipmentConvenienceTest extends TestCase
     {
         $shipment = new Shipment([
             'options' => [
-                'package_type' => RefShipmentPackageType::_2,
+                'package_type' => RefShipmentPackageType::MAILBOX,
             ],
         ]);
 
@@ -71,7 +71,7 @@ final class ShipmentConvenienceTest extends TestCase
 
         $this->assertInstanceOf(ShipmentOptions::class, $options);
         $this->assertIsInt($options->getPackageType());
-        $this->assertSame((int) RefShipmentPackageType::_2, $options->getPackageType());
+        $this->assertSame((int) RefShipmentPackageType::MAILBOX, $options->getPackageType());
     }
 
     public function testGetCarrierLazilyNormalizesSdkNameToId(): void
@@ -83,7 +83,7 @@ final class ShipmentConvenienceTest extends TestCase
         $carrier = $shipment->getCarrier();
 
         $this->assertIsInt($carrier);
-        $this->assertSame((int) RefTypesCarrier::_1, $carrier);
+        $this->assertSame((int) RefTypesCarrier::POSTNL, $carrier);
     }
 
     public function testSetCarrierAcceptsSdkCarrierNameAndStoresId(): void

@@ -47,18 +47,18 @@ final class PackageTypeApiMapping implements ApiMappingInterface
      * v2 enum names are the public-facing enum values.
      * v1 package type ids remain required for shipment create payloads.
      *
-     * @return array<string, string>
+     * @return array<string, int>
      */
     private function map(): array
     {
         return [
-            RefShipmentPackageTypeV2::PACKAGE => RefShipmentPackageType::_1,
-            RefShipmentPackageTypeV2::MAILBOX => RefShipmentPackageType::_2,
-            RefShipmentPackageTypeV2::UNFRANKED => RefShipmentPackageType::_3,
-            RefShipmentPackageTypeV2::DIGITAL_STAMP => RefShipmentPackageType::_4,
-            RefShipmentPackageTypeV2::PALLET => RefShipmentPackageType::_5,
-            RefShipmentPackageTypeV2::SMALL_PACKAGE => RefShipmentPackageType::_6,
-            RefShipmentPackageTypeV2::ENVELOPE => RefShipmentPackageType::_7,
+            RefShipmentPackageTypeV2::PACKAGE => RefShipmentPackageType::PACKAGE,
+            RefShipmentPackageTypeV2::MAILBOX => RefShipmentPackageType::MAILBOX,
+            RefShipmentPackageTypeV2::UNFRANKED => RefShipmentPackageType::UNFRANKED,
+            RefShipmentPackageTypeV2::DIGITAL_STAMP => RefShipmentPackageType::DIGITAL_STAMP,
+            RefShipmentPackageTypeV2::PALLET => RefShipmentPackageType::PALLET,
+            RefShipmentPackageTypeV2::SMALL_PACKAGE => RefShipmentPackageType::SMALL_PACKAGE,
+            RefShipmentPackageTypeV2::ENVELOPE => RefShipmentPackageType::ENVELOPE,
         ];
     }
 }
