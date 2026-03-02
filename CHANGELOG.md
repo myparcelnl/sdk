@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.4](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.3...v11.0.0-beta.4) (2026-03-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove dropoff point from maintained code (#589)
+
+### :sparkles: New Features
+
+* remove dropoff point from maintained code ([#589](https://github.com/myparcelnl/sdk/issues/589)) ([98376de](https://github.com/myparcelnl/sdk/commit/98376ded89b875c0a5100d350850c47f326dc392))
+
 ## [11.0.0-beta.3](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.2...v11.0.0-beta.3) (2026-02-27)
 
 
