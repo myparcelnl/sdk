@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.5](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.4...v11.0.0-beta.5) (2026-03-02)
+
+
+### :sparkles: New Features
+
+* Shipment-first create flow (generated Core API client) ([#587](https://github.com/myparcelnl/sdk/issues/587)) ([82a1555](https://github.com/myparcelnl/sdk/commit/82a155595f70ac4cde386fc3b61873a4d4aef6a7))
+
 ## [11.0.0-beta.4](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.3...v11.0.0-beta.4) (2026-03-02)
 
 
