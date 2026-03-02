@@ -9,13 +9,8 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
 
 /**
  * SDK wrapper around generated shipment options.
- *
- * @todo remove after CoreAPI spec/codegen fix:
- * Keep package_type serialization aligned with API expectations while generated
- * enums expose numeric ids as strings.
- *
- * The generated enums for request payload values are represented as numeric strings.
- * Core API validation expects integer ids in the POST /shipments body.
+ * Keeps package_type normalized to integer ids and accepts v2 enum names
+ * for SDK convenience.
  */
 class ShipmentOptions extends RefShipmentShipmentOptions
 {

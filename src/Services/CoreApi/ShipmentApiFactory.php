@@ -10,7 +10,6 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Utils;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -70,40 +69,9 @@ final class ShipmentApiFactory
     {
         $stack = HandlerStack::create();
 
-        $stack->push(self::normalizeShipmentRequestMiddleware(), 'normalize_shipment_enums');
         $stack->push(self::normalizeTrackTraceResponseMiddleware(), 'normalize_tracktrace_response');
 
         return $stack;
-    }
-
-    private static function normalizeShipmentRequestMiddleware(): callable
-    {
-        return Middleware::mapRequest(static function (RequestInterface $request): RequestInterface {
-            $contentType = $request->getHeaderLine('Content-Type');
-
-            if (false === strpos($contentType, 'shipment+json')) {
-                return $request;
-            }
-
-            $body = (string) $request->getBody();
-
-            if ('' === $body) {
-                return $request;
-            }
-
-            $decoded = json_decode($body, true);
-
-            if (! is_array($decoded)) {
-                return $request;
-            }
-
-            $normalized = self::normalizeShipmentRequestPayload($decoded);
-            if ($normalized === $decoded) {
-                return $request;
-            }
-
-            return $request->withBody(Utils::streamFor(json_encode($normalized)));
-        });
     }
 
     private static function normalizeTrackTraceResponseMiddleware(): callable
@@ -155,36 +123,6 @@ final class ShipmentApiFactory
         }
 
         return '';
-    }
-
-    /**
-     * @todo remove after CoreAPI spec/codegen fix for numeric enum serialization.
-     *
-     * @param array<string, mixed> $payload
-     * @return array<string, mixed>
-     */
-    private static function normalizeShipmentRequestPayload(array $payload): array
-    {
-        if (! isset($payload['data']['shipments']) || ! is_array($payload['data']['shipments'])) {
-            return $payload;
-        }
-
-        foreach ($payload['data']['shipments'] as &$shipment) {
-            if (! is_array($shipment)) {
-                continue;
-            }
-
-            if (isset($shipment['carrier']) && is_string($shipment['carrier']) && is_numeric($shipment['carrier'])) {
-                $shipment['carrier'] = (int) $shipment['carrier'];
-            }
-
-            if (isset($shipment['options']['package_type']) && is_string($shipment['options']['package_type']) && is_numeric($shipment['options']['package_type'])) {
-                $shipment['options']['package_type'] = (int) $shipment['options']['package_type'];
-            }
-        }
-        unset($shipment);
-
-        return $payload;
     }
 
     /**

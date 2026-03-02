@@ -110,8 +110,9 @@ class Shipment extends ShipmentRequest
     }
 
     /**
-     * @todo remove after CoreAPI spec/codegen fix:
-     * Force known shipment fields to scalar types expected by API validation.
+     * Keep serializer types aligned with SDK ergonomics.
+     *
+     * @todo remove reference_identifier override after CoreAPI spec/codegen fix.
      *
      * @return array<string, string>
      */
@@ -175,8 +176,6 @@ class Shipment extends ShipmentRequest
     /**
      * Accept both generated model or array, but always store as SDK ShipmentOptions wrapper.
      *
-     * @todo remove wrapper-specific normalization after CoreAPI spec/codegen fix.
-     *
      * @param array<string, mixed>|ShipmentOptionsModel|ShipmentOptions $options
      * @return self
      */
@@ -203,8 +202,6 @@ class Shipment extends ShipmentRequest
 
     /**
      * Normalize numeric-string carrier ids to integers before serialization.
-     *
-     * @todo remove normalization after generated enums serialize numeric ids correctly.
      *
      * @param int|string $carrier
      * @return self
