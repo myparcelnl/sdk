@@ -155,14 +155,6 @@ final class ShipmentApiFactory
             }
 
             $trackTrace = array_intersect_key($trackTrace, array_flip($allowedTrackTraceKeys));
-
-            if (isset($trackTrace['carrier'])) {
-                $carrier = $trackTrace['carrier'];
-
-                if (is_string($carrier) && ctype_digit($carrier)) {
-                    $trackTrace['carrier'] = (int) $carrier;
-                }
-            }
         }
         unset($trackTrace);
 

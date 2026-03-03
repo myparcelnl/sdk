@@ -10,23 +10,6 @@ use ReflectionMethod;
 
 final class ShipmentApiFactoryTest extends TestCase
 {
-    public function testNormalizeTrackTraceResponsePayloadNormalizesCarrierValues(): void
-    {
-        $payload = [
-            'data' => [
-                'tracktraces' => [
-                    ['carrier' => '1'],
-                    ['carrier' => 2],
-                ],
-            ],
-        ];
-
-        $normalized = $this->invokeFactoryNormalizer('normalizeTrackTraceResponsePayload', $payload);
-
-        self::assertSame(1, $normalized['data']['tracktraces'][0]['carrier']);
-        self::assertSame(2, $normalized['data']['tracktraces'][1]['carrier']);
-    }
-
     public function testNormalizeTrackTraceResponsePayloadKeepsStableFieldsOnly(): void
     {
         $payload = [
