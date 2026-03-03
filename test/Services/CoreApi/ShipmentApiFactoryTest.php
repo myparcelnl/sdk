@@ -10,27 +10,21 @@ use ReflectionMethod;
 
 final class ShipmentApiFactoryTest extends TestCase
 {
-    public function testNormalizeShipmentRequestPayloadCastsNumericEnumStrings(): void
+    public function testNormalizeTrackTraceResponsePayloadNormalizesCarrierValues(): void
     {
         $payload = [
             'data' => [
-                'shipments' => [
-                    [
-                        'carrier' => '1',
-                        'options' => [
-                            'package_type' => '2',
-                        ],
-                    ],
+                'tracktraces' => [
+                    ['carrier' => '1'],
+                    ['carrier' => 2],
                 ],
             ],
         ];
 
-        $normalized = $this->invokeFactoryNormalizer('normalizeShipmentRequestPayload', $payload);
+        $normalized = $this->invokeFactoryNormalizer('normalizeTrackTraceResponsePayload', $payload);
 
-        self::assertIsInt($normalized['data']['shipments'][0]['carrier']);
-        self::assertSame(1, $normalized['data']['shipments'][0]['carrier']);
-        self::assertIsInt($normalized['data']['shipments'][0]['options']['package_type']);
-        self::assertSame(2, $normalized['data']['shipments'][0]['options']['package_type']);
+        self::assertSame(1, $normalized['data']['tracktraces'][0]['carrier']);
+        self::assertSame(2, $normalized['data']['tracktraces'][1]['carrier']);
     }
 
     public function testNormalizeTrackTraceResponsePayloadKeepsStableFieldsOnly(): void
@@ -74,8 +68,8 @@ final class ShipmentApiFactoryTest extends TestCase
             ],
             array_keys($trackTrace)
         );
-        self::assertIsString($trackTrace['carrier']);
-        self::assertSame('1', $trackTrace['carrier']);
+        self::assertIsInt($trackTrace['carrier']);
+        self::assertSame(1, $trackTrace['carrier']);
     }
 
     /**
@@ -85,7 +79,10 @@ final class ShipmentApiFactoryTest extends TestCase
     private function invokeFactoryNormalizer(string $method, array $payload): array
     {
         $reflection = new ReflectionMethod(ShipmentApiFactory::class, $method);
-        $reflection->setAccessible(true);
+
+        if (PHP_VERSION_ID < 80100) {
+            $reflection->setAccessible(true);
+        }
 
         /** @var array<string, mixed> $normalized */
         $normalized = $reflection->invoke(null, $payload);

@@ -6,10 +6,10 @@ namespace MyParcelNL\Sdk\Test\Services;
 
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
-use MyParcelNL\Sdk\Model\Shipment\Carrier;
-use MyParcelNL\Sdk\Model\Shipment\PackageType;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
@@ -42,7 +42,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     public function testSetLinkOfLabelsForCreatedShipment(): void
     {
         $collection = new ShipmentCollection();
-        $collection->add($this->createMinimalNlShipment('smoke-label-' . uniqid('', true)));
+        $collection->push($this->createMinimalNlShipment('smoke-label-' . uniqid('', true)));
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
@@ -64,7 +64,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     public function testFetchTrackTraceDataForCreatedShipment(): void
     {
         $collection = new ShipmentCollection();
-        $collection->add($this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true)));
+        $collection->push($this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true)));
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
@@ -87,8 +87,8 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     private function createMinimalNlShipment(string $referenceIdentifier): Shipment
     {
         return (new Shipment())
-            ->setCarrier(Carrier::POSTNL)
-            ->withPackageType(PackageType::PACKAGE)
+            ->setCarrier(RefTypesCarrierV2::POSTNL)
+            ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
             ->withWeight(1000)
             ->setRecipient([
                 'cc'          => 'NL',
