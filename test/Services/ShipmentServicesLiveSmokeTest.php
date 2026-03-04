@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services;
 
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
@@ -11,6 +12,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
@@ -59,6 +61,40 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         self::assertNotEmpty($link);
         self::assertStringContainsString((new MyParcelRequest())->getRequestUrl(), $link);
         self::assertSame($link, $labels->getLinkOfLabels());
+    }
+
+    public function testGeneratedLabelsRequestWithExplicitAcceptReturnsBody(): void
+    {
+        $collection = new ShipmentCollection();
+        $collection->push($this->createMinimalNlShipment('smoke-generated-label-body-' . uniqid('', true)));
+
+        try {
+            $createService = new ShipmentCreateService($this->liveApiKey);
+            $created = $createService->create($collection);
+            $shipmentIds = array_keys($created);
+
+            $api = ShipmentApiFactory::make($this->liveApiKey);
+            $request = $api->getShipmentsLabelsRequest(
+                implode(';', $shipmentIds),
+                'SDK-LiveSmoke/labels-body-check',
+                'A6'
+            )->withHeader('Accept', 'application/vnd.shipment_label_link+json');
+
+            $response = (new GuzzleClient(['timeout' => 10]))->send($request);
+            $body = (string) $response->getBody();
+        } catch (\Throwable $e) {
+            $this->handleLiveException($e);
+            return;
+        }
+
+        self::assertNotEmpty($body, 'Expected non-empty response body for label link request.');
+
+        $decoded = json_decode($body, true);
+        self::assertIsArray($decoded, 'Expected JSON body for label link response.');
+
+        $link = $decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null;
+        self::assertIsString($link, 'Expected label URL in response body.');
+        self::assertNotSame('', $link, 'Expected non-empty label URL in response body.');
     }
 
     public function testFetchTrackTraceDataForCreatedShipment(): void

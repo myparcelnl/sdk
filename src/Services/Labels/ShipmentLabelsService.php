@@ -4,66 +4,73 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Labels;
 
+use GuzzleHttp\Client as GuzzleClient;
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Helper\LabelHelper;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
 use setasign\Fpdi\Fpdi;
 
 /**
  * Service for retrieving shipment labels (link/PDF) by shipment IDs.
- *
- * Intentionally uses MyParcelRequest for now:
- * - generated ShipmentApi::getShipmentsLabels() currently returns no response body,
- *   while this service needs to read label URLs and raw PDF bytes.
- * - prepared labels endpoint (/v2/shipment_labels/{ids}) is not covered by the
- *   generated ShipmentApi operation set.
  */
 final class ShipmentLabelsService
 {
     use HasUserAgent;
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
+    private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
+    private const PDF_ACCEPT_HEADER = 'application/pdf';
 
-    private string $apiKey;
+    private ShipmentApi $api;
+    private ClientInterface $httpClient;
 
     private string $labelLink = '';
 
     private string $labelPdf = '';
 
-    public function __construct(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
+    public function __construct(
+        string $apiKey,
+        ?ShipmentApi $api = null,
+        ?ClientInterface $httpClient = null,
+        ?string $host = null
+    ) {
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
     }
 
     /**
      * @param int[] $shipmentIds
      * @param mixed $positions
+     *
+     * @throws ApiException
      */
     public function setLinkOfLabels(array $shipmentIds, $positions = 1): string
     {
         $this->validateIds($shipmentIds);
 
-        $queryString = $this->buildLabelQuery($positions);
-        $urlLocation = 'pdfs';
-        $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL;
+        [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
+        $request = $this->buildLabelsRequest($shipmentIds, $format, $resolvedPositions)
+            ->withHeader('Accept', self::LABEL_LINK_ACCEPT_HEADER);
+        $response = $this->httpClient->sendRequest($request);
 
-        if ($this->useLabelPrepare(count($shipmentIds))) {
-            $requestType = MyParcelRequest::REQUEST_TYPE_RETRIEVE_PREPARED_LABEL;
-            $urlLocation = 'pdf';
+        $decoded = json_decode((string) $response->getBody(), true);
+        if (! is_array($decoded)) {
+            throw new ApiException('Did not receive expected label link response. Please contact MyParcel.');
         }
 
-        $request = (new MyParcelRequest())
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters(
-                $this->apiKey,
-                implode(';', $shipmentIds) . '/' . $queryString
-            )
-            ->sendRequest('GET', $requestType);
+        $url = $decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null;
+        if (! is_string($url) || '' === $url) {
+            throw new ApiException('Did not receive expected label link response. Please contact MyParcel.');
+        }
 
-        $this->labelLink = (new MyParcelRequest())->getRequestUrl() . $request->getResult("data.{$urlLocation}.url");
+        $this->labelLink = $this->resolveAbsoluteUrl($url, $request);
 
         return $this->labelLink;
     }
@@ -83,21 +90,15 @@ final class ShipmentLabelsService
     {
         $this->validateIds($shipmentIds);
 
-        $queryString = $this->buildLabelQuery($positions);
-
-        $request = (new MyParcelRequest())
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters(
-                $this->apiKey,
-                implode(';', $shipmentIds) . '/' . $queryString,
-                MyParcelRequest::HEADER_ACCEPT_APPLICATION_PDF
-            )
-            ->sendRequest('GET', MyParcelRequest::REQUEST_TYPE_RETRIEVE_LABEL);
-
-        $result = $request->getResult();
+        [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
+        $request = $this->buildLabelsRequest($shipmentIds, $format, $resolvedPositions)
+            ->withHeader('Accept', self::PDF_ACCEPT_HEADER);
+        $response = $this->httpClient->sendRequest($request);
+        $result = (string) $response->getBody();
 
         if (! is_string($result) || ! preg_match('/^%PDF-\d/', $result)) {
-            if (is_array($result) && isset($result['data']['payment_instructions'])) {
+            $decoded = json_decode($result, true);
+            if (is_array($decoded) && isset($decoded['data']['payment_instructions'])) {
                 throw new ApiException('Received payment link instead of pdf. Check your MyParcel account status.');
             }
 
@@ -154,25 +155,63 @@ final class ShipmentLabelsService
         exit;
     }
 
+    /**
+     * @deprecated Prepared labels are handled by the regular labels endpoint using Accept negotiation.
+     *             This method remains for backward compatibility.
+     */
     public function useLabelPrepare(int $numberOfShipments): bool
     {
         return $numberOfShipments > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
     }
 
     /**
-     * @param mixed $positions
+     * Build label request using generated ShipmentApi request builder.
+     *
+     * @param int[] $shipmentIds
      */
-    private function buildLabelQuery($positions): string
+    private function buildLabelsRequest(array $shipmentIds, string $format, ?string $positions): RequestInterface
+    {
+        return $this->api->getShipmentsLabelsRequest(
+            implode(';', array_map('strval', $shipmentIds)),
+            $this->getUserAgentHeader(),
+            $format,
+            $positions,
+            null,
+            null,
+            ShipmentApi::contentTypes['getShipmentsLabels'][0]
+        );
+    }
+
+    /**
+     * @param mixed $positions
+     * @return array{0: string, 1: string|null}
+     */
+    private function resolveFormatAndPositions($positions): array
     {
         if (is_numeric($positions)) {
-            return '?format=A4&positions=' . LabelHelper::getPositions((int) $positions);
+            return ['A4', LabelHelper::getPositions((int) $positions)];
         }
 
         if (is_array($positions)) {
-            return '?format=A4&positions=' . implode(';', $positions);
+            return ['A4', implode(';', $positions)];
         }
 
-        return '?format=A6';
+        return ['A6', null];
+    }
+
+    private function resolveAbsoluteUrl(string $url, RequestInterface $request): string
+    {
+        if (preg_match('/^https?:\/\//i', $url)) {
+            return $url;
+        }
+
+        $uri = $request->getUri();
+        $base = $uri->getScheme() . '://' . $uri->getHost();
+        if (null !== $uri->getPort()) {
+            $base .= ':' . $uri->getPort();
+        }
+
+        return rtrim($base, '/') . '/' . ltrim($url, '/');
     }
 
     /**
