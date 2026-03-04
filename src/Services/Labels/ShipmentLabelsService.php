@@ -18,6 +18,10 @@ use setasign\Fpdi\Fpdi;
 
 /**
  * Service for retrieving shipment labels (link/PDF) by shipment IDs.
+ *
+ * @todo Temporary workaround: use generated request-builder + manual sendRequest()
+ *       because generated ShipmentApi::getShipmentsLabels() currently exposes a void return flow.
+ *       Replace with direct generated response handling once spec/generator returns typed label body.
  */
 final class ShipmentLabelsService
 {
