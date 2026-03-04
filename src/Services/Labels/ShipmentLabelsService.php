@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Labels;
 
 use GuzzleHttp\Client as GuzzleClient;
-use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
@@ -26,7 +25,7 @@ final class ShipmentLabelsService
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
-    private const PDF_ACCEPT_HEADER = 'application/pdf';
+    private const PDF_ACCEPT_HEADER = 'application/pdf+print';
 
     private ShipmentApi $api;
     private ClientInterface $httpClient;
@@ -53,8 +52,6 @@ final class ShipmentLabelsService
      */
     public function setLinkOfLabels(array $shipmentIds, $positions = 1): string
     {
-        $this->validateIds($shipmentIds);
-
         [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
         $request = $this->buildLabelsRequest($shipmentIds, $format, $resolvedPositions)
             ->withHeader('Accept', self::LABEL_LINK_ACCEPT_HEADER);
@@ -88,8 +85,6 @@ final class ShipmentLabelsService
      */
     public function setPdfOfLabels(array $shipmentIds, $positions = 1): string
     {
-        $this->validateIds($shipmentIds);
-
         [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
         $request = $this->buildLabelsRequest($shipmentIds, $format, $resolvedPositions)
             ->withHeader('Accept', self::PDF_ACCEPT_HEADER);
@@ -212,21 +207,5 @@ final class ShipmentLabelsService
         }
 
         return rtrim($base, '/') . '/' . ltrim($url, '/');
-    }
-
-    /**
-     * @param array<int, mixed> $ids
-     */
-    private function validateIds(array $ids): void
-    {
-        if (empty($ids)) {
-            throw new InvalidArgumentException('At least one shipment ID is required');
-        }
-
-        foreach ($ids as $id) {
-            if (! is_int($id) && ! (is_string($id) && ctype_digit($id))) {
-                throw new InvalidArgumentException('Shipment IDs must be integers');
-            }
-        }
     }
 }

@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Test\Services\Labels;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use InvalidArgumentException;
 use Mockery;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Exception\ApiException;
@@ -119,18 +118,41 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame($expected, $service->getLinkOfLabels());
     }
 
-    public function testSetLinkOfLabelsThrowsOnEmptyIds(): void
+    public function testSetLinkOfLabelsThrowsOnInvalidResponseBody(): void
     {
-        $service = new ShipmentLabelsService(
-            $this->getApiKey(),
-            Mockery::mock(ShipmentApi::class),
-            Mockery::mock(ClientInterface::class)
-        );
+        $api = Mockery::mock(ShipmentApi::class);
+        $httpClient = Mockery::mock(ClientInterface::class);
+        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1;2;3;4');
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one shipment ID is required');
+        $api->shouldReceive('getShipmentsLabelsRequest')
+            ->once()
+            ->with(
+                '101',
+                Mockery::type('string'),
+                'A4',
+                '1;2;3;4',
+                null,
+                null,
+                ShipmentApi::contentTypes['getShipmentsLabels'][0]
+            )
+            ->andReturn($request);
 
-        $service->setLinkOfLabels([]);
+        $httpClient->shouldReceive('sendRequest')
+            ->once()
+            ->with(Mockery::on(static function (RequestInterface $request): bool {
+                return ShipmentLabelsServiceTest::assertAcceptHeader(
+                    $request,
+                    'application/vnd.shipment_label_link+json'
+                );
+            }))
+            ->andReturn(new Response(200, [], 'not-json'));
+
+        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Did not receive expected label link response. Please contact MyParcel.');
+
+        $service->setLinkOfLabels([101]);
     }
 
     public function testSetPdfOfLabelsThrowsOnPaymentInstructions(): void
@@ -155,7 +177,7 @@ final class ShipmentLabelsServiceTest extends TestCase
         $httpClient->shouldReceive('sendRequest')
             ->once()
             ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
+                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf+print');
             }))
             ->andReturn(new Response(200, [], json_encode([
                 'data' => [
@@ -195,7 +217,7 @@ final class ShipmentLabelsServiceTest extends TestCase
         $httpClient->shouldReceive('sendRequest')
             ->once()
             ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
+                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf+print');
             }))
             ->andReturn(new Response(200, [], 'not-a-pdf'));
 
