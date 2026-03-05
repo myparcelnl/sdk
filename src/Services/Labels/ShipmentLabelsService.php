@@ -14,7 +14,6 @@ use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
-use setasign\Fpdi\Fpdi;
 
 /**
  * Service for retrieving shipment labels (link/PDF) by shipment IDs.
@@ -104,26 +103,7 @@ final class ShipmentLabelsService
             throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
         }
 
-        if (! class_exists(Fpdi::class)) {
-            throw new ApiException('FPDI dependency is required to process label PDFs.');
-        }
-
-        $fpdi = new Fpdi();
-        $fileResource = fopen('php://memory', 'rb+');
-        fwrite($fileResource, $result);
-
-        $pageCount = $fpdi->setSourceFile($fileResource);
-
-        for ($i = 1; $i <= $pageCount; $i++) {
-            $templateIndex = $fpdi->importPage($i);
-            $specs = $fpdi->getTemplateSize($templateIndex);
-            $fpdi->addPage($specs['orientation'], [$specs['width'], $specs['height']]);
-            $fpdi->useTemplate($templateIndex);
-        }
-
-        $this->labelPdf = $fpdi->Output('S');
-
-        fclose($fileResource);
+        $this->labelPdf = $result;
 
         return $this->labelPdf;
     }
