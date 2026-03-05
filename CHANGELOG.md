@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.6](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.5...v11.0.0-beta.6) (2026-03-05)
+
+
+### :sparkles: New Features
+
+* introduce label- and track & trace services for shipment domain ([#588](https://github.com/myparcelnl/sdk/issues/588)) ([0198cc2](https://github.com/myparcelnl/sdk/commit/0198cc2a7c0235521d218a12edb9ef5c42ef92ff))
+
 ## [11.0.0-beta.5](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.4...v11.0.0-beta.5) (2026-03-02)
 
 
