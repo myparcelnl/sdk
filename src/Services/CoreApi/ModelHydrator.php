@@ -41,7 +41,7 @@ final class ModelHydrator
             }
 
             // Array of models: "SomeModel[]"
-            if (str_ends_with($type, '[]')) {
+            if (self::endsWith($type, '[]')) {
                 $innerType = substr($type, 0, -2);
 
                 if (self::isModelClass($innerType)) {
@@ -73,5 +73,23 @@ final class ModelHydrator
         }
 
         return class_exists($type) && is_subclass_of($type, ModelInterface::class);
+    }
+
+    /**
+     * PHP 7.4-compatible replacement for str_ends_with().
+     */
+    private static function endsWith(string $haystack, string $needle): bool
+    {
+        if ('' === $needle) {
+            return true;
+        }
+
+        $needleLength = strlen($needle);
+
+        if ($needleLength > strlen($haystack)) {
+            return false;
+        }
+
+        return substr($haystack, -$needleLength) === $needle;
     }
 }
