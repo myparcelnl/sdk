@@ -10,7 +10,6 @@ use Mockery;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Psr\Http\Client\ClientInterface;
@@ -22,8 +21,8 @@ final class ShipmentLabelsServiceTest extends TestCase
     {
         $service = new ShipmentLabelsService($this->getApiKey());
 
-        self::assertFalse($service->useLabelPrepare(MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM));
-        self::assertTrue($service->useLabelPrepare(MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM + 1));
+        self::assertFalse($service->useLabelPrepare(25));
+        self::assertTrue($service->useLabelPrepare(26));
     }
 
     public function testSetLinkOfLabelsUsesRegularEndpointAndStoresLink(): void
