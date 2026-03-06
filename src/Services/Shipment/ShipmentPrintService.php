@@ -4,38 +4,50 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
+use GuzzleHttp\Client as GuzzleClient;
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
+use Psr\Http\Client\ClientInterface as PsrClientInterface;
 
 /**
  * Direct print flow for shipments.
  *
- * @todo migrate to generated ShipmentApi when direct-print request/headers are supported in OpenAPI spec/client.
+ * Uses hybrid approach (request builder + manual send) so we can override the Accept header
+ * with the direct-print printer-group-id header.
+ *
+ * @todo revert to direct generated API method once the direct-print Accept header
+ *       is supported as a first-class parameter in the OpenAPI spec/client.
  */
 final class ShipmentPrintService
 {
     use HasUserAgent;
     use EnsuresShipmentReferenceIds;
 
-    private string $apiKey;
+    private const DIRECT_PRINT_ACCEPT_TEMPLATE = 'application/vnd.shipment_label+json+print;printer-group-id=%s';
 
-    public function __construct(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
+    private ShipmentApi $api;
+
+    private PsrClientInterface $httpClient;
+
+    public function __construct(
+        string $apiKey,
+        ?ShipmentApi $api = null,
+        ?PsrClientInterface $httpClient = null,
+        ?string $host = null
+    ) {
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
     }
 
     /**
      * Create shipments and send labels directly to the given printer group.
-     *
-     * Direct print requires a custom Accept header with printer-group-id.
-     * The generated client cannot inject this header per call, so this flow
-     * intentionally uses MyParcelRequest.
-     *
-     * @todo migrate to generated ShipmentApi call once direct-print contract is available in spec/client.
      *
      * @return array<int, string|null> Mapping shipment id => reference identifier.
      */
@@ -46,17 +58,22 @@ final class ShipmentPrintService
         $this->validateBeforePrint($shipments);
         $this->ensureReferenceIds($shipments);
 
-        $body = $this->buildRequestBody($shipments);
+        $requestModel = $this->buildCreateRequest($shipments);
 
-        $headers = MyParcelRequest::HEADER_CONTENT_TYPE_SHIPMENT;
-        $headers['Accept'] = MyParcelRequest::getDirectPrintAcceptHeader($printerGroupId)['Accept'];
+        $request = $this->api->postShipmentsRequest(
+            $this->getUserAgentHeader(),
+            $requestModel,
+            null,
+            null,
+            null,
+            null,
+            ShipmentApi::contentTypes['postShipments'][0]
+        )->withHeader('Accept', sprintf(self::DIRECT_PRINT_ACCEPT_TEMPLATE, $printerGroupId));
 
-        $request = (new MyParcelRequest())
-            ->setUserAgents($this->getUserAgent())
-            ->setRequestParameters($this->apiKey, $body, $headers)
-            ->sendRequest();
+        $response = $this->httpClient->sendRequest($request);
+        $decoded = json_decode((string) $response->getBody(), true);
 
-        return $this->parseResponse($request->getResult('data.ids'));
+        return $this->parseIdsResponse($decoded);
     }
 
     /**
@@ -72,42 +89,30 @@ final class ShipmentPrintService
     /**
      * @param Shipment[] $shipments
      */
-    private function buildRequestBody(array $shipments): string
+    private function buildCreateRequest(array $shipments): ShipmentPostShipmentsRequestV11
     {
-        $shipmentsData = array_map(static function (Shipment $shipment): array {
-            $encoded = json_decode(json_encode($shipment), true);
+        $data = new ShipmentPostShipmentsRequestV11Data();
+        $data->setShipments($shipments);
+        $data->setUserAgent($this->getUserAgentHeader());
 
-            return is_array($encoded) ? $encoded : [];
-        }, $shipments);
+        $request = new ShipmentPostShipmentsRequestV11();
+        $request->setData($data);
 
-        $body = json_encode(['data' => [
-            'shipments'  => $shipmentsData,
-            'user_agent' => $this->getUserAgentHeader(),
-        ]]);
-
-        if (! is_string($body)) {
-            throw new InvalidArgumentException('Unable to encode shipment payload for direct print request.');
-        }
-
-        return $body;
+        return $request;
     }
 
     /**
-     * @param mixed $responseData
      * @return array<int, string|null>
      */
-    private function parseResponse($responseData): array
+    private function parseIdsResponse(?array $decoded): array
     {
-        if (null === $responseData) {
+        if (! is_array($decoded) || ! isset($decoded['data']['ids']) || ! is_array($decoded['data']['ids'])) {
             return [];
         }
 
-        if (! is_array($responseData)) {
-            throw new InvalidArgumentException('Unexpected response payload for direct print request.');
-        }
-
         $mapping = [];
-        foreach ($responseData as $item) {
+
+        foreach ($decoded['data']['ids'] as $item) {
             if (! is_array($item) || ! isset($item['id'])) {
                 continue;
             }
