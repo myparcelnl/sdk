@@ -455,8 +455,8 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
             $invalidProperties[] = "invalid value for 'assigned_user_id', number of items must be greater than or equal to 1.";
         }
 
-        if (!is_null($this->container['carrier']) && (count($this->container['carrier']) > 14)) {
-            $invalidProperties[] = "invalid value for 'carrier', number of items must be less than or equal to 14.";
+        if (!is_null($this->container['carrier']) && (count($this->container['carrier']) > 15)) {
+            $invalidProperties[] = "invalid value for 'carrier', number of items must be less than or equal to 15.";
         }
 
         if (!is_null($this->container['carrier']) && (count($this->container['carrier']) < 1)) {
@@ -650,8 +650,8 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
             throw new \InvalidArgumentException('non-nullable carrier cannot be null');
         }
 
-        if ((count($carrier) > 14)) {
-            throw new \InvalidArgumentException('invalid value for $carrier when calling OrdersGetFilterParameter., number of items must be less than or equal to 14.');
+        if ((count($carrier) > 15)) {
+            throw new \InvalidArgumentException('invalid value for $carrier when calling OrdersGetFilterParameter., number of items must be less than or equal to 15.');
         }
         if ((count($carrier) < 1)) {
             throw new \InvalidArgumentException('invalid length for $carrier when calling OrdersGetFilterParameter., number of items must be greater than or equal to 1.');

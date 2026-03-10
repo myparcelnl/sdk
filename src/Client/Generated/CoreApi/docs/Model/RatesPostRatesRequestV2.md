@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2**](RefShipmentPickupV2.md) |  | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2**](RefTypesCarrierV2.md) |  |
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2**](RefShipmentPackageTypeV2.md) |  |
-**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2**](CapabilitiesPhysicalPropertiesV2.md) |  | [optional]
+**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties**](RatesPostRatesRequestV2PhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2Options**](RatesPostRatesRequestV2Options.md) |  | [optional]
 **delivery_type** | **string** |  | [optional]
 **direction** | **string** | The shipment direction for which the rates are requested. | [optional]
