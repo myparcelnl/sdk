@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.7](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.6...v11.0.0-beta.7) (2026-03-10)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#597](https://github.com/myparcelnl/sdk/issues/597)) ([da449c6](https://github.com/myparcelnl/sdk/commit/da449c64f04e2b826750c542feb133581109ee45))
+
 ## [11.0.0-beta.6](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.5...v11.0.0-beta.6) (2026-03-05)
 
 
