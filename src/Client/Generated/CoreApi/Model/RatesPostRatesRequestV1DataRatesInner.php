@@ -64,7 +64,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => 'Null',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType',
-        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2',
+        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV1DataRatesInnerOptions',
         'delivery_type' => 'float',
         'shipment_type' => 'float',
@@ -641,7 +641,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Gets physical_properties
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties|null
      */
     public function getPhysicalProperties()
     {
@@ -651,7 +651,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Sets physical_properties
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2|null $physical_properties physical_properties
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties|null $physical_properties physical_properties
      *
      * @return self
      */

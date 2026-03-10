@@ -6,6 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **additional_insurance** | **object** | Provides enhanced insurance coverage beyond the standard amount. | [optional]
 **deliver_at_postal_point** | **object** | Indicates that the parcel will be delivered to a designated postal service point rather than the recipient&#39;s address, requiring the recipient to collect it from that location. | [optional]
+**fresh_food** | **object** | Designates the shipment as containing perishable, non-frozen food items, ensuring appropriate handling procedures are applied to maintain freshness and prevent spoilage during transit. | [optional]
+**frozen** | **object** | Specifies that the shipment contains items that must remain frozen, necessitating strict, continuous temperature-controlled environments throughout the transit process to prevent thawing. | [optional]
 **hide_sender** | **object** | Omits the sender&#39;s information from the shipping label, maintaining sender anonymity in the delivery process. | [optional]
 **insurance** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonInsurance**](ShipmentOptionsCommonInsurance.md) |  | [optional]
 **no_tracking** | **object** | Disables all tracking and tracing capabilities for the shipment. | [optional]

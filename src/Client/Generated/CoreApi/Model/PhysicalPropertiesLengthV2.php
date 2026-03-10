@@ -301,6 +301,10 @@ class PhysicalPropertiesLengthV2 implements ModelInterface, ArrayAccess, \JsonSe
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
+        if (($this->container['value'] > 10000)) {
+            $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 10000.";
+        }
+
         if (($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
@@ -355,6 +359,9 @@ class PhysicalPropertiesLengthV2 implements ModelInterface, ArrayAccess, \JsonSe
             throw new \InvalidArgumentException('non-nullable value cannot be null');
         }
 
+        if (($value > 10000)) {
+            throw new \InvalidArgumentException('invalid value for $value when calling PhysicalPropertiesLengthV2., must be smaller than or equal to 10000.');
+        }
         if (($value < 0)) {
             throw new \InvalidArgumentException('invalid value for $value when calling PhysicalPropertiesLengthV2., must be bigger than or equal to 0.');
         }

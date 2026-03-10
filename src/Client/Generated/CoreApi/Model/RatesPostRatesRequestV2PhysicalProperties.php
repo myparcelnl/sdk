@@ -1,6 +1,6 @@
 <?php
 /**
- * PhysicalPropertiesHeightV2
+ * RatesPostRatesRequestV2PhysicalProperties
  *
  * PHP version 7.4
  *
@@ -33,16 +33,16 @@ use \ArrayAccess;
 use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
- * PhysicalPropertiesHeightV2 Class Doc Comment
+ * RatesPostRatesRequestV2PhysicalProperties Class Doc Comment
  *
  * @category Class
- * @description The height of the package
+ * @description Physical properties of the package.
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSerializable
+class RatesPostRatesRequestV2PhysicalProperties implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
       *
       * @var string
       */
-    protected static $openAPIModelName = 'PhysicalPropertiesHeightV2';
+    protected static $openAPIModelName = 'rates_post_rates_request_v2_physicalProperties';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
       * @var string[]
       */
     protected static $openAPITypes = [
-        'value' => 'float',
-        'unit' => 'string'
+        'height' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesHeight',
+        'width' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesWidth',
+        'length' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesLength',
+        'weight' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2'
     ];
 
     /**
@@ -71,8 +73,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'value' => null,
-        'unit' => null
+        'height' => null,
+        'width' => null,
+        'length' => null,
+        'weight' => null
     ];
 
     /**
@@ -81,8 +85,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'value' => false,
-        'unit' => false
+        'height' => false,
+        'width' => false,
+        'length' => false,
+        'weight' => false
     ];
 
     /**
@@ -171,8 +177,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
      * @var string[]
      */
     protected static $attributeMap = [
-        'value' => 'value',
-        'unit' => 'unit'
+        'height' => 'height',
+        'width' => 'width',
+        'length' => 'length',
+        'weight' => 'weight'
     ];
 
     /**
@@ -181,8 +189,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
      * @var string[]
      */
     protected static $setters = [
-        'value' => 'setValue',
-        'unit' => 'setUnit'
+        'height' => 'setHeight',
+        'width' => 'setWidth',
+        'length' => 'setLength',
+        'weight' => 'setWeight'
     ];
 
     /**
@@ -191,8 +201,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
      * @var string[]
      */
     protected static $getters = [
-        'value' => 'getValue',
-        'unit' => 'getUnit'
+        'height' => 'getHeight',
+        'width' => 'getWidth',
+        'length' => 'getLength',
+        'weight' => 'getWeight'
     ];
 
     /**
@@ -236,21 +248,6 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
         return self::$openAPIModelName;
     }
 
-    public const UNIT_CM = 'cm';
-    public const UNIT_MM = 'mm';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getUnitAllowableValues()
-    {
-        return [
-            self::UNIT_CM,
-            self::UNIT_MM,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -267,8 +264,10 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('value', $data ?? [], null);
-        $this->setIfExists('unit', $data ?? [], null);
+        $this->setIfExists('height', $data ?? [], null);
+        $this->setIfExists('width', $data ?? [], null);
+        $this->setIfExists('length', $data ?? [], null);
+        $this->setIfExists('weight', $data ?? [], null);
     }
 
     /**
@@ -298,29 +297,6 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
     {
         $invalidProperties = [];
 
-        if ($this->container['value'] === null) {
-            $invalidProperties[] = "'value' can't be null";
-        }
-        if (($this->container['value'] > 10000)) {
-            $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 10000.";
-        }
-
-        if (($this->container['value'] < 0)) {
-            $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
-        }
-
-        if ($this->container['unit'] === null) {
-            $invalidProperties[] = "'unit' can't be null";
-        }
-        $allowedValues = $this->getUnitAllowableValues();
-        if (!is_null($this->container['unit']) && !in_array($this->container['unit'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'unit', must be one of '%s'",
-                $this->container['unit'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -337,73 +313,109 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
 
 
     /**
-     * Gets value
+     * Gets height
      *
-     * @return float
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesHeight|null
      */
-    public function getValue()
+    public function getHeight()
     {
-        return $this->container['value'];
+        return $this->container['height'];
     }
 
     /**
-     * Sets value
+     * Sets height
      *
-     * @param float $value The height value
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesHeight|null $height height
      *
      * @return self
      */
-    public function setValue($value)
+    public function setHeight($height)
     {
-        if (is_null($value)) {
-            throw new \InvalidArgumentException('non-nullable value cannot be null');
+        if (is_null($height)) {
+            throw new \InvalidArgumentException('non-nullable height cannot be null');
         }
-
-        if (($value > 10000)) {
-            throw new \InvalidArgumentException('invalid value for $value when calling PhysicalPropertiesHeightV2., must be smaller than or equal to 10000.');
-        }
-        if (($value < 0)) {
-            throw new \InvalidArgumentException('invalid value for $value when calling PhysicalPropertiesHeightV2., must be bigger than or equal to 0.');
-        }
-
-        $this->container['value'] = $value;
+        $this->container['height'] = $height;
 
         return $this;
     }
 
     /**
-     * Gets unit
+     * Gets width
      *
-     * @return string
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesWidth|null
      */
-    public function getUnit()
+    public function getWidth()
     {
-        return $this->container['unit'];
+        return $this->container['width'];
     }
 
     /**
-     * Sets unit
+     * Sets width
      *
-     * @param string $unit The unit of measurement in SI units (e.g., mm, cm)
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesWidth|null $width width
      *
      * @return self
      */
-    public function setUnit($unit)
+    public function setWidth($width)
     {
-        if (is_null($unit)) {
-            throw new \InvalidArgumentException('non-nullable unit cannot be null');
+        if (is_null($width)) {
+            throw new \InvalidArgumentException('non-nullable width cannot be null');
         }
-        $allowedValues = $this->getUnitAllowableValues();
-        if (!in_array($unit, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'unit', must be one of '%s'",
-                    $unit,
-                    implode("', '", $allowedValues)
-                )
-            );
+        $this->container['width'] = $width;
+
+        return $this;
+    }
+
+    /**
+     * Gets length
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesLength|null
+     */
+    public function getLength()
+    {
+        return $this->container['length'];
+    }
+
+    /**
+     * Sets length
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalPropertiesLength|null $length length
+     *
+     * @return self
+     */
+    public function setLength($length)
+    {
+        if (is_null($length)) {
+            throw new \InvalidArgumentException('non-nullable length cannot be null');
         }
-        $this->container['unit'] = $unit;
+        $this->container['length'] = $length;
+
+        return $this;
+    }
+
+    /**
+     * Gets weight
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2|null
+     */
+    public function getWeight()
+    {
+        return $this->container['weight'];
+    }
+
+    /**
+     * Sets weight
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2|null $weight weight
+     *
+     * @return self
+     */
+    public function setWeight($weight)
+    {
+        if (is_null($weight)) {
+            throw new \InvalidArgumentException('non-nullable weight cannot be null');
+        }
+        $this->container['weight'] = $weight;
 
         return $this;
     }

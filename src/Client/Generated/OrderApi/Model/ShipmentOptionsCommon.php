@@ -59,6 +59,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static $openAPITypes = [
         'additional_insurance' => 'object',
         'deliver_at_postal_point' => 'object',
+        'fresh_food' => 'object',
+        'frozen' => 'object',
         'hide_sender' => 'object',
         'insurance' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonInsurance',
         'no_tracking' => 'object',
@@ -87,6 +89,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static $openAPIFormats = [
         'additional_insurance' => null,
         'deliver_at_postal_point' => null,
+        'fresh_food' => null,
+        'frozen' => null,
         'hide_sender' => null,
         'insurance' => null,
         'no_tracking' => null,
@@ -113,6 +117,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static array $openAPINullables = [
         'additional_insurance' => false,
         'deliver_at_postal_point' => false,
+        'fresh_food' => false,
+        'frozen' => false,
         'hide_sender' => false,
         'insurance' => false,
         'no_tracking' => false,
@@ -219,6 +225,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static $attributeMap = [
         'additional_insurance' => 'additionalInsurance',
         'deliver_at_postal_point' => 'deliverAtPostalPoint',
+        'fresh_food' => 'freshFood',
+        'frozen' => 'frozen',
         'hide_sender' => 'hideSender',
         'insurance' => 'insurance',
         'no_tracking' => 'noTracking',
@@ -245,6 +253,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static $setters = [
         'additional_insurance' => 'setAdditionalInsurance',
         'deliver_at_postal_point' => 'setDeliverAtPostalPoint',
+        'fresh_food' => 'setFreshFood',
+        'frozen' => 'setFrozen',
         'hide_sender' => 'setHideSender',
         'insurance' => 'setInsurance',
         'no_tracking' => 'setNoTracking',
@@ -271,6 +281,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static $getters = [
         'additional_insurance' => 'getAdditionalInsurance',
         'deliver_at_postal_point' => 'getDeliverAtPostalPoint',
+        'fresh_food' => 'getFreshFood',
+        'frozen' => 'getFrozen',
         'hide_sender' => 'getHideSender',
         'insurance' => 'getInsurance',
         'no_tracking' => 'getNoTracking',
@@ -348,6 +360,8 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
     {
         $this->setIfExists('additional_insurance', $data ?? [], null);
         $this->setIfExists('deliver_at_postal_point', $data ?? [], null);
+        $this->setIfExists('fresh_food', $data ?? [], null);
+        $this->setIfExists('frozen', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('insurance', $data ?? [], null);
         $this->setIfExists('no_tracking', $data ?? [], null);
@@ -458,6 +472,60 @@ class ShipmentOptionsCommon implements ModelInterface, ArrayAccess, \JsonSeriali
             throw new \InvalidArgumentException('non-nullable deliver_at_postal_point cannot be null');
         }
         $this->container['deliver_at_postal_point'] = $deliver_at_postal_point;
+
+        return $this;
+    }
+
+    /**
+     * Gets fresh_food
+     *
+     * @return object|null
+     */
+    public function getFreshFood()
+    {
+        return $this->container['fresh_food'];
+    }
+
+    /**
+     * Sets fresh_food
+     *
+     * @param object|null $fresh_food Designates the shipment as containing perishable, non-frozen food items, ensuring appropriate handling procedures are applied to maintain freshness and prevent spoilage during transit.
+     *
+     * @return self
+     */
+    public function setFreshFood($fresh_food)
+    {
+        if (is_null($fresh_food)) {
+            throw new \InvalidArgumentException('non-nullable fresh_food cannot be null');
+        }
+        $this->container['fresh_food'] = $fresh_food;
+
+        return $this;
+    }
+
+    /**
+     * Gets frozen
+     *
+     * @return object|null
+     */
+    public function getFrozen()
+    {
+        return $this->container['frozen'];
+    }
+
+    /**
+     * Sets frozen
+     *
+     * @param object|null $frozen Specifies that the shipment contains items that must remain frozen, necessitating strict, continuous temperature-controlled environments throughout the transit process to prevent thawing.
+     *
+     * @return self
+     */
+    public function setFrozen($frozen)
+    {
+        if (is_null($frozen)) {
+            throw new \InvalidArgumentException('non-nullable frozen cannot be null');
+        }
+        $this->container['frozen'] = $frozen;
 
         return $this;
     }

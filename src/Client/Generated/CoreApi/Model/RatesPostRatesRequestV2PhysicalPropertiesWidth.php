@@ -1,6 +1,6 @@
 <?php
 /**
- * PhysicalPropertiesHeightV2
+ * RatesPostRatesRequestV2PhysicalPropertiesWidth
  *
  * PHP version 7.4
  *
@@ -33,16 +33,16 @@ use \ArrayAccess;
 use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
- * PhysicalPropertiesHeightV2 Class Doc Comment
+ * RatesPostRatesRequestV2PhysicalPropertiesWidth Class Doc Comment
  *
  * @category Class
- * @description The height of the package
+ * @description The width of the package
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSerializable
+class RatesPostRatesRequestV2PhysicalPropertiesWidth implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
       *
       * @var string
       */
-    protected static $openAPIModelName = 'PhysicalPropertiesHeightV2';
+    protected static $openAPIModelName = 'rates_post_rates_request_v2_physicalProperties_width';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -301,10 +301,6 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
-        if (($this->container['value'] > 10000)) {
-            $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 10000.";
-        }
-
         if (($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
@@ -349,7 +345,7 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets value
      *
-     * @param float $value The height value
+     * @param float $value The width value
      *
      * @return self
      */
@@ -359,11 +355,8 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
             throw new \InvalidArgumentException('non-nullable value cannot be null');
         }
 
-        if (($value > 10000)) {
-            throw new \InvalidArgumentException('invalid value for $value when calling PhysicalPropertiesHeightV2., must be smaller than or equal to 10000.');
-        }
         if (($value < 0)) {
-            throw new \InvalidArgumentException('invalid value for $value when calling PhysicalPropertiesHeightV2., must be bigger than or equal to 0.');
+            throw new \InvalidArgumentException('invalid value for $value when calling RatesPostRatesRequestV2PhysicalPropertiesWidth., must be bigger than or equal to 0.');
         }
 
         $this->container['value'] = $value;
