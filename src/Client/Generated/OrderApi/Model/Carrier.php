@@ -63,6 +63,8 @@ class Carrier
 
     public const POSTNL = 'POSTNL';
 
+    public const POSTE_ITALIANE = 'POSTE_ITALIANE';
+
     public const TRUNKRS = 'TRUNKRS';
 
     public const UPS_EXPRESS_SAVER = 'UPS_EXPRESS_SAVER';
@@ -88,6 +90,7 @@ class Carrier
             self::GLS,
             self::INPOST,
             self::POSTNL,
+            self::POSTE_ITALIANE,
             self::TRUNKRS,
             self::UPS_EXPRESS_SAVER,
             self::UPS_STANDARD,
