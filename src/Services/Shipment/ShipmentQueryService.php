@@ -27,6 +27,12 @@ final class ShipmentQueryService
 {
     use HasUserAgent;
 
+    /**
+     * Default page size for query results.
+     * Originates from the legacy MyParcelCollection::setLatestData($size = 300) default.
+     */
+    private const DEFAULT_QUERY_PAGE_SIZE = 300;
+
     private ShipmentApi $api;
 
     private PsrClientInterface $httpClient;
@@ -38,47 +44,28 @@ final class ShipmentQueryService
         ?string $host = null
     ) {
         $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
     }
 
     /**
      * Query shipments by available API filters.
      *
-     * @param array<string, mixed> $parameters
+     * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
+     *                                         parameters (barcode, carrier_id, created, status, etc.).
      * @return ShipmentDefsShipment[]
      */
     public function query(array $parameters = []): array
     {
-        $size = array_key_exists('size', $parameters) ? $parameters['size'] : 300;
-
-        $request = $this->api->getShipmentsRequest(
-            $this->getUserAgentHeader(),
-            $parameters['barcode'] ?? null,
-            $parameters['carrier_id'] ?? null,
-            $parameters['created'] ?? null,
-            $parameters['delayed'] ?? null,
-            $parameters['delivered'] ?? null,
-            $parameters['dropoff_today'] ?? null,
-            $parameters['filter_hidden_shops'] ?? null,
-            $parameters['hidden'] ?? null,
-            $parameters['link_consumer_portal'] ?? null,
-            $parameters['order'] ?? null,
-            $parameters['package_type'] ?? null,
-            $parameters['page'] ?? null,
-            $parameters['q'] ?? null,
-            $parameters['reference_identifier'] ?? null,
-            $parameters['region'] ?? null,
-            $parameters['shipment_type'] ?? null,
-            $parameters['shop_id'] ?? null,
-            $size,
-            $parameters['sort'] ?? null,
-            $parameters['status'] ?? null,
-            $parameters['transaction_status'] ?? null
-        );
+        $request = $this->buildGetShipmentsRequest($parameters);
 
         return $this->sendAndParseShipments($request);
     }
 
+    /**
+     * Find a single shipment by its ID.
+     *
+     * @return ShipmentDefsShipment|null The shipment, or null if not found.
+     */
     public function find(int $shipmentId): ?ShipmentDefsShipment
     {
         $shipments = $this->findMany([$shipmentId]);
@@ -87,6 +74,8 @@ final class ShipmentQueryService
     }
 
     /**
+     * Find multiple shipments by their IDs in a single API call.
+     *
      * @param int[] $shipmentIds
      * @return ShipmentDefsShipment[]
      */
@@ -102,6 +91,11 @@ final class ShipmentQueryService
         return $this->sendAndParseShipments($request);
     }
 
+    /**
+     * Find a single shipment by its reference identifier.
+     *
+     * @return ShipmentDefsShipment|null The shipment, or null if not found.
+     */
     public function findByReferenceId(string $referenceIdentifier): ?ShipmentDefsShipment
     {
         $shipments = $this->findManyByReferenceId([$referenceIdentifier]);
@@ -110,6 +104,12 @@ final class ShipmentQueryService
     }
 
     /**
+     * Find shipments by multiple reference identifiers.
+     *
+     * Warning: the MyParcel API only supports filtering by a single reference_identifier per request.
+     * This method therefore issues one API call per identifier (N+1). Be mindful of rate limits
+     * when passing large arrays.
+     *
      * @param string[] $referenceIdentifiers
      * @return ShipmentDefsShipment[]
      */
@@ -146,6 +146,45 @@ final class ShipmentQueryService
         }
 
         return array_map([$this, 'hydrateShipment'], $decoded['data']['shipments']);
+    }
+
+    /**
+     * Build the getShipments request from a parameter array.
+     *
+     * Maps the associative $parameters array to the generated getShipmentsRequest()
+     * positional argument list. PHP 7.4 does not support named arguments, so the
+     * generated method signature (22 positional params) dictates this mapping.
+     */
+    private function buildGetShipmentsRequest(array $parameters): RequestInterface
+    {
+        $size = array_key_exists('size', $parameters)
+            ? $parameters['size']
+            : self::DEFAULT_QUERY_PAGE_SIZE;
+
+        return $this->api->getShipmentsRequest(
+            $this->getUserAgentHeader(),
+            $parameters['barcode'] ?? null,
+            $parameters['carrier_id'] ?? null,
+            $parameters['created'] ?? null,
+            $parameters['delayed'] ?? null,
+            $parameters['delivered'] ?? null,
+            $parameters['dropoff_today'] ?? null,
+            $parameters['filter_hidden_shops'] ?? null,
+            $parameters['hidden'] ?? null,
+            $parameters['link_consumer_portal'] ?? null,
+            $parameters['order'] ?? null,
+            $parameters['package_type'] ?? null,
+            $parameters['page'] ?? null,
+            $parameters['q'] ?? null,
+            $parameters['reference_identifier'] ?? null,
+            $parameters['region'] ?? null,
+            $parameters['shipment_type'] ?? null,
+            $parameters['shop_id'] ?? null,
+            $size,
+            $parameters['sort'] ?? null,
+            $parameters['status'] ?? null,
+            $parameters['transaction_status'] ?? null
+        );
     }
 
     /**

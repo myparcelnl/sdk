@@ -38,12 +38,14 @@ final class ShipmentTrackTraceService
         ?string $baseUri = null
     ) {
         $this->api = $api ?? ShipmentApiFactory::make($apiKey, $baseUri);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
     }
 
     /**
+     * Retrieve track & trace information for the given shipment IDs.
+     *
      * @param int[] $shipmentIds
-     * @return array<int, ShipmentDefsTrackTrace>
+     * @return array<int, ShipmentDefsTrackTrace> Keyed by shipment ID.
      */
     public function fetchTrackTraceData(array $shipmentIds): array
     {

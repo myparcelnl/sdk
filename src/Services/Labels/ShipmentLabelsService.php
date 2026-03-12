@@ -44,12 +44,14 @@ final class ShipmentLabelsService
         ?string $host = null
     ) {
         $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
     }
 
     /**
+     * Fetch and store the label download link for the given shipments.
+     *
      * @param int[] $shipmentIds
-     * @param mixed $positions
+     * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
      *
      * @throws ApiException
      */
@@ -75,14 +77,19 @@ final class ShipmentLabelsService
         return $this->labelLink;
     }
 
+    /**
+     * Return the previously fetched label link URL.
+     */
     public function getLinkOfLabels(): string
     {
         return $this->labelLink;
     }
 
     /**
+     * Fetch and store the raw PDF content for the given shipment labels.
+     *
      * @param int[] $shipmentIds
-     * @param mixed $positions
+     * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
      *
      * @throws ApiException
      */
@@ -108,13 +115,18 @@ final class ShipmentLabelsService
         return $this->labelPdf;
     }
 
+    /**
+     * Return the previously fetched raw PDF label content.
+     */
     public function getLabelPdf(): string
     {
         return $this->labelPdf;
     }
 
     /**
-     * @throws MissingFieldException
+     * Stream the stored PDF to the browser as a download (or inline).
+     *
+     * @throws MissingFieldException If setPdfOfLabels() has not been called first.
      */
     public function downloadPdfOfLabels(bool $inlineDownload = false): void
     {
