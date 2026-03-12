@@ -43,7 +43,7 @@ final class ShipmentPrintService
         ?string $host = null
     ) {
         $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
     }
 
     /**

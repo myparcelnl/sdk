@@ -15,6 +15,14 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 final class ShipmentApiFactory
 {
     /**
+     * Default HTTP client timeout in seconds.
+     *
+     * Shared across all shipment services to ensure consistent behaviour.
+     * The MyParcel API typically responds within 2-3 seconds; 10 seconds
+     * provides headroom for label generation and large batch queries.
+     */
+    public const DEFAULT_HTTP_TIMEOUT = 10;
+    /**
      * Create a configured ShipmentApi client.
      *
      * @param string|null $apiKey Optional API key.
@@ -48,7 +56,7 @@ final class ShipmentApiFactory
         $stack = self::createHandlerStack();
 
         $httpOptions = [
-            'timeout'  => 10,
+            'timeout'  => self::DEFAULT_HTTP_TIMEOUT,
             'handler'  => $stack,
             'debug'    => false,
         ];
