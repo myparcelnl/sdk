@@ -19,19 +19,15 @@ inlineSchemaNameMappings:
   shipment_post_shipments_request_v1_1_data_shipments_inner: ShipmentRequest
   shipment_post_shipments_request_v1_1_data_shipments_inner_secondary_shipments_inner: SecondaryShipmentRequest
 typeMappings:
-  # @todo remove once the upstream spec/codegen fix for the street pattern is available.
-  # Maps the buggy ShipmentDefsShipmentRecipient to our fixed override class so that
-  # all generated code (ObjectSerializer, API methods, models) uses the corrected version.
+  # @todo remove when upstream spec fixes street pattern + email enum
+  # Redirects to override classes that fix broken setStreet() regex and setEmail() enum.
   ShipmentDefsShipmentRecipient: FixedShipmentRecipient
   ShipmentDefsShipmentSender: FixedShipmentSender
-  # The upstream spec defines some properties as `type: "null"` which the PHP generator
-  # maps to a literal class name 'Null'. ObjectSerializer then crashes with
-  # "Class 'Null' not found". Mapping it to 'mixed' lets it pass through as-is.
+  # @todo remove when upstream spec fixes type: "null" properties
+  # Prevents ObjectSerializer from trying to instantiate a class named 'Null'.
   Null: mixed
-  # The spec defines reference_identifier as ['null','integer','string'], causing the
-  # generator to create an empty wrapper model RefShipmentReferenceIdentifier. This
-  # loses data during deserialization. In practice it's always a nullable string.
-  # @todo remove once the upstream spec fixes this to `type: string, nullable: true`.
+  # @todo remove when upstream spec fixes reference_identifier union type
+  # The union ['null','integer','string'] generates an empty wrapper model that loses data.
   RefShipmentReferenceIdentifier: string
 additionalProperties:
   '!include': 'commonProperties.yaml'
