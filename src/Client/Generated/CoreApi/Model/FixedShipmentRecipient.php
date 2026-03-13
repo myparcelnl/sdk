@@ -2,28 +2,32 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Sdk\Client\Override;
+namespace MyParcelNL\Sdk\Client\Generated\CoreApi\Model;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
  * Temporary override for ShipmentDefsShipmentRecipient.
  *
- * Fixes the broken preg_match pattern in setStreet() and listInvalidProperties().
- * The generated code uses `"\\D+"` (missing regex delimiters), which causes a
- * preg_match warning and crashes any deserialization path that calls the setter.
+ * Fixes the following bugs in the generated parent class:
+ * - setStreet() / listInvalidProperties(): broken preg_match pattern `"\D+"` (missing regex delimiters)
+ * - setEmail(): incorrectly restricts email to empty string only (enum with single value `""`)
+ * - listInvalidProperties(): same email enum check on read-path
+ *
+ * Registered via typeMappings in openapi/coreapi.yaml so that ObjectSerializer
+ * deserializes into this class instead of the buggy generated parent.
  *
  * @todo remove once the upstream spec/codegen fix for the street pattern is available
- *       and the client is regenerated.
+ *       and the client is regenerated. Also remove the typeMappings + importMappings
+ *       entries from openapi/coreapi.yaml.
  */
 final class FixedShipmentRecipient extends ShipmentDefsShipmentRecipient
 {
     /**
      * {@inheritDoc}
      *
-     * Overrides the broken preg_match pattern: original uses "\\D+" without
-     * regex delimiters, this version uses "/\\D+/".
+     * Overrides the broken preg_match pattern: original uses "\D+" without
+     * regex delimiters, this version uses "/\D+/".
      *
      * Note: accesses the protected $openAPINullablesSetToNull property directly
      * because the parent getter/setter are private and not accessible from child classes.
@@ -57,18 +61,48 @@ final class FixedShipmentRecipient extends ShipmentDefsShipmentRecipient
     /**
      * {@inheritDoc}
      *
-     * Overrides the broken preg_match pattern in the street validation check.
-     * Suppresses the E_WARNING from parent's broken preg_match("\\D+", ...) call
-     * (missing regex delimiters), then replaces its result with the corrected pattern.
+     * Removes the broken email enum restriction that only allows empty string.
+     * The generated spec incorrectly defines email as an enum with `""` as the
+     * only allowed value. This override accepts any string (or null).
+     */
+    public function setEmail($email)
+    {
+        if (is_null($email)) {
+            $this->openAPINullablesSetToNull[] = 'email';
+        } else {
+            $index = array_search('email', $this->openAPINullablesSetToNull);
+            if ($index !== false) {
+                unset($this->openAPINullablesSetToNull[$index]);
+                $this->openAPINullablesSetToNull = array_values($this->openAPINullablesSetToNull);
+            }
+        }
+
+        $this->container['email'] = $email;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Overrides the broken preg_match pattern in the street validation check
+     * and removes the incorrect email enum validation.
      */
     public function listInvalidProperties()
     {
         // Suppress E_WARNING from parent's broken preg_match("\D+", ...)
         $invalidProperties = @parent::listInvalidProperties();
 
-        // Remove the broken street pattern validation added by parent
+        // Remove the broken street pattern validation and email enum validation added by parent
         $invalidProperties = array_filter($invalidProperties, static function (string $msg): bool {
-            return false === strpos($msg, "must be conform to the pattern \\D+");
+            if (false !== strpos($msg, "must be conform to the pattern \\D+")) {
+                return false;
+            }
+            if (false !== strpos($msg, "for 'email', must be one of")) {
+                return false;
+            }
+
+            return true;
         });
 
         // Re-validate street with corrected pattern

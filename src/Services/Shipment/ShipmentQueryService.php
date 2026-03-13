@@ -4,47 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
-use GuzzleHttp\Client as GuzzleClient;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ModelHydrator;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use Psr\Http\Client\ClientInterface as PsrClientInterface;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * Query/fetch service for shipments using generated Core API endpoints.
- *
- * Uses hybrid approach (request builder + manual send + constructor-based deserialization)
- * to work around a broken preg_match pattern in the generated ShipmentDefsShipmentRecipient::setStreet().
- * Model constructors write directly to the internal container via setIfExists(), bypassing setter validation.
- *
- * @todo revert to direct generated API methods (getShipments/getShipmentsById) once the
- *       upstream spec/codegen fix for the street pattern is available and the client is regenerated.
  */
 final class ShipmentQueryService
 {
     use HasUserAgent;
 
-    /**
-     * Default page size for query results.
-     * Originates from the legacy MyParcelCollection::setLatestData($size = 300) default.
-     */
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
 
     private ShipmentApi $api;
 
-    private PsrClientInterface $httpClient;
-
     public function __construct(
         string $apiKey,
         ?ShipmentApi $api = null,
-        ?PsrClientInterface $httpClient = null,
         ?string $host = null
     ) {
         $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
     }
 
     /**
@@ -56,9 +38,9 @@ final class ShipmentQueryService
      */
     public function query(array $parameters = []): array
     {
-        $request = $this->buildGetShipmentsRequest($parameters);
+        $response = $this->buildGetShipmentsQuery($parameters);
 
-        return $this->sendAndParseShipments($request);
+        return $this->extractShipments($response);
     }
 
     /**
@@ -86,9 +68,11 @@ final class ShipmentQueryService
         }
 
         $ids = implode(';', array_map('intval', $shipmentIds));
-        $request = $this->api->getShipmentsByIdRequest($ids, $this->getUserAgentHeader());
 
-        return $this->sendAndParseShipments($request);
+        /** @var ShipmentResponsesShipments $response */
+        $response = $this->api->getShipmentsById($ids, $this->getUserAgentHeader());
+
+        return $this->extractShipments($response);
     }
 
     /**
@@ -124,7 +108,9 @@ final class ShipmentQueryService
                 continue;
             }
 
-            $shipments = $this->query(['reference_identifier' => $referenceIdentifier]);
+            // Explicitly pass size=null to use the API default; the API returns 0 results
+            // when size >= 200 is combined with reference_identifier.
+            $shipments = $this->query(['reference_identifier' => $referenceIdentifier, 'size' => null]);
             $result = $this->mergeUniqueById($result, $shipments);
         }
 
@@ -132,36 +118,19 @@ final class ShipmentQueryService
     }
 
     /**
-     * Send request and parse the shipments response using constructor-based deserialization.
+     * Build and execute the getShipments query from a parameter array.
      *
-     * @return ShipmentDefsShipment[]
-     */
-    private function sendAndParseShipments(RequestInterface $request): array
-    {
-        $response = $this->httpClient->sendRequest($request);
-        $decoded = json_decode((string) $response->getBody(), true);
-
-        if (! is_array($decoded) || ! isset($decoded['data']['shipments']) || ! is_array($decoded['data']['shipments'])) {
-            return [];
-        }
-
-        return array_map([$this, 'hydrateShipment'], $decoded['data']['shipments']);
-    }
-
-    /**
-     * Build the getShipments request from a parameter array.
-     *
-     * Maps the associative $parameters array to the generated getShipmentsRequest()
+     * Maps the associative $parameters array to the generated getShipments()
      * positional argument list. PHP 7.4 does not support named arguments, so the
      * generated method signature (22 positional params) dictates this mapping.
      */
-    private function buildGetShipmentsRequest(array $parameters): RequestInterface
+    private function buildGetShipmentsQuery(array $parameters): ShipmentResponsesShipments
     {
         $size = array_key_exists('size', $parameters)
             ? $parameters['size']
             : self::DEFAULT_QUERY_PAGE_SIZE;
 
-        return $this->api->getShipmentsRequest(
+        return $this->api->getShipments(
             $this->getUserAgentHeader(),
             $parameters['barcode'] ?? null,
             $parameters['carrier_id'] ?? null,
@@ -188,15 +157,19 @@ final class ShipmentQueryService
     }
 
     /**
-     * Recursively hydrate a ShipmentDefsShipment from raw array data.
+     * Extract the shipments array from the generated response model.
      *
-     * Uses ModelHydrator to construct all nested typed models (recipient, sender,
-     * status, options, etc.) via their constructors, bypassing setter validation.
+     * @return ShipmentDefsShipment[]
      */
-    private function hydrateShipment(array $data): ShipmentDefsShipment
+    private function extractShipments(ShipmentResponsesShipments $response): array
     {
-        /** @var ShipmentDefsShipment */
-        return ModelHydrator::hydrate(ShipmentDefsShipment::class, $data);
+        $data = $response->getData();
+
+        if (null === $data) {
+            return [];
+        }
+
+        return $data->getShipments() ?? [];
     }
 
     /**
