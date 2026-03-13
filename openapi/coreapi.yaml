@@ -18,6 +18,17 @@ inlineSchemaNameMappings:
   # Shipment V1.1 - test mappings
   shipment_post_shipments_request_v1_1_data_shipments_inner: ShipmentRequest
   shipment_post_shipments_request_v1_1_data_shipments_inner_secondary_shipments_inner: SecondaryShipmentRequest
+typeMappings:
+  # @todo remove when upstream spec fixes street pattern + email enum
+  # Redirects to override classes that fix broken setStreet() regex and setEmail() enum.
+  ShipmentDefsShipmentRecipient: FixedShipmentRecipient
+  ShipmentDefsShipmentSender: FixedShipmentSender
+  # @todo remove when upstream spec fixes type: "null" properties
+  # Prevents ObjectSerializer from trying to instantiate a class named 'Null'.
+  Null: mixed
+  # @todo remove when upstream spec fixes reference_identifier union type
+  # The union ['null','integer','string'] generates an empty wrapper model that loses data.
+  RefShipmentReferenceIdentifier: string
 additionalProperties:
   '!include': 'commonProperties.yaml'
   packageName: MyParcelNL\Sdk\Client\Generated\CoreApi
