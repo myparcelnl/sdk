@@ -67,10 +67,10 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'link_consumer_portal' => 'string',
         'link_tracktrace' => 'string',
         'partner_tracktraces' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalTrackTraceLink[]',
-        'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender',
+        'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions',
-        'pickup' => 'Null',
+        'pickup' => 'mixed',
         'delayed' => 'bool',
         'location' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackingLocation',
         'status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTraceStatus',
@@ -700,7 +700,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets recipient
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient
      */
     public function getRecipient()
     {
@@ -710,7 +710,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets recipient
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient $recipient recipient
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient $recipient recipient
      *
      * @return self
      */
@@ -727,7 +727,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender
      */
     public function getSender()
     {
@@ -737,7 +737,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender $sender sender
      *
      * @return self
      */
@@ -781,7 +781,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets pickup
      *
-     * @return Null
+     * @return mixed
      */
     public function getPickup()
     {
@@ -791,7 +791,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets pickup
      *
-     * @param Null $pickup pickup
+     * @param mixed $pickup pickup
      *
      * @return self
      */

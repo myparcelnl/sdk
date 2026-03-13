@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\TrackTrace;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTrace;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktracesData;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use Psr\Http\Client\ClientInterface;
 
 final class ShipmentTrackTraceServiceTest extends TestCase
 {
     public function testFetchTrackTraceDataThrowsOnEmptyIds(): void
     {
         $api = $this->createMock(ShipmentApi::class);
-        $httpClient = $this->createMock(ClientInterface::class);
 
-        $service = new ShipmentTrackTraceService($this->getApiKey(), $api, $httpClient);
+        $service = new ShipmentTrackTraceService($this->getApiKey(), $api);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one shipment ID is required');
@@ -31,31 +29,24 @@ final class ShipmentTrackTraceServiceTest extends TestCase
 
     public function testFetchTrackTraceDataCallsGeneratedEndpointAndMapsByShipmentId(): void
     {
+        $tt1 = new ShipmentDefsTrackTrace([
+            'shipment_id' => 123,
+            'link_tracktrace' => 'https://track.test/123',
+            'code' => 'DELIVERED',
+        ]);
+        $tt2 = new ShipmentDefsTrackTrace([
+            'shipment_id' => 456,
+            'link_tracktrace' => 'https://track.test/456',
+            'code' => 'IN_TRANSIT',
+        ]);
+
         $api = $this->createMock(ShipmentApi::class);
         $api->expects(self::once())
-            ->method('getTrackTracesByIdsRequest')
+            ->method('getTrackTracesByIds')
             ->with(self::identicalTo('123;456'), self::isType('string'))
-            ->willReturn(new Request('GET', 'https://api.myparcel.nl/tracktraces/123;456'));
+            ->willReturn($this->buildTracktracesResponse([$tt1, $tt2]));
 
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->expects(self::once())
-            ->method('sendRequest')
-            ->willReturn($this->createJsonResponse([
-                'data' => ['tracktraces' => [
-                    [
-                        'shipment_id' => 123,
-                        'link_tracktrace' => 'https://track.test/123',
-                        'code' => 'DELIVERED',
-                    ],
-                    [
-                        'shipment_id' => 456,
-                        'link_tracktrace' => 'https://track.test/456',
-                        'code' => 'IN_TRANSIT',
-                    ],
-                ]],
-            ]));
-
-        $service = new ShipmentTrackTraceService($this->getApiKey(), $api, $httpClient);
+        $service = new ShipmentTrackTraceService($this->getApiKey(), $api);
         $service->setUserAgentForProposition('Magento', '2.4.7');
 
         $result = $service->fetchTrackTraceData([123, 456]);
@@ -70,35 +61,28 @@ final class ShipmentTrackTraceServiceTest extends TestCase
         self::assertSame('IN_TRANSIT', $result[456]->getCode());
     }
 
-    public function testRecipientStreetIsPreservedViaConstructorDeserialization(): void
+    public function testRecipientIsDeserializedAsFixedShipmentRecipient(): void
     {
+        $recipient = new FixedShipmentRecipient([
+            'cc' => 'NL',
+            'street' => 'Antareslaan',
+            'number' => '31',
+            'postal_code' => '2132JE',
+            'city' => 'Hoofddorp',
+            'person' => 'Test Person',
+        ]);
+        $tt = new ShipmentDefsTrackTrace([
+            'shipment_id' => 99,
+            'code' => 'DELIVERED',
+            'description' => 'Package delivered',
+            'recipient' => $recipient,
+        ]);
+
         $api = $this->createMock(ShipmentApi::class);
-        $api->method('getTrackTracesByIdsRequest')
-            ->willReturn(new Request('GET', 'https://api.myparcel.nl/tracktraces/99'));
+        $api->method('getTrackTracesByIds')
+            ->willReturn($this->buildTracktracesResponse([$tt]));
 
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->method('sendRequest')
-            ->willReturn($this->createJsonResponse([
-                'data' => ['tracktraces' => [
-                    [
-                        'shipment_id' => 99,
-                        'code' => 'DELIVERED',
-                        'description' => 'Package delivered',
-                        'recipient' => [
-                            'cc' => 'NL',
-                            'street' => 'Antareslaan',
-                            'number' => '31',
-                            'postal_code' => '2132JE',
-                            'city' => 'Hoofddorp',
-                            'person' => 'Test Person',
-                        ],
-                        'status' => ['current' => 7, 'final' => true],
-                        'history' => [['code' => 'A', 'time' => '2024-01-01']],
-                    ],
-                ]],
-            ]));
-
-        $service = new ShipmentTrackTraceService($this->getApiKey(), $api, $httpClient);
+        $service = new ShipmentTrackTraceService($this->getApiKey(), $api);
         $result = $service->fetchTrackTraceData([99]);
 
         self::assertArrayHasKey(99, $result);
@@ -107,33 +91,31 @@ final class ShipmentTrackTraceServiceTest extends TestCase
         self::assertSame('DELIVERED', $trackTrace->getCode());
         self::assertSame('Package delivered', $trackTrace->getDescription());
 
-        $recipient = $trackTrace->getRecipient();
-        self::assertInstanceOf(ShipmentDefsShipmentRecipient::class, $recipient);
-        self::assertSame('Antareslaan', $recipient->getStreet());
-        self::assertSame('NL', $recipient->getCc());
-        self::assertSame('31', $recipient->getNumber());
-        self::assertSame('2132JE', $recipient->getPostalCode());
-        self::assertSame('Hoofddorp', $recipient->getCity());
-        self::assertSame('Test Person', $recipient->getPerson());
+        $resultRecipient = $trackTrace->getRecipient();
+        self::assertInstanceOf(FixedShipmentRecipient::class, $resultRecipient);
+        self::assertSame('Antareslaan', $resultRecipient->getStreet());
+        self::assertSame('NL', $resultRecipient->getCc());
     }
 
     public function testEmptyTrackTracesResponseReturnsEmptyArray(): void
     {
         $api = $this->createMock(ShipmentApi::class);
-        $api->method('getTrackTracesByIdsRequest')
-            ->willReturn(new Request('GET', 'https://api.myparcel.nl/tracktraces/1'));
+        $api->method('getTrackTracesByIds')
+            ->willReturn($this->buildTracktracesResponse([]));
 
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->method('sendRequest')
-            ->willReturn($this->createJsonResponse(['data' => ['tracktraces' => []]]));
-
-        $service = new ShipmentTrackTraceService($this->getApiKey(), $api, $httpClient);
+        $service = new ShipmentTrackTraceService($this->getApiKey(), $api);
 
         self::assertSame([], $service->fetchTrackTraceData([1]));
     }
 
-    private function createJsonResponse(array $data): Response
+    private function buildTracktracesResponse(array $tracktraces): ShipmentResponsesTracktraces
     {
-        return new Response(200, ['Content-Type' => 'application/json'], json_encode($data));
+        $data = new ShipmentResponsesTracktracesData();
+        $data->setTracktraces($tracktraces);
+
+        $response = new ShipmentResponsesTracktraces();
+        $response->setData($data);
+
+        return $response;
     }
 }
