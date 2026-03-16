@@ -60,7 +60,7 @@ class RefTypesMoney implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'currency' => 'string',
-        'amount' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyAmount'
+        'amount' => 'int'
     ];
 
     /**
@@ -368,7 +368,7 @@ class RefTypesMoney implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets amount
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyAmount
+     * @return int
      */
     public function getAmount()
     {
@@ -378,7 +378,7 @@ class RefTypesMoney implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets amount
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyAmount $amount amount
+     * @param int $amount amount
      *
      * @return self
      */
