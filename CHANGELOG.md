@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.8](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.7...v11.0.0-beta.8) (2026-03-16)
+
+
+### :bug: Bug Fixes
+
+* **openapi:** fix monetary amounts not being serialized ([#598](https://github.com/myparcelnl/sdk/issues/598)) ([c62efda](https://github.com/myparcelnl/sdk/commit/c62efdace82edd42babc8e00ace88d099f5e5496))
+
 ## [11.0.0-beta.7](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.6...v11.0.0-beta.7) (2026-03-10)
 
 
