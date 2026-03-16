@@ -100,6 +100,8 @@ Class | Method | HTTP request | Description
 *ShipmentApi* | [**postShipments**](docs/Api/ShipmentApi.md#postshipments) | **POST** /shipments | Add Shipment
 *ShipmentApi* | [**postUnrelatedReturnShipments**](docs/Api/ShipmentApi.md#postunrelatedreturnshipments) | **POST** /return_shipments | Generate unrelated return shipment URL
 *ShipmentApi* | [**putShipment**](docs/Api/ShipmentApi.md#putshipment) | **PUT** /shipments | Update Shipment
+*WebhookApi* | [**getWebhookSubscriptions**](docs/Api/WebhookApi.md#getwebhooksubscriptions) | **GET** /webhook_subscriptions | Get webhook subscriptions
+*WebhookApi* | [**getWebhookSubscriptionsById**](docs/Api/WebhookApi.md#getwebhooksubscriptionsbyid) | **GET** /webhook_subscriptions/{ids} | Get webhook subscriptions by id.
 
 ## Models
 
@@ -387,6 +389,12 @@ Class | Method | HTTP request | Description
 - [ShipmentResponsesShipmentsData](docs/Model/ShipmentResponsesShipmentsData.md)
 - [ShipmentResponsesTracktraces](docs/Model/ShipmentResponsesTracktraces.md)
 - [ShipmentResponsesTracktracesData](docs/Model/ShipmentResponsesTracktracesData.md)
+- [WebhooksResponsesWebhookSubscriptionsV10](docs/Model/WebhooksResponsesWebhookSubscriptionsV10.md)
+- [WebhooksResponsesWebhookSubscriptionsV10Data](docs/Model/WebhooksResponsesWebhookSubscriptionsV10Data.md)
+- [WebhooksResponsesWebhookSubscriptionsV11](docs/Model/WebhooksResponsesWebhookSubscriptionsV11.md)
+- [WebhooksResponsesWebhookSubscriptionsV11Data](docs/Model/WebhooksResponsesWebhookSubscriptionsV11Data.md)
+- [WebhooksResponsesWebhookV10](docs/Model/WebhooksResponsesWebhookV10.md)
+- [WebhooksResponsesWebhookV11](docs/Model/WebhooksResponsesWebhookV11.md)
 
 ## Authorization
 
