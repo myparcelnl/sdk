@@ -66,6 +66,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'delivery_date' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'drop_off_at_postal_point' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'extra_assurance' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
+        'fresh_food' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
+        'frozen' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'hide_sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'label_description' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'large_format' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
@@ -96,6 +98,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'delivery_date' => null,
         'drop_off_at_postal_point' => null,
         'extra_assurance' => null,
+        'fresh_food' => null,
+        'frozen' => null,
         'hide_sender' => null,
         'label_description' => null,
         'large_format' => null,
@@ -124,6 +128,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'delivery_date' => false,
         'drop_off_at_postal_point' => false,
         'extra_assurance' => false,
+        'fresh_food' => false,
+        'frozen' => false,
         'hide_sender' => false,
         'label_description' => false,
         'large_format' => false,
@@ -232,6 +238,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'delivery_date' => 'delivery_date',
         'drop_off_at_postal_point' => 'drop_off_at_postal_point',
         'extra_assurance' => 'extra_assurance',
+        'fresh_food' => 'fresh_food',
+        'frozen' => 'frozen',
         'hide_sender' => 'hide_sender',
         'label_description' => 'label_description',
         'large_format' => 'large_format',
@@ -260,6 +268,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'delivery_date' => 'setDeliveryDate',
         'drop_off_at_postal_point' => 'setDropOffAtPostalPoint',
         'extra_assurance' => 'setExtraAssurance',
+        'fresh_food' => 'setFreshFood',
+        'frozen' => 'setFrozen',
         'hide_sender' => 'setHideSender',
         'label_description' => 'setLabelDescription',
         'large_format' => 'setLargeFormat',
@@ -288,6 +298,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'delivery_date' => 'getDeliveryDate',
         'drop_off_at_postal_point' => 'getDropOffAtPostalPoint',
         'extra_assurance' => 'getExtraAssurance',
+        'fresh_food' => 'getFreshFood',
+        'frozen' => 'getFrozen',
         'hide_sender' => 'getHideSender',
         'label_description' => 'getLabelDescription',
         'large_format' => 'getLargeFormat',
@@ -367,6 +379,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         $this->setIfExists('delivery_date', $data ?? [], null);
         $this->setIfExists('drop_off_at_postal_point', $data ?? [], null);
         $this->setIfExists('extra_assurance', $data ?? [], null);
+        $this->setIfExists('fresh_food', $data ?? [], null);
+        $this->setIfExists('frozen', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('label_description', $data ?? [], null);
         $this->setIfExists('large_format', $data ?? [], null);
@@ -635,6 +649,60 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
             throw new \InvalidArgumentException('non-nullable extra_assurance cannot be null');
         }
         $this->container['extra_assurance'] = $extra_assurance;
+
+        return $this;
+    }
+
+    /**
+     * Gets fresh_food
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1|null
+     */
+    public function getFreshFood()
+    {
+        return $this->container['fresh_food'];
+    }
+
+    /**
+     * Sets fresh_food
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1|null $fresh_food fresh_food
+     *
+     * @return self
+     */
+    public function setFreshFood($fresh_food)
+    {
+        if (is_null($fresh_food)) {
+            throw new \InvalidArgumentException('non-nullable fresh_food cannot be null');
+        }
+        $this->container['fresh_food'] = $fresh_food;
+
+        return $this;
+    }
+
+    /**
+     * Gets frozen
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1|null
+     */
+    public function getFrozen()
+    {
+        return $this->container['frozen'];
+    }
+
+    /**
+     * Sets frozen
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1|null $frozen frozen
+     *
+     * @return self
+     */
+    public function setFrozen($frozen)
+    {
+        if (is_null($frozen)) {
+            throw new \InvalidArgumentException('non-nullable frozen cannot be null');
+        }
+        $this->container['frozen'] = $frozen;
 
         return $this;
     }

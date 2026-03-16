@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **delivery_date** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **drop_off_at_postal_point** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **extra_assurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
+**fresh_food** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
+**frozen** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **hide_sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **label_description** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **large_format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]

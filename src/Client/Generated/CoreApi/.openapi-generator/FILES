@@ -2,6 +2,7 @@
 Api/DefaultApi.php
 Api/NotificationApi.php
 Api/ShipmentApi.php
+Api/WebhookApi.php
 ApiException.php
 Configuration.php
 HeaderSelector.php
@@ -290,11 +291,18 @@ Model/ShipmentResponsesShipments.php
 Model/ShipmentResponsesShipmentsData.php
 Model/ShipmentResponsesTracktraces.php
 Model/ShipmentResponsesTracktracesData.php
+Model/WebhooksResponsesWebhookSubscriptionsV10.php
+Model/WebhooksResponsesWebhookSubscriptionsV10Data.php
+Model/WebhooksResponsesWebhookSubscriptionsV11.php
+Model/WebhooksResponsesWebhookSubscriptionsV11Data.php
+Model/WebhooksResponsesWebhookV10.php
+Model/WebhooksResponsesWebhookV11.php
 ObjectSerializer.php
 README.md
 docs/Api/DefaultApi.md
 docs/Api/NotificationApi.md
 docs/Api/ShipmentApi.md
+docs/Api/WebhookApi.md
 docs/Model/AccountDefsContact.md
 docs/Model/AccountDefsContactPropertiesEmail.md
 docs/Model/AccountDefsLocationPropertiesNumber.md
@@ -579,3 +587,9 @@ docs/Model/ShipmentResponsesShipments.md
 docs/Model/ShipmentResponsesShipmentsData.md
 docs/Model/ShipmentResponsesTracktraces.md
 docs/Model/ShipmentResponsesTracktracesData.md
+docs/Model/WebhooksResponsesWebhookSubscriptionsV10.md
+docs/Model/WebhooksResponsesWebhookSubscriptionsV10Data.md
+docs/Model/WebhooksResponsesWebhookSubscriptionsV11.md
+docs/Model/WebhooksResponsesWebhookSubscriptionsV11Data.md
+docs/Model/WebhooksResponsesWebhookV10.md
+docs/Model/WebhooksResponsesWebhookV11.md

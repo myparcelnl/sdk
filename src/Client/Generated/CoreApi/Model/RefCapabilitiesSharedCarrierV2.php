@@ -44,7 +44,11 @@ class RefCapabilitiesSharedCarrierV2
     /**
      * Possible values of this enum
      */
+    public const BPOST = 'BPOST';
+
     public const BRT = 'BRT';
+
+    public const CHEAP_CARGO = 'CHEAP_CARGO';
 
     public const DHL_EUROPLUS = 'DHL_EUROPLUS';
 
@@ -75,7 +79,9 @@ class RefCapabilitiesSharedCarrierV2
     public static function getAllowableEnumValues()
     {
         return [
+            self::BPOST,
             self::BRT,
+            self::CHEAP_CARGO,
             self::DHL_EUROPLUS,
             self::DHL_FOR_YOU,
             self::DHL_PARCEL_CONNECT,

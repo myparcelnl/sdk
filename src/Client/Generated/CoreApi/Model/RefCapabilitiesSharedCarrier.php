@@ -46,6 +46,10 @@ class RefCapabilitiesSharedCarrier
      */
     public const NUMBER_1 = 1;
 
+    public const NUMBER_2 = 2;
+
+    public const NUMBER_3 = 3;
+
     public const NUMBER_4 = 4;
 
     public const NUMBER_9 = 9;
@@ -76,6 +80,8 @@ class RefCapabilitiesSharedCarrier
     {
         return [
             self::NUMBER_1,
+            self::NUMBER_2,
+            self::NUMBER_3,
             self::NUMBER_4,
             self::NUMBER_9,
             self::NUMBER_10,
