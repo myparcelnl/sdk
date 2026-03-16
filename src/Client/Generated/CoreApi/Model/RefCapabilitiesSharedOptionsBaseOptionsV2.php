@@ -63,6 +63,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         'custom_label_text' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
         'deliver_at_postal_point' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
         'delivery_date' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
+        'fresh_food' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
+        'frozen' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
         'hide_sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
         'no_tracking' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
         'oversized_package' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2',
@@ -93,6 +95,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         'custom_label_text' => null,
         'deliver_at_postal_point' => null,
         'delivery_date' => null,
+        'fresh_food' => null,
+        'frozen' => null,
         'hide_sender' => null,
         'no_tracking' => null,
         'oversized_package' => null,
@@ -121,6 +125,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         'custom_label_text' => false,
         'deliver_at_postal_point' => false,
         'delivery_date' => false,
+        'fresh_food' => false,
+        'frozen' => false,
         'hide_sender' => false,
         'no_tracking' => false,
         'oversized_package' => false,
@@ -229,6 +235,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         'custom_label_text' => 'customLabelText',
         'deliver_at_postal_point' => 'deliverAtPostalPoint',
         'delivery_date' => 'deliveryDate',
+        'fresh_food' => 'freshFood',
+        'frozen' => 'frozen',
         'hide_sender' => 'hideSender',
         'no_tracking' => 'noTracking',
         'oversized_package' => 'oversizedPackage',
@@ -257,6 +265,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         'custom_label_text' => 'setCustomLabelText',
         'deliver_at_postal_point' => 'setDeliverAtPostalPoint',
         'delivery_date' => 'setDeliveryDate',
+        'fresh_food' => 'setFreshFood',
+        'frozen' => 'setFrozen',
         'hide_sender' => 'setHideSender',
         'no_tracking' => 'setNoTracking',
         'oversized_package' => 'setOversizedPackage',
@@ -285,6 +295,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         'custom_label_text' => 'getCustomLabelText',
         'deliver_at_postal_point' => 'getDeliverAtPostalPoint',
         'delivery_date' => 'getDeliveryDate',
+        'fresh_food' => 'getFreshFood',
+        'frozen' => 'getFrozen',
         'hide_sender' => 'getHideSender',
         'no_tracking' => 'getNoTracking',
         'oversized_package' => 'getOversizedPackage',
@@ -364,6 +376,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
         $this->setIfExists('custom_label_text', $data ?? [], null);
         $this->setIfExists('deliver_at_postal_point', $data ?? [], null);
         $this->setIfExists('delivery_date', $data ?? [], null);
+        $this->setIfExists('fresh_food', $data ?? [], null);
+        $this->setIfExists('frozen', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('no_tracking', $data ?? [], null);
         $this->setIfExists('oversized_package', $data ?? [], null);
@@ -554,6 +568,60 @@ class RefCapabilitiesSharedOptionsBaseOptionsV2 implements ModelInterface, Array
             throw new \InvalidArgumentException('non-nullable delivery_date cannot be null');
         }
         $this->container['delivery_date'] = $delivery_date;
+
+        return $this;
+    }
+
+    /**
+     * Gets fresh_food
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2|null
+     */
+    public function getFreshFood()
+    {
+        return $this->container['fresh_food'];
+    }
+
+    /**
+     * Sets fresh_food
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2|null $fresh_food fresh_food
+     *
+     * @return self
+     */
+    public function setFreshFood($fresh_food)
+    {
+        if (is_null($fresh_food)) {
+            throw new \InvalidArgumentException('non-nullable fresh_food cannot be null');
+        }
+        $this->container['fresh_food'] = $fresh_food;
+
+        return $this;
+    }
+
+    /**
+     * Gets frozen
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2|null
+     */
+    public function getFrozen()
+    {
+        return $this->container['frozen'];
+    }
+
+    /**
+     * Sets frozen
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2|null $frozen frozen
+     *
+     * @return self
+     */
+    public function setFrozen($frozen)
+    {
+        if (is_null($frozen)) {
+            throw new \InvalidArgumentException('non-nullable frozen cannot be null');
+        }
+        $this->container['frozen'] = $frozen;
 
         return $this;
     }
