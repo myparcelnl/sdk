@@ -3,6 +3,9 @@
 # OpenAPI Generator configuration
 inputSpec: https://api.myparcel.nl/openapi.min.json
 outputDir: src/Client/Generated/CoreApi
+typeMappings:
+  # Map Empty model classes (oneOf) to primitives to avoid generating empty classes
+  RefTypesMoneyAmount: int
 # Maps inline schema names to shorter, cleaner class names
 inlineSchemaNameMappings:
   # Capabilities V2 - used in CapabilitiesMapper
