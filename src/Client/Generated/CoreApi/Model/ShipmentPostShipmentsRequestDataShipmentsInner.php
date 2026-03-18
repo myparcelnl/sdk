@@ -65,7 +65,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender',
         'recipients' => 'float[]',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties',
-        'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup',
@@ -696,7 +696,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Gets options
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions
      */
     public function getOptions()
     {
@@ -706,7 +706,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Sets options
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions $options options
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions $options options
      *
      * @return self
      */

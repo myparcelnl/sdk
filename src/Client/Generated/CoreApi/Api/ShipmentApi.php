@@ -75,6 +75,12 @@ class ShipmentApi
         'deleteShipments' => [
             'application/json',
         ],
+        'getDeliveryOptions' => [
+            'application/json',
+        ],
+        'getPickupLocations' => [
+            'application/json',
+        ],
         'getShipments' => [
             'application/json',
         ],
@@ -376,6 +382,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -396,6 +407,1239 @@ class ShipmentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getDeliveryOptions
+     *
+     * Get Delivery Options
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     */
+    public function getDeliveryOptions($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
+    {
+        list($response) = $this->getDeliveryOptionsWithHttpInfo($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getDeliveryOptionsWithHttpInfo
+     *
+     * Get Delivery Options
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getDeliveryOptionsWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
+    {
+        $request = $this->getDeliveryOptionsRequest($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                
+                
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getDeliveryOptionsAsync
+     *
+     * Get Delivery Options
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getDeliveryOptionsAsync($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
+    {
+        return $this->getDeliveryOptionsAsyncWithHttpInfo($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getDeliveryOptionsAsyncWithHttpInfo
+     *
+     * Get Delivery Options
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getDeliveryOptionsAsyncWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2';
+        $request = $this->getDeliveryOptionsRequest($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getDeliveryOptions'
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getDeliveryOptionsRequest($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
+    {
+
+
+        if ($postal_code !== null && strlen($postal_code) > 12) {
+            throw new \InvalidArgumentException('invalid length for "$postal_code" when calling ShipmentApi.getDeliveryOptions, must be smaller than or equal to 12.');
+        }
+        if ($postal_code !== null && strlen($postal_code) < 2) {
+            throw new \InvalidArgumentException('invalid length for "$postal_code" when calling ShipmentApi.getDeliveryOptions, must be bigger than or equal to 2.');
+        }
+        if ($postal_code !== null && !preg_match("/^[a-zA-Z0-9\\-\\s]{2,12}$/", $postal_code)) {
+            throw new \InvalidArgumentException("invalid value for \"postal_code\" when calling ShipmentApi.getDeliveryOptions, must conform to the pattern /^[a-zA-Z0-9\\-\\s]{2,12}$/.");
+        }
+        
+
+
+
+
+
+
+        if ($delivery_date !== null && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/", $delivery_date)) {
+            throw new \InvalidArgumentException("invalid value for \"delivery_date\" when calling ShipmentApi.getDeliveryOptions, must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/.");
+        }
+        
+        if ($delivery_time !== null && !preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $delivery_time)) {
+            throw new \InvalidArgumentException("invalid value for \"delivery_time\" when calling ShipmentApi.getDeliveryOptions, must conform to the pattern /([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        }
+        
+        if ($cutoff_time !== null && !preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $cutoff_time)) {
+            throw new \InvalidArgumentException("invalid value for \"cutoff_time\" when calling ShipmentApi.getDeliveryOptions, must conform to the pattern /([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        }
+        
+        if ($dropoff_days !== null && !preg_match("/^([0-6](;[0-6])*)?$/", $dropoff_days)) {
+            throw new \InvalidArgumentException("invalid value for \"dropoff_days\" when calling ShipmentApi.getDeliveryOptions, must conform to the pattern /^([0-6](;[0-6])*)?$/.");
+        }
+        
+
+        if ($dropoff_delay !== null && $dropoff_delay > 14) {
+            throw new \InvalidArgumentException('invalid value for "$dropoff_delay" when calling ShipmentApi.getDeliveryOptions, must be smaller than or equal to 14.');
+        }
+        if ($dropoff_delay !== null && $dropoff_delay < 0) {
+            throw new \InvalidArgumentException('invalid value for "$dropoff_delay" when calling ShipmentApi.getDeliveryOptions, must be bigger than or equal to 0.');
+        }
+        
+        if ($deliverydays_window !== null && $deliverydays_window > 14) {
+            throw new \InvalidArgumentException('invalid value for "$deliverydays_window" when calling ShipmentApi.getDeliveryOptions, must be smaller than or equal to 14.');
+        }
+        if ($deliverydays_window !== null && $deliverydays_window < -1) {
+            throw new \InvalidArgumentException('invalid value for "$deliverydays_window" when calling ShipmentApi.getDeliveryOptions, must be bigger than or equal to -1.');
+        }
+        
+
+
+
+
+
+        $resourcePath = '/delivery_options';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cc,
+            'cc', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $postal_code,
+            'postal_code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $number,
+            'number', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $city,
+            'city', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $street,
+            'street', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $platform,
+            'platform', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $shop_id,
+            'shop_id', // param base name
+            'anyOf&lt;integer,array,string&gt;', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $carrier,
+            'carrier', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $delivery_date,
+            'delivery_date', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $delivery_time,
+            'delivery_time', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cutoff_time,
+            'cutoff_time', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $dropoff_days,
+            'dropoff_days', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $monday_delivery,
+            'monday_delivery', // param base name
+            'anyOf&lt;boolean,integer,number,string&gt;', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $dropoff_delay,
+            'dropoff_delay', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $deliverydays_window,
+            'deliverydays_window', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $exclude_delivery_type,
+            'exclude_delivery_type', // param base name
+            'ShipmentParametersDeliveryType', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $exclude_parcel_lockers,
+            'exclude_parcel_lockers', // param base name
+            'anyOf&lt;boolean,integer,number,string&gt;', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $latitude,
+            'latitude', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $longitude,
+            'longitude', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json;version=2.0', 'application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getPickupLocations
+     *
+     * Get Pickup Locations
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     */
+    public function getPickupLocations($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
+    {
+        list($response) = $this->getPickupLocationsWithHttpInfo($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getPickupLocationsWithHttpInfo
+     *
+     * Get Pickup Locations
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getPickupLocationsWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
+    {
+        $request = $this->getPickupLocationsRequest($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                
+                
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getPickupLocationsAsync
+     *
+     * Get Pickup Locations
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getPickupLocationsAsync($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
+    {
+        return $this->getPickupLocationsAsyncWithHttpInfo($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getPickupLocationsAsyncWithHttpInfo
+     *
+     * Get Pickup Locations
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getPickupLocationsAsyncWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations';
+        $request = $this->getPickupLocationsRequest($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getPickupLocations'
+     *
+     * @param  string|null $cc The country code for which to fetch the delivery options. (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
+     * @param  string|null $number The street number for which to fetch the resources. (optional)
+     * @param  string|null $city Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  string|null $street This can be used to narrow the search results for locations outside NL. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier|null $platform The platform where you want the data from. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds|null $shop_id (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier|null $carrier (optional)
+     * @param  \DateTime|null $delivery_date The date on which the package has to be delivered. (optional)
+     * @param  string|null $delivery_time The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. (optional)
+     * @param  string|null $cutoff_time This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. (optional)
+     * @param  string|null $dropoff_days This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $monday_delivery Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. (optional)
+     * @param  int|null $dropoff_delay This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. (optional)
+     * @param  int|null $deliverydays_window This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType|null $exclude_delivery_type Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean|null $exclude_parcel_lockers This option allows to filter out pickup locations that are parcel lockers. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $latitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter|null $longitude This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getPickupLocationsRequest($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
+    {
+
+
+        if ($postal_code !== null && strlen($postal_code) > 12) {
+            throw new \InvalidArgumentException('invalid length for "$postal_code" when calling ShipmentApi.getPickupLocations, must be smaller than or equal to 12.');
+        }
+        if ($postal_code !== null && strlen($postal_code) < 2) {
+            throw new \InvalidArgumentException('invalid length for "$postal_code" when calling ShipmentApi.getPickupLocations, must be bigger than or equal to 2.');
+        }
+        if ($postal_code !== null && !preg_match("/^[a-zA-Z0-9\\-\\s]{2,12}$/", $postal_code)) {
+            throw new \InvalidArgumentException("invalid value for \"postal_code\" when calling ShipmentApi.getPickupLocations, must conform to the pattern /^[a-zA-Z0-9\\-\\s]{2,12}$/.");
+        }
+        
+
+
+
+
+
+
+        if ($delivery_date !== null && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/", $delivery_date)) {
+            throw new \InvalidArgumentException("invalid value for \"delivery_date\" when calling ShipmentApi.getPickupLocations, must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/.");
+        }
+        
+        if ($delivery_time !== null && !preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $delivery_time)) {
+            throw new \InvalidArgumentException("invalid value for \"delivery_time\" when calling ShipmentApi.getPickupLocations, must conform to the pattern /([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        }
+        
+        if ($cutoff_time !== null && !preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $cutoff_time)) {
+            throw new \InvalidArgumentException("invalid value for \"cutoff_time\" when calling ShipmentApi.getPickupLocations, must conform to the pattern /([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        }
+        
+        if ($dropoff_days !== null && !preg_match("/^([0-6](;[0-6])*)?$/", $dropoff_days)) {
+            throw new \InvalidArgumentException("invalid value for \"dropoff_days\" when calling ShipmentApi.getPickupLocations, must conform to the pattern /^([0-6](;[0-6])*)?$/.");
+        }
+        
+
+        if ($dropoff_delay !== null && $dropoff_delay > 14) {
+            throw new \InvalidArgumentException('invalid value for "$dropoff_delay" when calling ShipmentApi.getPickupLocations, must be smaller than or equal to 14.');
+        }
+        if ($dropoff_delay !== null && $dropoff_delay < 0) {
+            throw new \InvalidArgumentException('invalid value for "$dropoff_delay" when calling ShipmentApi.getPickupLocations, must be bigger than or equal to 0.');
+        }
+        
+        if ($deliverydays_window !== null && $deliverydays_window > 14) {
+            throw new \InvalidArgumentException('invalid value for "$deliverydays_window" when calling ShipmentApi.getPickupLocations, must be smaller than or equal to 14.');
+        }
+        if ($deliverydays_window !== null && $deliverydays_window < -1) {
+            throw new \InvalidArgumentException('invalid value for "$deliverydays_window" when calling ShipmentApi.getPickupLocations, must be bigger than or equal to -1.');
+        }
+        
+
+
+
+
+
+        $resourcePath = '/pickup_locations';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cc,
+            'cc', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $postal_code,
+            'postal_code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $number,
+            'number', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $city,
+            'city', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $street,
+            'street', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $platform,
+            'platform', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $shop_id,
+            'shop_id', // param base name
+            'anyOf&lt;integer,array,string&gt;', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $carrier,
+            'carrier', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $delivery_date,
+            'delivery_date', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $delivery_time,
+            'delivery_time', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cutoff_time,
+            'cutoff_time', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $dropoff_days,
+            'dropoff_days', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $monday_delivery,
+            'monday_delivery', // param base name
+            'anyOf&lt;boolean,integer,number,string&gt;', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $dropoff_delay,
+            'dropoff_delay', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $deliverydays_window,
+            'deliverydays_window', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $exclude_delivery_type,
+            'exclude_delivery_type', // param base name
+            'ShipmentParametersDeliveryType', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $exclude_parcel_lockers,
+            'exclude_parcel_lockers', // param base name
+            'anyOf&lt;boolean,integer,number,string&gt;', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $latitude,
+            'latitude', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $longitude,
+            'longitude', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -1024,6 +2268,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -1371,6 +2620,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -1706,6 +2960,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -1742,7 +3001,7 @@ class ShipmentApi
      * @param  string|null $country_code country_code (optional)
      * @param  string|null $external_identifier external_identifier (optional)
      * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
-     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
      * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
@@ -1766,7 +3025,7 @@ class ShipmentApi
      * @param  string|null $country_code (optional)
      * @param  string|null $external_identifier (optional)
      * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
-     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
      * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
@@ -1936,7 +3195,7 @@ class ShipmentApi
      * @param  string|null $country_code (optional)
      * @param  string|null $external_identifier (optional)
      * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
-     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
      * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
@@ -1963,7 +3222,7 @@ class ShipmentApi
      * @param  string|null $country_code (optional)
      * @param  string|null $external_identifier (optional)
      * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
-     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
      * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
@@ -2019,7 +3278,7 @@ class ShipmentApi
      * @param  string|null $country_code (optional)
      * @param  string|null $external_identifier (optional)
      * @param  string|null $extra_info Enables extra info in the response that is not included by default for performance reasons. (optional)
-     * @param  string|null $postal_code Postal Code (optional)
+     * @param  string|null $postal_code The postal code for which to fetch the resources. (optional)
      * @param  string|null $sort Sort order. Defaults to &#x60;desc&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
@@ -2182,6 +3441,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -2547,6 +3811,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -2913,6 +4182,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -3279,6 +4553,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -3645,6 +4924,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -4074,6 +5358,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -4421,6 +5710,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -4667,6 +5961,11 @@ class ShipmentApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();

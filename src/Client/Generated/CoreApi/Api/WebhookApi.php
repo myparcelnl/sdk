@@ -72,11 +72,18 @@ class WebhookApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
+        'deleteWebhookSubscriptions' => [
+            'application/json',
+        ],
         'getWebhookSubscriptions' => [
             'application/json',
         ],
         'getWebhookSubscriptionsById' => [
             'application/json',
+        ],
+        'postWebhookSubscriptions' => [
+            'application/json;charset=utf-8;version=1.1',
+            'application/json;charset=utf-8',
         ],
     ];
 
@@ -124,6 +131,245 @@ class WebhookApi
     public function getConfig()
     {
         return $this->config;
+    }
+
+    /**
+     * Operation deleteWebhookSubscriptions
+     *
+     * Delete webhook subscriptions
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function deleteWebhookSubscriptions($ids, $user_agent, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
+    {
+        $this->deleteWebhookSubscriptionsWithHttpInfo($ids, $user_agent, $contentType);
+    }
+
+    /**
+     * Operation deleteWebhookSubscriptionsWithHttpInfo
+     *
+     * Delete webhook subscriptions
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function deleteWebhookSubscriptionsWithHttpInfo($ids, $user_agent, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
+    {
+        $request = $this->deleteWebhookSubscriptionsRequest($ids, $user_agent, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation deleteWebhookSubscriptionsAsync
+     *
+     * Delete webhook subscriptions
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function deleteWebhookSubscriptionsAsync($ids, $user_agent, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
+    {
+        return $this->deleteWebhookSubscriptionsAsyncWithHttpInfo($ids, $user_agent, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation deleteWebhookSubscriptionsAsyncWithHttpInfo
+     *
+     * Delete webhook subscriptions
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function deleteWebhookSubscriptionsAsyncWithHttpInfo($ids, $user_agent, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
+    {
+        $returnType = '';
+        $request = $this->deleteWebhookSubscriptionsRequest($ids, $user_agent, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'deleteWebhookSubscriptions'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function deleteWebhookSubscriptionsRequest($ids, $user_agent, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
+    {
+
+        // verify the required parameter 'ids' is set
+        if ($ids === null || (is_array($ids) && count($ids) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ids when calling deleteWebhookSubscriptions'
+            );
+        }
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling deleteWebhookSubscriptions'
+            );
+        }
+
+
+        $resourcePath = '/webhook_subscriptions/{ids}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
+
+        // path params
+        if ($ids !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ids' . '}',
+                ObjectSerializer::toPathValue($ids),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'DELETE',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
     }
 
     /**
@@ -427,6 +673,11 @@ class WebhookApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -759,6 +1010,11 @@ class WebhookApi
             }
         }
 
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
         // this endpoint requires Bearer authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
@@ -779,6 +1035,337 @@ class WebhookApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation postWebhookSubscriptions
+     *
+     * Create webhook subscriptions
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11 $webhooks_post_webhook_subscriptions_request_v11 Request body for creating webhook subscriptions. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     */
+    public function postWebhookSubscriptions($user_agent, $webhooks_post_webhook_subscriptions_request_v11, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
+    {
+        list($response) = $this->postWebhookSubscriptionsWithHttpInfo($user_agent, $webhooks_post_webhook_subscriptions_request_v11, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation postWebhookSubscriptionsWithHttpInfo
+     *
+     * Create webhook subscriptions
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11 $webhooks_post_webhook_subscriptions_request_v11 Request body for creating webhook subscriptions. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function postWebhookSubscriptionsWithHttpInfo($user_agent, $webhooks_post_webhook_subscriptions_request_v11, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
+    {
+        $request = $this->postWebhookSubscriptionsRequest($user_agent, $webhooks_post_webhook_subscriptions_request_v11, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                
+                
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation postWebhookSubscriptionsAsync
+     *
+     * Create webhook subscriptions
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11 $webhooks_post_webhook_subscriptions_request_v11 Request body for creating webhook subscriptions. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function postWebhookSubscriptionsAsync($user_agent, $webhooks_post_webhook_subscriptions_request_v11, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
+    {
+        return $this->postWebhookSubscriptionsAsyncWithHttpInfo($user_agent, $webhooks_post_webhook_subscriptions_request_v11, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation postWebhookSubscriptionsAsyncWithHttpInfo
+     *
+     * Create webhook subscriptions
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11 $webhooks_post_webhook_subscriptions_request_v11 Request body for creating webhook subscriptions. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function postWebhookSubscriptionsAsyncWithHttpInfo($user_agent, $webhooks_post_webhook_subscriptions_request_v11, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions';
+        $request = $this->postWebhookSubscriptionsRequest($user_agent, $webhooks_post_webhook_subscriptions_request_v11, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'postWebhookSubscriptions'
+     *
+     * @param  string $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (required)
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11 $webhooks_post_webhook_subscriptions_request_v11 Request body for creating webhook subscriptions. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function postWebhookSubscriptionsRequest($user_agent, $webhooks_post_webhook_subscriptions_request_v11, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
+    {
+
+        // verify the required parameter 'user_agent' is set
+        if ($user_agent === null || (is_array($user_agent) && count($user_agent) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $user_agent when calling postWebhookSubscriptions'
+            );
+        }
+
+        // verify the required parameter 'webhooks_post_webhook_subscriptions_request_v11' is set
+        if ($webhooks_post_webhook_subscriptions_request_v11 === null || (is_array($webhooks_post_webhook_subscriptions_request_v11) && count($webhooks_post_webhook_subscriptions_request_v11) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $webhooks_post_webhook_subscriptions_request_v11 when calling postWebhookSubscriptions'
+            );
+        }
+
+
+        $resourcePath = '/webhook_subscriptions';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($webhooks_post_webhook_subscriptions_request_v11)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($webhooks_post_webhook_subscriptions_request_v11));
+            } else {
+                $httpBody = $webhooks_post_webhook_subscriptions_request_v11;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

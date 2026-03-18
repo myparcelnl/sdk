@@ -332,8 +332,8 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
         if ($this->container['time'] === null) {
             $invalidProperties[] = "'time' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", $this->container['time'])) {
-            $invalidProperties[] = "invalid value for 'time', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.";
+        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['time'])) {
+            $invalidProperties[] = "invalid value for 'time', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['delayed'] === null) {
@@ -485,7 +485,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Sets time
      *
-     * @param string $time Represents a date and time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` represents a zero-padded second, `00` through `60` (where `60` is only used to denote an added leap second)
+     * @param string $time Represents a date in ISO 8601 format and a time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss.u ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` (optional) represents a zero-padded second, `00` through `60`     (where `60` is only used to denote an added leap second)   - `.u` (optional) represents a fraction of a second, `.0` through `.999999+`
      *
      * @return self
      */
@@ -495,8 +495,8 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
             throw new \InvalidArgumentException('non-nullable time cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", ObjectSerializer::toString($time)))) {
-            throw new \InvalidArgumentException("invalid value for \$time when calling ShipmentDefsCarrierTrackTraceEvent., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.");
+        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($time)))) {
+            throw new \InvalidArgumentException("invalid value for \$time when calling ShipmentDefsCarrierTrackTraceEvent., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
         }
 
         $this->container['time'] = $time;

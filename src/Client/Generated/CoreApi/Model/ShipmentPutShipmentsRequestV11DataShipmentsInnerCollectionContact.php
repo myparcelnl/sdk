@@ -60,17 +60,17 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     protected static $openAPITypes = [
         'cc' => 'string',
         'city' => 'string',
-        'company' => 'Null',
+        'company' => 'string',
         'email' => 'string',
         'first_name' => 'string',
         'gender' => 'string',
         'last_name' => 'string',
         'number' => 'string',
-        'number_suffix' => 'Null',
+        'number_suffix' => 'string',
         'phone' => 'string',
         'postal_code' => 'string',
         'street' => 'string',
-        'street_additional_info' => 'Null'
+        'street_additional_info' => 'string'
     ];
 
     /**
@@ -519,7 +519,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     /**
      * Gets company
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getCompany()
     {
@@ -529,7 +529,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     /**
      * Sets company
      *
-     * @param Null|null $company company
+     * @param string|null $company company
      *
      * @return self
      */
@@ -696,7 +696,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     /**
      * Gets number_suffix
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getNumberSuffix()
     {
@@ -706,7 +706,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     /**
      * Sets number_suffix
      *
-     * @param Null|null $number_suffix number_suffix
+     * @param string|null $number_suffix number_suffix
      *
      * @return self
      */
@@ -819,7 +819,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     /**
      * Gets street_additional_info
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getStreetAdditionalInfo()
     {
@@ -829,7 +829,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
     /**
      * Sets street_additional_info
      *
-     * @param Null|null $street_additional_info street_additional_info
+     * @param string|null $street_additional_info street_additional_info
      *
      * @return self
      */

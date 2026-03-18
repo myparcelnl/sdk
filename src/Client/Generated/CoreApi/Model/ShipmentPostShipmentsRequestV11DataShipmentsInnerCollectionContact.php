@@ -66,11 +66,11 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
         'gender' => 'string',
         'last_name' => 'string',
         'number' => 'string',
-        'number_suffix' => 'Null',
+        'number_suffix' => 'string',
         'phone' => 'string',
         'postal_code' => 'string',
         'street' => 'string',
-        'street_additional_info' => 'Null'
+        'street_additional_info' => 'string'
     ];
 
     /**
@@ -705,7 +705,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
     /**
      * Gets number_suffix
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getNumberSuffix()
     {
@@ -715,7 +715,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
     /**
      * Sets number_suffix
      *
-     * @param Null|null $number_suffix number_suffix
+     * @param string|null $number_suffix number_suffix
      *
      * @return self
      */
@@ -828,7 +828,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
     /**
      * Gets street_additional_info
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getStreetAdditionalInfo()
     {
@@ -838,7 +838,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
     /**
      * Sets street_additional_info
      *
-     * @param Null|null $street_additional_info street_additional_info
+     * @param string|null $street_additional_info street_additional_info
      *
      * @return self
      */

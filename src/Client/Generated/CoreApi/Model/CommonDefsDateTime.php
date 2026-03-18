@@ -292,8 +292,8 @@ class CommonDefsDateTime implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['date'] === null) {
             $invalidProperties[] = "'date' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", $this->container['date'])) {
-            $invalidProperties[] = "invalid value for 'date', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.";
+        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['date'])) {
+            $invalidProperties[] = "invalid value for 'date', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['timezone'] === null) {
@@ -330,7 +330,7 @@ class CommonDefsDateTime implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets date
      *
-     * @param string $date Represents a date and time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` represents a zero-padded second, `00` through `60` (where `60` is only used to denote an added leap second)
+     * @param string $date Represents a date in ISO 8601 format and a time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss.u ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` (optional) represents a zero-padded second, `00` through `60`     (where `60` is only used to denote an added leap second)   - `.u` (optional) represents a fraction of a second, `.0` through `.999999+`
      *
      * @return self
      */
@@ -340,8 +340,8 @@ class CommonDefsDateTime implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable date cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", ObjectSerializer::toString($date)))) {
-            throw new \InvalidArgumentException("invalid value for \$date when calling CommonDefsDateTime., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.");
+        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($date)))) {
+            throw new \InvalidArgumentException("invalid value for \$date when calling CommonDefsDateTime., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
         }
 
         $this->container['date'] = $date;

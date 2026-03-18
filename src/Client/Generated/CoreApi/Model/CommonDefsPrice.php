@@ -301,10 +301,6 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['amount'] === null) {
             $invalidProperties[] = "'amount' can't be null";
         }
-        if (($this->container['amount'] < 0)) {
-            $invalidProperties[] = "invalid value for 'amount', must be bigger than or equal to 0.";
-        }
-
         if ($this->container['currency'] === null) {
             $invalidProperties[] = "'currency' can't be null";
         }
@@ -361,11 +357,6 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-
-        if (!is_null($amount) && ($amount < 0)) {
-            throw new \InvalidArgumentException('invalid value for $amount when calling CommonDefsPrice., must be bigger than or equal to 0.');
-        }
-
         $this->container['amount'] = $amount;
 
         return $this;
