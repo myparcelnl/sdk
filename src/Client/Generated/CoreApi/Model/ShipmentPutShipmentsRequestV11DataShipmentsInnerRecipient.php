@@ -73,8 +73,8 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
         'email' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail',
         'secondary_emails' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentRecipientSecondaryEmailsInner[]',
         'phone' => 'string',
-        'eori_number' => 'Null',
-        'vat_number' => 'Null'
+        'eori_number' => 'string',
+        'vat_number' => 'string'
     ];
 
     /**
@@ -935,7 +935,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
     /**
      * Gets eori_number
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getEoriNumber()
     {
@@ -945,7 +945,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
     /**
      * Sets eori_number
      *
-     * @param Null|null $eori_number eori_number
+     * @param string|null $eori_number eori_number
      *
      * @return self
      */
@@ -962,7 +962,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
     /**
      * Gets vat_number
      *
-     * @return Null|null
+     * @return string|null
      */
     public function getVatNumber()
     {
@@ -972,7 +972,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
     /**
      * Sets vat_number
      *
-     * @param Null|null $vat_number vat_number
+     * @param string|null $vat_number vat_number
      *
      * @return self
      */
