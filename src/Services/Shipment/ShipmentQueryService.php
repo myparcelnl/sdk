@@ -76,45 +76,17 @@ final class ShipmentQueryService
     }
 
     /**
-     * Find a single shipment by its reference identifier.
+     * Find all shipments that match a single reference identifier.
      *
-     * @return ShipmentDefsShipment|null The shipment, or null if not found.
-     */
-    public function findByReferenceId(string $referenceIdentifier): ?ShipmentDefsShipment
-    {
-        $shipments = $this->findManyByReferenceId([$referenceIdentifier]);
-
-        return $shipments[0] ?? null;
-    }
-
-    /**
-     * Find shipments by multiple reference identifiers.
-     *
-     * Warning: the MyParcel API only supports filtering by a single reference_identifier per request.
-     * This method therefore issues one API call per identifier (N+1). Be mindful of rate limits
-     * when passing large arrays.
-     *
-     * @param string[] $referenceIdentifiers
      * @return ShipmentDefsShipment[]
      */
-    public function findManyByReferenceId(array $referenceIdentifiers): array
+    public function findByReferenceId(string $referenceIdentifier): array
     {
-        $result = [];
 
-        foreach ($referenceIdentifiers as $referenceIdentifier) {
-            $referenceIdentifier = trim($referenceIdentifier);
+        // Explicitly pass size=null to use the API default; the API returns 0 results
+        // when size >= 200 is combined with reference_identifier.
+        return $this->query(['reference_identifier' => $referenceIdentifier, 'size' => null]);
 
-            if ('' === $referenceIdentifier) {
-                continue;
-            }
-
-            // Explicitly pass size=null to use the API default; the API returns 0 results
-            // when size >= 200 is combined with reference_identifier.
-            $shipments = $this->query(['reference_identifier' => $referenceIdentifier, 'size' => null]);
-            $result = $this->mergeUniqueById($result, $shipments);
-        }
-
-        return array_values($result);
     }
 
     /**
@@ -172,26 +144,4 @@ final class ShipmentQueryService
         return $data->getShipments() ?? [];
     }
 
-    /**
-     * @param ShipmentDefsShipment[] $existing
-     * @param ShipmentDefsShipment[] $incoming
-     * @return array<int|string, ShipmentDefsShipment>
-     */
-    private function mergeUniqueById(array $existing, array $incoming): array
-    {
-        $merged = $existing;
-
-        foreach ($incoming as $shipment) {
-            $id = $shipment->getId();
-
-            if (null === $id) {
-                $merged[] = $shipment;
-                continue;
-            }
-
-            $merged[(int) $id] = $shipment;
-        }
-
-        return $merged;
-    }
 }

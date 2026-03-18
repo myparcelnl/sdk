@@ -62,7 +62,7 @@ final class ShipmentPrintServiceTest extends TestCase
         ]);
 
         $service = new ShipmentPrintService($this->getApiKey(), $api, $httpClient);
-        $service->setUserAgentForProposition('Magento', '2.4.7');
+        $service->setUserAgentForProposition('appname', '1.0.0');
 
         $result = $service->print($collection, $printerGroupId);
 

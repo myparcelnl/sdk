@@ -28,7 +28,7 @@ final class ShipmentDeleteService
     public function deleteMany(array $shipmentIds): void
     {
         if (empty($shipmentIds)) {
-            throw new InvalidArgumentException('At least one shipment ID is required');
+            return;
         }
 
         $ids = implode(';', array_map('intval', $shipmentIds));
@@ -36,4 +36,3 @@ final class ShipmentDeleteService
         $this->api->deleteShipments($ids, $this->getUserAgentHeader());
     }
 }
-

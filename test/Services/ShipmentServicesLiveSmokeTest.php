@@ -156,8 +156,8 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         self::assertNotNull($recipient->getStreet(), 'Expected street to be present on recipient.');
         self::assertSame('NL', $recipient->getCc());
 
-        self::assertNotNull($foundByReference, 'Expected shipment to be returned by findByReferenceId().');
-        self::assertSame($shipmentId, (int) $foundByReference->getId());
+        self::assertNotEmpty($foundByReference, 'Expected shipments to be returned by findByReferenceId().');
+        self::assertSame($shipmentId, (int) $foundByReference[0]->getId());
 
         self::assertCount(1, $foundMany);
         self::assertSame($shipmentId, (int) $foundMany[0]->getId());

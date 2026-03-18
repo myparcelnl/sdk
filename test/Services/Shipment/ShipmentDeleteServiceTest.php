@@ -11,13 +11,13 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 final class ShipmentDeleteServiceTest extends TestCase
 {
-    public function testDeleteManyThrowsOnEmptyIds(): void
+    public function testDeleteManyReturnsEarlyOnEmptyIds(): void
     {
-        $service = new ShipmentDeleteService($this->getApiKey(), $this->createMock(ShipmentApi::class));
+        $api = $this->createMock(ShipmentApi::class);
+        $api->expects(self::never())
+            ->method('deleteShipments');
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one shipment ID is required');
-
+        $service = new ShipmentDeleteService($this->getApiKey(), $api);
         $service->deleteMany([]);
     }
 

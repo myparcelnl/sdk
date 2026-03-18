@@ -18,13 +18,11 @@ final class MultiColloShipmentService
      */
     public function splitShipment(Shipment $shipment, int $amount): Shipment
     {
-        if ($amount < 2) {
-            throw new InvalidArgumentException('Multi-collo requires at least 2 shipments');
-        }
 
         $main = clone $shipment;
         $referenceId = $this->resolveReferenceIdentifier($main->getReferenceIdentifier());
         $main->setReferenceIdentifier($referenceId);
+        $carrier = $main->getCarrier();
 
         $weightPerCollo = $this->resolveWeightPerCollo($main, $amount);
         if (null !== $weightPerCollo) {
@@ -36,7 +34,6 @@ final class MultiColloShipmentService
             $secondary = new SecondaryShipmentRequest();
             $secondary->setReferenceIdentifier($referenceId);
 
-            $carrier = $main->getCarrier();
             if (null !== $carrier) {
                 $secondary->setCarrier($carrier);
             }

@@ -98,31 +98,24 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertCount(1, $result);
     }
 
-    public function testFindManyByReferenceIdAggregatesAndDeduplicatesByShipmentId(): void
+    public function testFindByReferenceIdReturnsAllMatches(): void
     {
-        $callCount = 0;
-
         $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::exactly(2))
+        $api->expects(self::once())
             ->method('getShipments')
-            ->willReturnCallback(function () use (&$callCount) {
-                $callCount++;
-
-                if (1 === $callCount) {
-                    return $this->buildShipmentsResponse([
-                        new ShipmentDefsShipment(['id' => 1001]),
-                        new ShipmentDefsShipment(['id' => 1002]),
-                    ]);
-                }
+            ->willReturnCallback(function (...$args) {
+                self::assertSame('ref-a', $args[14]);
+                self::assertNull($args[18]);
 
                 return $this->buildShipmentsResponse([
+                    new ShipmentDefsShipment(['id' => 1001]),
                     new ShipmentDefsShipment(['id' => 1002]),
                     new ShipmentDefsShipment(['id' => 1003]),
                 ]);
             });
 
         $service = new ShipmentQueryService($this->getApiKey(), $api);
-        $result = $service->findManyByReferenceId(['ref-a', 'ref-b']);
+        $result = $service->findByReferenceId('ref-a');
 
         self::assertCount(3, $result);
         $ids = array_map(static fn (ShipmentDefsShipment $s) => $s->getId(), $result);

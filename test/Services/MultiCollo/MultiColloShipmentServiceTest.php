@@ -11,16 +11,6 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 final class MultiColloShipmentServiceTest extends TestCase
 {
-    public function testSplitShipmentThrowsWhenAmountLowerThanTwo(): void
-    {
-        $service = new MultiColloShipmentService();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Multi-collo requires at least 2 shipments');
-
-        $service->splitShipment(new Shipment(), 1);
-    }
-
     public function testSplitShipmentCreatesSecondaryShipmentsAndDistributesWeight(): void
     {
         $shipment = (new Shipment())
