@@ -66,7 +66,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender',
         'recipients' => 'float[]',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties',
-        'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup',
@@ -756,7 +756,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets options
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions
      */
     public function getOptions()
     {
@@ -766,7 +766,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets options
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions $options options
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions $options options
      *
      * @return self
      */

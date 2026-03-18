@@ -58,7 +58,7 @@ class GetIndex200Response implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var string[]
       */
     protected static $openAPITypes = [
-        'title' => 'int',
+        'title' => 'string',
         'status' => 'string'
     ];
 
@@ -303,7 +303,7 @@ class GetIndex200Response implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Gets title
      *
-     * @return int|null
+     * @return string|null
      */
     public function getTitle()
     {
@@ -313,7 +313,7 @@ class GetIndex200Response implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Sets title
      *
-     * @param int|null $title title
+     * @param string|null $title title
      *
      * @return self
      */
