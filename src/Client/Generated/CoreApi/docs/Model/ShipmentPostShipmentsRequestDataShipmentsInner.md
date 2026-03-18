@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender**](RefShipmentSender.md) |  | [optional]
 **recipients** | **float[]** |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties**](ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties.md) |  | [optional]
-**options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions**](RefShipmentShipmentOptions.md) |  |
+**options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions**](ShipmentDefsShipmentOptions.md) |  |
 **customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration**](RefShipmentCustomsDeclaration.md) |  | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup**](RefShipmentPickup.md) |  | [optional]

@@ -33,6 +33,11 @@ Delete notification groups to stop receiving notifications about shipment events
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -66,7 +71,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -93,6 +98,11 @@ Disable all notification templates associated with a specific notification group
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -127,7 +137,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -154,6 +164,11 @@ Disable a specific notification template associated with a specific notification
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -190,7 +205,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -217,6 +232,11 @@ Enable all notification templates associated with a specific notification group.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -251,7 +271,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -278,6 +298,11 @@ Enable a specific notification template associated with a specific notification 
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -314,7 +339,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -341,6 +366,11 @@ Retrieve notification groups to see which groups are set up to receive notificat
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -376,7 +406,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -403,6 +433,11 @@ Retrieve notification templates associated with a specific notification group.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -438,7 +473,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -465,6 +500,11 @@ Create notification groups to receive notifications about shipment events.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -500,7 +540,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -527,6 +567,11 @@ Update a notification template associated with a specific notification group.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -565,7 +610,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -592,6 +637,11 @@ Send a test notification using a specific notification template associated with 
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -628,7 +678,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 

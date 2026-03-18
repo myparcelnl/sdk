@@ -5,6 +5,8 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
 | [**deleteShipments()**](ShipmentApi.md#deleteShipments) | **DELETE** /shipments/{ids} | Delete Shipment |
+| [**getDeliveryOptions()**](ShipmentApi.md#getDeliveryOptions) | **GET** /delivery_options | Get Delivery Options |
+| [**getPickupLocations()**](ShipmentApi.md#getPickupLocations) | **GET** /pickup_locations | Get Pickup Locations |
 | [**getShipments()**](ShipmentApi.md#getShipments) | **GET** /shipments | Gets a list of Shipments, optionally filtered using parameters. |
 | [**getShipmentsById()**](ShipmentApi.md#getShipmentsById) | **GET** /shipments/{ids} | Get shipments by id. |
 | [**getShipmentsLabels()**](ShipmentApi.md#getShipmentsLabels) | **GET** /shipment_labels/{ids} | Get Shipment labels |
@@ -34,6 +36,11 @@ This operation can be used to delete shipments for which a label has not yet bee
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -68,6 +75,201 @@ void (empty response body)
 
 ### Authorization
 
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `getDeliveryOptions()`
+
+```php
+getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2
+```
+
+Get Delivery Options
+
+Get the delivery options for a given location and carrier.  If none of the optional parameters are specified then the following default will be used: If a request is made for the delivery options between Friday after the default cutoff_time (15:30) and Monday before the default cutoff_time (15:30) then Tuesday will be shown as the next possible delivery date.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$cc = 'cc_example'; // string | The country code for which to fetch the delivery options.
+$postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
+$number = 'number_example'; // string | The street number for which to fetch the resources.
+$city = 'city_example'; // string | Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL.
+$street = 'street_example'; // string | This can be used to narrow the search results for locations outside NL.
+$platform = 'platform_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier | The platform where you want the data from.
+$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$carrier = 'carrier_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier
+$delivery_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | The date on which the package has to be delivered.
+$delivery_time = 'delivery_time_example'; // string | The time on which a package has to be delivered. > __Note__: This is only an indication of time the package will be >           delivered on the selected date.
+$cutoff_time = 'cutoff_time_example'; // string | This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there's no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection.
+$dropoff_days = 'dropoff_days_example'; // string | This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.
+$monday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. > __Note__: To activate Monday delivery, value 6 must be given with > [dropoff_days], value 1 must be given by [monday_delivery]. And on > Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) > so that Monday will be shown.
+$dropoff_delay = 56; // int | This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0.
+$deliverydays_window = 56; // int | This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
+$exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
+$exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
+$latitude = 'latitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
+$longitude = 'longitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
+
+try {
+    $result = $apiInstance->getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ShipmentApi->getDeliveryOptions: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **cc** | **string**| The country code for which to fetch the delivery options. | [optional] |
+| **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
+| **number** | **string**| The street number for which to fetch the resources. | [optional] |
+| **city** | **string**| Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. | [optional] |
+| **street** | **string**| This can be used to narrow the search results for locations outside NL. | [optional] |
+| **platform** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier**| The platform where you want the data from. | [optional] |
+| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **carrier** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier**|  | [optional] |
+| **delivery_date** | **\DateTime**| The date on which the package has to be delivered. | [optional] |
+| **delivery_time** | **string**| The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. | [optional] |
+| **cutoff_time** | **string**| This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. | [optional] |
+| **dropoff_days** | **string**| This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. | [optional] |
+| **monday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. | [optional] |
+| **dropoff_delay** | **int**| This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. | [optional] |
+| **deliverydays_window** | **int**| This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). | [optional] |
+| **exclude_delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. | [optional] |
+| **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
+| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
+| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2**](../Model/ShipmentResponsesDeliveryOptionsV2.md)
+
+### Authorization
+
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json;version=2.0`, `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `getPickupLocations()`
+
+```php
+getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations
+```
+
+Get Pickup Locations
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$cc = 'cc_example'; // string | The country code for which to fetch the delivery options.
+$postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
+$number = 'number_example'; // string | The street number for which to fetch the resources.
+$city = 'city_example'; // string | Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL.
+$street = 'street_example'; // string | This can be used to narrow the search results for locations outside NL.
+$platform = 'platform_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier | The platform where you want the data from.
+$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$carrier = 'carrier_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier
+$delivery_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | The date on which the package has to be delivered.
+$delivery_time = 'delivery_time_example'; // string | The time on which a package has to be delivered. > __Note__: This is only an indication of time the package will be >           delivered on the selected date.
+$cutoff_time = 'cutoff_time_example'; // string | This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there's no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection.
+$dropoff_days = 'dropoff_days_example'; // string | This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.
+$monday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. > __Note__: To activate Monday delivery, value 6 must be given with > [dropoff_days], value 1 must be given by [monday_delivery]. And on > Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) > so that Monday will be shown.
+$dropoff_delay = 56; // int | This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0.
+$deliverydays_window = 56; // int | This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
+$exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
+$exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
+$latitude = 'latitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
+$longitude = 'longitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
+
+try {
+    $result = $apiInstance->getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ShipmentApi->getPickupLocations: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **cc** | **string**| The country code for which to fetch the delivery options. | [optional] |
+| **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
+| **number** | **string**| The street number for which to fetch the resources. | [optional] |
+| **city** | **string**| Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. | [optional] |
+| **street** | **string**| This can be used to narrow the search results for locations outside NL. | [optional] |
+| **platform** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier**| The platform where you want the data from. | [optional] |
+| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **carrier** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier**|  | [optional] |
+| **delivery_date** | **\DateTime**| The date on which the package has to be delivered. | [optional] |
+| **delivery_time** | **string**| The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. | [optional] |
+| **cutoff_time** | **string**| This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. | [optional] |
+| **dropoff_days** | **string**| This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. | [optional] |
+| **monday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. | [optional] |
+| **dropoff_delay** | **int**| This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. | [optional] |
+| **deliverydays_window** | **int**| This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). | [optional] |
+| **exclude_delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. | [optional] |
+| **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
+| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
+| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations**](../Model/ShipmentResponsesPickupLocations.md)
+
+### Authorization
+
 [bearer](../../README.md#bearer)
 
 ### HTTP request headers
@@ -95,6 +297,11 @@ This operation returns a list of Shipments available to this User.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -170,7 +377,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -197,6 +404,11 @@ Get shipments by id.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -234,7 +446,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -261,6 +473,11 @@ Get Shipment labels
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -303,7 +520,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -331,6 +548,11 @@ Get detailed Track & Trace information for one or more shipments.
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -346,7 +568,7 @@ $barcode = 'barcode_example'; // string
 $country_code = 'country_code_example'; // string
 $external_identifier = 'external_identifier_example'; // string
 $extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
-$postal_code = 'postal_code_example'; // string | Postal Code
+$postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
 $sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
 
 try {
@@ -366,7 +588,7 @@ try {
 | **country_code** | **string**|  | [optional] |
 | **external_identifier** | **string**|  | [optional] |
 | **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
-| **postal_code** | **string**| Postal Code | [optional] |
+| **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
 | **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
 
 ### Return type
@@ -375,7 +597,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -402,6 +624,11 @@ Get detailed Track & Trace information for one or more shipments.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -441,7 +668,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -468,6 +695,11 @@ List shipment capabilities of the carriers for the MyParcel platforms. This endp
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -503,7 +735,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -530,6 +762,11 @@ List shipment capabilities of the carriers for the MyParcel platforms. This endp
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -565,7 +802,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -592,6 +829,11 @@ This endpoint allows you to determine the rates for a shipment configuration.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -627,7 +869,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -654,6 +896,11 @@ Add shipments allows you to create standard and related return shipments.
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -697,7 +944,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -724,6 +971,11 @@ This endpoint is often used by external parties to facilitate return shipments o
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -757,7 +1009,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -784,6 +1036,11 @@ This operation can be used to update certain fields of a shipment. The fields th
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -818,7 +1075,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 

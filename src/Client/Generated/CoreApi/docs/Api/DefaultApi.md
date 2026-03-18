@@ -22,6 +22,11 @@ getIndex($user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetIndex20
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -54,7 +59,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
