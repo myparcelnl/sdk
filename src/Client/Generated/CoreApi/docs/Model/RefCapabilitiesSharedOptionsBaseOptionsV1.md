@@ -26,5 +26,6 @@ Name | Type | Description | Notes
 **same_day_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 **signature** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
+**tracked** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1**](RefCapabilitiesSharedOptionsBaseOptionV1.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
