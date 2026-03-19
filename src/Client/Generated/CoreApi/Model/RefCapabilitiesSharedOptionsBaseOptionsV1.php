@@ -79,7 +79,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'return' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'same_day_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
         'saturday_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
-        'signature' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1'
+        'signature' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1',
+        'tracked' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1'
     ];
 
     /**
@@ -111,7 +112,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'return' => null,
         'same_day_delivery' => null,
         'saturday_delivery' => null,
-        'signature' => null
+        'signature' => null,
+        'tracked' => null
     ];
 
     /**
@@ -141,7 +143,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'return' => false,
         'same_day_delivery' => false,
         'saturday_delivery' => false,
-        'signature' => false
+        'signature' => false,
+        'tracked' => false
     ];
 
     /**
@@ -251,7 +254,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'return' => 'return',
         'same_day_delivery' => 'same_day_delivery',
         'saturday_delivery' => 'saturday_delivery',
-        'signature' => 'signature'
+        'signature' => 'signature',
+        'tracked' => 'tracked'
     ];
 
     /**
@@ -281,7 +285,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'return' => 'setReturn',
         'same_day_delivery' => 'setSameDayDelivery',
         'saturday_delivery' => 'setSaturdayDelivery',
-        'signature' => 'setSignature'
+        'signature' => 'setSignature',
+        'tracked' => 'setTracked'
     ];
 
     /**
@@ -311,7 +316,8 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         'return' => 'getReturn',
         'same_day_delivery' => 'getSameDayDelivery',
         'saturday_delivery' => 'getSaturdayDelivery',
-        'signature' => 'getSignature'
+        'signature' => 'getSignature',
+        'tracked' => 'getTracked'
     ];
 
     /**
@@ -393,6 +399,7 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
         $this->setIfExists('same_day_delivery', $data ?? [], null);
         $this->setIfExists('saturday_delivery', $data ?? [], null);
         $this->setIfExists('signature', $data ?? [], null);
+        $this->setIfExists('tracked', $data ?? [], null);
     }
 
     /**
@@ -1027,6 +1034,33 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1 implements ModelInterface, Array
             throw new \InvalidArgumentException('non-nullable signature cannot be null');
         }
         $this->container['signature'] = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Gets tracked
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1|null
+     */
+    public function getTracked()
+    {
+        return $this->container['tracked'];
+    }
+
+    /**
+     * Sets tracked
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1|null $tracked tracked
+     *
+     * @return self
+     */
+    public function setTracked($tracked)
+    {
+        if (is_null($tracked)) {
+            throw new \InvalidArgumentException('non-nullable tracked cannot be null');
+        }
+        $this->container['tracked'] = $tracked;
 
         return $this;
     }
