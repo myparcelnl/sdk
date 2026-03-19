@@ -80,6 +80,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         'same_day_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2',
         'saturday_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2',
         'scheduled_collection' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2',
+        'tracked' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2',
         'insurance' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2'
     ];
 
@@ -113,6 +114,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         'same_day_delivery' => null,
         'saturday_delivery' => null,
         'scheduled_collection' => null,
+        'tracked' => null,
         'insurance' => null
     ];
 
@@ -144,6 +146,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         'same_day_delivery' => false,
         'saturday_delivery' => false,
         'scheduled_collection' => false,
+        'tracked' => false,
         'insurance' => false
     ];
 
@@ -255,6 +258,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         'same_day_delivery' => 'sameDayDelivery',
         'saturday_delivery' => 'saturdayDelivery',
         'scheduled_collection' => 'scheduledCollection',
+        'tracked' => 'tracked',
         'insurance' => 'insurance'
     ];
 
@@ -286,6 +290,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         'same_day_delivery' => 'setSameDayDelivery',
         'saturday_delivery' => 'setSaturdayDelivery',
         'scheduled_collection' => 'setScheduledCollection',
+        'tracked' => 'setTracked',
         'insurance' => 'setInsurance'
     ];
 
@@ -317,6 +322,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         'same_day_delivery' => 'getSameDayDelivery',
         'saturday_delivery' => 'getSaturdayDelivery',
         'scheduled_collection' => 'getScheduledCollection',
+        'tracked' => 'getTracked',
         'insurance' => 'getInsurance'
     ];
 
@@ -399,6 +405,7 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
         $this->setIfExists('same_day_delivery', $data ?? [], null);
         $this->setIfExists('saturday_delivery', $data ?? [], null);
         $this->setIfExists('scheduled_collection', $data ?? [], null);
+        $this->setIfExists('tracked', $data ?? [], null);
         $this->setIfExists('insurance', $data ?? [], null);
     }
 
@@ -1034,6 +1041,33 @@ class RefCapabilitiesResponseOptionsOptionsV2 implements ModelInterface, ArrayAc
             throw new \InvalidArgumentException('non-nullable scheduled_collection cannot be null');
         }
         $this->container['scheduled_collection'] = $scheduled_collection;
+
+        return $this;
+    }
+
+    /**
+     * Gets tracked
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|null
+     */
+    public function getTracked()
+    {
+        return $this->container['tracked'];
+    }
+
+    /**
+     * Sets tracked
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|null $tracked tracked
+     *
+     * @return self
+     */
+    public function setTracked($tracked)
+    {
+        if (is_null($tracked)) {
+            throw new \InvalidArgumentException('non-nullable tracked cannot be null');
+        }
+        $this->container['tracked'] = $tracked;
 
         return $this;
     }
