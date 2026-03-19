@@ -44,32 +44,74 @@ class RefCapabilitiesSharedCarrierV2
     /**
      * Possible values of this enum
      */
+    /**
+     * bpost
+     */
     public const BPOST = 'BPOST';
 
+    /**
+     * BRT
+     */
     public const BRT = 'BRT';
 
+    /**
+     * Cheap Cargo
+     */
     public const CHEAP_CARGO = 'CHEAP_CARGO';
 
+    /**
+     * DHL Europlus
+     */
     public const DHL_EUROPLUS = 'DHL_EUROPLUS';
 
+    /**
+     * DHL For You
+     */
     public const DHL_FOR_YOU = 'DHL_FOR_YOU';
 
+    /**
+     * DHL Parcel Connect
+     */
     public const DHL_PARCEL_CONNECT = 'DHL_PARCEL_CONNECT';
 
+    /**
+     * DPD
+     */
     public const DPD = 'DPD';
 
+    /**
+     * GLS
+     */
     public const GLS = 'GLS';
 
+    /**
+     * InPost
+     */
     public const INPOST = 'INPOST';
 
+    /**
+     * PosteItaliane
+     */
     public const POSTE_ITALIANE = 'POSTE_ITALIANE';
 
+    /**
+     * PostNL
+     */
     public const POSTNL = 'POSTNL';
 
+    /**
+     * Trunkrs
+     */
     public const TRUNKRS = 'TRUNKRS';
 
+    /**
+     * UPS Express Saver
+     */
     public const UPS_EXPRESS_SAVER = 'UPS_EXPRESS_SAVER';
 
+    /**
+     * UPS Standard
+     */
     public const UPS_STANDARD = 'UPS_STANDARD';
 
     /**

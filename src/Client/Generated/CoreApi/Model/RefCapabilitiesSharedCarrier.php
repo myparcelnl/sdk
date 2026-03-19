@@ -44,33 +44,75 @@ class RefCapabilitiesSharedCarrier
     /**
      * Possible values of this enum
      */
-    public const NUMBER_1 = 1;
+    /**
+     * PostNL
+     */
+    public const POSTNL = 1;
 
-    public const NUMBER_2 = 2;
+    /**
+     * bpost
+     */
+    public const BPOST = 2;
 
-    public const NUMBER_3 = 3;
+    /**
+     * Cheap Cargo
+     */
+    public const CHEAP_CARGO = 3;
 
-    public const NUMBER_4 = 4;
+    /**
+     * DPD
+     */
+    public const DPD = 4;
 
-    public const NUMBER_9 = 9;
+    /**
+     * DHL For You
+     */
+    public const DHL_FOR_YOU = 9;
 
-    public const NUMBER_10 = 10;
+    /**
+     * DHL Parcel Connect
+     */
+    public const DHL_PARCEL_CONNECT = 10;
 
-    public const NUMBER_11 = 11;
+    /**
+     * DHL Europlus
+     */
+    public const DHL_EUROPLUS = 11;
 
-    public const NUMBER_12 = 12;
+    /**
+     * UPS Standard
+     */
+    public const UPS_STANDARD = 12;
 
-    public const NUMBER_13 = 13;
+    /**
+     * UPS Express Saver
+     */
+    public const UPS_EXPRESS_SAVER = 13;
 
-    public const NUMBER_14 = 14;
+    /**
+     * GLS
+     */
+    public const GLS = 14;
 
-    public const NUMBER_15 = 15;
+    /**
+     * BRT
+     */
+    public const BRT = 15;
 
-    public const NUMBER_16 = 16;
+    /**
+     * Trunkrs
+     */
+    public const TRUNKRS = 16;
 
-    public const NUMBER_17 = 17;
+    /**
+     * InPost
+     */
+    public const INPOST = 17;
 
-    public const NUMBER_18 = 18;
+    /**
+     * PosteItaliane
+     */
+    public const POSTE_ITALIANE = 18;
 
     /**
      * Gets allowable values of the enum
@@ -79,20 +121,20 @@ class RefCapabilitiesSharedCarrier
     public static function getAllowableEnumValues()
     {
         return [
-            self::NUMBER_1,
-            self::NUMBER_2,
-            self::NUMBER_3,
-            self::NUMBER_4,
-            self::NUMBER_9,
-            self::NUMBER_10,
-            self::NUMBER_11,
-            self::NUMBER_12,
-            self::NUMBER_13,
-            self::NUMBER_14,
-            self::NUMBER_15,
-            self::NUMBER_16,
-            self::NUMBER_17,
-            self::NUMBER_18
+            self::POSTNL,
+            self::BPOST,
+            self::CHEAP_CARGO,
+            self::DPD,
+            self::DHL_FOR_YOU,
+            self::DHL_PARCEL_CONNECT,
+            self::DHL_EUROPLUS,
+            self::UPS_STANDARD,
+            self::UPS_EXPRESS_SAVER,
+            self::GLS,
+            self::BRT,
+            self::TRUNKRS,
+            self::INPOST,
+            self::POSTE_ITALIANE
         ];
     }
 }
