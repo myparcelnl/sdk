@@ -82,7 +82,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProviderId',
         'payment_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
-        'platform_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformPropertiesId',
+        'platform_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId',
         'origin' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOrigin',
         'user_agent' => 'string',
         'secondary_shipments' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\SecondaryShipmentResource[]',
@@ -96,9 +96,9 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'contract_id' => 'int',
         'link_consumer_portal' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentLinkConsumerPortal',
         'partner_tracktraces' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPartnerTracktracesInner[]',
-        'pickup_request_number' => 'mixed',
-        'order_shipment_identifier' => 'mixed',
-        'shipped_items' => 'mixed',
+        'pickup_request_number' => 'string',
+        'order_shipment_identifier' => 'Null',
+        'shipped_items' => 'Null',
         'created' => 'string',
         'modified' => 'string',
         'created_by' => 'int',
@@ -700,15 +700,15 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", $this->container['created'])) {
-            $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.";
+        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
+            $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['modified'] === null) {
             $invalidProperties[] = "'modified' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", $this->container['modified'])) {
-            $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.";
+        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
+            $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['created_by'] === null) {
@@ -1408,7 +1408,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets platform_id
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformPropertiesId
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId
      */
     public function getPlatformId()
     {
@@ -1418,7 +1418,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets platform_id
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformPropertiesId $platform_id platform_id
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId $platform_id platform_id
      *
      * @return self
      */
@@ -1808,7 +1808,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets pickup_request_number
      *
-     * @return mixed|null
+     * @return string|null
      */
     public function getPickupRequestNumber()
     {
@@ -1818,7 +1818,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets pickup_request_number
      *
-     * @param mixed|null $pickup_request_number pickup_request_number
+     * @param string|null $pickup_request_number pickup_request_number
      *
      * @return self
      */
@@ -1901,7 +1901,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets created
      *
-     * @param string $created Represents a date and time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` represents a zero-padded second, `00` through `60` (where `60` is only used to denote an added leap second)
+     * @param string $created Represents a date in ISO 8601 format and a time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss.u ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` (optional) represents a zero-padded second, `00` through `60`     (where `60` is only used to denote an added leap second)   - `.u` (optional) represents a fraction of a second, `.0` through `.999999+`
      *
      * @return self
      */
@@ -1911,8 +1911,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
             throw new \InvalidArgumentException('non-nullable created cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", ObjectSerializer::toString($created)))) {
-            throw new \InvalidArgumentException("invalid value for \$created when calling ShipmentDefsShipment., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.");
+        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($created)))) {
+            throw new \InvalidArgumentException("invalid value for \$created when calling ShipmentDefsShipment., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
         }
 
         $this->container['created'] = $created;
@@ -1933,7 +1933,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets modified
      *
-     * @param string $modified Represents a date and time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` represents a zero-padded second, `00` through `60` (where `60` is only used to denote an added leap second)
+     * @param string $modified Represents a date in ISO 8601 format and a time in ISO 8601 format, separated by a space, so:  ``` YYYY-MM-DD hh:mm:ss.u ```  Where:   - `YYYY` represents a four-digit year, `0000` through `9999`   - `MM` represents a zero-padded month of the year, `01` through `12`   - `DD` represents a zero-padded day of that month, `01` through `31` and:   - `hh` represents a zero-padded hour, `00` through `24`   - `mm` represents a zero-padded minute, `00` through `59`   - `ss` (optional) represents a zero-padded second, `00` through `60`     (where `60` is only used to denote an added leap second)   - `.u` (optional) represents a fraction of a second, `.0` through `.999999+`
      *
      * @return self
      */
@@ -1943,8 +1943,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
             throw new \InvalidArgumentException('non-nullable modified cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/", ObjectSerializer::toString($modified)))) {
-            throw new \InvalidArgumentException("invalid value for \$modified when calling ShipmentDefsShipment., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d:([0-5]\\d|60)(.\\d+)?/.");
+        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($modified)))) {
+            throw new \InvalidArgumentException("invalid value for \$modified when calling ShipmentDefsShipment., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
         }
 
         $this->container['modified'] = $modified;

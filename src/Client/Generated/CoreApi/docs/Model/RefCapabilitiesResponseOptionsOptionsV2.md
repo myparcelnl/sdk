@@ -26,6 +26,7 @@ Name | Type | Description | Notes
 **same_day_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2**](RefCapabilitiesResponseOptionsOptionV2.md) |  | [optional]
 **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2**](RefCapabilitiesResponseOptionsOptionV2.md) |  | [optional]
 **scheduled_collection** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2**](RefCapabilitiesResponseOptionsOptionV2.md) |  | [optional]
+**tracked** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2**](RefCapabilitiesResponseOptionsOptionV2.md) |  | [optional]
 **insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2**](RefCapabilitiesResponseOptionsInsuranceOptionV2.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

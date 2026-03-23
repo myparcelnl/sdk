@@ -68,7 +68,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
         'delivered' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender',
-        'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup',
@@ -787,7 +787,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
     /**
      * Gets options
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions
      */
     public function getOptions()
     {
@@ -797,7 +797,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInner implements ModelInterface
     /**
      * Sets options
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions $options options
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions $options options
      *
      * @return self
      */
