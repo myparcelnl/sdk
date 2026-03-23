@@ -10,7 +10,6 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Helper\LabelHelper;
-use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -29,6 +28,7 @@ final class ShipmentLabelsService
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
     private const PDF_ACCEPT_HEADER = 'application/pdf+print';
+    private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
     private ShipmentApi $api;
     private ClientInterface $httpClient;
@@ -44,12 +44,14 @@ final class ShipmentLabelsService
         ?string $host = null
     ) {
         $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => 10]);
+        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
     }
 
     /**
+     * Fetch and store the label download link for the given shipments.
+     *
      * @param int[] $shipmentIds
-     * @param mixed $positions
+     * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
      *
      * @throws ApiException
      */
@@ -75,14 +77,19 @@ final class ShipmentLabelsService
         return $this->labelLink;
     }
 
+    /**
+     * Return the previously fetched label link URL.
+     */
     public function getLinkOfLabels(): string
     {
         return $this->labelLink;
     }
 
     /**
+     * Fetch and store the raw PDF content for the given shipment labels.
+     *
      * @param int[] $shipmentIds
-     * @param mixed $positions
+     * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
      *
      * @throws ApiException
      */
@@ -108,13 +115,18 @@ final class ShipmentLabelsService
         return $this->labelPdf;
     }
 
+    /**
+     * Return the previously fetched raw PDF label content.
+     */
     public function getLabelPdf(): string
     {
         return $this->labelPdf;
     }
 
     /**
-     * @throws MissingFieldException
+     * Stream the stored PDF to the browser as a download (or inline).
+     *
+     * @throws MissingFieldException If setPdfOfLabels() has not been called first.
      */
     public function downloadPdfOfLabels(bool $inlineDownload = false): void
     {
@@ -140,7 +152,7 @@ final class ShipmentLabelsService
      */
     public function useLabelPrepare(int $numberOfShipments): bool
     {
-        return $numberOfShipments > MyParcelRequest::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
+        return $numberOfShipments > self::SHIPMENT_LABEL_PREPARE_ACTIVE_FROM;
     }
 
     /**

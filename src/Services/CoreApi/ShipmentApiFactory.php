@@ -6,17 +6,22 @@ namespace MyParcelNL\Sdk\Services\CoreApi;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Utils;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Factory for creating the generated ShipmentApi client.
  */
 final class ShipmentApiFactory
 {
+    /**
+     * Default HTTP client timeout in seconds.
+     *
+     * Shared across all shipment services to ensure consistent behaviour.
+     * The MyParcel API typically responds within 2-3 seconds; 10 seconds
+     * provides headroom for label generation and large batch queries.
+     */
+    public const DEFAULT_HTTP_TIMEOUT = 10;
     /**
      * Create a configured ShipmentApi client.
      *
@@ -51,7 +56,7 @@ final class ShipmentApiFactory
         $stack = self::createHandlerStack();
 
         $httpOptions = [
-            'timeout'  => 10,
+            'timeout'  => self::DEFAULT_HTTP_TIMEOUT,
             'handler'  => $stack,
             'debug'    => false,
         ];
@@ -67,35 +72,7 @@ final class ShipmentApiFactory
 
     private static function createHandlerStack(): HandlerStack
     {
-        $stack = HandlerStack::create();
-
-        $stack->push(self::normalizeTrackTraceResponseMiddleware(), 'normalize_tracktrace_response');
-
-        return $stack;
-    }
-
-    private static function normalizeTrackTraceResponseMiddleware(): callable
-    {
-        return Middleware::mapResponse(static function (ResponseInterface $response): ResponseInterface {
-            $body = (string) $response->getBody();
-
-            if ('' === $body) {
-                return $response;
-            }
-
-            $decoded = json_decode($body, true);
-
-            if (! is_array($decoded)) {
-                return $response;
-            }
-
-            $normalized = self::normalizeTrackTraceResponsePayload($decoded);
-            if ($normalized === $decoded) {
-                return $response;
-            }
-
-            return $response->withBody(Utils::streamFor(json_encode($normalized)));
-        });
+        return HandlerStack::create();
     }
 
     /**
@@ -125,39 +102,4 @@ final class ShipmentApiFactory
         return '';
     }
 
-    /**
-     * @todo remove after CoreAPI spec/codegen fix for TrackTrace deserialization.
-     *
-     * @param array<string, mixed> $payload
-     * @return array<string, mixed>
-     */
-    private static function normalizeTrackTraceResponsePayload(array $payload): array
-    {
-        if (! isset($payload['data']['tracktraces']) || ! is_array($payload['data']['tracktraces'])) {
-            return $payload;
-        }
-
-        $allowedTrackTraceKeys = [
-            'shipment_id',
-            'carrier',
-            'code',
-            'description',
-            'time',
-            'link_consumer_portal',
-            'link_tracktrace',
-            'delayed',
-            'returnable',
-        ];
-
-        foreach ($payload['data']['tracktraces'] as &$trackTrace) {
-            if (! is_array($trackTrace)) {
-                continue;
-            }
-
-            $trackTrace = array_intersect_key($trackTrace, array_flip($allowedTrackTraceKeys));
-        }
-        unset($trackTrace);
-
-        return $payload;
-    }
 }

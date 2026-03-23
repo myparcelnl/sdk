@@ -63,15 +63,15 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'account_id' => 'int',
         'shop_id' => 'int',
         'shipment_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentType',
-        'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender',
+        'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender',
         'status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettings',
-        'pickup' => 'Null',
+        'pickup' => 'mixed',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentCustomsDeclaration',
-        'physical_properties' => 'Null',
-        'reference_identifier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier',
+        'physical_properties' => 'mixed',
+        'reference_identifier' => 'string',
         'transaction_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus',
         'drop_off_point' => 'mixed',
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
@@ -870,7 +870,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets recipient
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient
      */
     public function getRecipient()
     {
@@ -880,7 +880,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets recipient
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient $recipient recipient
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient $recipient recipient
      *
      * @return self
      */
@@ -897,7 +897,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender
      */
     public function getSender()
     {
@@ -907,7 +907,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender $sender sender
      *
      * @return self
      */
@@ -1005,7 +1005,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets pickup
      *
-     * @return Null
+     * @return mixed
      */
     public function getPickup()
     {
@@ -1015,7 +1015,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets pickup
      *
-     * @param Null $pickup pickup
+     * @param mixed $pickup pickup
      *
      * @return self
      */
@@ -1059,7 +1059,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets physical_properties
      *
-     * @return Null
+     * @return mixed
      */
     public function getPhysicalProperties()
     {
@@ -1069,7 +1069,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets physical_properties
      *
-     * @param Null $physical_properties physical_properties
+     * @param mixed $physical_properties physical_properties
      *
      * @return self
      */
@@ -1086,7 +1086,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets reference_identifier
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier
+     * @return string
      */
     public function getReferenceIdentifier()
     {
@@ -1096,7 +1096,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets reference_identifier
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier $reference_identifier reference_identifier
+     * @param string $reference_identifier reference_identifier
      *
      * @return self
      */
@@ -1835,7 +1835,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets order_shipment_identifier
      *
-     * @return Null|null
+     * @return mixed|null
      */
     public function getOrderShipmentIdentifier()
     {
@@ -1845,7 +1845,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets order_shipment_identifier
      *
-     * @param Null|null $order_shipment_identifier order_shipment_identifier
+     * @param mixed|null $order_shipment_identifier order_shipment_identifier
      *
      * @return self
      */
@@ -1864,7 +1864,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets shipped_items
      *
-     * @return Null|null
+     * @return mixed|null
      */
     public function getShippedItems()
     {
@@ -1874,7 +1874,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets shipped_items
      *
-     * @param Null|null $shipped_items shipped_items
+     * @param mixed|null $shipped_items shipped_items
      *
      * @return self
      */
