@@ -37,9 +37,9 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
-      - uses: myparcelnl/actions/semantic-release@v5
-        with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+      # - uses: myparcelnl/actions/semantic-release@v5
+      #   with:
+      #     token: ${{ secrets.GH_REPO_TOKEN }}
 
   rebase-prs:
     if: always()
