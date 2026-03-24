@@ -60,6 +60,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2',
+        'contract' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV2',
         'package_types' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2[]',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponsePhysicalPropertiesPhysicalProperties',
@@ -77,6 +78,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'carrier' => null,
+        'contract' => null,
         'package_types' => null,
         'options' => null,
         'physical_properties' => null,
@@ -92,6 +94,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
       */
     protected static array $openAPINullables = [
         'carrier' => false,
+        'contract' => false,
         'package_types' => false,
         'options' => false,
         'physical_properties' => false,
@@ -187,6 +190,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'carrier' => 'carrier',
+        'contract' => 'contract',
         'package_types' => 'packageTypes',
         'options' => 'options',
         'physical_properties' => 'physicalProperties',
@@ -202,6 +206,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'carrier' => 'setCarrier',
+        'contract' => 'setContract',
         'package_types' => 'setPackageTypes',
         'options' => 'setOptions',
         'physical_properties' => 'setPhysicalProperties',
@@ -217,6 +222,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'carrier' => 'getCarrier',
+        'contract' => 'getContract',
         'package_types' => 'getPackageTypes',
         'options' => 'getOptions',
         'physical_properties' => 'getPhysicalProperties',
@@ -283,6 +289,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
     public function __construct(?array $data = null)
     {
         $this->setIfExists('carrier', $data ?? [], null);
+        $this->setIfExists('contract', $data ?? [], null);
         $this->setIfExists('package_types', $data ?? [], null);
         $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('physical_properties', $data ?? [], null);
@@ -377,6 +384,33 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
             throw new \InvalidArgumentException('non-nullable carrier cannot be null');
         }
         $this->container['carrier'] = $carrier;
+
+        return $this;
+    }
+
+    /**
+     * Gets contract
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV2|null
+     */
+    public function getContract()
+    {
+        return $this->container['contract'];
+    }
+
+    /**
+     * Sets contract
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV2|null $contract contract
+     *
+     * @return self
+     */
+    public function setContract($contract)
+    {
+        if (is_null($contract)) {
+            throw new \InvalidArgumentException('non-nullable contract cannot be null');
+        }
+        $this->container['contract'] = $contract;
 
         return $this;
     }

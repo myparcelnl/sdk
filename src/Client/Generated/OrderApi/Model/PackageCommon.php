@@ -57,8 +57,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequired',
-        'shipment' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageCommonShipment'
+        'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsPackage',
+        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequired'
     ];
 
     /**
@@ -69,8 +70,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'physical_properties' => null,
-        'shipment' => null
+        'customs_declaration' => null,
+        'options' => null,
+        'physical_properties' => null
     ];
 
     /**
@@ -79,8 +81,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'physical_properties' => false,
-        'shipment' => false
+        'customs_declaration' => false,
+        'options' => false,
+        'physical_properties' => false
     ];
 
     /**
@@ -169,8 +172,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'physical_properties' => 'physicalProperties',
-        'shipment' => 'shipment'
+        'customs_declaration' => 'customsDeclaration',
+        'options' => 'options',
+        'physical_properties' => 'physicalProperties'
     ];
 
     /**
@@ -179,8 +183,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'physical_properties' => 'setPhysicalProperties',
-        'shipment' => 'setShipment'
+        'customs_declaration' => 'setCustomsDeclaration',
+        'options' => 'setOptions',
+        'physical_properties' => 'setPhysicalProperties'
     ];
 
     /**
@@ -189,8 +194,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'physical_properties' => 'getPhysicalProperties',
-        'shipment' => 'getShipment'
+        'customs_declaration' => 'getCustomsDeclaration',
+        'options' => 'getOptions',
+        'physical_properties' => 'getPhysicalProperties'
     ];
 
     /**
@@ -250,8 +256,9 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('customs_declaration', $data ?? [], null);
+        $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('physical_properties', $data ?? [], null);
-        $this->setIfExists('shipment', $data ?? [], null);
     }
 
     /**
@@ -297,6 +304,60 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
+     * Gets customs_declaration
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration|null
+     */
+    public function getCustomsDeclaration()
+    {
+        return $this->container['customs_declaration'];
+    }
+
+    /**
+     * Sets customs_declaration
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration|null $customs_declaration customs_declaration
+     *
+     * @return self
+     */
+    public function setCustomsDeclaration($customs_declaration)
+    {
+        if (is_null($customs_declaration)) {
+            throw new \InvalidArgumentException('non-nullable customs_declaration cannot be null');
+        }
+        $this->container['customs_declaration'] = $customs_declaration;
+
+        return $this;
+    }
+
+    /**
+     * Gets options
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsPackage|null
+     */
+    public function getOptions()
+    {
+        return $this->container['options'];
+    }
+
+    /**
+     * Sets options
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsPackage|null $options options
+     *
+     * @return self
+     */
+    public function setOptions($options)
+    {
+        if (is_null($options)) {
+            throw new \InvalidArgumentException('non-nullable options cannot be null');
+        }
+        $this->container['options'] = $options;
+
+        return $this;
+    }
+
+    /**
      * Gets physical_properties
      *
      * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequired|null
@@ -319,33 +380,6 @@ class PackageCommon implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable physical_properties cannot be null');
         }
         $this->container['physical_properties'] = $physical_properties;
-
-        return $this;
-    }
-
-    /**
-     * Gets shipment
-     *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageCommonShipment|null
-     */
-    public function getShipment()
-    {
-        return $this->container['shipment'];
-    }
-
-    /**
-     * Sets shipment
-     *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageCommonShipment|null $shipment shipment
-     *
-     * @return self
-     */
-    public function setShipment($shipment)
-    {
-        if (is_null($shipment)) {
-            throw new \InvalidArgumentException('non-nullable shipment cannot be null');
-        }
-        $this->container['shipment'] = $shipment;
 
         return $this;
     }

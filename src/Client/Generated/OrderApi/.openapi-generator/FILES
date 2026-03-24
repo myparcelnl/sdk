@@ -29,7 +29,6 @@ Model/CreateOrderFromShippablePackages.php
 Model/CreateOrderFromShippablePackagesAnyOf.php
 Model/CreateOrderFromShippablePackagesAnyOf1.php
 Model/CreateOrderFromShippablePackagesAnyOf1Multicollo.php
-Model/CreateOrderFromShippablePackagesAnyOf1MulticolloShipment.php
 Model/CustomsDeclaration.php
 Model/CustomsDeclarationGroupsInner.php
 Model/CustomsDeclarationGroupsInnerTotalValue.php
@@ -78,7 +77,6 @@ Model/OrdersGet200ResponseTotal.php
 Model/OrdersGetFilterParameter.php
 Model/OrdersGetSortParameter.php
 Model/PackageCommon.php
-Model/PackageCommonShipment.php
 Model/PackageRequest.php
 Model/PackageRequestLinesInner.php
 Model/PackageResponse.php
@@ -178,7 +176,6 @@ docs/Model/CreateOrderFromShippablePackages.md
 docs/Model/CreateOrderFromShippablePackagesAnyOf.md
 docs/Model/CreateOrderFromShippablePackagesAnyOf1.md
 docs/Model/CreateOrderFromShippablePackagesAnyOf1Multicollo.md
-docs/Model/CreateOrderFromShippablePackagesAnyOf1MulticolloShipment.md
 docs/Model/CustomsDeclaration.md
 docs/Model/CustomsDeclarationGroupsInner.md
 docs/Model/CustomsDeclarationGroupsInnerTotalValue.md
@@ -226,7 +223,6 @@ docs/Model/OrdersGet200ResponseTotal.md
 docs/Model/OrdersGetFilterParameter.md
 docs/Model/OrdersGetSortParameter.md
 docs/Model/PackageCommon.md
-docs/Model/PackageCommonShipment.md
 docs/Model/PackageRequest.md
 docs/Model/PackageRequestLinesInner.md
 docs/Model/PackageResponse.md

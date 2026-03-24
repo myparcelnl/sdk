@@ -57,8 +57,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
       * @var string[]
       */
     protected static $openAPITypes = [
-        'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration',
-        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CarrierToCreate',
         'direction' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection',
         'disable_auto_detect_pickup' => 'bool',
@@ -66,6 +64,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipient',
         'custom_contract_id' => 'string',
         'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender'
     ];
@@ -78,8 +77,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'customs_declaration' => null,
-        'options' => null,
         'carrier' => null,
         'direction' => null,
         'disable_auto_detect_pickup' => null,
@@ -87,6 +84,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'recipient' => null,
         'custom_contract_id' => null,
         'delivery' => null,
+        'options' => null,
         'pickup' => null,
         'sender' => null
     ];
@@ -97,8 +95,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'customs_declaration' => false,
-        'options' => false,
         'carrier' => false,
         'direction' => false,
         'disable_auto_detect_pickup' => false,
@@ -106,6 +102,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'recipient' => false,
         'custom_contract_id' => false,
         'delivery' => false,
+        'options' => false,
         'pickup' => false,
         'sender' => false
     ];
@@ -196,8 +193,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $attributeMap = [
-        'customs_declaration' => 'customsDeclaration',
-        'options' => 'options',
         'carrier' => 'carrier',
         'direction' => 'direction',
         'disable_auto_detect_pickup' => 'disableAutoDetectPickup',
@@ -205,6 +200,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'recipient' => 'recipient',
         'custom_contract_id' => 'customContractId',
         'delivery' => 'delivery',
+        'options' => 'options',
         'pickup' => 'pickup',
         'sender' => 'sender'
     ];
@@ -215,8 +211,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $setters = [
-        'customs_declaration' => 'setCustomsDeclaration',
-        'options' => 'setOptions',
         'carrier' => 'setCarrier',
         'direction' => 'setDirection',
         'disable_auto_detect_pickup' => 'setDisableAutoDetectPickup',
@@ -224,6 +218,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'recipient' => 'setRecipient',
         'custom_contract_id' => 'setCustomContractId',
         'delivery' => 'setDelivery',
+        'options' => 'setOptions',
         'pickup' => 'setPickup',
         'sender' => 'setSender'
     ];
@@ -234,8 +229,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $getters = [
-        'customs_declaration' => 'getCustomsDeclaration',
-        'options' => 'getOptions',
         'carrier' => 'getCarrier',
         'direction' => 'getDirection',
         'disable_auto_detect_pickup' => 'getDisableAutoDetectPickup',
@@ -243,6 +236,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'recipient' => 'getRecipient',
         'custom_contract_id' => 'getCustomContractId',
         'delivery' => 'getDelivery',
+        'options' => 'getOptions',
         'pickup' => 'getPickup',
         'sender' => 'getSender'
     ];
@@ -304,8 +298,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('customs_declaration', $data ?? [], null);
-        $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('carrier', $data ?? [], null);
         $this->setIfExists('direction', $data ?? [], null);
         $this->setIfExists('disable_auto_detect_pickup', $data ?? [], null);
@@ -313,6 +305,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         $this->setIfExists('recipient', $data ?? [], null);
         $this->setIfExists('custom_contract_id', $data ?? [], null);
         $this->setIfExists('delivery', $data ?? [], null);
+        $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
     }
@@ -381,60 +374,6 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets customs_declaration
-     *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration|null
-     */
-    public function getCustomsDeclaration()
-    {
-        return $this->container['customs_declaration'];
-    }
-
-    /**
-     * Sets customs_declaration
-     *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration|null $customs_declaration customs_declaration
-     *
-     * @return self
-     */
-    public function setCustomsDeclaration($customs_declaration)
-    {
-        if (is_null($customs_declaration)) {
-            throw new \InvalidArgumentException('non-nullable customs_declaration cannot be null');
-        }
-        $this->container['customs_declaration'] = $customs_declaration;
-
-        return $this;
-    }
-
-    /**
-     * Gets options
-     *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions|null
-     */
-    public function getOptions()
-    {
-        return $this->container['options'];
-    }
-
-    /**
-     * Sets options
-     *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions|null $options options
-     *
-     * @return self
-     */
-    public function setOptions($options)
-    {
-        if (is_null($options)) {
-            throw new \InvalidArgumentException('non-nullable options cannot be null');
-        }
-        $this->container['options'] = $options;
-
-        return $this;
-    }
 
     /**
      * Gets carrier
@@ -628,6 +567,33 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
             throw new \InvalidArgumentException('non-nullable delivery cannot be null');
         }
         $this->container['delivery'] = $delivery;
+
+        return $this;
+    }
+
+    /**
+     * Gets options
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon|null
+     */
+    public function getOptions()
+    {
+        return $this->container['options'];
+    }
+
+    /**
+     * Sets options
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon|null $options options
+     *
+     * @return self
+     */
+    public function setOptions($options)
+    {
+        if (is_null($options)) {
+            throw new \InvalidArgumentException('non-nullable options cannot be null');
+        }
+        $this->container['options'] = $options;
 
         return $this;
     }

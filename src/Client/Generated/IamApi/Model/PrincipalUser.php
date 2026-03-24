@@ -1,6 +1,6 @@
 <?php
 /**
- * Principal
+ * PrincipalUser
  *
  * PHP version 7.4
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
 
 /**
- * Principal Class Doc Comment
+ * PrincipalUser Class Doc Comment
  *
  * @category Class
  * @package  MyParcelNL\Sdk\Client\Generated\IamApi
@@ -40,16 +40,16 @@ use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
+class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    public const DISCRIMINATOR = 'type';
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Principal';
+    protected static $openAPIModelName = 'PrincipalUser';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -276,7 +276,6 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const TYPE_SHOP = 'SHOP';
     public const TYPE_USER = 'USER';
 
     /**
@@ -287,7 +286,6 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
     public function getTypeAllowableValues()
     {
         return [
-            self::TYPE_SHOP,
             self::TYPE_USER,
         ];
     }
@@ -316,9 +314,6 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('role', $data ?? [], null);
         $this->setIfExists('shop_ids', $data ?? [], null);
-
-        // Initialize discriminator property with the model name.
-        $this->container['type'] = static::$openAPIModelName;
     }
 
     /**
@@ -453,10 +448,10 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable account_id cannot be null');
         }
         if ((mb_strlen($account_id) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $account_id when calling Principal., must be smaller than or equal to 50.');
+            throw new \InvalidArgumentException('invalid length for $account_id when calling PrincipalUser., must be smaller than or equal to 50.');
         }
         if ((mb_strlen($account_id) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $account_id when calling Principal., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $account_id when calling PrincipalUser., must be bigger than or equal to 1.');
         }
 
         $this->container['account_id'] = $account_id;
@@ -515,10 +510,10 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if ((count($features) > 26)) {
-            throw new \InvalidArgumentException('invalid value for $features when calling Principal., number of items must be less than or equal to 26.');
+            throw new \InvalidArgumentException('invalid value for $features when calling PrincipalUser., number of items must be less than or equal to 26.');
         }
         if ((count($features) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $features when calling Principal., number of items must be greater than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $features when calling PrincipalUser., number of items must be greater than or equal to 1.');
         }
         $this->container['features'] = $features;
 
@@ -549,10 +544,10 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if ((count($fulfilment_platforms) > 1)) {
-            throw new \InvalidArgumentException('invalid value for $fulfilment_platforms when calling Principal., number of items must be less than or equal to 1.');
+            throw new \InvalidArgumentException('invalid value for $fulfilment_platforms when calling PrincipalUser., number of items must be less than or equal to 1.');
         }
         if ((count($fulfilment_platforms) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $fulfilment_platforms when calling Principal., number of items must be greater than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $fulfilment_platforms when calling PrincipalUser., number of items must be greater than or equal to 1.');
         }
         $this->container['fulfilment_platforms'] = $fulfilment_platforms;
 
@@ -609,10 +604,10 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
         if ((mb_strlen($id) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $id when calling Principal., must be smaller than or equal to 50.');
+            throw new \InvalidArgumentException('invalid length for $id when calling PrincipalUser., must be smaller than or equal to 50.');
         }
         if ((mb_strlen($id) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $id when calling Principal., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $id when calling PrincipalUser., must be bigger than or equal to 1.');
         }
 
         $this->container['id'] = $id;
@@ -708,10 +703,10 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         if ((count($shop_ids) > 500)) {
-            throw new \InvalidArgumentException('invalid value for $shop_ids when calling Principal., number of items must be less than or equal to 500.');
+            throw new \InvalidArgumentException('invalid value for $shop_ids when calling PrincipalUser., number of items must be less than or equal to 500.');
         }
         if ((count($shop_ids) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $shop_ids when calling Principal., number of items must be greater than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $shop_ids when calling PrincipalUser., number of items must be greater than or equal to 1.');
         }
         $this->container['shop_ids'] = $shop_ids;
 

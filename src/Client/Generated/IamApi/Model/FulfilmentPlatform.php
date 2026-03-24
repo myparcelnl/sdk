@@ -33,6 +33,7 @@ use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
  * FulfilmentPlatform Class Doc Comment
  *
  * @category Class
+ * @description The fulfilment platform used.
  * @package  MyParcelNL\Sdk\Client\Generated\IamApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
