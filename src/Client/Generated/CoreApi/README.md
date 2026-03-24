@@ -55,6 +55,11 @@ $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfi
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -82,7 +87,7 @@ All URIs are relative to *https://api.myparcel.nl*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**getIndex**](docs/Api/DefaultApi.md#getindex) | **GET** / | 
+*DefaultApi* | [**getIndex**](docs/Api/DefaultApi.md#getindex) | **GET** / |
 *NotificationApi* | [**deleteNotificationGroups**](docs/Api/NotificationApi.md#deletenotificationgroups) | **DELETE** /notification_groups/{ids} | Delete notification groups
 *NotificationApi* | [**disableAllNotificationTemplatesByGroup**](docs/Api/NotificationApi.md#disableallnotificationtemplatesbygroup) | **PUT** /notification_groups/{notification_group_id}/notification_templates/disable | Disable all notification templates in a notification group
 *NotificationApi* | [**disableNotificationTemplate**](docs/Api/NotificationApi.md#disablenotificationtemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/disable | Disable notification template
@@ -94,6 +99,8 @@ Class | Method | HTTP request | Description
 *NotificationApi* | [**putNotificationTemplate**](docs/Api/NotificationApi.md#putnotificationtemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id} | Update notification template
 *NotificationApi* | [**sendTestNotification**](docs/Api/NotificationApi.md#sendtestnotification) | **POST** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/test | Send test notification
 *ShipmentApi* | [**deleteShipments**](docs/Api/ShipmentApi.md#deleteshipments) | **DELETE** /shipments/{ids} | Delete Shipment
+*ShipmentApi* | [**getDeliveryOptions**](docs/Api/ShipmentApi.md#getdeliveryoptions) | **GET** /delivery_options | Get Delivery Options
+*ShipmentApi* | [**getPickupLocations**](docs/Api/ShipmentApi.md#getpickuplocations) | **GET** /pickup_locations | Get Pickup Locations
 *ShipmentApi* | [**getDeliveryOptions**](docs/Api/ShipmentApi.md#getdeliveryoptions) | **GET** /delivery_options | Get Delivery Options
 *ShipmentApi* | [**getPickupLocations**](docs/Api/ShipmentApi.md#getpickuplocations) | **GET** /pickup_locations | Get Pickup Locations
 *ShipmentApi* | [**getShipments**](docs/Api/ShipmentApi.md#getshipments) | **GET** /shipments | Gets a list of Shipments, optionally filtered using parameters.
@@ -108,8 +115,10 @@ Class | Method | HTTP request | Description
 *ShipmentApi* | [**postUnrelatedReturnShipments**](docs/Api/ShipmentApi.md#postunrelatedreturnshipments) | **POST** /return_shipments | Generate unrelated return shipment URL
 *ShipmentApi* | [**putShipment**](docs/Api/ShipmentApi.md#putshipment) | **PUT** /shipments | Update Shipment
 *WebhookApi* | [**deleteWebhookSubscriptions**](docs/Api/WebhookApi.md#deletewebhooksubscriptions) | **DELETE** /webhook_subscriptions/{ids} | Delete webhook subscriptions
+*WebhookApi* | [**deleteWebhookSubscriptions**](docs/Api/WebhookApi.md#deletewebhooksubscriptions) | **DELETE** /webhook_subscriptions/{ids} | Delete webhook subscriptions
 *WebhookApi* | [**getWebhookSubscriptions**](docs/Api/WebhookApi.md#getwebhooksubscriptions) | **GET** /webhook_subscriptions | Get webhook subscriptions
 *WebhookApi* | [**getWebhookSubscriptionsById**](docs/Api/WebhookApi.md#getwebhooksubscriptionsbyid) | **GET** /webhook_subscriptions/{ids} | Get webhook subscriptions by id.
+*WebhookApi* | [**postWebhookSubscriptions**](docs/Api/WebhookApi.md#postwebhooksubscriptions) | **POST** /webhook_subscriptions | Create webhook subscriptions
 *WebhookApi* | [**postWebhookSubscriptions**](docs/Api/WebhookApi.md#postwebhooksubscriptions) | **POST** /webhook_subscriptions | Create webhook subscriptions
 
 ## Models
@@ -117,6 +126,10 @@ Class | Method | HTTP request | Description
 - [AccountDefsContact](docs/Model/AccountDefsContact.md)
 - [AccountDefsContactPropertiesEmail](docs/Model/AccountDefsContactPropertiesEmail.md)
 - [AccountDefsLocationPropertiesNumber](docs/Model/AccountDefsLocationPropertiesNumber.md)
+- [AccountDefsPlatformId](docs/Model/AccountDefsPlatformId.md)
+- [AccountDefsPlatformName](docs/Model/AccountDefsPlatformName.md)
+- [AccountParametersPlatformId](docs/Model/AccountParametersPlatformId.md)
+- [AccountParametersPlatformIdentifier](docs/Model/AccountParametersPlatformIdentifier.md)
 - [AccountDefsPlatformId](docs/Model/AccountDefsPlatformId.md)
 - [AccountDefsPlatformName](docs/Model/AccountDefsPlatformName.md)
 - [AccountParametersPlatformId](docs/Model/AccountParametersPlatformId.md)
@@ -152,6 +165,8 @@ Class | Method | HTTP request | Description
 - [CommonDefsDownloadUrl](docs/Model/CommonDefsDownloadUrl.md)
 - [CommonDefsLatitude](docs/Model/CommonDefsLatitude.md)
 - [CommonDefsLongitude](docs/Model/CommonDefsLongitude.md)
+- [CommonDefsLatitude](docs/Model/CommonDefsLatitude.md)
+- [CommonDefsLongitude](docs/Model/CommonDefsLongitude.md)
 - [CommonDefsPrice](docs/Model/CommonDefsPrice.md)
 - [CommonDefsTimeZoneType](docs/Model/CommonDefsTimeZoneType.md)
 - [CommonErrorSystem](docs/Model/CommonErrorSystem.md)
@@ -163,6 +178,7 @@ Class | Method | HTTP request | Description
 - [CommonHttpStatusCode4xxClientError404NotFound](docs/Model/CommonHttpStatusCode4xxClientError404NotFound.md)
 - [CommonHttpStatusCode4xxClientError406NotAcceptable](docs/Model/CommonHttpStatusCode4xxClientError406NotAcceptable.md)
 - [CommonHttpStatusCode4xxClientError415UnsupportedMediaType](docs/Model/CommonHttpStatusCode4xxClientError415UnsupportedMediaType.md)
+- [CommonHttpStatusCodeError](docs/Model/CommonHttpStatusCodeError.md)
 - [CommonHttpStatusCodeError](docs/Model/CommonHttpStatusCodeError.md)
 - [CommonParametersBigids](docs/Model/CommonParametersBigids.md)
 - [CommonParametersBoolean](docs/Model/CommonParametersBoolean.md)
@@ -189,6 +205,8 @@ Class | Method | HTTP request | Description
 - [CommonResponsesUserErrorNotFoundAllOfErrors](docs/Model/CommonResponsesUserErrorNotFoundAllOfErrors.md)
 - [CommonResponsesUserErrorPermissionDenied](docs/Model/CommonResponsesUserErrorPermissionDenied.md)
 - [CommonResponsesUserErrorPermissionDeniedAllOfErrors](docs/Model/CommonResponsesUserErrorPermissionDeniedAllOfErrors.md)
+- [Error](docs/Model/Error.md)
+- [GetDeliveryOptionsLatitudeParameter](docs/Model/GetDeliveryOptionsLatitudeParameter.md)
 - [Error](docs/Model/Error.md)
 - [GetDeliveryOptionsLatitudeParameter](docs/Model/GetDeliveryOptionsLatitudeParameter.md)
 - [GetIndex200Response](docs/Model/GetIndex200Response.md)
@@ -240,6 +258,8 @@ Class | Method | HTTP request | Description
 - [RefCapabilitiesResponsePhysicalPropertiesPhysicalProperty](docs/Model/RefCapabilitiesResponsePhysicalPropertiesPhysicalProperty.md)
 - [RefCapabilitiesSharedCarrier](docs/Model/RefCapabilitiesSharedCarrier.md)
 - [RefCapabilitiesSharedCarrierV2](docs/Model/RefCapabilitiesSharedCarrierV2.md)
+- [RefCapabilitiesSharedContractV1](docs/Model/RefCapabilitiesSharedContractV1.md)
+- [RefCapabilitiesSharedContractV2](docs/Model/RefCapabilitiesSharedContractV2.md)
 - [RefCapabilitiesSharedOptionsBaseOptionV1](docs/Model/RefCapabilitiesSharedOptionsBaseOptionV1.md)
 - [RefCapabilitiesSharedOptionsBaseOptionV2](docs/Model/RefCapabilitiesSharedOptionsBaseOptionV2.md)
 - [RefCapabilitiesSharedOptionsBaseOptionsV1](docs/Model/RefCapabilitiesSharedOptionsBaseOptionsV1.md)
@@ -305,13 +325,24 @@ Class | Method | HTTP request | Description
 - [RefTypesValueWithUnit](docs/Model/RefTypesValueWithUnit.md)
 - [RefWebhookWebhookV10](docs/Model/RefWebhookWebhookV10.md)
 - [RefWebhookWebhookV11](docs/Model/RefWebhookWebhookV11.md)
+- [RefWebhookWebhookV10](docs/Model/RefWebhookWebhookV10.md)
+- [RefWebhookWebhookV11](docs/Model/RefWebhookWebhookV11.md)
 - [SecondaryShipmentRequest](docs/Model/SecondaryShipmentRequest.md)
 - [SecondaryShipmentResource](docs/Model/SecondaryShipmentResource.md)
+- [ShipmentDefsCarrierLocationType](docs/Model/ShipmentDefsCarrierLocationType.md)
 - [ShipmentDefsCarrierLocationType](docs/Model/ShipmentDefsCarrierLocationType.md)
 - [ShipmentDefsCarrierTrackTraceEvent](docs/Model/ShipmentDefsCarrierTrackTraceEvent.md)
 - [ShipmentDefsCustomsShipmentType](docs/Model/ShipmentDefsCustomsShipmentType.md)
 - [ShipmentDefsDeliveryMomentPropertiesTimeFrame](docs/Model/ShipmentDefsDeliveryMomentPropertiesTimeFrame.md)
 - [ShipmentDefsDeliveryMomentPropertiesType](docs/Model/ShipmentDefsDeliveryMomentPropertiesType.md)
+- [ShipmentDefsDeliveryOptionsDeliveryNameV2](docs/Model/ShipmentDefsDeliveryOptionsDeliveryNameV2.md)
+- [ShipmentDefsDeliveryOptionsDeliveryTimeFrame](docs/Model/ShipmentDefsDeliveryOptionsDeliveryTimeFrame.md)
+- [ShipmentDefsDeliveryOptionsOpeningHours](docs/Model/ShipmentDefsDeliveryOptionsOpeningHours.md)
+- [ShipmentDefsDeliveryOptionsPickup](docs/Model/ShipmentDefsDeliveryOptionsPickup.md)
+- [ShipmentDefsDeliveryOptionsPickupDate](docs/Model/ShipmentDefsDeliveryOptionsPickupDate.md)
+- [ShipmentDefsDeliveryOptionsPickupHoliday](docs/Model/ShipmentDefsDeliveryOptionsPickupHoliday.md)
+- [ShipmentDefsDeliveryOptionsPickupStartTime](docs/Model/ShipmentDefsDeliveryOptionsPickupStartTime.md)
+- [ShipmentDefsDeliveryOptionsPickupTime](docs/Model/ShipmentDefsDeliveryOptionsPickupTime.md)
 - [ShipmentDefsDeliveryOptionsDeliveryNameV2](docs/Model/ShipmentDefsDeliveryOptionsDeliveryNameV2.md)
 - [ShipmentDefsDeliveryOptionsDeliveryTimeFrame](docs/Model/ShipmentDefsDeliveryOptionsDeliveryTimeFrame.md)
 - [ShipmentDefsDeliveryOptionsOpeningHours](docs/Model/ShipmentDefsDeliveryOptionsOpeningHours.md)
@@ -350,6 +381,10 @@ Class | Method | HTTP request | Description
 - [ShipmentDefsTrackTraceProofOfDeliveryAnyOf](docs/Model/ShipmentDefsTrackTraceProofOfDeliveryAnyOf.md)
 - [ShipmentDefsTrackTraceStatus](docs/Model/ShipmentDefsTrackTraceStatus.md)
 - [ShipmentDefsTrackingLocation](docs/Model/ShipmentDefsTrackingLocation.md)
+- [ShipmentParametersCarrierId](docs/Model/ShipmentParametersCarrierId.md)
+- [ShipmentParametersCarrierIdentifier](docs/Model/ShipmentParametersCarrierIdentifier.md)
+- [ShipmentParametersCarrierName](docs/Model/ShipmentParametersCarrierName.md)
+- [ShipmentParametersDeliveryType](docs/Model/ShipmentParametersDeliveryType.md)
 - [ShipmentParametersCarrierId](docs/Model/ShipmentParametersCarrierId.md)
 - [ShipmentParametersCarrierIdentifier](docs/Model/ShipmentParametersCarrierIdentifier.md)
 - [ShipmentParametersCarrierName](docs/Model/ShipmentParametersCarrierName.md)
@@ -419,6 +454,20 @@ Class | Method | HTTP request | Description
 - [ShipmentResponsesDeliveryOptionsV1ErrorsInnerAnyOf](docs/Model/ShipmentResponsesDeliveryOptionsV1ErrorsInnerAnyOf.md)
 - [ShipmentResponsesDeliveryOptionsV2](docs/Model/ShipmentResponsesDeliveryOptionsV2.md)
 - [ShipmentResponsesDeliveryOptionsV2Data](docs/Model/ShipmentResponsesDeliveryOptionsV2Data.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryOptionV1](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryOptionV1.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryOptionV2](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryOptionV2.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryPossibility](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryPossibility.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInner](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInner.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInnerSchema](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInnerSchema.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryPossibilityType](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryPossibilityType.md)
+- [ShipmentResponsesDeliveryOptionsDeliveryTime](docs/Model/ShipmentResponsesDeliveryOptionsDeliveryTime.md)
+- [ShipmentResponsesDeliveryOptionsPackageTypeV2](docs/Model/ShipmentResponsesDeliveryOptionsPackageTypeV2.md)
+- [ShipmentResponsesDeliveryOptionsV1](docs/Model/ShipmentResponsesDeliveryOptionsV1.md)
+- [ShipmentResponsesDeliveryOptionsV1Data](docs/Model/ShipmentResponsesDeliveryOptionsV1Data.md)
+- [ShipmentResponsesDeliveryOptionsV1ErrorsInner](docs/Model/ShipmentResponsesDeliveryOptionsV1ErrorsInner.md)
+- [ShipmentResponsesDeliveryOptionsV1ErrorsInnerAnyOf](docs/Model/ShipmentResponsesDeliveryOptionsV1ErrorsInnerAnyOf.md)
+- [ShipmentResponsesDeliveryOptionsV2](docs/Model/ShipmentResponsesDeliveryOptionsV2.md)
+- [ShipmentResponsesDeliveryOptionsV2Data](docs/Model/ShipmentResponsesDeliveryOptionsV2Data.md)
 - [ShipmentResponsesDownloadableLabel](docs/Model/ShipmentResponsesDownloadableLabel.md)
 - [ShipmentResponsesPaymentInstructions](docs/Model/ShipmentResponsesPaymentInstructions.md)
 - [ShipmentResponsesPaymentInstructionsData](docs/Model/ShipmentResponsesPaymentInstructionsData.md)
@@ -431,6 +480,12 @@ Class | Method | HTTP request | Description
 - [ShipmentResponsesPickupLocationsDefinitionsPossibilitiesInner](docs/Model/ShipmentResponsesPickupLocationsDefinitionsPossibilitiesInner.md)
 - [ShipmentResponsesPickupLocationsDefinitionsPossibilitiesInnerMoment](docs/Model/ShipmentResponsesPickupLocationsDefinitionsPossibilitiesInnerMoment.md)
 - [ShipmentResponsesPickupLocationsDefinitionsTimeframe](docs/Model/ShipmentResponsesPickupLocationsDefinitionsTimeframe.md)
+- [ShipmentResponsesPostShipmentsV12](docs/Model/ShipmentResponsesPostShipmentsV12.md)
+- [ShipmentResponsesPostShipmentsV12Data](docs/Model/ShipmentResponsesPostShipmentsV12Data.md)
+- [ShipmentResponsesPostShipmentsV12DataPdf](docs/Model/ShipmentResponsesPostShipmentsV12DataPdf.md)
+- [ShipmentResponsesPostShipmentsV12DataZpl](docs/Model/ShipmentResponsesPostShipmentsV12DataZpl.md)
+- [ShipmentResponsesPutShipmentsV12](docs/Model/ShipmentResponsesPutShipmentsV12.md)
+- [ShipmentResponsesPutShipmentsV12Data](docs/Model/ShipmentResponsesPutShipmentsV12Data.md)
 - [ShipmentResponsesShipmentIds](docs/Model/ShipmentResponsesShipmentIds.md)
 - [ShipmentResponsesShipmentIdsData](docs/Model/ShipmentResponsesShipmentIdsData.md)
 - [ShipmentResponsesShipmentIdsDataIdsInner](docs/Model/ShipmentResponsesShipmentIdsDataIdsInner.md)
@@ -438,12 +493,17 @@ Class | Method | HTTP request | Description
 - [ShipmentResponsesShipmentLabelsData](docs/Model/ShipmentResponsesShipmentLabelsData.md)
 - [ShipmentResponsesShipmentLabelsDataOneOf](docs/Model/ShipmentResponsesShipmentLabelsDataOneOf.md)
 - [ShipmentResponsesShipmentLabelsDataOneOf1](docs/Model/ShipmentResponsesShipmentLabelsDataOneOf1.md)
-- [ShipmentResponsesShipmentLabelsDataOneOf1Zpl](docs/Model/ShipmentResponsesShipmentLabelsDataOneOf1Zpl.md)
-- [ShipmentResponsesShipmentLabelsDataOneOfPdf](docs/Model/ShipmentResponsesShipmentLabelsDataOneOfPdf.md)
 - [ShipmentResponsesShipments](docs/Model/ShipmentResponsesShipments.md)
 - [ShipmentResponsesShipmentsData](docs/Model/ShipmentResponsesShipmentsData.md)
 - [ShipmentResponsesTracktraces](docs/Model/ShipmentResponsesTracktraces.md)
 - [ShipmentResponsesTracktracesData](docs/Model/ShipmentResponsesTracktracesData.md)
+- [WebhooksPostWebhookSubscriptionsRequestV10](docs/Model/WebhooksPostWebhookSubscriptionsRequestV10.md)
+- [WebhooksPostWebhookSubscriptionsRequestV10Data](docs/Model/WebhooksPostWebhookSubscriptionsRequestV10Data.md)
+- [WebhooksPostWebhookSubscriptionsRequestV11](docs/Model/WebhooksPostWebhookSubscriptionsRequestV11.md)
+- [WebhooksPostWebhookSubscriptionsRequestV11Data](docs/Model/WebhooksPostWebhookSubscriptionsRequestV11Data.md)
+- [WebhooksResponsesPostWebhookSubscriptions](docs/Model/WebhooksResponsesPostWebhookSubscriptions.md)
+- [WebhooksResponsesPostWebhookSubscriptionsData](docs/Model/WebhooksResponsesPostWebhookSubscriptionsData.md)
+- [WebhooksResponsesPostWebhookSubscriptionsDataIdsInner](docs/Model/WebhooksResponsesPostWebhookSubscriptionsDataIdsInner.md)
 - [WebhooksPostWebhookSubscriptionsRequestV10](docs/Model/WebhooksPostWebhookSubscriptionsRequestV10.md)
 - [WebhooksPostWebhookSubscriptionsRequestV10Data](docs/Model/WebhooksPostWebhookSubscriptionsRequestV10Data.md)
 - [WebhooksPostWebhookSubscriptionsRequestV11](docs/Model/WebhooksPostWebhookSubscriptionsRequestV11.md)
@@ -464,6 +524,13 @@ Authentication schemes defined for the API:
 ### bearer
 
 - **Type**: Bearer authentication
+
+### apiKey
+
+- **Type**: API key
+- **API key parameter name**: Authorization
+- **Location**: HTTP header
+
 
 ### apiKey
 

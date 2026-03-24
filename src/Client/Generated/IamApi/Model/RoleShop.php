@@ -1,6 +1,6 @@
 <?php
 /**
- * Platform
+ * RoleShop
  *
  * PHP version 7.4
  *
@@ -30,24 +30,20 @@ namespace MyParcelNL\Sdk\Client\Generated\IamApi\Model;
 use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
 
 /**
- * Platform Class Doc Comment
+ * RoleShop Class Doc Comment
  *
  * @category Class
- * @description The operating platform identifier.
+ * @description The specific role assigned to a shop.
  * @package  MyParcelNL\Sdk\Client\Generated\IamApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class Platform
+class RoleShop
 {
     /**
      * Possible values of this enum
      */
-    public const MYPARCEL_BE = 'MYPARCEL_BE';
-
-    public const MYPARCEL_NL = 'MYPARCEL_NL';
-
-    public const MYPARCEL_IT = 'MYPARCEL_IT';
+    public const SHOP_DEFAULT = 'SHOP_DEFAULT';
 
     /**
      * Gets allowable values of the enum
@@ -56,9 +52,7 @@ class Platform
     public static function getAllowableEnumValues()
     {
         return [
-            self::MYPARCEL_BE,
-            self::MYPARCEL_NL,
-            self::MYPARCEL_IT
+            self::SHOP_DEFAULT
         ];
     }
 }

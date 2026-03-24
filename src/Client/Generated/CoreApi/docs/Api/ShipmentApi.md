@@ -883,7 +883,7 @@ try {
 ## `postShipments()`
 
 ```php
-postShipments($user_agent, $shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject
+postShipments($user_agent, $shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
 ```
 
 Add Shipment
@@ -940,7 +940,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject**](../Model/InlineObject.md)
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12**](../Model/ShipmentResponsesPostShipmentsV12.md)
 
 ### Authorization
 
@@ -949,7 +949,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/vnd.shipment+json;version=1.1`, `application/vnd.shipment+json`, `application/vnd.return_shipment+json`, `application/vnd.unrelated_return_shipment+json`
-- **Accept**: `application/json`, `application/vnd.shipment_label+json`, `application/*`
+- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/vnd.shipment_label+json`, `application/*`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1023,7 +1023,7 @@ try {
 ## `putShipment()`
 
 ```php
-putShipment($user_agent, $shipment_put_shipments_request_v11)
+putShipment($user_agent, $shipment_put_shipments_request_v11): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12
 ```
 
 Update Shipment
@@ -1056,7 +1056,8 @@ $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us ins
 $shipment_put_shipments_request_v11 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11 | Array of Shipment objects.
 
 try {
-    $apiInstance->putShipment($user_agent, $shipment_put_shipments_request_v11);
+    $result = $apiInstance->putShipment($user_agent, $shipment_put_shipments_request_v11);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->putShipment: ', $e->getMessage(), PHP_EOL;
 }
@@ -1071,7 +1072,7 @@ try {
 
 ### Return type
 
-void (empty response body)
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12**](../Model/ShipmentResponsesPutShipmentsV12.md)
 
 ### Authorization
 
@@ -1080,7 +1081,7 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: `application/vnd.shipment+json;version=1.1`, `application/vnd.shipment+json`
-- **Accept**: `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/*`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

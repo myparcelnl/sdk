@@ -59,8 +59,8 @@ class ShipmentResponsesShipmentLabelsData implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'ids' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner[]',
-        'pdf' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOfPdf',
-        'zpl' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOf1Zpl'
+        'pdf' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf',
+        'zpl' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl'
     ];
 
     /**
@@ -343,7 +343,7 @@ class ShipmentResponsesShipmentLabelsData implements ModelInterface, ArrayAccess
     /**
      * Gets pdf
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOfPdf
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf
      */
     public function getPdf()
     {
@@ -353,7 +353,7 @@ class ShipmentResponsesShipmentLabelsData implements ModelInterface, ArrayAccess
     /**
      * Sets pdf
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOfPdf $pdf pdf
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf $pdf pdf
      *
      * @return self
      */
@@ -370,7 +370,7 @@ class ShipmentResponsesShipmentLabelsData implements ModelInterface, ArrayAccess
     /**
      * Gets zpl
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOf1Zpl
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl
      */
     public function getZpl()
     {
@@ -380,7 +380,7 @@ class ShipmentResponsesShipmentLabelsData implements ModelInterface, ArrayAccess
     /**
      * Sets zpl
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOf1Zpl $zpl zpl
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl $zpl zpl
      *
      * @return self
      */
