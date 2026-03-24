@@ -59,7 +59,7 @@ class ShipmentResponsesShipmentLabelsDataOneOf1 implements ModelInterface, Array
       */
     protected static $openAPITypes = [
         'ids' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner[]',
-        'zpl' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOf1Zpl'
+        'zpl' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl'
     ];
 
     /**
@@ -333,7 +333,7 @@ class ShipmentResponsesShipmentLabelsDataOneOf1 implements ModelInterface, Array
     /**
      * Gets zpl
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOf1Zpl
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl
      */
     public function getZpl()
     {
@@ -343,7 +343,7 @@ class ShipmentResponsesShipmentLabelsDataOneOf1 implements ModelInterface, Array
     /**
      * Sets zpl
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOf1Zpl $zpl zpl
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl $zpl zpl
      *
      * @return self
      */

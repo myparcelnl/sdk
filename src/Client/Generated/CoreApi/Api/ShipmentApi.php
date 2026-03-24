@@ -4970,7 +4970,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postShipments($user_agent, $shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, string $contentType = self::contentTypes['postShipments'][0])
     {
@@ -4993,7 +4993,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postShipmentsWithHttpInfo($user_agent, $shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, string $contentType = self::contentTypes['postShipments'][0])
     {
@@ -5024,11 +5024,11 @@ class ShipmentApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -5046,7 +5046,7 @@ class ShipmentApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -5094,7 +5094,7 @@ class ShipmentApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -5127,7 +5127,7 @@ class ShipmentApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject',
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5191,7 +5191,7 @@ class ShipmentApi
      */
     public function postShipmentsAsyncWithHttpInfo($user_agent, $shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, string $contentType = self::contentTypes['postShipments'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12';
         $request = $this->postShipmentsRequest($user_agent, $shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $contentType);
 
         return $this->client
@@ -5321,7 +5321,7 @@ class ShipmentApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', 'application/vnd.shipment_label+json', 'application/*', ],
+            ['application/json;charset=utf-8;version=1.2', 'application/json', 'application/vnd.shipment_label+json', 'application/*', ],
             $contentType,
             $multipart
         );
@@ -5752,11 +5752,12 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function putShipment($user_agent, $shipment_put_shipments_request_v11, string $contentType = self::contentTypes['putShipment'][0])
     {
-        $this->putShipmentWithHttpInfo($user_agent, $shipment_put_shipments_request_v11, $contentType);
+        list($response) = $this->putShipmentWithHttpInfo($user_agent, $shipment_put_shipments_request_v11, $contentType);
+        return $response;
     }
 
     /**
@@ -5770,7 +5771,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function putShipmentWithHttpInfo($user_agent, $shipment_put_shipments_request_v11, string $contentType = self::contentTypes['putShipment'][0])
     {
@@ -5799,10 +5800,116 @@ class ShipmentApi
             $statusCode = $response->getStatusCode();
 
 
-            return [null, $statusCode, $response->getHeaders()];
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                
+                
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
 
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
                 case 415:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -5854,14 +5961,27 @@ class ShipmentApi
      */
     public function putShipmentAsyncWithHttpInfo($user_agent, $shipment_put_shipments_request_v11, string $contentType = self::contentTypes['putShipment'][0])
     {
-        $returnType = '';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12';
         $request = $this->putShipmentRequest($user_agent, $shipment_put_shipments_request_v11, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -5924,7 +6044,7 @@ class ShipmentApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/*', 'application/json', ],
+            ['application/json;charset=utf-8;version=1.2', 'application/json', 'application/*', ],
             $contentType,
             $multipart
         );

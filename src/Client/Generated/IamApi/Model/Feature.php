@@ -33,6 +33,7 @@ use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
  * Feature Class Doc Comment
  *
  * @category Class
+ * @description A feature that is available in the platform.
  * @package  MyParcelNL\Sdk\Client\Generated\IamApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -42,11 +43,19 @@ class Feature
     /**
      * Possible values of this enum
      */
+    public const ORDER_MANAGEMENT = 'ORDER_MANAGEMENT';
+
+    public const LEGACY_ORDER_MANAGEMENT = 'LEGACY_ORDER_MANAGEMENT';
+
     public const AUTO_ORDER_IMPORT = 'AUTO_ORDER_IMPORT';
 
     public const BOL_DOT_COM_VVB_SHIPMENTS = 'BOL_DOT_COM_VVB_SHIPMENTS';
 
     public const CUSTOM_CONTRACTS = 'CUSTOM_CONTRACTS';
+
+    public const DIRECT_PRINTING = 'DIRECT_PRINTING';
+
+    public const DISABLE_LABEL_HEADLINE = 'DISABLE_LABEL_HEADLINE';
 
     public const EXTENDED_SHIPPING_RULES = 'EXTENDED_SHIPPING_RULES';
 
@@ -61,6 +70,8 @@ class Feature
     public const RETURN_LINK_ON_PACKING_SLIP = 'RETURN_LINK_ON_PACKING_SLIP';
 
     public const SAVE_ORDER_SORTING_SETTING = 'SAVE_ORDER_SORTING_SETTING';
+
+    public const SCAN_MODE = 'SCAN_MODE';
 
     public const SHIPMENT_BULK_CREATE_FROM_ADDRESS_BOOK = 'SHIPMENT_BULK_CREATE_FROM_ADDRESS_BOOK';
 
@@ -84,12 +95,6 @@ class Feature
 
     public const UNLIMITED_SHIPPING_RULES = 'UNLIMITED_SHIPPING_RULES';
 
-    public const DIRECT_PRINTING = 'DIRECT_PRINTING';
-
-    public const SCAN_MODE = 'SCAN_MODE';
-
-    public const DISABLE_LABEL_HEADLINE = 'DISABLE_LABEL_HEADLINE';
-
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -97,9 +102,13 @@ class Feature
     public static function getAllowableEnumValues()
     {
         return [
+            self::ORDER_MANAGEMENT,
+            self::LEGACY_ORDER_MANAGEMENT,
             self::AUTO_ORDER_IMPORT,
             self::BOL_DOT_COM_VVB_SHIPMENTS,
             self::CUSTOM_CONTRACTS,
+            self::DIRECT_PRINTING,
+            self::DISABLE_LABEL_HEADLINE,
             self::EXTENDED_SHIPPING_RULES,
             self::NESTED_SHIPMENT_LABEL_ON_PACKING_SLIP,
             self::ORDER_INVOICE,
@@ -107,6 +116,7 @@ class Feature
             self::ORDER_PICKLIST,
             self::RETURN_LINK_ON_PACKING_SLIP,
             self::SAVE_ORDER_SORTING_SETTING,
+            self::SCAN_MODE,
             self::SHIPMENT_BULK_CREATE_FROM_ADDRESS_BOOK,
             self::SHIPMENT_BULK_EDITS,
             self::SHIPMENT_DISCOUNT,
@@ -117,10 +127,7 @@ class Feature
             self::TIER4_ANALYTICS,
             self::TRACK_TRACE_EMAIL_SECONDARY_RECIPIENTS,
             self::UNLIMITED_SHIPMENTS_PER_ORDER_LINE,
-            self::UNLIMITED_SHIPPING_RULES,
-            self::DIRECT_PRINTING,
-            self::SCAN_MODE,
-            self::DISABLE_LABEL_HEADLINE
+            self::UNLIMITED_SHIPPING_RULES
         ];
     }
 }

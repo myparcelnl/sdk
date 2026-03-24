@@ -58,7 +58,7 @@ class CreateOrderFromShippablePackagesAnyOf1Multicollo implements ModelInterface
       */
     protected static $openAPITypes = [
         'packages' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageCommon[]',
-        'shipment' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateOrderFromShippablePackagesAnyOf1MulticolloShipment'
+        'shipment' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippablePackageShipment'
     ];
 
     /**
@@ -347,7 +347,7 @@ class CreateOrderFromShippablePackagesAnyOf1Multicollo implements ModelInterface
     /**
      * Gets shipment
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateOrderFromShippablePackagesAnyOf1MulticolloShipment
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippablePackageShipment
      */
     public function getShipment()
     {
@@ -357,7 +357,7 @@ class CreateOrderFromShippablePackagesAnyOf1Multicollo implements ModelInterface
     /**
      * Sets shipment
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateOrderFromShippablePackagesAnyOf1MulticolloShipment $shipment shipment
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippablePackageShipment $shipment shipment
      *
      * @return self
      */

@@ -131,7 +131,7 @@ class DefaultApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\IamApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response
+     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal
      */
     public function whoamiGet(string $contentType = self::contentTypes['whoamiGet'][0])
     {
@@ -148,7 +148,7 @@ class DefaultApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\IamApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal, HTTP status code, HTTP response headers (array of strings)
      */
     public function whoamiGetWithHttpInfo(string $contentType = self::contentTypes['whoamiGet'][0])
     {
@@ -179,11 +179,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -201,7 +201,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -220,7 +220,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -253,7 +253,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response',
+                        '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -295,7 +295,7 @@ class DefaultApi
      */
     public function whoamiGetAsyncWithHttpInfo(string $contentType = self::contentTypes['whoamiGet'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal';
         $request = $this->whoamiGetRequest($contentType);
 
         return $this->client

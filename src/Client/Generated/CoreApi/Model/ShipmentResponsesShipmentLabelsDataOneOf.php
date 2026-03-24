@@ -59,7 +59,7 @@ class ShipmentResponsesShipmentLabelsDataOneOf implements ModelInterface, ArrayA
       */
     protected static $openAPITypes = [
         'ids' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner[]',
-        'pdf' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOfPdf'
+        'pdf' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf'
     ];
 
     /**
@@ -333,7 +333,7 @@ class ShipmentResponsesShipmentLabelsDataOneOf implements ModelInterface, ArrayA
     /**
      * Gets pdf
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOfPdf
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf
      */
     public function getPdf()
     {
@@ -343,7 +343,7 @@ class ShipmentResponsesShipmentLabelsDataOneOf implements ModelInterface, ArrayA
     /**
      * Sets pdf
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentLabelsDataOneOfPdf $pdf pdf
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf $pdf pdf
      *
      * @return self
      */

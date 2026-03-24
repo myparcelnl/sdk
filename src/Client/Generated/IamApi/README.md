@@ -88,9 +88,12 @@ Class | Method | HTTP request | Description
 - [FulfilmentPlatform](docs/Model/FulfilmentPlatform.md)
 - [Platform](docs/Model/Platform.md)
 - [Principal](docs/Model/Principal.md)
-- [Role](docs/Model/Role.md)
-- [WhoamiGet200Response](docs/Model/WhoamiGet200Response.md)
-- [WhoamiGet200ResponseImpersonator](docs/Model/WhoamiGet200ResponseImpersonator.md)
+- [PrincipalCommon](docs/Model/PrincipalCommon.md)
+- [PrincipalShop](docs/Model/PrincipalShop.md)
+- [PrincipalType](docs/Model/PrincipalType.md)
+- [PrincipalUser](docs/Model/PrincipalUser.md)
+- [RoleShop](docs/Model/RoleShop.md)
+- [RoleUser](docs/Model/RoleUser.md)
 
 ## Authorization
 

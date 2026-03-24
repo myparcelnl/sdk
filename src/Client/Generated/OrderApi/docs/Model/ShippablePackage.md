@@ -4,6 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclaration**](CustomsDeclaration.md) |  | [optional]
+**options** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsPackage**](ShipmentOptionsPackage.md) |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequired**](PhysicalPropertiesWeightRequired.md) |  | [optional]
 **shipment** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippablePackageShipment**](ShippablePackageShipment.md) |  |
 

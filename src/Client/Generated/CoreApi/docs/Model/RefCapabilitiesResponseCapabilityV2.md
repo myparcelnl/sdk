@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2**](RefCapabilitiesSharedCarrierV2.md) |  |
+**contract** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV2**](RefCapabilitiesSharedContractV2.md) |  | [optional]
 **package_types** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2[]**](RefShipmentPackageTypeV2.md) |  |
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2**](RefCapabilitiesResponseOptionsOptionsV2.md) |  |
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponsePhysicalPropertiesPhysicalProperties**](RefCapabilitiesResponsePhysicalPropertiesPhysicalProperties.md) |  |
