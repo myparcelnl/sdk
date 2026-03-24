@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.11](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.10...v11.0.0-beta.11) (2026-03-24)
+
+
+### :bug: Bug Fixes
+
+* **v11:** security fix tar vulnerability and update @myparcel-dev/semantic-release-config ([#600](https://github.com/myparcelnl/sdk/issues/600)) ([60bda93](https://github.com/myparcelnl/sdk/commit/60bda93a68c776c4e8c5202a3c058192a9ed4f1e))
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#603](https://github.com/myparcelnl/sdk/issues/603)) ([bd4342c](https://github.com/myparcelnl/sdk/commit/bd4342ce6c350cdd2f7941fc90ca102050abb4fa))
+* **api:** update API clients ([#604](https://github.com/myparcelnl/sdk/issues/604)) ([625b153](https://github.com/myparcelnl/sdk/commit/625b15398ddc2f604c560b337b11d39dcf39f5bc))
+* introduce shipment query, delete, return and multi-collo services ([#596](https://github.com/myparcelnl/sdk/issues/596)) ([1c8bbda](https://github.com/myparcelnl/sdk/commit/1c8bbdae5f6baf10eb47bf0aaebb728f388564cb))
+
 ## [11.0.0-beta.10](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.9...v11.0.0-beta.10) (2026-03-18)
 
 
