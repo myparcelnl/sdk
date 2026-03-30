@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Concerns;
 
 use Exception;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Services\CountryCodes;
 
 trait HasCountry
 {
@@ -45,7 +45,7 @@ trait HasCountry
     {
         return in_array(
             $this->getCountry(),
-            AbstractConsignment::EURO_COUNTRIES
+            CountryCodes::EU_COUNTRIES
         );
     }
 

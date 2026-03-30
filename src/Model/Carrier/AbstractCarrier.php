@@ -6,10 +6,8 @@ namespace MyParcelNL\Sdk\Model\Carrier;
 
 abstract class AbstractCarrier
 {
-    /**
-     * @var class-string
-     */
-    protected $consignmentClass;
+    public const TYPE_B2C = 'b2c';
+    public const TYPE_B2B = 'b2b';
 
     /**
      * @var string
@@ -30,14 +28,6 @@ abstract class AbstractCarrier
      * @var string
      */
     protected $type;
-
-    /**
-     * @return class-string<\MyParcelNL\Sdk\Model\Consignment\AbstractConsignment>
-     */
-    public function getConsignmentClass(): string
-    {
-        return $this->consignmentClass;
-    }
 
     /**
      * The human-readable name of the carrier.

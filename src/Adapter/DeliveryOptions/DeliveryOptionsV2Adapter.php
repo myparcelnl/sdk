@@ -3,7 +3,6 @@
 namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
 use Exception;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
 {
@@ -43,6 +42,6 @@ class DeliveryOptionsV2Adapter extends AbstractDeliveryOptionsAdapter
      */
     private function normalizeDeliveryType(int $deliveryType): string
     {
-        return array_flip(AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP)[$deliveryType];
+        return array_flip(self::DELIVERY_TYPES_NAMES_IDS_MAP)[$deliveryType];
     }
 }
