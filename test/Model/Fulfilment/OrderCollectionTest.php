@@ -10,8 +10,6 @@ use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\Model\Fulfilment\Product;
@@ -96,8 +94,8 @@ class OrderCollectionTest extends TestCase
                 [
                     'carrier'      => CarrierPostNL::NAME,
                     'date'         => (new DateTime())->format('Y-m-d H:i:s'),
-                    'deliveryType' => AbstractConsignment::DELIVERY_TYPES_NAMES[$i],
-                    'packageType'  => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+                    'deliveryType' => array_keys(AbstractDeliveryOptionsAdapter::DELIVERY_TYPES_NAMES_IDS_MAP)[$i],
+                    'packageType'  => AbstractDeliveryOptionsAdapter::PACKAGE_TYPE_PACKAGE_NAME,
                 ]
             );
 
