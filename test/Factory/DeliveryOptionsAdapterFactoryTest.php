@@ -8,7 +8,8 @@ use BadMethodCallException;
 use DateTime;
 use MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
+use MyParcelNL\Sdk\Services\CountryCodes;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class DeliveryOptionsAdapterFactoryTest extends TestCase
@@ -26,7 +27,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                 'date'    => $date,
                 'time'    => [
                     [
-                        'type' => AbstractConsignment::DELIVERY_TYPE_STANDARD,
+                        'type' => AbstractDeliveryOptionsAdapter::DELIVERY_TYPE_STANDARD,
                     ],
                 ],
                 'options' => [
@@ -40,7 +41,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                 'date'              => $date,
                 'time'              => [
                     [
-                        'type' => AbstractConsignment::DELIVERY_TYPE_PICKUP,
+                        'type' => AbstractDeliveryOptionsAdapter::DELIVERY_TYPE_PICKUP,
                     ],
                 ],
                 'options'           => [
@@ -48,7 +49,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'only_recipient' => true,
                     'insurance'      => 5000,
                 ],
-                'cc'                => AbstractConsignment::CC_NL,
+                'cc'                => CountryCodes::CC_NL,
                 'city'              => 'Hoofddorp',
                 'location_code'     => '123456',
                 'location_name'     => 'Primera Sanders',
@@ -60,8 +61,8 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
             'DeliveryOptionsV3Adapter'                  => [
                 'carrier'         => CarrierPostNL::NAME,
                 'date'            => $date,
-                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
-                'packageType'     => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+                'deliveryType'    => AbstractDeliveryOptionsAdapter::DELIVERY_TYPE_STANDARD_NAME,
+                'packageType'     => AbstractDeliveryOptionsAdapter::PACKAGE_TYPE_PACKAGE_NAME,
                 'shipmentOptions' => [
                     'signature'         => true,
                     'only_recipient'    => true,
@@ -76,8 +77,8 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
             'DeliveryOptionsV3Adapter with pickup'      => [
                 'carrier'         => CarrierPostNL::NAME,
                 'date'            => $date,
-                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
-                'packageType'     => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+                'deliveryType'    => AbstractDeliveryOptionsAdapter::DELIVERY_TYPE_PICKUP_NAME,
+                'packageType'     => AbstractDeliveryOptionsAdapter::PACKAGE_TYPE_PACKAGE_NAME,
                 'shipmentOptions' => [
                     'signature'         => true,
                     'only_recipient'    => true,
@@ -88,7 +89,7 @@ class DeliveryOptionsAdapterFactoryTest extends TestCase
                     'label_description' => $this->faker->words(3, true),
                 ],
                 'pickupLocation'  => [
-                    'country'           => AbstractConsignment::CC_NL,
+                    'country'           => CountryCodes::CC_NL,
                     'location_code'     => '123456',
                     'retail_network_id' => 'PNPNL-01',
                     'location_name'     => 'Primera Sanders',
