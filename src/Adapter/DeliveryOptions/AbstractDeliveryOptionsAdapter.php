@@ -3,10 +3,50 @@
 namespace MyParcelNL\Sdk\Adapter\DeliveryOptions;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 abstract class AbstractDeliveryOptionsAdapter
 {
+    public const DELIVERY_TYPE_MORNING       = 1;
+    public const DELIVERY_TYPE_STANDARD      = 2;
+    public const DELIVERY_TYPE_EVENING       = 3;
+    public const DELIVERY_TYPE_PICKUP        = 4;
+    public const DELIVERY_TYPE_EXPRESS       = 7;
+    public const DELIVERY_TYPE_MORNING_NAME  = 'morning';
+    public const DELIVERY_TYPE_STANDARD_NAME = 'standard';
+    public const DELIVERY_TYPE_EVENING_NAME  = 'evening';
+    public const DELIVERY_TYPE_PICKUP_NAME   = 'pickup';
+    public const DELIVERY_TYPE_EXPRESS_NAME  = 'express';
+
+    public const DELIVERY_TYPES_NAMES_IDS_MAP
+        = [
+            self::DELIVERY_TYPE_MORNING_NAME  => self::DELIVERY_TYPE_MORNING,
+            self::DELIVERY_TYPE_STANDARD_NAME => self::DELIVERY_TYPE_STANDARD,
+            self::DELIVERY_TYPE_EVENING_NAME  => self::DELIVERY_TYPE_EVENING,
+            self::DELIVERY_TYPE_PICKUP_NAME   => self::DELIVERY_TYPE_PICKUP,
+            self::DELIVERY_TYPE_EXPRESS_NAME  => self::DELIVERY_TYPE_EXPRESS,
+        ];
+
+    public const PACKAGE_TYPE_PACKAGE       = 1;
+    public const PACKAGE_TYPE_MAILBOX       = 2;
+    public const PACKAGE_TYPE_LETTER        = 3;
+    public const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+    public const PACKAGE_TYPE_PACKAGE_SMALL = 6;
+
+    public const PACKAGE_TYPE_PACKAGE_NAME       = 'package';
+    public const PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
+    public const PACKAGE_TYPE_LETTER_NAME        = 'letter';
+    public const PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
+    public const PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
+
+    public const PACKAGE_TYPES_NAMES_IDS_MAP
+        = [
+            self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE,
+            self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX,
+            self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER,
+            self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP,
+            self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL,
+        ];
+
     /**
      * @var string|null
      */
@@ -79,7 +119,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getDeliveryTypeId(): ?int
     {
-        return AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType] ?? null;
+        return self::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType] ?? null;
     }
 
     /**
@@ -95,7 +135,7 @@ abstract class AbstractDeliveryOptionsAdapter
      */
     public function getPackageTypeId(): ?int
     {
-        return AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType] ?? null;
+        return self::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType] ?? null;
     }
 
     /**
@@ -123,7 +163,7 @@ abstract class AbstractDeliveryOptionsAdapter
             return false;
         }
 
-        return AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME == $this->deliveryType;
+        return self::DELIVERY_TYPE_PICKUP_NAME == $this->deliveryType;
     }
 
     /**

@@ -5,15 +5,16 @@ namespace MyParcelNL\Sdk\Model;
 use MyParcelNL\Sdk\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
 class PrinterlessReturnRequest extends MyParcelRequest
 {
-    private AbstractConsignment $consignment;
+    private string $apiKey;
+    private int $consignmentId;
 
-    public function __construct(AbstractConsignment $consignment)
+    public function __construct(string $apiKey, int $consignmentId)
     {
-        $this->consignment = $consignment;
+        $this->apiKey = $apiKey;
+        $this->consignmentId = $consignmentId;
     }
 
     /**
@@ -24,11 +25,11 @@ class PrinterlessReturnRequest extends MyParcelRequest
      */
     public function send()
     {
-        $this->setApiKey($this->consignment->getApiKey())
+        $this->setApiKey($this->apiKey)
              ->setHeaders(
                  MyParcelRequest::HEADER_ACCEPT_IMAGE_PNG + MyParcelRequest::HEADER_CONTENT_TYPE_UNRELATED_RETURN_SHIPMENT
              )
-             ->sendRequest('GET', "printerless_return_label/{$this->consignment->getConsignmentId()}")
+             ->sendRequest('GET', "printerless_return_label/{$this->consignmentId}")
         ;
 
         return $this->getResult();

@@ -4,19 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\Model\Consignment\BpostConsignment;
-
 class CarrierBpost extends AbstractCarrier
 {
-    public const CONSIGNMENT = BpostConsignment::class;
-    public const HUMAN       = 'bpost';
-    public const ID          = 2;
-    public const NAME        = 'bpost';
-
-    /**
-     * @var class-string
-     */
-    protected $consignmentClass = self::CONSIGNMENT;
+    public const HUMAN = 'bpost';
+    public const ID    = 2;
+    public const NAME  = 'bpost';
 
     /**
      * @var string
