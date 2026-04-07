@@ -59,6 +59,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
       */
     protected static $openAPITypes = [
         'shop_id' => 'int',
+        'contract_id' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2',
@@ -80,6 +81,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
       */
     protected static $openAPIFormats = [
         'shop_id' => null,
+        'contract_id' => null,
         'recipient' => null,
         'sender' => null,
         'pickup' => null,
@@ -99,6 +101,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
       */
     protected static array $openAPINullables = [
         'shop_id' => false,
+        'contract_id' => false,
         'recipient' => false,
         'sender' => false,
         'pickup' => false,
@@ -198,6 +201,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      */
     protected static $attributeMap = [
         'shop_id' => 'shopId',
+        'contract_id' => 'contractId',
         'recipient' => 'recipient',
         'sender' => 'sender',
         'pickup' => 'pickup',
@@ -217,6 +221,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      */
     protected static $setters = [
         'shop_id' => 'setShopId',
+        'contract_id' => 'setContractId',
         'recipient' => 'setRecipient',
         'sender' => 'setSender',
         'pickup' => 'setPickup',
@@ -236,6 +241,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
      */
     protected static $getters = [
         'shop_id' => 'getShopId',
+        'contract_id' => 'getContractId',
         'recipient' => 'getRecipient',
         'sender' => 'getSender',
         'pickup' => 'getPickup',
@@ -289,6 +295,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         return self::$openAPIModelName;
     }
 
+    public const DELIVERY_TYPE_EARLY_MORNING_DELIVERY = 'EARLY_MORNING_DELIVERY';
     public const DELIVERY_TYPE_EVENING_DELIVERY = 'EVENING_DELIVERY';
     public const DELIVERY_TYPE_EXPRESS_DELIVERY = 'EXPRESS_DELIVERY';
     public const DELIVERY_TYPE_MORNING_DELIVERY = 'MORNING_DELIVERY';
@@ -306,6 +313,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     public function getDeliveryTypeAllowableValues()
     {
         return [
+            self::DELIVERY_TYPE_EARLY_MORNING_DELIVERY,
             self::DELIVERY_TYPE_EVENING_DELIVERY,
             self::DELIVERY_TYPE_EXPRESS_DELIVERY,
             self::DELIVERY_TYPE_MORNING_DELIVERY,
@@ -344,6 +352,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     public function __construct(?array $data = null)
     {
         $this->setIfExists('shop_id', $data ?? [], null);
+        $this->setIfExists('contract_id', $data ?? [], null);
         $this->setIfExists('recipient', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
@@ -452,6 +461,33 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
             throw new \InvalidArgumentException('non-nullable shop_id cannot be null');
         }
         $this->container['shop_id'] = $shop_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets contract_id
+     *
+     * @return int|null
+     */
+    public function getContractId()
+    {
+        return $this->container['contract_id'];
+    }
+
+    /**
+     * Sets contract_id
+     *
+     * @param int|null $contract_id The ID of the contract for which the rates are requested.
+     *
+     * @return self
+     */
+    public function setContractId($contract_id)
+    {
+        if (is_null($contract_id)) {
+            throw new \InvalidArgumentException('non-nullable contract_id cannot be null');
+        }
+        $this->container['contract_id'] = $contract_id;
 
         return $this;
     }

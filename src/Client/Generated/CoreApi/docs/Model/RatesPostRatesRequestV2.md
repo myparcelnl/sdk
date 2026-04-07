@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **shop_id** | **int** | The ID of the shop for which the rates are requested. | [optional]
+**contract_id** | **int** | The ID of the contract for which the rates are requested. | [optional]
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2**](CapabilitiesRecipientV2.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2**](CapabilitiesSenderV2.md) |  | [optional]
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2**](RefShipmentPickupV2.md) |  | [optional]

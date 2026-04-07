@@ -59,9 +59,10 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
       */
     protected static $openAPITypes = [
         'shop_id' => 'int',
+        'contract_id' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender',
-        'pickup' => 'Null',
+        'pickup' => 'mixed',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties',
@@ -81,6 +82,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
       */
     protected static $openAPIFormats = [
         'shop_id' => null,
+        'contract_id' => null,
         'recipient' => null,
         'sender' => null,
         'pickup' => null,
@@ -101,6 +103,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
       */
     protected static array $openAPINullables = [
         'shop_id' => false,
+        'contract_id' => false,
         'recipient' => false,
         'sender' => false,
         'pickup' => false,
@@ -201,6 +204,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      */
     protected static $attributeMap = [
         'shop_id' => 'shop_id',
+        'contract_id' => 'contract_id',
         'recipient' => 'recipient',
         'sender' => 'sender',
         'pickup' => 'pickup',
@@ -221,6 +225,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      */
     protected static $setters = [
         'shop_id' => 'setShopId',
+        'contract_id' => 'setContractId',
         'recipient' => 'setRecipient',
         'sender' => 'setSender',
         'pickup' => 'setPickup',
@@ -241,6 +246,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
      */
     protected static $getters = [
         'shop_id' => 'getShopId',
+        'contract_id' => 'getContractId',
         'recipient' => 'getRecipient',
         'sender' => 'getSender',
         'pickup' => 'getPickup',
@@ -381,6 +387,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     public function __construct(?array $data = null)
     {
         $this->setIfExists('shop_id', $data ?? [], null);
+        $this->setIfExists('contract_id', $data ?? [], null);
         $this->setIfExists('recipient', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
@@ -504,6 +511,33 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     }
 
     /**
+     * Gets contract_id
+     *
+     * @return int|null
+     */
+    public function getContractId()
+    {
+        return $this->container['contract_id'];
+    }
+
+    /**
+     * Sets contract_id
+     *
+     * @param int|null $contract_id The ID of the contract for which the rates are requested.
+     *
+     * @return self
+     */
+    public function setContractId($contract_id)
+    {
+        if (is_null($contract_id)) {
+            throw new \InvalidArgumentException('non-nullable contract_id cannot be null');
+        }
+        $this->container['contract_id'] = $contract_id;
+
+        return $this;
+    }
+
+    /**
      * Gets recipient
      *
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient
@@ -560,7 +594,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Gets pickup
      *
-     * @return Null|null
+     * @return mixed|null
      */
     public function getPickup()
     {
@@ -570,7 +604,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Sets pickup
      *
-     * @param Null|null $pickup pickup
+     * @param mixed|null $pickup pickup
      *
      * @return self
      */

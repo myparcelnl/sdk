@@ -80,6 +80,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**editNotePost**](docs/Api/DefaultApi.md#editnotepost) | **POST** /edit-note | Edit a note of an order.
 *DefaultApi* | [**importPost**](docs/Api/DefaultApi.md#importpost) | **POST** /import | Import an order after it is discovered from a sales channel.
 *DefaultApi* | [**ordersGet**](docs/Api/DefaultApi.md#ordersget) | **GET** /orders | Query and/or filter orders.
+*DefaultApi* | [**picklistGet**](docs/Api/DefaultApi.md#picklistget) | **GET** /picklist | Generate a picklist for 1 or more orders.
 *DefaultApi* | [**preparePackagesForShipmentPost**](docs/Api/DefaultApi.md#preparepackagesforshipmentpost) | **POST** /prepare-packages-for-shipment | Prepares packages for shipment
 *DefaultApi* | [**removeNotesPost**](docs/Api/DefaultApi.md#removenotespost) | **POST** /remove-notes | Remove notes from an order.
 *DefaultApi* | [**unassignFromUserPost**](docs/Api/DefaultApi.md#unassignfromuserpost) | **POST** /unassign-from-user | 

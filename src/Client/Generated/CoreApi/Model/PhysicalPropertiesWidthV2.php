@@ -59,7 +59,7 @@ class PhysicalPropertiesWidthV2 implements ModelInterface, ArrayAccess, \JsonSer
       * @var string[]
       */
     protected static $openAPITypes = [
-        'value' => 'float',
+        'value' => 'int',
         'unit' => 'string'
     ];
 
@@ -339,7 +339,7 @@ class PhysicalPropertiesWidthV2 implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets value
      *
-     * @return float
+     * @return int
      */
     public function getValue()
     {
@@ -349,7 +349,7 @@ class PhysicalPropertiesWidthV2 implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets value
      *
-     * @param float $value The width value
+     * @param int $value The width value
      *
      * @return self
      */

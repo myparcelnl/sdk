@@ -288,8 +288,8 @@ class ShipmentMulticollo implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['total_packages'] === null) {
             $invalidProperties[] = "'total_packages' can't be null";
         }
-        if (($this->container['total_packages'] > 10)) {
-            $invalidProperties[] = "invalid value for 'total_packages', must be smaller than or equal to 10.";
+        if (($this->container['total_packages'] > 20)) {
+            $invalidProperties[] = "invalid value for 'total_packages', must be smaller than or equal to 20.";
         }
 
         if (($this->container['total_packages'] < 2)) {
@@ -361,8 +361,8 @@ class ShipmentMulticollo implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable total_packages cannot be null');
         }
 
-        if (($total_packages > 10)) {
-            throw new \InvalidArgumentException('invalid value for $total_packages when calling ShipmentMulticollo., must be smaller than or equal to 10.');
+        if (($total_packages > 20)) {
+            throw new \InvalidArgumentException('invalid value for $total_packages when calling ShipmentMulticollo., must be smaller than or equal to 20.');
         }
         if (($total_packages < 2)) {
             throw new \InvalidArgumentException('invalid value for $total_packages when calling ShipmentMulticollo., must be bigger than or equal to 2.');

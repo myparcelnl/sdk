@@ -59,7 +59,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'reference_identifier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier'
+        'reference_identifier' => 'string'
     ];
 
     /**
@@ -333,7 +333,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
     /**
      * Gets reference_identifier
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier
+     * @return string
      */
     public function getReferenceIdentifier()
     {
@@ -343,7 +343,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
     /**
      * Sets reference_identifier
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier $reference_identifier reference_identifier
+     * @param string $reference_identifier reference_identifier
      *
      * @return self
      */

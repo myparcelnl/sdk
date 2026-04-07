@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **city** | **string** |  |
 **street** | **string** |  |
 **street_additional_info** | **string** |  | [optional]
-**number** | [**Null**](Null.md) |  | [optional]
+**number** | [**mixed**](Null.md) |  | [optional]
 **number_suffix** | **string** |  | [optional]
 **box_number** | **string** |  | [optional]
 **person** | **string** |  |

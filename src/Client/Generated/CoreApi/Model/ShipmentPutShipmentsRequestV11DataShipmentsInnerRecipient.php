@@ -65,7 +65,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
         'city' => 'string',
         'street' => 'string',
         'street_additional_info' => 'string',
-        'number' => 'Null',
+        'number' => 'mixed',
         'number_suffix' => 'string',
         'box_number' => 'string',
         'person' => 'string',
@@ -693,7 +693,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
     /**
      * Gets number
      *
-     * @return Null|null
+     * @return mixed|null
      */
     public function getNumber()
     {
@@ -703,7 +703,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerRecipient implements Model
     /**
      * Sets number
      *
-     * @param Null|null $number number
+     * @param mixed|null $number number
      *
      * @return self
      */

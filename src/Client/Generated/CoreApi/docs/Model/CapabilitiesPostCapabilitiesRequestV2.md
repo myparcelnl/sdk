@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **shop_id** | **int** | The ID of the shop for which the capabilities are requested. | [optional]
+**contract_id** | **int** | The ID of the contract for which the capabilities are requested. | [optional]
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2**](CapabilitiesRecipientV2.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2**](CapabilitiesSenderV2.md) |  | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2**](RefCapabilitiesSharedCarrierV2.md) |  | [optional]
