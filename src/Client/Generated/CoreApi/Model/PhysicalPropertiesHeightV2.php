@@ -59,7 +59,7 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
       * @var string[]
       */
     protected static $openAPITypes = [
-        'value' => 'float',
+        'value' => 'int',
         'unit' => 'string'
     ];
 
@@ -339,7 +339,7 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Gets value
      *
-     * @return float
+     * @return int
      */
     public function getValue()
     {
@@ -349,7 +349,7 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets value
      *
-     * @param float $value The height value
+     * @param int $value The height value
      *
      * @return self
      */

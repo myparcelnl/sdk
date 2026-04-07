@@ -237,6 +237,8 @@ class ExternalReferenceEcommercePlatform implements ModelInterface, ArrayAccess,
 
     public const NAME_BOL = 'BOL';
     public const NAME_LIGHTSPEED = 'LIGHTSPEED';
+    public const NAME_MAGENTO = 'MAGENTO';
+    public const NAME_PRESTA = 'PRESTA';
     public const NAME_SHOPIFY = 'SHOPIFY';
     public const NAME_WOOCOMMERCE = 'WOOCOMMERCE';
 
@@ -250,6 +252,8 @@ class ExternalReferenceEcommercePlatform implements ModelInterface, ArrayAccess,
         return [
             self::NAME_BOL,
             self::NAME_LIGHTSPEED,
+            self::NAME_MAGENTO,
+            self::NAME_PRESTA,
             self::NAME_SHOPIFY,
             self::NAME_WOOCOMMERCE,
         ];

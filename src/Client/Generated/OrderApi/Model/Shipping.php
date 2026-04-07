@@ -353,8 +353,8 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'custom_contract_id', the character length must be bigger than or equal to 1.";
         }
 
-        if (!is_null($this->container['number_of_labels']) && ($this->container['number_of_labels'] > 10)) {
-            $invalidProperties[] = "invalid value for 'number_of_labels', must be smaller than or equal to 10.";
+        if (!is_null($this->container['number_of_labels']) && ($this->container['number_of_labels'] > 20)) {
+            $invalidProperties[] = "invalid value for 'number_of_labels', must be smaller than or equal to 20.";
         }
 
         if (!is_null($this->container['number_of_labels']) && ($this->container['number_of_labels'] < 1)) {
@@ -568,8 +568,8 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable number_of_labels cannot be null');
         }
 
-        if (($number_of_labels > 10)) {
-            throw new \InvalidArgumentException('invalid value for $number_of_labels when calling Shipping., must be smaller than or equal to 10.');
+        if (($number_of_labels > 20)) {
+            throw new \InvalidArgumentException('invalid value for $number_of_labels when calling Shipping., must be smaller than or equal to 20.');
         }
         if (($number_of_labels < 1)) {
             throw new \InvalidArgumentException('invalid value for $number_of_labels when calling Shipping., must be bigger than or equal to 1.');

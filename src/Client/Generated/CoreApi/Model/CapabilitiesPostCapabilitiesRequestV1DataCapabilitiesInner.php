@@ -59,6 +59,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
       */
     protected static $openAPITypes = [
         'shop_id' => 'int',
+        'contract_id' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier',
@@ -80,6 +81,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
       */
     protected static $openAPIFormats = [
         'shop_id' => null,
+        'contract_id' => null,
         'recipient' => null,
         'sender' => null,
         'carrier_id' => null,
@@ -99,6 +101,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
       */
     protected static array $openAPINullables = [
         'shop_id' => false,
+        'contract_id' => false,
         'recipient' => false,
         'sender' => false,
         'carrier_id' => false,
@@ -198,6 +201,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      */
     protected static $attributeMap = [
         'shop_id' => 'shop_id',
+        'contract_id' => 'contract_id',
         'recipient' => 'recipient',
         'sender' => 'sender',
         'carrier_id' => 'carrier_id',
@@ -217,6 +221,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      */
     protected static $setters = [
         'shop_id' => 'setShopId',
+        'contract_id' => 'setContractId',
         'recipient' => 'setRecipient',
         'sender' => 'setSender',
         'carrier_id' => 'setCarrierId',
@@ -236,6 +241,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
      */
     protected static $getters = [
         'shop_id' => 'getShopId',
+        'contract_id' => 'getContractId',
         'recipient' => 'getRecipient',
         'sender' => 'getSender',
         'carrier_id' => 'getCarrierId',
@@ -398,6 +404,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     public function __construct(?array $data = null)
     {
         $this->setIfExists('shop_id', $data ?? [], null);
+        $this->setIfExists('contract_id', $data ?? [], null);
         $this->setIfExists('recipient', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
         $this->setIfExists('carrier_id', $data ?? [], null);
@@ -514,6 +521,33 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
             throw new \InvalidArgumentException('non-nullable shop_id cannot be null');
         }
         $this->container['shop_id'] = $shop_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets contract_id
+     *
+     * @return int|null
+     */
+    public function getContractId()
+    {
+        return $this->container['contract_id'];
+    }
+
+    /**
+     * Sets contract_id
+     *
+     * @param int|null $contract_id The ID of the contract for which the capabilities are requested.
+     *
+     * @return self
+     */
+    public function setContractId($contract_id)
+    {
+        if (is_null($contract_id)) {
+            throw new \InvalidArgumentException('non-nullable contract_id cannot be null');
+        }
+        $this->container['contract_id'] = $contract_id;
 
         return $this;
     }
