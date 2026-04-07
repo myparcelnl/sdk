@@ -64,14 +64,14 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'shop_id' => 'int',
         'shipment_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentType',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRecipient',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender',
         'status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesOptions',
         'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettings',
-        'pickup' => 'Null',
+        'pickup' => 'mixed',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
-        'physical_properties' => 'Null',
-        'reference_identifier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier',
+        'physical_properties' => 'mixed',
+        'reference_identifier' => 'string',
         'transaction_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus',
         'drop_off_point' => 'mixed',
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
@@ -85,7 +85,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'platform_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId',
         'origin' => 'string',
         'user_agent' => 'string',
-        'secondary_shipments' => 'Null',
+        'secondary_shipments' => 'mixed',
         'collection_contact' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact',
         'multi_collo_main_shipment_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId',
         'external_identifier' => 'string',
@@ -98,7 +98,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'partner_tracktraces' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPartnerTracktracesInner[]',
         'pickup_request_number' => 'string',
         'order_shipment_identifier' => 'string',
-        'shipped_items' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\Null[]',
+        'shipped_items' => 'mixed[]',
         'created' => 'string',
         'modified' => 'string',
         'created_by' => 'int',
@@ -902,7 +902,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender
      */
     public function getSender()
     {
@@ -912,7 +912,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender $sender sender
      *
      * @return self
      */
@@ -1010,7 +1010,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets pickup
      *
-     * @return Null
+     * @return mixed
      */
     public function getPickup()
     {
@@ -1020,7 +1020,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets pickup
      *
-     * @param Null $pickup pickup
+     * @param mixed $pickup pickup
      *
      * @return self
      */
@@ -1071,7 +1071,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets physical_properties
      *
-     * @return Null
+     * @return mixed
      */
     public function getPhysicalProperties()
     {
@@ -1081,7 +1081,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets physical_properties
      *
-     * @param Null $physical_properties physical_properties
+     * @param mixed $physical_properties physical_properties
      *
      * @return self
      */
@@ -1098,7 +1098,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets reference_identifier
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier
+     * @return string
      */
     public function getReferenceIdentifier()
     {
@@ -1108,7 +1108,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets reference_identifier
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentReferenceIdentifier $reference_identifier reference_identifier
+     * @param string $reference_identifier reference_identifier
      *
      * @return self
      */
@@ -1530,7 +1530,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets secondary_shipments
      *
-     * @return Null|null
+     * @return mixed|null
      */
     public function getSecondaryShipments()
     {
@@ -1540,7 +1540,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets secondary_shipments
      *
-     * @param Null|null $secondary_shipments secondary_shipments
+     * @param mixed|null $secondary_shipments secondary_shipments
      *
      * @return self
      */
@@ -1954,7 +1954,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets shipped_items
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\Null[]|null
+     * @return mixed[]|null
      */
     public function getShippedItems()
     {
@@ -1964,7 +1964,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets shipped_items
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\Null[]|null $shipped_items shipped_items
+     * @param mixed[]|null $shipped_items shipped_items
      *
      * @return self
      */

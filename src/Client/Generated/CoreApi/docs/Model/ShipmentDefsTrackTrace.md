@@ -12,10 +12,10 @@ Name | Type | Description | Notes
 **link_consumer_portal** | **string** |  |
 **link_tracktrace** | **string** |  |
 **partner_tracktraces** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalTrackTraceLink[]**](ShipmentDefsExternalTrackTraceLink.md) |  |
-**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRecipient**](ShipmentDefsShipmentRecipient.md) |  |
-**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender**](ShipmentDefsShipmentSender.md) |  |
+**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient**](ShipmentDefsShipmentRecipient.md) |  |
+**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender**](ShipmentDefsShipmentSender.md) |  |
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions**](RefShipmentShipmentOptions.md) |  |
-**pickup** | [**Null**](Null.md) |  |
+**pickup** | [**mixed**](Null.md) |  |
 **delayed** | **bool** |  |
 **location** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackingLocation**](ShipmentDefsTrackingLocation.md) |  |
 **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTraceStatus**](ShipmentDefsTrackTraceStatus.md) |  |

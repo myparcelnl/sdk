@@ -6,14 +6,15 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 | ------------- | ------------- | ------------- |
 | [**deleteShipments()**](ShipmentApi.md#deleteShipments) | **DELETE** /shipments/{ids} | Delete Shipment |
 | [**getDeliveryOptions()**](ShipmentApi.md#getDeliveryOptions) | **GET** /delivery_options | Get Delivery Options |
+| [**getDropOffPoints()**](ShipmentApi.md#getDropOffPoints) | **GET** /drop_off_points | Get drop off points |
 | [**getPickupLocations()**](ShipmentApi.md#getPickupLocations) | **GET** /pickup_locations | Get Pickup Locations |
 | [**getShipments()**](ShipmentApi.md#getShipments) | **GET** /shipments | Gets a list of Shipments, optionally filtered using parameters. |
 | [**getShipmentsById()**](ShipmentApi.md#getShipmentsById) | **GET** /shipments/{ids} | Get shipments by id. |
 | [**getShipmentsLabels()**](ShipmentApi.md#getShipmentsLabels) | **GET** /shipment_labels/{ids} | Get Shipment labels |
 | [**getTrackTraces()**](ShipmentApi.md#getTrackTraces) | **GET** /tracktraces | Track Shipment |
 | [**getTrackTracesByIds()**](ShipmentApi.md#getTrackTracesByIds) | **GET** /tracktraces/{ids} | Track Shipment |
-| [**postCapabilities()**](ShipmentApi.md#postCapabilities) | **POST** /shipments/capabilities | List shipment capabilities |
-| [**postCapabilitiesContractDefinitions()**](ShipmentApi.md#postCapabilitiesContractDefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user. |
+| [**postCapabilities()**](ShipmentApi.md#postCapabilities) | **POST** /shipments/capabilities | List shipment capabilities (Beta) |
+| [**postCapabilitiesContractDefinitions()**](ShipmentApi.md#postCapabilitiesContractDefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user. (Beta) |
 | [**postRates()**](ShipmentApi.md#postRates) | **POST** /shipments/rates | List shipment rates |
 | [**postShipments()**](ShipmentApi.md#postShipments) | **POST** /shipments | Add Shipment |
 | [**postUnrelatedReturnShipments()**](ShipmentApi.md#postUnrelatedReturnShipments) | **POST** /return_shipments | Generate unrelated return shipment URL |
@@ -66,7 +67,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**](../Model/.md)| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 
 ### Return type
@@ -135,8 +136,8 @@ $dropoff_delay = 56; // int | This options allows the **Merchant** to set the nu
 $deliverydays_window = 56; // int | This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
 $exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
-$latitude = 'latitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
-$longitude = 'longitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
+$latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
+$longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
 
 try {
     $result = $apiInstance->getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
@@ -167,8 +168,8 @@ try {
 | **deliverydays_window** | **int**| This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). | [optional] |
 | **exclude_delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. | [optional] |
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
-| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
-| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
+| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
+| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
 
 ### Return type
 
@@ -182,6 +183,105 @@ try {
 
 - **Content-Type**: Not defined
 - **Accept**: `application/json;version=2.0`, `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `getDropOffPoints()`
+
+```php
+getDropOffPoints($user_agent, $postal_code, $number, $distance, $cc, $limit, $carrier_id, $shop_id, $reference, $location_name, $external_identifier, $city, $cut_off_time, $min_cut_off_time, $max_cut_off_time, $latitude, $longitude, $exclude_parcel_lockers): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPoints
+```
+
+Get drop off points
+
+Use this endpoint to receive a list of nearby drop off points, where shipments can be dropped off upon shipping. Results are ordered by distance from the provided postal code or coordinates.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
+$postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
+$number = 'number_example'; // string | The street number for which to fetch the resources.
+$distance = 56; // int | Provide the radius in kilometers for which you want to find drop off points. The default distance differs by carrier.
+$cc = 'cc_example'; // string | The country code for which to fetch the delivery options.
+$limit = 56; // int | Limit the number of resources returned.
+$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId
+$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$reference = 'reference_example'; // string | Filter by `reference`.
+$location_name = 'location_name_example'; // string | Filter by location name.
+$external_identifier = 'external_identifier_example'; // string
+$city = 'city_example'; // string | Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL.
+$cut_off_time = 'cut_off_time_example'; // string
+$min_cut_off_time = 'min_cut_off_time_example'; // string
+$max_cut_off_time = 'max_cut_off_time_example'; // string
+$latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
+$longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
+$exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
+
+try {
+    $result = $apiInstance->getDropOffPoints($user_agent, $postal_code, $number, $distance, $cc, $limit, $carrier_id, $shop_id, $reference, $location_name, $external_identifier, $city, $cut_off_time, $min_cut_off_time, $max_cut_off_time, $latitude, $longitude, $exclude_parcel_lockers);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ShipmentApi->getDropOffPoints: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
+| **number** | **string**| The street number for which to fetch the resources. | [optional] |
+| **distance** | **int**| Provide the radius in kilometers for which you want to find drop off points. The default distance differs by carrier. | [optional] |
+| **cc** | **string**| The country code for which to fetch the delivery options. | [optional] |
+| **limit** | **int**| Limit the number of resources returned. | [optional] |
+| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId**](../Model/.md)|  | [optional] |
+| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **reference** | **string**| Filter by &#x60;reference&#x60;. | [optional] |
+| **location_name** | **string**| Filter by location name. | [optional] |
+| **external_identifier** | **string**|  | [optional] |
+| **city** | **string**| Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. | [optional] |
+| **cut_off_time** | **string**|  | [optional] |
+| **min_cut_off_time** | **string**|  | [optional] |
+| **max_cut_off_time** | **string**|  | [optional] |
+| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
+| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
+| **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPoints**](../Model/ShipmentResponsesDropOffPoints.md)
+
+### Authorization
+
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -229,8 +329,8 @@ $dropoff_delay = 56; // int | This options allows the **Merchant** to set the nu
 $deliverydays_window = 56; // int | This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
 $exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
-$latitude = 'latitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
-$longitude = 'longitude_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter | This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations.
+$latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
+$longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
 
 try {
     $result = $apiInstance->getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
@@ -261,8 +361,8 @@ try {
 | **deliverydays_window** | **int**| This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). | [optional] |
 | **exclude_delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. | [optional] |
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
-| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
-| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsLatitudeParameter**| This provides the ability to display the postNL locations through the coordinates. If only latitude or longitude is passed as a parameter, it will be ignored and will simply use zip code for searching locations. | [optional] |
+| **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
+| **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
 
 ### Return type
 
@@ -315,7 +415,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
 );
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $barcode = 'barcode_example'; // string
-$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier
+$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId
 $created = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | When set, only resources created after this date will be returned. Inclusive.
 $delayed = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Filter on whether the current event code means the shipment has been delayed.
 $delivered = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
@@ -350,7 +450,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **barcode** | **string**|  | [optional] |
-| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](../Model/.md)|  | [optional] |
+| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId**](../Model/.md)|  | [optional] |
 | **created** | **\DateTime**| When set, only resources created after this date will be returned. Inclusive. | [optional] |
 | **delayed** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Filter on whether the current event code means the shipment has been delayed. | [optional] |
 | **delivered** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
@@ -436,7 +536,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**](../Model/.md)| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **link_consumer_portal** | **bool**|  | [optional] |
 
@@ -507,7 +607,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**](../Model/.md)| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPaperSize**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
 | **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
@@ -657,7 +757,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**](../Model/.md)| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
 | **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
@@ -685,9 +785,9 @@ try {
 postCapabilities($user_agent, $capabilities_post_capabilities_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2
 ```
 
-List shipment capabilities
+List shipment capabilities (Beta)
 
-List shipment capabilities of the carriers for the MyParcel platforms. This endpoint allows you to determine what delivery options, package types, and shipment options are available for specific carriers and destinations.
+**This endpoint is currently in beta and the API contract may change.** List shipment capabilities of the carriers for the MyParcel platforms. This endpoint allows you to determine what delivery options, package types, and shipment options are available for specific carriers and destinations.
 
 ### Example
 
@@ -752,9 +852,9 @@ try {
 postCapabilitiesContractDefinitions($user_agent, $capabilities_post_contract_definitions_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2
 ```
 
-List a superset of available capabilities for the carriers and contracts associated with the logged-in user.
+List a superset of available capabilities for the carriers and contracts associated with the logged-in user. (Beta)
 
-List shipment capabilities of the carriers for the MyParcel platforms. This endpoint allows you to determine the complete set of delivery options, package types, and shipment options available to a specific account.
+**This endpoint is currently in beta and the API contract may change.** List shipment capabilities of the carriers for the MyParcel platforms. This endpoint allows you to determine the complete set of delivery options, package types, and shipment options available to a specific account.
 
 ### Example
 

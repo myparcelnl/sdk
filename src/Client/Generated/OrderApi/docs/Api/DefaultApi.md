@@ -12,6 +12,7 @@ All URIs are relative to https://order.api.myparcel.nl, except if the operation 
 | [**editNotePost()**](DefaultApi.md#editNotePost) | **POST** /edit-note | Edit a note of an order. |
 | [**importPost()**](DefaultApi.md#importPost) | **POST** /import | Import an order after it is discovered from a sales channel. |
 | [**ordersGet()**](DefaultApi.md#ordersGet) | **GET** /orders | Query and/or filter orders. |
+| [**picklistGet()**](DefaultApi.md#picklistGet) | **GET** /picklist | Generate a picklist for 1 or more orders. |
 | [**preparePackagesForShipmentPost()**](DefaultApi.md#preparePackagesForShipmentPost) | **POST** /prepare-packages-for-shipment | Prepares packages for shipment |
 | [**removeNotesPost()**](DefaultApi.md#removeNotesPost) | **POST** /remove-notes | Remove notes from an order. |
 | [**unassignFromUserPost()**](DefaultApi.md#unassignFromUserPost) | **POST** /unassign-from-user |  |
@@ -471,6 +472,64 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `picklistGet()`
+
+```php
+picklistGet($order_id, $accept): \SplFileObject
+```
+
+Generate a picklist for 1 or more orders.
+
+Get picklist.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
+$order_id = array('order_id_example'); // string[] | The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request.
+$accept = 'accept_example'; // string
+
+try {
+    $result = $apiInstance->picklistGet($order_id, $accept);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->picklistGet: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **order_id** | [**string[]**](../Model/string.md)| The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. | |
+| **accept** | **string**|  | |
+
+### Return type
+
+**\SplFileObject**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/pdf`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
