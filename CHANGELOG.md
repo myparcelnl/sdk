@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.13](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.12...v11.0.0-beta.13) (2026-04-08)
+
 ## [11.0.0-beta.12](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.11...v11.0.0-beta.12) (2026-04-07)
 
 
