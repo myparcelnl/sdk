@@ -21,6 +21,7 @@ use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentDeleteService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
+use MyParcelNL\Sdk\Services\Webhook\WebhookService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 /**
@@ -282,6 +283,117 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
         self::assertCount(2, $multiColloShipment->getSecondaryShipments());
         self::assertNotEmpty($created);
+    }
+
+    /**
+     * Covers all 5 legacy webhook hook types: subscribe, getById, getAll (filtered), unsubscribe.
+     * This replaces the old per-class webhook web service tests with full coverage of the new
+     * unified WebhookService.
+     *
+     * @dataProvider provideWebhookHooks
+     */
+    public function testWebhookSubscribeGetAndUnsubscribe(string $hook): void
+    {
+        $createdId = null;
+
+        try {
+            $service = new WebhookService($this->liveApiKey);
+            $url     = 'https://example.com/smoke-webhook-' . $hook . '-' . uniqid('', true);
+
+            // 1. Subscribe (replaces old $webhookWebService->subscribe($url))
+            $createdId = $service->subscribe($hook, $url);
+
+            self::assertIsInt($createdId);
+            self::assertGreaterThan(0, $createdId);
+
+            // 2. Get by ID (new capability, not in old services)
+            $found = $service->getById($createdId);
+            self::assertCount(1, $found);
+            self::assertSame($createdId, $found[0]->getId());
+            self::assertSame($hook, $found[0]->getHook());
+            self::assertSame($url, $found[0]->getUrl());
+
+            // 3. List all filtered by hook (new capability)
+            $all = $service->getAll($hook);
+            self::assertNotEmpty($all, "Expected at least 1 subscription for hook '{$hook}'.");
+
+            $matchingIds = array_map(
+                static function ($sub) { return $sub->getId(); },
+                $all
+            );
+            self::assertContains($createdId, $matchingIds, "Created subscription should appear in filtered list.");
+
+            // 4. Unsubscribe (replaces old $webhookWebService->unsubscribe($id))
+            $service->unsubscribe($createdId);
+            $createdId = null; // mark as cleaned up
+
+            // 5. Verify deletion
+            $afterDelete = $service->getById($createdId ?? 0);
+            self::assertEmpty($afterDelete, "Subscription should be gone after unsubscribe.");
+
+        } catch (\Throwable $e) {
+            // Cleanup on failure
+            if (null !== $createdId) {
+                try {
+                    (new WebhookService($this->liveApiKey))->unsubscribe($createdId);
+                } catch (\Throwable $ignored) {
+                }
+            }
+            $this->handleLiveException($e);
+        }
+    }
+
+    /**
+     * Tests subscribing multiple webhooks and unsubscribing them in a single batch call.
+     * The old services only supported single unsubscribe; the new service supports variadic IDs.
+     */
+    public function testWebhookBatchUnsubscribe(): void
+    {
+        $createdIds = [];
+
+        try {
+            $service = new WebhookService($this->liveApiKey);
+
+            // Subscribe two different hooks
+            $createdIds[] = $service->subscribe(
+                WebhookService::HOOK_SHIPMENT_STATUS_CHANGE,
+                'https://example.com/smoke-batch-1-' . uniqid('', true)
+            );
+            $createdIds[] = $service->subscribe(
+                WebhookService::HOOK_ORDER_STATUS_CHANGE,
+                'https://example.com/smoke-batch-2-' . uniqid('', true)
+            );
+
+            self::assertCount(2, $createdIds);
+
+            // Batch unsubscribe (new capability)
+            $service->unsubscribe(...$createdIds);
+            $createdIds = [];
+
+        } catch (\Throwable $e) {
+            // Cleanup on failure
+            foreach ($createdIds as $id) {
+                try {
+                    (new WebhookService($this->liveApiKey))->unsubscribe($id);
+                } catch (\Throwable $ignored) {
+                }
+            }
+            $this->handleLiveException($e);
+        }
+    }
+
+    /**
+     * All 5 hook types that the old webhook web services covered.
+     */
+    public function provideWebhookHooks(): array
+    {
+        return [
+            'shipment_status_change'             => [WebhookService::HOOK_SHIPMENT_STATUS_CHANGE],
+            'shipment_label_created'             => [WebhookService::HOOK_SHIPMENT_LABEL_CREATED],
+            'order_status_change'                => [WebhookService::HOOK_ORDER_STATUS_CHANGE],
+            'shop_carrier_accessibility_updated' => [WebhookService::HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED],
+            'shop_updated'                       => [WebhookService::HOOK_SHOP_UPDATED],
+        ];
     }
 
     private function createMinimalNlShipment(string $referenceIdentifier): Shipment
