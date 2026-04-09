@@ -3,6 +3,10 @@
 # OpenAPI Generator configuration
 inputSpec: https://iam.api.myparcel.nl/openapi.json
 outputDir: src/Client/Generated/IamApi
+typeMappings:
+  # @todo remove once upstream Principal generation is fixed
+  # Temporary override for correct whoami Principal deserialization.
+  Principal: FixedPrincipal
 additionalProperties:
   '!include': 'commonProperties.yaml'
   packageName: MyParcelNL\Sdk\Client\Generated\IamApi
