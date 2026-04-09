@@ -10,7 +10,7 @@ All URIs are relative to https://iam.api.myparcel.nl, except if the operation de
 ## `whoamiGet()`
 
 ```php
-whoamiGet(): \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal
+whoamiGet(): \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal
 ```
 
 Find out who you are and what you can.
@@ -54,7 +54,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Principal**](../Model/Principal.md)
+[**\MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal**](../Model/FixedPrincipal.md)
 
 ### Authorization
 
