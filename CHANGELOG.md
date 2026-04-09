@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.15](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.14...v11.0.0-beta.15) (2026-04-09)
+
+
+### :bug: Bug Fixes
+
+* override iam principal deserialization ([#611](https://github.com/myparcelnl/sdk/issues/611)) ([459a957](https://github.com/myparcelnl/sdk/commit/459a9572587f68252151081367062aaff8de04a9))
+
 ## [11.0.0-beta.14](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.13...v11.0.0-beta.14) (2026-04-08)
 
 
