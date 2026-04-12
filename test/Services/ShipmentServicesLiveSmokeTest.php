@@ -22,6 +22,13 @@ use MyParcelNL\Sdk\Services\Shipment\ShipmentDeleteService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Services\Webhook\WebhookService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
+use MyParcelNL\Sdk\Model\Fulfilment\Order;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
+use MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions;
+use MyParcelNL\Sdk\Model\Fulfilment\Product;
+use MyParcelNL\Sdk\Model\Recipient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 /**
@@ -394,6 +401,114 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             'shop_carrier_accessibility_updated' => [WebhookService::HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED],
             'shop_updated'                       => [WebhookService::HOOK_SHOP_UPDATED],
         ];
+    }
+
+    /**
+     * Verifies OrderCollection::query() works with the new OrderShipmentOptions.
+     * Orders constructed from API responses must hydrate correctly via
+     * OrderShipmentOptions::fromOrderResponse().
+     */
+    public function testFulfilmentOrderQueryReturnsOrders(): void
+    {
+        // OrderCollection uses the legacy MyParcelRequest/MyParcelCurl stack,
+        // so we must reset the curl factory to allow real HTTP calls.
+        \MyParcelNL\Sdk\Model\MyParcelRequest::setCurlFactory(null);
+
+        try {
+            $collection = OrderCollection::query($this->liveApiKey);
+        } catch (\Throwable $e) {
+            $this->handleLiveException($e);
+            return;
+        }
+
+        // The account may have 0 orders, but the call itself must succeed
+        // and every returned order must have valid OrderShipmentOptions.
+        self::assertInstanceOf(OrderCollection::class, $collection);
+
+        if ($collection->isEmpty()) {
+            $this->markTestSkipped('No fulfilment orders in this account to verify hydration.');
+        }
+
+        /** @var Order $order */
+        $order = $collection->first();
+        self::assertInstanceOf(Order::class, $order);
+        self::assertInstanceOf(OrderShipmentOptions::class, $order->getDeliveryOptions());
+    }
+
+    /**
+     * Full round-trip: build an Order with OrderShipmentOptions, save via API,
+     * and verify the response hydrates back correctly.
+     * This is the critical path that consumers rely on.
+     */
+    public function testFulfilmentOrderSaveWithOrderShipmentOptions(): void
+    {
+        \MyParcelNL\Sdk\Model\MyParcelRequest::setCurlFactory(null);
+
+        try {
+            $orderCollection = (new OrderCollection())->setApiKey($this->liveApiKey);
+
+            $shipmentOptions = (new OrderShipmentOptions())
+                ->setCarrierId(1) // PostNL
+                ->setDate((new \DateTime('+1 day'))->format('Y-m-d H:i:s'))
+                ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
+                ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+
+            $order = (new Order())
+                ->setStatus('open')
+                ->setDeliveryOptions($shipmentOptions)
+                ->setExternalIdentifier('smoke-order-' . uniqid('', true))
+                ->setFulfilmentPartnerIdentifier('smoke-fp-' . uniqid('', true))
+                ->setInvoiceAddress($this->createMinimalRecipient())
+                ->setRecipient($this->createMinimalRecipient())
+                ->setLanguage('NL')
+                ->setType('test')
+                ->setOrderDate((new \DateTime())->format('Y-m-d'));
+
+            $orderLine = (new OrderLine())
+                ->setUuid(uniqid('', true))
+                ->setQuantity(1)
+                ->setPrice(1000)
+                ->setPriceAfterVat(1210)
+                ->setVat(210)
+                ->setProduct(
+                    (new Product())
+                        ->setName('Smoke Test Product')
+                        ->setSku('SMOKE001')
+                        ->setWeight(500)
+                );
+
+            $order->setOrderLines(new \MyParcelNL\Sdk\Support\Collection([$orderLine]));
+            $order->setWeight(500);
+            $orderCollection->push($order);
+
+            $saved = $orderCollection->save();
+        } catch (\Throwable $e) {
+            $this->handleLiveException($e);
+            return;
+        }
+
+        self::assertNotEmpty($saved->toArray(), 'Saved order collection should not be empty.');
+
+        /** @var Order $savedOrder */
+        $savedOrder = $saved->first();
+        self::assertInstanceOf(Order::class, $savedOrder);
+        self::assertIsString($savedOrder->getUuid(), 'Saved order should have a UUID.');
+        self::assertInstanceOf(OrderShipmentOptions::class, $savedOrder->getDeliveryOptions());
+
+        // Verify order lines came back
+        self::assertGreaterThanOrEqual(1, $savedOrder->getOrderLines()->count());
+    }
+
+    private function createMinimalRecipient(): Recipient
+    {
+        return (new Recipient())
+            ->setCc('NL')
+            ->setCity('Hoofddorp')
+            ->setPostalCode('2132JE')
+            ->setStreet('Antareslaan')
+            ->setPerson('Smoke Test')
+            ->setEmail('smoke@myparcel.nl')
+            ->setPhone('0612345678');
     }
 
     private function createMinimalNlShipment(string $referenceIdentifier): Shipment
