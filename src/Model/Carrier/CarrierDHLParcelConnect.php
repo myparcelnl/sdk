@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 class CarrierDHLParcelConnect extends AbstractCarrier
 {
     public const HUMAN = 'DHL Parcel Connect';

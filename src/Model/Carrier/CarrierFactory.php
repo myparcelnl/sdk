@@ -7,6 +7,10 @@ namespace MyParcelNL\Sdk\Model\Carrier;
 use Exception;
 use MyParcelNL\Sdk\Support\Classes;
 
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 class CarrierFactory
 {
     /**
