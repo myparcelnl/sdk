@@ -4,6 +4,9 @@ namespace MyParcelNL\Sdk\Helper;
 
 use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class ValidateStreet
 {
     /**

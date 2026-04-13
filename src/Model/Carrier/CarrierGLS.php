@@ -2,6 +2,10 @@
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 class CarrierGLS extends AbstractCarrier
 {
     public const HUMAN = 'GLS';
