@@ -17,6 +17,8 @@ use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 
 /**
+ * @internal Legacy Order v1 (fulfilment) collection.
+ *
  * @property \MyParcelNL\Sdk\Model\Fulfilment\Order[] $items
  */
 class OrderCollection extends Collection

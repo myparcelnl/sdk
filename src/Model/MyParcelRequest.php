@@ -13,6 +13,9 @@ use MyParcelNL\Sdk\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\Helper\RequestError;
 use MyParcelNL\Sdk\Support\Arr;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class MyParcelRequest
 {
     use HasApiKey;

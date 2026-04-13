@@ -8,6 +8,9 @@
 
 namespace MyParcelNL\Sdk\Model;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class FullStreet
 {
     /**

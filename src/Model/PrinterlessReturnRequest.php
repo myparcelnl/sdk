@@ -6,6 +6,9 @@ use MyParcelNL\Sdk\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class PrinterlessReturnRequest extends MyParcelRequest
 {
     private string $apiKey;

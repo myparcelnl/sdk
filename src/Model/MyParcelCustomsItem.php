@@ -22,6 +22,7 @@ use MyParcelNL\Sdk\Support\Str;
  * mandatory for non-EU shipments.
  *
  * Class MyParcelCustomsItem
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
 class MyParcelCustomsItem
 {

@@ -16,6 +16,9 @@ use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 use Throwable;
 
+/**
+ * @internal Legacy Order v1 (fulfilment) collection.
+ */
 class OrderNotesCollection extends Collection
 {
     use HasUserAgent;

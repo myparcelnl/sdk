@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 abstract class AbstractCarrier
 {
     public const TYPE_B2C = 'b2c';
