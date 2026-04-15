@@ -33,6 +33,10 @@ final class ShipmentCreateService
     /**
      * Create shipments through the generated ShipmentApi client.
      *
+     * Builds the generated request model, applies SDK defaults such as reference identifiers,
+     * and maps the typed generated success response back to the SDK's
+     * id => reference_identifier return shape.
+     *
      * @param ShipmentCollection $collection Collection of shipments to create.
      * @param mixed              $format     Label format (e.g. "A4", "A6") or generated format reference.
      * @param mixed              $positions  Label position(s) for A4 (e.g. "1;2;3;4") or generated position reference.
@@ -62,6 +66,9 @@ final class ShipmentCreateService
         return $this->parseCreateResponse($shipments, $response);
     }
 
+    /**
+     * Resolve the generated shipment create content type by prefix instead of array index.
+     */
     private function resolveShipmentCreateContentType(): string
     {
         foreach (ShipmentApi::contentTypes['postShipments'] as $contentType) {
@@ -100,6 +107,8 @@ final class ShipmentCreateService
 
     /**
      * @param Shipment[] $shipments
+     *
+     * Read only the current generated success model and translate it to the SDK convenience shape.
      *
      * @return array<int, string|null>
      */

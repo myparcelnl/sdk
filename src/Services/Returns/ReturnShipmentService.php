@@ -24,7 +24,13 @@ use Psr\Http\Message\RequestInterface;
 /**
  * Return shipment creation service.
  *
- * Uses generated request models and request builder as source of truth.
+ * Uses generated request models and response models as source of truth.
+ *
+ * This service remains hybrid because the generated operation methods do not yet expose
+ * the related return variants we need here, such as send_return_mail and unrelated returns.
+ * Until those parameters are modeled directly on the generated operation signatures, we build
+ * the request with the generated request builder and deserialize the response with the generated
+ * response model ourselves.
  *
  * @todo switch to direct generated methods once send_return_mail and unrelated return contracts
  *       are fully represented by the generated operation signatures.
@@ -49,6 +55,9 @@ final class ReturnShipmentService
 
     /**
      * Create return shipments linked to existing parent shipment ids.
+     *
+     * Hybrid note: we still use postShipmentsRequest() here so we can append the
+     * send_return_mail query parameter without hardcoding the rest of the request contract.
      *
      * @param array<int, array<string, mixed>> $returnShipments
      * @return array<int, string|null>
@@ -87,6 +96,9 @@ final class ReturnShipmentService
     /**
      * Create unrelated return shipments.
      *
+     * Hybrid note: unrelated returns currently reuse the generated request builder because
+     * this variant is not yet exposed as a dedicated generated operation method.
+     *
      * @param array<int, array<string, mixed>> $returnShipments
      * @return array<int, string|null>
      */
@@ -120,22 +132,17 @@ final class ReturnShipmentService
     }
 
     /**
+     * Send the prepared hybrid request and deserialize it with the generated success model.
+     *
+     * We intentionally do not swallow parse or contract errors here; hybrid transport should
+     * still fail loudly when the generated client contract no longer matches the live response.
+     *
      * @return array<int, string|null>
      */
     private function sendAndParseIdsResponse(RequestInterface $request): array
     {
         $response = $this->httpClient->sendRequest($request);
-
-        $body = (string) $response->getBody();
-        if ('' === $body) {
-            return [];
-        }
-
-        try {
-            $decoded = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            return [];
-        }
+        $decoded = json_decode((string) $response->getBody(), false, 512, JSON_THROW_ON_ERROR);
 
         $responseModel = ObjectSerializer::deserialize(
             $decoded,
@@ -144,7 +151,7 @@ final class ReturnShipmentService
         );
 
         if (! $responseModel instanceof ShipmentResponsesPostShipmentsV12 || null === $responseModel->getData()) {
-            return [];
+            throw new InvalidArgumentException('Unexpected response type returned while parsing return shipment response.');
         }
 
         return $this->mapCreatedShipments($responseModel->getData()->getShipments() ?? []);
@@ -182,6 +189,12 @@ final class ReturnShipmentService
         return $request->withUri($uri->withQuery(http_build_query($query)));
     }
 
+    /**
+     * Resolve the generated return shipment content type by prefix instead of array index.
+     *
+     * This keeps the generated client as source of truth while avoiding fragile coupling to
+     * the internal order of ShipmentApi::contentTypes['postShipments'].
+     */
     private function resolveContentType(string $prefix): string
     {
         foreach (ShipmentApi::contentTypes['postShipments'] as $contentType) {

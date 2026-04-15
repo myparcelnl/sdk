@@ -17,8 +17,11 @@ use Psr\Http\Message\RequestInterface;
 /**
  * Service for retrieving shipment labels (link/PDF) by shipment IDs.
  *
+ * This service intentionally keeps the legacy link/PDF behavior intact.
+ *
  * @todo Temporary workaround: use generated request-builder + manual sendRequest()
- *       because generated ShipmentApi::getShipmentsLabels() currently exposes a void return flow.
+ *       because generated ShipmentApi::getShipmentsLabels() currently exposes a void return flow,
+ *       while this SDK still needs the existing link/PDF response handling.
  */
 final class ShipmentLabelsService
 {
@@ -48,6 +51,9 @@ final class ShipmentLabelsService
 
     /**
      * Fetch and store the label download link for the given shipments.
+     *
+     * Hybrid note: request construction comes from the generated client, but response parsing
+     * stays local for now because the generated labels operation does not expose a typed return model.
      *
      * @param int[] $shipmentIds
      * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
@@ -86,6 +92,9 @@ final class ShipmentLabelsService
 
     /**
      * Fetch and store the raw PDF content for the given shipment labels.
+     *
+     * Hybrid note: this keeps the existing PDF flow intact and only overrides Accept to request
+     * the old PDF variant directly.
      *
      * @param int[] $shipmentIds
      * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
@@ -156,6 +165,9 @@ final class ShipmentLabelsService
 
     /**
      * Build label request using generated ShipmentApi request builder.
+     *
+     * The generated builder stays the source of truth for the request contract; this service only
+     * applies Accept negotiation on top for the legacy link/PDF flows.
      *
      * @param int[] $shipmentIds
      */

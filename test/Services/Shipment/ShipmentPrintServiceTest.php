@@ -112,7 +112,7 @@ final class ShipmentPrintServiceTest extends TestCase
         self::assertStringStartsWith('sdk_', $shipment->getReferenceIdentifier());
     }
 
-    public function testPrintReturnsEmptyArrayOnUnexpectedResponse(): void
+    public function testPrintThrowsOnUnexpectedResponse(): void
     {
         $api = $this->createMock(ShipmentApi::class);
         $api->method('postShipmentsRequest')
@@ -128,6 +128,9 @@ final class ShipmentPrintServiceTest extends TestCase
 
         $service = new ShipmentPrintService($this->getApiKey(), $api, $httpClient);
 
-        self::assertSame([], $service->print($collection, 'printer-group-1'));
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unexpected response type returned while parsing direct print response.');
+
+        $service->print($collection, 'printer-group-1');
     }
 }

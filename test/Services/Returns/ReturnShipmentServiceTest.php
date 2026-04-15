@@ -228,4 +228,29 @@ final class ReturnShipmentServiceTest extends TestCase
 
         self::assertSame([], $result);
     }
+
+    public function testCreateRelatedThrowsOnUnexpectedResponse(): void
+    {
+        $api = $this->createMock(ShipmentApi::class);
+        $api->expects(self::once())
+            ->method('postShipmentsRequest')
+            ->willReturn(new Request('POST', 'https://api.myparcel.nl/shipments'));
+
+        $httpClient = $this->createMock(PsrClientInterface::class);
+        $httpClient->expects(self::once())
+            ->method('sendRequest')
+            ->willReturn(new Response(200, [], '{"error":"something"}'));
+
+        $service = new ReturnShipmentService($this->getApiKey(), $api, $httpClient);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unexpected response type returned while parsing return shipment response.');
+
+        $service->createRelated([[
+            'parent' => 1001,
+            'carrier' => 1,
+            'email' => 'test@example.com',
+            'name' => 'John Doe',
+        ]], false);
+    }
 }
