@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * This object is embedded in the AbstractConsignment object for global shipments and is
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -18,10 +16,8 @@ use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
- * This object is embedded in the MyParcelConsignment object for global shipments and is
- * mandatory for non-EU shipments.
+ * Customs item embedded in CustomsDeclaration for global shipments; mandatory for non-EU shipments.
  *
- * Class MyParcelCustomsItem
  * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
 class MyParcelCustomsItem
