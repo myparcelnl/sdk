@@ -119,20 +119,29 @@ final class ShipmentCreateService
         }
 
         $responseData = $response->getData();
+        if (null === $responseData) {
+            throw new InvalidArgumentException('ShipmentApi::postShipments() returned a response without data.');
+        }
+
         $requestReferences = array_values(array_map(
             static fn (Shipment $shipment): ?string => $shipment->getReferenceIdentifier(),
             $shipments
         ));
 
         $mapping = [];
-        foreach ($responseData->getShipments() as $index => $createdShipment) {
+        foreach (($responseData->getShipments() ?? []) as $index => $createdShipment) {
             $referenceIdentifier = $createdShipment->getReferenceIdentifier();
 
             if (null === $referenceIdentifier && isset($requestReferences[$index])) {
                 $referenceIdentifier = $requestReferences[$index];
             }
 
-            $mapping[(int) $createdShipment->getId()] = $referenceIdentifier;
+            $shipmentId = $createdShipment->getId();
+            if (null === $shipmentId) {
+                continue;
+            }
+
+            $mapping[(int) $shipmentId] = $referenceIdentifier;
         }
 
         return $mapping;

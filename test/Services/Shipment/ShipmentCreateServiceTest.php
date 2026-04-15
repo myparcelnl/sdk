@@ -201,6 +201,75 @@ final class ShipmentCreateServiceTest extends TestCase
         self::assertSame([7001 => 'order-wrapper-ref'], $result);
     }
 
+    public function testCreateThrowsWhenResponseDataIsMissing(): void
+    {
+        $collection = new ShipmentCollection([
+            (new Shipment())->setReferenceIdentifier('order-missing-data'),
+        ]);
+
+        $api = $this->createMock(ShipmentApi::class);
+        $service = new ShipmentCreateService($this->getApiKey(), $api);
+
+        $api->expects(self::once())
+            ->method('postShipments')
+            ->willReturn(new ShipmentResponsesPostShipmentsV12());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('ShipmentApi::postShipments() returned a response without data.');
+
+        $service->create($collection);
+    }
+
+    public function testCreateReturnsEmptyMappingWhenResponseHasNoShipments(): void
+    {
+        $collection = new ShipmentCollection([
+            (new Shipment())->setReferenceIdentifier('order-no-shipments'),
+        ]);
+
+        $api = $this->createMock(ShipmentApi::class);
+        $service = new ShipmentCreateService($this->getApiKey(), $api);
+
+        $data = new ShipmentResponsesPostShipmentsV12Data();
+        $response = new ShipmentResponsesPostShipmentsV12();
+        $response->setData($data);
+
+        $api->expects(self::once())
+            ->method('postShipments')
+            ->willReturn($response);
+
+        self::assertSame([], $service->create($collection));
+    }
+
+    public function testCreateSkipsShipmentsWithoutIdInResponse(): void
+    {
+        $collection = new ShipmentCollection([
+            (new Shipment())->setReferenceIdentifier('order-with-id'),
+            (new Shipment())->setReferenceIdentifier('order-without-id'),
+        ]);
+
+        $api = $this->createMock(ShipmentApi::class);
+        $service = new ShipmentCreateService($this->getApiKey(), $api);
+
+        $shipmentWithId = new ShipmentDefsShipment();
+        $shipmentWithId->setId(8001);
+        $shipmentWithId->setReferenceIdentifier('order-with-id');
+
+        $shipmentWithoutId = new ShipmentDefsShipment();
+        $shipmentWithoutId->setReferenceIdentifier('order-without-id');
+
+        $data = new ShipmentResponsesPostShipmentsV12Data();
+        $data->setShipments([$shipmentWithId, $shipmentWithoutId]);
+
+        $response = new ShipmentResponsesPostShipmentsV12();
+        $response->setData($data);
+
+        $api->expects(self::once())
+            ->method('postShipments')
+            ->willReturn($response);
+
+        self::assertSame([8001 => 'order-with-id'], $service->create($collection));
+    }
+
     /**
      * @param array<int, array{id:int, reference_identifier:mixed}> $ids
      */
