@@ -2,7 +2,7 @@
 
 namespace MyParcelNL\Sdk\Helper;
 
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\Services\CountryCodes;
 
 /**
  * @internal Legacy — used by Order v1 (fulfilment) and web services.
@@ -72,10 +72,10 @@ class ValidateStreet
      */
     public static function getStreetRegexByCountry(string $local, string $destination): ?string
     {
-        $localIsBe       = $local === AbstractConsignment::CC_BE;
-        $localIsNlOrBe   = in_array($local, [AbstractConsignment::CC_BE, AbstractConsignment::CC_NL]);
-        $destinationIsNl = $destination === AbstractConsignment::CC_NL;
-        $destinationIsBe = $destination === AbstractConsignment::CC_BE;
+        $localIsBe       = $local === CountryCodes::CC_BE;
+        $localIsNlOrBe   = in_array($local, [CountryCodes::CC_BE, CountryCodes::CC_NL]);
+        $destinationIsNl = $destination === CountryCodes::CC_NL;
+        $destinationIsBe = $destination === CountryCodes::CC_BE;
 
         if ($localIsNlOrBe && $destinationIsNl) {
             return self::SPLIT_STREET_REGEX_NL;
