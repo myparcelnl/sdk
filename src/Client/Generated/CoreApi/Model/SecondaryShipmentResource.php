@@ -77,10 +77,10 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
         'barcode' => 'string',
-        'region' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRegion',
+        'region' => 'string',
         'external_provider' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName',
         'external_provider_id' => 'int',
-        'payment_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus',
+        'payment_status' => 'string',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'platform_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId',
         'origin' => 'string',
@@ -1278,7 +1278,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets region
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRegion
+     * @return string
      */
     public function getRegion()
     {
@@ -1288,7 +1288,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets region
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRegion $region region
+     * @param string $region region
      *
      * @return self
      */
@@ -1373,7 +1373,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets payment_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus
+     * @return string
      */
     public function getPaymentStatus()
     {
@@ -1383,7 +1383,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets payment_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus $payment_status payment_status
+     * @param string $payment_status payment_status
      *
      * @return self
      */

@@ -9,12 +9,16 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIds;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
 use Psr\Http\Client\ClientInterface as PsrClientInterface;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Direct print flow for shipments.
@@ -59,21 +63,35 @@ final class ShipmentPrintService
         $this->ensureReferenceIds($shipments);
 
         $requestModel = $this->buildCreateRequest($shipments);
+        $request = $this->createDirectPrintRequest($requestModel, $printerGroupId);
 
-        $request = $this->api->postShipmentsRequest(
+        return $this->sendAndParseIdsResponse($request);
+    }
+
+    private function createDirectPrintRequest(
+        ShipmentPostShipmentsRequestV11 $requestModel,
+        string $printerGroupId
+    ): RequestInterface {
+        return $this->api->postShipmentsRequest(
             $this->getUserAgentHeader(),
             $requestModel,
             null,
             null,
             null,
             null,
-            ShipmentApi::contentTypes['postShipments'][0]
+            $this->resolveShipmentCreateContentType()
         )->withHeader('Accept', sprintf(self::DIRECT_PRINT_ACCEPT_TEMPLATE, $printerGroupId));
+    }
 
-        $response = $this->httpClient->sendRequest($request);
-        $decoded = json_decode((string) $response->getBody(), true);
+    private function resolveShipmentCreateContentType(): string
+    {
+        foreach (ShipmentApi::contentTypes['postShipments'] as $contentType) {
+            if (0 === strpos($contentType, 'application/vnd.shipment+json')) {
+                return $contentType;
+            }
+        }
 
-        return $this->parseIdsResponse($decoded);
+        throw new \RuntimeException('No shipment create content type configured in generated ShipmentApi client.');
     }
 
     /**
@@ -104,22 +122,49 @@ final class ShipmentPrintService
     /**
      * @return array<int, string|null>
      */
-    private function parseIdsResponse(?array $decoded): array
+    private function sendAndParseIdsResponse(RequestInterface $request): array
     {
-        if (! is_array($decoded) || ! isset($decoded['data']['ids']) || ! is_array($decoded['data']['ids'])) {
+        $response = $this->httpClient->sendRequest($request);
+
+        $body = (string) $response->getBody();
+        if ('' === $body) {
             return [];
         }
 
+        try {
+            $decoded = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+            $responseModel = ObjectSerializer::deserialize(
+                $decoded,
+                ShipmentResponsesShipmentIds::class,
+                []
+            );
+        } catch (\JsonException | InvalidArgumentException $e) {
+            return [];
+        }
+
+        if (! $responseModel instanceof ShipmentResponsesShipmentIds || null === $responseModel->getData()) {
+            return [];
+        }
+
+        return $this->mapCreatedShipmentIds($responseModel->getData()->getIds() ?? []);
+    }
+
+    /**
+     * @param ShipmentResponsesShipmentIdsDataIdsInner[] $ids
+     *
+     * @return array<int, string|null>
+     */
+    private function mapCreatedShipmentIds(array $ids): array
+    {
         $mapping = [];
 
-        foreach ($decoded['data']['ids'] as $item) {
-            if (! is_array($item) || ! isset($item['id'])) {
+        foreach ($ids as $item) {
+            $shipmentId = $item->getId();
+            if (null === $shipmentId) {
                 continue;
             }
 
-            $mapping[(int) $item['id']] = isset($item['reference_identifier'])
-                ? (string) $item['reference_identifier']
-                : null;
+            $mapping[(int) $shipmentId] = $item->getReferenceIdentifier();
         }
 
         return $mapping;

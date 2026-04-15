@@ -23,10 +23,10 @@ Name | Type | Description | Notes
 **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  |
 **price** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney**](RefTypesMoney.md) |  |
 **barcode** | **string** |  |
-**region** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRegion**](ShipmentDefsShipmentPropertiesRegion.md) |  |
+**region** | [**string**](ShipmentDefsShipmentPropertiesRegion.md) |  |
 **external_provider** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName**](ShipmentDefsExternalProviderPropertiesDisplayName.md) |  |
 **external_provider_id** | **int** |  |
-**payment_status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus**](ShipmentDefsShipmentPaymentStatus.md) |  |
+**payment_status** | [**string**](ShipmentDefsShipmentPaymentStatus.md) |  |
 **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
 **platform_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId**](AccountDefsPlatformId.md) |  |
 **origin** | **string** |  |

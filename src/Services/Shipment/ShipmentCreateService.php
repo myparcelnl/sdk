@@ -6,9 +6,9 @@ namespace MyParcelNL\Sdk\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\InlineObject;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
@@ -56,10 +56,21 @@ final class ShipmentCreateService
             $positions,
             null,
             null,
-            ShipmentApi::contentTypes['postShipments'][0]
+            $this->resolveShipmentCreateContentType()
         );
 
         return $this->parseCreateResponse($shipments, $response);
+    }
+
+    private function resolveShipmentCreateContentType(): string
+    {
+        foreach (ShipmentApi::contentTypes['postShipments'] as $contentType) {
+            if (0 === strpos($contentType, 'application/vnd.shipment+json')) {
+                return $contentType;
+            }
+        }
+
+        throw new \RuntimeException('No shipment create content type configured in generated ShipmentApi client.');
     }
 
     /**
@@ -94,7 +105,7 @@ final class ShipmentCreateService
      */
     private function parseCreateResponse(array $shipments, $response): array
     {
-        if (! $response instanceof InlineObject) {
+        if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
             throw new InvalidArgumentException('Unexpected response type returned by ShipmentApi::postShipments()');
         }
 
@@ -105,56 +116,16 @@ final class ShipmentCreateService
         ));
 
         $mapping = [];
-        foreach ($responseData->getIds() as $index => $idObject) {
-            $referenceIdentifier = $this->normalizeReferenceIdentifier($idObject->getReferenceIdentifier());
+        foreach ($responseData->getShipments() as $index => $createdShipment) {
+            $referenceIdentifier = $createdShipment->getReferenceIdentifier();
 
-            // @todo remove after CoreAPI spec/codegen fix:
-            // Generated client may deserialize reference_identifier as wrapper object.
             if (null === $referenceIdentifier && isset($requestReferences[$index])) {
                 $referenceIdentifier = $requestReferences[$index];
             }
 
-            $mapping[(int) $idObject->getId()] = $referenceIdentifier;
+            $mapping[(int) $createdShipment->getId()] = $referenceIdentifier;
         }
 
         return $mapping;
-    }
-
-    /**
-     * @todo remove after CoreAPI spec/codegen fix:
-     * Normalize generated reference_identifier values to scalar strings.
-     */
-    private function normalizeReferenceIdentifier($referenceIdentifier): ?string
-    {
-        if (null === $referenceIdentifier) {
-            return null;
-        }
-
-        if (is_string($referenceIdentifier) || is_int($referenceIdentifier) || is_float($referenceIdentifier)) {
-            return (string) $referenceIdentifier;
-        }
-
-        if (! is_object($referenceIdentifier)) {
-            return null;
-        }
-
-        if (method_exists($referenceIdentifier, '__toString')) {
-            try {
-                $asString = (string) $referenceIdentifier;
-                if ('' !== $asString && '{}' !== $asString) {
-                    return $asString;
-                }
-            } catch (\Throwable $e) {
-                // ignore and continue
-            }
-        }
-
-        $decoded = json_decode(json_encode($referenceIdentifier), true);
-
-        if (is_string($decoded) || is_int($decoded) || is_float($decoded)) {
-            return (string) $decoded;
-        }
-
-        return null;
     }
 }

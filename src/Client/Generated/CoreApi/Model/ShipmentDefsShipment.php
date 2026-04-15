@@ -77,10 +77,10 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
         'barcode' => 'string',
-        'region' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRegion',
+        'region' => 'string',
         'external_provider' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProvider',
         'external_provider_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProviderId',
-        'payment_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus',
+        'payment_status' => 'string',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
         'platform_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId',
         'origin' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOrigin',
@@ -1266,7 +1266,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets region
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRegion
+     * @return string
      */
     public function getRegion()
     {
@@ -1276,7 +1276,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets region
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentRegion $region region
+     * @param string $region region
      *
      * @return self
      */
@@ -1347,7 +1347,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets payment_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus
+     * @return string
      */
     public function getPaymentStatus()
     {
@@ -1357,7 +1357,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets payment_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPaymentStatus $payment_status payment_status
+     * @param string $payment_status payment_status
      *
      * @return self
      */

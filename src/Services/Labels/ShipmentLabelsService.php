@@ -19,7 +19,6 @@ use Psr\Http\Message\RequestInterface;
  *
  * @todo Temporary workaround: use generated request-builder + manual sendRequest()
  *       because generated ShipmentApi::getShipmentsLabels() currently exposes a void return flow.
- *       Replace with direct generated response handling once spec/generator returns typed label body.
  */
 final class ShipmentLabelsService
 {
@@ -27,7 +26,7 @@ final class ShipmentLabelsService
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
-    private const PDF_ACCEPT_HEADER = 'application/pdf+print';
+    private const PDF_ACCEPT_HEADER = 'application/pdf';
     private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
     private ShipmentApi $api;
