@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipments
 use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType;
 use Psr\Http\Client\ClientInterface as PsrClientInterface;
 use Psr\Http\Message\RequestInterface;
 
@@ -38,6 +39,7 @@ use Psr\Http\Message\RequestInterface;
 final class ReturnShipmentService
 {
     use HasUserAgent;
+    use ResolvesPostShipmentsContentType;
 
     private ShipmentApi $api;
 
@@ -85,7 +87,7 @@ final class ReturnShipmentService
             null,
             null,
             null,
-            $this->resolveContentType('application/vnd.return_shipment+json')
+            $this->resolvePostShipmentsContentType('application/vnd.return_shipment+json')
         );
 
         $request = $this->withQueryParameter($request, 'send_return_mail', $sendMail ? '1' : '0');
@@ -125,7 +127,7 @@ final class ReturnShipmentService
             null,
             null,
             null,
-            $this->resolveContentType('application/vnd.unrelated_return_shipment+json')
+            $this->resolvePostShipmentsContentType('application/vnd.unrelated_return_shipment+json')
         );
 
         return $this->sendAndParseIdsResponse($request);
@@ -187,26 +189,6 @@ final class ReturnShipmentService
         $query[$key] = $value;
 
         return $request->withUri($uri->withQuery(http_build_query($query)));
-    }
-
-    /**
-     * Resolve the generated return shipment content type by prefix instead of array index.
-     *
-     * This keeps the generated client as source of truth while avoiding fragile coupling to
-     * the internal order of ShipmentApi::contentTypes['postShipments'].
-     */
-    private function resolveContentType(string $prefix): string
-    {
-        foreach (ShipmentApi::contentTypes['postShipments'] as $contentType) {
-            if (0 === strpos($contentType, $prefix)) {
-                return $contentType;
-            }
-        }
-
-        throw new \RuntimeException(sprintf(
-            'No matching content type starting with "%s" configured in generated ShipmentApi client.',
-            $prefix
-        ));
     }
 
 }

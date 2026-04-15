@@ -16,6 +16,7 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
 use Psr\Http\Client\ClientInterface as PsrClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -34,6 +35,7 @@ final class ShipmentPrintService
 {
     use HasUserAgent;
     use EnsuresShipmentReferenceIds;
+    use ResolvesPostShipmentsContentType;
 
     private const DIRECT_PRINT_ACCEPT_TEMPLATE = 'application/vnd.shipment_label+json+print;printer-group-id=%s';
 
@@ -86,22 +88,8 @@ final class ShipmentPrintService
             null,
             null,
             null,
-            $this->resolveShipmentCreateContentType()
+            $this->resolvePostShipmentsContentType('application/vnd.shipment+json')
         )->withHeader('Accept', sprintf(self::DIRECT_PRINT_ACCEPT_TEMPLATE, $printerGroupId));
-    }
-
-    /**
-     * Resolve the generated shipment create content type by prefix instead of array index.
-     */
-    private function resolveShipmentCreateContentType(): string
-    {
-        foreach (ShipmentApi::contentTypes['postShipments'] as $contentType) {
-            if (0 === strpos($contentType, 'application/vnd.shipment+json')) {
-                return $contentType;
-            }
-        }
-
-        throw new \RuntimeException('No shipment create content type configured in generated ShipmentApi client.');
     }
 
     /**
