@@ -31,6 +31,13 @@ typeMappings:
   # @todo remove when upstream spec fixes reference_identifier union type
   # The union ['null','integer','string'] generates an empty wrapper model that loses data.
   RefShipmentReferenceIdentifier: string
+  # @todo remove when upstream spec/codegen fixes region oneOf(string pattern | enum)
+  # The current codegen produces unusable model wrappers/enums for shipment resource regions.
+  ShipmentDefsShipmentRegion: string
+  ShipmentDefsShipmentPropertiesRegion: string
+  # @todo remove when upstream spec fixes return shipment payment_status empty-string responses
+  # Live return-shipment responses currently return "", which violates the enum and breaks deserialization.
+  ShipmentDefsShipmentPaymentStatus: string
 additionalProperties:
   '!include': 'commonProperties.yaml'
   packageName: MyParcelNL\Sdk\Client\Generated\CoreApi

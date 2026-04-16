@@ -65,6 +65,28 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         self::assertSame($link, $labels->getLinkOfLabels());
     }
 
+    public function testSetPdfOfLabelsForCreatedShipment(): void
+    {
+        $collection = new ShipmentCollection();
+        $collection->push($this->createMinimalNlShipment('smoke-label-pdf-' . uniqid('', true)));
+
+        try {
+            $createService = new ShipmentCreateService($this->liveApiKey);
+            $created = $createService->create($collection);
+            $shipmentIds = array_keys($created);
+
+            $labels = new ShipmentLabelsService($this->liveApiKey);
+            $pdf = $labels->setPdfOfLabels($shipmentIds, false);
+        } catch (\Throwable $e) {
+            $this->handleLiveException($e);
+            return;
+        }
+
+        self::assertNotEmpty($pdf);
+        self::assertStringStartsWith('%PDF-', $pdf);
+        self::assertSame($pdf, $labels->getLabelPdf());
+    }
+
     public function testGeneratedLabelsRequestWithExplicitAcceptReturnsBody(): void
     {
         $collection = new ShipmentCollection();
