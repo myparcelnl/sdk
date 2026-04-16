@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentPrintService;
@@ -39,6 +40,17 @@ final class ShipmentPrintServiceTest extends TestCase
         $api = $this->createMock(ShipmentApi::class);
         $api->expects(self::once())
             ->method('postShipmentsRequest')
+            ->with(
+                self::isType('string'),
+                self::isInstanceOf(ShipmentPostShipmentsRequestV11::class),
+                self::isNull(),
+                self::isNull(),
+                self::isNull(),
+                self::isNull(),
+                self::callback(static function (string $contentType): bool {
+                    return 0 === strpos($contentType, 'application/vnd.shipment+json');
+                })
+            )
             ->willReturn(new Request('POST', 'https://api.myparcel.nl/shipments', [], '{}'));
 
         $capturedRequest = null;
@@ -52,6 +64,9 @@ final class ShipmentPrintServiceTest extends TestCase
                     'data' => [
                         'ids' => [
                             ['id' => 6001, 'reference_identifier' => 'order-1001'],
+                        ],
+                        'pdf' => [
+                            'url' => '/pdfs/test-print-job',
                         ],
                     ],
                 ]));
@@ -97,7 +112,7 @@ final class ShipmentPrintServiceTest extends TestCase
         self::assertStringStartsWith('sdk_', $shipment->getReferenceIdentifier());
     }
 
-    public function testPrintReturnsEmptyArrayOnUnexpectedResponse(): void
+    public function testPrintThrowsOnUnexpectedResponse(): void
     {
         $api = $this->createMock(ShipmentApi::class);
         $api->method('postShipmentsRequest')
@@ -113,6 +128,9 @@ final class ShipmentPrintServiceTest extends TestCase
 
         $service = new ShipmentPrintService($this->getApiKey(), $api, $httpClient);
 
-        self::assertSame([], $service->print($collection, 'printer-group-1'));
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unexpected response type returned while parsing direct print response.');
+
+        $service->print($collection, 'printer-group-1');
     }
 }

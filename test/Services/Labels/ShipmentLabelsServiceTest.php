@@ -176,7 +176,7 @@ final class ShipmentLabelsServiceTest extends TestCase
         $httpClient->shouldReceive('sendRequest')
             ->once()
             ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf+print');
+                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
             }))
             ->andReturn(new Response(200, [], json_encode([
                 'data' => [
@@ -192,6 +192,41 @@ final class ShipmentLabelsServiceTest extends TestCase
         $this->expectExceptionMessage('Received payment link instead of pdf. Check your MyParcel account status.');
 
         $service->setPdfOfLabels([101]);
+    }
+
+    public function testSetPdfOfLabelsStoresPdfBody(): void
+    {
+        $api = Mockery::mock(ShipmentApi::class);
+        $httpClient = Mockery::mock(ClientInterface::class);
+        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1;2;3;4');
+        $pdf = "%PDF-1.4\nfake-pdf";
+
+        $api->shouldReceive('getShipmentsLabelsRequest')
+            ->once()
+            ->with(
+                '101',
+                Mockery::type('string'),
+                'A4',
+                '1;2;3;4',
+                null,
+                null,
+                ShipmentApi::contentTypes['getShipmentsLabels'][0]
+            )
+            ->andReturn($request);
+
+        $httpClient->shouldReceive('sendRequest')
+            ->once()
+            ->with(Mockery::on(static function (RequestInterface $request): bool {
+                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
+            }))
+            ->andReturn(new Response(200, ['Content-Type' => 'application/pdf'], $pdf));
+
+        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+
+        $result = $service->setPdfOfLabels([101]);
+
+        self::assertSame($pdf, $result);
+        self::assertSame($pdf, $service->getLabelPdf());
     }
 
     public function testSetPdfOfLabelsThrowsOnInvalidPdfResponse(): void
@@ -216,7 +251,7 @@ final class ShipmentLabelsServiceTest extends TestCase
         $httpClient->shouldReceive('sendRequest')
             ->once()
             ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf+print');
+                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
             }))
             ->andReturn(new Response(200, [], 'not-a-pdf'));
 

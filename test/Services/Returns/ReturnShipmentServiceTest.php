@@ -44,7 +44,7 @@ final class ReturnShipmentServiceTest extends TestCase
         $httpClient->expects(self::once())
             ->method('sendRequest')
             ->willReturn(new Response(200, [], json_encode([
-                'data' => ['ids' => []],
+                'data' => ['shipments' => []],
             ])));
 
         $service = new ReturnShipmentService(
@@ -76,7 +76,9 @@ final class ReturnShipmentServiceTest extends TestCase
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
-                self::identicalTo(ShipmentApi::contentTypes['postShipments'][2])
+                self::callback(static function (string $contentType): bool {
+                    return 0 === strpos($contentType, 'application/vnd.return_shipment+json');
+                })
             )
             ->willReturn($baseRequest);
 
@@ -93,7 +95,7 @@ final class ReturnShipmentServiceTest extends TestCase
             }))
             ->willReturn(new Response(200, [], json_encode([
                 'data' => [
-                    'ids' => [
+                    'shipments' => [
                         ['id' => 9001, 'reference_identifier' => 'ret-9001'],
                     ],
                 ],
@@ -138,7 +140,7 @@ final class ReturnShipmentServiceTest extends TestCase
         $httpClient->expects(self::once())
             ->method('sendRequest')
             ->willReturn(new Response(200, [], json_encode([
-                'data' => ['ids' => []],
+                'data' => ['shipments' => []],
             ])));
 
         $service = new ReturnShipmentService(
@@ -168,7 +170,9 @@ final class ReturnShipmentServiceTest extends TestCase
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
-                self::identicalTo(ShipmentApi::contentTypes['postShipments'][3])
+                self::callback(static function (string $contentType): bool {
+                    return 0 === strpos($contentType, 'application/vnd.unrelated_return_shipment+json');
+                })
             )
             ->willReturn($baseRequest);
 
@@ -184,7 +188,7 @@ final class ReturnShipmentServiceTest extends TestCase
             }))
             ->willReturn(new Response(200, [], json_encode([
                 'data' => [
-                    'ids' => [
+                    'shipments' => [
                         ['id' => 9101, 'reference_identifier' => 'unr-9101'],
                     ],
                 ],
@@ -200,7 +204,7 @@ final class ReturnShipmentServiceTest extends TestCase
         self::assertSame([9101 => 'unr-9101'], $result);
     }
 
-    public function testCreateRelatedReturnsEmptyMappingWhenResponseHasNoIds(): void
+    public function testCreateRelatedReturnsEmptyMappingWhenResponseHasNoShipments(): void
     {
         $api = $this->createMock(ShipmentApi::class);
         $api->expects(self::once())
@@ -211,7 +215,7 @@ final class ReturnShipmentServiceTest extends TestCase
         $httpClient->expects(self::once())
             ->method('sendRequest')
             ->willReturn(new Response(200, [], json_encode([
-                'data' => [],
+                'data' => ['shipments' => []],
             ])));
 
         $service = new ReturnShipmentService($this->getApiKey(), $api, $httpClient);
@@ -223,5 +227,30 @@ final class ReturnShipmentServiceTest extends TestCase
         ]], false);
 
         self::assertSame([], $result);
+    }
+
+    public function testCreateRelatedThrowsOnUnexpectedResponse(): void
+    {
+        $api = $this->createMock(ShipmentApi::class);
+        $api->expects(self::once())
+            ->method('postShipmentsRequest')
+            ->willReturn(new Request('POST', 'https://api.myparcel.nl/shipments'));
+
+        $httpClient = $this->createMock(PsrClientInterface::class);
+        $httpClient->expects(self::once())
+            ->method('sendRequest')
+            ->willReturn(new Response(200, [], '{"error":"something"}'));
+
+        $service = new ReturnShipmentService($this->getApiKey(), $api, $httpClient);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unexpected response type returned while parsing return shipment response.');
+
+        $service->createRelated([[
+            'parent' => 1001,
+            'carrier' => 1,
+            'email' => 'test@example.com',
+            'name' => 'John Doe',
+        ]], false);
     }
 }
