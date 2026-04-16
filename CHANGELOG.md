@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.17](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.16...v11.0.0-beta.17) (2026-04-16)
+
+
+### :bug: Bug Fixes
+
+* harden v11 shipment service wrappers against spec/client drift ([#614](https://github.com/myparcelnl/sdk/issues/614)) ([8da1df9](https://github.com/myparcelnl/sdk/commit/8da1df9c4f3868517d399c7962ed828409f1c8b9))
+
 ## [11.0.0-beta.16](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.15...v11.0.0-beta.16) (2026-04-13)
 
 ## [11.0.0-beta.15](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.14...v11.0.0-beta.15) (2026-04-09)
