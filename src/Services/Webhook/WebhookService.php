@@ -62,7 +62,13 @@ final class WebhookService
             $request
         );
 
-        return $response->getData()->getIds()[0]->getId();
+        $data = $response->getData();
+
+        if (null === $data || empty($data->getIds())) {
+            throw new \RuntimeException('Unexpected response: no subscription IDs returned.');
+        }
+
+        return $data->getIds()[0]->getId();
     }
 
     /**
@@ -95,7 +101,9 @@ final class WebhookService
             $hook
         );
 
-        return $response->getData()->getWebhookSubscriptions() ?? [];
+        $data = $response->getData();
+
+        return null !== $data ? ($data->getWebhookSubscriptions() ?? []) : [];
     }
 
     /**
@@ -118,6 +126,8 @@ final class WebhookService
             $this->getUserAgentHeader()
         );
 
-        return $response->getData()->getWebhookSubscriptions() ?? [];
+        $data = $response->getData();
+
+        return null !== $data ? ($data->getWebhookSubscriptions() ?? []) : [];
     }
 }
