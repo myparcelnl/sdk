@@ -125,7 +125,13 @@ class AbstractOrder extends BaseModel
      */
     public function getCarrier(): AbstractCarrier
     {
-        return CarrierFactory::createFromName($this->delivery_options->getCarrier());
+        $carrierId = $this->delivery_options->getCarrierId();
+
+        if (null === $carrierId) {
+            throw new \Exception('No carrier set on delivery options');
+        }
+
+        return CarrierFactory::createFromId($carrierId);
     }
 
     /**
