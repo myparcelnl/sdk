@@ -331,11 +331,12 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             self::assertContains($createdId, $matchingIds, "Created subscription should appear in filtered list.");
 
             // 4. Unsubscribe (replaces old $webhookWebService->unsubscribe($id))
+            $deletedId = $createdId;
             $service->unsubscribe($createdId);
             $createdId = null; // mark as cleaned up
 
             // 5. Verify deletion
-            $afterDelete = $service->getById($createdId ?? 0);
+            $afterDelete = $service->getById($deletedId);
             self::assertEmpty($afterDelete, "Subscription should be gone after unsubscribe.");
 
         } catch (\Throwable $e) {
