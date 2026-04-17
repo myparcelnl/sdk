@@ -2,19 +2,15 @@
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\Model\Consignment\GLSConsignment;
-
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 class CarrierGLS extends AbstractCarrier
 {
-    public const CONSIGNMENT = GLSConsignment::class;
-    public const HUMAN       = 'GLS';
-    public const ID          = 14;
-    public const NAME        = 'gls';
-
-    /**
-     * @var class-string
-     */
-    protected $consignmentClass = self::CONSIGNMENT;
+    public const HUMAN = 'GLS';
+    public const ID    = 14;
+    public const NAME  = 'gls';
 
     /**
      * @var string
@@ -30,6 +26,4 @@ class CarrierGLS extends AbstractCarrier
      * @var string
      */
     protected $name = self::NAME;
-
-
 }

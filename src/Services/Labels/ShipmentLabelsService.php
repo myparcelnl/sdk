@@ -9,7 +9,6 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Helper\LabelHelper;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -191,7 +190,9 @@ final class ShipmentLabelsService
     private function resolveFormatAndPositions($positions): array
     {
         if (is_numeric($positions)) {
-            return ['A4', LabelHelper::getPositions((int) $positions)];
+            $start = (int) $positions;
+
+            return ['A4', $start >= 1 && $start <= 4 ? implode(';', range($start, 4)) : ''];
         }
 
         if (is_array($positions)) {

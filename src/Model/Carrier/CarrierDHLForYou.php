@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\Model\Consignment\DHLForYouConsignment;
-
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 class CarrierDHLForYou extends AbstractCarrier
 {
-    public const CONSIGNMENT = DHLForYouConsignment::class;
-    public const HUMAN       = 'DHL For You';
-    public const ID          = 9;
-    public const NAME        = 'dhlforyou';
-    public const TYPE        = AbstractConsignment::TYPE_B2C;
-
-    /**
-     * @var class-string
-     */
-    protected $consignmentClass = self::CONSIGNMENT;
+    public const HUMAN = 'DHL For You';
+    public const ID    = 9;
+    public const NAME  = 'dhlforyou';
+    public const TYPE  = self::TYPE_B2C;
 
     /**
      * @var string

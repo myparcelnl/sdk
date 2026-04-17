@@ -70,6 +70,51 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame($expected, $service->getLinkOfLabels());
     }
 
+    public function testSetLinkOfLabelsKeepsLegacyEmptyPositionsForOutOfRangeNumericInput(): void
+    {
+        $api = Mockery::mock(ShipmentApi::class);
+        $httpClient = Mockery::mock(ClientInterface::class);
+        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=');
+
+        $api->shouldReceive('getShipmentsLabelsRequest')
+            ->once()
+            ->with(
+                '101',
+                Mockery::type('string'),
+                'A4',
+                '',
+                null,
+                null,
+                ShipmentApi::contentTypes['getShipmentsLabels'][0]
+            )
+            ->andReturn($request);
+
+        $httpClient->shouldReceive('sendRequest')
+            ->once()
+            ->with(Mockery::on(static function (RequestInterface $request): bool {
+                return ShipmentLabelsServiceTest::assertAcceptHeader(
+                    $request,
+                    'application/vnd.shipment_label_link+json'
+                );
+            }))
+            ->andReturn(new Response(200, [], json_encode([
+                'data' => [
+                    'pdfs' => [
+                        'url' => '/pdfs/download/101',
+                    ],
+                ],
+            ])));
+
+        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+
+        $result = $service->setLinkOfLabels([101], 5);
+
+        $expected = 'https://api.myparcel.nl/pdfs/download/101';
+
+        self::assertSame($expected, $result);
+        self::assertSame($expected, $service->getLinkOfLabels());
+    }
+
     public function testSetLinkOfLabelsUsesGeneratedEndpointForLargeBatch(): void
     {
         $api = Mockery::mock(ShipmentApi::class);

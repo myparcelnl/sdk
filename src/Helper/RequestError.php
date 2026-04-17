@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Helper;
 
 /**
  * @since v2.0.0
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
 class RequestError
 {

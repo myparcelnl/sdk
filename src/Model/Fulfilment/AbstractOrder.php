@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
 use Exception;
-use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\Exception\ValidationException;
 use MyParcelNL\Sdk\Model\BaseModel;
 use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
@@ -25,9 +24,9 @@ class AbstractOrder extends BaseModel
     public const DATE_FORMAT_DATE = 'Y-m-d';
 
     /**
-     * The selected delivery options for this order.
+     * The selected shipment options for this order.
      *
-     * @var \MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
+     * @var \MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions
      */
     protected $delivery_options;
 
@@ -126,7 +125,13 @@ class AbstractOrder extends BaseModel
      */
     public function getCarrier(): AbstractCarrier
     {
-        return CarrierFactory::createFromName($this->delivery_options->getCarrier());
+        $carrierId = $this->delivery_options->getCarrierId();
+
+        if (null === $carrierId) {
+            throw new \Exception('No carrier set on delivery options');
+        }
+
+        return CarrierFactory::createFromId($carrierId);
     }
 
     /**
@@ -138,9 +143,9 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions
      */
-    public function getDeliveryOptions(): AbstractDeliveryOptionsAdapter
+    public function getDeliveryOptions(): OrderShipmentOptions
     {
         return $this->delivery_options;
     }
@@ -293,11 +298,11 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param  \MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions $deliveryOptions
      *
      * @return self
      */
-    public function setDeliveryOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): self
+    public function setDeliveryOptions(OrderShipmentOptions $deliveryOptions): self
     {
         $this->delivery_options = $deliveryOptions;
         return $this;

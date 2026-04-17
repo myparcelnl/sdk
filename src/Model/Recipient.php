@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Model;
 
 use MyParcelNL\Sdk\Helper\SplitStreet;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class Recipient extends BaseModel
 {
     /**

@@ -12,7 +12,12 @@ use MyParcelNL\Sdk\Model\Shipment\Shipment;
 final class MultiColloShipmentService
 {
     /**
-     * Convert one shipment into a multi-collo shipment with secondary shipments.
+     * Split a shipment into a multi-collo shipment with secondary shipments.
+     *
+     * Clones the input shipment, reuses (or generates) a shared reference identifier
+     * across all colli, and distributes weight evenly across the main and secondary
+     * shipments. The returned shipment has secondary_shipments populated and is ready
+     * for ShipmentCreateService::create().
      *
      * @param int $amount Total number of collo pieces (including the main shipment).
      */
