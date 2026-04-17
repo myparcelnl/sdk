@@ -19,7 +19,7 @@ interface ApiMappingInterface
     /**
      * Returns the full mapping where key = v2 enum-case value and value = v1 shipment id.
      *
-     * @return array<string, string>
+     * @return array<string, int>
      */
     public function all(): array;
 
