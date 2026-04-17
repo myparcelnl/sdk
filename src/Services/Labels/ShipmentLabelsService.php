@@ -190,7 +190,9 @@ final class ShipmentLabelsService
     private function resolveFormatAndPositions($positions): array
     {
         if (is_numeric($positions)) {
-            return ['A4', implode(';', range((int) $positions, 4))];
+            $start = (int) $positions;
+
+            return ['A4', $start >= 1 && $start <= 4 ? implode(';', range($start, 4)) : ''];
         }
 
         if (is_array($positions)) {
