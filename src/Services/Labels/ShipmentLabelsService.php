@@ -30,6 +30,8 @@ final class ShipmentLabelsService
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
     private const PDF_ACCEPT_HEADER = 'application/pdf';
     private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
+    private const A4_FIRST_LABEL_POSITION = 1;
+    private const A4_LAST_LABEL_POSITION = 4;
 
     private ShipmentApi $api;
     private ClientInterface $httpClient;
@@ -192,7 +194,12 @@ final class ShipmentLabelsService
         if (is_numeric($positions)) {
             $start = (int) $positions;
 
-            return ['A4', $start >= 1 && $start <= 4 ? implode(';', range($start, 4)) : ''];
+            return [
+                'A4',
+                $start >= self::A4_FIRST_LABEL_POSITION && $start <= self::A4_LAST_LABEL_POSITION
+                    ? implode(';', range($start, self::A4_LAST_LABEL_POSITION))
+                    : '',
+            ];
         }
 
         if (is_array($positions)) {

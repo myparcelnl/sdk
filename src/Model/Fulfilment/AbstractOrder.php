@@ -25,6 +25,7 @@ class AbstractOrder extends BaseModel
 
     /**
      * The selected shipment options for this order.
+     * Keeps the legacy delivery_options property name for Order v1 hydration/payload compatibility.
      *
      * @var \MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions
      */
