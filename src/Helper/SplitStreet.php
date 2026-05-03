@@ -20,6 +20,8 @@ use MyParcelNL\Sdk\Services\CountryCodes;
  */
 class SplitStreet
 {
+    public const MAX_STREET_LENGTH = 40;
+
     const BOX_NL                 = 'bus';
     const BOX_BTE                = 'bte';
     const BOX_FR                 = 'boîte';
@@ -140,7 +142,7 @@ class SplitStreet
      */
     public static function getStreetParts($street)
     {
-        $streetWrap = wordwrap($street, 40, 'BREAK_LINE');
+        $streetWrap = wordwrap($street, self::MAX_STREET_LENGTH, 'BREAK_LINE');
         $parts      = explode("BREAK_LINE", $streetWrap);
 
         return $parts;
