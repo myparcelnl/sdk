@@ -29,7 +29,7 @@ class MaximumWeightRule extends Rule
     /**
      * @var int
      */
-    public const MAX_COLLO_WEIGHT_PACKAGE_SMALL_GRAMS = 2000;
+    public const MAX_COLLO_WEIGHT_PACKAGE_SMALL_GRAMS = 23000;
 
     /**
      * @param  \MyParcelNL\Sdk\Model\Consignment\AbstractConsignment $validationSubject
