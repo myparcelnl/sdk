@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.6](https://github.com/myparcelnl/sdk/compare/v10.7.5...v10.7.6) (2026-05-08)
+
+
+### :bug: Bug Fixes
+
+* update small package weight ([#616](https://github.com/myparcelnl/sdk/issues/616)) ([8829679](https://github.com/myparcelnl/sdk/commit/88296790e2006ec429ea77e56c83316d35d36a0c))
+
 ## [10.7.5](https://github.com/myparcelnl/sdk/compare/v10.7.4...v10.7.5) (2026-01-30)
 
 
