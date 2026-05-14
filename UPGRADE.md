@@ -19,7 +19,7 @@ v11 replaces the consignment stack with generated API clients and typed service 
 | Direct print via `MyParcelCollection`          | `ShipmentPrintService::print()`            |
 | `AbstractWebhookWebService` + 5 subclasses     | `WebhookService`                           |
 | `CheckApiKeyWebService::apiKeyIsCorrect()`     | `ApiKeyService::isValid()`                 |
-| `AbstractDeliveryOptionsAdapter` + adapters     | `OrderShipmentOptions` (fulfilment orders) |
+| `AbstractDeliveryOptionsAdapter` + adapters     | `Shipment\ShipmentOptions` + `Order::setCarrierId()` (fulfilment orders) |
 
 ## Create shipments
 
@@ -295,7 +295,7 @@ $multiCollo = $service->splitShipment($shipment, 3);
 
 ## Delivery options on fulfilment orders
 
-The old delivery options adapters (`DeliveryOptionsAdapterFactory`, `AbstractDeliveryOptionsAdapter`, etc.) parsed checkout delivery options and are fully removed. For fulfilment Order v1, shipment options are now read from the order API response:
+The old delivery options adapters (`DeliveryOptionsAdapterFactory`, `AbstractDeliveryOptionsAdapter`, etc.) parsed checkout delivery options and are fully removed. For fulfilment Order v1, shipment options now use the shared shipment options contract from `MyParcelNL\Sdk\Model\Shipment\ShipmentOptions`. Carrier remains shipment-level data and is exposed separately on the order.
 
 ### Before (v10)
 
@@ -311,30 +311,30 @@ $shipmentOptions = $adapter->getShipmentOptions();
 ### After (v11)
 
 ```php
-// OrderShipmentOptions is hydrated from the order API response automatically.
+// ShipmentOptions is hydrated from the order API response automatically.
 $order   = $collection->first();
 $options = $order->getDeliveryOptions();
 
 $deliveryType = $options->getDeliveryType();
 $packageType  = $options->getPackageType();
-$carrierId    = $options->getCarrierId();
-$isSignature  = $options->hasSignature();
+$carrierId    = $order->getCarrierId();
+$isSignature  = (bool) $options->getSignature();
 ```
 
-You can also build `OrderShipmentOptions` manually when saving orders:
+You can also build `ShipmentOptions` manually when saving orders:
 
 ```php
-use MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions;
+use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 
-$options = (new OrderShipmentOptions())
-    ->setCarrierId(1)
+$options = (new ShipmentOptions())
     ->setDeliveryType(RefTypesDeliveryTypeV2::MORNING)
     ->setPackageType(RefShipmentPackageTypeV2::PACKAGE)
     ->setSignature(true);
 
+$order->setCarrierId(1);
 $order->setDeliveryOptions($options);
 $collection->save();
 ```

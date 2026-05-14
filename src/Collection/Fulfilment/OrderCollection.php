@@ -8,9 +8,10 @@ use DateTime;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
-use MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions;
+use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Support\Arr;
@@ -120,7 +121,7 @@ class OrderCollection extends Collection
                     'invoice_address'               => $order->getInvoiceAddress()->toArrayWithoutNull(),
                     'order_lines'                   => $order->getOrderLines()->toArrayWithoutNull(),
                     'shipment'                      => [
-                        'carrier'             => $options->getCarrierId(),
+                        'carrier'             => $order->getCarrierId(),
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($options),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
@@ -133,14 +134,14 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions $options
+     * @param \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $options
      *
      * @return array
      * @throws \Exception
      */
-    private function getShipmentOptions(OrderShipmentOptions $options): array
+    private function getShipmentOptions(ShipmentOptions $options): array
     {
-        $deliveryDate = $options->getDate();
+        $deliveryDate = $options->getDeliveryDate();
 
         if ($deliveryDate) {
             $date         = new DateTime($deliveryDate);
@@ -148,23 +149,30 @@ class OrderCollection extends Collection
         }
 
         $result = [
-            'package_type'      => $options->getPackageTypeId(),
-            'delivery_type'     => $options->getDeliveryTypeId(),
+            'package_type'      => $options->getPackageType(),
+            'delivery_type'     => $options->getDeliveryType(),
             'delivery_date'     => $deliveryDate ?: null,
-            'signature'         => (int) $options->hasSignature(),
-            'collect'           => (int) $options->hasCollect(),
-            'receipt_code'      => (int) $options->hasReceiptCode(),
-            'only_recipient'    => (int) $options->hasOnlyRecipient(),
-            'age_check'         => (int) $options->hasAgeCheck(),
-            'large_format'      => (int) $options->hasLargeFormat(),
-            'return'            => (int) $options->isReturn(),
-            'priority_delivery' => (int) $options->isPriorityDelivery(),
+            'signature'         => (int) $options->getSignature(),
+            'collect'           => (int) $options->getCollect(),
+            'receipt_code'      => (int) $options->getReceiptCode(),
+            'only_recipient'    => (int) $options->getOnlyRecipient(),
+            'age_check'         => (int) $options->getAgeCheck(),
+            'large_format'      => (int) $options->getLargeFormat(),
+            'return'            => (int) $options->getReturn(),
+            'priority_delivery' => (int) $options->getPriorityDelivery(),
             'label_description' => (string) $options->getLabelDescription(),
         ];
 
-        if ($options->getInsurance()) {
+        $insurance = $options->getInsurance();
+
+        if ($insurance instanceof RefTypesPriceEuro) {
             $result['insurance'] = [
-                'amount'   => (int) $options->getInsurance() * 100,
+                'amount'   => (int) $insurance->getAmount(),
+                'currency' => $insurance->getCurrency() ?: 'EUR',
+            ];
+        } elseif (is_numeric($insurance)) {
+            $result['insurance'] = [
+                'amount'   => (int) $insurance * 100,
                 'currency' => 'EUR',
             ];
         }
