@@ -6,17 +6,14 @@ namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
-use MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class OrderGetCarrierTest extends TestCase
 {
-    public function testGetCarrierReturnsCarrierFromShipmentOptions(): void
+    public function testGetCarrierReturnsCarrierFromOrderShipment(): void
     {
-        $options = (new OrderShipmentOptions())->setCarrierId(CarrierPostNL::ID);
-
         $order = new Order();
-        $order->setDeliveryOptions($options);
+        $order->setCarrierId(CarrierPostNL::ID);
 
         $carrier = $order->getCarrier();
 
@@ -25,10 +22,7 @@ class OrderGetCarrierTest extends TestCase
 
     public function testGetCarrierThrowsWhenNoCarrierSet(): void
     {
-        $options = new OrderShipmentOptions();
-
         $order = new Order();
-        $order->setDeliveryOptions($options);
 
         $this->expectException(\Exception::class);
         $order->getCarrier();

@@ -13,6 +13,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Services\MultiCollo\MultiColloShipmentService;
@@ -26,7 +27,6 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
-use MyParcelNL\Sdk\Model\Fulfilment\OrderShipmentOptions;
 use MyParcelNL\Sdk\Model\Fulfilment\Product;
 use MyParcelNL\Sdk\Model\Recipient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -405,9 +405,9 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     }
 
     /**
-     * Verifies OrderCollection::query() works with the new OrderShipmentOptions.
+     * Verifies OrderCollection::query() works with shared ShipmentOptions.
      * Orders constructed from API responses must hydrate correctly via
-     * OrderShipmentOptions::fromOrderResponse().
+     * ShipmentOptions::fromOrderResponse().
      */
     public function testFulfilmentOrderQueryReturnsOrders(): void
     {
@@ -423,7 +423,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         // The account may have 0 orders, but the call itself must succeed
-        // and every returned order must have valid OrderShipmentOptions.
+        // and every returned order must have valid shared shipment options.
         self::assertInstanceOf(OrderCollection::class, $collection);
 
         if ($collection->isEmpty()) {
@@ -433,29 +433,29 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         /** @var Order $order */
         $order = $collection->first();
         self::assertInstanceOf(Order::class, $order);
-        self::assertInstanceOf(OrderShipmentOptions::class, $order->getDeliveryOptions());
+        self::assertInstanceOf(ShipmentOptions::class, $order->getDeliveryOptions());
     }
 
     /**
-     * Full round-trip: build an Order with OrderShipmentOptions, save via API,
+     * Full round-trip: build an Order with shared ShipmentOptions, save via API,
      * and verify the response hydrates back correctly.
      * This is the critical path that consumers rely on.
      */
-    public function testFulfilmentOrderSaveWithOrderShipmentOptions(): void
+    public function testFulfilmentOrderSaveWithShipmentOptions(): void
     {
         \MyParcelNL\Sdk\Model\MyParcelRequest::setCurlFactory(null);
 
         try {
             $orderCollection = (new OrderCollection())->setApiKey($this->liveApiKey);
 
-            $shipmentOptions = (new OrderShipmentOptions())
-                ->setCarrierId(1) // PostNL
-                ->setDate((new \DateTime('+1 day'))->format('Y-m-d H:i:s'))
+            $shipmentOptions = (new ShipmentOptions())
+                ->setDeliveryDate((new \DateTime('+1 day'))->format('Y-m-d H:i:s'))
                 ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
                 ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
 
             $order = (new Order())
                 ->setStatus('open')
+                ->setCarrierId(1) // PostNL
                 ->setDeliveryOptions($shipmentOptions)
                 ->setExternalIdentifier('smoke-order-' . uniqid('', true))
                 ->setFulfilmentPartnerIdentifier('smoke-fp-' . uniqid('', true))
@@ -494,7 +494,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $savedOrder = $saved->first();
         self::assertInstanceOf(Order::class, $savedOrder);
         self::assertIsString($savedOrder->getUuid(), 'Saved order should have a UUID.');
-        self::assertInstanceOf(OrderShipmentOptions::class, $savedOrder->getDeliveryOptions());
+        self::assertInstanceOf(ShipmentOptions::class, $savedOrder->getDeliveryOptions());
 
         // Verify order lines came back
         self::assertGreaterThanOrEqual(1, $savedOrder->getOrderLines()->count());
