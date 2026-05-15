@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.18](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.17...v11.0.0-beta.18) (2026-05-15)
+
+
+### :bug: Bug Fixes
+
+* **ci:** correct phpunit coverage exclude path to ./src/Client/Generated ([e9af8da](https://github.com/myparcelnl/sdk/commit/e9af8dad28eb81e1c371bb757ef9c96ac015d38c)), closes [#590](https://github.com/myparcelnl/sdk/issues/590)
+
 ## [11.0.0-beta.17](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.16...v11.0.0-beta.17) (2026-04-16)
 
 
