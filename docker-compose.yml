@@ -25,5 +25,5 @@ services:
         source: ./
         target: /local
     command: >
-      batch /local/openapi/coreapi.yaml /local/openapi/order.yaml /local/openapi/iam.yaml --includes-base-dir=/local/openapi --root-dir=/local --threads=1
+      batch /local/openapi/coreapi.yaml /local/openapi/coreapi-private.yaml /local/openapi/order.yaml /local/openapi/iam.yaml --includes-base-dir=/local/openapi --root-dir=/local --threads=1
     profiles: [openapi]

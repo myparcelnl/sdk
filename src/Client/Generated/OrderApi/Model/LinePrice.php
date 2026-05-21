@@ -59,7 +59,8 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'currency' => 'string',
         'fractional' => 'int',
-        'integral' => 'int'
+        'integral' => 'int',
+        'micros' => 'int'
     ];
 
     /**
@@ -72,7 +73,8 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'currency' => null,
         'fractional' => null,
-        'integral' => null
+        'integral' => null,
+        'micros' => null
     ];
 
     /**
@@ -83,7 +85,8 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'currency' => false,
         'fractional' => false,
-        'integral' => false
+        'integral' => false,
+        'micros' => false
     ];
 
     /**
@@ -174,7 +177,8 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'currency' => 'currency',
         'fractional' => 'fractional',
-        'integral' => 'integral'
+        'integral' => 'integral',
+        'micros' => 'micros'
     ];
 
     /**
@@ -185,7 +189,8 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'currency' => 'setCurrency',
         'fractional' => 'setFractional',
-        'integral' => 'setIntegral'
+        'integral' => 'setIntegral',
+        'micros' => 'setMicros'
     ];
 
     /**
@@ -196,7 +201,8 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'currency' => 'getCurrency',
         'fractional' => 'getFractional',
-        'integral' => 'getIntegral'
+        'integral' => 'getIntegral',
+        'micros' => 'getMicros'
     ];
 
     /**
@@ -259,6 +265,7 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('fractional', $data ?? [], null);
         $this->setIfExists('integral', $data ?? [], null);
+        $this->setIfExists('micros', $data ?? [], null);
     }
 
     /**
@@ -311,6 +318,14 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if (($this->container['integral'] < 0)) {
             $invalidProperties[] = "invalid value for 'integral', must be bigger than or equal to 0.";
+        }
+
+        if (!is_null($this->container['micros']) && ($this->container['micros'] > 9007199254740991)) {
+            $invalidProperties[] = "invalid value for 'micros', must be smaller than or equal to 9007199254740991.";
+        }
+
+        if (!is_null($this->container['micros']) && ($this->container['micros'] < 0)) {
+            $invalidProperties[] = "invalid value for 'micros', must be bigger than or equal to 0.";
         }
 
         return $invalidProperties;
@@ -422,6 +437,41 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         $this->container['integral'] = $integral;
+
+        return $this;
+    }
+
+    /**
+     * Gets micros
+     *
+     * @return int|null
+     */
+    public function getMicros()
+    {
+        return $this->container['micros'];
+    }
+
+    /**
+     * Sets micros
+     *
+     * @param int|null $micros The amount of money in integer micros.
+     *
+     * @return self
+     */
+    public function setMicros($micros)
+    {
+        if (is_null($micros)) {
+            throw new \InvalidArgumentException('non-nullable micros cannot be null');
+        }
+
+        if (($micros > 9007199254740991)) {
+            throw new \InvalidArgumentException('invalid value for $micros when calling LinePrice., must be smaller than or equal to 9007199254740991.');
+        }
+        if (($micros < 0)) {
+            throw new \InvalidArgumentException('invalid value for $micros when calling LinePrice., must be bigger than or equal to 0.');
+        }
+
+        $this->container['micros'] = $micros;
 
         return $this;
     }
