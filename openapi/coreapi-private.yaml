@@ -1,0 +1,36 @@
+'!include': 'common.yaml'
+
+# OpenAPI Generator configuration
+# @todo replace inputSpec with the public URL once the Private CoreAPI spec is hosted
+# (mirroring coreapi.yaml / iam.yaml / order.yaml). The local spec lives under
+# openapi/specs/ until then.
+inputSpec: /local/openapi/specs/coreapi-private.yaml
+outputDir: src/Client/Generated/CoreApiPrivate
+typeMappings:
+  # The generator emits empty wrapper classes for oneOf/anyOf schemas that
+  # combine primitives or include `type: "null"`. These can't (de)serialize
+  # anything — map references to the underlying primitive so the wrappers
+  # become orphaned and the API consumes/produces plain values.
+  # @todo remove individual entries if upstream spec replaces oneOf/anyOf
+  # with a single concrete type.
+
+  # oneOf(integer, string) — string digits, treat as int (matches coreapi.yaml)
+  RefTypesMoneyAmount: int
+
+  # anyOf(integer-enum, integer) — both branches are integers
+  CommonErrorUserCode: int
+
+  # anyOf(integer, string with `;`-joined-id pattern) — used as a path
+  # parameter that always serializes as a string (e.g. "1;2;3")
+  CommonParametersBigids: string
+
+  # anyOf(_ref_types_cc=string, null) — nullable 2-char country code; nullability
+  # is preserved on the parent property, the wrapper itself is just a string
+  ShippingRulesPatchShippingRulesDataShippingRulesInnerCriteriaCountry: string
+
+  # oneOf(null, _ref_shipping_rules_region=string enum) — same pattern as country
+  ShippingRulesPatchShippingRulesDataShippingRulesInnerCriteriaRegion: string
+additionalProperties:
+  '!include': 'commonProperties.yaml'
+  packageName: MyParcelNL\Sdk\Client\Generated\CoreApiPrivate
+  invokerPackage: MyParcelNL\Sdk\Client\Generated\CoreApiPrivate

@@ -60,7 +60,8 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
     protected static $openAPITypes = [
         'currency' => 'string',
         'fractional' => 'int',
-        'integral' => 'int'
+        'integral' => 'int',
+        'micros' => 'int'
     ];
 
     /**
@@ -73,7 +74,8 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
     protected static $openAPIFormats = [
         'currency' => null,
         'fractional' => null,
-        'integral' => null
+        'integral' => null,
+        'micros' => null
     ];
 
     /**
@@ -84,7 +86,8 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
     protected static array $openAPINullables = [
         'currency' => false,
         'fractional' => false,
-        'integral' => false
+        'integral' => false,
+        'micros' => false
     ];
 
     /**
@@ -175,7 +178,8 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
     protected static $attributeMap = [
         'currency' => 'currency',
         'fractional' => 'fractional',
-        'integral' => 'integral'
+        'integral' => 'integral',
+        'micros' => 'micros'
     ];
 
     /**
@@ -186,7 +190,8 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
     protected static $setters = [
         'currency' => 'setCurrency',
         'fractional' => 'setFractional',
-        'integral' => 'setIntegral'
+        'integral' => 'setIntegral',
+        'micros' => 'setMicros'
     ];
 
     /**
@@ -197,7 +202,8 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
     protected static $getters = [
         'currency' => 'getCurrency',
         'fractional' => 'getFractional',
-        'integral' => 'getIntegral'
+        'integral' => 'getIntegral',
+        'micros' => 'getMicros'
     ];
 
     /**
@@ -260,6 +266,7 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('fractional', $data ?? [], null);
         $this->setIfExists('integral', $data ?? [], null);
+        $this->setIfExists('micros', $data ?? [], null);
     }
 
     /**
@@ -312,6 +319,14 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
         }
         if (($this->container['integral'] < 0)) {
             $invalidProperties[] = "invalid value for 'integral', must be bigger than or equal to 0.";
+        }
+
+        if (!is_null($this->container['micros']) && ($this->container['micros'] > 9007199254740991)) {
+            $invalidProperties[] = "invalid value for 'micros', must be smaller than or equal to 9007199254740991.";
+        }
+
+        if (!is_null($this->container['micros']) && ($this->container['micros'] < 0)) {
+            $invalidProperties[] = "invalid value for 'micros', must be bigger than or equal to 0.";
         }
 
         return $invalidProperties;
@@ -423,6 +438,41 @@ class ShipmentOptionsCommonInsuranceAmount implements ModelInterface, ArrayAcces
         }
 
         $this->container['integral'] = $integral;
+
+        return $this;
+    }
+
+    /**
+     * Gets micros
+     *
+     * @return int|null
+     */
+    public function getMicros()
+    {
+        return $this->container['micros'];
+    }
+
+    /**
+     * Sets micros
+     *
+     * @param int|null $micros The amount of money in integer micros.
+     *
+     * @return self
+     */
+    public function setMicros($micros)
+    {
+        if (is_null($micros)) {
+            throw new \InvalidArgumentException('non-nullable micros cannot be null');
+        }
+
+        if (($micros > 9007199254740991)) {
+            throw new \InvalidArgumentException('invalid value for $micros when calling ShipmentOptionsCommonInsuranceAmount., must be smaller than or equal to 9007199254740991.');
+        }
+        if (($micros < 0)) {
+            throw new \InvalidArgumentException('invalid value for $micros when calling ShipmentOptionsCommonInsuranceAmount., must be bigger than or equal to 0.');
+        }
+
+        $this->container['micros'] = $micros;
 
         return $this;
     }
