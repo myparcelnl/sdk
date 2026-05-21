@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.19](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.18...v11.0.0-beta.19) (2026-05-21)
+
+
+### :sparkles: New Features
+
+* **api:** add private coreapi client for shipping rules ([#617](https://github.com/myparcelnl/sdk/issues/617)) ([1b0ac66](https://github.com/myparcelnl/sdk/commit/1b0ac66acbfe7ae37cba788269bc87f1a9ae44c3))
+
 ## [11.0.0-beta.18](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.17...v11.0.0-beta.18) (2026-05-15)
 
 
