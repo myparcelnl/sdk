@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Account;
 
 use MyParcelNL\Sdk\Model\Account\CarrierOptions;
+use MyParcelNL\Sdk\Model\Carrier\CarrierBRT;
 use MyParcelNL\Sdk\Model\Carrier\CarrierDPD;
+use MyParcelNL\Sdk\Model\Carrier\CarrierInPost;
 use MyParcelNL\Sdk\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\Model\Carrier\CarrierPosteItaliane;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 class CarrierOptionsTest extends TestCase
@@ -66,6 +69,51 @@ class CarrierOptionsTest extends TestCase
                     'type' => 'custom',
 
                 ]
+            ],
+            ['options' => [
+                'enabled' => true,
+                'optional' => false,
+                'carrier' => [
+                    'id' => 15,
+                ],
+            ],
+                'expected' => [
+                    'enabled' => true,
+                    'optional' => false,
+                    'carrier' => CarrierBRT::class,
+                    'label' => CarrierBRT::HUMAN,
+                    'type' => CarrierBRT::HUMAN,
+                ],
+            ],
+            ['options' => [
+                'enabled' => true,
+                'optional' => false,
+                'carrier' => [
+                    'id' => 17,
+                ],
+            ],
+                'expected' => [
+                    'enabled' => true,
+                    'optional' => false,
+                    'carrier' => CarrierInPost::class,
+                    'label' => CarrierInPost::HUMAN,
+                    'type' => CarrierInPost::HUMAN,
+                ],
+            ],
+            ['options' => [
+                'enabled' => true,
+                'optional' => false,
+                'carrier' => [
+                    'id' => 18,
+                ],
+            ],
+                'expected' => [
+                    'enabled' => true,
+                    'optional' => false,
+                    'carrier' => CarrierPosteItaliane::class,
+                    'label' => CarrierPosteItaliane::HUMAN,
+                    'type' => CarrierPosteItaliane::HUMAN,
+                ],
             ],
         ];
 
