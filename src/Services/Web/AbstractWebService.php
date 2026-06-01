@@ -8,6 +8,9 @@ use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 
+/**
+ * @internal Legacy web service — no generated client equivalent yet.
+ */
 abstract class AbstractWebService
 {
     use HasApiKey;

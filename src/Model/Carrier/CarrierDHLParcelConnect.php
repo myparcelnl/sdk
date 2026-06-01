@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Carrier;
 
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\Model\Consignment\DHLParcelConnectConsignment;
-
+/**
+ * @internal Legacy carrier model — used by web services and Order v1 (fulfilment).
+ *           Do not use in new code. Use the generated client models instead.
+ */
 class CarrierDHLParcelConnect extends AbstractCarrier
 {
-    public const CONSIGNMENT = DHLParcelConnectConsignment::class;
-    public const HUMAN       = 'DHL Parcel Connect';
-    public const ID          = 10;
-    public const NAME        = 'dhlparcelconnect';
-    public const TYPE        = AbstractConsignment::TYPE_B2C;
-
-    /**
-     * @var class-string
-     */
-    protected $consignmentClass = self::CONSIGNMENT;
+    public const HUMAN = 'DHL Parcel Connect';
+    public const ID    = 10;
+    public const NAME  = 'dhlparcelconnect';
+    public const TYPE  = self::TYPE_B2C;
 
     /**
      * @var string
