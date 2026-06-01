@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.20](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.19...v11.0.0-beta.20) (2026-06-01)
+
+
+### :bug: Bug Fixes
+
+* add Italian carriers to legacy factory ([94669d6](https://github.com/myparcelnl/sdk/commit/94669d681e04dce9a786471993e870b5e51ea84d))
+
 ## [11.0.0-beta.19](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.18...v11.0.0-beta.19) (2026-05-21)
 
 
