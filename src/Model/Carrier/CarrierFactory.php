@@ -22,7 +22,10 @@ class CarrierFactory
         CarrierUPSStandard::class,
         CarrierUPSExpressSaver::class,
         CarrierGLS::class,
+        CarrierBRT::class,
         CarrierTrunkrs::class,
+        CarrierInPost::class,
+        CarrierPosteItaliane::class,
     ];
 
     /**
