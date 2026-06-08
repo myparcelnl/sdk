@@ -25,25 +25,40 @@ final class CarrierContractDefinitionsService
 
     private ShipmentApi $api;
 
+    /**
+     * @param string           $apiKey API key used when creating the default generated client.
+     * @param string|null      $host   Optional API host override for the default generated client.
+     * @param ShipmentApi|null $api    Optional preconfigured generated client, primarily for tests or custom transports.
+     *                                 When provided, the client is used as-is.
+     */
     public function __construct(
         string $apiKey,
-        ?ShipmentApi $api = null,
-        ?string $host = null
+        ?string $host = null,
+        ?ShipmentApi $api = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host, $this->getUserAgentHeader());
     }
 
     /**
-     * Fetch all contract definitions available for the configured API key.
+     * Fetch contract definitions available for the configured API key.
+     *
+     * Pass a generated carrier enum value to let the generated request model
+     * validate and filter the API request.
      *
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException
      */
-    public function getAll(): array
+    public function getContractDefinitions(?string $carrier = null): array
     {
+        $request = new CapabilitiesPostContractDefinitionsRequestV2();
+
+        if (null !== $carrier) {
+            $request->setCarrier($carrier);
+        }
+
         $response = $this->api->postCapabilitiesContractDefinitions(
             $this->getUserAgentHeader(),
-            new CapabilitiesPostContractDefinitionsRequestV2()
+            $request
         );
 
         if (! $response instanceof CapabilitiesResponsesContractDefinitionsV2) {
@@ -53,31 +68,5 @@ final class CarrierContractDefinitionsService
         }
 
         return $response->getItems() ?? [];
-    }
-
-    /**
-     * Fetch contract definitions for a carrier.
-     *
-     * The generated response is the source of truth. Filtering is done locally so
-     * newly generated response carriers keep working even when request filtering
-     * is narrower than the response contract.
-     *
-     * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
-     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException
-     */
-    public function getByCarrier(string $carrier): array
-    {
-        $normalizedCarrier = $this->normalizeCarrier($carrier);
-
-        return array_values(array_filter(
-            $this->getAll(),
-            fn (RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2 $definition): bool => $normalizedCarrier ===
-                $this->normalizeCarrier((string) $definition->getCarrier())
-        ));
-    }
-
-    private function normalizeCarrier(string $carrier): string
-    {
-        return strtoupper((string) preg_replace('/[^a-z0-9]/i', '', $carrier));
     }
 }
