@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.21](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.20...v11.0.0-beta.21) (2026-06-08)
+
+
+### :sparkles: New Features
+
+* add carrier contract definitions service ([#619](https://github.com/myparcelnl/sdk/issues/619)) ([20d000a](https://github.com/myparcelnl/sdk/commit/20d000a31ea9c3ddbf9f5353bba37458ebc892b4))
+
 ## [11.0.0-beta.20](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.19...v11.0.0-beta.20) (2026-06-01)
 
 
