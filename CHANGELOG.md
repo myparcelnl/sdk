@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.22](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.21...v11.0.0-beta.22) (2026-06-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove legacy consignment stack and finalize v11 migration paths (#615)
+
+* remove legacy consignment stack and finalize v11 migration paths ([#615](https://github.com/myparcelnl/sdk/issues/615)) ([ac6103c](https://github.com/myparcelnl/sdk/commit/ac6103cb0e2cd98e3a4e20a9b3662e2e8f3fbfce))
+
 ## [11.0.0-beta.21](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.20...v11.0.0-beta.21) (2026-06-08)
 
 
