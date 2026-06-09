@@ -57,6 +57,7 @@ $mapping = $service->create((new ShipmentCollection())->push($shipment));
 | `ReturnShipmentService` | Create related or unrelated return shipments |
 | `MultiColloShipmentService` | Split a shipment into multiple colli |
 | `CapabilitiesService` | Check carrier capabilities for a shipment |
+| `CarrierContractDefinitionsService` | Fetch account-level carrier contract definitions |
 | `WebhookService` | Subscribe, unsubscribe, list webhooks |
 | `ApiKeyService` | Validate API key, get principal info |
 
@@ -69,6 +70,9 @@ The following are still available but will be replaced in a future release:
 - **Web services (@internal):** `AccountWebService`, `CarrierOptionsWebService`, `PrinterGroupWebService`
 - **Order v1 fulfilment:** `OrderCollection` (@internal), `OrderNotesCollection` (@internal), `Order`, `OrderLine`, `OrderNote`, `Product`
 - **Carrier models, shared models, helpers (@internal)** — see [UPGRADE.md](UPGRADE.md) for the full list
+
+Use `CarrierContractDefinitionsService` for new account-level carrier contract definition lookups instead of
+`CarrierOptionsWebService`.
 
 ## Testing
 

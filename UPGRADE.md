@@ -257,6 +257,36 @@ $shipment = (new Shipment())
 $capabilities = $service->fromShipment($shipment);
 ```
 
+## Carrier contract definitions
+
+Use `CarrierContractDefinitionsService` when you need account-level carrier contract definitions, for example to build carrier settings or discover which carriers are available for an account. Use `CapabilitiesService` when you need shipment-specific capabilities based on shipment input such as country, weight, package type or delivery options.
+
+This is the recommended replacement when you previously used `CarrierOptionsWebService` to build carrier settings or determine which carriers are available for a shop or account. It is not a 1:1 replacement for the legacy `CarrierOptions` model; consumers should read the generated contract definition models directly.
+
+The service returns the generated Core API contract definition models directly. The generated client is the source of truth for request validation and response shape.
+
+### Before (v10)
+
+```php
+use MyParcelNL\Sdk\Services\Web\CarrierOptionsWebService;
+
+$carrierOptions = (new CarrierOptionsWebService())
+    ->setApiKey('your-api-key')
+    ->getCarrierOptions($shopId);
+```
+
+### After (v11)
+
+```php
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
+use MyParcelNL\Sdk\Services\Capabilities\CarrierContractDefinitionsService;
+
+$service = new CarrierContractDefinitionsService('your-api-key');
+
+$definitions = $service->getContractDefinitions();
+$inPost      = $service->getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2::CARRIER_INPOST);
+```
+
 ## Return shipments
 
 ### After (v11)
@@ -344,9 +374,9 @@ $collection->save();
 The following legacy classes are still available. Classes marked `@internal` should not be used in new integrations.
 
 - **Order v1 (fulfilment):** `OrderCollection` (@internal), `OrderNotesCollection` (@internal), `Order`, `OrderLine`, `OrderNote`, `Product`
-- **Web services (no generated-client equivalent yet):** `AccountWebService` (@internal), `CarrierOptionsWebService` (@internal), `PrinterGroupWebService` (@internal)
+- **Web services (legacy):** `AccountWebService` (@internal), `CarrierOptionsWebService` (@internal), `PrinterGroupWebService` (@internal). Use `CarrierContractDefinitionsService` for new account-level carrier contract definition lookups.
 - **Shared models (@internal):** `BaseModel`, `Recipient`, `CustomsDeclaration`, `MyParcelCustomsItem`, `PickupLocation`, `PhysicalProperties`, `MyParcelRequest`, `RequestBody`, `PrinterlessReturnRequest`, `FullStreet`
-- **Carrier value objects (@internal):** `AbstractCarrier`, `CarrierFactory`, `CarrierPostNL`, `CarrierBpost`, `CarrierDHLForYou`, `CarrierDHLEuroplus`, `CarrierDHLParcelConnect`, `CarrierDPD`, `CarrierGLS`, `CarrierTrunkrs`, `CarrierUPSExpressSaver`, `CarrierUPSStandard`
+- **Carrier value objects (@internal):** `AbstractCarrier`, `CarrierFactory`, `CarrierPostNL`, `CarrierBpost`, `CarrierDHLForYou`, `CarrierDHLEuroplus`, `CarrierDHLParcelConnect`, `CarrierDPD`, `CarrierGLS`, `CarrierBRT`, `CarrierTrunkrs`, `CarrierInPost`, `CarrierPosteItaliane`, `CarrierUPSExpressSaver`, `CarrierUPSStandard`
 - **Web service infra (@internal):** `AbstractWebService`, `HasCarrier` (trait)
 - **Helpers (@internal):** `SplitStreet`, `ValidateStreet`, `MyParcelCurl`, `RequestError`
 - **Validation (@internal):** `AbstractValidator`, `ValidatorFactory`
@@ -357,7 +387,7 @@ These will be replaced when their respective API endpoints are added to the gene
 
 The following classes and namespaces have been fully removed:
 
-- `MyParcelNL\Sdk\Model\Consignment\*` (13 consignment models)
+- `MyParcelNL\Sdk\Model\Consignment\*` (all consignment models)
 - `MyParcelNL\Sdk\Adapter\DeliveryOptions\*` (11 delivery options adapters)
 - `MyParcelNL\Sdk\Helper\MyParcelCollection`
 - `MyParcelNL\Sdk\Factory\ConsignmentFactory`
