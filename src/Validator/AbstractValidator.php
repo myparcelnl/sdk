@@ -8,6 +8,9 @@ use MyParcelNL\Sdk\Exception\ValidationException;
 use MyParcelNL\Sdk\Rule\Rule;
 use MyParcelNL\Sdk\Support\Collection;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 abstract class AbstractValidator
 {
     /**

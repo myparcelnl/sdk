@@ -8,6 +8,9 @@ use MyParcelNL\Sdk\Model\Account\CarrierOptions;
 use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
 use MyParcelNL\Sdk\Support\Collection;
 
+/**
+ * @internal Legacy web service — no generated client equivalent yet.
+ */
 class CarrierOptionsWebService extends AbstractWebService
 {
     use HasCarrier;
