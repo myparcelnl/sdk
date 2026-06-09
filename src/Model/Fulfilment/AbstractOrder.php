@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
 use Exception;
-use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\Exception\ValidationException;
 use MyParcelNL\Sdk\Model\BaseModel;
 use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
@@ -15,6 +14,7 @@ use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\PhysicalProperties;
 use MyParcelNL\Sdk\Model\PickupLocation;
 use MyParcelNL\Sdk\Model\Recipient;
+use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Validator\Order\OrderValidator;
 use MyParcelNL\Sdk\Validator\ValidatorFactory;
@@ -25,11 +25,19 @@ class AbstractOrder extends BaseModel
     public const DATE_FORMAT_DATE = 'Y-m-d';
 
     /**
-     * The selected delivery options for this order.
+     * The selected shipment options for this order.
+     * Keeps the legacy delivery_options property name for Order v1 hydration/payload compatibility.
      *
-     * @var \MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter
+     * @var \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions
      */
     protected $delivery_options;
+
+    /**
+     * Carrier is shipment-level data in the Order v1 payload, not part of shipment options.
+     *
+     * @var int|null
+     */
+    protected $carrier_id;
 
     /**
      * The unique identifier of the order in your webshop.
@@ -126,7 +134,21 @@ class AbstractOrder extends BaseModel
      */
     public function getCarrier(): AbstractCarrier
     {
-        return CarrierFactory::createFromName($this->delivery_options->getCarrier());
+        $carrierId = $this->getCarrierId();
+
+        if (null === $carrierId) {
+            throw new \Exception('No carrier set on order shipment');
+        }
+
+        return CarrierFactory::createFromId($carrierId);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCarrierId(): ?int
+    {
+        return $this->carrier_id;
     }
 
     /**
@@ -138,9 +160,9 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter
+     * @return \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions
      */
-    public function getDeliveryOptions(): AbstractDeliveryOptionsAdapter
+    public function getDeliveryOptions(): ShipmentOptions
     {
         return $this->delivery_options;
     }
@@ -293,11 +315,22 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param  int|null $carrierId
      *
      * @return self
      */
-    public function setDeliveryOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): self
+    public function setCarrierId(?int $carrierId): self
+    {
+        $this->carrier_id = $carrierId;
+        return $this;
+    }
+
+    /**
+     * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
+     *
+     * @return self
+     */
+    public function setDeliveryOptions(ShipmentOptions $deliveryOptions): self
     {
         $this->delivery_options = $deliveryOptions;
         return $this;
@@ -473,6 +506,7 @@ class AbstractOrder extends BaseModel
                 'recipient'                     => $this->getRecipient()->toArray(),
                 'invoice_address'               => $this->getInvoiceAddress()->toArray(),
                 'order_lines'                   => $this->getOrderLines()->toArray(),
+                'carrier_id'                    => $this->getCarrierId(),
                 'delivery_options'              => $this->getDeliveryOptions()->toArray(),
             ],
             (null === $this->customs_declaration)

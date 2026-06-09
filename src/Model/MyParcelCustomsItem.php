@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * This object is embedded in the AbstractConsignment object for global shipments and is
- *
  * If you want to add improvements, please create a fork in our GitHub:
  * https://github.com/myparcelnl
  *
@@ -15,21 +13,18 @@
 namespace MyParcelNL\Sdk\Model;
 
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Factory\ConsignmentFactory;
-use MyParcelNL\Sdk\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\Services\ConsignmentEncode;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
- * This object is embedded in the MyParcelConsignment object for global shipments and is
- * mandatory for non-EU shipments.
+ * Customs item embedded in CustomsDeclaration for global shipments; mandatory for non-EU shipments.
  *
- * Class MyParcelCustomsItem
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
 class MyParcelCustomsItem
 {
+    private const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
+    private const DEFAULT_CURRENCY = 'EUR';
+
     public $description;
     public $amount;
     public $weight;
@@ -50,22 +45,13 @@ class MyParcelCustomsItem
      *
      * Required: Yes
      *
-     * @param mixed                      $description
-     * @param string|int|AbstractCarrier $carrier
+     * @param mixed  $description
+     * @param mixed  $carrier
      * @return $this
-     *
-     * @throws \Exception
      */
     public function setDescription($description, $carrier = null): self
     {
-        $maxLength = AbstractConsignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
-
-        if ($carrier) {
-            $consignment = ConsignmentFactory::createFromCarrier(CarrierFactory::create($carrier));
-            $maxLength   = $consignment::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH;
-        }
-
-        $this->description = Str::limit((string) $description, $maxLength);
+        $this->description = Str::limit((string) $description, self::CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH);
 
         return $this;
     }
@@ -129,7 +115,7 @@ class MyParcelCustomsItem
     }
 
     /**
-     * Item value in cents in ConsignmentEncode::DEFAULT_CURRENCY.
+     * Item value in cents in EUR.
      *
      * @param int|float|string $item_value
      *
@@ -140,7 +126,7 @@ class MyParcelCustomsItem
         return $this->setItemValueArray(
             [
                 'amount'   => (int) $item_value,
-                'currency' => ConsignmentEncode::DEFAULT_CURRENCY,
+                'currency' => self::DEFAULT_CURRENCY,
             ]
         );
     }

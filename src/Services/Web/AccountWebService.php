@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Services\Web;
 
 use MyParcelNL\Sdk\Model\Account\Account;
 
+/**
+ * @internal Legacy web service — no generated client equivalent yet.
+ */
 class AccountWebService extends AbstractWebService
 {
     public const ENDPOINT = 'accounts';

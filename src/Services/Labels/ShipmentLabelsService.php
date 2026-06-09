@@ -9,7 +9,6 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Helper\LabelHelper;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -31,6 +30,8 @@ final class ShipmentLabelsService
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
     private const PDF_ACCEPT_HEADER = 'application/pdf';
     private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
+    private const A4_FIRST_LABEL_POSITION = 1;
+    private const A4_LAST_LABEL_POSITION = 4;
 
     private ShipmentApi $api;
     private ClientInterface $httpClient;
@@ -191,7 +192,14 @@ final class ShipmentLabelsService
     private function resolveFormatAndPositions($positions): array
     {
         if (is_numeric($positions)) {
-            return ['A4', LabelHelper::getPositions((int) $positions)];
+            $start = (int) $positions;
+
+            return [
+                'A4',
+                $start >= self::A4_FIRST_LABEL_POSITION && $start <= self::A4_LAST_LABEL_POSITION
+                    ? implode(';', range($start, self::A4_LAST_LABEL_POSITION))
+                    : '',
+            ];
         }
 
         if (is_array($positions)) {

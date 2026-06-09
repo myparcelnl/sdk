@@ -12,12 +12,16 @@
 
 namespace MyParcelNL\Sdk\Helper;
 
-use MyParcelNL\Sdk\Exception\InvalidConsignmentException;
-use MyParcelNL\Sdk\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\Model\FullStreet;
+use MyParcelNL\Sdk\Services\CountryCodes;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class SplitStreet
 {
+    public const MAX_STREET_LENGTH = 40;
+
     const BOX_NL                 = 'bus';
     const BOX_BTE                = 'bte';
     const BOX_FR                 = 'boîte';
@@ -82,7 +86,7 @@ class SplitStreet
         $fullStreet = trim(preg_replace('/(\r\n)|\n|\r/', ' ', $fullStreet));
 
         // Replace house number suffix by an abbreviation, only possible for the Netherlands
-        if ($destination === AbstractConsignment::CC_NL) {
+        if ($destination === CountryCodes::CC_NL) {
             foreach (self::NUMBER_SUFFIX_ABBREVIATION as $from => $to) {
                 $fullStreet = preg_replace("/(\d.*-?)[\s]$from/", '$1' . $to, $fullStreet);
             }
@@ -90,7 +94,7 @@ class SplitStreet
 
         $regex = ValidateStreet::getStreetRegexByCountry($local, $destination);
 
-        if ($destination === AbstractConsignment::CC_BE) {
+        if ($destination === CountryCodes::CC_BE) {
             preg_match(ValidateStreet::SPLIT_STREET_REGEX_BE, $fullStreet, $matches);
 
             if (in_array($matches['box_separator'], self::BOX_SEPARATOR)) {
@@ -138,7 +142,7 @@ class SplitStreet
      */
     public static function getStreetParts($street)
     {
-        $streetWrap = wordwrap($street, AbstractConsignment::MAX_STREET_LENGTH, 'BREAK_LINE');
+        $streetWrap = wordwrap($street, self::MAX_STREET_LENGTH, 'BREAK_LINE');
         $parts      = explode("BREAK_LINE", $streetWrap);
 
         return $parts;
@@ -150,18 +154,18 @@ class SplitStreet
      * @param array  $matches
      *
      * @return void
-     * @throws \MyParcelNL\Sdk\Exception\InvalidConsignmentException
+     * @throws \InvalidArgumentException
      */
     private static function validate(string $fullStreet, int $result, array $matches): void
     {
         if (! $result || ! is_array($matches)) {
             // Invalid full street supplied
-            throw new InvalidConsignmentException('Invalid full street supplied: ' . $fullStreet);
+            throw new \InvalidArgumentException('Invalid full street supplied: ' . $fullStreet);
         }
 
         if ($fullStreet != $matches[0]) {
             // Characters are gone by preg_match
-            throw new InvalidConsignmentException('Something went wrong splitting up the following address: ' . $fullStreet);
+            throw new \InvalidArgumentException('Something went wrong splitting up the following address: ' . $fullStreet);
         }
 
         return;

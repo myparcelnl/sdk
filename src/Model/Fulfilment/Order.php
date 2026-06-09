@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
-use MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Model\Recipient;
+use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Collection;
 
 class Order extends AbstractOrder
@@ -25,6 +25,8 @@ class Order extends AbstractOrder
      */
     public function __construct(array $data = [])
     {
+        $shipment = $data['shipment'] ?? [];
+
         $this->uuid                          = $data['uuid'] ?? null;
         $this->external_identifier           = $data['external_identifier'] ?? null;
         $this->fulfilment_partner_identifier = $data['fulfilment_partner_identifier'] ?? null;
@@ -34,9 +36,12 @@ class Order extends AbstractOrder
         $this->status                        = $data['status'] ?? null;
         $this->type                          = $data['type'] ?? null;
 
-        $this->recipient        = new Recipient($data['shipment']['recipient'] ?? []);
+        $this->carrier_id       = isset($shipment['carrier_id'])
+            ? (int) $shipment['carrier_id']
+            : (isset($shipment['carrier']) ? (int) $shipment['carrier'] : null);
+        $this->recipient        = new Recipient($shipment['recipient'] ?? []);
         $this->invoice_address  = new Recipient($data['invoice_address'] ?? []);
         $this->order_lines      = (new Collection($data['order_lines'] ?? []))->mapInto(OrderLine::class);
-        $this->delivery_options = new DeliveryOptionsFromOrderAdapter($data['shipment'] ?? []);
+        $this->delivery_options = ShipmentOptions::fromOrderResponse($shipment);
     }
 }

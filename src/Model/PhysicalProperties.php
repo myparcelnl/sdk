@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class PhysicalProperties extends BaseModel
 {
     private const DEFAULT_WEIGHT = 10;
