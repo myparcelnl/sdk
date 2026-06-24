@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**city** | **string** | The city of the address. |
+**city** | **string** | The city of the address. | [optional]
 **country_code** | **string** | The country code (ISO 3166-1 alpha-2) of the address. |
-**street** | **string** | The street of the address. |
+**street** | **string** | The street of the address. | [optional]
 **additional_information** | **string** | Additional information about the address. | [optional]
 **box_number** | **string** | The box number of the address. Only applicable for &#x60;countryCode&#x60;&#x3D;&#x60;BE&#x60;. | [optional]
 **house_number** | **string** | The house number of the address. | [optional]

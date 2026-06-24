@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **longitude** | **string** |  |
 **location_code** | **string** |  |
 **phone_number** | **string** |  |
-**type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsCarrierLocationType**](ShipmentDefsCarrierLocationType.md) |  |
+**type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType**](RefShipmentLocationType.md) |  |
 **opening_hours** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocationsDefinitionsOpeningHours**](ShipmentResponsesPickupLocationsDefinitionsOpeningHours.md) |  |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

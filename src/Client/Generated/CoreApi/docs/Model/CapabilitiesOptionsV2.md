@@ -6,8 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **additional_insurance** | **object** | Additional insurance option | [optional]
 **deliver_at_postal_point** | **object** | Deliver at postal point option | [optional]
+**fresh_food** | **object** | Fresh food delivery option | [optional]
+**frozen** | **object** | Frozen delivery option | [optional]
 **hide_sender** | **object** | Hide sender option | [optional]
-**insurance** | **object** | Insurance option | [optional]
+**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2OptionsInsurance**](CapabilitiesPostCapabilitiesRequestV2OptionsInsurance.md) |  | [optional]
 **no_tracking** | **object** | No tracking option (inverse of tracked) | [optional]
 **oversized_package** | **object** | Oversized package option | [optional]
 **print_return_label_at_drop_off** | **object** | Print return label at drop off package option | [optional]

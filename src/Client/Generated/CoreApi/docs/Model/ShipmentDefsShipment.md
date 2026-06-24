@@ -40,7 +40,7 @@ Name | Type | Description | Notes
 **amount** | **int** |  | [optional]
 **currency** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentCurrency**](ShipmentDefsShipmentCurrency.md) |  | [optional]
 **contract_id** | **int** |  |
-**link_consumer_portal** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentLinkConsumerPortal**](ShipmentDefsShipmentLinkConsumerPortal.md) |  | [optional]
+**link_consumer_portal** | [**string**](ShipmentDefsShipmentLinkConsumerPortal.md) |  | [optional]
 **partner_tracktraces** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPartnerTracktracesInner[]**](ShipmentDefsShipmentPartnerTracktracesInner.md) |  | [optional]
 **pickup_request_number** | **string** |  | [optional]
 **order_shipment_identifier** | [**mixed**](Null.md) |  | [optional]
