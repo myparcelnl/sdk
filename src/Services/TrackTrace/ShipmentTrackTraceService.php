@@ -43,6 +43,8 @@ final class ShipmentTrackTraceService
         /** @var ShipmentResponsesTracktraces $response */
         $response = $this->api->getTrackTracesByIds(
             implode(';', $shipmentIds),
+            null,
+            null,
             $this->getUserAgentHeader()
         );
 
