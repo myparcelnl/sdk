@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **state** | **string** |  | [optional]
 **cc** | **string** |  | [optional]
 **location_code** | **string** |  | [optional]
-**location_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentBpostBpostPugoType**](RefShipmentBpostBpostPugoType.md) |  | [optional]
+**location_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupLocationType**](RefShipmentPickupLocationType.md) |  | [optional]
 **retail_network_id** | **string** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

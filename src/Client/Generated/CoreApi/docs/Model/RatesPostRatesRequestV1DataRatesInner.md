@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient**](CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender**](CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender.md) |  | [optional]
 **pickup** | [**mixed**](Null.md) |  | [optional]
-**carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
+**carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier**](RefCapabilitiesSharedCarrier.md) |  |
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType**](RefShipmentPackageType.md) |  |
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties**](RatesPostRatesRequestV2PhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV1DataRatesInnerOptions**](RatesPostRatesRequestV1DataRatesInnerOptions.md) |  | [optional]

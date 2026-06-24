@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 **occupancy** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsOccupancy**](ShipmentDefsOccupancy.md) |  | [optional]
 **occupancy_today** | **float** |  | [optional]
 **default_drop_off_point** | **bool** |  | [optional]
-**type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsCarrierLocationType**](ShipmentDefsCarrierLocationType.md) |  | [optional]
+**type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType**](RefShipmentLocationType.md) |  | [optional]
 **opening_hours** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPointDefinitionsOpeningHours**](ShipmentResponsesDropOffPointDefinitionsOpeningHours.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

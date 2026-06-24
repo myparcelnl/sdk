@@ -4,10 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
-**contract** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponseContract**](RefRatesResponseContract.md) |  |
+**carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier**](RefCapabilitiesSharedCarrier.md) |  |
+**contract** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponseContract**](RefRatesResponseContract.md) |  | [optional]
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType**](RefShipmentPackageType.md) |  |
-**delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType**](RefTypesDeliveryType.md) |  |
+**delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType**](RefTypesDeliveryType.md) |  | [optional]
+**shipment_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesShipmentType**](RefTypesShipmentType.md) |  |
 **price_composition** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponsePriceCompositionPriceCompositionV1**](RefRatesResponsePriceCompositionPriceCompositionV1.md) |  |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -27,6 +27,11 @@ Delete webhook subscriptions to stop receiving notifications about events.
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -52,7 +57,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -60,7 +65,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -74,7 +79,7 @@ void (empty response body)
 ## `getWebhookSubscriptions()`
 
 ```php
-getWebhookSubscriptions($user_agent, $hook): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11
+getWebhookSubscriptions($hook, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11
 ```
 
 Get webhook subscriptions
@@ -103,11 +108,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $hook = 'hook_example'; // string | Filter by webhook event type.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getWebhookSubscriptions($user_agent, $hook);
+    $result = $apiInstance->getWebhookSubscriptions($hook, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WebhookApi->getWebhookSubscriptions: ', $e->getMessage(), PHP_EOL;
@@ -118,8 +123,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **hook** | **string**| Filter by webhook event type. | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -186,7 +191,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -208,7 +213,7 @@ try {
 ## `postWebhookSubscriptions()`
 
 ```php
-postWebhookSubscriptions($user_agent, $webhooks_post_webhook_subscriptions_request_v11): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions
+postWebhookSubscriptions($webhooks_post_webhook_subscriptions_request_v11, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions
 ```
 
 Create webhook subscriptions
@@ -222,6 +227,11 @@ Create webhook subscriptions for event notifications.
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
@@ -232,11 +242,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $webhooks_post_webhook_subscriptions_request_v11 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11 | Request body for creating webhook subscriptions.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postWebhookSubscriptions($user_agent, $webhooks_post_webhook_subscriptions_request_v11);
+    $result = $apiInstance->postWebhookSubscriptions($webhooks_post_webhook_subscriptions_request_v11, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WebhookApi->postWebhookSubscriptions: ', $e->getMessage(), PHP_EOL;
@@ -247,8 +257,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **webhooks_post_webhook_subscriptions_request_v11** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11**](../Model/WebhooksPostWebhookSubscriptionsRequestV11.md)| Request body for creating webhook subscriptions. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -256,11 +266,11 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
-- **Content-Type**: `application/json;charset=utf-8;version=1.1`, `application/json;charset=utf-8`
+- **Content-Type**: `application/json;version=1.1`, `application/json`
 - **Accept**: `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)

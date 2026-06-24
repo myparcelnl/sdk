@@ -5,8 +5,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **currency** | **string** | ISO 4217 three-letter currency code. |
-**fractional** | **int** | The fractional unit of the amount. |
-**integral** | **int** | The whole unit of the amount. |
-**micros** | **int** | The amount of money in integer micros. | [optional]
+**micros** | **int** | The amount of money in integer micros. |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

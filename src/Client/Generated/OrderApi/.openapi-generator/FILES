@@ -9,7 +9,6 @@ Model/AddNotePostRequestInner.php
 Model/AddNotePostRequestInnerLocale.php
 Model/AddPackages.php
 Model/Address.php
-Model/Aggregation.php
 Model/AssignToUserPost200ResponseInner.php
 Model/AssignToUserPost200ResponseInnerOneOf.php
 Model/AssignToUserPostRequestInner.php
@@ -57,7 +56,6 @@ Model/Line.php
 Model/LineExternalReference.php
 Model/LinePrice.php
 Model/LineProduct.php
-Model/LineProductEan.php
 Model/ModelInterface.php
 Model/Money.php
 Model/Note.php
@@ -69,6 +67,15 @@ Model/NoteFromPrincipal.php
 Model/Order.php
 Model/OrderExternalReferences.php
 Model/OrderOrderedAt.php
+Model/OrderRules.php
+Model/OrderRulesSetShippingPreferences.php
+Model/OrderRulesSetShippingPreferencesAppliedAt.php
+Model/OrderRulesSetShippingPreferencesPathInner.php
+Model/OrderRulesSetShippingPreferencesPathInnerAnyOf.php
+Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1.php
+Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition.php
+Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf.php
+Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf1.php
 Model/OrderStatus.php
 Model/OrdersGet200Response.php
 Model/OrdersGet200ResponseAggregations.php
@@ -103,10 +110,7 @@ Model/PhysicalPropertiesHeight.php
 Model/PhysicalPropertiesLength.php
 Model/PhysicalPropertiesWeight.php
 Model/PhysicalPropertiesWeightRequired.php
-Model/PhysicalPropertiesWeightRequiredHeight.php
-Model/PhysicalPropertiesWeightRequiredLength.php
 Model/PhysicalPropertiesWeightRequiredWeight.php
-Model/PhysicalPropertiesWeightRequiredWidth.php
 Model/PhysicalPropertiesWidth.php
 Model/Pickup.php
 Model/PickupAnyOf.php
@@ -156,7 +160,6 @@ docs/Model/AddNotePostRequestInner.md
 docs/Model/AddNotePostRequestInnerLocale.md
 docs/Model/AddPackages.md
 docs/Model/Address.md
-docs/Model/Aggregation.md
 docs/Model/AssignToUserPost200ResponseInner.md
 docs/Model/AssignToUserPost200ResponseInnerOneOf.md
 docs/Model/AssignToUserPostRequestInner.md
@@ -204,7 +207,6 @@ docs/Model/Line.md
 docs/Model/LineExternalReference.md
 docs/Model/LinePrice.md
 docs/Model/LineProduct.md
-docs/Model/LineProductEan.md
 docs/Model/Money.md
 docs/Model/Note.md
 docs/Model/NoteFromImported.md
@@ -215,6 +217,15 @@ docs/Model/NoteFromPrincipal.md
 docs/Model/Order.md
 docs/Model/OrderExternalReferences.md
 docs/Model/OrderOrderedAt.md
+docs/Model/OrderRules.md
+docs/Model/OrderRulesSetShippingPreferences.md
+docs/Model/OrderRulesSetShippingPreferencesAppliedAt.md
+docs/Model/OrderRulesSetShippingPreferencesPathInner.md
+docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf.md
+docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1.md
+docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition.md
+docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf.md
+docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf1.md
 docs/Model/OrderStatus.md
 docs/Model/OrdersGet200Response.md
 docs/Model/OrdersGet200ResponseAggregations.md
@@ -249,10 +260,7 @@ docs/Model/PhysicalPropertiesHeight.md
 docs/Model/PhysicalPropertiesLength.md
 docs/Model/PhysicalPropertiesWeight.md
 docs/Model/PhysicalPropertiesWeightRequired.md
-docs/Model/PhysicalPropertiesWeightRequiredHeight.md
-docs/Model/PhysicalPropertiesWeightRequiredLength.md
 docs/Model/PhysicalPropertiesWeightRequiredWeight.md
-docs/Model/PhysicalPropertiesWeightRequiredWidth.md
 docs/Model/PhysicalPropertiesWidth.md
 docs/Model/Pickup.md
 docs/Model/PickupAnyOf.md

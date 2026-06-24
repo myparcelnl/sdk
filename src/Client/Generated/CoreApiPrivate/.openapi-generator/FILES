@@ -1,6 +1,4 @@
-.gitignore
 .php-cs-fixer.dist.php
-.travis.yml
 Api/ShippingRuleApi.php
 ApiException.php
 Configuration.php
@@ -60,7 +58,6 @@ Model/ShippingRulesResponsesShippingRulesPaginated.php
 Model/ShippingRulesResponsesShippingRulesPaginatedData.php
 ObjectSerializer.php
 README.md
-composer.json
 docs/Api/ShippingRuleApi.md
 docs/Model/CommonErrorSystem.md
 docs/Model/CommonErrorUser.md
@@ -114,5 +111,3 @@ docs/Model/ShippingRulesResponsesShippingRules.md
 docs/Model/ShippingRulesResponsesShippingRulesData.md
 docs/Model/ShippingRulesResponsesShippingRulesPaginated.md
 docs/Model/ShippingRulesResponsesShippingRulesPaginatedData.md
-git_push.sh
-phpunit.xml.dist

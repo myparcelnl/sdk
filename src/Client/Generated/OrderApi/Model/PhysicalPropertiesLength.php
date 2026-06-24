@@ -235,7 +235,9 @@ class PhysicalPropertiesLength implements ModelInterface, ArrayAccess, \JsonSeri
         return self::$openAPIModelName;
     }
 
-    public const UNIT_MILLIMETER = 'MILLIMETER';
+    public const UNIT_MM = 'mm';
+    public const UNIT_CM = 'cm';
+    public const UNIT_M = 'm';
 
     /**
      * Gets allowable values of the enum
@@ -245,7 +247,9 @@ class PhysicalPropertiesLength implements ModelInterface, ArrayAccess, \JsonSeri
     public function getUnitAllowableValues()
     {
         return [
-            self::UNIT_MILLIMETER,
+            self::UNIT_MM,
+            self::UNIT_CM,
+            self::UNIT_M,
         ];
     }
 
