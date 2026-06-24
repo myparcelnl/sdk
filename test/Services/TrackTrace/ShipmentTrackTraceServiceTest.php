@@ -43,7 +43,15 @@ final class ShipmentTrackTraceServiceTest extends TestCase
         $api = $this->createMock(ShipmentApi::class);
         $api->expects(self::once())
             ->method('getTrackTracesByIds')
-            ->with(self::identicalTo('123;456'), self::isType('string'))
+            ->with(
+                self::identicalTo('123;456'),
+                self::isNull(),
+                self::isNull(),
+                self::logicalAnd(
+                    self::isType('string'),
+                    self::stringContains('Magento')
+                )
+            )
             ->willReturn($this->buildTracktracesResponse([$tt1, $tt2]));
 
         $service = new ShipmentTrackTraceService($this->getApiKey(), $api);
