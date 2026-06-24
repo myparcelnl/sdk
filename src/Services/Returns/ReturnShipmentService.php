@@ -81,12 +81,12 @@ final class ReturnShipmentService
         $requestModel->setData($data);
 
         $request = $this->api->postShipmentsRequest(
-            $this->getUserAgentHeader(),
             $requestModel,
             null,
             null,
             null,
             null,
+            $this->getUserAgentHeader(),
             $this->resolvePostShipmentsContentType('application/vnd.return_shipment+json')
         );
 
@@ -121,12 +121,12 @@ final class ReturnShipmentService
         $requestModel->setData($data);
 
         $request = $this->api->postShipmentsRequest(
-            $this->getUserAgentHeader(),
             $requestModel,
             null,
             null,
             null,
             null,
+            $this->getUserAgentHeader(),
             $this->resolvePostShipmentsContentType('application/vnd.unrelated_return_shipment+json')
         );
 

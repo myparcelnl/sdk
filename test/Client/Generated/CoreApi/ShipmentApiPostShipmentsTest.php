@@ -57,7 +57,7 @@ final class ShipmentApiPostShipmentsTest extends TestCase
         $request->setData($data);
 
         $api = new ShipmentApi($client, $config);
-        $response = $api->postShipments('SDK-Test/1.0', $request);
+        $response = $api->postShipments($request, null, null, null, null, 'SDK-Test/1.0');
 
         $shipments = $response->getData()->getShipments();
 
@@ -103,7 +103,7 @@ final class ShipmentApiPostShipmentsTest extends TestCase
         $request->setData($data);
 
         $api = new ShipmentApi($client, $config);
-        $response = $api->postShipments('SDK-Test/1.0', $request);
+        $response = $api->postShipments($request, null, null, null, null, 'SDK-Test/1.0');
 
         $shipments = $response->getData()->getShipments();
 

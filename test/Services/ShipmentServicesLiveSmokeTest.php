@@ -108,8 +108,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             $api = ShipmentApiFactory::make($this->liveApiKey);
             $request = $api->getShipmentsLabelsRequest(
                 implode(';', $shipmentIds),
-                'SDK-LiveSmoke/labels-body-check',
-                'A6'
+                'A6',
+                null,
+                null,
+                null,
+                'SDK-LiveSmoke/labels-body-check'
             )->withHeader('Accept', 'application/vnd.shipment_label_link+json');
 
             $response = (new GuzzleClient(['timeout' => 10]))->send($request);

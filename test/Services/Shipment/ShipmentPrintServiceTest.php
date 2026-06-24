@@ -41,12 +41,12 @@ final class ShipmentPrintServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postShipmentsRequest')
             ->with(
-                self::isType('string'),
                 self::isInstanceOf(ShipmentPostShipmentsRequestV11::class),
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
+                self::isType('string'),
                 self::callback(static function (string $contentType): bool {
                     return 0 === strpos($contentType, 'application/vnd.shipment+json');
                 })

@@ -56,12 +56,12 @@ final class ShipmentCreateService
         $userAgentHeader = $this->getUserAgentHeader();
 
         $response = $this->api->postShipments(
-            $userAgentHeader,
             $request,
             $format,
             $positions,
             null,
             null,
+            $userAgentHeader,
             $this->resolvePostShipmentsContentType('application/vnd.shipment+json')
         );
 

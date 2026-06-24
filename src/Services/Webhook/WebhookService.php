@@ -58,8 +58,8 @@ final class WebhookService
         ]);
 
         $response = $this->api->postWebhookSubscriptions(
-            $this->getUserAgentHeader(),
-            $request
+            $request,
+            $this->getUserAgentHeader()
         );
 
         $data = $response->getData();
@@ -97,8 +97,8 @@ final class WebhookService
     public function getAll(?string $hook = null): array
     {
         $response = $this->api->getWebhookSubscriptions(
-            $this->getUserAgentHeader(),
-            $hook
+            $hook,
+            $this->getUserAgentHeader()
         );
 
         $data = $response->getData();

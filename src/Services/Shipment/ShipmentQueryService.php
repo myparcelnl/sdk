@@ -70,7 +70,7 @@ final class ShipmentQueryService
         $ids = implode(';', array_map('intval', $shipmentIds));
 
         /** @var ShipmentResponsesShipments $response */
-        $response = $this->api->getShipmentsById($ids, $this->getUserAgentHeader());
+        $response = $this->api->getShipmentsById($ids, null, $this->getUserAgentHeader());
 
         return $this->extractShipments($response);
     }
@@ -94,7 +94,7 @@ final class ShipmentQueryService
      *
      * Maps the associative $parameters array to the generated getShipments()
      * positional argument list. PHP 7.4 does not support named arguments, so the
-     * generated method signature (22 positional params) dictates this mapping.
+     * generated method signature dictates this mapping.
      */
     private function buildGetShipmentsQuery(array $parameters): ShipmentResponsesShipments
     {
@@ -103,7 +103,6 @@ final class ShipmentQueryService
             : self::DEFAULT_QUERY_PAGE_SIZE;
 
         return $this->api->getShipments(
-            $this->getUserAgentHeader(),
             $parameters['barcode'] ?? null,
             $parameters['carrier_id'] ?? null,
             $parameters['created'] ?? null,
@@ -124,7 +123,8 @@ final class ShipmentQueryService
             $size,
             $parameters['sort'] ?? null,
             $parameters['status'] ?? null,
-            $parameters['transaction_status'] ?? null
+            $parameters['transaction_status'] ?? null,
+            $this->getUserAgentHeader()
         );
     }
 

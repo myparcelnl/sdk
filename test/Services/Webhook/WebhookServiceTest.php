@@ -29,7 +29,6 @@ final class WebhookServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postWebhookSubscriptions')
             ->with(
-                self::isType('string'),
                 self::callback(static function (WebhooksPostWebhookSubscriptionsRequestV11 $request): bool {
                     $subs = $request->getData()->getWebhookSubscriptions();
                     self::assertCount(1, $subs);
@@ -37,7 +36,8 @@ final class WebhookServiceTest extends TestCase
                     self::assertSame('https://example.com/webhook', $subs[0]->getUrl());
 
                     return true;
-                })
+                }),
+                self::isType('string')
             )
             ->willReturn($response);
 
@@ -93,7 +93,7 @@ final class WebhookServiceTest extends TestCase
         $api = $this->createMock(WebhookApi::class);
         $api->expects(self::once())
             ->method('getWebhookSubscriptions')
-            ->with(self::isType('string'), self::isNull())
+            ->with(self::isNull(), self::isType('string'))
             ->willReturn($response);
 
         $service = new WebhookService($this->getApiKey(), $api);
@@ -113,8 +113,8 @@ final class WebhookServiceTest extends TestCase
         $api->expects(self::once())
             ->method('getWebhookSubscriptions')
             ->with(
-                self::isType('string'),
-                self::identicalTo('shipment_label_created')
+                self::identicalTo('shipment_label_created'),
+                self::isType('string')
             )
             ->willReturn($response);
 

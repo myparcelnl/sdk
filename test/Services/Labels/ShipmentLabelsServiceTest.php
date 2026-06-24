@@ -35,11 +35,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 '101;102',
-                Mockery::type('string'),
                 'A4',
                 '2;3;4',
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
@@ -80,11 +80,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 '101',
-                Mockery::type('string'),
                 'A4',
                 '',
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
@@ -127,11 +127,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 $idsAsString,
-                Mockery::type('string'),
                 'A6',
                 null,
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
@@ -172,11 +172,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 '101',
-                Mockery::type('string'),
                 'A4',
                 '1;2;3;4',
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
@@ -209,11 +209,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 '101',
-                Mockery::type('string'),
                 'A4',
                 '1;2;3;4',
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
@@ -250,11 +250,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 '101',
-                Mockery::type('string'),
                 'A4',
                 '1;2;3;4',
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
@@ -284,11 +284,11 @@ final class ShipmentLabelsServiceTest extends TestCase
             ->once()
             ->with(
                 '101',
-                Mockery::type('string'),
                 'A4',
                 '1;2;3;4',
                 null,
                 null,
+                Mockery::type('string'),
                 ShipmentApi::contentTypes['getShipmentsLabels'][0]
             )
             ->andReturn($request);
