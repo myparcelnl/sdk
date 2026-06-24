@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.25](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.24...v11.0.0-beta.25) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* pass tracktrace user agent correctly ([1c87b32](https://github.com/myparcelnl/sdk/commit/1c87b32a3d1fab16f22407bae07fba225bf726be))
+
 ## [11.0.0-beta.24](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.23...v11.0.0-beta.24) (2026-06-24)
 
 
