@@ -25,6 +25,9 @@ typeMappings:
   # Redirects to override classes that fix broken setStreet() regex and setEmail() enum.
   ShipmentDefsShipmentRecipient: FixedShipmentRecipient
   ShipmentDefsShipmentSender: FixedShipmentSender
+  # @todo remove when upstream spec fixes tracktrace from_address_email enum
+  # The current spec/codegen only allows an empty string, but live shipment responses contain real account emails.
+  RefShipmentGeneralSettingsTracktrace: FixedShipmentGeneralSettingsTracktrace
   # @todo remove when upstream spec fixes type: "null" properties
   # Prevents ObjectSerializer from trying to instantiate a class named 'Null'.
   Null: mixed
