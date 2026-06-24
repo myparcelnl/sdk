@@ -58,7 +58,7 @@ class OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition implements ModelI
       */
     protected static $openAPITypes = [
         'country_code' => 'string',
-        'geo_area_code' => 'string'
+        'geo_area_code' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\GeoAreaCode'
     ];
 
     /**
@@ -234,21 +234,6 @@ class OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition implements ModelI
         return self::$openAPIModelName;
     }
 
-    public const GEO_AREA_CODE_EU = 'EU';
-    public const GEO_AREA_CODE_NON_EU = 'NON_EU';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getGeoAreaCodeAllowableValues()
-    {
-        return [
-            self::GEO_AREA_CODE_EU,
-            self::GEO_AREA_CODE_NON_EU,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -314,15 +299,6 @@ class OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition implements ModelI
         if ($this->container['geo_area_code'] === null) {
             $invalidProperties[] = "'geo_area_code' can't be null";
         }
-        $allowedValues = $this->getGeoAreaCodeAllowableValues();
-        if (!is_null($this->container['geo_area_code']) && !in_array($this->container['geo_area_code'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'geo_area_code', must be one of '%s'",
-                $this->container['geo_area_code'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -378,7 +354,7 @@ class OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition implements ModelI
     /**
      * Gets geo_area_code
      *
-     * @return string
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\GeoAreaCode
      */
     public function getGeoAreaCode()
     {
@@ -388,7 +364,7 @@ class OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition implements ModelI
     /**
      * Sets geo_area_code
      *
-     * @param string $geo_area_code A geographic area code that represents a specific list of countries.
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\GeoAreaCode $geo_area_code geo_area_code
      *
      * @return self
      */
@@ -396,16 +372,6 @@ class OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition implements ModelI
     {
         if (is_null($geo_area_code)) {
             throw new \InvalidArgumentException('non-nullable geo_area_code cannot be null');
-        }
-        $allowedValues = $this->getGeoAreaCodeAllowableValues();
-        if (!in_array($geo_area_code, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'geo_area_code', must be one of '%s'",
-                    $geo_area_code,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['geo_area_code'] = $geo_area_code;
 
