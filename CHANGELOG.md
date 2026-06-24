@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.26](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.25...v11.0.0-beta.26) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* align service calls with regenerated user-agent parameter ([cd5d37f](https://github.com/myparcelnl/sdk/commit/cd5d37f1152709b406f3c0eaab5ab9b74f429fec))
+
 ## [11.0.0-beta.25](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.24...v11.0.0-beta.25) (2026-06-24)
 
 
