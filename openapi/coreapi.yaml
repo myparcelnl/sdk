@@ -31,6 +31,10 @@ typeMappings:
   # @todo remove when upstream spec fixes reference_identifier union type
   # The union ['null','integer','string'] generates an empty wrapper model that loses data.
   RefShipmentReferenceIdentifier: string
+  # @todo remove when upstream spec/codegen fixes link_consumer_portal oneOf(uri | empty-string)
+  # The current codegen produces empty wrapper models that lose the actual URL.
+  ShipmentDefsShipmentLinkConsumerPortal: string
+  ShipmentDefsShipmentPropertiesLinkConsumerPortal: string
   # @todo remove when upstream spec/codegen fixes region oneOf(string pattern | enum)
   # The current codegen produces unusable model wrappers/enums for shipment resource regions.
   ShipmentDefsShipmentRegion: string
