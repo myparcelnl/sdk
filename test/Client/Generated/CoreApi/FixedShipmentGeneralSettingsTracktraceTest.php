@@ -11,12 +11,14 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 final class FixedShipmentGeneralSettingsTracktraceTest extends TestCase
 {
+    private const SENDER_EMAIL = 'sender@example.test';
+
     public function testFromAddressEmailAcceptsRealAccountEmail(): void
     {
         $tracktrace = new FixedShipmentGeneralSettingsTracktrace();
-        $tracktrace->setFromAddressEmail('freek.vanrijt+test@myparcel.nl');
+        $tracktrace->setFromAddressEmail(self::SENDER_EMAIL);
 
-        self::assertSame('freek.vanrijt+test@myparcel.nl', $tracktrace->getFromAddressEmail());
+        self::assertSame(self::SENDER_EMAIL, $tracktrace->getFromAddressEmail());
         self::assertSame([], $tracktrace->listInvalidProperties());
     }
 
@@ -25,7 +27,7 @@ final class FixedShipmentGeneralSettingsTracktraceTest extends TestCase
         $settings = ObjectSerializer::deserialize(
             json_encode([
                 'tracktrace' => [
-                    'from_address_email' => 'freek.vanrijt+test@myparcel.nl',
+                    'from_address_email' => self::SENDER_EMAIL,
                 ],
             ], JSON_THROW_ON_ERROR),
             RefShipmentGeneralSettings::class,
@@ -34,6 +36,6 @@ final class FixedShipmentGeneralSettingsTracktraceTest extends TestCase
 
         self::assertInstanceOf(RefShipmentGeneralSettings::class, $settings);
         self::assertInstanceOf(FixedShipmentGeneralSettingsTracktrace::class, $settings->getTracktrace());
-        self::assertSame('freek.vanrijt+test@myparcel.nl', $settings->getTracktrace()->getFromAddressEmail());
+        self::assertSame(self::SENDER_EMAIL, $settings->getTracktrace()->getFromAddressEmail());
     }
 }
