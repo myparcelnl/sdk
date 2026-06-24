@@ -577,3 +577,4 @@ class RefShipmentGeneralSettings implements ModelInterface, ArrayAccess, \JsonSe
     }
 }
 
+

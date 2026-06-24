@@ -35,6 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * ShipmentOptions Class Doc Comment
  *
  * @category Class
+ * @description Options applicable to shipments.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
