@@ -82,12 +82,12 @@ final class ShipmentPrintService
         string $printerGroupId
     ): RequestInterface {
         return $this->api->postShipmentsRequest(
-            $this->getUserAgentHeader(),
             $requestModel,
             null,
             null,
             null,
             null,
+            $this->getUserAgentHeader(),
             $this->resolvePostShipmentsContentType('application/vnd.shipment+json')
         )->withHeader('Accept', sprintf(self::DIRECT_PRINT_ACCEPT_TEMPLATE, $printerGroupId));
     }

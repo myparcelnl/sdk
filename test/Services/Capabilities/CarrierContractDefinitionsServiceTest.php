@@ -30,13 +30,13 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postCapabilitiesContractDefinitions')
             ->with(
-                self::identicalTo($expectedUserAgent),
                 self::callback(static function ($request): bool {
                     self::assertInstanceOf(CapabilitiesPostContractDefinitionsRequestV2::class, $request);
                     self::assertNull($request->getCarrier());
 
                     return true;
-                })
+                }),
+                self::identicalTo($expectedUserAgent)
             )
             ->willReturn(new CapabilitiesResponsesContractDefinitionsV2(['items' => $items]));
 
@@ -51,7 +51,6 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postCapabilitiesContractDefinitions')
             ->with(
-                self::anything(),
                 self::callback(static function ($request): bool {
                     self::assertInstanceOf(CapabilitiesPostContractDefinitionsRequestV2::class, $request);
                     self::assertSame(
@@ -60,7 +59,8 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
                     );
 
                     return true;
-                })
+                }),
+                self::anything()
             )
             ->willReturn(new CapabilitiesResponsesContractDefinitionsV2(['items' => [$inPost]]));
 

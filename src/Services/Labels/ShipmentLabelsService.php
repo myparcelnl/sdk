@@ -176,11 +176,11 @@ final class ShipmentLabelsService
     {
         return $this->api->getShipmentsLabelsRequest(
             implode(';', array_map('strval', $shipmentIds)),
-            $this->getUserAgentHeader(),
             $format,
             $positions,
             null,
             null,
+            $this->getUserAgentHeader(),
             ShipmentApi::contentTypes['getShipmentsLabels'][0]
         );
     }

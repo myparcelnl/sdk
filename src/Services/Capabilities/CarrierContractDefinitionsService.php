@@ -66,8 +66,8 @@ final class CarrierContractDefinitionsService
         }
 
         $response = $this->api->postCapabilitiesContractDefinitions(
-            $this->getUserAgentHeader(),
-            $request
+            $request,
+            $this->getUserAgentHeader()
         );
 
         if (! $response instanceof CapabilitiesResponsesContractDefinitionsV2) {

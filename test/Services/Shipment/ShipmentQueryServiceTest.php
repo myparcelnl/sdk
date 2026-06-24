@@ -32,7 +32,7 @@ final class ShipmentQueryServiceTest extends TestCase
         $api = $this->createMock(ShipmentApi::class);
         $api->expects(self::once())
             ->method('getShipmentsById')
-            ->with(self::identicalTo('10;20'), self::isType('string'))
+            ->with(self::identicalTo('10;20'), self::isNull(), self::isType('string'))
             ->willReturn($this->buildShipmentsResponse([$shipment1, $shipment2]));
 
         $service = new ShipmentQueryService($this->getApiKey(), $api);
@@ -76,12 +76,13 @@ final class ShipmentQueryServiceTest extends TestCase
             ->method('getShipments')
             ->willReturnCallback(function (...$args) {
                 // Verify key parameters are passed correctly
-                self::assertSame('3SMYPA1234567', $args[1]); // barcode
-                self::assertSame(2, $args[12]); // page
-                self::assertSame('order-100', $args[14]); // reference_identifier
-                self::assertSame(300, $args[18]); // size (default)
-                self::assertSame('desc', $args[19]); // sort
-                self::assertSame(1, $args[20]); // status
+                self::assertSame('3SMYPA1234567', $args[0]); // barcode
+                self::assertSame(2, $args[11]); // page
+                self::assertSame('order-100', $args[13]); // reference_identifier
+                self::assertSame(300, $args[17]); // size (default)
+                self::assertSame('desc', $args[18]); // sort
+                self::assertSame(1, $args[19]); // status
+                self::assertIsString($args[21]); // user_agent
 
                 return $this->buildShipmentsResponse([new ShipmentDefsShipment(['id' => 123])]);
             });
@@ -104,8 +105,9 @@ final class ShipmentQueryServiceTest extends TestCase
         $api->expects(self::once())
             ->method('getShipments')
             ->willReturnCallback(function (...$args) {
-                self::assertSame('ref-a', $args[14]);
-                self::assertNull($args[18]);
+                self::assertSame('ref-a', $args[13]);
+                self::assertNull($args[17]);
+                self::assertIsString($args[21]);
 
                 return $this->buildShipmentsResponse([
                     new ShipmentDefsShipment(['id' => 1001]),

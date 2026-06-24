@@ -60,7 +60,6 @@ final class ShipmentCreateServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postShipments')
             ->with(
-                self::identicalTo($expectedUserAgent),
                 self::callback(static function ($request) use ($expectedUserAgent): bool {
                     self::assertInstanceOf(ShipmentPostShipmentsRequestV11::class, $request);
                     self::assertInstanceOf(ShipmentPostShipmentsRequestV11Data::class, $request->getData());
@@ -79,6 +78,7 @@ final class ShipmentCreateServiceTest extends TestCase
                 self::identicalTo('1;2'),
                 self::isNull(),
                 self::isNull(),
+                self::identicalTo($expectedUserAgent),
                 self::callback(static function (string $contentType): bool {
                     return 0 === strpos($contentType, 'application/vnd.shipment+json');
                 })
@@ -107,7 +107,6 @@ final class ShipmentCreateServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postShipments')
             ->with(
-                self::anything(),
                 self::callback(static function ($request): bool {
                     self::assertInstanceOf(ShipmentPostShipmentsRequestV11::class, $request);
                     $shipmentData = $request->getData()->getShipments()[0];
@@ -125,6 +124,7 @@ final class ShipmentCreateServiceTest extends TestCase
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
+                self::isType('string'),
                 self::callback(static function (string $contentType): bool {
                     return 0 === strpos($contentType, 'application/vnd.shipment+json');
                 })
@@ -150,7 +150,6 @@ final class ShipmentCreateServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postShipments')
             ->with(
-                self::anything(),
                 self::callback(static function ($request) use (&$capturedReference): bool {
                     self::assertInstanceOf(ShipmentPostShipmentsRequestV11::class, $request);
                     $capturedReference = $request->getData()->getShipments()[0]->getReferenceIdentifier();
@@ -164,6 +163,7 @@ final class ShipmentCreateServiceTest extends TestCase
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
+                self::isType('string'),
                 self::callback(static function (string $contentType): bool {
                     return 0 === strpos($contentType, 'application/vnd.shipment+json');
                 })

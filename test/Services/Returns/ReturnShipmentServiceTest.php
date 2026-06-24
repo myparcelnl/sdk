@@ -70,12 +70,12 @@ final class ReturnShipmentServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postShipmentsRequest')
             ->with(
-                self::isType('string'),
                 self::isInstanceOf(ShipmentPostReturnShipmentsRequest::class),
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
+                self::isType('string'),
                 self::callback(static function (string $contentType): bool {
                     return 0 === strpos($contentType, 'application/vnd.return_shipment+json');
                 })
@@ -164,12 +164,12 @@ final class ReturnShipmentServiceTest extends TestCase
         $api->expects(self::once())
             ->method('postShipmentsRequest')
             ->with(
-                self::isType('string'),
                 self::isInstanceOf(ShipmentPostUnrelatedReturnShipmentsRequest::class),
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
                 self::isNull(),
+                self::isType('string'),
                 self::callback(static function (string $contentType): bool {
                     return 0 === strpos($contentType, 'application/vnd.unrelated_return_shipment+json');
                 })
