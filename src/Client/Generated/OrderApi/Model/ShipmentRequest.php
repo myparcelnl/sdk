@@ -60,7 +60,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier',
         'direction' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection',
         'disable_auto_detect_pickup' => 'bool',
-        'package_type' => 'string',
+        'package_type' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipient',
         'custom_contract_id' => 'string',
         'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
@@ -282,31 +282,6 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const PACKAGE_TYPE_DIGITAL_STAMP = 'DIGITAL_STAMP';
-    public const PACKAGE_TYPE_ENVELOPE = 'ENVELOPE';
-    public const PACKAGE_TYPE_MAILBOX = 'MAILBOX';
-    public const PACKAGE_TYPE_PACKAGE = 'PACKAGE';
-    public const PACKAGE_TYPE_PALLET = 'PALLET';
-    public const PACKAGE_TYPE_SMALL_PACKAGE = 'SMALL_PACKAGE';
-    public const PACKAGE_TYPE_UNFRANKED = 'UNFRANKED';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getPackageTypeAllowableValues()
-    {
-        return [
-            self::PACKAGE_TYPE_DIGITAL_STAMP,
-            self::PACKAGE_TYPE_ENVELOPE,
-            self::PACKAGE_TYPE_MAILBOX,
-            self::PACKAGE_TYPE_PACKAGE,
-            self::PACKAGE_TYPE_PALLET,
-            self::PACKAGE_TYPE_SMALL_PACKAGE,
-            self::PACKAGE_TYPE_UNFRANKED,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -374,15 +349,6 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['package_type'] === null) {
             $invalidProperties[] = "'package_type' can't be null";
         }
-        $allowedValues = $this->getPackageTypeAllowableValues();
-        if (!is_null($this->container['package_type']) && !in_array($this->container['package_type'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'package_type', must be one of '%s'",
-                $this->container['package_type'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         if ($this->container['recipient'] === null) {
             $invalidProperties[] = "'recipient' can't be null";
         }
@@ -493,7 +459,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets package_type
      *
-     * @return string
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType
      */
     public function getPackageType()
     {
@@ -503,7 +469,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets package_type
      *
-     * @param string $package_type The type of the package.
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType $package_type package_type
      *
      * @return self
      */
@@ -511,16 +477,6 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         if (is_null($package_type)) {
             throw new \InvalidArgumentException('non-nullable package_type cannot be null');
-        }
-        $allowedValues = $this->getPackageTypeAllowableValues();
-        if (!in_array($package_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'package_type', must be one of '%s'",
-                    $package_type,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['package_type'] = $package_type;
 

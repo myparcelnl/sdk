@@ -9,6 +9,6 @@ Name | Type | Description | Notes
 **number_of_items** | **int** | The total quantity of individual items within this specific group. |
 **total_value** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue**](CustomsDeclarationGroupsInnerTotalValue.md) |  |
 **total_weight** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalWeight**](CustomsDeclarationGroupsInnerTotalWeight.md) |  |
-**country_code_of_origin** | **string** | The ISO 3166-1 alpha-2 country code indicating where the goods in this group originated. | [optional]
+**country_code_of_origin** | [**StringMixed**](StringMixed.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
