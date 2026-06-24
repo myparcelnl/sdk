@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.23](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.22...v11.0.0-beta.23) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* consumer portal link mapping ([#620](https://github.com/myparcelnl/sdk/issues/620)) ([c258878](https://github.com/myparcelnl/sdk/commit/c258878778e39f4a394939097f7d005bdb21e589))
+
 ## [11.0.0-beta.22](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.21...v11.0.0-beta.22) (2026-06-09)
 
 
