@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **contract** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV2**](RefCapabilitiesSharedContractV2.md) |  | [optional]
 **package_types** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2[]**](RefShipmentPackageTypeV2.md) |  |
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2**](RefCapabilitiesResponseOptionsOptionsV2.md) |  |
-**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponsePhysicalPropertiesPhysicalProperties**](RefCapabilitiesResponsePhysicalPropertiesPhysicalProperties.md) |  |
+**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV2**](RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV2.md) |  |
 **delivery_types** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2[]**](RefTypesDeliveryTypeV2.md) |  |
 **transaction_types** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesTransactionTypes[]**](RefTypesTransactionTypes.md) |  |
 **collo** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo**](RefCapabilitiesResponseCollo.md) |  |

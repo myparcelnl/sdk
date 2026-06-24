@@ -68,7 +68,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -81,7 +81,7 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -191,7 +191,7 @@ try {
 ## `getDropOffPoints()`
 
 ```php
-getDropOffPoints($user_agent, $postal_code, $number, $distance, $cc, $limit, $carrier_id, $shop_id, $reference, $location_name, $external_identifier, $city, $cut_off_time, $min_cut_off_time, $max_cut_off_time, $latitude, $longitude, $exclude_parcel_lockers): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPoints
+getDropOffPoints($postal_code, $number, $distance, $cc, $limit, $carrier_id, $shop_id, $reference, $location_name, $external_identifier, $city, $cut_off_time, $min_cut_off_time, $max_cut_off_time, $latitude, $longitude, $exclude_parcel_lockers, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPoints
 ```
 
 Get drop off points
@@ -220,7 +220,6 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
 $number = 'number_example'; // string | The street number for which to fetch the resources.
 $distance = 56; // int | Provide the radius in kilometers for which you want to find drop off points. The default distance differs by carrier.
@@ -238,9 +237,10 @@ $max_cut_off_time = 'max_cut_off_time_example'; // string
 $latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
 $longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getDropOffPoints($user_agent, $postal_code, $number, $distance, $cc, $limit, $carrier_id, $shop_id, $reference, $location_name, $external_identifier, $city, $cut_off_time, $min_cut_off_time, $max_cut_off_time, $latitude, $longitude, $exclude_parcel_lockers);
+    $result = $apiInstance->getDropOffPoints($postal_code, $number, $distance, $cc, $limit, $carrier_id, $shop_id, $reference, $location_name, $external_identifier, $city, $cut_off_time, $min_cut_off_time, $max_cut_off_time, $latitude, $longitude, $exclude_parcel_lockers, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getDropOffPoints: ', $e->getMessage(), PHP_EOL;
@@ -251,7 +251,6 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
 | **number** | **string**| The street number for which to fetch the resources. | [optional] |
 | **distance** | **int**| Provide the radius in kilometers for which you want to find drop off points. The default distance differs by carrier. | [optional] |
@@ -269,6 +268,7 @@ try {
 | **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
 | **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -301,6 +301,11 @@ Get Pickup Locations
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
 // Configure Bearer authorization: bearer
 $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
@@ -370,7 +375,7 @@ try {
 
 ### Authorization
 
-[bearer](../../README.md#bearer)
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
 
 ### HTTP request headers
 
@@ -384,7 +389,7 @@ try {
 ## `getShipments()`
 
 ```php
-getShipments($user_agent, $barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $filter_hidden_shops, $hidden, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
+getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $filter_hidden_shops, $hidden, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
 ```
 
 Gets a list of Shipments, optionally filtered using parameters.
@@ -413,7 +418,6 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $barcode = 'barcode_example'; // string
 $carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId
 $created = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | When set, only resources created after this date will be returned. Inclusive.
@@ -423,7 +427,7 @@ $dropoff_today = True; // bool | Use this parameter to only show Shipments that 
 $filter_hidden_shops = True; // bool
 $hidden = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
 $link_consumer_portal = True; // bool
-$order = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersOrder(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersOrder | Specify whether the results should be sorted in ascending or descending order.
+$order = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter | Specify whether the results should be sorted in ascending or descending order.
 $package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType | Filter by Package Type.
 $page = 56; // int | Request a specific page of the results, used for paginated results.
 $q = 'q_example'; // string | If this parameter is provided results will be filtered by the provided query or keyword.
@@ -435,9 +439,10 @@ $size = 56; // int | Specify the number of resources returned per page, used for
 $sort = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment | Sort Shipment results by a particular resource field.
 $status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus | Filter by Shipment status. This filter will return only Shipments with the specified status.
 $transaction_status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getShipments($user_agent, $barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $filter_hidden_shops, $hidden, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status);
+    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $filter_hidden_shops, $hidden, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getShipments: ', $e->getMessage(), PHP_EOL;
@@ -448,7 +453,6 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **barcode** | **string**|  | [optional] |
 | **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId**](../Model/.md)|  | [optional] |
 | **created** | **\DateTime**| When set, only resources created after this date will be returned. Inclusive. | [optional] |
@@ -458,7 +462,7 @@ try {
 | **filter_hidden_shops** | **bool**|  | [optional] |
 | **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
 | **link_consumer_portal** | **bool**|  | [optional] |
-| **order** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersOrder**](../Model/.md)| Specify whether the results should be sorted in ascending or descending order. | [optional] |
+| **order** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter**](../Model/.md)| Specify whether the results should be sorted in ascending or descending order. | [optional] |
 | **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType**](../Model/.md)| Filter by Package Type. | [optional] |
 | **page** | **int**| Request a specific page of the results, used for paginated results. | [optional] |
 | **q** | **string**| If this parameter is provided results will be filtered by the provided query or keyword. | [optional] |
@@ -470,6 +474,7 @@ try {
 | **sort** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment**](../Model/.md)| Sort Shipment results by a particular resource field. | [optional] |
 | **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus**](../Model/.md)| Filter by Shipment status. This filter will return only Shipments with the specified status. | [optional] |
 | **transaction_status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus**](../Model/.md)|  | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -491,12 +496,12 @@ try {
 ## `getShipmentsById()`
 
 ```php
-getShipmentsById($ids, $user_agent, $link_consumer_portal): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
+getShipmentsById($ids, $link_consumer_portal, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
 ```
 
 Get shipments by id.
 
-Get shipments by id.
+Get shipments by id. A maximum of 100 shipment IDs can be requested at once.
 
 ### Example
 
@@ -521,11 +526,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     $config
 );
 $ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $link_consumer_portal = True; // bool
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getShipmentsById($ids, $user_agent, $link_consumer_portal);
+    $result = $apiInstance->getShipmentsById($ids, $link_consumer_portal, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getShipmentsById: ', $e->getMessage(), PHP_EOL;
@@ -537,8 +542,8 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **link_consumer_portal** | **bool**|  | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -560,7 +565,7 @@ try {
 ## `getShipmentsLabels()`
 
 ```php
-getShipmentsLabels($ids, $user_agent, $format, $positions, $collect_date, $delivery_options_identifier)
+getShipmentsLabels($ids, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent)
 ```
 
 Get Shipment labels
@@ -590,14 +595,14 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     $config
 );
 $ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
-$format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPaperSize | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
+$format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
 $positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
 $collect_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime
 $delivery_options_identifier = 'delivery_options_identifier_example'; // string
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->getShipmentsLabels($ids, $user_agent, $format, $positions, $collect_date, $delivery_options_identifier);
+    $apiInstance->getShipmentsLabels($ids, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getShipmentsLabels: ', $e->getMessage(), PHP_EOL;
 }
@@ -608,11 +613,11 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
-| **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPaperSize**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
+| **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
 | **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
 | **collect_date** | **\DateTime**|  | [optional] |
 | **delivery_options_identifier** | **string**|  | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -634,7 +639,7 @@ void (empty response body)
 ## `getTrackTraces()`
 
 ```php
-getTrackTraces($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces
+getTrackTraces($barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces
 ```
 
 Track Shipment
@@ -663,16 +668,16 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $barcode = 'barcode_example'; // string
 $country_code = 'country_code_example'; // string
 $external_identifier = 'external_identifier_example'; // string
 $extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
 $postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
 $sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getTrackTraces($user_agent, $barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort);
+    $result = $apiInstance->getTrackTraces($barcode, $country_code, $external_identifier, $extra_info, $postal_code, $sort, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getTrackTraces: ', $e->getMessage(), PHP_EOL;
@@ -683,13 +688,13 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **barcode** | **string**|  | [optional] |
 | **country_code** | **string**|  | [optional] |
 | **external_identifier** | **string**|  | [optional] |
 | **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
 | **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
 | **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -711,7 +716,7 @@ try {
 ## `getTrackTracesByIds()`
 
 ```php
-getTrackTracesByIds($ids, $user_agent, $sort, $extra_info): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces
+getTrackTracesByIds($ids, $sort, $extra_info, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces
 ```
 
 Track Shipment
@@ -741,12 +746,12 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     $config
 );
 $ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
 $extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getTrackTracesByIds($ids, $user_agent, $sort, $extra_info);
+    $result = $apiInstance->getTrackTracesByIds($ids, $sort, $extra_info, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getTrackTracesByIds: ', $e->getMessage(), PHP_EOL;
@@ -758,9 +763,9 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
 | **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -782,7 +787,7 @@ try {
 ## `postCapabilities()`
 
 ```php
-postCapabilities($user_agent, $capabilities_post_capabilities_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2
+postCapabilities($capabilities_post_capabilities_request_v2, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2
 ```
 
 List shipment capabilities (Beta)
@@ -811,11 +816,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $capabilities_post_capabilities_request_v2 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 | Request body for capabilities endpoint.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postCapabilities($user_agent, $capabilities_post_capabilities_request_v2);
+    $result = $apiInstance->postCapabilities($capabilities_post_capabilities_request_v2, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postCapabilities: ', $e->getMessage(), PHP_EOL;
@@ -826,8 +831,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **capabilities_post_capabilities_request_v2** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2**](../Model/CapabilitiesPostCapabilitiesRequestV2.md)| Request body for capabilities endpoint. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -839,7 +844,7 @@ try {
 
 ### HTTP request headers
 
-- **Content-Type**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`
+- **Content-Type**: `application/json;version=2.0`, `application/json`
 - **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
@@ -849,7 +854,7 @@ try {
 ## `postCapabilitiesContractDefinitions()`
 
 ```php
-postCapabilitiesContractDefinitions($user_agent, $capabilities_post_contract_definitions_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2
+postCapabilitiesContractDefinitions($capabilities_post_contract_definitions_request_v2, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2
 ```
 
 List a superset of available capabilities for the carriers and contracts associated with the logged-in user. (Beta)
@@ -878,11 +883,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $capabilities_post_contract_definitions_request_v2 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2 | Request body for capabilities contract definitions endpoint.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postCapabilitiesContractDefinitions($user_agent, $capabilities_post_contract_definitions_request_v2);
+    $result = $apiInstance->postCapabilitiesContractDefinitions($capabilities_post_contract_definitions_request_v2, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postCapabilitiesContractDefinitions: ', $e->getMessage(), PHP_EOL;
@@ -893,8 +898,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **capabilities_post_contract_definitions_request_v2** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2**](../Model/CapabilitiesPostContractDefinitionsRequestV2.md)| Request body for capabilities contract definitions endpoint. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -906,8 +911,8 @@ try {
 
 ### HTTP request headers
 
-- **Content-Type**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`
-- **Accept**: `application/json;charset=utf-8;version=2`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Content-Type**: `application/json;version=2.0`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -916,7 +921,7 @@ try {
 ## `postRates()`
 
 ```php
-postRates($user_agent, $rates_post_rates_request_v2): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponseRateV2
+postRates($rates_post_rates_request_v2, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponseRateV2
 ```
 
 List shipment rates
@@ -945,11 +950,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $rates_post_rates_request_v2 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2 | Request body for rates endpoint.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postRates($user_agent, $rates_post_rates_request_v2);
+    $result = $apiInstance->postRates($rates_post_rates_request_v2, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postRates: ', $e->getMessage(), PHP_EOL;
@@ -960,8 +965,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **rates_post_rates_request_v2** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2**](../Model/RatesPostRatesRequestV2.md)| Request body for rates endpoint. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -973,7 +978,7 @@ try {
 
 ### HTTP request headers
 
-- **Content-Type**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`
+- **Content-Type**: `application/json;version=2.0`, `application/json`
 - **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
@@ -983,7 +988,7 @@ try {
 ## `postShipments()`
 
 ```php
-postShipments($user_agent, $shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
+postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
 ```
 
 Add Shipment
@@ -1012,15 +1017,15 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $shipment_post_shipments_request_v11 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11 | Array of Shipment objects.
-$format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPaperSize | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
+$format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
 $positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
 $collect_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime
 $delivery_options_identifier = 'delivery_options_identifier_example'; // string
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postShipments($user_agent, $shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier);
+    $result = $apiInstance->postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postShipments: ', $e->getMessage(), PHP_EOL;
@@ -1031,12 +1036,12 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **shipment_post_shipments_request_v11** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11**](../Model/ShipmentPostShipmentsRequestV11.md)| Array of Shipment objects. | |
-| **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPaperSize**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
+| **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
 | **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
 | **collect_date** | **\DateTime**|  | [optional] |
 | **delivery_options_identifier** | **string**|  | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -1049,7 +1054,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/vnd.shipment+json;version=1.1`, `application/vnd.shipment+json`, `application/vnd.return_shipment+json`, `application/vnd.unrelated_return_shipment+json`
-- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/vnd.shipment_label+json`, `application/*`
+- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/vnd.shipment_label+json`, `application/*`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1101,7 +1106,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -1123,7 +1128,7 @@ try {
 ## `putShipment()`
 
 ```php
-putShipment($user_agent, $shipment_put_shipments_request_v11): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12
+putShipment($shipment_put_shipments_request_v11, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12
 ```
 
 Update Shipment
@@ -1152,11 +1157,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $shipment_put_shipments_request_v11 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11 | Array of Shipment objects.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->putShipment($user_agent, $shipment_put_shipments_request_v11);
+    $result = $apiInstance->putShipment($shipment_put_shipments_request_v11, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->putShipment: ', $e->getMessage(), PHP_EOL;
@@ -1167,8 +1172,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **shipment_put_shipments_request_v11** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestV11**](../Model/ShipmentPutShipmentsRequestV11.md)| Array of Shipment objects. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -1181,7 +1186,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/vnd.shipment+json;version=1.1`, `application/vnd.shipment+json`
-- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/*`
+- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/*`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

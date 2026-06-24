@@ -61,6 +61,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'ordered_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderOrderedAt',
         'price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money',
         'shop_id' => 'string',
+        'short_id' => 'string',
         'status' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus',
         'assigned_user_id' => 'string',
         'billing_details' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails',
@@ -69,6 +70,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'lines' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Line[]',
         'notes' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Note[]',
         'packages' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageResponse[]',
+        'rules' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRules',
         'shipping' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Shipping'
     ];
 
@@ -84,6 +86,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'ordered_at' => null,
         'price' => null,
         'shop_id' => null,
+        'short_id' => null,
         'status' => null,
         'assigned_user_id' => null,
         'billing_details' => null,
@@ -92,6 +95,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'lines' => null,
         'notes' => null,
         'packages' => null,
+        'rules' => null,
         'shipping' => null
     ];
 
@@ -105,6 +109,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'ordered_at' => false,
         'price' => false,
         'shop_id' => false,
+        'short_id' => false,
         'status' => false,
         'assigned_user_id' => false,
         'billing_details' => false,
@@ -113,6 +118,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'lines' => false,
         'notes' => false,
         'packages' => false,
+        'rules' => false,
         'shipping' => false
     ];
 
@@ -206,6 +212,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'ordered_at' => 'orderedAt',
         'price' => 'price',
         'shop_id' => 'shopId',
+        'short_id' => 'shortId',
         'status' => 'status',
         'assigned_user_id' => 'assignedUserId',
         'billing_details' => 'billingDetails',
@@ -214,6 +221,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'lines' => 'lines',
         'notes' => 'notes',
         'packages' => 'packages',
+        'rules' => 'rules',
         'shipping' => 'shipping'
     ];
 
@@ -227,6 +235,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'ordered_at' => 'setOrderedAt',
         'price' => 'setPrice',
         'shop_id' => 'setShopId',
+        'short_id' => 'setShortId',
         'status' => 'setStatus',
         'assigned_user_id' => 'setAssignedUserId',
         'billing_details' => 'setBillingDetails',
@@ -235,6 +244,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'lines' => 'setLines',
         'notes' => 'setNotes',
         'packages' => 'setPackages',
+        'rules' => 'setRules',
         'shipping' => 'setShipping'
     ];
 
@@ -248,6 +258,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'ordered_at' => 'getOrderedAt',
         'price' => 'getPrice',
         'shop_id' => 'getShopId',
+        'short_id' => 'getShortId',
         'status' => 'getStatus',
         'assigned_user_id' => 'getAssignedUserId',
         'billing_details' => 'getBillingDetails',
@@ -256,6 +267,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'lines' => 'getLines',
         'notes' => 'getNotes',
         'packages' => 'getPackages',
+        'rules' => 'getRules',
         'shipping' => 'getShipping'
     ];
 
@@ -320,6 +332,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('ordered_at', $data ?? [], null);
         $this->setIfExists('price', $data ?? [], null);
         $this->setIfExists('shop_id', $data ?? [], null);
+        $this->setIfExists('short_id', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('assigned_user_id', $data ?? [], null);
         $this->setIfExists('billing_details', $data ?? [], null);
@@ -328,6 +341,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('lines', $data ?? [], null);
         $this->setIfExists('notes', $data ?? [], null);
         $this->setIfExists('packages', $data ?? [], null);
+        $this->setIfExists('rules', $data ?? [], null);
         $this->setIfExists('shipping', $data ?? [], null);
     }
 
@@ -376,6 +390,17 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if ((mb_strlen($this->container['shop_id']) < 1)) {
             $invalidProperties[] = "invalid value for 'shop_id', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['short_id'] === null) {
+            $invalidProperties[] = "'short_id' can't be null";
+        }
+        if ((mb_strlen($this->container['short_id']) > 9)) {
+            $invalidProperties[] = "invalid value for 'short_id', the character length must be smaller than or equal to 9.";
+        }
+
+        if ((mb_strlen($this->container['short_id']) < 9)) {
+            $invalidProperties[] = "invalid value for 'short_id', the character length must be bigger than or equal to 9.";
         }
 
         if ($this->container['status'] === null) {
@@ -547,6 +572,40 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         $this->container['shop_id'] = $shop_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets short_id
+     *
+     * @return string
+     */
+    public function getShortId()
+    {
+        return $this->container['short_id'];
+    }
+
+    /**
+     * Sets short_id
+     *
+     * @param string $short_id The short ID of the order.
+     *
+     * @return self
+     */
+    public function setShortId($short_id)
+    {
+        if (is_null($short_id)) {
+            throw new \InvalidArgumentException('non-nullable short_id cannot be null');
+        }
+        if ((mb_strlen($short_id) > 9)) {
+            throw new \InvalidArgumentException('invalid length for $short_id when calling Order., must be smaller than or equal to 9.');
+        }
+        if ((mb_strlen($short_id) < 9)) {
+            throw new \InvalidArgumentException('invalid length for $short_id when calling Order., must be bigger than or equal to 9.');
+        }
+
+        $this->container['short_id'] = $short_id;
 
         return $this;
     }
@@ -798,6 +857,33 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('invalid length for $packages when calling Order., number of items must be greater than or equal to 1.');
         }
         $this->container['packages'] = $packages;
+
+        return $this;
+    }
+
+    /**
+     * Gets rules
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRules|null
+     */
+    public function getRules()
+    {
+        return $this->container['rules'];
+    }
+
+    /**
+     * Sets rules
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRules|null $rules rules
+     *
+     * @return self
+     */
+    public function setRules($rules)
+    {
+        if (is_null($rules)) {
+            throw new \InvalidArgumentException('non-nullable rules cannot be null');
+        }
+        $this->container['rules'] = $rules;
 
         return $this;
     }

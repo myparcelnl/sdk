@@ -5,10 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **additional_insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
-**cooled_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
-**custom_label_text** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **deliver_at_postal_point** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
-**delivery_date** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **fresh_food** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2**](RefCapabilitiesSharedOptionsBaseOptionV2.md) |  | [optional]
 **frozen** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2**](RefCapabilitiesSharedOptionsBaseOptionV2.md) |  | [optional]
 **hide_sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
@@ -21,7 +18,6 @@ Name | Type | Description | Notes
 **requires_cash_on_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **requires_receipt_code** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **requires_signature** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
-**return_contribution_fee** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **return_on_first_failed_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **same_day_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]
 **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2**](RefCapabilitiesContractDefinitionsResponseOptionsOptionV2.md) |  | [optional]

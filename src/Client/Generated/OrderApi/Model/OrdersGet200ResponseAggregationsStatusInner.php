@@ -57,7 +57,7 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
       * @var string[]
       */
     protected static $openAPITypes = [
-        'key' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus',
+        'key' => 'string',
         'count' => 'int'
     ];
 
@@ -234,6 +234,31 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
         return self::$openAPIModelName;
     }
 
+    public const KEY_CANCELED = 'CANCELED';
+    public const KEY_COMPLETED = 'COMPLETED';
+    public const KEY_DISCOVERED = 'DISCOVERED';
+    public const KEY_IMPORT_REQUESTED = 'IMPORT_REQUESTED';
+    public const KEY_OPEN = 'OPEN';
+    public const KEY_PROCESSING = 'PROCESSING';
+    public const KEY_RETURNING = 'RETURNING';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getKeyAllowableValues()
+    {
+        return [
+            self::KEY_CANCELED,
+            self::KEY_COMPLETED,
+            self::KEY_DISCOVERED,
+            self::KEY_IMPORT_REQUESTED,
+            self::KEY_OPEN,
+            self::KEY_PROCESSING,
+            self::KEY_RETURNING,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -284,6 +309,15 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
         if ($this->container['key'] === null) {
             $invalidProperties[] = "'key' can't be null";
         }
+        $allowedValues = $this->getKeyAllowableValues();
+        if (!is_null($this->container['key']) && !in_array($this->container['key'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'key', must be one of '%s'",
+                $this->container['key'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['count'] === null) {
             $invalidProperties[] = "'count' can't be null";
         }
@@ -309,7 +343,7 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
     /**
      * Gets key
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus
+     * @return string
      */
     public function getKey()
     {
@@ -319,7 +353,7 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
     /**
      * Sets key
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus $key key
+     * @param string $key The status of the order.
      *
      * @return self
      */
@@ -327,6 +361,16 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
     {
         if (is_null($key)) {
             throw new \InvalidArgumentException('non-nullable key cannot be null');
+        }
+        $allowedValues = $this->getKeyAllowableValues();
+        if (!in_array($key, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'key', must be one of '%s'",
+                    $key,
+                    implode("', '", $allowedValues)
+                )
+            );
         }
         $this->container['key'] = $key;
 

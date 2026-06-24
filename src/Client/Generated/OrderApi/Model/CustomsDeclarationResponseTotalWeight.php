@@ -235,7 +235,8 @@ class CustomsDeclarationResponseTotalWeight implements ModelInterface, ArrayAcce
         return self::$openAPIModelName;
     }
 
-    public const UNIT_GRAM = 'GRAM';
+    public const UNIT_G = 'g';
+    public const UNIT_KG = 'kg';
 
     /**
      * Gets allowable values of the enum
@@ -245,7 +246,8 @@ class CustomsDeclarationResponseTotalWeight implements ModelInterface, ArrayAcce
     public function getUnitAllowableValues()
     {
         return [
-            self::UNIT_GRAM,
+            self::UNIT_G,
+            self::UNIT_KG,
         ];
     }
 

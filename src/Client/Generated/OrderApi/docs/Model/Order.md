@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **ordered_at** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderOrderedAt**](OrderOrderedAt.md) |  |
 **price** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money**](Money.md) |  |
 **shop_id** | **string** | The unique identifier of the shop. |
+**short_id** | **string** | The short ID of the order. |
 **status** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus**](OrderStatus.md) |  |
 **assigned_user_id** | **string** | The user ID assigned to the order. | [optional]
 **billing_details** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails**](BillingDetails.md) |  | [optional]
@@ -16,6 +17,7 @@ Name | Type | Description | Notes
 **lines** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Line[]**](Line.md) | The lines of the order | [optional]
 **notes** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Note[]**](Note.md) | The notes of the order. | [optional]
 **packages** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageResponse[]**](PackageResponse.md) | The packages of the order. | [optional]
+**rules** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRules**](OrderRules.md) |  | [optional]
 **shipping** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Shipping**](Shipping.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

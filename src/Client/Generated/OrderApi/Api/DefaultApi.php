@@ -89,6 +89,9 @@ class DefaultApi
         'editNotePost' => [
             'application/json',
         ],
+        'evaluateRulesPost' => [
+            'application/json',
+        ],
         'importPost' => [
             'application/json',
         ],
@@ -2242,6 +2245,354 @@ class DefaultApi
     }
 
     /**
+     * Operation evaluateRulesPost
+     *
+     * Evaluate order rules.
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for evaluating order rules. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['evaluateRulesPost'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     */
+    public function evaluateRulesPost($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
+    {
+        list($response) = $this->evaluateRulesPostWithHttpInfo($cancel_post_request_inner, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation evaluateRulesPostWithHttpInfo
+     *
+     * Evaluate order rules.
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for evaluating order rules. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['evaluateRulesPost'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function evaluateRulesPostWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
+    {
+        $request = $this->evaluateRulesPostRequest($cancel_post_request_inner, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 400:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation evaluateRulesPostAsync
+     *
+     * Evaluate order rules.
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for evaluating order rules. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['evaluateRulesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function evaluateRulesPostAsync($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
+    {
+        return $this->evaluateRulesPostAsyncWithHttpInfo($cancel_post_request_inner, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation evaluateRulesPostAsyncWithHttpInfo
+     *
+     * Evaluate order rules.
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for evaluating order rules. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['evaluateRulesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function evaluateRulesPostAsyncWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $request = $this->evaluateRulesPostRequest($cancel_post_request_inner, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'evaluateRulesPost'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for evaluating order rules. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['evaluateRulesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function evaluateRulesPostRequest($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
+    {
+
+        // verify the required parameter 'cancel_post_request_inner' is set
+        if ($cancel_post_request_inner === null || (is_array($cancel_post_request_inner) && count($cancel_post_request_inner) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $cancel_post_request_inner when calling evaluateRulesPost'
+            );
+        }
+        if (count($cancel_post_request_inner) > 50) {
+            throw new \InvalidArgumentException('invalid value for "$cancel_post_request_inner" when calling DefaultApi.evaluateRulesPost, number of items must be less than or equal to 50.');
+        }
+        if (count($cancel_post_request_inner) < 1) {
+            throw new \InvalidArgumentException('invalid value for "$cancel_post_request_inner" when calling DefaultApi.evaluateRulesPost, number of items must be greater than or equal to 1.');
+        }
+        
+
+        $resourcePath = '/evaluate-rules';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($cancel_post_request_inner)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($cancel_post_request_inner));
+            } else {
+                $httpBody = $cancel_post_request_inner;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation importPost
      *
      * Import an order after it is discovered from a sales channel.
@@ -2594,7 +2945,7 @@ class DefaultApi
      *
      * Query and/or filter orders.
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[]|null $aggregation Fields to summarize data for based on the query. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter filter (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
@@ -2606,9 +2957,9 @@ class DefaultApi
      * @throws \InvalidArgumentException
      * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
      */
-    public function ordersGet($aggregation = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
+    public function ordersGet($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
-        list($response) = $this->ordersGetWithHttpInfo($aggregation, $filter, $limit, $page_token, $query, $sort, $contentType);
+        list($response) = $this->ordersGetWithHttpInfo($aggregations, $filter, $limit, $page_token, $query, $sort, $contentType);
         return $response;
     }
 
@@ -2617,7 +2968,7 @@ class DefaultApi
      *
      * Query and/or filter orders.
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[]|null $aggregation Fields to summarize data for based on the query. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
@@ -2629,9 +2980,9 @@ class DefaultApi
      * @throws \InvalidArgumentException
      * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
      */
-    public function ordersGetWithHttpInfo($aggregation = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
+    public function ordersGetWithHttpInfo($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
-        $request = $this->ordersGetRequest($aggregation, $filter, $limit, $page_token, $query, $sort, $contentType);
+        $request = $this->ordersGetRequest($aggregations, $filter, $limit, $page_token, $query, $sort, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2782,7 +3133,7 @@ class DefaultApi
      *
      * Query and/or filter orders.
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[]|null $aggregation Fields to summarize data for based on the query. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
@@ -2793,9 +3144,9 @@ class DefaultApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function ordersGetAsync($aggregation = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
+    public function ordersGetAsync($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
-        return $this->ordersGetAsyncWithHttpInfo($aggregation, $filter, $limit, $page_token, $query, $sort, $contentType)
+        return $this->ordersGetAsyncWithHttpInfo($aggregations, $filter, $limit, $page_token, $query, $sort, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2808,7 +3159,7 @@ class DefaultApi
      *
      * Query and/or filter orders.
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[]|null $aggregation Fields to summarize data for based on the query. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
@@ -2819,10 +3170,10 @@ class DefaultApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function ordersGetAsyncWithHttpInfo($aggregation = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
+    public function ordersGetAsyncWithHttpInfo($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response';
-        $request = $this->ordersGetRequest($aggregation, $filter, $limit, $page_token, $query, $sort, $contentType);
+        $request = $this->ordersGetRequest($aggregations, $filter, $limit, $page_token, $query, $sort, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2863,7 +3214,7 @@ class DefaultApi
     /**
      * Create request for operation 'ordersGet'
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[]|null $aggregation Fields to summarize data for based on the query. (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
@@ -2874,14 +3225,14 @@ class DefaultApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function ordersGetRequest($aggregation = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
+    public function ordersGetRequest($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
 
-        if ($aggregation !== null && count($aggregation) > 1) {
-            throw new \InvalidArgumentException('invalid value for "$aggregation" when calling DefaultApi.ordersGet, number of items must be less than or equal to 1.');
+        if ($aggregations !== null && count($aggregations) > 7) {
+            throw new \InvalidArgumentException('invalid value for "$aggregations" when calling DefaultApi.ordersGet, number of items must be less than or equal to 7.');
         }
-        if ($aggregation !== null && count($aggregation) < 1) {
-            throw new \InvalidArgumentException('invalid value for "$aggregation" when calling DefaultApi.ordersGet, number of items must be greater than or equal to 1.');
+        if ($aggregations !== null && count($aggregations) < 1) {
+            throw new \InvalidArgumentException('invalid value for "$aggregations" when calling DefaultApi.ordersGet, number of items must be greater than or equal to 1.');
         }
         
 
@@ -2917,8 +3268,8 @@ class DefaultApi
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $aggregation,
-            'aggregation', // param base name
+            $aggregations,
+            'aggregations', // param base name
             'array', // openApiType
             'form', // style
             true, // explode
@@ -3032,7 +3383,7 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
@@ -3053,7 +3404,7 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
@@ -3216,7 +3567,7 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
@@ -3240,7 +3591,7 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
@@ -3293,7 +3644,7 @@ class DefaultApi
      * Create request for operation 'packingSlipsGet'
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
@@ -3434,7 +3785,7 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
@@ -3453,7 +3804,7 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
@@ -3614,7 +3965,7 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -3636,7 +3987,7 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -3687,7 +4038,7 @@ class DefaultApi
      * Create request for operation 'picklistGet'
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept (required)
+     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException

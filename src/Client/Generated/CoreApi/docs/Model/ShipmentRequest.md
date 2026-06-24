@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **shop_id** | **int** |  | [optional]
 **contract_id** | **int** |  | [optional]
 **reference_identifier** | **int** |  | [optional]
-**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient.md) |  | [optional]
+**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender**](RefShipmentSender.md) |  | [optional]
 **recipients** | **float[]** |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties**](ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties.md) |  | [optional]

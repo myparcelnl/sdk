@@ -58,10 +58,10 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
       * @var string[]
       */
     protected static $openAPITypes = [
-        'height' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredHeight',
-        'length' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredLength',
+        'height' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesHeight',
+        'length' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesLength',
         'weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWeight',
-        'width' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWidth'
+        'width' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWidth'
     ];
 
     /**
@@ -317,7 +317,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Gets height
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredHeight|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesHeight|null
      */
     public function getHeight()
     {
@@ -327,7 +327,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Sets height
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredHeight|null $height height
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesHeight|null $height height
      *
      * @return self
      */
@@ -344,7 +344,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Gets length
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredLength|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesLength|null
      */
     public function getLength()
     {
@@ -354,7 +354,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Sets length
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredLength|null $length length
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesLength|null $length length
      *
      * @return self
      */
@@ -398,7 +398,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Gets width
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWidth|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWidth|null
      */
     public function getWidth()
     {
@@ -408,7 +408,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Sets width
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWidth|null $width width
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWidth|null $width width
      *
      * @return self
      */

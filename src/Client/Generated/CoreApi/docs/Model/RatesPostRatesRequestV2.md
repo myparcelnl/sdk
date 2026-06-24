@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2**](CapabilitiesRecipientV2.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2**](CapabilitiesSenderV2.md) |  | [optional]
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2**](RefShipmentPickupV2.md) |  | [optional]
-**carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2**](RefTypesCarrierV2.md) |  |
+**carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2**](RefCapabilitiesSharedCarrierV2.md) |  |
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2**](RefShipmentPackageTypeV2.md) |  |
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties**](RatesPostRatesRequestV2PhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2Options**](RatesPostRatesRequestV2Options.md) |  | [optional]

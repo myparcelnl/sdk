@@ -10,6 +10,7 @@ All URIs are relative to https://order.api.myparcel.nl, except if the operation 
 | [**cancelPost()**](DefaultApi.md#cancelPost) | **POST** /cancel | Cancel orders. |
 | [**createFromShippablePackagesPost()**](DefaultApi.md#createFromShippablePackagesPost) | **POST** /create-from-shippable-packages | Create an order from shippable packages. |
 | [**editNotePost()**](DefaultApi.md#editNotePost) | **POST** /edit-note | Edit a note of an order. |
+| [**evaluateRulesPost()**](DefaultApi.md#evaluateRulesPost) | **POST** /evaluate-rules | Evaluate order rules. |
 | [**importPost()**](DefaultApi.md#importPost) | **POST** /import | Import an order after it is discovered from a sales channel. |
 | [**ordersGet()**](DefaultApi.md#ordersGet) | **GET** /orders | Query and/or filter orders. |
 | [**packingSlipsGet()**](DefaultApi.md#packingSlipsGet) | **GET** /packing-slips | Generate packing slips for 1 or more orders. |
@@ -356,6 +357,62 @@ No authorization required
 [[Back to Model list]](../../README.md#models)
 [[Back to README]](../../README.md)
 
+## `evaluateRulesPost()`
+
+```php
+evaluateRulesPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+```
+
+Evaluate order rules.
+
+Evaluate order rules.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
+$cancel_post_request_inner = array(new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner()); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] | Body for evaluating order rules.
+
+try {
+    $result = $apiInstance->evaluateRulesPost($cancel_post_request_inner);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->evaluateRulesPost: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **cancel_post_request_inner** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[]**](../Model/CancelPostRequestInner.md)| Body for evaluating order rules. | |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
 ## `importPost()`
 
 ```php
@@ -415,7 +472,7 @@ No authorization required
 ## `ordersGet()`
 
 ```php
-ordersGet($aggregation, $filter, $limit, $page_token, $query, $sort): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response
+ordersGet($aggregations, $filter, $limit, $page_token, $query, $sort): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response
 ```
 
 Query and/or filter orders.
@@ -435,7 +492,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client()
 );
-$aggregation = array(new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation()); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[] | Fields to summarize data for based on the query.
+$aggregations = array(new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus()); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[] | The statuses to retrieve counts for.
 $filter = ["filter[assignedUserId]=me","filter[carrier]=POST_NL","filter[countryCode]=NL","filter[hasAssignedUser]=true","filter[hasNotes]=true","filter[orderId]=123e4567-e89b-12d3-a456-426614174000","filter[orderedAt]=gte 2024-02-04T00:00:00Z","filter[price]=lte 10","filter[salesChannelId]=123e4567-e89b-12d3-a456-426614174000","filter[shopId]=555","filter[status]=OPEN","filter[status]=OPEN&filter[status]=CANCELED","filter[countryCode]=NL&filter[status]=OPEN"]; // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter
 $limit = 50; // int | The maximum number of orders to retrieve.
 $page_token = 'page_token_example'; // string | The page token to retrieve the next page of orders.
@@ -443,7 +500,7 @@ $query = 'query_example'; // string | The following operators are supported: '+ 
 $sort = ["sort[customerReference]=DESC","sort[orderedAt]=ASC","sort[price]=ASC","sort[sourceId]=DESC","sort[customerReference]=ASC&sort[orderedAt]=DESC&sort[price]=ASC&sort[status]=ASC&sort[sourceId]=DESC"]; // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter | When no `query` is provided the default sort is by `orderedAt` descending. When a `query` is provided the default sort is by relevance.
 
 try {
-    $result = $apiInstance->ordersGet($aggregation, $filter, $limit, $page_token, $query, $sort);
+    $result = $apiInstance->ordersGet($aggregations, $filter, $limit, $page_token, $query, $sort);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->ordersGet: ', $e->getMessage(), PHP_EOL;
@@ -454,7 +511,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **aggregation** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation[]**](../Model/\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Aggregation.md)| Fields to summarize data for based on the query. | [optional] |
+| **aggregations** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]**](../Model/\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus.md)| The statuses to retrieve counts for. | [optional] |
 | **filter** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter**](../Model/.md)|  | [optional] |
 | **limit** | **int**| The maximum number of orders to retrieve. | [optional] [default to 50] |
 | **page_token** | **string**| The page token to retrieve the next page of orders. | [optional] |
@@ -502,7 +559,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
     new GuzzleHttp\Client()
 );
 $order_id = array('order_id_example'); // string[] | The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed.
-$accept = 'accept_example'; // string
+$accept = 'accept_example'; // string | Use `application/pdf` to download the packing slip. Use `application/pdf+print; printer-group-id=<uuid>` to send the packing slip directly to a printer group.
 $shipment_labels_layout = 'shipment_labels_layout_example'; // string | How shipment labels are included alongside the packing slips in the resulting PDF. `INTERLEAVED` outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered.
 $package_id = array('package_id_example'); // string[] | The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included.
 
@@ -519,7 +576,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **order_id** | [**string[]**](../Model/string.md)| The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. | |
-| **accept** | **string**|  | |
+| **accept** | **string**| Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. | |
 | **shipment_labels_layout** | **string**| How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. | [optional] |
 | **package_id** | [**string[]**](../Model/string.md)| The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. | [optional] |
 
@@ -548,7 +605,7 @@ picklistGet($order_id, $accept): \SplFileObject
 
 Generate a picklist for 1 or more orders.
 
-Get picklist.
+Get picklist. Accepts `application/pdf` to download the picklist as a PDF, or `application/pdf+print` with a `printer-group-id` parameter to send the picklist directly to a printer.
 
 ### Example
 
@@ -564,7 +621,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
     new GuzzleHttp\Client()
 );
 $order_id = array('order_id_example'); // string[] | The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request.
-$accept = 'accept_example'; // string
+$accept = 'accept_example'; // string | Use `application/pdf` to download the picklist. Use `application/pdf+print; printer-group-id=<uuid>` to send the picklist directly to a printer group.
 
 try {
     $result = $apiInstance->picklistGet($order_id, $accept);
@@ -579,7 +636,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **order_id** | [**string[]**](../Model/string.md)| The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. | |
-| **accept** | **string**|  | |
+| **accept** | **string**| Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. | |
 
 ### Return type
 

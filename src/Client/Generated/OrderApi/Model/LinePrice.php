@@ -58,8 +58,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'currency' => 'string',
-        'fractional' => 'int',
-        'integral' => 'int',
         'micros' => 'int'
     ];
 
@@ -72,8 +70,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'currency' => null,
-        'fractional' => null,
-        'integral' => null,
         'micros' => null
     ];
 
@@ -84,8 +80,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static array $openAPINullables = [
         'currency' => false,
-        'fractional' => false,
-        'integral' => false,
         'micros' => false
     ];
 
@@ -176,8 +170,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'currency' => 'currency',
-        'fractional' => 'fractional',
-        'integral' => 'integral',
         'micros' => 'micros'
     ];
 
@@ -188,8 +180,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'currency' => 'setCurrency',
-        'fractional' => 'setFractional',
-        'integral' => 'setIntegral',
         'micros' => 'setMicros'
     ];
 
@@ -200,8 +190,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'currency' => 'getCurrency',
-        'fractional' => 'getFractional',
-        'integral' => 'getIntegral',
         'micros' => 'getMicros'
     ];
 
@@ -263,8 +251,6 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('currency', $data ?? [], null);
-        $this->setIfExists('fractional', $data ?? [], null);
-        $this->setIfExists('integral', $data ?? [], null);
         $this->setIfExists('micros', $data ?? [], null);
     }
 
@@ -306,25 +292,14 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'currency', the character length must be bigger than or equal to 3.";
         }
 
-        if ($this->container['fractional'] === null) {
-            $invalidProperties[] = "'fractional' can't be null";
+        if ($this->container['micros'] === null) {
+            $invalidProperties[] = "'micros' can't be null";
         }
-        if (($this->container['fractional'] < 0)) {
-            $invalidProperties[] = "invalid value for 'fractional', must be bigger than or equal to 0.";
-        }
-
-        if ($this->container['integral'] === null) {
-            $invalidProperties[] = "'integral' can't be null";
-        }
-        if (($this->container['integral'] < 0)) {
-            $invalidProperties[] = "invalid value for 'integral', must be bigger than or equal to 0.";
-        }
-
-        if (!is_null($this->container['micros']) && ($this->container['micros'] > 9007199254740991)) {
+        if (($this->container['micros'] > 9007199254740991)) {
             $invalidProperties[] = "invalid value for 'micros', must be smaller than or equal to 9007199254740991.";
         }
 
-        if (!is_null($this->container['micros']) && ($this->container['micros'] < 0)) {
+        if (($this->container['micros'] < 0)) {
             $invalidProperties[] = "invalid value for 'micros', must be bigger than or equal to 0.";
         }
 
@@ -378,73 +353,9 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets fractional
-     *
-     * @return int
-     */
-    public function getFractional()
-    {
-        return $this->container['fractional'];
-    }
-
-    /**
-     * Sets fractional
-     *
-     * @param int $fractional The fractional unit of the amount.
-     *
-     * @return self
-     */
-    public function setFractional($fractional)
-    {
-        if (is_null($fractional)) {
-            throw new \InvalidArgumentException('non-nullable fractional cannot be null');
-        }
-
-        if (($fractional < 0)) {
-            throw new \InvalidArgumentException('invalid value for $fractional when calling LinePrice., must be bigger than or equal to 0.');
-        }
-
-        $this->container['fractional'] = $fractional;
-
-        return $this;
-    }
-
-    /**
-     * Gets integral
-     *
-     * @return int
-     */
-    public function getIntegral()
-    {
-        return $this->container['integral'];
-    }
-
-    /**
-     * Sets integral
-     *
-     * @param int $integral The whole unit of the amount.
-     *
-     * @return self
-     */
-    public function setIntegral($integral)
-    {
-        if (is_null($integral)) {
-            throw new \InvalidArgumentException('non-nullable integral cannot be null');
-        }
-
-        if (($integral < 0)) {
-            throw new \InvalidArgumentException('invalid value for $integral when calling LinePrice., must be bigger than or equal to 0.');
-        }
-
-        $this->container['integral'] = $integral;
-
-        return $this;
-    }
-
-    /**
      * Gets micros
      *
-     * @return int|null
+     * @return int
      */
     public function getMicros()
     {
@@ -454,7 +365,7 @@ class LinePrice implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets micros
      *
-     * @param int|null $micros The amount of money in integer micros.
+     * @param int $micros The amount of money in integer micros.
      *
      * @return self
      */

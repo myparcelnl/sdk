@@ -59,7 +59,7 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'name' => 'string',
-        'ean' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LineProductEan',
+        'ean' => 'string',
         'sku' => 'string',
         'id' => 'string'
     ];
@@ -307,6 +307,14 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
         }
 
+        if (!is_null($this->container['ean']) && (mb_strlen($this->container['ean']) > 13)) {
+            $invalidProperties[] = "invalid value for 'ean', the character length must be smaller than or equal to 13.";
+        }
+
+        if (!is_null($this->container['ean']) && (mb_strlen($this->container['ean']) < 1)) {
+            $invalidProperties[] = "invalid value for 'ean', the character length must be bigger than or equal to 1.";
+        }
+
         if (!is_null($this->container['sku']) && (mb_strlen($this->container['sku']) > 200)) {
             $invalidProperties[] = "invalid value for 'sku', the character length must be smaller than or equal to 200.";
         }
@@ -367,7 +375,7 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets ean
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LineProductEan|null
+     * @return string|null
      */
     public function getEan()
     {
@@ -377,7 +385,7 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets ean
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LineProductEan|null $ean ean
+     * @param string|null $ean The EAN of the product.
      *
      * @return self
      */
@@ -386,6 +394,13 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($ean)) {
             throw new \InvalidArgumentException('non-nullable ean cannot be null');
         }
+        if ((mb_strlen($ean) > 13)) {
+            throw new \InvalidArgumentException('invalid length for $ean when calling LineProduct., must be smaller than or equal to 13.');
+        }
+        if ((mb_strlen($ean) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $ean when calling LineProduct., must be bigger than or equal to 1.');
+        }
+
         $this->container['ean'] = $ean;
 
         return $this;

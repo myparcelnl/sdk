@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PickupLocation;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -25,7 +25,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
             ->withDirection(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND)
             ->withPickup([
                 'location' => [
-                    'type' => CapabilitiesPostCapabilitiesRequestV2PickupLocation::TYPE_RETAIL,
+                    'type' => RefShipmentLocationTypeV2::RETAIL,
                 ],
             ]);
 
@@ -41,7 +41,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertNotNull($coreReq->getPickup());
         $this->assertNotNull($coreReq->getPickup()->getLocation());
         $this->assertSame(
-            CapabilitiesPostCapabilitiesRequestV2PickupLocation::TYPE_RETAIL,
+            RefShipmentLocationTypeV2::RETAIL,
             $coreReq->getPickup()->getLocation()->getType()
         );
     }

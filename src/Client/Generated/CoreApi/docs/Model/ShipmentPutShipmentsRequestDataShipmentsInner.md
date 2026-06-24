@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
 **status** | **int** |  | [optional]
 **delivered** | **int** |  | [optional]
-**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestDataShipmentsInnerRecipient**](ShipmentPutShipmentsRequestDataShipmentsInnerRecipient.md) |  | [optional]
+**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPutShipmentsRequestDataShipmentsInnerRecipient**](ShipmentPutShipmentsRequestDataShipmentsInnerRecipient.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender**](RefShipmentSender.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions**](ShipmentDefsShipmentOptions.md) |  |
 **customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration**](RefShipmentCustomsDeclaration.md) |  | [optional]

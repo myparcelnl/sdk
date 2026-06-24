@@ -62,7 +62,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         'noted_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedNotedAt',
         'principal' => 'string',
         'text' => 'string',
-        'author' => 'string',
         'locale' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedLocale',
         'updated_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedUpdatedAt'
     ];
@@ -80,7 +79,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         'noted_at' => null,
         'principal' => null,
         'text' => null,
-        'author' => null,
         'locale' => null,
         'updated_at' => null
     ];
@@ -96,7 +94,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         'noted_at' => false,
         'principal' => false,
         'text' => false,
-        'author' => false,
         'locale' => false,
         'updated_at' => false
     ];
@@ -192,7 +189,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         'noted_at' => 'notedAt',
         'principal' => 'principal',
         'text' => 'text',
-        'author' => 'author',
         'locale' => 'locale',
         'updated_at' => 'updatedAt'
     ];
@@ -208,7 +204,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         'noted_at' => 'setNotedAt',
         'principal' => 'setPrincipal',
         'text' => 'setText',
-        'author' => 'setAuthor',
         'locale' => 'setLocale',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -224,7 +219,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         'noted_at' => 'getNotedAt',
         'principal' => 'getPrincipal',
         'text' => 'getText',
-        'author' => 'getAuthor',
         'locale' => 'getLocale',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -304,7 +298,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         $this->setIfExists('noted_at', $data ?? [], null);
         $this->setIfExists('principal', $data ?? [], null);
         $this->setIfExists('text', $data ?? [], null);
-        $this->setIfExists('author', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
         $this->setIfExists('updated_at', $data ?? [], null);
     }
@@ -374,14 +367,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
 
         if ((mb_strlen($this->container['text']) < 1)) {
             $invalidProperties[] = "invalid value for 'text', the character length must be bigger than or equal to 1.";
-        }
-
-        if (!is_null($this->container['author']) && (mb_strlen($this->container['author']) > 200)) {
-            $invalidProperties[] = "invalid value for 'author', the character length must be smaller than or equal to 200.";
-        }
-
-        if (!is_null($this->container['author']) && (mb_strlen($this->container['author']) < 1)) {
-            $invalidProperties[] = "invalid value for 'author', the character length must be bigger than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -554,40 +539,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         }
 
         $this->container['text'] = $text;
-
-        return $this;
-    }
-
-    /**
-     * Gets author
-     *
-     * @return string|null
-     */
-    public function getAuthor()
-    {
-        return $this->container['author'];
-    }
-
-    /**
-     * Sets author
-     *
-     * @param string|null $author The author of the note.
-     *
-     * @return self
-     */
-    public function setAuthor($author)
-    {
-        if (is_null($author)) {
-            throw new \InvalidArgumentException('non-nullable author cannot be null');
-        }
-        if ((mb_strlen($author) > 200)) {
-            throw new \InvalidArgumentException('invalid length for $author when calling NoteFromPrincipal., must be smaller than or equal to 200.');
-        }
-        if ((mb_strlen($author) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $author when calling NoteFromPrincipal., must be bigger than or equal to 1.');
-        }
-
-        $this->container['author'] = $author;
 
         return $this;
     }

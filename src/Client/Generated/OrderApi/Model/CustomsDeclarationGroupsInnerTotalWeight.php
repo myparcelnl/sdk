@@ -235,7 +235,6 @@ class CustomsDeclarationGroupsInnerTotalWeight implements ModelInterface, ArrayA
         return self::$openAPIModelName;
     }
 
-    public const UNIT_GRAM = 'GRAM';
     public const UNIT_G = 'g';
     public const UNIT_KG = 'kg';
 
@@ -247,7 +246,6 @@ class CustomsDeclarationGroupsInnerTotalWeight implements ModelInterface, ArrayA
     public function getUnitAllowableValues()
     {
         return [
-            self::UNIT_GRAM,
             self::UNIT_G,
             self::UNIT_KG,
         ];

@@ -35,6 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * OrdersGet200ResponseAggregations Class Doc Comment
  *
  * @category Class
+ * @description Count of orders per status, scoped to all active filters except the status filter.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -274,14 +275,6 @@ class OrdersGet200ResponseAggregations implements ModelInterface, ArrayAccess, \
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['status']) && (count($this->container['status']) > 7)) {
-            $invalidProperties[] = "invalid value for 'status', number of items must be less than or equal to 7.";
-        }
-
-        if (!is_null($this->container['status']) && (count($this->container['status']) < 7)) {
-            $invalidProperties[] = "invalid value for 'status', number of items must be greater than or equal to 7.";
-        }
-
         return $invalidProperties;
     }
 
@@ -318,13 +311,6 @@ class OrdersGet200ResponseAggregations implements ModelInterface, ArrayAccess, \
     {
         if (is_null($status)) {
             throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-
-        if ((count($status) > 7)) {
-            throw new \InvalidArgumentException('invalid value for $status when calling OrdersGet200ResponseAggregations., number of items must be less than or equal to 7.');
-        }
-        if ((count($status) < 7)) {
-            throw new \InvalidArgumentException('invalid length for $status when calling OrdersGet200ResponseAggregations., number of items must be greater than or equal to 7.');
         }
         $this->container['status'] = $status;
 

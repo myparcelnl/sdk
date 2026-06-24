@@ -78,6 +78,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**cancelPost**](docs/Api/DefaultApi.md#cancelpost) | **POST** /cancel | Cancel orders.
 *DefaultApi* | [**createFromShippablePackagesPost**](docs/Api/DefaultApi.md#createfromshippablepackagespost) | **POST** /create-from-shippable-packages | Create an order from shippable packages.
 *DefaultApi* | [**editNotePost**](docs/Api/DefaultApi.md#editnotepost) | **POST** /edit-note | Edit a note of an order.
+*DefaultApi* | [**evaluateRulesPost**](docs/Api/DefaultApi.md#evaluaterulespost) | **POST** /evaluate-rules | Evaluate order rules.
 *DefaultApi* | [**importPost**](docs/Api/DefaultApi.md#importpost) | **POST** /import | Import an order after it is discovered from a sales channel.
 *DefaultApi* | [**ordersGet**](docs/Api/DefaultApi.md#ordersget) | **GET** /orders | Query and/or filter orders.
 *DefaultApi* | [**packingSlipsGet**](docs/Api/DefaultApi.md#packingslipsget) | **GET** /packing-slips | Generate packing slips for 1 or more orders.
@@ -95,7 +96,6 @@ Class | Method | HTTP request | Description
 - [AddNotePostRequestInnerLocale](docs/Model/AddNotePostRequestInnerLocale.md)
 - [AddPackages](docs/Model/AddPackages.md)
 - [Address](docs/Model/Address.md)
-- [Aggregation](docs/Model/Aggregation.md)
 - [AssignToUserPost200ResponseInner](docs/Model/AssignToUserPost200ResponseInner.md)
 - [AssignToUserPost200ResponseInnerOneOf](docs/Model/AssignToUserPost200ResponseInnerOneOf.md)
 - [AssignToUserPostRequestInner](docs/Model/AssignToUserPostRequestInner.md)
@@ -143,7 +143,6 @@ Class | Method | HTTP request | Description
 - [LineExternalReference](docs/Model/LineExternalReference.md)
 - [LinePrice](docs/Model/LinePrice.md)
 - [LineProduct](docs/Model/LineProduct.md)
-- [LineProductEan](docs/Model/LineProductEan.md)
 - [Money](docs/Model/Money.md)
 - [Note](docs/Model/Note.md)
 - [NoteFromImported](docs/Model/NoteFromImported.md)
@@ -154,6 +153,15 @@ Class | Method | HTTP request | Description
 - [Order](docs/Model/Order.md)
 - [OrderExternalReferences](docs/Model/OrderExternalReferences.md)
 - [OrderOrderedAt](docs/Model/OrderOrderedAt.md)
+- [OrderRules](docs/Model/OrderRules.md)
+- [OrderRulesSetShippingPreferences](docs/Model/OrderRulesSetShippingPreferences.md)
+- [OrderRulesSetShippingPreferencesAppliedAt](docs/Model/OrderRulesSetShippingPreferencesAppliedAt.md)
+- [OrderRulesSetShippingPreferencesPathInner](docs/Model/OrderRulesSetShippingPreferencesPathInner.md)
+- [OrderRulesSetShippingPreferencesPathInnerAnyOf](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf.md)
+- [OrderRulesSetShippingPreferencesPathInnerAnyOf1](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1.md)
+- [OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1Condition.md)
+- [OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf.md)
+- [OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf1](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf1.md)
 - [OrderStatus](docs/Model/OrderStatus.md)
 - [OrdersGet200Response](docs/Model/OrdersGet200Response.md)
 - [OrdersGet200ResponseAggregations](docs/Model/OrdersGet200ResponseAggregations.md)
@@ -188,10 +196,7 @@ Class | Method | HTTP request | Description
 - [PhysicalPropertiesLength](docs/Model/PhysicalPropertiesLength.md)
 - [PhysicalPropertiesWeight](docs/Model/PhysicalPropertiesWeight.md)
 - [PhysicalPropertiesWeightRequired](docs/Model/PhysicalPropertiesWeightRequired.md)
-- [PhysicalPropertiesWeightRequiredHeight](docs/Model/PhysicalPropertiesWeightRequiredHeight.md)
-- [PhysicalPropertiesWeightRequiredLength](docs/Model/PhysicalPropertiesWeightRequiredLength.md)
 - [PhysicalPropertiesWeightRequiredWeight](docs/Model/PhysicalPropertiesWeightRequiredWeight.md)
-- [PhysicalPropertiesWeightRequiredWidth](docs/Model/PhysicalPropertiesWeightRequiredWidth.md)
 - [PhysicalPropertiesWidth](docs/Model/PhysicalPropertiesWidth.md)
 - [Pickup](docs/Model/Pickup.md)
 - [PickupAnyOf](docs/Model/PickupAnyOf.md)

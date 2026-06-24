@@ -63,7 +63,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **string**| One or more notification group IDs. Separate multiple IDs using &#x60;;&#x60;. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -129,7 +129,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -197,7 +197,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -263,7 +263,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -331,7 +331,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -353,7 +353,7 @@ void (empty response body)
 ## `getNotificationGroups()`
 
 ```php
-getNotificationGroups($user_agent, $shop_id): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
+getNotificationGroups($shop_id, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
 ```
 
 Get notification groups
@@ -382,11 +382,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getNotificationGroups($user_agent, $shop_id);
+    $result = $apiInstance->getNotificationGroups($shop_id, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->getNotificationGroups: ', $e->getMessage(), PHP_EOL;
@@ -397,8 +397,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -465,7 +465,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -487,7 +487,7 @@ try {
 ## `postNotificationGroups()`
 
 ```php
-postNotificationGroups($user_agent, $notification_post_notification_group_request): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
+postNotificationGroups($notification_post_notification_group_request, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups
 ```
 
 Create notification groups
@@ -516,11 +516,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
     new GuzzleHttp\Client(),
     $config
 );
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $notification_post_notification_group_request = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest | Request body for creating notification groups.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postNotificationGroups($user_agent, $notification_post_notification_group_request);
+    $result = $apiInstance->postNotificationGroups($notification_post_notification_group_request, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->postNotificationGroups: ', $e->getMessage(), PHP_EOL;
@@ -531,8 +531,8 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **notification_post_notification_group_request** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPostNotificationGroupRequest**](../Model/NotificationPostNotificationGroupRequest.md)| Request body for creating notification groups. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -554,7 +554,7 @@ try {
 ## `putNotificationTemplate()`
 
 ```php
-putNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request)
+putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent)
 ```
 
 Update notification template
@@ -585,11 +585,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\NotificationApi(
 );
 $notification_group_id = 56; // int | The ID of the notification group.
 $notification_template_id = 56; // int | The ID of the notification template.
-$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 $notification_put_notification_template_request = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest | Request body for updating a notification template.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $apiInstance->putNotificationTemplate($notification_group_id, $notification_template_id, $user_agent, $notification_put_notification_template_request);
+    $apiInstance->putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent);
 } catch (Exception $e) {
     echo 'Exception when calling NotificationApi->putNotificationTemplate: ', $e->getMessage(), PHP_EOL;
 }
@@ -601,8 +601,8 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
 | **notification_put_notification_template_request** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationPutNotificationTemplateRequest**](../Model/NotificationPutNotificationTemplateRequest.md)| Request body for updating a notification template. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
@@ -670,7 +670,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **notification_group_id** | **int**| The ID of the notification group. | |
 | **notification_template_id** | **int**| The ID of the notification template. | |
-| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
 
