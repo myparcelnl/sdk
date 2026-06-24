@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.27](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.26...v11.0.0-beta.27) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* accept tracktrace sender email values ([34d60ae](https://github.com/myparcelnl/sdk/commit/34d60ae2ab83f878cfbf5045db87dbb0e81ca359))
+
 ## [11.0.0-beta.26](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.25...v11.0.0-beta.26) (2026-06-24)
 
 
