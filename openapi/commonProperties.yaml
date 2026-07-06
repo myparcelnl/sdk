@@ -3,3 +3,4 @@
 modelPackage: Model
 srcBasePath: .
 apiPackage: Api
+enumUnknownDefaultCase: true
