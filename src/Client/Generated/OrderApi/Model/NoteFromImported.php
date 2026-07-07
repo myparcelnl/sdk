@@ -435,16 +435,6 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($type)) {
             throw new \InvalidArgumentException('non-nullable type cannot be null');
         }
-        $allowedValues = $this->getTypeAllowableValues();
-        if (!in_array($type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'type', must be one of '%s'",
-                    $type,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['type'] = $type;
 
         return $this;
@@ -525,16 +515,6 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         if (is_null($origin)) {
             throw new \InvalidArgumentException('non-nullable origin cannot be null');
-        }
-        $allowedValues = $this->getOriginAllowableValues();
-        if (!in_array($origin, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'origin', must be one of '%s'",
-                    $origin,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['origin'] = $origin;
 

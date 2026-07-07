@@ -21,6 +21,8 @@ inlineSchemaNameMappings:
 typeMappings:
   # Map Empty model classes (oneOf) to primitives to avoid generating empty classes
   RefTypesMoneyAmount: int
+  RefTypesMoneyPropertiesAmount: int
+
   # @todo remove when upstream spec fixes street pattern + email enum
   # Redirects to override classes that fix broken setStreet() regex and setEmail() enum.
   ShipmentDefsShipmentRecipient: FixedShipmentRecipient

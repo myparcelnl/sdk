@@ -888,16 +888,6 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
         if (is_null($status)) {
             throw new \InvalidArgumentException('non-nullable status cannot be null');
         }
-        $allowedValues = $this->getStatusAllowableValues();
-        if (!in_array($status, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'status', must be one of '%s'",
-                    $status,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['status'] = $status;
 
         return $this;
@@ -924,16 +914,6 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
     {
         if (is_null($delivered)) {
             throw new \InvalidArgumentException('non-nullable delivered cannot be null');
-        }
-        $allowedValues = $this->getDeliveredAllowableValues();
-        if (!in_array($delivered, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivered', must be one of '%s'",
-                    $delivered,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['delivered'] = $delivered;
 
@@ -1015,16 +995,6 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
     {
         if (is_null($hidden)) {
             throw new \InvalidArgumentException('non-nullable hidden cannot be null');
-        }
-        $allowedValues = $this->getHiddenAllowableValues();
-        if (!in_array($hidden, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'hidden', must be one of '%s'",
-                    $hidden,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['hidden'] = $hidden;
 

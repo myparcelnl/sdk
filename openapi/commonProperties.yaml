@@ -3,4 +3,6 @@
 modelPackage: Model
 srcBasePath: .
 apiPackage: Api
-enumUnknownDefaultCase: true
+# Disabled: unknown enum handling is done in our ObjectSerializer/model templates
+# (raw passthrough on read, strict on write) instead of the sentinel-value approach.
+enumUnknownDefaultCase: false

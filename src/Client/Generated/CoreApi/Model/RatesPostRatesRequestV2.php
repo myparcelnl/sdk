@@ -703,16 +703,6 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         if (is_null($delivery_type)) {
             throw new \InvalidArgumentException('non-nullable delivery_type cannot be null');
         }
-        $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!in_array($delivery_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivery_type', must be one of '%s'",
-                    $delivery_type,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['delivery_type'] = $delivery_type;
 
         return $this;
@@ -739,16 +729,6 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     {
         if (is_null($direction)) {
             throw new \InvalidArgumentException('non-nullable direction cannot be null');
-        }
-        $allowedValues = $this->getDirectionAllowableValues();
-        if (!in_array($direction, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'direction', must be one of '%s'",
-                    $direction,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['direction'] = $direction;
 

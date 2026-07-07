@@ -35,7 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * OrdersGet200ResponseAggregations Class Doc Comment
  *
  * @category Class
- * @description Count of orders per status, scoped to all active filters except the status filter.
+ * @description Count of orders per status, scoped to the active search query and all active filters except the status filter.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

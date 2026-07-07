@@ -412,16 +412,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
         if (is_null($save_recipient_address)) {
             throw new \InvalidArgumentException('non-nullable save_recipient_address cannot be null');
         }
-        $allowedValues = $this->getSaveRecipientAddressAllowableValues();
-        if (!in_array($save_recipient_address, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'save_recipient_address', must be one of '%s'",
-                    $save_recipient_address,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['save_recipient_address'] = $save_recipient_address;
 
         return $this;
@@ -448,16 +438,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
     {
         if (is_null($delivery_notification)) {
             throw new \InvalidArgumentException('non-nullable delivery_notification cannot be null');
-        }
-        $allowedValues = $this->getDeliveryNotificationAllowableValues();
-        if (!in_array($delivery_notification, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivery_notification', must be one of '%s'",
-                    $delivery_notification,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['delivery_notification'] = $delivery_notification;
 
@@ -512,16 +492,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
     {
         if (is_null($disable_auto_detect_pickup)) {
             throw new \InvalidArgumentException('non-nullable disable_auto_detect_pickup cannot be null');
-        }
-        $allowedValues = $this->getDisableAutoDetectPickupAllowableValues();
-        if (!in_array($disable_auto_detect_pickup, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'disable_auto_detect_pickup', must be one of '%s'",
-                    $disable_auto_detect_pickup,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['disable_auto_detect_pickup'] = $disable_auto_detect_pickup;
 

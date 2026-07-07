@@ -368,16 +368,6 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
         if (is_null($code)) {
             throw new \InvalidArgumentException('non-nullable code cannot be null');
         }
-        $allowedValues = $this->getCodeAllowableValues();
-        if (!in_array($code, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'code', must be one of '%s'",
-                    $code,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['code'] = $code;
 
         return $this;

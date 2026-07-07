@@ -75,7 +75,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'transaction_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus',
         'drop_off_point' => 'mixed',
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
-        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
+        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount',
         'barcode' => 'string',
         'region' => 'string',
         'external_provider' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName',
@@ -1220,7 +1220,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets price
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getPrice()
     {
@@ -1230,7 +1230,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $price price
      *
      * @return self
      */

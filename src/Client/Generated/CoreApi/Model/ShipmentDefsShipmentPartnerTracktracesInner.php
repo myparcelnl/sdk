@@ -354,16 +354,6 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getUriAllowableValues();
-        if (!is_null($uri) && !in_array($uri, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'uri', must be one of '%s'",
-                    $uri,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['uri'] = $uri;
 
         return $this;

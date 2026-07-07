@@ -422,16 +422,6 @@ class CustomsDeclaration implements ModelInterface, ArrayAccess, \JsonSerializab
         if (is_null($purpose)) {
             throw new \InvalidArgumentException('non-nullable purpose cannot be null');
         }
-        $allowedValues = $this->getPurposeAllowableValues();
-        if (!in_array($purpose, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'purpose', must be one of '%s'",
-                    $purpose,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['purpose'] = $purpose;
 
         return $this;

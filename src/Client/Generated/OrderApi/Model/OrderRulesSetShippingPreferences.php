@@ -421,16 +421,6 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
         if (is_null($result)) {
             throw new \InvalidArgumentException('non-nullable result cannot be null');
         }
-        $allowedValues = $this->getResultAllowableValues();
-        if (!in_array($result, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'result', must be one of '%s'",
-                    $result,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['result'] = $result;
 
         return $this;

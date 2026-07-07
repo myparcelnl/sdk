@@ -619,16 +619,6 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
         if (is_null($gender)) {
             throw new \InvalidArgumentException('non-nullable gender cannot be null');
         }
-        $allowedValues = $this->getGenderAllowableValues();
-        if (!in_array($gender, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'gender', must be one of '%s'",
-                    $gender,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['gender'] = $gender;
 
         return $this;

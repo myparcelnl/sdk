@@ -359,16 +359,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
         if (is_null($source)) {
             throw new \InvalidArgumentException('non-nullable source cannot be null');
         }
-        $allowedValues = $this->getSourceAllowableValues();
-        if (!in_array($source, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'source', must be one of '%s'",
-                    $source,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['source'] = $source;
 
         return $this;

@@ -75,7 +75,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'transaction_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus',
         'drop_off_point' => 'mixed',
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
-        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
+        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount',
         'barcode' => 'string',
         'region' => 'string',
         'external_provider' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProvider',
@@ -1208,7 +1208,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets price
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getPrice()
     {
@@ -1218,7 +1218,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $price price
      *
      * @return self
      */

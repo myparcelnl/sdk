@@ -1166,16 +1166,6 @@ class ShipmentDefsShipmentRecipient implements ModelInterface, ArrayAccess, \Jso
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getEmailAllowableValues();
-        if (!is_null($email) && !in_array($email, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'email', must be one of '%s'",
-                    $email,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['email'] = $email;
 
         return $this;

@@ -346,16 +346,6 @@ class CapabilitiesPostContractDefinitionsRequestV1Data implements ModelInterface
         if (is_null($carrier_id)) {
             throw new \InvalidArgumentException('non-nullable carrier_id cannot be null');
         }
-        $allowedValues = $this->getCarrierIdAllowableValues();
-        if (!in_array($carrier_id, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'carrier_id', must be one of '%s'",
-                    $carrier_id,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['carrier_id'] = $carrier_id;
 
         return $this;

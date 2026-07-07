@@ -352,16 +352,6 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
         if (is_null($relation)) {
             throw new \InvalidArgumentException('non-nullable relation cannot be null');
         }
-        $allowedValues = $this->getRelationAllowableValues();
-        if (!in_array($relation, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'relation', must be one of '%s'",
-                    $relation,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['relation'] = $relation;
 
         return $this;

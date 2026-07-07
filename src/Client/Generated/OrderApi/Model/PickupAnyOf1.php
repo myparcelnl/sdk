@@ -413,16 +413,6 @@ class PickupAnyOf1 implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($retail_network_id)) {
             throw new \InvalidArgumentException('non-nullable retail_network_id cannot be null');
         }
-        $allowedValues = $this->getRetailNetworkIdAllowableValues();
-        if (!in_array($retail_network_id, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'retail_network_id', must be one of '%s'",
-                    $retail_network_id,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['retail_network_id'] = $retail_network_id;
 
         return $this;

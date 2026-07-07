@@ -346,16 +346,6 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
         if (is_null($carrier)) {
             throw new \InvalidArgumentException('non-nullable carrier cannot be null');
         }
-        $allowedValues = $this->getCarrierAllowableValues();
-        if (!in_array($carrier, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'carrier', must be one of '%s'",
-                    $carrier,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['carrier'] = $carrier;
 
         return $this;

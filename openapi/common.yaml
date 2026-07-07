@@ -1,5 +1,9 @@
 # Shared configuration values for OpenAPI Generator configuration files.
 generatorName: php
+# Overrides the stock ObjectSerializer to pass unknown response enum values
+# through instead of throwing. Only ObjectSerializer.mustache lives here; every
+# other template falls back to the generator's built-in defaults.
+templateDir: /local/openapi/templates
 globalProperties:
   apiTests: false
   modelTests: false

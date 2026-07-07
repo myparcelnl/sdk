@@ -641,16 +641,6 @@ class RefShipmentGeneralSettingsTracktrace implements ModelInterface, ArrayAcces
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getFromAddressEmailAllowableValues();
-        if (!is_null($from_address_email) && !in_array($from_address_email, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'from_address_email', must be one of '%s'",
-                    $from_address_email,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['from_address_email'] = $from_address_email;
 
         return $this;

@@ -471,16 +471,6 @@ class NotificationPostNotificationGroupRequestOneOf1 implements ModelInterface, 
         if (is_null($shipment_direction)) {
             throw new \InvalidArgumentException('non-nullable shipment_direction cannot be null');
         }
-        $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!in_array($shipment_direction, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'shipment_direction', must be one of '%s'",
-                    $shipment_direction,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['shipment_direction'] = $shipment_direction;
 
         return $this;

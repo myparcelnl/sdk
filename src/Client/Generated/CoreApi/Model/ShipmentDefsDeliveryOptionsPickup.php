@@ -773,16 +773,6 @@ class ShipmentDefsDeliveryOptionsPickup implements ModelInterface, ArrayAccess, 
         if (is_null($price_comment)) {
             throw new \InvalidArgumentException('non-nullable price_comment cannot be null');
         }
-        $allowedValues = $this->getPriceCommentAllowableValues();
-        if (!in_array($price_comment, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'price_comment', must be one of '%s'",
-                    $price_comment,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['price_comment'] = $price_comment;
 
         return $this;

@@ -336,16 +336,6 @@ class ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings 
         if (is_null($save_recipient_address)) {
             throw new \InvalidArgumentException('non-nullable save_recipient_address cannot be null');
         }
-        $allowedValues = $this->getSaveRecipientAddressAllowableValues();
-        if (!in_array($save_recipient_address, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'save_recipient_address', must be one of '%s'",
-                    $save_recipient_address,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['save_recipient_address'] = $save_recipient_address;
 
         return $this;

@@ -497,16 +497,6 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getPackageTypeAllowableValues();
-        if (!is_null($package_type) && !in_array($package_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'package_type', must be one of '%s'",
-                    $package_type,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['package_type'] = $package_type;
 
         return $this;
@@ -577,16 +567,6 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     {
         if (is_null($shipment_direction)) {
             throw new \InvalidArgumentException('non-nullable shipment_direction cannot be null');
-        }
-        $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!in_array($shipment_direction, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'shipment_direction', must be one of '%s'",
-                    $shipment_direction,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['shipment_direction'] = $shipment_direction;
 

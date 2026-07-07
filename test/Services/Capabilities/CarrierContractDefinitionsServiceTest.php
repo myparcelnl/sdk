@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Capabilities;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
@@ -72,16 +76,18 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         );
     }
 
-    public function testGetContractDefinitionsLetsGeneratedRequestValidateCarrier(): void
+    public function testGetContractDefinitionsRejectsUnknownCarrierBeforeSending(): void
     {
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::never())
-            ->method('postCapabilitiesContractDefinitions');
+        // Real client with an empty mock handler: request serialization runs (and must
+        // reject the unknown carrier) before any HTTP request is attempted.
+        $api = new ShipmentApi(
+            new Client(['handler' => HandlerStack::create(new MockHandler([]))]),
+            Configuration::getDefaultConfiguration()->setApiKey('Authorization', $this->getApiKey())
+        );
 
         $service = new CarrierContractDefinitionsService($this->getApiKey(), null, $api);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid value 'inpost' for 'carrier'");
 
         $service->getContractDefinitions('inpost');
     }

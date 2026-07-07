@@ -554,16 +554,6 @@ class BillingDefsPaymentData implements ModelInterface, ArrayAccess, \JsonSerial
         if (is_null($paid)) {
             throw new \InvalidArgumentException('non-nullable paid cannot be null');
         }
-        $allowedValues = $this->getPaidAllowableValues();
-        if (!in_array($paid, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'paid', must be one of '%s'",
-                    $paid,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['paid'] = $paid;
 
         return $this;

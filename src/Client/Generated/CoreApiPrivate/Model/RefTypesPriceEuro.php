@@ -351,16 +351,6 @@ class RefTypesPriceEuro implements ModelInterface, ArrayAccess, \JsonSerializabl
         if (is_null($currency)) {
             throw new \InvalidArgumentException('non-nullable currency cannot be null');
         }
-        $allowedValues = $this->getCurrencyAllowableValues();
-        if (!in_array($currency, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'currency', must be one of '%s'",
-                    $currency,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['currency'] = $currency;
 
         return $this;

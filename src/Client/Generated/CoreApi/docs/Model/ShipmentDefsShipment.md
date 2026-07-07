@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 **transaction_status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus**](RefShipmentTransactionStatus.md) |  |
 **drop_off_point** | **mixed** |  |
 **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  |
-**price** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney**](RefTypesMoney.md) |  |
+**price** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount**](RefTypesMoneyNullableAmount.md) |  |
 **barcode** | **string** |  |
 **region** | [**string**](ShipmentDefsShipmentRegion.md) |  |
 **external_provider** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProvider**](ShipmentDefsShipmentExternalProvider.md) |  |

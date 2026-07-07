@@ -1060,16 +1060,6 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!is_null($delivery_type) && !in_array($delivery_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivery_type', must be one of '%s'",
-                    $delivery_type,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['delivery_type'] = $delivery_type;
 
         return $this;

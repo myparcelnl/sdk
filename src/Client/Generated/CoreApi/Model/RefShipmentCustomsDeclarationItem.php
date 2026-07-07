@@ -566,16 +566,6 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getCountryAllowableValues();
-        if (!is_null($country) && !in_array($country, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'country', must be one of '%s'",
-                    $country,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['country'] = $country;
 
         return $this;
