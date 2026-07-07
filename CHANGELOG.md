@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.7](https://github.com/myparcelnl/sdk/compare/v10.7.6...v10.7.7) (2026-07-07)
+
+
+### :bug: Bug Fixes
+
+* **security:** fix tar vulnerability ([#599](https://github.com/myparcelnl/sdk/issues/599)) ([75b31f9](https://github.com/myparcelnl/sdk/commit/75b31f9b2552ea6b69b4348da387e8e7672cf614))
+
 ## [10.7.6](https://github.com/myparcelnl/sdk/compare/v10.7.5...v10.7.6) (2026-05-08)
 
 
