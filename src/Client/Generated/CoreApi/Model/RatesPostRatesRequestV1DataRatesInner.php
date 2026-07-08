@@ -438,7 +438,9 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
             $invalidProperties[] = "'package_type' can't be null";
         }
         $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'delivery_type', must be one of '%s'",
                 $this->container['delivery_type'],
@@ -447,7 +449,9 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         }
 
         $allowedValues = $this->getShipmentTypeAllowableValues();
-        if (!is_null($this->container['shipment_type']) && !in_array($this->container['shipment_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['shipment_type']) && !in_array($this->container['shipment_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'shipment_type', must be one of '%s'",
                 $this->container['shipment_type'],
@@ -456,7 +460,9 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         }
 
         $allowedValues = $this->getDirectionAllowableValues();
-        if (!is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'direction', must be one of '%s'",
                 $this->container['direction'],

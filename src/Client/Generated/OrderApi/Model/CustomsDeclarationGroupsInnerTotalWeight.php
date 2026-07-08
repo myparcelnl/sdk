@@ -301,7 +301,9 @@ class CustomsDeclarationGroupsInnerTotalWeight implements ModelInterface, ArrayA
             $invalidProperties[] = "'unit' can't be null";
         }
         $allowedValues = $this->getUnitAllowableValues();
-        if (!is_null($this->container['unit']) && !in_array($this->container['unit'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['unit']) && !in_array($this->container['unit'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'unit', must be one of '%s'",
                 $this->container['unit'],

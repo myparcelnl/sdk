@@ -7,3 +7,12 @@ templateDir: /local/openapi/templates
 globalProperties:
   apiTests: false
   modelTests: false
+# Collapse `anyOf(string | enum[null,""])` pseudo-enums (e.g. email fields) to plain
+# strings at the spec level. On generator 7.12.0 these rules are effectively a no-op:
+# the normalizer cannot process OpenAPI 3.1 `type: ["null","string"]` schemas and logs
+# "Type {} not yet supported" for each. Kept in place so that after upgrading to >= 7.17
+# (which adds NORMALIZE_31SPEC) they take effect, letting us drop the runtime pseudo-enum
+# guards in ObjectSerializer.mustache / model_generic.mustache and the Fixed* overrides.
+openapiNormalizer:
+  SIMPLIFY_ANYOF_STRING_AND_ENUM_STRING: "true"
+  SIMPLIFY_ONEOF_ANYOF: "true"

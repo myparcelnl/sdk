@@ -299,7 +299,9 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
             $invalidProperties[] = "'uri' is required";
         }
         $allowedValues = $this->getUriAllowableValues();
-        if (!is_null($this->container['uri']) && !in_array($this->container['uri'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['uri']) && !in_array($this->container['uri'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'uri', must be one of '%s'",
                 $this->container['uri'],

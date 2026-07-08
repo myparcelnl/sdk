@@ -464,7 +464,9 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $allowedValues = $this->getHasAssignedUserAllowableValues();
-        if (!is_null($this->container['has_assigned_user']) && !in_array($this->container['has_assigned_user'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['has_assigned_user']) && !in_array($this->container['has_assigned_user'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'has_assigned_user', must be one of '%s'",
                 $this->container['has_assigned_user'],
@@ -473,7 +475,9 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $allowedValues = $this->getHasNotesAllowableValues();
-        if (!is_null($this->container['has_notes']) && !in_array($this->container['has_notes'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['has_notes']) && !in_array($this->container['has_notes'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'has_notes', must be one of '%s'",
                 $this->container['has_notes'],
@@ -538,7 +542,9 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $allowedValues = $this->getShipmentDelayedAllowableValues();
-        if (!is_null($this->container['shipment_delayed']) && !in_array($this->container['shipment_delayed'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['shipment_delayed']) && !in_array($this->container['shipment_delayed'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'shipment_delayed', must be one of '%s'",
                 $this->container['shipment_delayed'],

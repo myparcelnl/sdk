@@ -463,7 +463,9 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
         }
 
         $allowedValues = $this->getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'status', must be one of '%s'",
                 $this->container['status'],
@@ -472,7 +474,9 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
         }
 
         $allowedValues = $this->getDeliveredAllowableValues();
-        if (!is_null($this->container['delivered']) && !in_array($this->container['delivered'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['delivered']) && !in_array($this->container['delivered'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'delivered', must be one of '%s'",
                 $this->container['delivered'],
@@ -481,7 +485,9 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInner im
         }
 
         $allowedValues = $this->getHiddenAllowableValues();
-        if (!is_null($this->container['hidden']) && !in_array($this->container['hidden'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['hidden']) && !in_array($this->container['hidden'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'hidden', must be one of '%s'",
                 $this->container['hidden'],

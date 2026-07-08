@@ -431,7 +431,9 @@ class ShipmentDefsDeliveryOptionsPickup implements ModelInterface, ArrayAccess, 
         $invalidProperties = [];
 
         $allowedValues = $this->getPriceCommentAllowableValues();
-        if (!is_null($this->container['price_comment']) && !in_array($this->container['price_comment'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['price_comment']) && !in_array($this->container['price_comment'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'price_comment', must be one of '%s'",
                 $this->container['price_comment'],

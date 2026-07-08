@@ -95,10 +95,15 @@ class ObjectSerializer
                         if (is_callable($callable)) {
                             /** array $callable */
                             $allowedEnumTypes = $callable();
-                            foreach (is_array($value) ? $value : [$value] as $item) {
-                                if (!in_array($item, $allowedEnumTypes, true)) {
-                                    $imploded = implode("', '", $allowedEnumTypes);
-                                    throw new \InvalidArgumentException("Invalid value for enum '$enumType', must be one of: '$imploded'");
+                            // openapi-generator collapses `anyOf(<string> | enum[null,""])` into a
+                            // pseudo-enum whose only value is "" (e.g. email fields). These are not
+                            // real enums, so skip enforcement when no non-empty value is allowed.
+                            if (array_filter($allowedEnumTypes, fn($v) => $v !== null && $v !== '') !== []) {
+                                foreach (is_array($value) ? $value : [$value] as $item) {
+                                    if (!in_array($item, $allowedEnumTypes, true)) {
+                                        $imploded = implode("', '", $allowedEnumTypes);
+                                        throw new \InvalidArgumentException("Invalid value for enum '$enumType', must be one of: '$imploded'");
+                                    }
                                 }
                             }
                         }
@@ -108,12 +113,15 @@ class ObjectSerializer
                     $allowableMethod = $getter . 'AllowableValues';
                     if ($value !== null && method_exists($data, $allowableMethod)) {
                         $allowedValues = $data->$allowableMethod();
-                        $invalid = is_array($value)
-                            ? (bool) array_filter($value, fn($item) => !in_array($item, $allowedValues, true))
-                            : !in_array($value, $allowedValues, true);
-                        if ($invalid) {
-                            $imploded = implode("', '", $allowedValues);
-                            throw new \InvalidArgumentException("Invalid value for enum property '$property', must be one of: '$imploded'");
+                        // Skip value-less pseudo-enums (see the referenced-enum note above).
+                        if (array_filter($allowedValues, fn($v) => $v !== null && $v !== '') !== []) {
+                            $invalid = is_array($value)
+                                ? (bool) array_filter($value, fn($item) => !in_array($item, $allowedValues, true))
+                                : !in_array($value, $allowedValues, true);
+                            if ($invalid) {
+                                $imploded = implode("', '", $allowedValues);
+                                throw new \InvalidArgumentException("Invalid value for enum property '$property', must be one of: '$imploded'");
+                            }
                         }
                     }
                     if (($data::isNullable($property) && $data->isNullableSetToNull($property)) || $value !== null) {

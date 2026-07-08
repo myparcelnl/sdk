@@ -366,7 +366,9 @@ class RefShipmentGeneralSettingsTracktrace implements ModelInterface, ArrayAcces
         $invalidProperties = [];
 
         $allowedValues = $this->getFromAddressEmailAllowableValues();
-        if (!is_null($this->container['from_address_email']) && !in_array($this->container['from_address_email'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['from_address_email']) && !in_array($this->container['from_address_email'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'from_address_email', must be one of '%s'",
                 $this->container['from_address_email'],

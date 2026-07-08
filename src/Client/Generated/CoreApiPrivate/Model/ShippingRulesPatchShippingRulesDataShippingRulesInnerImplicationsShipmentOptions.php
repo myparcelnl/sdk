@@ -457,7 +457,9 @@ class ShippingRulesPatchShippingRulesDataShippingRulesInnerImplicationsShipmentO
         $invalidProperties = [];
 
         $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'delivery_type', must be one of '%s'",
                 $this->container['delivery_type'],

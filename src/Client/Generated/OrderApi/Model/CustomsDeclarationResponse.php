@@ -332,7 +332,9 @@ class CustomsDeclarationResponse implements ModelInterface, ArrayAccess, \JsonSe
             $invalidProperties[] = "'purpose' can't be null";
         }
         $allowedValues = $this->getPurposeAllowableValues();
-        if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'purpose', must be one of '%s'",
                 $this->container['purpose'],

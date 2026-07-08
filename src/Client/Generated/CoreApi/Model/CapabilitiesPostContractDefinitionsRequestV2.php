@@ -301,7 +301,9 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
         $invalidProperties = [];
 
         $allowedValues = $this->getCarrierAllowableValues();
-        if (!is_null($this->container['carrier']) && !in_array($this->container['carrier'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['carrier']) && !in_array($this->container['carrier'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'carrier', must be one of '%s'",
                 $this->container['carrier'],

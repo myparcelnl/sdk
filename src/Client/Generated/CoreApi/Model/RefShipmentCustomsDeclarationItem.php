@@ -359,7 +359,9 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
             $invalidProperties[] = "'classification' can't be null";
         }
         $allowedValues = $this->getCountryAllowableValues();
-        if (!is_null($this->container['country']) && !in_array($this->container['country'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['country']) && !in_array($this->container['country'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'country', must be one of '%s'",
                 $this->container['country'],

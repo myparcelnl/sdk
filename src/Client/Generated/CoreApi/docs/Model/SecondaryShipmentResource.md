@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **shop_id** | **int** |  |
 **shipment_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentType**](RefShipmentType.md) |  |
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRecipient**](ShipmentDefsShipmentPropertiesRecipient.md) |  |
-**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender**](ShipmentDefsShipmentSender.md) |  |
+**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender**](ShipmentDefsShipmentSender.md) |  |
 **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus**](ShipmentDefsShipmentStatus.md) |  |
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesOptions**](ShipmentDefsShipmentPropertiesOptions.md) |  |
 **general_settings** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettings**](RefShipmentGeneralSettings.md) |  |

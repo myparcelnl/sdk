@@ -300,7 +300,9 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
             $invalidProperties[] = "'relation' can't be null";
         }
         $allowedValues = $this->getRelationAllowableValues();
-        if (!is_null($this->container['relation']) && !in_array($this->container['relation'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['relation']) && !in_array($this->container['relation'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'relation', must be one of '%s'",
                 $this->container['relation'],

@@ -365,7 +365,9 @@ class BillingDefsPaymentData implements ModelInterface, ArrayAccess, \JsonSerial
             $invalidProperties[] = "'paid' can't be null";
         }
         $allowedValues = $this->getPaidAllowableValues();
-        if (!is_null($this->container['paid']) && !in_array($this->container['paid'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['paid']) && !in_array($this->container['paid'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'paid', must be one of '%s'",
                 $this->container['paid'],

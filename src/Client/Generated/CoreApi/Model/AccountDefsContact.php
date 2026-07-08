@@ -412,7 +412,9 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
             $invalidProperties[] = "'email' is required";
         }
         $allowedValues = $this->getEmailAllowableValues();
-        if (!is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'email', must be one of '%s'",
                 $this->container['email'],

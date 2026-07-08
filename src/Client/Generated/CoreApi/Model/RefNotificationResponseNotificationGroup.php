@@ -361,7 +361,9 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
             $invalidProperties[] = "'package_type' is required";
         }
         $allowedValues = $this->getPackageTypeAllowableValues();
-        if (!is_null($this->container['package_type']) && !in_array($this->container['package_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['package_type']) && !in_array($this->container['package_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'package_type', must be one of '%s'",
                 $this->container['package_type'],
@@ -388,7 +390,9 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
             $invalidProperties[] = "'shipment_direction' can't be null";
         }
         $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!is_null($this->container['shipment_direction']) && !in_array($this->container['shipment_direction'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['shipment_direction']) && !in_array($this->container['shipment_direction'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'shipment_direction', must be one of '%s'",
                 $this->container['shipment_direction'],

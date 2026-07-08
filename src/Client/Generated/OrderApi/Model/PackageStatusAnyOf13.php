@@ -311,7 +311,9 @@ class PackageStatusAnyOf13 implements ModelInterface, ArrayAccess, \JsonSerializ
             $invalidProperties[] = "'group' can't be null";
         }
         $allowedValues = $this->getGroupAllowableValues();
-        if (!is_null($this->container['group']) && !in_array($this->container['group'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['group']) && !in_array($this->container['group'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'group', must be one of '%s'",
                 $this->container['group'],
@@ -323,7 +325,9 @@ class PackageStatusAnyOf13 implements ModelInterface, ArrayAccess, \JsonSerializ
             $invalidProperties[] = "'name' can't be null";
         }
         $allowedValues = $this->getNameAllowableValues();
-        if (!is_null($this->container['name']) && !in_array($this->container['name'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['name']) && !in_array($this->container['name'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'name', must be one of '%s'",
                 $this->container['name'],

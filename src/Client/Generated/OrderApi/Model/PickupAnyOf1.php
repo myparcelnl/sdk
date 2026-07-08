@@ -314,7 +314,9 @@ class PickupAnyOf1 implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "'retail_network_id' can't be null";
         }
         $allowedValues = $this->getRetailNetworkIdAllowableValues();
-        if (!is_null($this->container['retail_network_id']) && !in_array($this->container['retail_network_id'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['retail_network_id']) && !in_array($this->container['retail_network_id'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'retail_network_id', must be one of '%s'",
                 $this->container['retail_network_id'],

@@ -299,7 +299,9 @@ class RefTypesPriceEuro implements ModelInterface, ArrayAccess, \JsonSerializabl
             $invalidProperties[] = "'currency' can't be null";
         }
         $allowedValues = $this->getCurrencyAllowableValues();
-        if (!is_null($this->container['currency']) && !in_array($this->container['currency'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['currency']) && !in_array($this->container['currency'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'currency', must be one of '%s'",
                 $this->container['currency'],
