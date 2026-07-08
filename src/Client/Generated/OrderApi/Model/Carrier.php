@@ -71,6 +71,8 @@ class Carrier
 
     public const UPS_STANDARD = 'UPS_STANDARD';
 
+    public const VIA_TIM = 'VIA_TIM';
+
     public const BOL = 'BOL';
 
     /**
@@ -94,6 +96,7 @@ class Carrier
             self::TRUNKRS,
             self::UPS_EXPRESS_SAVER,
             self::UPS_STANDARD,
+            self::VIA_TIM,
             self::BOL
         ];
     }
