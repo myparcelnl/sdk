@@ -619,7 +619,7 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
     /**
      * Gets email
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail()
     {
@@ -629,7 +629,7 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
     /**
      * Sets email
      *
-     * @param string $email email
+     * @param string|null $email email
      *
      * @return self
      */

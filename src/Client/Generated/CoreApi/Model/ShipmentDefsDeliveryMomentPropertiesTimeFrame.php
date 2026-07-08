@@ -306,7 +306,7 @@ class ShipmentDefsDeliveryMomentPropertiesTimeFrame implements ModelInterface, A
     /**
      * Gets start
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null
      */
     public function getStart()
     {
@@ -316,7 +316,7 @@ class ShipmentDefsDeliveryMomentPropertiesTimeFrame implements ModelInterface, A
     /**
      * Sets start
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime $start start
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null $start start
      *
      * @return self
      */
@@ -340,7 +340,7 @@ class ShipmentDefsDeliveryMomentPropertiesTimeFrame implements ModelInterface, A
     /**
      * Gets end
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null
      */
     public function getEnd()
     {
@@ -350,7 +350,7 @@ class ShipmentDefsDeliveryMomentPropertiesTimeFrame implements ModelInterface, A
     /**
      * Sets end
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime $end end
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null $end end
      *
      * @return self
      */

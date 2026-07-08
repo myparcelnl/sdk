@@ -453,7 +453,7 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets shipping_rule_id
      *
-     * @return int
+     * @return int|null
      */
     public function getShippingRuleId()
     {
@@ -463,7 +463,7 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets shipping_rule_id
      *
-     * @param int $shipping_rule_id Identifier of the shipping rule that produced these implications. Null when the implications come from a fallback resolution and no specific rule applied.
+     * @param int|null $shipping_rule_id Identifier of the shipping rule that produced these implications. Null when the implications come from a fallback resolution and no specific rule applied.
      *
      * @return self
      */

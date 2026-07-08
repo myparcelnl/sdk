@@ -343,7 +343,7 @@ class ShipmentDefsTrackTraceStatus implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets main
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null
      */
     public function getMain()
     {
@@ -353,7 +353,7 @@ class ShipmentDefsTrackTraceStatus implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets main
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus $main main
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null $main main
      *
      * @return self
      */

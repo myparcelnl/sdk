@@ -602,7 +602,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets last_name
      *
-     * @return string
+     * @return string|null
      */
     public function getLastName()
     {
@@ -612,7 +612,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets last_name
      *
-     * @param string $last_name last_name
+     * @param string|null $last_name last_name
      *
      * @return self
      */
@@ -640,7 +640,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets email
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail()
     {
@@ -650,7 +650,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets email
      *
-     * @param string $email email
+     * @param string|null $email email
      *
      * @return self
      */
@@ -674,7 +674,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets phone
      *
-     * @return string
+     * @return string|null
      */
     public function getPhone()
     {
@@ -684,7 +684,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets phone
      *
-     * @param string $phone phone
+     * @param string|null $phone phone
      *
      * @return self
      */
@@ -712,7 +712,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets company
      *
-     * @return string
+     * @return string|null
      */
     public function getCompany()
     {
@@ -722,7 +722,7 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets company
      *
-     * @param string $company company
+     * @param string|null $company company
      *
      * @return self
      */

@@ -331,7 +331,7 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets amount
      *
-     * @return int
+     * @return int|null
      */
     public function getAmount()
     {
@@ -341,7 +341,7 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets amount
      *
-     * @param int $amount The amount in the lowest denomination of the currency, e.g. cents for EUR.
+     * @param int|null $amount The amount in the lowest denomination of the currency, e.g. cents for EUR.
      *
      * @return self
      */

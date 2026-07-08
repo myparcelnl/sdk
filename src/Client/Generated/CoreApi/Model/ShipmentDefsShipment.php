@@ -1086,7 +1086,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets reference_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getReferenceIdentifier()
     {
@@ -1096,7 +1096,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets reference_identifier
      *
-     * @param string $reference_identifier reference_identifier
+     * @param string|null $reference_identifier reference_identifier
      *
      * @return self
      */
@@ -1120,7 +1120,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets transaction_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null
      */
     public function getTransactionStatus()
     {
@@ -1130,7 +1130,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets transaction_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus $transaction_status transaction_status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null $transaction_status transaction_status
      *
      * @return self
      */
@@ -1347,7 +1347,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets payment_status
      *
-     * @return string
+     * @return string|null
      */
     public function getPaymentStatus()
     {
@@ -1357,7 +1357,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets payment_status
      *
-     * @param string $payment_status payment_status
+     * @param string|null $payment_status payment_status
      *
      * @return self
      */
@@ -1462,7 +1462,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets user_agent
      *
-     * @return string
+     * @return string|null
      */
     public function getUserAgent()
     {
@@ -1472,7 +1472,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets user_agent
      *
-     * @param string $user_agent user_agent
+     * @param string|null $user_agent user_agent
      *
      * @return self
      */
@@ -1581,7 +1581,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets external_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getExternalIdentifier()
     {
@@ -1591,7 +1591,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets external_identifier
      *
-     * @param string $external_identifier external_identifier
+     * @param string|null $external_identifier external_identifier
      *
      * @return self
      */

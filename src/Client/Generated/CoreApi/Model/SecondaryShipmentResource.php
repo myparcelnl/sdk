@@ -1037,7 +1037,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets customs_declaration
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration|null
      */
     public function getCustomsDeclaration()
     {
@@ -1047,7 +1047,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets customs_declaration
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration $customs_declaration customs_declaration
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration|null $customs_declaration customs_declaration
      *
      * @return self
      */
@@ -1098,7 +1098,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets reference_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getReferenceIdentifier()
     {
@@ -1108,7 +1108,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets reference_identifier
      *
-     * @param string $reference_identifier reference_identifier
+     * @param string|null $reference_identifier reference_identifier
      *
      * @return self
      */
@@ -1132,7 +1132,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets transaction_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null
      */
     public function getTransactionStatus()
     {
@@ -1142,7 +1142,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets transaction_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus $transaction_status transaction_status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null $transaction_status transaction_status
      *
      * @return self
      */
@@ -1278,7 +1278,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets region
      *
-     * @return string
+     * @return string|null
      */
     public function getRegion()
     {
@@ -1288,7 +1288,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets region
      *
-     * @param string $region region
+     * @param string|null $region region
      *
      * @return self
      */
@@ -1312,7 +1312,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets external_provider
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName|null
      */
     public function getExternalProvider()
     {
@@ -1322,7 +1322,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets external_provider
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName $external_provider external_provider
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName|null $external_provider external_provider
      *
      * @return self
      */
@@ -1373,7 +1373,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets payment_status
      *
-     * @return string
+     * @return string|null
      */
     public function getPaymentStatus()
     {
@@ -1383,7 +1383,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets payment_status
      *
-     * @param string $payment_status payment_status
+     * @param string|null $payment_status payment_status
      *
      * @return self
      */
@@ -1492,7 +1492,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets user_agent
      *
-     * @return string
+     * @return string|null
      */
     public function getUserAgent()
     {
@@ -1502,7 +1502,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets user_agent
      *
-     * @param string $user_agent user_agent
+     * @param string|null $user_agent user_agent
      *
      * @return self
      */
@@ -1559,7 +1559,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets collection_contact
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact|null
      */
     public function getCollectionContact()
     {
@@ -1569,7 +1569,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets collection_contact
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact $collection_contact collection_contact
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact|null $collection_contact collection_contact
      *
      * @return self
      */
@@ -1593,7 +1593,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets multi_collo_main_shipment_id
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId|null
      */
     public function getMultiColloMainShipmentId()
     {
@@ -1603,7 +1603,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets multi_collo_main_shipment_id
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId $multi_collo_main_shipment_id multi_collo_main_shipment_id
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId|null $multi_collo_main_shipment_id multi_collo_main_shipment_id
      *
      * @return self
      */
@@ -1627,7 +1627,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets external_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getExternalIdentifier()
     {
@@ -1637,7 +1637,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets external_identifier
      *
-     * @param string $external_identifier external_identifier
+     * @param string|null $external_identifier external_identifier
      *
      * @return self
      */
@@ -1787,7 +1787,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets contract_id
      *
-     * @return int
+     * @return int|null
      */
     public function getContractId()
     {
@@ -1797,7 +1797,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets contract_id
      *
-     * @param int $contract_id contract_id
+     * @param int|null $contract_id contract_id
      *
      * @return self
      */

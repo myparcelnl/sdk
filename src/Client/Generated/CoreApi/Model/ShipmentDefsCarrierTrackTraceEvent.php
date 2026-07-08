@@ -387,7 +387,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Gets status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus|null
      */
     public function getStatus()
     {
@@ -397,7 +397,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Sets status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus $status status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus|null $status status
      *
      * @return self
      */
@@ -421,7 +421,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Gets main
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null
      */
     public function getMain()
     {
@@ -431,7 +431,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Sets main
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus $main main
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null $main main
      *
      * @return self
      */

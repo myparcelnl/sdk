@@ -334,7 +334,7 @@ class RefTypesMoneyNullableAmount implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Gets amount
      *
-     * @return int
+     * @return int|null
      */
     public function getAmount()
     {
@@ -344,7 +344,7 @@ class RefTypesMoneyNullableAmount implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Sets amount
      *
-     * @param int $amount amount
+     * @param int|null $amount amount
      *
      * @return self
      */

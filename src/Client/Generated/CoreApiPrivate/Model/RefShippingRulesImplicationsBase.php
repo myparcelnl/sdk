@@ -354,7 +354,7 @@ class RefShippingRulesImplicationsBase implements ModelInterface, ArrayAccess, \
     /**
      * Gets contract_id
      *
-     * @return int
+     * @return int|null
      */
     public function getContractId()
     {
@@ -364,7 +364,7 @@ class RefShippingRulesImplicationsBase implements ModelInterface, ArrayAccess, \
     /**
      * Sets contract_id
      *
-     * @param int $contract_id Identifier of the carrier contract to use. Null when no specific contract is forced.
+     * @param int|null $contract_id Identifier of the carrier contract to use. Null when no specific contract is forced.
      *
      * @return self
      */

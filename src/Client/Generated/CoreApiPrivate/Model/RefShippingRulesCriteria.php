@@ -366,7 +366,7 @@ class RefShippingRulesCriteria implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets region
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion|null
      */
     public function getRegion()
     {
@@ -376,7 +376,7 @@ class RefShippingRulesCriteria implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets region
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion $region region
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion|null $region region
      *
      * @return self
      */

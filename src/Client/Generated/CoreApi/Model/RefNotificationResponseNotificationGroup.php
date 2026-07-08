@@ -471,7 +471,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Gets package_type
      *
-     * @return string
+     * @return string|null
      */
     public function getPackageType()
     {
@@ -481,7 +481,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Sets package_type
      *
-     * @param string $package_type package_type
+     * @param string|null $package_type package_type
      *
      * @return self
      */
@@ -505,7 +505,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Gets country_code
      *
-     * @return string
+     * @return string|null
      */
     public function getCountryCode()
     {
@@ -515,7 +515,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Sets country_code
      *
-     * @param string $country_code ISO 3166-1 alpha-2 country code
+     * @param string|null $country_code ISO 3166-1 alpha-2 country code
      *
      * @return self
      */

@@ -328,7 +328,7 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
     /**
      * Gets uri
      *
-     * @return string
+     * @return string|null
      */
     public function getUri()
     {
@@ -338,7 +338,7 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
     /**
      * Sets uri
      *
-     * @param string $uri uri
+     * @param string|null $uri uri
      *
      * @return self
      */

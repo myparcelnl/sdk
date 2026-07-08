@@ -333,7 +333,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
     /**
      * Gets reference_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getReferenceIdentifier()
     {
@@ -343,7 +343,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
     /**
      * Sets reference_identifier
      *
-     * @param string $reference_identifier reference_identifier
+     * @param string|null $reference_identifier reference_identifier
      *
      * @return self
      */

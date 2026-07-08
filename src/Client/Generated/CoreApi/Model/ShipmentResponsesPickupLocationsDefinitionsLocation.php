@@ -403,7 +403,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Gets retail_network_id
      *
-     * @return string
+     * @return string|null
      */
     public function getRetailNetworkId()
     {
@@ -413,7 +413,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Sets retail_network_id
      *
-     * @param string $retail_network_id retail_network_id
+     * @param string|null $retail_network_id retail_network_id
      *
      * @return self
      */
@@ -545,7 +545,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Gets phone_number
      *
-     * @return string
+     * @return string|null
      */
     public function getPhoneNumber()
     {
@@ -555,7 +555,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Sets phone_number
      *
-     * @param string $phone_number phone_number
+     * @param string|null $phone_number phone_number
      *
      * @return self
      */
@@ -579,7 +579,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Gets type
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType|null
      */
     public function getType()
     {
@@ -589,7 +589,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Sets type
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType $type type
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType|null $type type
      *
      * @return self
      */

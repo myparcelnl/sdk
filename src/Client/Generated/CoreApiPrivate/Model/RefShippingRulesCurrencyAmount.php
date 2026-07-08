@@ -310,7 +310,7 @@ class RefShippingRulesCurrencyAmount implements ModelInterface, ArrayAccess, \Js
     /**
      * Gets amount
      *
-     * @return int
+     * @return int|null
      */
     public function getAmount()
     {
@@ -320,7 +320,7 @@ class RefShippingRulesCurrencyAmount implements ModelInterface, ArrayAccess, \Js
     /**
      * Sets amount
      *
-     * @param int $amount amount
+     * @param int|null $amount amount
      *
      * @return self
      */
@@ -349,7 +349,7 @@ class RefShippingRulesCurrencyAmount implements ModelInterface, ArrayAccess, \Js
     /**
      * Gets currency
      *
-     * @return string
+     * @return string|null
      */
     public function getCurrency()
     {
@@ -359,7 +359,7 @@ class RefShippingRulesCurrencyAmount implements ModelInterface, ArrayAccess, \Js
     /**
      * Sets currency
      *
-     * @param string $currency currency
+     * @param string|null $currency currency
      *
      * @return self
      */

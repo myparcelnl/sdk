@@ -387,7 +387,7 @@ class NotificationPostNotificationGroupRequest implements ModelInterface, ArrayA
     /**
      * Gets package_type
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function getPackageType()
     {
@@ -397,7 +397,7 @@ class NotificationPostNotificationGroupRequest implements ModelInterface, ArrayA
     /**
      * Sets package_type
      *
-     * @param mixed $package_type package_type
+     * @param mixed|null $package_type package_type
      *
      * @return self
      */
