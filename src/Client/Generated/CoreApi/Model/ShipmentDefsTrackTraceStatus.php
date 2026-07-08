@@ -292,8 +292,8 @@ class ShipmentDefsTrackTraceStatus implements ModelInterface, ArrayAccess, \Json
         if ($this->container['current'] === null) {
             $invalidProperties[] = "'current' can't be null";
         }
-        if ($this->container['main'] === null) {
-            $invalidProperties[] = "'main' can't be null";
+        if ($this->container['main'] === null && !$this->isNullableSetToNull('main')) {
+            $invalidProperties[] = "'main' is required";
         }
         if ($this->container['final'] === null) {
             $invalidProperties[] = "'final' can't be null";

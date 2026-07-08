@@ -312,8 +312,8 @@ class NotificationPostNotificationGroupRequest implements ModelInterface, ArrayA
         if ($this->container['shop_id'] === null) {
             $invalidProperties[] = "'shop_id' can't be null";
         }
-        if ($this->container['package_type'] === null) {
-            $invalidProperties[] = "'package_type' can't be null";
+        if ($this->container['package_type'] === null && !$this->isNullableSetToNull('package_type')) {
+            $invalidProperties[] = "'package_type' is required";
         }
         if ($this->container['country_code'] === null) {
             $invalidProperties[] = "'country_code' can't be null";

@@ -334,29 +334,29 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ($this->container['cc'] === null) {
-            $invalidProperties[] = "'cc' can't be null";
+        if ($this->container['cc'] === null && !$this->isNullableSetToNull('cc')) {
+            $invalidProperties[] = "'cc' is required";
         }
-        if ($this->container['city'] === null) {
-            $invalidProperties[] = "'city' can't be null";
+        if ($this->container['city'] === null && !$this->isNullableSetToNull('city')) {
+            $invalidProperties[] = "'city' is required";
         }
-        if ($this->container['postal_code'] === null) {
-            $invalidProperties[] = "'postal_code' can't be null";
+        if ($this->container['postal_code'] === null && !$this->isNullableSetToNull('postal_code')) {
+            $invalidProperties[] = "'postal_code' is required";
         }
-        if ($this->container['street'] === null) {
-            $invalidProperties[] = "'street' can't be null";
+        if ($this->container['street'] === null && !$this->isNullableSetToNull('street')) {
+            $invalidProperties[] = "'street' is required";
         }
-        if ($this->container['number'] === null) {
-            $invalidProperties[] = "'number' can't be null";
+        if ($this->container['number'] === null && !$this->isNullableSetToNull('number')) {
+            $invalidProperties[] = "'number' is required";
         }
-        if ($this->container['number_suffix'] === null) {
-            $invalidProperties[] = "'number_suffix' can't be null";
+        if ($this->container['number_suffix'] === null && !$this->isNullableSetToNull('number_suffix')) {
+            $invalidProperties[] = "'number_suffix' is required";
         }
-        if ($this->container['longitude'] === null) {
-            $invalidProperties[] = "'longitude' can't be null";
+        if ($this->container['longitude'] === null && !$this->isNullableSetToNull('longitude')) {
+            $invalidProperties[] = "'longitude' is required";
         }
-        if ($this->container['latitude'] === null) {
-            $invalidProperties[] = "'latitude' can't be null";
+        if ($this->container['latitude'] === null && !$this->isNullableSetToNull('latitude')) {
+            $invalidProperties[] = "'latitude' is required";
         }
         return $invalidProperties;
     }

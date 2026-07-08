@@ -282,11 +282,11 @@ class ShipmentDefsDeliveryMomentPropertiesTimeFrame implements ModelInterface, A
     {
         $invalidProperties = [];
 
-        if ($this->container['start'] === null) {
-            $invalidProperties[] = "'start' can't be null";
+        if ($this->container['start'] === null && !$this->isNullableSetToNull('start')) {
+            $invalidProperties[] = "'start' is required";
         }
-        if ($this->container['end'] === null) {
-            $invalidProperties[] = "'end' can't be null";
+        if ($this->container['end'] === null && !$this->isNullableSetToNull('end')) {
+            $invalidProperties[] = "'end' is required";
         }
         return $invalidProperties;
     }

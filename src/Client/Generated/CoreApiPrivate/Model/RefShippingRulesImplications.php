@@ -316,8 +316,8 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
         if ($this->container['physical_properties'] === null) {
             $invalidProperties[] = "'physical_properties' can't be null";
         }
-        if ($this->container['shipping_rule_id'] === null) {
-            $invalidProperties[] = "'shipping_rule_id' can't be null";
+        if ($this->container['shipping_rule_id'] === null && !$this->isNullableSetToNull('shipping_rule_id')) {
+            $invalidProperties[] = "'shipping_rule_id' is required";
         }
         if (($this->container['shipping_rule_id'] > -9223372036854775616)) {
             $invalidProperties[] = "invalid value for 'shipping_rule_id', must be smaller than or equal to -9223372036854775616.";

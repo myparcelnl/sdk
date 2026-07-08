@@ -401,15 +401,15 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
             $invalidProperties[] = "invalid value for 'first_name', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['last_name'] === null) {
-            $invalidProperties[] = "'last_name' can't be null";
+        if ($this->container['last_name'] === null && !$this->isNullableSetToNull('last_name')) {
+            $invalidProperties[] = "'last_name' is required";
         }
         if ((mb_strlen($this->container['last_name']) > 255)) {
             $invalidProperties[] = "invalid value for 'last_name', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['email'] === null) {
-            $invalidProperties[] = "'email' can't be null";
+        if ($this->container['email'] === null && !$this->isNullableSetToNull('email')) {
+            $invalidProperties[] = "'email' is required";
         }
         $allowedValues = $this->getEmailAllowableValues();
         if (!is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
@@ -420,15 +420,15 @@ class AccountDefsContact implements ModelInterface, ArrayAccess, \JsonSerializab
             );
         }
 
-        if ($this->container['phone'] === null) {
-            $invalidProperties[] = "'phone' can't be null";
+        if ($this->container['phone'] === null && !$this->isNullableSetToNull('phone')) {
+            $invalidProperties[] = "'phone' is required";
         }
         if ((mb_strlen($this->container['phone']) > 100)) {
             $invalidProperties[] = "invalid value for 'phone', the character length must be smaller than or equal to 100.";
         }
 
-        if ($this->container['company'] === null) {
-            $invalidProperties[] = "'company' can't be null";
+        if ($this->container['company'] === null && !$this->isNullableSetToNull('company')) {
+            $invalidProperties[] = "'company' is required";
         }
         if ((mb_strlen($this->container['company']) > 255)) {
             $invalidProperties[] = "invalid value for 'company', the character length must be smaller than or equal to 255.";

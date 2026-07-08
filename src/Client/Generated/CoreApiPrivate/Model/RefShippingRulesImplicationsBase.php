@@ -300,8 +300,8 @@ class RefShippingRulesImplicationsBase implements ModelInterface, ArrayAccess, \
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
         }
-        if ($this->container['contract_id'] === null) {
-            $invalidProperties[] = "'contract_id' can't be null";
+        if ($this->container['contract_id'] === null && !$this->isNullableSetToNull('contract_id')) {
+            $invalidProperties[] = "'contract_id' is required";
         }
         if ($this->container['shipment_options'] === null) {
             $invalidProperties[] = "'shipment_options' can't be null";

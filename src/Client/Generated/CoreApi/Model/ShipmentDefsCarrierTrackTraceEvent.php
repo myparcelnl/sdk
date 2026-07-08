@@ -320,11 +320,11 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
         if ($this->container['code'] === null) {
             $invalidProperties[] = "'code' can't be null";
         }
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
+        if ($this->container['status'] === null && !$this->isNullableSetToNull('status')) {
+            $invalidProperties[] = "'status' is required";
         }
-        if ($this->container['main'] === null) {
-            $invalidProperties[] = "'main' can't be null";
+        if ($this->container['main'] === null && !$this->isNullableSetToNull('main')) {
+            $invalidProperties[] = "'main' is required";
         }
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";

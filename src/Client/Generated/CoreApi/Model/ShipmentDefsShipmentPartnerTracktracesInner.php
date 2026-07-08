@@ -295,8 +295,8 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
     {
         $invalidProperties = [];
 
-        if ($this->container['uri'] === null) {
-            $invalidProperties[] = "'uri' can't be null";
+        if ($this->container['uri'] === null && !$this->isNullableSetToNull('uri')) {
+            $invalidProperties[] = "'uri' is required";
         }
         $allowedValues = $this->getUriAllowableValues();
         if (!is_null($this->container['uri']) && !in_array($this->container['uri'], $allowedValues, true)) {

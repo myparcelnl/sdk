@@ -305,8 +305,8 @@ class RefShippingRulesCriteria implements ModelInterface, ArrayAccess, \JsonSeri
             $invalidProperties[] = "invalid value for 'country', must be conform to the pattern /^[A-Za-z]{2}$/.";
         }
 
-        if ($this->container['region'] === null) {
-            $invalidProperties[] = "'region' can't be null";
+        if ($this->container['region'] === null && !$this->isNullableSetToNull('region')) {
+            $invalidProperties[] = "'region' is required";
         }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";

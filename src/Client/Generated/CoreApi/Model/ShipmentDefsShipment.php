@@ -622,11 +622,11 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['physical_properties'] === null) {
             $invalidProperties[] = "'physical_properties' can't be null";
         }
-        if ($this->container['reference_identifier'] === null) {
-            $invalidProperties[] = "'reference_identifier' can't be null";
+        if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
+            $invalidProperties[] = "'reference_identifier' is required";
         }
-        if ($this->container['transaction_status'] === null) {
-            $invalidProperties[] = "'transaction_status' can't be null";
+        if ($this->container['transaction_status'] === null && !$this->isNullableSetToNull('transaction_status')) {
+            $invalidProperties[] = "'transaction_status' is required";
         }
         if ($this->container['drop_off_point'] === null) {
             $invalidProperties[] = "'drop_off_point' can't be null";
@@ -653,8 +653,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['external_provider_id'] === null) {
             $invalidProperties[] = "'external_provider_id' can't be null";
         }
-        if ($this->container['payment_status'] === null) {
-            $invalidProperties[] = "'payment_status' can't be null";
+        if ($this->container['payment_status'] === null && !$this->isNullableSetToNull('payment_status')) {
+            $invalidProperties[] = "'payment_status' is required";
         }
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
@@ -665,8 +665,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['origin'] === null) {
             $invalidProperties[] = "'origin' can't be null";
         }
-        if ($this->container['user_agent'] === null) {
-            $invalidProperties[] = "'user_agent' can't be null";
+        if ($this->container['user_agent'] === null && !$this->isNullableSetToNull('user_agent')) {
+            $invalidProperties[] = "'user_agent' is required";
         }
         if ((mb_strlen($this->container['user_agent']) > 255)) {
             $invalidProperties[] = "invalid value for 'user_agent', the character length must be smaller than or equal to 255.";
@@ -681,8 +681,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['multi_collo_main_shipment_id'] === null) {
             $invalidProperties[] = "'multi_collo_main_shipment_id' can't be null";
         }
-        if ($this->container['external_identifier'] === null) {
-            $invalidProperties[] = "'external_identifier' can't be null";
+        if ($this->container['external_identifier'] === null && !$this->isNullableSetToNull('external_identifier')) {
+            $invalidProperties[] = "'external_identifier' is required";
         }
         if ((mb_strlen($this->container['external_identifier']) > 255)) {
             $invalidProperties[] = "invalid value for 'external_identifier', the character length must be smaller than or equal to 255.";

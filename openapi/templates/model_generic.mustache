@@ -284,8 +284,8 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
 
         {{#vars}}
         {{#required}}
-        if ($this->container['{{name}}'] === null) {
-            $invalidProperties[] = "'{{name}}' can't be null";
+        if ($this->container['{{name}}'] === null{{#isNullable}} && !$this->isNullableSetToNull('{{name}}'){{/isNullable}}) {
+            $invalidProperties[] = "'{{name}}' {{^isNullable}}can't be null"{{/isNullable}}{{#isNullable}}is required"{{/isNullable}};
         }
         {{/required}}
         {{#isEnum}}

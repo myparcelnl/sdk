@@ -408,8 +408,8 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
             $invalidProperties[] = "invalid value for 'last_name', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['email'] === null) {
-            $invalidProperties[] = "'email' can't be null";
+        if ($this->container['email'] === null && !$this->isNullableSetToNull('email')) {
+            $invalidProperties[] = "'email' is required";
         }
         $allowedValues = $this->getEmailAllowableValues();
         if (!is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {

@@ -616,17 +616,17 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['pickup'] === null) {
             $invalidProperties[] = "'pickup' can't be null";
         }
-        if ($this->container['customs_declaration'] === null) {
-            $invalidProperties[] = "'customs_declaration' can't be null";
+        if ($this->container['customs_declaration'] === null && !$this->isNullableSetToNull('customs_declaration')) {
+            $invalidProperties[] = "'customs_declaration' is required";
         }
         if ($this->container['physical_properties'] === null) {
             $invalidProperties[] = "'physical_properties' can't be null";
         }
-        if ($this->container['reference_identifier'] === null) {
-            $invalidProperties[] = "'reference_identifier' can't be null";
+        if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
+            $invalidProperties[] = "'reference_identifier' is required";
         }
-        if ($this->container['transaction_status'] === null) {
-            $invalidProperties[] = "'transaction_status' can't be null";
+        if ($this->container['transaction_status'] === null && !$this->isNullableSetToNull('transaction_status')) {
+            $invalidProperties[] = "'transaction_status' is required";
         }
         if ($this->container['drop_off_point'] === null) {
             $invalidProperties[] = "'drop_off_point' can't be null";
@@ -644,17 +644,17 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
             $invalidProperties[] = "invalid value for 'barcode', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['region'] === null) {
-            $invalidProperties[] = "'region' can't be null";
+        if ($this->container['region'] === null && !$this->isNullableSetToNull('region')) {
+            $invalidProperties[] = "'region' is required";
         }
-        if ($this->container['external_provider'] === null) {
-            $invalidProperties[] = "'external_provider' can't be null";
+        if ($this->container['external_provider'] === null && !$this->isNullableSetToNull('external_provider')) {
+            $invalidProperties[] = "'external_provider' is required";
         }
         if ($this->container['external_provider_id'] === null) {
             $invalidProperties[] = "'external_provider_id' can't be null";
         }
-        if ($this->container['payment_status'] === null) {
-            $invalidProperties[] = "'payment_status' can't be null";
+        if ($this->container['payment_status'] === null && !$this->isNullableSetToNull('payment_status')) {
+            $invalidProperties[] = "'payment_status' is required";
         }
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
@@ -669,21 +669,21 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
             $invalidProperties[] = "invalid value for 'origin', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['user_agent'] === null) {
-            $invalidProperties[] = "'user_agent' can't be null";
+        if ($this->container['user_agent'] === null && !$this->isNullableSetToNull('user_agent')) {
+            $invalidProperties[] = "'user_agent' is required";
         }
         if ((mb_strlen($this->container['user_agent']) > 255)) {
             $invalidProperties[] = "invalid value for 'user_agent', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['collection_contact'] === null) {
-            $invalidProperties[] = "'collection_contact' can't be null";
+        if ($this->container['collection_contact'] === null && !$this->isNullableSetToNull('collection_contact')) {
+            $invalidProperties[] = "'collection_contact' is required";
         }
-        if ($this->container['multi_collo_main_shipment_id'] === null) {
-            $invalidProperties[] = "'multi_collo_main_shipment_id' can't be null";
+        if ($this->container['multi_collo_main_shipment_id'] === null && !$this->isNullableSetToNull('multi_collo_main_shipment_id')) {
+            $invalidProperties[] = "'multi_collo_main_shipment_id' is required";
         }
-        if ($this->container['external_identifier'] === null) {
-            $invalidProperties[] = "'external_identifier' can't be null";
+        if ($this->container['external_identifier'] === null && !$this->isNullableSetToNull('external_identifier')) {
+            $invalidProperties[] = "'external_identifier' is required";
         }
         if ((mb_strlen($this->container['external_identifier']) > 255)) {
             $invalidProperties[] = "invalid value for 'external_identifier', the character length must be smaller than or equal to 255.";
@@ -695,8 +695,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['delivered'] === null) {
             $invalidProperties[] = "'delivered' can't be null";
         }
-        if ($this->container['contract_id'] === null) {
-            $invalidProperties[] = "'contract_id' can't be null";
+        if ($this->container['contract_id'] === null && !$this->isNullableSetToNull('contract_id')) {
+            $invalidProperties[] = "'contract_id' is required";
         }
         if (!is_null($this->container['order_shipment_identifier']) && (mb_strlen($this->container['order_shipment_identifier']) > 36)) {
             $invalidProperties[] = "invalid value for 'order_shipment_identifier', the character length must be smaller than or equal to 36.";

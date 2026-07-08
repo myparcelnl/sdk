@@ -357,8 +357,8 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
         if ($this->container['shop_id'] === null) {
             $invalidProperties[] = "'shop_id' can't be null";
         }
-        if ($this->container['package_type'] === null) {
-            $invalidProperties[] = "'package_type' can't be null";
+        if ($this->container['package_type'] === null && !$this->isNullableSetToNull('package_type')) {
+            $invalidProperties[] = "'package_type' is required";
         }
         $allowedValues = $this->getPackageTypeAllowableValues();
         if (!is_null($this->container['package_type']) && !in_array($this->container['package_type'], $allowedValues, true)) {
@@ -369,8 +369,8 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
             );
         }
 
-        if ($this->container['country_code'] === null) {
-            $invalidProperties[] = "'country_code' can't be null";
+        if ($this->container['country_code'] === null && !$this->isNullableSetToNull('country_code')) {
+            $invalidProperties[] = "'country_code' is required";
         }
         if ((mb_strlen($this->container['country_code']) > 2)) {
             $invalidProperties[] = "invalid value for 'country_code', the character length must be smaller than or equal to 2.";
