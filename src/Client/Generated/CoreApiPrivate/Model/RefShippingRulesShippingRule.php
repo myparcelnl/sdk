@@ -321,8 +321,8 @@ class RefShippingRulesShippingRule implements ModelInterface, ArrayAccess, \Json
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
-        if (!is_null($this->container['id']) && ($this->container['id'] > -9223372036854775616)) {
-            $invalidProperties[] = "invalid value for 'id', must be smaller than or equal to -9223372036854775616.";
+        if (!is_null($this->container['id']) && ($this->container['id'] > 9223372036854775807)) {
+            $invalidProperties[] = "invalid value for 'id', must be smaller than or equal to 9223372036854775807.";
         }
 
         if (!is_null($this->container['id']) && ($this->container['id'] < 1)) {
@@ -389,8 +389,8 @@ class RefShippingRulesShippingRule implements ModelInterface, ArrayAccess, \Json
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
 
-        if (($id > -9223372036854775616)) {
-            throw new \InvalidArgumentException('invalid value for $id when calling RefShippingRulesShippingRule., must be smaller than or equal to -9223372036854775616.');
+        if (($id > 9223372036854775807)) {
+            throw new \InvalidArgumentException('invalid value for $id when calling RefShippingRulesShippingRule., must be smaller than or equal to 9223372036854775807.');
         }
         if (($id < 1)) {
             throw new \InvalidArgumentException('invalid value for $id when calling RefShippingRulesShippingRule., must be bigger than or equal to 1.');

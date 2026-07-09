@@ -294,8 +294,8 @@ class ShippingRuleApi
                 'Missing the required parameter $shipping_rule_id when calling deleteShippingRule'
             );
         }
-        if ($shipping_rule_id > -9223372036854775616) {
-            throw new \InvalidArgumentException('invalid value for "$shipping_rule_id" when calling ShippingRuleApi.deleteShippingRule, must be smaller than or equal to -9223372036854775616.');
+        if ($shipping_rule_id > 9223372036854775807) {
+            throw new \InvalidArgumentException('invalid value for "$shipping_rule_id" when calling ShippingRuleApi.deleteShippingRule, must be smaller than or equal to 9223372036854775807.');
         }
         if ($shipping_rule_id < 1) {
             throw new \InvalidArgumentException('invalid value for "$shipping_rule_id" when calling ShippingRuleApi.deleteShippingRule, must be bigger than or equal to 1.');

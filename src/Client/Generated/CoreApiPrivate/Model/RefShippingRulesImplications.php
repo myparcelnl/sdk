@@ -319,8 +319,8 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
         if ($this->container['shipping_rule_id'] === null && !$this->isNullableSetToNull('shipping_rule_id')) {
             $invalidProperties[] = "'shipping_rule_id' is required";
         }
-        if (!is_null($this->container['shipping_rule_id']) && ($this->container['shipping_rule_id'] > -9223372036854775616)) {
-            $invalidProperties[] = "invalid value for 'shipping_rule_id', must be smaller than or equal to -9223372036854775616.";
+        if (!is_null($this->container['shipping_rule_id']) && ($this->container['shipping_rule_id'] > 9223372036854775807)) {
+            $invalidProperties[] = "invalid value for 'shipping_rule_id', must be smaller than or equal to 9223372036854775807.";
         }
 
         if (!is_null($this->container['shipping_rule_id']) && ($this->container['shipping_rule_id'] < 1)) {
@@ -480,8 +480,8 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
             }
         }
 
-        if (!is_null($shipping_rule_id) && ($shipping_rule_id > -9223372036854775616)) {
-            throw new \InvalidArgumentException('invalid value for $shipping_rule_id when calling RefShippingRulesImplications., must be smaller than or equal to -9223372036854775616.');
+        if (!is_null($shipping_rule_id) && ($shipping_rule_id > 9223372036854775807)) {
+            throw new \InvalidArgumentException('invalid value for $shipping_rule_id when calling RefShippingRulesImplications., must be smaller than or equal to 9223372036854775807.');
         }
         if (!is_null($shipping_rule_id) && ($shipping_rule_id < 1)) {
             throw new \InvalidArgumentException('invalid value for $shipping_rule_id when calling RefShippingRulesImplications., must be bigger than or equal to 1.');
