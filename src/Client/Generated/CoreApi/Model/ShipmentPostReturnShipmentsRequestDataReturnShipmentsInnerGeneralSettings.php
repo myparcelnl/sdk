@@ -291,7 +291,9 @@ class ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings 
         $invalidProperties = [];
 
         $allowedValues = $this->getSaveRecipientAddressAllowableValues();
-        if (!is_null($this->container['save_recipient_address']) && !in_array($this->container['save_recipient_address'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['save_recipient_address']) && !in_array($this->container['save_recipient_address'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'save_recipient_address', must be one of '%s'",
                 $this->container['save_recipient_address'],
@@ -335,16 +337,6 @@ class ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerGeneralSettings 
     {
         if (is_null($save_recipient_address)) {
             throw new \InvalidArgumentException('non-nullable save_recipient_address cannot be null');
-        }
-        $allowedValues = $this->getSaveRecipientAddressAllowableValues();
-        if (!in_array($save_recipient_address, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'save_recipient_address', must be one of '%s'",
-                    $save_recipient_address,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['save_recipient_address'] = $save_recipient_address;
 

@@ -295,11 +295,13 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
     {
         $invalidProperties = [];
 
-        if ($this->container['uri'] === null) {
-            $invalidProperties[] = "'uri' can't be null";
+        if ($this->container['uri'] === null && !$this->isNullableSetToNull('uri')) {
+            $invalidProperties[] = "'uri' is required";
         }
         $allowedValues = $this->getUriAllowableValues();
-        if (!is_null($this->container['uri']) && !in_array($this->container['uri'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['uri']) && !in_array($this->container['uri'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'uri', must be one of '%s'",
                 $this->container['uri'],
@@ -328,7 +330,7 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
     /**
      * Gets uri
      *
-     * @return string
+     * @return string|null
      */
     public function getUri()
     {
@@ -338,7 +340,7 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
     /**
      * Sets uri
      *
-     * @param string $uri uri
+     * @param string|null $uri uri
      *
      * @return self
      */
@@ -353,16 +355,6 @@ class ShipmentDefsShipmentPartnerTracktracesInner implements ModelInterface, Arr
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
-        }
-        $allowedValues = $this->getUriAllowableValues();
-        if (!is_null($uri) && !in_array($uri, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'uri', must be one of '%s'",
-                    $uri,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['uri'] = $uri;
 

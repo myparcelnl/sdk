@@ -349,7 +349,9 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
         $invalidProperties = [];
 
         $allowedValues = $this->getSaveRecipientAddressAllowableValues();
-        if (!is_null($this->container['save_recipient_address']) && !in_array($this->container['save_recipient_address'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['save_recipient_address']) && !in_array($this->container['save_recipient_address'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'save_recipient_address', must be one of '%s'",
                 $this->container['save_recipient_address'],
@@ -358,7 +360,9 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
         }
 
         $allowedValues = $this->getDeliveryNotificationAllowableValues();
-        if (!is_null($this->container['delivery_notification']) && !in_array($this->container['delivery_notification'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['delivery_notification']) && !in_array($this->container['delivery_notification'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'delivery_notification', must be one of '%s'",
                 $this->container['delivery_notification'],
@@ -367,7 +371,9 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
         }
 
         $allowedValues = $this->getDisableAutoDetectPickupAllowableValues();
-        if (!is_null($this->container['disable_auto_detect_pickup']) && !in_array($this->container['disable_auto_detect_pickup'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['disable_auto_detect_pickup']) && !in_array($this->container['disable_auto_detect_pickup'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'disable_auto_detect_pickup', must be one of '%s'",
                 $this->container['disable_auto_detect_pickup'],
@@ -412,16 +418,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
         if (is_null($save_recipient_address)) {
             throw new \InvalidArgumentException('non-nullable save_recipient_address cannot be null');
         }
-        $allowedValues = $this->getSaveRecipientAddressAllowableValues();
-        if (!in_array($save_recipient_address, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'save_recipient_address', must be one of '%s'",
-                    $save_recipient_address,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['save_recipient_address'] = $save_recipient_address;
 
         return $this;
@@ -448,16 +444,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
     {
         if (is_null($delivery_notification)) {
             throw new \InvalidArgumentException('non-nullable delivery_notification cannot be null');
-        }
-        $allowedValues = $this->getDeliveryNotificationAllowableValues();
-        if (!in_array($delivery_notification, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivery_notification', must be one of '%s'",
-                    $delivery_notification,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['delivery_notification'] = $delivery_notification;
 
@@ -512,16 +498,6 @@ class ShipmentPostShipmentsRequestDataShipmentsInnerGeneralSettings implements M
     {
         if (is_null($disable_auto_detect_pickup)) {
             throw new \InvalidArgumentException('non-nullable disable_auto_detect_pickup cannot be null');
-        }
-        $allowedValues = $this->getDisableAutoDetectPickupAllowableValues();
-        if (!in_array($disable_auto_detect_pickup, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'disable_auto_detect_pickup', must be one of '%s'",
-                    $disable_auto_detect_pickup,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['disable_auto_detect_pickup'] = $disable_auto_detect_pickup;
 

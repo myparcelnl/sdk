@@ -278,7 +278,7 @@ class RatesPostRatesRequestV1Data implements ModelInterface, ArrayAccess, \JsonS
         if ($this->container['rates'] === null) {
             $invalidProperties[] = "'rates' can't be null";
         }
-        if ((count($this->container['rates']) < 1)) {
+        if (!is_null($this->container['rates']) && (count($this->container['rates']) < 1)) {
             $invalidProperties[] = "invalid value for 'rates', number of items must be greater than or equal to 1.";
         }
 

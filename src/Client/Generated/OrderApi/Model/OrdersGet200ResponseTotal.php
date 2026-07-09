@@ -300,7 +300,9 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
             $invalidProperties[] = "'relation' can't be null";
         }
         $allowedValues = $this->getRelationAllowableValues();
-        if (!is_null($this->container['relation']) && !in_array($this->container['relation'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['relation']) && !in_array($this->container['relation'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'relation', must be one of '%s'",
                 $this->container['relation'],
@@ -311,7 +313,7 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
-        if (($this->container['value'] < 0)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
 
@@ -351,16 +353,6 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
     {
         if (is_null($relation)) {
             throw new \InvalidArgumentException('non-nullable relation cannot be null');
-        }
-        $allowedValues = $this->getRelationAllowableValues();
-        if (!in_array($relation, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'relation', must be one of '%s'",
-                    $relation,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['relation'] = $relation;
 

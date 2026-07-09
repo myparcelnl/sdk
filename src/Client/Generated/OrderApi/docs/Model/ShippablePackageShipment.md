@@ -14,5 +14,6 @@ Name | Type | Description | Notes
 **options** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon**](ShipmentOptionsCommon.md) |  | [optional]
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup**](Pickup.md) |  | [optional]
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender**](ShipmentRequestSender.md) |  | [optional]
+**save_recipient_address** | **bool** | When set to true, the recipient address is saved to the user&#39;s address book. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

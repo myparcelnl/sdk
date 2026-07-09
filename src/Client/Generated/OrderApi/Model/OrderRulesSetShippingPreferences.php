@@ -306,7 +306,7 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
         if ($this->container['path'] === null) {
             $invalidProperties[] = "'path' can't be null";
         }
-        if ((count($this->container['path']) < 1)) {
+        if (!is_null($this->container['path']) && (count($this->container['path']) < 1)) {
             $invalidProperties[] = "invalid value for 'path', number of items must be greater than or equal to 1.";
         }
 
@@ -317,7 +317,9 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
             $invalidProperties[] = "'result' can't be null";
         }
         $allowedValues = $this->getResultAllowableValues();
-        if (!is_null($this->container['result']) && !in_array($this->container['result'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['result']) && !in_array($this->container['result'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'result', must be one of '%s'",
                 $this->container['result'],
@@ -420,16 +422,6 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
     {
         if (is_null($result)) {
             throw new \InvalidArgumentException('non-nullable result cannot be null');
-        }
-        $allowedValues = $this->getResultAllowableValues();
-        if (!in_array($result, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'result', must be one of '%s'",
-                    $result,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['result'] = $result;
 

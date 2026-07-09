@@ -377,22 +377,22 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
         if ($this->container['cc'] === null) {
             $invalidProperties[] = "'cc' can't be null";
         }
-        if ((mb_strlen($this->container['cc']) > 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) > 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['cc']) < 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) < 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be bigger than or equal to 2.";
         }
 
         if ($this->container['city'] === null) {
             $invalidProperties[] = "'city' can't be null";
         }
-        if ((mb_strlen($this->container['city']) > 255)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 255)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 255.";
         }
 
-        if ((mb_strlen($this->container['city']) < 1)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 1)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 1.";
         }
 
@@ -403,7 +403,9 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
             $invalidProperties[] = "'email' can't be null";
         }
         $allowedValues = $this->getGenderAllowableValues();
-        if (!is_null($this->container['gender']) && !in_array($this->container['gender'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['gender']) && !in_array($this->container['gender'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'gender', must be one of '%s'",
                 $this->container['gender'],
@@ -417,28 +419,28 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
         if ($this->container['number'] === null) {
             $invalidProperties[] = "'number' can't be null";
         }
-        if ((mb_strlen($this->container['number']) < 1)) {
+        if (!is_null($this->container['number']) && (mb_strlen($this->container['number']) < 1)) {
             $invalidProperties[] = "invalid value for 'number', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['phone'] === null) {
             $invalidProperties[] = "'phone' can't be null";
         }
-        if ((mb_strlen($this->container['phone']) < 8)) {
+        if (!is_null($this->container['phone']) && (mb_strlen($this->container['phone']) < 8)) {
             $invalidProperties[] = "invalid value for 'phone', the character length must be bigger than or equal to 8.";
         }
 
         if ($this->container['postal_code'] === null) {
             $invalidProperties[] = "'postal_code' can't be null";
         }
-        if ((mb_strlen($this->container['postal_code']) < 1)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) < 1)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['street'] === null) {
             $invalidProperties[] = "'street' can't be null";
         }
-        if ((mb_strlen($this->container['street']) < 1)) {
+        if (!is_null($this->container['street']) && (mb_strlen($this->container['street']) < 1)) {
             $invalidProperties[] = "invalid value for 'street', the character length must be bigger than or equal to 1.";
         }
 
@@ -627,16 +629,6 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContact impleme
     {
         if (is_null($gender)) {
             throw new \InvalidArgumentException('non-nullable gender cannot be null');
-        }
-        $allowedValues = $this->getGenderAllowableValues();
-        if (!in_array($gender, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'gender', must be one of '%s'",
-                    $gender,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['gender'] = $gender;
 

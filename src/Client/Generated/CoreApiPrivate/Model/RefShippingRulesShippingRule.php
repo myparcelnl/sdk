@@ -321,11 +321,11 @@ class RefShippingRulesShippingRule implements ModelInterface, ArrayAccess, \Json
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
-        if (($this->container['id'] > -9223372036854775616)) {
-            $invalidProperties[] = "invalid value for 'id', must be smaller than or equal to -9223372036854775616.";
+        if (!is_null($this->container['id']) && ($this->container['id'] > 9223372036854775807)) {
+            $invalidProperties[] = "invalid value for 'id', must be smaller than or equal to 9223372036854775807.";
         }
 
-        if (($this->container['id'] < 1)) {
+        if (!is_null($this->container['id']) && ($this->container['id'] < 1)) {
             $invalidProperties[] = "invalid value for 'id', must be bigger than or equal to 1.";
         }
 
@@ -347,7 +347,7 @@ class RefShippingRulesShippingRule implements ModelInterface, ArrayAccess, \Json
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
+        if (!is_null($this->container['created']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
             $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
@@ -389,8 +389,8 @@ class RefShippingRulesShippingRule implements ModelInterface, ArrayAccess, \Json
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
 
-        if (($id > -9223372036854775616)) {
-            throw new \InvalidArgumentException('invalid value for $id when calling RefShippingRulesShippingRule., must be smaller than or equal to -9223372036854775616.');
+        if (($id > 9223372036854775807)) {
+            throw new \InvalidArgumentException('invalid value for $id when calling RefShippingRulesShippingRule., must be smaller than or equal to 9223372036854775807.');
         }
         if (($id < 1)) {
             throw new \InvalidArgumentException('invalid value for $id when calling RefShippingRulesShippingRule., must be bigger than or equal to 1.');

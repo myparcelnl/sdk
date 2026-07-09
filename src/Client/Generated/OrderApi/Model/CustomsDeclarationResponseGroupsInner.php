@@ -313,33 +313,33 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
         }
-        if ((mb_strlen($this->container['description']) > 100)) {
+        if (!is_null($this->container['description']) && (mb_strlen($this->container['description']) > 100)) {
             $invalidProperties[] = "invalid value for 'description', the character length must be smaller than or equal to 100.";
         }
 
-        if ((mb_strlen($this->container['description']) < 1)) {
+        if (!is_null($this->container['description']) && (mb_strlen($this->container['description']) < 1)) {
             $invalidProperties[] = "invalid value for 'description', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['hs_code'] === null) {
             $invalidProperties[] = "'hs_code' can't be null";
         }
-        if ((mb_strlen($this->container['hs_code']) > 12)) {
+        if (!is_null($this->container['hs_code']) && (mb_strlen($this->container['hs_code']) > 12)) {
             $invalidProperties[] = "invalid value for 'hs_code', the character length must be smaller than or equal to 12.";
         }
 
-        if ((mb_strlen($this->container['hs_code']) < 6)) {
+        if (!is_null($this->container['hs_code']) && (mb_strlen($this->container['hs_code']) < 6)) {
             $invalidProperties[] = "invalid value for 'hs_code', the character length must be bigger than or equal to 6.";
         }
 
         if ($this->container['number_of_items'] === null) {
             $invalidProperties[] = "'number_of_items' can't be null";
         }
-        if (($this->container['number_of_items'] > 99999)) {
+        if (!is_null($this->container['number_of_items']) && ($this->container['number_of_items'] > 99999)) {
             $invalidProperties[] = "invalid value for 'number_of_items', must be smaller than or equal to 99999.";
         }
 
-        if (($this->container['number_of_items'] < 1)) {
+        if (!is_null($this->container['number_of_items']) && ($this->container['number_of_items'] < 1)) {
             $invalidProperties[] = "invalid value for 'number_of_items', must be bigger than or equal to 1.";
         }
 

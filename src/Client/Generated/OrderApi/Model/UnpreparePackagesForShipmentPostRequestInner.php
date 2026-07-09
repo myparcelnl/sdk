@@ -287,11 +287,11 @@ class UnpreparePackagesForShipmentPostRequestInner implements ModelInterface, Ar
         if ($this->container['package_ids'] === null) {
             $invalidProperties[] = "'package_ids' can't be null";
         }
-        if ((count($this->container['package_ids']) > 25)) {
+        if (!is_null($this->container['package_ids']) && (count($this->container['package_ids']) > 25)) {
             $invalidProperties[] = "invalid value for 'package_ids', number of items must be less than or equal to 25.";
         }
 
-        if ((count($this->container['package_ids']) < 1)) {
+        if (!is_null($this->container['package_ids']) && (count($this->container['package_ids']) < 1)) {
             $invalidProperties[] = "invalid value for 'package_ids', number of items must be greater than or equal to 1.";
         }
 

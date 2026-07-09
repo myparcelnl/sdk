@@ -278,7 +278,7 @@ class ShipmentResponsesPostShipmentsV12DataPdf implements ModelInterface, ArrayA
         if ($this->container['url'] === null) {
             $invalidProperties[] = "'url' can't be null";
         }
-        if (!preg_match("/^\/pdfs\/.*/", $this->container['url'])) {
+        if (!is_null($this->container['url']) && !preg_match("/^\/pdfs\/.*/", $this->container['url'])) {
             $invalidProperties[] = "invalid value for 'url', must be conform to the pattern /^\/pdfs\/.*/.";
         }
 

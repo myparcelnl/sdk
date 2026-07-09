@@ -89,13 +89,38 @@ class ObjectSerializer
                     $getter = $data::getters()[$property];
                     $value = $data->$getter();
                     if ($value !== null && !in_array($openAPIType, ['\DateTime', '\SplFileObject', 'array', 'bool', 'boolean', 'byte', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)) {
-                        $callable = [$openAPIType, 'getAllowableEnumValues'];
+                        // Array types are suffixed with "[]"; validate each item against the base enum class.
+                        $enumType = substr($openAPIType, -2) === '[]' ? substr($openAPIType, 0, -2) : $openAPIType;
+                        $callable = [$enumType, 'getAllowableEnumValues'];
                         if (is_callable($callable)) {
                             /** array $callable */
                             $allowedEnumTypes = $callable();
-                            if (!in_array($value, $allowedEnumTypes, true)) {
-                                $imploded = implode("', '", $allowedEnumTypes);
-                                throw new \InvalidArgumentException("Invalid value for enum '$openAPIType', must be one of: '$imploded'");
+                            // openapi-generator collapses `anyOf(<string> | enum[null,""])` into a
+                            // pseudo-enum whose only value is "" (e.g. email fields). These are not
+                            // real enums, so skip enforcement when no non-empty value is allowed.
+                            if (array_filter($allowedEnumTypes, fn($v) => $v !== null && $v !== '') !== []) {
+                                foreach (is_array($value) ? $value : [$value] as $item) {
+                                    if (!in_array($item, $allowedEnumTypes, true)) {
+                                        $imploded = implode("', '", $allowedEnumTypes);
+                                        throw new \InvalidArgumentException("Invalid value for enum '$enumType', must be one of: '$imploded'");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Inline enums store the raw value (no setter validation), so the
+                    // request/write path is enforced here via the *AllowableValues() accessor.
+                    $allowableMethod = $getter . 'AllowableValues';
+                    if ($value !== null && method_exists($data, $allowableMethod)) {
+                        $allowedValues = $data->$allowableMethod();
+                        // Skip value-less pseudo-enums (see the referenced-enum note above).
+                        if (array_filter($allowedValues, fn($v) => $v !== null && $v !== '') !== []) {
+                            $invalid = is_array($value)
+                                ? (bool) array_filter($value, fn($item) => !in_array($item, $allowedValues, true))
+                                : !in_array($value, $allowedValues, true);
+                            if ($invalid) {
+                                $imploded = implode("', '", $allowedValues);
+                                throw new \InvalidArgumentException("Invalid value for enum property '$property', must be one of: '$imploded'");
                             }
                         }
                     }
@@ -508,8 +533,9 @@ class ObjectSerializer
 
         if (method_exists($class, 'getAllowableEnumValues')) {
             if (!in_array($data, $class::getAllowableEnumValues(), true)) {
-                $imploded = implode("', '", $class::getAllowableEnumValues());
-                throw new \InvalidArgumentException("Invalid value for enum '$class', must be one of: '$imploded'");
+                // Unknown enum value: pass it through instead of throwing so a newly
+                // added API value does not break response parsing. See EnumFallback.
+                return \MyParcelNL\Sdk\Support\EnumFallback::onUnknown($class, $data);
             }
             return $data;
         } else {

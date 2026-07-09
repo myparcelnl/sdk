@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **shop_id** | **int** |  |
 **shipment_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentType**](RefShipmentType.md) |  |
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient**](ShipmentDefsShipmentRecipient.md) |  |
-**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender**](ShipmentDefsShipmentSender.md) |  |
+**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender**](ShipmentDefsShipmentSender.md) |  |
 **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus**](ShipmentDefsShipmentStatus.md) |  |
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions**](ShipmentDefsShipmentOptions.md) |  |
 **general_settings** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettings**](RefShipmentGeneralSettings.md) |  |
@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 **transaction_status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus**](RefShipmentTransactionStatus.md) |  |
 **drop_off_point** | **mixed** |  |
 **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  |
-**price** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney**](RefTypesMoney.md) |  |
+**price** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount**](RefTypesMoneyNullableAmount.md) |  |
 **barcode** | **string** |  |
 **region** | [**string**](ShipmentDefsShipmentRegion.md) |  |
 **external_provider** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProvider**](ShipmentDefsShipmentExternalProvider.md) |  |

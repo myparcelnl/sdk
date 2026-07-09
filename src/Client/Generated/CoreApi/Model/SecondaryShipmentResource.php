@@ -64,7 +64,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'shop_id' => 'int',
         'shipment_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentType',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesRecipient',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender',
         'status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesOptions',
         'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettings',
@@ -75,7 +75,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'transaction_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus',
         'drop_off_point' => 'mixed',
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
-        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
+        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount',
         'barcode' => 'string',
         'region' => 'string',
         'external_provider' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName',
@@ -616,17 +616,17 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['pickup'] === null) {
             $invalidProperties[] = "'pickup' can't be null";
         }
-        if ($this->container['customs_declaration'] === null) {
-            $invalidProperties[] = "'customs_declaration' can't be null";
+        if ($this->container['customs_declaration'] === null && !$this->isNullableSetToNull('customs_declaration')) {
+            $invalidProperties[] = "'customs_declaration' is required";
         }
         if ($this->container['physical_properties'] === null) {
             $invalidProperties[] = "'physical_properties' can't be null";
         }
-        if ($this->container['reference_identifier'] === null) {
-            $invalidProperties[] = "'reference_identifier' can't be null";
+        if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
+            $invalidProperties[] = "'reference_identifier' is required";
         }
-        if ($this->container['transaction_status'] === null) {
-            $invalidProperties[] = "'transaction_status' can't be null";
+        if ($this->container['transaction_status'] === null && !$this->isNullableSetToNull('transaction_status')) {
+            $invalidProperties[] = "'transaction_status' is required";
         }
         if ($this->container['drop_off_point'] === null) {
             $invalidProperties[] = "'drop_off_point' can't be null";
@@ -640,21 +640,21 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['barcode'] === null) {
             $invalidProperties[] = "'barcode' can't be null";
         }
-        if ((mb_strlen($this->container['barcode']) > 255)) {
+        if (!is_null($this->container['barcode']) && (mb_strlen($this->container['barcode']) > 255)) {
             $invalidProperties[] = "invalid value for 'barcode', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['region'] === null) {
-            $invalidProperties[] = "'region' can't be null";
+        if ($this->container['region'] === null && !$this->isNullableSetToNull('region')) {
+            $invalidProperties[] = "'region' is required";
         }
-        if ($this->container['external_provider'] === null) {
-            $invalidProperties[] = "'external_provider' can't be null";
+        if ($this->container['external_provider'] === null && !$this->isNullableSetToNull('external_provider')) {
+            $invalidProperties[] = "'external_provider' is required";
         }
         if ($this->container['external_provider_id'] === null) {
             $invalidProperties[] = "'external_provider_id' can't be null";
         }
-        if ($this->container['payment_status'] === null) {
-            $invalidProperties[] = "'payment_status' can't be null";
+        if ($this->container['payment_status'] === null && !$this->isNullableSetToNull('payment_status')) {
+            $invalidProperties[] = "'payment_status' is required";
         }
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
@@ -665,27 +665,27 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['origin'] === null) {
             $invalidProperties[] = "'origin' can't be null";
         }
-        if ((mb_strlen($this->container['origin']) > 255)) {
+        if (!is_null($this->container['origin']) && (mb_strlen($this->container['origin']) > 255)) {
             $invalidProperties[] = "invalid value for 'origin', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['user_agent'] === null) {
-            $invalidProperties[] = "'user_agent' can't be null";
+        if ($this->container['user_agent'] === null && !$this->isNullableSetToNull('user_agent')) {
+            $invalidProperties[] = "'user_agent' is required";
         }
-        if ((mb_strlen($this->container['user_agent']) > 255)) {
+        if (!is_null($this->container['user_agent']) && (mb_strlen($this->container['user_agent']) > 255)) {
             $invalidProperties[] = "invalid value for 'user_agent', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['collection_contact'] === null) {
-            $invalidProperties[] = "'collection_contact' can't be null";
+        if ($this->container['collection_contact'] === null && !$this->isNullableSetToNull('collection_contact')) {
+            $invalidProperties[] = "'collection_contact' is required";
         }
-        if ($this->container['multi_collo_main_shipment_id'] === null) {
-            $invalidProperties[] = "'multi_collo_main_shipment_id' can't be null";
+        if ($this->container['multi_collo_main_shipment_id'] === null && !$this->isNullableSetToNull('multi_collo_main_shipment_id')) {
+            $invalidProperties[] = "'multi_collo_main_shipment_id' is required";
         }
-        if ($this->container['external_identifier'] === null) {
-            $invalidProperties[] = "'external_identifier' can't be null";
+        if ($this->container['external_identifier'] === null && !$this->isNullableSetToNull('external_identifier')) {
+            $invalidProperties[] = "'external_identifier' is required";
         }
-        if ((mb_strlen($this->container['external_identifier']) > 255)) {
+        if (!is_null($this->container['external_identifier']) && (mb_strlen($this->container['external_identifier']) > 255)) {
             $invalidProperties[] = "invalid value for 'external_identifier', the character length must be smaller than or equal to 255.";
         }
 
@@ -695,8 +695,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['delivered'] === null) {
             $invalidProperties[] = "'delivered' can't be null";
         }
-        if ($this->container['contract_id'] === null) {
-            $invalidProperties[] = "'contract_id' can't be null";
+        if ($this->container['contract_id'] === null && !$this->isNullableSetToNull('contract_id')) {
+            $invalidProperties[] = "'contract_id' is required";
         }
         if (!is_null($this->container['order_shipment_identifier']) && (mb_strlen($this->container['order_shipment_identifier']) > 36)) {
             $invalidProperties[] = "invalid value for 'order_shipment_identifier', the character length must be smaller than or equal to 36.";
@@ -705,14 +705,14 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
+        if (!is_null($this->container['created']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
             $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['modified'] === null) {
             $invalidProperties[] = "'modified' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
+        if (!is_null($this->container['modified']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
             $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
@@ -902,7 +902,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender
      */
     public function getSender()
     {
@@ -912,7 +912,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender $sender sender
      *
      * @return self
      */
@@ -1037,7 +1037,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets customs_declaration
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration|null
      */
     public function getCustomsDeclaration()
     {
@@ -1047,7 +1047,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets customs_declaration
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration $customs_declaration customs_declaration
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration|null $customs_declaration customs_declaration
      *
      * @return self
      */
@@ -1098,7 +1098,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets reference_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getReferenceIdentifier()
     {
@@ -1108,7 +1108,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets reference_identifier
      *
-     * @param string $reference_identifier reference_identifier
+     * @param string|null $reference_identifier reference_identifier
      *
      * @return self
      */
@@ -1132,7 +1132,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets transaction_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null
      */
     public function getTransactionStatus()
     {
@@ -1142,7 +1142,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets transaction_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus $transaction_status transaction_status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null $transaction_status transaction_status
      *
      * @return self
      */
@@ -1220,7 +1220,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets price
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getPrice()
     {
@@ -1230,7 +1230,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $price price
      *
      * @return self
      */
@@ -1278,7 +1278,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets region
      *
-     * @return string
+     * @return string|null
      */
     public function getRegion()
     {
@@ -1288,7 +1288,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets region
      *
-     * @param string $region region
+     * @param string|null $region region
      *
      * @return self
      */
@@ -1312,7 +1312,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets external_provider
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName|null
      */
     public function getExternalProvider()
     {
@@ -1322,7 +1322,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets external_provider
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName $external_provider external_provider
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalProviderPropertiesDisplayName|null $external_provider external_provider
      *
      * @return self
      */
@@ -1373,7 +1373,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets payment_status
      *
-     * @return string
+     * @return string|null
      */
     public function getPaymentStatus()
     {
@@ -1383,7 +1383,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets payment_status
      *
-     * @param string $payment_status payment_status
+     * @param string|null $payment_status payment_status
      *
      * @return self
      */
@@ -1492,7 +1492,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets user_agent
      *
-     * @return string
+     * @return string|null
      */
     public function getUserAgent()
     {
@@ -1502,7 +1502,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets user_agent
      *
-     * @param string $user_agent user_agent
+     * @param string|null $user_agent user_agent
      *
      * @return self
      */
@@ -1559,7 +1559,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets collection_contact
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact|null
      */
     public function getCollectionContact()
     {
@@ -1569,7 +1569,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets collection_contact
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact $collection_contact collection_contact
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContact|null $collection_contact collection_contact
      *
      * @return self
      */
@@ -1593,7 +1593,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets multi_collo_main_shipment_id
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId|null
      */
     public function getMultiColloMainShipmentId()
     {
@@ -1603,7 +1603,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets multi_collo_main_shipment_id
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId $multi_collo_main_shipment_id multi_collo_main_shipment_id
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPropertiesMultiColloMainShipmentId|null $multi_collo_main_shipment_id multi_collo_main_shipment_id
      *
      * @return self
      */
@@ -1627,7 +1627,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets external_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getExternalIdentifier()
     {
@@ -1637,7 +1637,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets external_identifier
      *
-     * @param string $external_identifier external_identifier
+     * @param string|null $external_identifier external_identifier
      *
      * @return self
      */
@@ -1787,7 +1787,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets contract_id
      *
-     * @return int
+     * @return int|null
      */
     public function getContractId()
     {
@@ -1797,7 +1797,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets contract_id
      *
-     * @param int $contract_id contract_id
+     * @param int|null $contract_id contract_id
      *
      * @return self
      */

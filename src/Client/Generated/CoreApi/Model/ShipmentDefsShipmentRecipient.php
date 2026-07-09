@@ -509,15 +509,15 @@ class ShipmentDefsShipmentRecipient implements ModelInterface, ArrayAccess, \Jso
         if ($this->container['cc'] === null) {
             $invalidProperties[] = "'cc' can't be null";
         }
-        if ((mb_strlen($this->container['cc']) > 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) > 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['cc']) < 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) < 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be bigger than or equal to 2.";
         }
 
-        if (!preg_match("/^[A-Za-z]{2}$/", $this->container['cc'])) {
+        if (!is_null($this->container['cc']) && !preg_match("/^[A-Za-z]{2}$/", $this->container['cc'])) {
             $invalidProperties[] = "invalid value for 'cc', must be conform to the pattern /^[A-Za-z]{2}$/.";
         }
 
@@ -526,7 +526,9 @@ class ShipmentDefsShipmentRecipient implements ModelInterface, ArrayAccess, \Jso
         }
 
         $allowedValues = $this->getEmailAllowableValues();
-        if (!is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'email', must be one of '%s'",
                 $this->container['email'],
@@ -1165,16 +1167,6 @@ class ShipmentDefsShipmentRecipient implements ModelInterface, ArrayAccess, \Jso
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
-        }
-        $allowedValues = $this->getEmailAllowableValues();
-        if (!is_null($email) && !in_array($email, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'email', must be one of '%s'",
-                    $email,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['email'] = $email;
 

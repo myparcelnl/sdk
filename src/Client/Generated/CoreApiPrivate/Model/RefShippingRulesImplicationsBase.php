@@ -300,8 +300,8 @@ class RefShippingRulesImplicationsBase implements ModelInterface, ArrayAccess, \
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
         }
-        if ($this->container['contract_id'] === null) {
-            $invalidProperties[] = "'contract_id' can't be null";
+        if ($this->container['contract_id'] === null && !$this->isNullableSetToNull('contract_id')) {
+            $invalidProperties[] = "'contract_id' is required";
         }
         if ($this->container['shipment_options'] === null) {
             $invalidProperties[] = "'shipment_options' can't be null";
@@ -354,7 +354,7 @@ class RefShippingRulesImplicationsBase implements ModelInterface, ArrayAccess, \
     /**
      * Gets contract_id
      *
-     * @return int
+     * @return int|null
      */
     public function getContractId()
     {
@@ -364,7 +364,7 @@ class RefShippingRulesImplicationsBase implements ModelInterface, ArrayAccess, \
     /**
      * Sets contract_id
      *
-     * @param int $contract_id Identifier of the carrier contract to use. Null when no specific contract is forced.
+     * @param int|null $contract_id Identifier of the carrier contract to use. Null when no specific contract is forced.
      *
      * @return self
      */

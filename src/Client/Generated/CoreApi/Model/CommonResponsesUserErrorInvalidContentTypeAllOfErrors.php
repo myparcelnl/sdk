@@ -296,7 +296,9 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
         $invalidProperties = [];
 
         $allowedValues = $this->getCodeAllowableValues();
-        if (!is_null($this->container['code']) && !in_array($this->container['code'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['code']) && !in_array($this->container['code'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'code', must be one of '%s'",
                 $this->container['code'],
@@ -367,16 +369,6 @@ class CommonResponsesUserErrorInvalidContentTypeAllOfErrors implements ModelInte
     {
         if (is_null($code)) {
             throw new \InvalidArgumentException('non-nullable code cannot be null');
-        }
-        $allowedValues = $this->getCodeAllowableValues();
-        if (!in_array($code, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'code', must be one of '%s'",
-                    $code,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['code'] = $code;
 

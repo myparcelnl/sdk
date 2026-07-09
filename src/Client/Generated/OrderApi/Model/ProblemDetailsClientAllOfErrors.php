@@ -284,22 +284,22 @@ class ProblemDetailsClientAllOfErrors implements ModelInterface, ArrayAccess, \J
         if ($this->container['detail'] === null) {
             $invalidProperties[] = "'detail' can't be null";
         }
-        if ((mb_strlen($this->container['detail']) > 5000)) {
+        if (!is_null($this->container['detail']) && (mb_strlen($this->container['detail']) > 5000)) {
             $invalidProperties[] = "invalid value for 'detail', the character length must be smaller than or equal to 5000.";
         }
 
-        if ((mb_strlen($this->container['detail']) < 1)) {
+        if (!is_null($this->container['detail']) && (mb_strlen($this->container['detail']) < 1)) {
             $invalidProperties[] = "invalid value for 'detail', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['pointer'] === null) {
             $invalidProperties[] = "'pointer' can't be null";
         }
-        if ((mb_strlen($this->container['pointer']) > 200)) {
+        if (!is_null($this->container['pointer']) && (mb_strlen($this->container['pointer']) > 200)) {
             $invalidProperties[] = "invalid value for 'pointer', the character length must be smaller than or equal to 200.";
         }
 
-        if ((mb_strlen($this->container['pointer']) < 1)) {
+        if (!is_null($this->container['pointer']) && (mb_strlen($this->container['pointer']) < 1)) {
             $invalidProperties[] = "invalid value for 'pointer', the character length must be bigger than or equal to 1.";
         }
 

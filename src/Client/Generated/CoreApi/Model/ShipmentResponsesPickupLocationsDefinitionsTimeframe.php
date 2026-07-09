@@ -282,11 +282,11 @@ class ShipmentResponsesPickupLocationsDefinitionsTimeframe implements ModelInter
     {
         $invalidProperties = [];
 
-        if ($this->container['start'] === null) {
-            $invalidProperties[] = "'start' can't be null";
+        if ($this->container['start'] === null && !$this->isNullableSetToNull('start')) {
+            $invalidProperties[] = "'start' is required";
         }
-        if ($this->container['end'] === null) {
-            $invalidProperties[] = "'end' can't be null";
+        if ($this->container['end'] === null && !$this->isNullableSetToNull('end')) {
+            $invalidProperties[] = "'end' is required";
         }
         return $invalidProperties;
     }
@@ -306,7 +306,7 @@ class ShipmentResponsesPickupLocationsDefinitionsTimeframe implements ModelInter
     /**
      * Gets start
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null
      */
     public function getStart()
     {
@@ -316,7 +316,7 @@ class ShipmentResponsesPickupLocationsDefinitionsTimeframe implements ModelInter
     /**
      * Sets start
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime $start start
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null $start start
      *
      * @return self
      */
@@ -340,7 +340,7 @@ class ShipmentResponsesPickupLocationsDefinitionsTimeframe implements ModelInter
     /**
      * Gets end
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null
      */
     public function getEnd()
     {
@@ -350,7 +350,7 @@ class ShipmentResponsesPickupLocationsDefinitionsTimeframe implements ModelInter
     /**
      * Sets end
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime $end end
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsDateTime|null $end end
      *
      * @return self
      */

@@ -460,7 +460,9 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
             $invalidProperties[] = "'package_type' can't be null";
         }
         $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'delivery_type', must be one of '%s'",
                 $this->container['delivery_type'],
@@ -1059,16 +1061,6 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
-        }
-        $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!is_null($delivery_type) && !in_array($delivery_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivery_type', must be one of '%s'",
-                    $delivery_type,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['delivery_type'] = $delivery_type;
 
