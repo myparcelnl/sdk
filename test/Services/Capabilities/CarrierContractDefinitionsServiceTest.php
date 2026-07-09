@@ -80,9 +80,11 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
     {
         // Real client with an empty mock handler: request serialization runs (and must
         // reject the unknown carrier) before any HTTP request is attempted.
+        // Use a fresh Configuration instance rather than mutating the global default
+        // singleton, which would leak auth state into other tests.
         $api = new ShipmentApi(
             new Client(['handler' => HandlerStack::create(new MockHandler([]))]),
-            Configuration::getDefaultConfiguration()->setApiKey('Authorization', $this->getApiKey())
+            (new Configuration())->setApiKey('Authorization', $this->getApiKey())
         );
 
         $service = new CarrierContractDefinitionsService($this->getApiKey(), null, $api);
