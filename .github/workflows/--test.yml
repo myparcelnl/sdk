@@ -14,7 +14,11 @@ jobs:
       contents: read
       packages: write
     steps:
+      # Dependabot PRs cannot access Actions secrets, so skip the app credentials for them.
+      # The test image is public and the tests only need to check out the PR, which works
+      # with the default GITHUB_TOKEN.
       - uses: myparcelnl/actions/setup-app-credentials@v5
+        if: github.actor != 'dependabot[bot]'
         id: credentials
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
@@ -23,7 +27,7 @@ jobs:
       - uses: actions/checkout@v7
         if: github.actor != 'dependabot[bot]'
         with:
-          token: ${{ steps.credentials.outputs.token }}
+          token: ${{ steps.credentials.outputs.token || github.token }}
 
       - name: 'Handle coverage cache'
         if: github.actor != 'dependabot[bot]'
@@ -34,13 +38,11 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.php-version }}-coverage-${{ hashFiles('./src/**', './test/**') }}
 
       - uses: myparcelnl/actions/pull-docker-image@v5
-        if: github.actor != 'dependabot[bot]'
         id: docker
         with:
           image: ghcr.io/myparcelnl/php-xd:${{ matrix.php-version }}
 
       - name: 'Install composer dependencies'
-        if: github.actor != 'dependabot[bot]'
         run: |
           docker run \
             --volume $PWD:/app \
