@@ -404,15 +404,17 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
         if ($this->container['last_name'] === null) {
             $invalidProperties[] = "'last_name' can't be null";
         }
-        if ((mb_strlen($this->container['last_name']) > 255)) {
+        if (!is_null($this->container['last_name']) && (mb_strlen($this->container['last_name']) > 255)) {
             $invalidProperties[] = "invalid value for 'last_name', the character length must be smaller than or equal to 255.";
         }
 
-        if ($this->container['email'] === null) {
-            $invalidProperties[] = "'email' can't be null";
+        if ($this->container['email'] === null && !$this->isNullableSetToNull('email')) {
+            $invalidProperties[] = "'email' is required";
         }
         $allowedValues = $this->getEmailAllowableValues();
-        if (!is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['email']) && !in_array($this->container['email'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'email', must be one of '%s'",
                 $this->container['email'],
@@ -423,21 +425,21 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
         if ($this->container['phone'] === null) {
             $invalidProperties[] = "'phone' can't be null";
         }
-        if ((mb_strlen($this->container['phone']) > 100)) {
+        if (!is_null($this->container['phone']) && (mb_strlen($this->container['phone']) > 100)) {
             $invalidProperties[] = "invalid value for 'phone', the character length must be smaller than or equal to 100.";
         }
 
         if ($this->container['company'] === null) {
             $invalidProperties[] = "'company' can't be null";
         }
-        if ((mb_strlen($this->container['company']) > 255)) {
+        if (!is_null($this->container['company']) && (mb_strlen($this->container['company']) > 255)) {
             $invalidProperties[] = "invalid value for 'company', the character length must be smaller than or equal to 255.";
         }
 
         if ($this->container['street'] === null) {
             $invalidProperties[] = "'street' can't be null";
         }
-        if ((mb_strlen($this->container['street']) > 255)) {
+        if (!is_null($this->container['street']) && (mb_strlen($this->container['street']) > 255)) {
             $invalidProperties[] = "invalid value for 'street', the character length must be smaller than or equal to 255.";
         }
 
@@ -455,21 +457,21 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
         if ($this->container['postal_code'] === null) {
             $invalidProperties[] = "'postal_code' can't be null";
         }
-        if ((mb_strlen($this->container['postal_code']) > 255)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) > 255)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be smaller than or equal to 255.";
         }
 
         if ($this->container['city'] === null) {
             $invalidProperties[] = "'city' can't be null";
         }
-        if ((mb_strlen($this->container['city']) > 255)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 255)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 255.";
         }
 
         if ($this->container['cc'] === null) {
             $invalidProperties[] = "'cc' can't be null";
         }
-        if (!preg_match("/^[A-Z][A-Z]$/", $this->container['cc'])) {
+        if (!is_null($this->container['cc']) && !preg_match("/^[A-Z][A-Z]$/", $this->container['cc'])) {
             $invalidProperties[] = "invalid value for 'cc', must be conform to the pattern /^[A-Z][A-Z]$/.";
         }
 
@@ -619,7 +621,7 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
     /**
      * Gets email
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail()
     {
@@ -629,7 +631,7 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
     /**
      * Sets email
      *
-     * @param string $email email
+     * @param string|null $email email
      *
      * @return self
      */
@@ -644,16 +646,6 @@ class ShipmentDefsShipmentCollectionContact implements ModelInterface, ArrayAcce
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
-        }
-        $allowedValues = $this->getEmailAllowableValues();
-        if (!is_null($email) && !in_array($email, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'email', must be one of '%s'",
-                    $email,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['email'] = $email;
 

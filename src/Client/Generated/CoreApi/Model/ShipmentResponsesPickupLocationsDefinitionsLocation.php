@@ -334,8 +334,8 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
         if ($this->container['location_name'] === null) {
             $invalidProperties[] = "'location_name' can't be null";
         }
-        if ($this->container['retail_network_id'] === null) {
-            $invalidProperties[] = "'retail_network_id' can't be null";
+        if ($this->container['retail_network_id'] === null && !$this->isNullableSetToNull('retail_network_id')) {
+            $invalidProperties[] = "'retail_network_id' is required";
         }
         if ($this->container['distance'] === null) {
             $invalidProperties[] = "'distance' can't be null";
@@ -349,11 +349,11 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
         if ($this->container['location_code'] === null) {
             $invalidProperties[] = "'location_code' can't be null";
         }
-        if ($this->container['phone_number'] === null) {
-            $invalidProperties[] = "'phone_number' can't be null";
+        if ($this->container['phone_number'] === null && !$this->isNullableSetToNull('phone_number')) {
+            $invalidProperties[] = "'phone_number' is required";
         }
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
+        if ($this->container['type'] === null && !$this->isNullableSetToNull('type')) {
+            $invalidProperties[] = "'type' is required";
         }
         if ($this->container['opening_hours'] === null) {
             $invalidProperties[] = "'opening_hours' can't be null";
@@ -403,7 +403,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Gets retail_network_id
      *
-     * @return string
+     * @return string|null
      */
     public function getRetailNetworkId()
     {
@@ -413,7 +413,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Sets retail_network_id
      *
-     * @param string $retail_network_id retail_network_id
+     * @param string|null $retail_network_id retail_network_id
      *
      * @return self
      */
@@ -545,7 +545,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Gets phone_number
      *
-     * @return string
+     * @return string|null
      */
     public function getPhoneNumber()
     {
@@ -555,7 +555,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Sets phone_number
      *
-     * @param string $phone_number phone_number
+     * @param string|null $phone_number phone_number
      *
      * @return self
      */
@@ -579,7 +579,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Gets type
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType|null
      */
     public function getType()
     {
@@ -589,7 +589,7 @@ class ShipmentResponsesPickupLocationsDefinitionsLocation implements ModelInterf
     /**
      * Sets type
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType $type type
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType|null $type type
      *
      * @return self
      */

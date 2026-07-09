@@ -402,7 +402,9 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
             $invalidProperties[] = "'package_type' can't be null";
         }
         $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['delivery_type']) && !in_array($this->container['delivery_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'delivery_type', must be one of '%s'",
                 $this->container['delivery_type'],
@@ -411,7 +413,9 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         }
 
         $allowedValues = $this->getDirectionAllowableValues();
-        if (!is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'direction', must be one of '%s'",
                 $this->container['direction'],
@@ -703,16 +707,6 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         if (is_null($delivery_type)) {
             throw new \InvalidArgumentException('non-nullable delivery_type cannot be null');
         }
-        $allowedValues = $this->getDeliveryTypeAllowableValues();
-        if (!in_array($delivery_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'delivery_type', must be one of '%s'",
-                    $delivery_type,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['delivery_type'] = $delivery_type;
 
         return $this;
@@ -739,16 +733,6 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
     {
         if (is_null($direction)) {
             throw new \InvalidArgumentException('non-nullable direction cannot be null');
-        }
-        $allowedValues = $this->getDirectionAllowableValues();
-        if (!in_array($direction, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'direction', must be one of '%s'",
-                    $direction,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['direction'] = $direction;
 

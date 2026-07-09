@@ -305,11 +305,11 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['account_id'] === null) {
             $invalidProperties[] = "'account_id' can't be null";
         }
-        if ((mb_strlen($this->container['account_id']) > 50)) {
+        if (!is_null($this->container['account_id']) && (mb_strlen($this->container['account_id']) > 50)) {
             $invalidProperties[] = "invalid value for 'account_id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['account_id']) < 1)) {
+        if (!is_null($this->container['account_id']) && (mb_strlen($this->container['account_id']) < 1)) {
             $invalidProperties[] = "invalid value for 'account_id', the character length must be bigger than or equal to 1.";
         }
 

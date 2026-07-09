@@ -397,11 +397,11 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient implements Mode
         if ($this->container['cc'] === null) {
             $invalidProperties[] = "'cc' can't be null";
         }
-        if ((mb_strlen($this->container['cc']) > 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) > 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['cc']) < 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) < 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be bigger than or equal to 2.";
         }
 
@@ -416,33 +416,33 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient implements Mode
         if ($this->container['postal_code'] === null) {
             $invalidProperties[] = "'postal_code' can't be null";
         }
-        if ((mb_strlen($this->container['postal_code']) > 10)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) > 10)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be smaller than or equal to 10.";
         }
 
         if ($this->container['city'] === null) {
             $invalidProperties[] = "'city' can't be null";
         }
-        if ((mb_strlen($this->container['city']) > 35)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 35)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 35.";
         }
 
-        if ((mb_strlen($this->container['city']) < 1)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 1)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['street'] === null) {
             $invalidProperties[] = "'street' can't be null";
         }
-        if ((mb_strlen($this->container['street']) > 40)) {
+        if (!is_null($this->container['street']) && (mb_strlen($this->container['street']) > 40)) {
             $invalidProperties[] = "invalid value for 'street', the character length must be smaller than or equal to 40.";
         }
 
-        if ((mb_strlen($this->container['street']) < 1)) {
+        if (!is_null($this->container['street']) && (mb_strlen($this->container['street']) < 1)) {
             $invalidProperties[] = "invalid value for 'street', the character length must be bigger than or equal to 1.";
         }
 
-        if (!preg_match("/\\D+/", $this->container['street'])) {
+        if (!is_null($this->container['street']) && !preg_match("/\\D+/", $this->container['street'])) {
             $invalidProperties[] = "invalid value for 'street', must be conform to the pattern /\\D+/.";
         }
 
@@ -469,11 +469,11 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient implements Mode
         if ($this->container['person'] === null) {
             $invalidProperties[] = "'person' can't be null";
         }
-        if ((mb_strlen($this->container['person']) > 50)) {
+        if (!is_null($this->container['person']) && (mb_strlen($this->container['person']) > 50)) {
             $invalidProperties[] = "invalid value for 'person', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['person']) < 1)) {
+        if (!is_null($this->container['person']) && (mb_strlen($this->container['person']) < 1)) {
             $invalidProperties[] = "invalid value for 'person', the character length must be bigger than or equal to 1.";
         }
 

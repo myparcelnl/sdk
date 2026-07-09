@@ -285,8 +285,8 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
-        if ($this->container['reference_identifier'] === null) {
-            $invalidProperties[] = "'reference_identifier' can't be null";
+        if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
+            $invalidProperties[] = "'reference_identifier' is required";
         }
         return $invalidProperties;
     }
@@ -333,7 +333,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
     /**
      * Gets reference_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getReferenceIdentifier()
     {
@@ -343,7 +343,7 @@ class ShipmentResponsesShipmentIdsDataIdsInner implements ModelInterface, ArrayA
     /**
      * Sets reference_identifier
      *
-     * @param string $reference_identifier reference_identifier
+     * @param string|null $reference_identifier reference_identifier
      *
      * @return self
      */

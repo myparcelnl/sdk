@@ -455,8 +455,8 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
             $invalidProperties[] = "invalid value for 'assigned_user_id', number of items must be greater than or equal to 1.";
         }
 
-        if (!is_null($this->container['carrier']) && (count($this->container['carrier']) > 15)) {
-            $invalidProperties[] = "invalid value for 'carrier', number of items must be less than or equal to 15.";
+        if (!is_null($this->container['carrier']) && (count($this->container['carrier']) > 16)) {
+            $invalidProperties[] = "invalid value for 'carrier', number of items must be less than or equal to 16.";
         }
 
         if (!is_null($this->container['carrier']) && (count($this->container['carrier']) < 1)) {
@@ -464,7 +464,9 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $allowedValues = $this->getHasAssignedUserAllowableValues();
-        if (!is_null($this->container['has_assigned_user']) && !in_array($this->container['has_assigned_user'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['has_assigned_user']) && !in_array($this->container['has_assigned_user'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'has_assigned_user', must be one of '%s'",
                 $this->container['has_assigned_user'],
@@ -473,7 +475,9 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $allowedValues = $this->getHasNotesAllowableValues();
-        if (!is_null($this->container['has_notes']) && !in_array($this->container['has_notes'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['has_notes']) && !in_array($this->container['has_notes'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'has_notes', must be one of '%s'",
                 $this->container['has_notes'],
@@ -538,7 +542,9 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         }
 
         $allowedValues = $this->getShipmentDelayedAllowableValues();
-        if (!is_null($this->container['shipment_delayed']) && !in_array($this->container['shipment_delayed'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['shipment_delayed']) && !in_array($this->container['shipment_delayed'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'shipment_delayed', must be one of '%s'",
                 $this->container['shipment_delayed'],
@@ -650,8 +656,8 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
             throw new \InvalidArgumentException('non-nullable carrier cannot be null');
         }
 
-        if ((count($carrier) > 15)) {
-            throw new \InvalidArgumentException('invalid value for $carrier when calling OrdersGetFilterParameter., number of items must be less than or equal to 15.');
+        if ((count($carrier) > 16)) {
+            throw new \InvalidArgumentException('invalid value for $carrier when calling OrdersGetFilterParameter., number of items must be less than or equal to 16.');
         }
         if ((count($carrier) < 1)) {
             throw new \InvalidArgumentException('invalid length for $carrier when calling OrdersGetFilterParameter., number of items must be greater than or equal to 1.');
@@ -683,16 +689,6 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
         if (is_null($has_assigned_user)) {
             throw new \InvalidArgumentException('non-nullable has_assigned_user cannot be null');
         }
-        $allowedValues = $this->getHasAssignedUserAllowableValues();
-        if (!in_array($has_assigned_user, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'has_assigned_user', must be one of '%s'",
-                    $has_assigned_user,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['has_assigned_user'] = $has_assigned_user;
 
         return $this;
@@ -719,16 +715,6 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     {
         if (is_null($has_notes)) {
             throw new \InvalidArgumentException('non-nullable has_notes cannot be null');
-        }
-        $allowedValues = $this->getHasNotesAllowableValues();
-        if (!in_array($has_notes, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'has_notes', must be one of '%s'",
-                    $has_notes,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['has_notes'] = $has_notes;
 
@@ -824,15 +810,6 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     {
         if (is_null($package_status_group)) {
             throw new \InvalidArgumentException('non-nullable package_status_group cannot be null');
-        }
-        $allowedValues = $this->getPackageStatusGroupAllowableValues();
-        if (array_diff($package_status_group, $allowedValues)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'package_status_group', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
         }
 
         if ((count($package_status_group) > 6)) {
@@ -1003,16 +980,6 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     {
         if (is_null($shipment_delayed)) {
             throw new \InvalidArgumentException('non-nullable shipment_delayed cannot be null');
-        }
-        $allowedValues = $this->getShipmentDelayedAllowableValues();
-        if (!in_array($shipment_delayed, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'shipment_delayed', must be one of '%s'",
-                    $shipment_delayed,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['shipment_delayed'] = $shipment_delayed;
 

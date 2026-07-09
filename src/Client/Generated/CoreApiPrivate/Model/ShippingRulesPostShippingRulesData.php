@@ -278,7 +278,7 @@ class ShippingRulesPostShippingRulesData implements ModelInterface, ArrayAccess,
         if ($this->container['shipping_rules'] === null) {
             $invalidProperties[] = "'shipping_rules' can't be null";
         }
-        if ((count($this->container['shipping_rules']) < 1)) {
+        if (!is_null($this->container['shipping_rules']) && (count($this->container['shipping_rules']) < 1)) {
             $invalidProperties[] = "invalid value for 'shipping_rules', number of items must be greater than or equal to 1.";
         }
 

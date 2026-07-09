@@ -320,11 +320,11 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
         if ($this->container['code'] === null) {
             $invalidProperties[] = "'code' can't be null";
         }
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
+        if ($this->container['status'] === null && !$this->isNullableSetToNull('status')) {
+            $invalidProperties[] = "'status' is required";
         }
-        if ($this->container['main'] === null) {
-            $invalidProperties[] = "'main' can't be null";
+        if ($this->container['main'] === null && !$this->isNullableSetToNull('main')) {
+            $invalidProperties[] = "'main' is required";
         }
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
@@ -332,7 +332,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
         if ($this->container['time'] === null) {
             $invalidProperties[] = "'time' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['time'])) {
+        if (!is_null($this->container['time']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['time'])) {
             $invalidProperties[] = "invalid value for 'time', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
@@ -387,7 +387,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Gets status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus|null
      */
     public function getStatus()
     {
@@ -397,7 +397,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Sets status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus $status status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus|null $status status
      *
      * @return self
      */
@@ -421,7 +421,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Gets main
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null
      */
     public function getMain()
     {
@@ -431,7 +431,7 @@ class ShipmentDefsCarrierTrackTraceEvent implements ModelInterface, ArrayAccess,
     /**
      * Sets main
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus $main main
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null $main main
      *
      * @return self
      */

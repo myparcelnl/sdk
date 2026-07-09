@@ -16,6 +16,7 @@ typeMappings:
 
   # oneOf(integer, string) — string digits, treat as int (matches coreapi.yaml)
   RefTypesMoneyAmount: int
+  RefTypesMoneyPropertiesAmount: int
 
   # anyOf(integer-enum, integer) — both branches are integers
   CommonErrorUserCode: int

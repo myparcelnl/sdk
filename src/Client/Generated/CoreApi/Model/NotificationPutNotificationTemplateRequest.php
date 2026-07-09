@@ -285,18 +285,18 @@ class NotificationPutNotificationTemplateRequest implements ModelInterface, Arra
         if ($this->container['body'] === null) {
             $invalidProperties[] = "'body' can't be null";
         }
-        if ((mb_strlen($this->container['body']) < 1)) {
+        if (!is_null($this->container['body']) && (mb_strlen($this->container['body']) < 1)) {
             $invalidProperties[] = "invalid value for 'body', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['subject'] === null) {
             $invalidProperties[] = "'subject' can't be null";
         }
-        if ((mb_strlen($this->container['subject']) > 255)) {
+        if (!is_null($this->container['subject']) && (mb_strlen($this->container['subject']) > 255)) {
             $invalidProperties[] = "invalid value for 'subject', the character length must be smaller than or equal to 255.";
         }
 
-        if ((mb_strlen($this->container['subject']) < 1)) {
+        if (!is_null($this->container['subject']) && (mb_strlen($this->container['subject']) < 1)) {
             $invalidProperties[] = "invalid value for 'subject', the character length must be bigger than or equal to 1.";
         }
 

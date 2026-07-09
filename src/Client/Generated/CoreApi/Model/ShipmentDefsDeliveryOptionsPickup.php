@@ -431,7 +431,9 @@ class ShipmentDefsDeliveryOptionsPickup implements ModelInterface, ArrayAccess, 
         $invalidProperties = [];
 
         $allowedValues = $this->getPriceCommentAllowableValues();
-        if (!is_null($this->container['price_comment']) && !in_array($this->container['price_comment'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['price_comment']) && !in_array($this->container['price_comment'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'price_comment', must be one of '%s'",
                 $this->container['price_comment'],
@@ -772,16 +774,6 @@ class ShipmentDefsDeliveryOptionsPickup implements ModelInterface, ArrayAccess, 
     {
         if (is_null($price_comment)) {
             throw new \InvalidArgumentException('non-nullable price_comment cannot be null');
-        }
-        $allowedValues = $this->getPriceCommentAllowableValues();
-        if (!in_array($price_comment, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'price_comment', must be one of '%s'",
-                    $price_comment,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['price_comment'] = $price_comment;
 

@@ -326,29 +326,29 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         if ($this->container['description'] === null) {
             $invalidProperties[] = "'description' can't be null";
         }
-        if ((mb_strlen($this->container['description']) > 50)) {
+        if (!is_null($this->container['description']) && (mb_strlen($this->container['description']) > 50)) {
             $invalidProperties[] = "invalid value for 'description', the character length must be smaller than or equal to 50.";
         }
 
         if ($this->container['amount'] === null) {
             $invalidProperties[] = "'amount' can't be null";
         }
-        if (($this->container['amount'] > 99999)) {
+        if (!is_null($this->container['amount']) && ($this->container['amount'] > 99999)) {
             $invalidProperties[] = "invalid value for 'amount', must be smaller than or equal to 99999.";
         }
 
-        if (($this->container['amount'] < 1)) {
+        if (!is_null($this->container['amount']) && ($this->container['amount'] < 1)) {
             $invalidProperties[] = "invalid value for 'amount', must be bigger than or equal to 1.";
         }
 
         if ($this->container['weight'] === null) {
             $invalidProperties[] = "'weight' can't be null";
         }
-        if (($this->container['weight'] > 999999999)) {
+        if (!is_null($this->container['weight']) && ($this->container['weight'] > 999999999)) {
             $invalidProperties[] = "invalid value for 'weight', must be smaller than or equal to 999999999.";
         }
 
-        if (($this->container['weight'] < 0)) {
+        if (!is_null($this->container['weight']) && ($this->container['weight'] < 0)) {
             $invalidProperties[] = "invalid value for 'weight', must be bigger than or equal to 0.";
         }
 
@@ -359,7 +359,9 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
             $invalidProperties[] = "'classification' can't be null";
         }
         $allowedValues = $this->getCountryAllowableValues();
-        if (!is_null($this->container['country']) && !in_array($this->container['country'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['country']) && !in_array($this->container['country'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'country', must be one of '%s'",
                 $this->container['country'],
@@ -565,16 +567,6 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
-        }
-        $allowedValues = $this->getCountryAllowableValues();
-        if (!is_null($country) && !in_array($country, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'country', must be one of '%s'",
-                    $country,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['country'] = $country;
 

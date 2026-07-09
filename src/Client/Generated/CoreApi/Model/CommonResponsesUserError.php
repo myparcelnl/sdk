@@ -305,11 +305,11 @@ class CommonResponsesUserError implements ModelInterface, ArrayAccess, \JsonSeri
         if ($this->container['status_code'] === null) {
             $invalidProperties[] = "'status_code' can't be null";
         }
-        if (($this->container['status_code'] > 499)) {
+        if (!is_null($this->container['status_code']) && ($this->container['status_code'] > 499)) {
             $invalidProperties[] = "invalid value for 'status_code', must be smaller than or equal to 499.";
         }
 
-        if (($this->container['status_code'] < 400)) {
+        if (!is_null($this->container['status_code']) && ($this->container['status_code'] < 400)) {
             $invalidProperties[] = "invalid value for 'status_code', must be bigger than or equal to 400.";
         }
 

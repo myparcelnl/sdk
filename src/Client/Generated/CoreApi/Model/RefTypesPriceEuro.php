@@ -299,7 +299,9 @@ class RefTypesPriceEuro implements ModelInterface, ArrayAccess, \JsonSerializabl
             $invalidProperties[] = "'currency' can't be null";
         }
         $allowedValues = $this->getCurrencyAllowableValues();
-        if (!is_null($this->container['currency']) && !in_array($this->container['currency'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['currency']) && !in_array($this->container['currency'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'currency', must be one of '%s'",
                 $this->container['currency'],
@@ -310,7 +312,7 @@ class RefTypesPriceEuro implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['amount'] === null) {
             $invalidProperties[] = "'amount' can't be null";
         }
-        if (($this->container['amount'] < 0)) {
+        if (!is_null($this->container['amount']) && ($this->container['amount'] < 0)) {
             $invalidProperties[] = "invalid value for 'amount', must be bigger than or equal to 0.";
         }
 
@@ -350,16 +352,6 @@ class RefTypesPriceEuro implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         if (is_null($currency)) {
             throw new \InvalidArgumentException('non-nullable currency cannot be null');
-        }
-        $allowedValues = $this->getCurrencyAllowableValues();
-        if (!in_array($currency, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'currency', must be one of '%s'",
-                    $currency,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['currency'] = $currency;
 

@@ -334,29 +334,29 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ($this->container['cc'] === null) {
-            $invalidProperties[] = "'cc' can't be null";
+        if ($this->container['cc'] === null && !$this->isNullableSetToNull('cc')) {
+            $invalidProperties[] = "'cc' is required";
         }
-        if ($this->container['city'] === null) {
-            $invalidProperties[] = "'city' can't be null";
+        if ($this->container['city'] === null && !$this->isNullableSetToNull('city')) {
+            $invalidProperties[] = "'city' is required";
         }
-        if ($this->container['postal_code'] === null) {
-            $invalidProperties[] = "'postal_code' can't be null";
+        if ($this->container['postal_code'] === null && !$this->isNullableSetToNull('postal_code')) {
+            $invalidProperties[] = "'postal_code' is required";
         }
-        if ($this->container['street'] === null) {
-            $invalidProperties[] = "'street' can't be null";
+        if ($this->container['street'] === null && !$this->isNullableSetToNull('street')) {
+            $invalidProperties[] = "'street' is required";
         }
-        if ($this->container['number'] === null) {
-            $invalidProperties[] = "'number' can't be null";
+        if ($this->container['number'] === null && !$this->isNullableSetToNull('number')) {
+            $invalidProperties[] = "'number' is required";
         }
-        if ($this->container['number_suffix'] === null) {
-            $invalidProperties[] = "'number_suffix' can't be null";
+        if ($this->container['number_suffix'] === null && !$this->isNullableSetToNull('number_suffix')) {
+            $invalidProperties[] = "'number_suffix' is required";
         }
-        if ($this->container['longitude'] === null) {
-            $invalidProperties[] = "'longitude' can't be null";
+        if ($this->container['longitude'] === null && !$this->isNullableSetToNull('longitude')) {
+            $invalidProperties[] = "'longitude' is required";
         }
-        if ($this->container['latitude'] === null) {
-            $invalidProperties[] = "'latitude' can't be null";
+        if ($this->container['latitude'] === null && !$this->isNullableSetToNull('latitude')) {
+            $invalidProperties[] = "'latitude' is required";
         }
         return $invalidProperties;
     }
@@ -403,7 +403,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets cc
      *
-     * @return string
+     * @return string|null
      */
     public function getCc()
     {
@@ -413,7 +413,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets cc
      *
-     * @param string $cc cc
+     * @param string|null $cc cc
      *
      * @return self
      */
@@ -437,7 +437,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets city
      *
-     * @return string
+     * @return string|null
      */
     public function getCity()
     {
@@ -447,7 +447,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets city
      *
-     * @param string $city city
+     * @param string|null $city city
      *
      * @return self
      */
@@ -471,7 +471,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets postal_code
      *
-     * @return string
+     * @return string|null
      */
     public function getPostalCode()
     {
@@ -481,7 +481,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets postal_code
      *
-     * @param string $postal_code postal_code
+     * @param string|null $postal_code postal_code
      *
      * @return self
      */
@@ -505,7 +505,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets street
      *
-     * @return string
+     * @return string|null
      */
     public function getStreet()
     {
@@ -515,7 +515,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets street
      *
-     * @param string $street street
+     * @param string|null $street street
      *
      * @return self
      */
@@ -539,7 +539,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets number
      *
-     * @return string
+     * @return string|null
      */
     public function getNumber()
     {
@@ -549,7 +549,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets number
      *
-     * @param string $number number
+     * @param string|null $number number
      *
      * @return self
      */
@@ -573,7 +573,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets number_suffix
      *
-     * @return string
+     * @return string|null
      */
     public function getNumberSuffix()
     {
@@ -583,7 +583,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets number_suffix
      *
-     * @param string $number_suffix number_suffix
+     * @param string|null $number_suffix number_suffix
      *
      * @return self
      */
@@ -607,7 +607,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets longitude
      *
-     * @return float
+     * @return float|null
      */
     public function getLongitude()
     {
@@ -617,7 +617,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets longitude
      *
-     * @param float $longitude longitude
+     * @param float|null $longitude longitude
      *
      * @return self
      */
@@ -641,7 +641,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets latitude
      *
-     * @return float
+     * @return float|null
      */
     public function getLatitude()
     {
@@ -651,7 +651,7 @@ class ShipmentDefsTrackingLocation implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets latitude
      *
-     * @param float $latitude latitude
+     * @param float|null $latitude latitude
      *
      * @return self
      */

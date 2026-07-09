@@ -316,14 +316,14 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
         if ($this->container['physical_properties'] === null) {
             $invalidProperties[] = "'physical_properties' can't be null";
         }
-        if ($this->container['shipping_rule_id'] === null) {
-            $invalidProperties[] = "'shipping_rule_id' can't be null";
+        if ($this->container['shipping_rule_id'] === null && !$this->isNullableSetToNull('shipping_rule_id')) {
+            $invalidProperties[] = "'shipping_rule_id' is required";
         }
-        if (($this->container['shipping_rule_id'] > -9223372036854775616)) {
-            $invalidProperties[] = "invalid value for 'shipping_rule_id', must be smaller than or equal to -9223372036854775616.";
+        if (!is_null($this->container['shipping_rule_id']) && ($this->container['shipping_rule_id'] > 9223372036854775807)) {
+            $invalidProperties[] = "invalid value for 'shipping_rule_id', must be smaller than or equal to 9223372036854775807.";
         }
 
-        if (($this->container['shipping_rule_id'] < 1)) {
+        if (!is_null($this->container['shipping_rule_id']) && ($this->container['shipping_rule_id'] < 1)) {
             $invalidProperties[] = "invalid value for 'shipping_rule_id', must be bigger than or equal to 1.";
         }
 
@@ -453,7 +453,7 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets shipping_rule_id
      *
-     * @return int
+     * @return int|null
      */
     public function getShippingRuleId()
     {
@@ -463,7 +463,7 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets shipping_rule_id
      *
-     * @param int $shipping_rule_id Identifier of the shipping rule that produced these implications. Null when the implications come from a fallback resolution and no specific rule applied.
+     * @param int|null $shipping_rule_id Identifier of the shipping rule that produced these implications. Null when the implications come from a fallback resolution and no specific rule applied.
      *
      * @return self
      */
@@ -480,8 +480,8 @@ class RefShippingRulesImplications implements ModelInterface, ArrayAccess, \Json
             }
         }
 
-        if (!is_null($shipping_rule_id) && ($shipping_rule_id > -9223372036854775616)) {
-            throw new \InvalidArgumentException('invalid value for $shipping_rule_id when calling RefShippingRulesImplications., must be smaller than or equal to -9223372036854775616.');
+        if (!is_null($shipping_rule_id) && ($shipping_rule_id > 9223372036854775807)) {
+            throw new \InvalidArgumentException('invalid value for $shipping_rule_id when calling RefShippingRulesImplications., must be smaller than or equal to 9223372036854775807.');
         }
         if (!is_null($shipping_rule_id) && ($shipping_rule_id < 1)) {
             throw new \InvalidArgumentException('invalid value for $shipping_rule_id when calling RefShippingRulesImplications., must be bigger than or equal to 1.');

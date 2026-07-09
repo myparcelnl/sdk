@@ -302,29 +302,29 @@ class ShippingRulesResponsesShippingRulesPaginatedData implements ModelInterface
         if ($this->container['results'] === null) {
             $invalidProperties[] = "'results' can't be null";
         }
-        if (($this->container['results'] < 0)) {
+        if (!is_null($this->container['results']) && ($this->container['results'] < 0)) {
             $invalidProperties[] = "invalid value for 'results', must be bigger than or equal to 0.";
         }
 
         if ($this->container['page'] === null) {
             $invalidProperties[] = "'page' can't be null";
         }
-        if (($this->container['page'] > 1000)) {
+        if (!is_null($this->container['page']) && ($this->container['page'] > 1000)) {
             $invalidProperties[] = "invalid value for 'page', must be smaller than or equal to 1000.";
         }
 
-        if (($this->container['page'] < 1)) {
+        if (!is_null($this->container['page']) && ($this->container['page'] < 1)) {
             $invalidProperties[] = "invalid value for 'page', must be bigger than or equal to 1.";
         }
 
         if ($this->container['size'] === null) {
             $invalidProperties[] = "'size' can't be null";
         }
-        if (($this->container['size'] > 10000)) {
+        if (!is_null($this->container['size']) && ($this->container['size'] > 10000)) {
             $invalidProperties[] = "invalid value for 'size', must be smaller than or equal to 10000.";
         }
 
-        if (($this->container['size'] < 1)) {
+        if (!is_null($this->container['size']) && ($this->container['size'] < 1)) {
             $invalidProperties[] = "invalid value for 'size', must be bigger than or equal to 1.";
         }
 

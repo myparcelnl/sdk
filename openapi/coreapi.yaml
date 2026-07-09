@@ -21,13 +21,13 @@ inlineSchemaNameMappings:
 typeMappings:
   # Map Empty model classes (oneOf) to primitives to avoid generating empty classes
   RefTypesMoneyAmount: int
-  # @todo remove when upstream spec fixes street pattern + email enum
-  # Redirects to override classes that fix broken setStreet() regex and setEmail() enum.
+  RefTypesMoneyPropertiesAmount: int
+
+  # @todo remove when upstream spec fixes the street pattern.
+  # Redirects to an override class that fixes the broken setStreet() regex (missing
+  # regex delimiters). The email pseudo-enum bug is handled generically by the
+  # value-less-enum guards in the ObjectSerializer/model templates.
   ShipmentDefsShipmentRecipient: FixedShipmentRecipient
-  ShipmentDefsShipmentSender: FixedShipmentSender
-  # @todo remove when upstream spec fixes tracktrace from_address_email enum
-  # The current spec/codegen only allows an empty string, but live shipment responses contain real account emails.
-  RefShipmentGeneralSettingsTracktrace: FixedShipmentGeneralSettingsTracktrace
   # @todo remove when upstream spec fixes type: "null" properties
   # Prevents ObjectSerializer from trying to instantiate a class named 'Null'.
   Null: mixed

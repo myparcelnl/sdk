@@ -357,11 +357,13 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
         if ($this->container['shop_id'] === null) {
             $invalidProperties[] = "'shop_id' can't be null";
         }
-        if ($this->container['package_type'] === null) {
-            $invalidProperties[] = "'package_type' can't be null";
+        if ($this->container['package_type'] === null && !$this->isNullableSetToNull('package_type')) {
+            $invalidProperties[] = "'package_type' is required";
         }
         $allowedValues = $this->getPackageTypeAllowableValues();
-        if (!is_null($this->container['package_type']) && !in_array($this->container['package_type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['package_type']) && !in_array($this->container['package_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'package_type', must be one of '%s'",
                 $this->container['package_type'],
@@ -369,18 +371,18 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
             );
         }
 
-        if ($this->container['country_code'] === null) {
-            $invalidProperties[] = "'country_code' can't be null";
+        if ($this->container['country_code'] === null && !$this->isNullableSetToNull('country_code')) {
+            $invalidProperties[] = "'country_code' is required";
         }
-        if ((mb_strlen($this->container['country_code']) > 2)) {
+        if (!is_null($this->container['country_code']) && (mb_strlen($this->container['country_code']) > 2)) {
             $invalidProperties[] = "invalid value for 'country_code', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['country_code']) < 2)) {
+        if (!is_null($this->container['country_code']) && (mb_strlen($this->container['country_code']) < 2)) {
             $invalidProperties[] = "invalid value for 'country_code', the character length must be bigger than or equal to 2.";
         }
 
-        if (!preg_match("/^[A-Z]{2}$/", $this->container['country_code'])) {
+        if (!is_null($this->container['country_code']) && !preg_match("/^[A-Z]{2}$/", $this->container['country_code'])) {
             $invalidProperties[] = "invalid value for 'country_code', must be conform to the pattern /^[A-Z]{2}$/.";
         }
 
@@ -388,7 +390,9 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
             $invalidProperties[] = "'shipment_direction' can't be null";
         }
         $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!is_null($this->container['shipment_direction']) && !in_array($this->container['shipment_direction'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['shipment_direction']) && !in_array($this->container['shipment_direction'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'shipment_direction', must be one of '%s'",
                 $this->container['shipment_direction'],
@@ -471,7 +475,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Gets package_type
      *
-     * @return string
+     * @return string|null
      */
     public function getPackageType()
     {
@@ -481,7 +485,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Sets package_type
      *
-     * @param string $package_type package_type
+     * @param string|null $package_type package_type
      *
      * @return self
      */
@@ -497,16 +501,6 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = $this->getPackageTypeAllowableValues();
-        if (!is_null($package_type) && !in_array($package_type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'package_type', must be one of '%s'",
-                    $package_type,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['package_type'] = $package_type;
 
         return $this;
@@ -515,7 +509,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Gets country_code
      *
-     * @return string
+     * @return string|null
      */
     public function getCountryCode()
     {
@@ -525,7 +519,7 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     /**
      * Sets country_code
      *
-     * @param string $country_code ISO 3166-1 alpha-2 country code
+     * @param string|null $country_code ISO 3166-1 alpha-2 country code
      *
      * @return self
      */
@@ -577,16 +571,6 @@ class RefNotificationResponseNotificationGroup implements ModelInterface, ArrayA
     {
         if (is_null($shipment_direction)) {
             throw new \InvalidArgumentException('non-nullable shipment_direction cannot be null');
-        }
-        $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!in_array($shipment_direction, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'shipment_direction', must be one of '%s'",
-                    $shipment_direction,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['shipment_direction'] = $shipment_direction;
 

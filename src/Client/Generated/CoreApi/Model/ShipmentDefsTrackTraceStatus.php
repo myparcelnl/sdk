@@ -292,8 +292,8 @@ class ShipmentDefsTrackTraceStatus implements ModelInterface, ArrayAccess, \Json
         if ($this->container['current'] === null) {
             $invalidProperties[] = "'current' can't be null";
         }
-        if ($this->container['main'] === null) {
-            $invalidProperties[] = "'main' can't be null";
+        if ($this->container['main'] === null && !$this->isNullableSetToNull('main')) {
+            $invalidProperties[] = "'main' is required";
         }
         if ($this->container['final'] === null) {
             $invalidProperties[] = "'final' can't be null";
@@ -343,7 +343,7 @@ class ShipmentDefsTrackTraceStatus implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets main
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null
      */
     public function getMain()
     {
@@ -353,7 +353,7 @@ class ShipmentDefsTrackTraceStatus implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets main
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus $main main
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsMainStatus|null $main main
      *
      * @return self
      */

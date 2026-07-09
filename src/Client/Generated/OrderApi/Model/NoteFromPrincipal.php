@@ -333,7 +333,9 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
             $invalidProperties[] = "'type' can't be null";
         }
         $allowedValues = $this->getTypeAllowableValues();
-        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'type', must be one of '%s'",
                 $this->container['type'],
@@ -350,22 +352,22 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['principal'] === null) {
             $invalidProperties[] = "'principal' can't be null";
         }
-        if ((mb_strlen($this->container['principal']) > 100)) {
+        if (!is_null($this->container['principal']) && (mb_strlen($this->container['principal']) > 100)) {
             $invalidProperties[] = "invalid value for 'principal', the character length must be smaller than or equal to 100.";
         }
 
-        if ((mb_strlen($this->container['principal']) < 1)) {
+        if (!is_null($this->container['principal']) && (mb_strlen($this->container['principal']) < 1)) {
             $invalidProperties[] = "invalid value for 'principal', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['text'] === null) {
             $invalidProperties[] = "'text' can't be null";
         }
-        if ((mb_strlen($this->container['text']) > 2500)) {
+        if (!is_null($this->container['text']) && (mb_strlen($this->container['text']) > 2500)) {
             $invalidProperties[] = "invalid value for 'text', the character length must be smaller than or equal to 2500.";
         }
 
-        if ((mb_strlen($this->container['text']) < 1)) {
+        if (!is_null($this->container['text']) && (mb_strlen($this->container['text']) < 1)) {
             $invalidProperties[] = "invalid value for 'text', the character length must be bigger than or equal to 1.";
         }
 
@@ -405,16 +407,6 @@ class NoteFromPrincipal implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         if (is_null($type)) {
             throw new \InvalidArgumentException('non-nullable type cannot be null');
-        }
-        $allowedValues = $this->getTypeAllowableValues();
-        if (!in_array($type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'type', must be one of '%s'",
-                    $type,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['type'] = $type;
 

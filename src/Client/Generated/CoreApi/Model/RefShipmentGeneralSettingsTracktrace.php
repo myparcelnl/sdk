@@ -366,7 +366,9 @@ class RefShipmentGeneralSettingsTracktrace implements ModelInterface, ArrayAcces
         $invalidProperties = [];
 
         $allowedValues = $this->getFromAddressEmailAllowableValues();
-        if (!is_null($this->container['from_address_email']) && !in_array($this->container['from_address_email'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['from_address_email']) && !in_array($this->container['from_address_email'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'from_address_email', must be one of '%s'",
                 $this->container['from_address_email'],
@@ -640,16 +642,6 @@ class RefShipmentGeneralSettingsTracktrace implements ModelInterface, ArrayAcces
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
-        }
-        $allowedValues = $this->getFromAddressEmailAllowableValues();
-        if (!is_null($from_address_email) && !in_array($from_address_email, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'from_address_email', must be one of '%s'",
-                    $from_address_email,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['from_address_email'] = $from_address_email;
 

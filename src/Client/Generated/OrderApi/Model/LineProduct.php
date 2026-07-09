@@ -299,11 +299,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ((mb_strlen($this->container['name']) > 250)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 250)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 250.";
         }
 
-        if ((mb_strlen($this->container['name']) < 1)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) < 1)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
         }
 

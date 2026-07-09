@@ -320,11 +320,11 @@ class CustomsDeclaration implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['groups'] === null) {
             $invalidProperties[] = "'groups' can't be null";
         }
-        if ((count($this->container['groups']) > 100)) {
+        if (!is_null($this->container['groups']) && (count($this->container['groups']) > 100)) {
             $invalidProperties[] = "invalid value for 'groups', number of items must be less than or equal to 100.";
         }
 
-        if ((count($this->container['groups']) < 1)) {
+        if (!is_null($this->container['groups']) && (count($this->container['groups']) < 1)) {
             $invalidProperties[] = "invalid value for 'groups', number of items must be greater than or equal to 1.";
         }
 
@@ -332,7 +332,9 @@ class CustomsDeclaration implements ModelInterface, ArrayAccess, \JsonSerializab
             $invalidProperties[] = "'purpose' can't be null";
         }
         $allowedValues = $this->getPurposeAllowableValues();
-        if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'purpose', must be one of '%s'",
                 $this->container['purpose'],
@@ -421,16 +423,6 @@ class CustomsDeclaration implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         if (is_null($purpose)) {
             throw new \InvalidArgumentException('non-nullable purpose cannot be null');
-        }
-        $allowedValues = $this->getPurposeAllowableValues();
-        if (!in_array($purpose, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'purpose', must be one of '%s'",
-                    $purpose,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['purpose'] = $purpose;
 

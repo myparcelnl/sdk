@@ -287,7 +287,7 @@ class PackageResponseLinesInner implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['quantity'] === null) {
             $invalidProperties[] = "'quantity' can't be null";
         }
-        if (($this->container['quantity'] < 1)) {
+        if (!is_null($this->container['quantity']) && ($this->container['quantity'] < 1)) {
             $invalidProperties[] = "invalid value for 'quantity', must be bigger than or equal to 1.";
         }
 

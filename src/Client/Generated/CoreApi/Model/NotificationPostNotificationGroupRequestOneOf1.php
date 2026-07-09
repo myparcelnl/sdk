@@ -328,7 +328,9 @@ class NotificationPostNotificationGroupRequestOneOf1 implements ModelInterface, 
             $invalidProperties[] = "'shipment_direction' can't be null";
         }
         $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!is_null($this->container['shipment_direction']) && !in_array($this->container['shipment_direction'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['shipment_direction']) && !in_array($this->container['shipment_direction'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'shipment_direction', must be one of '%s'",
                 $this->container['shipment_direction'],
@@ -470,16 +472,6 @@ class NotificationPostNotificationGroupRequestOneOf1 implements ModelInterface, 
     {
         if (is_null($shipment_direction)) {
             throw new \InvalidArgumentException('non-nullable shipment_direction cannot be null');
-        }
-        $allowedValues = $this->getShipmentDirectionAllowableValues();
-        if (!in_array($shipment_direction, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'shipment_direction', must be one of '%s'",
-                    $shipment_direction,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['shipment_direction'] = $shipment_direction;
 

@@ -355,7 +355,9 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
             $invalidProperties[] = "'status' can't be null";
         }
         $allowedValues = $this->getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'status', must be one of '%s'",
                 $this->container['status'],
@@ -370,7 +372,9 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
             $invalidProperties[] = "'type' can't be null";
         }
         $allowedValues = $this->getTypeAllowableValues();
-        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'type', must be one of '%s'",
                 $this->container['type'],
@@ -381,22 +385,22 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
         }
-        if ((mb_strlen($this->container['title']) > 100)) {
+        if (!is_null($this->container['title']) && (mb_strlen($this->container['title']) > 100)) {
             $invalidProperties[] = "invalid value for 'title', the character length must be smaller than or equal to 100.";
         }
 
-        if ((mb_strlen($this->container['title']) < 1)) {
+        if (!is_null($this->container['title']) && (mb_strlen($this->container['title']) < 1)) {
             $invalidProperties[] = "invalid value for 'title', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['detail'] === null) {
             $invalidProperties[] = "'detail' can't be null";
         }
-        if ((mb_strlen($this->container['detail']) > 5000)) {
+        if (!is_null($this->container['detail']) && (mb_strlen($this->container['detail']) > 5000)) {
             $invalidProperties[] = "invalid value for 'detail', the character length must be smaller than or equal to 5000.";
         }
 
-        if ((mb_strlen($this->container['detail']) < 1)) {
+        if (!is_null($this->container['detail']) && (mb_strlen($this->container['detail']) < 1)) {
             $invalidProperties[] = "invalid value for 'detail', the character length must be bigger than or equal to 1.";
         }
 
@@ -406,7 +410,7 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
         if ($this->container['errors'] === null) {
             $invalidProperties[] = "'errors' can't be null";
         }
-        if ((count($this->container['errors']) < 1)) {
+        if (!is_null($this->container['errors']) && (count($this->container['errors']) < 1)) {
             $invalidProperties[] = "invalid value for 'errors', number of items must be greater than or equal to 1.";
         }
 
@@ -446,16 +450,6 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
     {
         if (is_null($status)) {
             throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $allowedValues = $this->getStatusAllowableValues();
-        if (!in_array($status, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'status', must be one of '%s'",
-                    $status,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['status'] = $status;
 
@@ -510,16 +504,6 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
     {
         if (is_null($type)) {
             throw new \InvalidArgumentException('non-nullable type cannot be null');
-        }
-        $allowedValues = $this->getTypeAllowableValues();
-        if (!in_array($type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'type', must be one of '%s'",
-                    $type,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['type'] = $type;
 

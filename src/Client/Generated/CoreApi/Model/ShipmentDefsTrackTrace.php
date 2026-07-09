@@ -68,7 +68,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'link_tracktrace' => 'string',
         'partner_tracktraces' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsExternalTrackTraceLink[]',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions',
         'pickup' => 'mixed',
         'delayed' => 'bool',
@@ -424,7 +424,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         if ($this->container['time'] === null) {
             $invalidProperties[] = "'time' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['time'])) {
+        if (!is_null($this->container['time']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['time'])) {
             $invalidProperties[] = "invalid value for 'time', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
@@ -727,7 +727,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender
      */
     public function getSender()
     {
@@ -737,7 +737,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender $sender sender
      *
      * @return self
      */

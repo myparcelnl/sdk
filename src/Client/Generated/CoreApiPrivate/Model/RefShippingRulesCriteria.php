@@ -293,20 +293,20 @@ class RefShippingRulesCriteria implements ModelInterface, ArrayAccess, \JsonSeri
         if ($this->container['country'] === null) {
             $invalidProperties[] = "'country' can't be null";
         }
-        if ((mb_strlen($this->container['country']) > 2)) {
+        if (!is_null($this->container['country']) && (mb_strlen($this->container['country']) > 2)) {
             $invalidProperties[] = "invalid value for 'country', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['country']) < 2)) {
+        if (!is_null($this->container['country']) && (mb_strlen($this->container['country']) < 2)) {
             $invalidProperties[] = "invalid value for 'country', the character length must be bigger than or equal to 2.";
         }
 
-        if (!preg_match("/^[A-Za-z]{2}$/", $this->container['country'])) {
+        if (!is_null($this->container['country']) && !preg_match("/^[A-Za-z]{2}$/", $this->container['country'])) {
             $invalidProperties[] = "invalid value for 'country', must be conform to the pattern /^[A-Za-z]{2}$/.";
         }
 
-        if ($this->container['region'] === null) {
-            $invalidProperties[] = "'region' can't be null";
+        if ($this->container['region'] === null && !$this->isNullableSetToNull('region')) {
+            $invalidProperties[] = "'region' is required";
         }
         if ($this->container['type'] === null) {
             $invalidProperties[] = "'type' can't be null";
@@ -366,7 +366,7 @@ class RefShippingRulesCriteria implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets region
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion|null
      */
     public function getRegion()
     {
@@ -376,7 +376,7 @@ class RefShippingRulesCriteria implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets region
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion $region region
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\RefShippingRulesRegion|null $region region
      *
      * @return self
      */

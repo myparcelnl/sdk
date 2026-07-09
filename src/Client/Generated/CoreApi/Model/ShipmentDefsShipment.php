@@ -64,7 +64,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'shop_id' => 'int',
         'shipment_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentType',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender',
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender',
         'status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentStatus',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'general_settings' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettings',
@@ -75,7 +75,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'transaction_status' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus',
         'drop_off_point' => 'mixed',
         'hidden' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
-        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
+        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount',
         'barcode' => 'string',
         'region' => 'string',
         'external_provider' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProvider',
@@ -622,11 +622,11 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['physical_properties'] === null) {
             $invalidProperties[] = "'physical_properties' can't be null";
         }
-        if ($this->container['reference_identifier'] === null) {
-            $invalidProperties[] = "'reference_identifier' can't be null";
+        if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
+            $invalidProperties[] = "'reference_identifier' is required";
         }
-        if ($this->container['transaction_status'] === null) {
-            $invalidProperties[] = "'transaction_status' can't be null";
+        if ($this->container['transaction_status'] === null && !$this->isNullableSetToNull('transaction_status')) {
+            $invalidProperties[] = "'transaction_status' is required";
         }
         if ($this->container['drop_off_point'] === null) {
             $invalidProperties[] = "'drop_off_point' can't be null";
@@ -640,7 +640,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['barcode'] === null) {
             $invalidProperties[] = "'barcode' can't be null";
         }
-        if ((mb_strlen($this->container['barcode']) > 255)) {
+        if (!is_null($this->container['barcode']) && (mb_strlen($this->container['barcode']) > 255)) {
             $invalidProperties[] = "invalid value for 'barcode', the character length must be smaller than or equal to 255.";
         }
 
@@ -653,8 +653,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['external_provider_id'] === null) {
             $invalidProperties[] = "'external_provider_id' can't be null";
         }
-        if ($this->container['payment_status'] === null) {
-            $invalidProperties[] = "'payment_status' can't be null";
+        if ($this->container['payment_status'] === null && !$this->isNullableSetToNull('payment_status')) {
+            $invalidProperties[] = "'payment_status' is required";
         }
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
@@ -665,10 +665,10 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['origin'] === null) {
             $invalidProperties[] = "'origin' can't be null";
         }
-        if ($this->container['user_agent'] === null) {
-            $invalidProperties[] = "'user_agent' can't be null";
+        if ($this->container['user_agent'] === null && !$this->isNullableSetToNull('user_agent')) {
+            $invalidProperties[] = "'user_agent' is required";
         }
-        if ((mb_strlen($this->container['user_agent']) > 255)) {
+        if (!is_null($this->container['user_agent']) && (mb_strlen($this->container['user_agent']) > 255)) {
             $invalidProperties[] = "invalid value for 'user_agent', the character length must be smaller than or equal to 255.";
         }
 
@@ -681,10 +681,10 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['multi_collo_main_shipment_id'] === null) {
             $invalidProperties[] = "'multi_collo_main_shipment_id' can't be null";
         }
-        if ($this->container['external_identifier'] === null) {
-            $invalidProperties[] = "'external_identifier' can't be null";
+        if ($this->container['external_identifier'] === null && !$this->isNullableSetToNull('external_identifier')) {
+            $invalidProperties[] = "'external_identifier' is required";
         }
-        if ((mb_strlen($this->container['external_identifier']) > 255)) {
+        if (!is_null($this->container['external_identifier']) && (mb_strlen($this->container['external_identifier']) > 255)) {
             $invalidProperties[] = "invalid value for 'external_identifier', the character length must be smaller than or equal to 255.";
         }
 
@@ -700,14 +700,14 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
+        if (!is_null($this->container['created']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
             $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['modified'] === null) {
             $invalidProperties[] = "'modified' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
+        if (!is_null($this->container['modified']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
             $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
@@ -897,7 +897,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets sender
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender
      */
     public function getSender()
     {
@@ -907,7 +907,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets sender
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentSender $sender sender
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender $sender sender
      *
      * @return self
      */
@@ -1086,7 +1086,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets reference_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getReferenceIdentifier()
     {
@@ -1096,7 +1096,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets reference_identifier
      *
-     * @param string $reference_identifier reference_identifier
+     * @param string|null $reference_identifier reference_identifier
      *
      * @return self
      */
@@ -1120,7 +1120,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets transaction_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null
      */
     public function getTransactionStatus()
     {
@@ -1130,7 +1130,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets transaction_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus $transaction_status transaction_status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null $transaction_status transaction_status
      *
      * @return self
      */
@@ -1208,7 +1208,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets price
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getPrice()
     {
@@ -1218,7 +1218,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $price price
      *
      * @return self
      */
@@ -1347,7 +1347,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets payment_status
      *
-     * @return string
+     * @return string|null
      */
     public function getPaymentStatus()
     {
@@ -1357,7 +1357,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets payment_status
      *
-     * @param string $payment_status payment_status
+     * @param string|null $payment_status payment_status
      *
      * @return self
      */
@@ -1462,7 +1462,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets user_agent
      *
-     * @return string
+     * @return string|null
      */
     public function getUserAgent()
     {
@@ -1472,7 +1472,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets user_agent
      *
-     * @param string $user_agent user_agent
+     * @param string|null $user_agent user_agent
      *
      * @return self
      */
@@ -1581,7 +1581,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets external_identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getExternalIdentifier()
     {
@@ -1591,7 +1591,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets external_identifier
      *
-     * @param string $external_identifier external_identifier
+     * @param string|null $external_identifier external_identifier
      *
      * @return self
      */

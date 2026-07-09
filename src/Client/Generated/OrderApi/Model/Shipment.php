@@ -390,7 +390,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
-        if ((mb_strlen($this->container['id']) < 1)) {
+        if (!is_null($this->container['id']) && (mb_strlen($this->container['id']) < 1)) {
             $invalidProperties[] = "invalid value for 'id', the character length must be bigger than or equal to 1.";
         }
 

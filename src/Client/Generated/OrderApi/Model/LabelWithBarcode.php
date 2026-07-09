@@ -315,11 +315,11 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['barcode'] === null) {
             $invalidProperties[] = "'barcode' can't be null";
         }
-        if ((mb_strlen($this->container['barcode']) > 50)) {
+        if (!is_null($this->container['barcode']) && (mb_strlen($this->container['barcode']) > 50)) {
             $invalidProperties[] = "invalid value for 'barcode', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['barcode']) < 1)) {
+        if (!is_null($this->container['barcode']) && (mb_strlen($this->container['barcode']) < 1)) {
             $invalidProperties[] = "invalid value for 'barcode', the character length must be bigger than or equal to 1.";
         }
 

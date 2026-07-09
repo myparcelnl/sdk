@@ -287,11 +287,11 @@ class AssignToUserPostRequestInner implements ModelInterface, ArrayAccess, \Json
         if ($this->container['user_id'] === null) {
             $invalidProperties[] = "'user_id' can't be null";
         }
-        if ((mb_strlen($this->container['user_id']) > 50)) {
+        if (!is_null($this->container['user_id']) && (mb_strlen($this->container['user_id']) > 50)) {
             $invalidProperties[] = "invalid value for 'user_id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['user_id']) < 1)) {
+        if (!is_null($this->container['user_id']) && (mb_strlen($this->container['user_id']) < 1)) {
             $invalidProperties[] = "invalid value for 'user_id', the character length must be bigger than or equal to 1.";
         }
 

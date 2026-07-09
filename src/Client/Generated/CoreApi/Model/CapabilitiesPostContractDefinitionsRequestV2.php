@@ -301,7 +301,9 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
         $invalidProperties = [];
 
         $allowedValues = $this->getCarrierAllowableValues();
-        if (!is_null($this->container['carrier']) && !in_array($this->container['carrier'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['carrier']) && !in_array($this->container['carrier'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'carrier', must be one of '%s'",
                 $this->container['carrier'],
@@ -345,16 +347,6 @@ class CapabilitiesPostContractDefinitionsRequestV2 implements ModelInterface, Ar
     {
         if (is_null($carrier)) {
             throw new \InvalidArgumentException('non-nullable carrier cannot be null');
-        }
-        $allowedValues = $this->getCarrierAllowableValues();
-        if (!in_array($carrier, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'carrier', must be one of '%s'",
-                    $carrier,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['carrier'] = $carrier;
 

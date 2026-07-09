@@ -297,11 +297,11 @@ class PreparePackagesForShipmentAnyOf implements ModelInterface, ArrayAccess, \J
         if ($this->container['packages'] === null) {
             $invalidProperties[] = "'packages' can't be null";
         }
-        if ((count($this->container['packages']) > 25)) {
+        if (!is_null($this->container['packages']) && (count($this->container['packages']) > 25)) {
             $invalidProperties[] = "invalid value for 'packages', number of items must be less than or equal to 25.";
         }
 
-        if ((count($this->container['packages']) < 1)) {
+        if (!is_null($this->container['packages']) && (count($this->container['packages']) < 1)) {
             $invalidProperties[] = "invalid value for 'packages', number of items must be greater than or equal to 1.";
         }
 

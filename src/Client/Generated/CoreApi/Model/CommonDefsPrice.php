@@ -298,14 +298,16 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['amount'] === null) {
-            $invalidProperties[] = "'amount' can't be null";
+        if ($this->container['amount'] === null && !$this->isNullableSetToNull('amount')) {
+            $invalidProperties[] = "'amount' is required";
         }
         if ($this->container['currency'] === null) {
             $invalidProperties[] = "'currency' can't be null";
         }
         $allowedValues = $this->getCurrencyAllowableValues();
-        if (!is_null($this->container['currency']) && !in_array($this->container['currency'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['currency']) && !in_array($this->container['currency'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'currency', must be one of '%s'",
                 $this->container['currency'],
@@ -331,7 +333,7 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets amount
      *
-     * @return int
+     * @return int|null
      */
     public function getAmount()
     {
@@ -341,7 +343,7 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets amount
      *
-     * @param int $amount The amount in the lowest denomination of the currency, e.g. cents for EUR.
+     * @param int|null $amount The amount in the lowest denomination of the currency, e.g. cents for EUR.
      *
      * @return self
      */
@@ -383,16 +385,6 @@ class CommonDefsPrice implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         if (is_null($currency)) {
             throw new \InvalidArgumentException('non-nullable currency cannot be null');
-        }
-        $allowedValues = $this->getCurrencyAllowableValues();
-        if (!in_array($currency, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'currency', must be one of '%s'",
-                    $currency,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['currency'] = $currency;
 

@@ -308,7 +308,9 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
             $invalidProperties[] = "'source' can't be null";
         }
         $allowedValues = $this->getSourceAllowableValues();
-        if (!is_null($this->container['source']) && !in_array($this->container['source'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['source']) && !in_array($this->container['source'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'source', must be one of '%s'",
                 $this->container['source'],
@@ -358,16 +360,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         if (is_null($source)) {
             throw new \InvalidArgumentException('non-nullable source cannot be null');
-        }
-        $allowedValues = $this->getSourceAllowableValues();
-        if (!in_array($source, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'source', must be one of '%s'",
-                    $source,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['source'] = $source;
 

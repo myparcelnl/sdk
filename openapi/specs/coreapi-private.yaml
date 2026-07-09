@@ -660,7 +660,7 @@ components:
                 - 'null'
                 - integer
               minimum: 1
-              maximum: 9223372036854776000
+              maximum: 9223372036854775807
     _ref_shipping_rules_implications_base:
       $schema: http://json-schema.org/draft-04/schema#
       description: >-
@@ -1182,7 +1182,7 @@ components:
       type: integer
       format: int64
       minimum: 1
-      maximum: 9223372036854776000
+      maximum: 9223372036854775807
     common_parameters_bigids:
       $schema: http://json-schema.org/draft-04/schema#
       title: common.parameters.BigIds

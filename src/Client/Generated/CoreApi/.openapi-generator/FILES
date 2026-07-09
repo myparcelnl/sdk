@@ -210,6 +210,9 @@ Model/RefTypesDeliveryTypeV2.php
 Model/RefTypesIntBoolean.php
 Model/RefTypesMoney.php
 Model/RefTypesMoneyAmount.php
+Model/RefTypesMoneyNullableAmount.php
+Model/RefTypesMoneyPropertiesAmount.php
+Model/RefTypesMoneyPropertiesCurrency.php
 Model/RefTypesPriceEuro.php
 Model/RefTypesShipmentType.php
 Model/RefTypesTransactionTypes.php
@@ -590,6 +593,9 @@ docs/Model/RefTypesDeliveryTypeV2.md
 docs/Model/RefTypesIntBoolean.md
 docs/Model/RefTypesMoney.md
 docs/Model/RefTypesMoneyAmount.md
+docs/Model/RefTypesMoneyNullableAmount.md
+docs/Model/RefTypesMoneyPropertiesAmount.md
+docs/Model/RefTypesMoneyPropertiesCurrency.md
 docs/Model/RefTypesPriceEuro.md
 docs/Model/RefTypesShipmentType.md
 docs/Model/RefTypesTransactionTypes.md

@@ -311,7 +311,9 @@ class PackageStatusAnyOf1 implements ModelInterface, ArrayAccess, \JsonSerializa
             $invalidProperties[] = "'group' can't be null";
         }
         $allowedValues = $this->getGroupAllowableValues();
-        if (!is_null($this->container['group']) && !in_array($this->container['group'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['group']) && !in_array($this->container['group'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'group', must be one of '%s'",
                 $this->container['group'],
@@ -323,7 +325,9 @@ class PackageStatusAnyOf1 implements ModelInterface, ArrayAccess, \JsonSerializa
             $invalidProperties[] = "'name' can't be null";
         }
         $allowedValues = $this->getNameAllowableValues();
-        if (!is_null($this->container['name']) && !in_array($this->container['name'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['name']) && !in_array($this->container['name'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'name', must be one of '%s'",
                 $this->container['name'],
@@ -368,16 +372,6 @@ class PackageStatusAnyOf1 implements ModelInterface, ArrayAccess, \JsonSerializa
         if (is_null($group)) {
             throw new \InvalidArgumentException('non-nullable group cannot be null');
         }
-        $allowedValues = $this->getGroupAllowableValues();
-        if (!in_array($group, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'group', must be one of '%s'",
-                    $group,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
         $this->container['group'] = $group;
 
         return $this;
@@ -404,16 +398,6 @@ class PackageStatusAnyOf1 implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         if (is_null($name)) {
             throw new \InvalidArgumentException('non-nullable name cannot be null');
-        }
-        $allowedValues = $this->getNameAllowableValues();
-        if (!in_array($name, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'name', must be one of '%s'",
-                    $name,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['name'] = $name;
 

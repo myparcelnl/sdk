@@ -384,22 +384,22 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['shop_id'] === null) {
             $invalidProperties[] = "'shop_id' can't be null";
         }
-        if ((mb_strlen($this->container['shop_id']) > 50)) {
+        if (!is_null($this->container['shop_id']) && (mb_strlen($this->container['shop_id']) > 50)) {
             $invalidProperties[] = "invalid value for 'shop_id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['shop_id']) < 1)) {
+        if (!is_null($this->container['shop_id']) && (mb_strlen($this->container['shop_id']) < 1)) {
             $invalidProperties[] = "invalid value for 'shop_id', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['short_id'] === null) {
             $invalidProperties[] = "'short_id' can't be null";
         }
-        if ((mb_strlen($this->container['short_id']) > 9)) {
+        if (!is_null($this->container['short_id']) && (mb_strlen($this->container['short_id']) > 9)) {
             $invalidProperties[] = "invalid value for 'short_id', the character length must be smaller than or equal to 9.";
         }
 
-        if ((mb_strlen($this->container['short_id']) < 9)) {
+        if (!is_null($this->container['short_id']) && (mb_strlen($this->container['short_id']) < 9)) {
             $invalidProperties[] = "invalid value for 'short_id', the character length must be bigger than or equal to 9.";
         }
 

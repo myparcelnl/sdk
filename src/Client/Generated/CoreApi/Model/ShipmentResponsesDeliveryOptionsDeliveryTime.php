@@ -341,14 +341,14 @@ class ShipmentResponsesDeliveryOptionsDeliveryTime implements ModelInterface, Ar
         if ($this->container['start'] === null) {
             $invalidProperties[] = "'start' can't be null";
         }
-        if (!preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['start'])) {
+        if (!is_null($this->container['start']) && !preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['start'])) {
             $invalidProperties[] = "invalid value for 'start', must be conform to the pattern /([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['end'] === null) {
             $invalidProperties[] = "'end' can't be null";
         }
-        if (!preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['end'])) {
+        if (!is_null($this->container['end']) && !preg_match("/([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['end'])) {
             $invalidProperties[] = "invalid value for 'end', must be conform to the pattern /([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 

@@ -298,11 +298,11 @@ class OrdersGet200Response implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['results'] === null) {
             $invalidProperties[] = "'results' can't be null";
         }
-        if ((count($this->container['results']) > 50)) {
+        if (!is_null($this->container['results']) && (count($this->container['results']) > 50)) {
             $invalidProperties[] = "invalid value for 'results', number of items must be less than or equal to 50.";
         }
 
-        if ((count($this->container['results']) < 0)) {
+        if (!is_null($this->container['results']) && (count($this->container['results']) < 0)) {
             $invalidProperties[] = "invalid value for 'results', number of items must be greater than or equal to 0.";
         }
 

@@ -285,22 +285,22 @@ class CustomsDeclarationGroupsInnerTotalValue implements ModelInterface, ArrayAc
         if ($this->container['currency'] === null) {
             $invalidProperties[] = "'currency' can't be null";
         }
-        if ((mb_strlen($this->container['currency']) > 3)) {
+        if (!is_null($this->container['currency']) && (mb_strlen($this->container['currency']) > 3)) {
             $invalidProperties[] = "invalid value for 'currency', the character length must be smaller than or equal to 3.";
         }
 
-        if ((mb_strlen($this->container['currency']) < 3)) {
+        if (!is_null($this->container['currency']) && (mb_strlen($this->container['currency']) < 3)) {
             $invalidProperties[] = "invalid value for 'currency', the character length must be bigger than or equal to 3.";
         }
 
         if ($this->container['micros'] === null) {
             $invalidProperties[] = "'micros' can't be null";
         }
-        if (($this->container['micros'] > 9007199254740991)) {
+        if (!is_null($this->container['micros']) && ($this->container['micros'] > 9007199254740991)) {
             $invalidProperties[] = "invalid value for 'micros', must be smaller than or equal to 9007199254740991.";
         }
 
-        if (($this->container['micros'] < 0)) {
+        if (!is_null($this->container['micros']) && ($this->container['micros'] < 0)) {
             $invalidProperties[] = "invalid value for 'micros', must be bigger than or equal to 0.";
         }
 

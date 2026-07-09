@@ -287,11 +287,11 @@ class RemoveNotesPostRequestInner implements ModelInterface, ArrayAccess, \JsonS
         if ($this->container['note_ids'] === null) {
             $invalidProperties[] = "'note_ids' can't be null";
         }
-        if ((count($this->container['note_ids']) > 150)) {
+        if (!is_null($this->container['note_ids']) && (count($this->container['note_ids']) > 150)) {
             $invalidProperties[] = "invalid value for 'note_ids', number of items must be less than or equal to 150.";
         }
 
-        if ((count($this->container['note_ids']) < 1)) {
+        if (!is_null($this->container['note_ids']) && (count($this->container['note_ids']) < 1)) {
             $invalidProperties[] = "invalid value for 'note_ids', number of items must be greater than or equal to 1.";
         }
 

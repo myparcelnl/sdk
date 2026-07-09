@@ -363,7 +363,9 @@ class ContactBusiness implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "'type' can't be null";
         }
         $allowedValues = $this->getTypeAllowableValues();
-        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'type', must be one of '%s'",
                 $this->container['type'],
@@ -374,11 +376,11 @@ class ContactBusiness implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['company'] === null) {
             $invalidProperties[] = "'company' can't be null";
         }
-        if ((mb_strlen($this->container['company']) > 100)) {
+        if (!is_null($this->container['company']) && (mb_strlen($this->container['company']) > 100)) {
             $invalidProperties[] = "invalid value for 'company', the character length must be smaller than or equal to 100.";
         }
 
-        if ((mb_strlen($this->container['company']) < 1)) {
+        if (!is_null($this->container['company']) && (mb_strlen($this->container['company']) < 1)) {
             $invalidProperties[] = "invalid value for 'company', the character length must be bigger than or equal to 1.";
         }
 
@@ -537,16 +539,6 @@ class ContactBusiness implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         if (is_null($type)) {
             throw new \InvalidArgumentException('non-nullable type cannot be null');
-        }
-        $allowedValues = $this->getTypeAllowableValues();
-        if (!in_array($type, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'type', must be one of '%s'",
-                    $type,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['type'] = $type;
 

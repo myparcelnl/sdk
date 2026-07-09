@@ -285,22 +285,22 @@ class ExternalReferenceSalesChannel implements ModelInterface, ArrayAccess, \Jso
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
-        if ((mb_strlen($this->container['id']) > 50)) {
+        if (!is_null($this->container['id']) && (mb_strlen($this->container['id']) > 50)) {
             $invalidProperties[] = "invalid value for 'id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['id']) < 1)) {
+        if (!is_null($this->container['id']) && (mb_strlen($this->container['id']) < 1)) {
             $invalidProperties[] = "invalid value for 'id', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ((mb_strlen($this->container['name']) > 50)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 50)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['name']) < 3)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) < 3)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 3.";
         }
 

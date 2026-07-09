@@ -301,11 +301,11 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
-        if (($this->container['value'] > 10000)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] > 10000)) {
             $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 10000.";
         }
 
-        if (($this->container['value'] < 0)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
 
@@ -313,7 +313,9 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
             $invalidProperties[] = "'unit' can't be null";
         }
         $allowedValues = $this->getUnitAllowableValues();
-        if (!is_null($this->container['unit']) && !in_array($this->container['unit'], $allowedValues, true)) {
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['unit']) && !in_array($this->container['unit'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'unit', must be one of '%s'",
                 $this->container['unit'],
@@ -392,16 +394,6 @@ class PhysicalPropertiesHeightV2 implements ModelInterface, ArrayAccess, \JsonSe
     {
         if (is_null($unit)) {
             throw new \InvalidArgumentException('non-nullable unit cannot be null');
-        }
-        $allowedValues = $this->getUnitAllowableValues();
-        if (!in_array($unit, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'unit', must be one of '%s'",
-                    $unit,
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['unit'] = $unit;
 

@@ -71,6 +71,8 @@ class CarrierToCreate
 
     public const UPS_STANDARD = 'UPS_STANDARD';
 
+    public const VIA_TIM = 'VIA_TIM';
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -91,7 +93,8 @@ class CarrierToCreate
             self::POSTE_ITALIANE,
             self::TRUNKRS,
             self::UPS_EXPRESS_SAVER,
-            self::UPS_STANDARD
+            self::UPS_STANDARD,
+            self::VIA_TIM
         ];
     }
 }

@@ -63,7 +63,7 @@ class RefShipmentGeneralSettings implements ModelInterface, ArrayAccess, \JsonSe
         'delivery_notification_email' => 'string[]',
         'disable_auto_detect_pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'printer_identifier' => 'string',
-        'tracktrace' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentGeneralSettingsTracktrace'
+        'tracktrace' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettingsTracktrace'
     ];
 
     /**
@@ -463,7 +463,7 @@ class RefShipmentGeneralSettings implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Gets tracktrace
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentGeneralSettingsTracktrace|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettingsTracktrace|null
      */
     public function getTracktrace()
     {
@@ -473,7 +473,7 @@ class RefShipmentGeneralSettings implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets tracktrace
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentGeneralSettingsTracktrace|null $tracktrace tracktrace
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentGeneralSettingsTracktrace|null $tracktrace tracktrace
      *
      * @return self
      */

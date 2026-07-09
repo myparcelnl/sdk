@@ -66,7 +66,8 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
         'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup',
-        'sender' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender'
+        'sender' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender',
+        'save_recipient_address' => 'bool'
     ];
 
     /**
@@ -86,7 +87,8 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'delivery' => null,
         'options' => null,
         'pickup' => null,
-        'sender' => null
+        'sender' => null,
+        'save_recipient_address' => null
     ];
 
     /**
@@ -104,7 +106,8 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'delivery' => false,
         'options' => false,
         'pickup' => false,
-        'sender' => false
+        'sender' => false,
+        'save_recipient_address' => false
     ];
 
     /**
@@ -202,7 +205,8 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'delivery' => 'delivery',
         'options' => 'options',
         'pickup' => 'pickup',
-        'sender' => 'sender'
+        'sender' => 'sender',
+        'save_recipient_address' => 'saveRecipientAddress'
     ];
 
     /**
@@ -220,7 +224,8 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'delivery' => 'setDelivery',
         'options' => 'setOptions',
         'pickup' => 'setPickup',
-        'sender' => 'setSender'
+        'sender' => 'setSender',
+        'save_recipient_address' => 'setSaveRecipientAddress'
     ];
 
     /**
@@ -238,7 +243,8 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'delivery' => 'getDelivery',
         'options' => 'getOptions',
         'pickup' => 'getPickup',
-        'sender' => 'getSender'
+        'sender' => 'getSender',
+        'save_recipient_address' => 'getSaveRecipientAddress'
     ];
 
     /**
@@ -308,6 +314,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
+        $this->setIfExists('save_recipient_address', $data ?? [], null);
     }
 
     /**
@@ -648,6 +655,33 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable sender cannot be null');
         }
         $this->container['sender'] = $sender;
+
+        return $this;
+    }
+
+    /**
+     * Gets save_recipient_address
+     *
+     * @return bool|null
+     */
+    public function getSaveRecipientAddress()
+    {
+        return $this->container['save_recipient_address'];
+    }
+
+    /**
+     * Sets save_recipient_address
+     *
+     * @param bool|null $save_recipient_address When set to true, the recipient address is saved to the user's address book.
+     *
+     * @return self
+     */
+    public function setSaveRecipientAddress($save_recipient_address)
+    {
+        if (is_null($save_recipient_address)) {
+            throw new \InvalidArgumentException('non-nullable save_recipient_address cannot be null');
+        }
+        $this->container['save_recipient_address'] = $save_recipient_address;
 
         return $this;
     }
