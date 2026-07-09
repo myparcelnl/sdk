@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.29](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.28...v11.0.0-beta.29) (2026-07-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **openapi:** loosen and apply consistent validation for enum values, fix required nullables (#623)
+
+### :sparkles: New Features
+
+* **openapi:** loosen and apply consistent validation for enum values, fix required nullables ([#623](https://github.com/myparcelnl/sdk/issues/623)) ([2164721](https://github.com/myparcelnl/sdk/commit/2164721c572844cb1350f9aa407bbdd18e6a1660)), closes [OpenAPITools/openapi-generator#22292](https://github.com/OpenAPITools/openapi-generator/issues/22292) [OpenAPITools/openapi-generator#22292](https://github.com/OpenAPITools/openapi-generator/issues/22292)
+
 ## [11.0.0-beta.28](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.27...v11.0.0-beta.28) (2026-06-24)
 
 
