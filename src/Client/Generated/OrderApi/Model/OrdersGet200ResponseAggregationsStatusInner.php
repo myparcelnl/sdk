@@ -287,7 +287,7 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
         if ($this->container['count'] === null) {
             $invalidProperties[] = "'count' can't be null";
         }
-        if (($this->container['count'] < 0)) {
+        if (!is_null($this->container['count']) && ($this->container['count'] < 0)) {
             $invalidProperties[] = "invalid value for 'count', must be bigger than or equal to 0.";
         }
 

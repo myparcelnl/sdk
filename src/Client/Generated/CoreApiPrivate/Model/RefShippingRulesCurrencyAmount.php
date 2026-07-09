@@ -285,7 +285,7 @@ class RefShippingRulesCurrencyAmount implements ModelInterface, ArrayAccess, \Js
         if ($this->container['amount'] === null && !$this->isNullableSetToNull('amount')) {
             $invalidProperties[] = "'amount' is required";
         }
-        if (($this->container['amount'] < 0)) {
+        if (!is_null($this->container['amount']) && ($this->container['amount'] < 0)) {
             $invalidProperties[] = "invalid value for 'amount', must be bigger than or equal to 0.";
         }
 

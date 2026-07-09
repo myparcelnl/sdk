@@ -284,11 +284,11 @@ class CreateOrderFromShippablePackagesAnyOf1Multicollo implements ModelInterface
         if ($this->container['packages'] === null) {
             $invalidProperties[] = "'packages' can't be null";
         }
-        if ((count($this->container['packages']) > 20)) {
+        if (!is_null($this->container['packages']) && (count($this->container['packages']) > 20)) {
             $invalidProperties[] = "invalid value for 'packages', number of items must be less than or equal to 20.";
         }
 
-        if ((count($this->container['packages']) < 2)) {
+        if (!is_null($this->container['packages']) && (count($this->container['packages']) < 2)) {
             $invalidProperties[] = "invalid value for 'packages', number of items must be greater than or equal to 2.";
         }
 

@@ -377,22 +377,22 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
         if ($this->container['cc'] === null) {
             $invalidProperties[] = "'cc' can't be null";
         }
-        if ((mb_strlen($this->container['cc']) > 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) > 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['cc']) < 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) < 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be bigger than or equal to 2.";
         }
 
         if ($this->container['city'] === null) {
             $invalidProperties[] = "'city' can't be null";
         }
-        if ((mb_strlen($this->container['city']) > 255)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 255)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 255.";
         }
 
-        if ((mb_strlen($this->container['city']) < 1)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 1)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 1.";
         }
 
@@ -410,28 +410,28 @@ class ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact implemen
         if ($this->container['number'] === null) {
             $invalidProperties[] = "'number' can't be null";
         }
-        if ((mb_strlen($this->container['number']) < 1)) {
+        if (!is_null($this->container['number']) && (mb_strlen($this->container['number']) < 1)) {
             $invalidProperties[] = "invalid value for 'number', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['phone'] === null) {
             $invalidProperties[] = "'phone' can't be null";
         }
-        if ((mb_strlen($this->container['phone']) < 8)) {
+        if (!is_null($this->container['phone']) && (mb_strlen($this->container['phone']) < 8)) {
             $invalidProperties[] = "invalid value for 'phone', the character length must be bigger than or equal to 8.";
         }
 
         if ($this->container['postal_code'] === null) {
             $invalidProperties[] = "'postal_code' can't be null";
         }
-        if ((mb_strlen($this->container['postal_code']) < 1)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) < 1)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be bigger than or equal to 1.";
         }
 
         if ($this->container['street'] === null) {
             $invalidProperties[] = "'street' can't be null";
         }
-        if ((mb_strlen($this->container['street']) < 1)) {
+        if (!is_null($this->container['street']) && (mb_strlen($this->container['street']) < 1)) {
             $invalidProperties[] = "invalid value for 'street', the character length must be bigger than or equal to 1.";
         }
 

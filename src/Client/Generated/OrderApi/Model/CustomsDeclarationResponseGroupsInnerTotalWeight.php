@@ -314,11 +314,11 @@ class CustomsDeclarationResponseGroupsInnerTotalWeight implements ModelInterface
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
-        if (($this->container['value'] > 999999999)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] > 999999999)) {
             $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 999999999.";
         }
 
-        if (($this->container['value'] < 1)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] < 1)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 1.";
         }
 

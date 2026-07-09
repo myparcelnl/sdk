@@ -313,7 +313,7 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
-        if (($this->container['value'] < 0)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
 

@@ -301,11 +301,11 @@ class PhysicalPropertiesLengthV2 implements ModelInterface, ArrayAccess, \JsonSe
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
-        if (($this->container['value'] > 10000)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] > 10000)) {
             $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 10000.";
         }
 
-        if (($this->container['value'] < 0)) {
+        if (!is_null($this->container['value']) && ($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
 

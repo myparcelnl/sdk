@@ -289,11 +289,11 @@ class ShipmentPostShipmentsRequestData implements ModelInterface, ArrayAccess, \
         if ($this->container['shipments'] === null) {
             $invalidProperties[] = "'shipments' can't be null";
         }
-        if ((count($this->container['shipments']) > 100)) {
+        if (!is_null($this->container['shipments']) && (count($this->container['shipments']) > 100)) {
             $invalidProperties[] = "invalid value for 'shipments', number of items must be less than or equal to 100.";
         }
 
-        if ((count($this->container['shipments']) < 1)) {
+        if (!is_null($this->container['shipments']) && (count($this->container['shipments']) < 1)) {
             $invalidProperties[] = "invalid value for 'shipments', number of items must be greater than or equal to 1.";
         }
 

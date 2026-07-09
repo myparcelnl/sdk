@@ -318,15 +318,15 @@ class NotificationPostNotificationGroupRequest implements ModelInterface, ArrayA
         if ($this->container['country_code'] === null) {
             $invalidProperties[] = "'country_code' can't be null";
         }
-        if ((mb_strlen($this->container['country_code']) > 2)) {
+        if (!is_null($this->container['country_code']) && (mb_strlen($this->container['country_code']) > 2)) {
             $invalidProperties[] = "invalid value for 'country_code', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['country_code']) < 2)) {
+        if (!is_null($this->container['country_code']) && (mb_strlen($this->container['country_code']) < 2)) {
             $invalidProperties[] = "invalid value for 'country_code', the character length must be bigger than or equal to 2.";
         }
 
-        if (!preg_match("/^[A-Z]{2}$/", $this->container['country_code'])) {
+        if (!is_null($this->container['country_code']) && !preg_match("/^[A-Z]{2}$/", $this->container['country_code'])) {
             $invalidProperties[] = "invalid value for 'country_code', must be conform to the pattern /^[A-Z]{2}$/.";
         }
 

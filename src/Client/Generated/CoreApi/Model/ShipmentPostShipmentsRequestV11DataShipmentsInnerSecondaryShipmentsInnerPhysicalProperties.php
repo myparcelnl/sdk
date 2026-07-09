@@ -306,11 +306,11 @@ class ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPh
         if ($this->container['weight'] === null) {
             $invalidProperties[] = "'weight' can't be null";
         }
-        if (($this->container['weight'] > 999999999)) {
+        if (!is_null($this->container['weight']) && ($this->container['weight'] > 999999999)) {
             $invalidProperties[] = "invalid value for 'weight', must be smaller than or equal to 999999999.";
         }
 
-        if (($this->container['weight'] < 0)) {
+        if (!is_null($this->container['weight']) && ($this->container['weight'] < 0)) {
             $invalidProperties[] = "invalid value for 'weight', must be bigger than or equal to 0.";
         }
 

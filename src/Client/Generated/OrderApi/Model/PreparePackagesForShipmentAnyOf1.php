@@ -297,11 +297,11 @@ class PreparePackagesForShipmentAnyOf1 implements ModelInterface, ArrayAccess, \
         if ($this->container['multicollo'] === null) {
             $invalidProperties[] = "'multicollo' can't be null";
         }
-        if ((count($this->container['multicollo']) > 25)) {
+        if (!is_null($this->container['multicollo']) && (count($this->container['multicollo']) > 25)) {
             $invalidProperties[] = "invalid value for 'multicollo', number of items must be less than or equal to 25.";
         }
 
-        if ((count($this->container['multicollo']) < 2)) {
+        if (!is_null($this->container['multicollo']) && (count($this->container['multicollo']) < 2)) {
             $invalidProperties[] = "invalid value for 'multicollo', number of items must be greater than or equal to 2.";
         }
 

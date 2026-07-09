@@ -509,15 +509,15 @@ class ShipmentDefsShipmentRecipient implements ModelInterface, ArrayAccess, \Jso
         if ($this->container['cc'] === null) {
             $invalidProperties[] = "'cc' can't be null";
         }
-        if ((mb_strlen($this->container['cc']) > 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) > 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be smaller than or equal to 2.";
         }
 
-        if ((mb_strlen($this->container['cc']) < 2)) {
+        if (!is_null($this->container['cc']) && (mb_strlen($this->container['cc']) < 2)) {
             $invalidProperties[] = "invalid value for 'cc', the character length must be bigger than or equal to 2.";
         }
 
-        if (!preg_match("/^[A-Za-z]{2}$/", $this->container['cc'])) {
+        if (!is_null($this->container['cc']) && !preg_match("/^[A-Za-z]{2}$/", $this->container['cc'])) {
             $invalidProperties[] = "invalid value for 'cc', must be conform to the pattern /^[A-Za-z]{2}$/.";
         }
 

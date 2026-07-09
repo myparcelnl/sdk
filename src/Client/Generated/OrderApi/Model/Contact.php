@@ -388,11 +388,11 @@ class Contact implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['company'] === null) {
             $invalidProperties[] = "'company' can't be null";
         }
-        if ((mb_strlen($this->container['company']) > 100)) {
+        if (!is_null($this->container['company']) && (mb_strlen($this->container['company']) > 100)) {
             $invalidProperties[] = "invalid value for 'company', the character length must be smaller than or equal to 100.";
         }
 
-        if ((mb_strlen($this->container['company']) < 1)) {
+        if (!is_null($this->container['company']) && (mb_strlen($this->container['company']) < 1)) {
             $invalidProperties[] = "invalid value for 'company', the character length must be bigger than or equal to 1.";
         }
 
@@ -423,11 +423,11 @@ class Contact implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
-        if ((mb_strlen($this->container['name']) > 200)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 200)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 200.";
         }
 
-        if ((mb_strlen($this->container['name']) < 1)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) < 1)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
         }
 

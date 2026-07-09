@@ -70,7 +70,7 @@ class UnknownEnumPassthroughTest extends TestCase
     }
 
     /**
-     * Serialization applies to sending at request to the API.
+     * Serialization applies to sending a request to the API.
      * Here we can safely validate against the spec and should prevent developers making errors.
      * @return void
      */

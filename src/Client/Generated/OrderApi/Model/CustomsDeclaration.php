@@ -320,11 +320,11 @@ class CustomsDeclaration implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['groups'] === null) {
             $invalidProperties[] = "'groups' can't be null";
         }
-        if ((count($this->container['groups']) > 100)) {
+        if (!is_null($this->container['groups']) && (count($this->container['groups']) > 100)) {
             $invalidProperties[] = "invalid value for 'groups', number of items must be less than or equal to 100.";
         }
 
-        if ((count($this->container['groups']) < 1)) {
+        if (!is_null($this->container['groups']) && (count($this->container['groups']) < 1)) {
             $invalidProperties[] = "invalid value for 'groups', number of items must be greater than or equal to 1.";
         }
 

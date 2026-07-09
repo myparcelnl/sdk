@@ -311,7 +311,7 @@ class AddNotePost200ResponseInnerOneOf implements ModelInterface, ArrayAccess, \
         if ($this->container['ids'] === null) {
             $invalidProperties[] = "'ids' can't be null";
         }
-        if ((count($this->container['ids']) < 1)) {
+        if (!is_null($this->container['ids']) && (count($this->container['ids']) < 1)) {
             $invalidProperties[] = "invalid value for 'ids', number of items must be greater than or equal to 1.";
         }
 

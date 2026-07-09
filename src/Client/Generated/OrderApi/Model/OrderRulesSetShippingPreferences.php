@@ -306,7 +306,7 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
         if ($this->container['path'] === null) {
             $invalidProperties[] = "'path' can't be null";
         }
-        if ((count($this->container['path']) < 1)) {
+        if (!is_null($this->container['path']) && (count($this->container['path']) < 1)) {
             $invalidProperties[] = "invalid value for 'path', number of items must be greater than or equal to 1.";
         }
 

@@ -312,7 +312,7 @@ class RefTypesPriceEuro implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['amount'] === null) {
             $invalidProperties[] = "'amount' can't be null";
         }
-        if (($this->container['amount'] < 0)) {
+        if (!is_null($this->container['amount']) && ($this->container['amount'] < 0)) {
             $invalidProperties[] = "invalid value for 'amount', must be bigger than or equal to 0.";
         }
 

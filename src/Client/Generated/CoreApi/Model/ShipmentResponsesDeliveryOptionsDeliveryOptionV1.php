@@ -285,7 +285,7 @@ class ShipmentResponsesDeliveryOptionsDeliveryOptionV1 implements ModelInterface
         if ($this->container['date'] === null) {
             $invalidProperties[] = "'date' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/", $this->container['date'])) {
+        if (!is_null($this->container['date']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/", $this->container['date'])) {
             $invalidProperties[] = "invalid value for 'date', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/.";
         }
 

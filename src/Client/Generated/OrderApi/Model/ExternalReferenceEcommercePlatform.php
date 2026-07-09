@@ -324,11 +324,11 @@ class ExternalReferenceEcommercePlatform implements ModelInterface, ArrayAccess,
         if ($this->container['source_id'] === null) {
             $invalidProperties[] = "'source_id' can't be null";
         }
-        if ((mb_strlen($this->container['source_id']) > 50)) {
+        if (!is_null($this->container['source_id']) && (mb_strlen($this->container['source_id']) > 50)) {
             $invalidProperties[] = "invalid value for 'source_id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['source_id']) < 1)) {
+        if (!is_null($this->container['source_id']) && (mb_strlen($this->container['source_id']) < 1)) {
             $invalidProperties[] = "invalid value for 'source_id', the character length must be bigger than or equal to 1.";
         }
 

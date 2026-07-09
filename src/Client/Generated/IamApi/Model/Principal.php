@@ -351,11 +351,11 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['account_id'] === null) {
             $invalidProperties[] = "'account_id' can't be null";
         }
-        if ((mb_strlen($this->container['account_id']) > 50)) {
+        if (!is_null($this->container['account_id']) && (mb_strlen($this->container['account_id']) > 50)) {
             $invalidProperties[] = "invalid value for 'account_id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['account_id']) < 1)) {
+        if (!is_null($this->container['account_id']) && (mb_strlen($this->container['account_id']) < 1)) {
             $invalidProperties[] = "invalid value for 'account_id', the character length must be bigger than or equal to 1.";
         }
 
@@ -381,11 +381,11 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
-        if ((mb_strlen($this->container['id']) > 50)) {
+        if (!is_null($this->container['id']) && (mb_strlen($this->container['id']) > 50)) {
             $invalidProperties[] = "invalid value for 'id', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['id']) < 1)) {
+        if (!is_null($this->container['id']) && (mb_strlen($this->container['id']) < 1)) {
             $invalidProperties[] = "invalid value for 'id', the character length must be bigger than or equal to 1.";
         }
 
@@ -409,11 +409,11 @@ class Principal implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['shop_ids'] === null) {
             $invalidProperties[] = "'shop_ids' can't be null";
         }
-        if ((count($this->container['shop_ids']) > 500)) {
+        if (!is_null($this->container['shop_ids']) && (count($this->container['shop_ids']) > 500)) {
             $invalidProperties[] = "invalid value for 'shop_ids', number of items must be less than or equal to 500.";
         }
 
-        if ((count($this->container['shop_ids']) < 1)) {
+        if (!is_null($this->container['shop_ids']) && (count($this->container['shop_ids']) < 1)) {
             $invalidProperties[] = "invalid value for 'shop_ids', number of items must be greater than or equal to 1.";
         }
 

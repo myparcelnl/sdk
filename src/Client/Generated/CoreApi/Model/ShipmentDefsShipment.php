@@ -640,7 +640,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['barcode'] === null) {
             $invalidProperties[] = "'barcode' can't be null";
         }
-        if ((mb_strlen($this->container['barcode']) > 255)) {
+        if (!is_null($this->container['barcode']) && (mb_strlen($this->container['barcode']) > 255)) {
             $invalidProperties[] = "invalid value for 'barcode', the character length must be smaller than or equal to 255.";
         }
 
@@ -668,7 +668,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['user_agent'] === null && !$this->isNullableSetToNull('user_agent')) {
             $invalidProperties[] = "'user_agent' is required";
         }
-        if ((mb_strlen($this->container['user_agent']) > 255)) {
+        if (!is_null($this->container['user_agent']) && (mb_strlen($this->container['user_agent']) > 255)) {
             $invalidProperties[] = "invalid value for 'user_agent', the character length must be smaller than or equal to 255.";
         }
 
@@ -684,7 +684,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['external_identifier'] === null && !$this->isNullableSetToNull('external_identifier')) {
             $invalidProperties[] = "'external_identifier' is required";
         }
-        if ((mb_strlen($this->container['external_identifier']) > 255)) {
+        if (!is_null($this->container['external_identifier']) && (mb_strlen($this->container['external_identifier']) > 255)) {
             $invalidProperties[] = "invalid value for 'external_identifier', the character length must be smaller than or equal to 255.";
         }
 
@@ -700,14 +700,14 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
+        if (!is_null($this->container['created']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
             $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 
         if ($this->container['modified'] === null) {
             $invalidProperties[] = "'modified' can't be null";
         }
-        if (!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
+        if (!is_null($this->container['modified']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
             $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
         }
 

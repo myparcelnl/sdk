@@ -334,22 +334,22 @@ class ShipmentDefsShipmentCustomsDeclaration implements ModelInterface, ArrayAcc
         if ($this->container['weight'] === null) {
             $invalidProperties[] = "'weight' can't be null";
         }
-        if (($this->container['weight'] > 999999999)) {
+        if (!is_null($this->container['weight']) && ($this->container['weight'] > 999999999)) {
             $invalidProperties[] = "invalid value for 'weight', must be smaller than or equal to 999999999.";
         }
 
-        if (($this->container['weight'] < 0)) {
+        if (!is_null($this->container['weight']) && ($this->container['weight'] < 0)) {
             $invalidProperties[] = "invalid value for 'weight', must be bigger than or equal to 0.";
         }
 
         if ($this->container['items'] === null) {
             $invalidProperties[] = "'items' can't be null";
         }
-        if ((count($this->container['items']) > 100)) {
+        if (!is_null($this->container['items']) && (count($this->container['items']) > 100)) {
             $invalidProperties[] = "invalid value for 'items', number of items must be less than or equal to 100.";
         }
 
-        if ((count($this->container['items']) < 1)) {
+        if (!is_null($this->container['items']) && (count($this->container['items']) < 1)) {
             $invalidProperties[] = "invalid value for 'items', number of items must be greater than or equal to 1.";
         }
 
