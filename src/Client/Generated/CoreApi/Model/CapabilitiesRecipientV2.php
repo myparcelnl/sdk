@@ -260,7 +260,7 @@ class CapabilitiesRecipientV2 implements ModelInterface, ArrayAccess, \JsonSeria
     {
         $this->setIfExists('country_code', $data ?? [], null);
         $this->setIfExists('postal_code', $data ?? [], null);
-        $this->setIfExists('is_business', $data ?? [], true);
+        $this->setIfExists('is_business', $data ?? [], null);
     }
 
     /**

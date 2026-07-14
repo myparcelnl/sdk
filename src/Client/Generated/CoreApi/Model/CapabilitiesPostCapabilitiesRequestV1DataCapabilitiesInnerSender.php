@@ -260,7 +260,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender implement
     {
         $this->setIfExists('cc', $data ?? [], null);
         $this->setIfExists('postal_code', $data ?? [], null);
-        $this->setIfExists('is_business', $data ?? [], true);
+        $this->setIfExists('is_business', $data ?? [], null);
     }
 
     /**
