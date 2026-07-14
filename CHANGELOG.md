@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.30](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.29...v11.0.0-beta.30) (2026-07-14)
+
+
+### :bug: Bug Fixes
+
+* **api:** fix `isBusiness` defaulting to `true` rathern than `null` in capabilities requests ([#631](https://github.com/myparcelnl/sdk/issues/631)) ([44f2f63](https://github.com/myparcelnl/sdk/commit/44f2f631a51a104b089bdeabcaca3e81330f812a))
+
 ## [11.0.0-beta.29](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.28...v11.0.0-beta.29) (2026-07-09)
 
 
