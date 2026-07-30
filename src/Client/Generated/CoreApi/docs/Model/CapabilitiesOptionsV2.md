@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **frozen** | **object** | Frozen delivery option | [optional]
 **hide_sender** | **object** | Hide sender option | [optional]
 **insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2OptionsInsurance**](CapabilitiesPostCapabilitiesRequestV2OptionsInsurance.md) |  | [optional]
-**no_tracking** | **object** | No tracking option (inverse of tracked) | [optional]
+**no_tracking** | **object** | Ship without track and trace option | [optional]
 **oversized_package** | **object** | Oversized package option | [optional]
 **print_return_label_at_drop_off** | **object** | Print return label at drop off package option | [optional]
 **priority_delivery** | **object** | Priority delivery package option | [optional]

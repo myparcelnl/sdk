@@ -592,7 +592,7 @@ class CapabilitiesOptionsV2 implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets no_tracking
      *
-     * @param object|null $no_tracking No tracking option (inverse of tracked)
+     * @param object|null $no_tracking Ship without track and trace option
      *
      * @return self
      */

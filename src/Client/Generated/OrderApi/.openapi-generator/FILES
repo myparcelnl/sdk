@@ -46,6 +46,7 @@ Model/EditNotePostRequestInner.php
 Model/ExternalReferenceEcommercePlatform.php
 Model/ExternalReferenceSalesChannel.php
 Model/ExternalReferences.php
+Model/ExternalReferencesImport.php
 Model/ExternalReferencesMyParcelShop.php
 Model/ExternalReferencesSalesChannel.php
 Model/GeoAreaCode.php
@@ -197,6 +198,7 @@ docs/Model/EditNotePostRequestInner.md
 docs/Model/ExternalReferenceEcommercePlatform.md
 docs/Model/ExternalReferenceSalesChannel.md
 docs/Model/ExternalReferences.md
+docs/Model/ExternalReferencesImport.md
 docs/Model/ExternalReferencesMyParcelShop.md
 docs/Model/ExternalReferencesSalesChannel.md
 docs/Model/GeoAreaCode.md
