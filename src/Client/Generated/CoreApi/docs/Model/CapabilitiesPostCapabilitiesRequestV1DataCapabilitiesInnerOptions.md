@@ -21,7 +21,8 @@ Name | Type | Description | Notes
 **same_day_delivery** | **object** | Same day delivery option | [optional]
 **saturday_delivery** | **object** | Saturday delivery option | [optional]
 **signature** | **object** | Requires signature option | [optional]
-**tracked** | **object** | Tracking option | [optional]
+**no_tracking** | **object** | Ship without track and trace option | [optional]
+**tracked** | **object** | DEPRECATED: replaced by no_tracking (its inverse). | [optional]
 **insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2OptionsInsurance**](CapabilitiesPostCapabilitiesRequestV2OptionsInsurance.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
