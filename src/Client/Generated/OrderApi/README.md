@@ -133,6 +133,7 @@ Class | Method | HTTP request | Description
 - [ExternalReferenceEcommercePlatform](docs/Model/ExternalReferenceEcommercePlatform.md)
 - [ExternalReferenceSalesChannel](docs/Model/ExternalReferenceSalesChannel.md)
 - [ExternalReferences](docs/Model/ExternalReferences.md)
+- [ExternalReferencesImport](docs/Model/ExternalReferencesImport.md)
 - [ExternalReferencesMyParcelShop](docs/Model/ExternalReferencesMyParcelShop.md)
 - [ExternalReferencesSalesChannel](docs/Model/ExternalReferencesSalesChannel.md)
 - [GeoAreaCode](docs/Model/GeoAreaCode.md)

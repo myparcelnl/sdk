@@ -74,6 +74,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'same_day_delivery' => 'object',
         'saturday_delivery' => 'object',
         'signature' => 'object',
+        'no_tracking' => 'object',
         'tracked' => 'object',
         'insurance' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV1DataRatesInnerOptionsInsurance'
     ];
@@ -101,6 +102,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'same_day_delivery' => null,
         'saturday_delivery' => null,
         'signature' => null,
+        'no_tracking' => null,
         'tracked' => null,
         'insurance' => null
     ];
@@ -126,6 +128,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'same_day_delivery' => false,
         'saturday_delivery' => false,
         'signature' => false,
+        'no_tracking' => false,
         'tracked' => false,
         'insurance' => false
     ];
@@ -231,6 +234,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'same_day_delivery' => 'same_day_delivery',
         'saturday_delivery' => 'saturday_delivery',
         'signature' => 'signature',
+        'no_tracking' => 'no_tracking',
         'tracked' => 'tracked',
         'insurance' => 'insurance'
     ];
@@ -256,6 +260,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'same_day_delivery' => 'setSameDayDelivery',
         'saturday_delivery' => 'setSaturdayDelivery',
         'signature' => 'setSignature',
+        'no_tracking' => 'setNoTracking',
         'tracked' => 'setTracked',
         'insurance' => 'setInsurance'
     ];
@@ -281,6 +286,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'same_day_delivery' => 'getSameDayDelivery',
         'saturday_delivery' => 'getSaturdayDelivery',
         'signature' => 'getSignature',
+        'no_tracking' => 'getNoTracking',
         'tracked' => 'getTracked',
         'insurance' => 'getInsurance'
     ];
@@ -357,6 +363,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         $this->setIfExists('same_day_delivery', $data ?? [], null);
         $this->setIfExists('saturday_delivery', $data ?? [], null);
         $this->setIfExists('signature', $data ?? [], null);
+        $this->setIfExists('no_tracking', $data ?? [], null);
         $this->setIfExists('tracked', $data ?? [], null);
         $this->setIfExists('insurance', $data ?? [], null);
     }
@@ -809,6 +816,33 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
     }
 
     /**
+     * Gets no_tracking
+     *
+     * @return object|null
+     */
+    public function getNoTracking()
+    {
+        return $this->container['no_tracking'];
+    }
+
+    /**
+     * Sets no_tracking
+     *
+     * @param object|null $no_tracking Ship without track and trace option
+     *
+     * @return self
+     */
+    public function setNoTracking($no_tracking)
+    {
+        if (is_null($no_tracking)) {
+            throw new \InvalidArgumentException('non-nullable no_tracking cannot be null');
+        }
+        $this->container['no_tracking'] = $no_tracking;
+
+        return $this;
+    }
+
+    /**
      * Gets tracked
      *
      * @return object|null
@@ -821,7 +855,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
     /**
      * Sets tracked
      *
-     * @param object|null $tracked Tracking option
+     * @param object|null $tracked DEPRECATED: replaced by no_tracking (its inverse).
      *
      * @return self
      */

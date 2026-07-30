@@ -357,8 +357,8 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['platform'] === null) {
             $invalidProperties[] = "'platform' can't be null";
         }
-        if (!is_null($this->container['features']) && (count($this->container['features']) > 26)) {
-            $invalidProperties[] = "invalid value for 'features', number of items must be less than or equal to 26.";
+        if (!is_null($this->container['features']) && (count($this->container['features']) > 27)) {
+            $invalidProperties[] = "invalid value for 'features', number of items must be less than or equal to 27.";
         }
 
         if (!is_null($this->container['features']) && (count($this->container['features']) < 1)) {
@@ -511,8 +511,8 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable features cannot be null');
         }
 
-        if ((count($features) > 26)) {
-            throw new \InvalidArgumentException('invalid value for $features when calling PrincipalUser., number of items must be less than or equal to 26.');
+        if ((count($features) > 27)) {
+            throw new \InvalidArgumentException('invalid value for $features when calling PrincipalUser., number of items must be less than or equal to 27.');
         }
         if ((count($features) < 1)) {
             throw new \InvalidArgumentException('invalid length for $features when calling PrincipalUser., number of items must be greater than or equal to 1.');

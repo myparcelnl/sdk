@@ -45,6 +45,8 @@ class RoleShop
      */
     public const SHOP_DEFAULT = 'SHOP_DEFAULT';
 
+    public const SHOP_SUB_CUSTOMER = 'SHOP_SUB_CUSTOMER';
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -52,7 +54,8 @@ class RoleShop
     public static function getAllowableEnumValues()
     {
         return [
-            self::SHOP_DEFAULT
+            self::SHOP_DEFAULT,
+            self::SHOP_SUB_CUSTOMER
         ];
     }
 }

@@ -61,9 +61,9 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     protected static $openAPITypes = [
         'name' => 'string',
         'key' => 'string',
-        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
-        'vat' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
-        'price_with_vat' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney'
+        'price' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount',
+        'vat' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount',
+        'price_with_vat' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount'
     ];
 
     /**
@@ -391,7 +391,7 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     /**
      * Gets price
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getPrice()
     {
@@ -401,7 +401,7 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $price price
      *
      * @return self
      */
@@ -418,7 +418,7 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     /**
      * Gets vat
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getVat()
     {
@@ -428,7 +428,7 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     /**
      * Sets vat
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $vat vat
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $vat vat
      *
      * @return self
      */
@@ -445,7 +445,7 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     /**
      * Gets price_with_vat
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount
      */
     public function getPriceWithVat()
     {
@@ -455,7 +455,7 @@ class RefRatesResponsePriceCompositionPriceV1 implements ModelInterface, ArrayAc
     /**
      * Sets price_with_vat
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney $price_with_vat price_with_vat
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoneyNullableAmount $price_with_vat price_with_vat
      *
      * @return self
      */

@@ -45,6 +45,8 @@ class Feature
      */
     public const ORDER_MANAGEMENT = 'ORDER_MANAGEMENT';
 
+    public const NOTIFICATION_CENTER = 'NOTIFICATION_CENTER';
+
     public const LEGACY_ORDER_MANAGEMENT = 'LEGACY_ORDER_MANAGEMENT';
 
     public const AUTO_ORDER_IMPORT = 'AUTO_ORDER_IMPORT';
@@ -103,6 +105,7 @@ class Feature
     {
         return [
             self::ORDER_MANAGEMENT,
+            self::NOTIFICATION_CENTER,
             self::LEGACY_ORDER_MANAGEMENT,
             self::AUTO_ORDER_IMPORT,
             self::BOL_DOT_COM_VVB_SHIPMENTS,

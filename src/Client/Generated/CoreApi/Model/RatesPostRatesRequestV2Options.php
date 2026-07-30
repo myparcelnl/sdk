@@ -61,6 +61,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     protected static $openAPITypes = [
         'additional_insurance' => 'object',
         'deliver_at_postal_point' => 'object',
+        'fresh_food' => 'object',
+        'frozen' => 'object',
         'hide_sender' => 'object',
         'insurance' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2OptionsInsurance',
         'no_tracking' => 'object',
@@ -87,6 +89,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     protected static $openAPIFormats = [
         'additional_insurance' => null,
         'deliver_at_postal_point' => null,
+        'fresh_food' => null,
+        'frozen' => null,
         'hide_sender' => null,
         'insurance' => null,
         'no_tracking' => null,
@@ -111,6 +115,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     protected static array $openAPINullables = [
         'additional_insurance' => false,
         'deliver_at_postal_point' => false,
+        'fresh_food' => false,
+        'frozen' => false,
         'hide_sender' => false,
         'insurance' => false,
         'no_tracking' => false,
@@ -215,6 +221,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     protected static $attributeMap = [
         'additional_insurance' => 'additionalInsurance',
         'deliver_at_postal_point' => 'deliverAtPostalPoint',
+        'fresh_food' => 'freshFood',
+        'frozen' => 'frozen',
         'hide_sender' => 'hideSender',
         'insurance' => 'insurance',
         'no_tracking' => 'noTracking',
@@ -239,6 +247,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     protected static $setters = [
         'additional_insurance' => 'setAdditionalInsurance',
         'deliver_at_postal_point' => 'setDeliverAtPostalPoint',
+        'fresh_food' => 'setFreshFood',
+        'frozen' => 'setFrozen',
         'hide_sender' => 'setHideSender',
         'insurance' => 'setInsurance',
         'no_tracking' => 'setNoTracking',
@@ -263,6 +273,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     protected static $getters = [
         'additional_insurance' => 'getAdditionalInsurance',
         'deliver_at_postal_point' => 'getDeliverAtPostalPoint',
+        'fresh_food' => 'getFreshFood',
+        'frozen' => 'getFrozen',
         'hide_sender' => 'getHideSender',
         'insurance' => 'getInsurance',
         'no_tracking' => 'getNoTracking',
@@ -338,6 +350,8 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     {
         $this->setIfExists('additional_insurance', $data ?? [], null);
         $this->setIfExists('deliver_at_postal_point', $data ?? [], null);
+        $this->setIfExists('fresh_food', $data ?? [], null);
+        $this->setIfExists('frozen', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('insurance', $data ?? [], null);
         $this->setIfExists('no_tracking', $data ?? [], null);
@@ -451,6 +465,60 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     }
 
     /**
+     * Gets fresh_food
+     *
+     * @return object|null
+     */
+    public function getFreshFood()
+    {
+        return $this->container['fresh_food'];
+    }
+
+    /**
+     * Sets fresh_food
+     *
+     * @param object|null $fresh_food Fresh food option
+     *
+     * @return self
+     */
+    public function setFreshFood($fresh_food)
+    {
+        if (is_null($fresh_food)) {
+            throw new \InvalidArgumentException('non-nullable fresh_food cannot be null');
+        }
+        $this->container['fresh_food'] = $fresh_food;
+
+        return $this;
+    }
+
+    /**
+     * Gets frozen
+     *
+     * @return object|null
+     */
+    public function getFrozen()
+    {
+        return $this->container['frozen'];
+    }
+
+    /**
+     * Sets frozen
+     *
+     * @param object|null $frozen Frozen option
+     *
+     * @return self
+     */
+    public function setFrozen($frozen)
+    {
+        if (is_null($frozen)) {
+            throw new \InvalidArgumentException('non-nullable frozen cannot be null');
+        }
+        $this->container['frozen'] = $frozen;
+
+        return $this;
+    }
+
+    /**
      * Gets hide_sender
      *
      * @return object|null
@@ -517,7 +585,7 @@ class RatesPostRatesRequestV2Options implements ModelInterface, ArrayAccess, \Js
     /**
      * Sets no_tracking
      *
-     * @param object|null $no_tracking No tracking option (inverse of tracked)
+     * @param object|null $no_tracking Ship without track and trace option
      *
      * @return self
      */

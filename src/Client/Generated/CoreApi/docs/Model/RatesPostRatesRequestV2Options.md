@@ -6,9 +6,11 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **additional_insurance** | **object** | Additional insurance option | [optional]
 **deliver_at_postal_point** | **object** | Deliver at postal point option | [optional]
+**fresh_food** | **object** | Fresh food option | [optional]
+**frozen** | **object** | Frozen option | [optional]
 **hide_sender** | **object** | Hide sender option | [optional]
 **insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2OptionsInsurance**](RatesPostRatesRequestV2OptionsInsurance.md) |  | [optional]
-**no_tracking** | **object** | No tracking option (inverse of tracked) | [optional]
+**no_tracking** | **object** | Ship without track and trace option | [optional]
 **oversized_package** | **object** | Oversized package option | [optional]
 **priority_delivery** | **object** | Priority delivery package option | [optional]
 **recipient_only_delivery** | **object** | Recipient only delivery option | [optional]
