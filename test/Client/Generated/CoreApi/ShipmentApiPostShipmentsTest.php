@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Test\Client\Generated\CoreApi;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
+use JsonException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
@@ -16,6 +17,21 @@ use Psr\Http\Message\RequestInterface;
 
 final class ShipmentApiPostShipmentsTest extends TestCase
 {
+    public function testPostShipmentsRequestThrowsForInvalidJson(): void
+    {
+        $data = new ShipmentPostShipmentsRequestV11Data();
+        $data->setShipments([(new ShipmentRequest())->setNote("\xB1\x31")]);
+        $data->setUserAgent('SDK-Test/1.0');
+
+        $request = new ShipmentPostShipmentsRequestV11();
+        $request->setData($data);
+
+        $api = new ShipmentApi($this->createMock(ClientInterface::class), new Configuration());
+
+        $this->expectException(JsonException::class);
+        $api->postShipmentsRequest($request, null, null, null, null, null, 'application/json');
+    }
+
     public function testPostShipmentsDeserializesMultiColloRegionsAsStrings(): void
     {
         $client = $this->createMock(ClientInterface::class);

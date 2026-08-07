@@ -155,6 +155,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function deleteShippingRule($shipping_rule_id, $user_agent = null, string $contentType = self::contentTypes['deleteShippingRule'][0])
@@ -173,6 +174,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteShippingRuleWithHttpInfo($shipping_rule_id, $user_agent = null, string $contentType = self::contentTypes['deleteShippingRule'][0])
@@ -223,6 +225,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteShippingRule'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteShippingRuleAsync($shipping_rule_id, $user_agent = null, string $contentType = self::contentTypes['deleteShippingRule'][0])
@@ -245,6 +248,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteShippingRule'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteShippingRuleAsyncWithHttpInfo($shipping_rule_id, $user_agent = null, string $contentType = self::contentTypes['deleteShippingRule'][0])
@@ -283,6 +287,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteShippingRule'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function deleteShippingRuleRequest($shipping_rule_id, $user_agent = null, string $contentType = self::contentTypes['deleteShippingRule'][0])
@@ -350,7 +355,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -402,6 +407,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesImplications|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function getShippingRuleImplications($shop_id, $country = null, $region = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRuleImplications'][0])
@@ -424,6 +430,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesImplications|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShippingRuleImplicationsWithHttpInfo($shop_id, $country = null, $region = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRuleImplications'][0])
@@ -556,6 +563,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRuleImplications'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRuleImplicationsAsync($shop_id, $country = null, $region = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRuleImplications'][0])
@@ -581,6 +589,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRuleImplications'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRuleImplicationsAsyncWithHttpInfo($shop_id, $country = null, $region = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRuleImplications'][0])
@@ -635,6 +644,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRuleImplications'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShippingRuleImplicationsRequest($shop_id, $country = null, $region = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRuleImplications'][0])
@@ -741,7 +751,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -793,6 +803,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRulesPaginated|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function getShippingRules($page = null, $size = null, $shop_ids = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRules'][0])
@@ -815,6 +826,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRulesPaginated|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShippingRulesWithHttpInfo($page = null, $size = null, $shop_ids = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRules'][0])
@@ -947,6 +959,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRulesAsync($page = null, $size = null, $shop_ids = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRules'][0])
@@ -972,6 +985,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRulesAsyncWithHttpInfo($page = null, $size = null, $shop_ids = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRules'][0])
@@ -1026,6 +1040,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShippingRulesRequest($page = null, $size = null, $shop_ids = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRules'][0])
@@ -1127,7 +1142,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1176,6 +1191,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function getShippingRulesByIds($shipping_rule_ids, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByIds'][0])
@@ -1195,6 +1211,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShippingRulesByIdsWithHttpInfo($shipping_rule_ids, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByIds'][0])
@@ -1324,6 +1341,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRulesByIds'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRulesByIdsAsync($shipping_rule_ids, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByIds'][0])
@@ -1346,6 +1364,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRulesByIds'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRulesByIdsAsyncWithHttpInfo($shipping_rule_ids, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByIds'][0])
@@ -1397,6 +1416,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRulesByIds'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShippingRulesByIdsRequest($shipping_rule_ids, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByIds'][0])
@@ -1458,7 +1478,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1510,6 +1530,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRulesPaginated|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function getShippingRulesByShop($shop_id, $page = null, $size = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByShop'][0])
@@ -1532,6 +1553,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRulesPaginated|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShippingRulesByShopWithHttpInfo($shop_id, $page = null, $size = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByShop'][0])
@@ -1664,6 +1686,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRulesByShop'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRulesByShopAsync($shop_id, $page = null, $size = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByShop'][0])
@@ -1689,6 +1712,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRulesByShop'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShippingRulesByShopAsyncWithHttpInfo($shop_id, $page = null, $size = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByShop'][0])
@@ -1743,6 +1767,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShippingRulesByShop'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShippingRulesByShopRequest($shop_id, $page = null, $size = null, $type = null, $user_agent = null, string $contentType = self::contentTypes['getShippingRulesByShop'][0])
@@ -1852,7 +1877,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1901,6 +1926,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function patchShippingRules($shipping_rules_patch_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['patchShippingRules'][0])
@@ -1920,6 +1946,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function patchShippingRulesWithHttpInfo($shipping_rules_patch_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['patchShippingRules'][0])
@@ -2049,6 +2076,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function patchShippingRulesAsync($shipping_rules_patch_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['patchShippingRules'][0])
@@ -2071,6 +2099,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function patchShippingRulesAsyncWithHttpInfo($shipping_rules_patch_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['patchShippingRules'][0])
@@ -2122,6 +2151,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function patchShippingRulesRequest($shipping_rules_patch_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['patchShippingRules'][0])
@@ -2161,7 +2191,7 @@ class ShippingRuleApi
         if (isset($shipping_rules_patch_shipping_rules)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($shipping_rules_patch_shipping_rules));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($shipping_rules_patch_shipping_rules), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $shipping_rules_patch_shipping_rules;
             }
@@ -2182,7 +2212,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2231,6 +2261,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function postShippingRules($shipping_rules_post_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['postShippingRules'][0])
@@ -2250,6 +2281,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postShippingRulesWithHttpInfo($shipping_rules_post_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['postShippingRules'][0])
@@ -2379,6 +2411,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postShippingRulesAsync($shipping_rules_post_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['postShippingRules'][0])
@@ -2401,6 +2434,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postShippingRulesAsyncWithHttpInfo($shipping_rules_post_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['postShippingRules'][0])
@@ -2452,6 +2486,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postShippingRulesRequest($shipping_rules_post_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['postShippingRules'][0])
@@ -2491,7 +2526,7 @@ class ShippingRuleApi
         if (isset($shipping_rules_post_shipping_rules)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($shipping_rules_post_shipping_rules));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($shipping_rules_post_shipping_rules), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $shipping_rules_post_shipping_rules;
             }
@@ -2512,7 +2547,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2561,6 +2596,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError
      */
     public function putShippingRules($shipping_rules_put_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['putShippingRules'][0])
@@ -2580,6 +2616,7 @@ class ShippingRuleApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\ShippingRulesResponsesShippingRules|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function putShippingRulesWithHttpInfo($shipping_rules_put_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['putShippingRules'][0])
@@ -2709,6 +2746,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function putShippingRulesAsync($shipping_rules_put_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['putShippingRules'][0])
@@ -2731,6 +2769,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function putShippingRulesAsyncWithHttpInfo($shipping_rules_put_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['putShippingRules'][0])
@@ -2782,6 +2821,7 @@ class ShippingRuleApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putShippingRules'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function putShippingRulesRequest($shipping_rules_put_shipping_rules, $user_agent = null, string $contentType = self::contentTypes['putShippingRules'][0])
@@ -2821,7 +2861,7 @@ class ShippingRuleApi
         if (isset($shipping_rules_put_shipping_rules)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($shipping_rules_put_shipping_rules));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($shipping_rules_put_shipping_rules), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $shipping_rules_put_shipping_rules;
             }
@@ -2842,7 +2882,7 @@ class ShippingRuleApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
