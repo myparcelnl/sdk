@@ -5,7 +5,9 @@
     json_encode(..., JSON_THROW_ON_ERROR), and the resulting JsonException is
     documented on generated request methods. Guzzle deprecated the helper in
     7.15 and removes it in 8.0. Fail-fast semantics are preserved, with the
-    native JsonException replacing Guzzle's InvalidArgumentException.
+    native JsonException replacing Guzzle's InvalidArgumentException. Async
+    response decoding also uses JSON_THROW_ON_ERROR and maps failures to an
+    ApiException, matching the synchronous response path.
 
     When the pinned generator version changes, refresh this file from the new
     stock template and re-apply the delta.
@@ -497,14 +499,26 @@ use {{invokerPackage}}\ObjectSerializer;
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     {{#returnType}}
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
