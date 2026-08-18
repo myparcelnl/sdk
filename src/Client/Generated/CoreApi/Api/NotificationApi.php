@@ -161,6 +161,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function deleteNotificationGroups($ids, $user_agent = null, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
@@ -179,6 +180,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteNotificationGroupsWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
@@ -229,6 +231,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteNotificationGroupsAsync($ids, $user_agent = null, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
@@ -251,6 +254,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteNotificationGroupsAsyncWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
@@ -289,6 +293,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function deleteNotificationGroupsRequest($ids, $user_agent = null, string $contentType = self::contentTypes['deleteNotificationGroups'][0])
@@ -350,7 +355,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -399,6 +404,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function disableAllNotificationTemplatesByGroup($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
@@ -417,6 +423,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function disableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
@@ -467,6 +474,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function disableAllNotificationTemplatesByGroupAsync($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
@@ -489,6 +497,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function disableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
@@ -527,6 +536,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function disableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['disableAllNotificationTemplatesByGroup'][0])
@@ -588,7 +598,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -638,6 +648,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function disableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
@@ -657,6 +668,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function disableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
@@ -708,6 +720,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function disableNotificationTemplateAsync($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
@@ -731,6 +744,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function disableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
@@ -770,6 +784,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['disableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function disableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['disableNotificationTemplate'][0])
@@ -846,7 +861,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -895,6 +910,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function enableAllNotificationTemplatesByGroup($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
@@ -913,6 +929,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function enableAllNotificationTemplatesByGroupWithHttpInfo($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
@@ -963,6 +980,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function enableAllNotificationTemplatesByGroupAsync($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
@@ -985,6 +1003,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function enableAllNotificationTemplatesByGroupAsyncWithHttpInfo($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
@@ -1023,6 +1042,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableAllNotificationTemplatesByGroup'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function enableAllNotificationTemplatesByGroupRequest($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['enableAllNotificationTemplatesByGroup'][0])
@@ -1084,7 +1104,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1134,6 +1154,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function enableNotificationTemplate($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
@@ -1153,6 +1174,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function enableNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
@@ -1204,6 +1226,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function enableNotificationTemplateAsync($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
@@ -1227,6 +1250,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function enableNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
@@ -1266,6 +1290,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['enableNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function enableNotificationTemplateRequest($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['enableNotificationTemplate'][0])
@@ -1342,7 +1367,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1391,6 +1416,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getNotificationGroups($shop_id = null, $user_agent = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
@@ -1410,6 +1436,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getNotificationGroupsWithHttpInfo($shop_id = null, $user_agent = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
@@ -1539,6 +1566,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getNotificationGroupsAsync($shop_id = null, $user_agent = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
@@ -1561,6 +1589,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getNotificationGroupsAsyncWithHttpInfo($shop_id = null, $user_agent = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
@@ -1571,13 +1600,25 @@ class NotificationApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1612,6 +1653,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getNotificationGroupsRequest($shop_id = null, $user_agent = null, string $contentType = self::contentTypes['getNotificationGroups'][0])
@@ -1668,7 +1710,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1717,6 +1759,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getNotificationTemplates($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['getNotificationTemplates'][0])
@@ -1736,6 +1779,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationTemplates|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getNotificationTemplatesWithHttpInfo($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['getNotificationTemplates'][0])
@@ -1865,6 +1909,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getNotificationTemplatesAsync($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['getNotificationTemplates'][0])
@@ -1887,6 +1932,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getNotificationTemplatesAsyncWithHttpInfo($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['getNotificationTemplates'][0])
@@ -1897,13 +1943,25 @@ class NotificationApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1938,6 +1996,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getNotificationTemplates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getNotificationTemplatesRequest($notification_group_id, $user_agent = null, string $contentType = self::contentTypes['getNotificationTemplates'][0])
@@ -1999,7 +2058,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2048,6 +2107,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postNotificationGroups($notification_post_notification_group_request, $user_agent = null, string $contentType = self::contentTypes['postNotificationGroups'][0])
@@ -2067,6 +2127,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\NotificationResponsesNotificationGroups|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postNotificationGroupsWithHttpInfo($notification_post_notification_group_request, $user_agent = null, string $contentType = self::contentTypes['postNotificationGroups'][0])
@@ -2196,6 +2257,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postNotificationGroupsAsync($notification_post_notification_group_request, $user_agent = null, string $contentType = self::contentTypes['postNotificationGroups'][0])
@@ -2218,6 +2280,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postNotificationGroupsAsyncWithHttpInfo($notification_post_notification_group_request, $user_agent = null, string $contentType = self::contentTypes['postNotificationGroups'][0])
@@ -2228,13 +2291,25 @@ class NotificationApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -2269,6 +2344,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postNotificationGroups'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postNotificationGroupsRequest($notification_post_notification_group_request, $user_agent = null, string $contentType = self::contentTypes['postNotificationGroups'][0])
@@ -2308,7 +2384,7 @@ class NotificationApi
         if (isset($notification_post_notification_group_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($notification_post_notification_group_request));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($notification_post_notification_group_request), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $notification_post_notification_group_request;
             }
@@ -2329,7 +2405,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2380,6 +2456,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function putNotificationTemplate($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent = null, string $contentType = self::contentTypes['putNotificationTemplate'][0])
@@ -2400,6 +2477,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function putNotificationTemplateWithHttpInfo($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent = null, string $contentType = self::contentTypes['putNotificationTemplate'][0])
@@ -2452,6 +2530,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function putNotificationTemplateAsync($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent = null, string $contentType = self::contentTypes['putNotificationTemplate'][0])
@@ -2476,6 +2555,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function putNotificationTemplateAsyncWithHttpInfo($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent = null, string $contentType = self::contentTypes['putNotificationTemplate'][0])
@@ -2516,6 +2596,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putNotificationTemplate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function putNotificationTemplateRequest($notification_group_id, $notification_template_id, $notification_put_notification_template_request, $user_agent = null, string $contentType = self::contentTypes['putNotificationTemplate'][0])
@@ -2585,7 +2666,7 @@ class NotificationApi
         if (isset($notification_put_notification_template_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($notification_put_notification_template_request));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($notification_put_notification_template_request), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $notification_put_notification_template_request;
             }
@@ -2606,7 +2687,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2656,6 +2737,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function sendTestNotification($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['sendTestNotification'][0])
@@ -2675,6 +2757,7 @@ class NotificationApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function sendTestNotificationWithHttpInfo($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['sendTestNotification'][0])
@@ -2726,6 +2809,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendTestNotificationAsync($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['sendTestNotification'][0])
@@ -2749,6 +2833,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendTestNotificationAsyncWithHttpInfo($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['sendTestNotification'][0])
@@ -2788,6 +2873,7 @@ class NotificationApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendTestNotification'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function sendTestNotificationRequest($notification_group_id, $notification_template_id, $user_agent = null, string $contentType = self::contentTypes['sendTestNotification'][0])
@@ -2864,7 +2950,7 @@ class NotificationApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);

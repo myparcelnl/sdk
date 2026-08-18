@@ -131,6 +131,7 @@ class DefaultApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\IamApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal
      */
     public function whoamiGet(string $contentType = self::contentTypes['whoamiGet'][0])
@@ -148,6 +149,7 @@ class DefaultApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\IamApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal, HTTP status code, HTTP response headers (array of strings)
      */
     public function whoamiGetWithHttpInfo(string $contentType = self::contentTypes['whoamiGet'][0])
@@ -271,6 +273,7 @@ class DefaultApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['whoamiGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function whoamiGetAsync(string $contentType = self::contentTypes['whoamiGet'][0])
@@ -291,6 +294,7 @@ class DefaultApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['whoamiGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function whoamiGetAsyncWithHttpInfo(string $contentType = self::contentTypes['whoamiGet'][0])
@@ -301,13 +305,25 @@ class DefaultApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -340,6 +356,7 @@ class DefaultApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['whoamiGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function whoamiGetRequest(string $contentType = self::contentTypes['whoamiGet'][0])
@@ -381,7 +398,7 @@ class DefaultApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
