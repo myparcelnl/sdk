@@ -183,6 +183,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function deleteShipments($ids, $user_agent = null, string $contentType = self::contentTypes['deleteShipments'][0])
@@ -201,6 +202,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteShipmentsWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['deleteShipments'][0])
@@ -251,6 +253,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteShipmentsAsync($ids, $user_agent = null, string $contentType = self::contentTypes['deleteShipments'][0])
@@ -273,6 +276,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteShipmentsAsyncWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['deleteShipments'][0])
@@ -283,7 +287,7 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -311,6 +315,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function deleteShipmentsRequest($ids, $user_agent = null, string $contentType = self::contentTypes['deleteShipments'][0])
@@ -372,7 +377,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -438,6 +443,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getDeliveryOptions($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
@@ -474,6 +480,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getDeliveryOptionsWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
@@ -620,6 +627,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getDeliveryOptionsAsync($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
@@ -659,6 +667,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getDeliveryOptionsAsyncWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
@@ -669,13 +678,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -727,6 +748,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDeliveryOptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getDeliveryOptionsRequest($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getDeliveryOptions'][0])
@@ -1009,7 +1031,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1074,6 +1096,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPoints|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getDropOffPoints($postal_code = null, $number = null, $distance = null, $cc = null, $limit = null, $carrier_id = null, $shop_id = null, $reference = null, $location_name = null, $external_identifier = null, $city = null, $cut_off_time = null, $min_cut_off_time = null, $max_cut_off_time = null, $latitude = null, $longitude = null, $exclude_parcel_lockers = null, $user_agent = null, string $contentType = self::contentTypes['getDropOffPoints'][0])
@@ -1109,6 +1132,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDropOffPoints|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getDropOffPointsWithHttpInfo($postal_code = null, $number = null, $distance = null, $cc = null, $limit = null, $carrier_id = null, $shop_id = null, $reference = null, $location_name = null, $external_identifier = null, $city = null, $cut_off_time = null, $min_cut_off_time = null, $max_cut_off_time = null, $latitude = null, $longitude = null, $exclude_parcel_lockers = null, $user_agent = null, string $contentType = self::contentTypes['getDropOffPoints'][0])
@@ -1254,6 +1278,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDropOffPoints'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getDropOffPointsAsync($postal_code = null, $number = null, $distance = null, $cc = null, $limit = null, $carrier_id = null, $shop_id = null, $reference = null, $location_name = null, $external_identifier = null, $city = null, $cut_off_time = null, $min_cut_off_time = null, $max_cut_off_time = null, $latitude = null, $longitude = null, $exclude_parcel_lockers = null, $user_agent = null, string $contentType = self::contentTypes['getDropOffPoints'][0])
@@ -1292,6 +1317,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDropOffPoints'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getDropOffPointsAsyncWithHttpInfo($postal_code = null, $number = null, $distance = null, $cc = null, $limit = null, $carrier_id = null, $shop_id = null, $reference = null, $location_name = null, $external_identifier = null, $city = null, $cut_off_time = null, $min_cut_off_time = null, $max_cut_off_time = null, $latitude = null, $longitude = null, $exclude_parcel_lockers = null, $user_agent = null, string $contentType = self::contentTypes['getDropOffPoints'][0])
@@ -1302,13 +1328,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1359,6 +1397,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDropOffPoints'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getDropOffPointsRequest($postal_code = null, $number = null, $distance = null, $cc = null, $limit = null, $carrier_id = null, $shop_id = null, $reference = null, $location_name = null, $external_identifier = null, $city = null, $cut_off_time = null, $min_cut_off_time = null, $max_cut_off_time = null, $latitude = null, $longitude = null, $exclude_parcel_lockers = null, $user_agent = null, string $contentType = self::contentTypes['getDropOffPoints'][0])
@@ -1614,7 +1653,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1680,6 +1719,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getPickupLocations($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
@@ -1716,6 +1756,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getPickupLocationsWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
@@ -1862,6 +1903,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getPickupLocationsAsync($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
@@ -1901,6 +1943,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getPickupLocationsAsyncWithHttpInfo($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
@@ -1911,13 +1954,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1969,6 +2024,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPickupLocations'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getPickupLocationsRequest($cc = null, $postal_code = null, $number = null, $city = null, $street = null, $platform = null, $shop_id = null, $carrier = null, $delivery_date = null, $delivery_time = null, $cutoff_time = null, $dropoff_days = null, $monday_delivery = null, $dropoff_delay = null, $deliverydays_window = null, $exclude_delivery_type = null, $exclude_parcel_lockers = null, $latitude = null, $longitude = null, string $contentType = self::contentTypes['getPickupLocations'][0])
@@ -2251,7 +2307,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2320,6 +2376,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getShipments($barcode = null, $carrier_id = null, $created = null, $delayed = null, $delivered = null, $dropoff_today = null, $filter_hidden_shops = null, $hidden = null, $link_consumer_portal = null, $order = null, $package_type = null, $page = null, $q = null, $reference_identifier = null, $region = null, $shipment_type = null, $shop_id = null, $size = null, $sort = null, $status = null, $transaction_status = null, $user_agent = null, string $contentType = self::contentTypes['getShipments'][0])
@@ -2359,6 +2416,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShipmentsWithHttpInfo($barcode = null, $carrier_id = null, $created = null, $delayed = null, $delivered = null, $dropoff_today = null, $filter_hidden_shops = null, $hidden = null, $link_consumer_portal = null, $order = null, $package_type = null, $page = null, $q = null, $reference_identifier = null, $region = null, $shipment_type = null, $shop_id = null, $size = null, $sort = null, $status = null, $transaction_status = null, $user_agent = null, string $contentType = self::contentTypes['getShipments'][0])
@@ -2508,6 +2566,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShipmentsAsync($barcode = null, $carrier_id = null, $created = null, $delayed = null, $delivered = null, $dropoff_today = null, $filter_hidden_shops = null, $hidden = null, $link_consumer_portal = null, $order = null, $package_type = null, $page = null, $q = null, $reference_identifier = null, $region = null, $shipment_type = null, $shop_id = null, $size = null, $sort = null, $status = null, $transaction_status = null, $user_agent = null, string $contentType = self::contentTypes['getShipments'][0])
@@ -2550,6 +2609,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShipmentsAsyncWithHttpInfo($barcode = null, $carrier_id = null, $created = null, $delayed = null, $delivered = null, $dropoff_today = null, $filter_hidden_shops = null, $hidden = null, $link_consumer_portal = null, $order = null, $package_type = null, $page = null, $q = null, $reference_identifier = null, $region = null, $shipment_type = null, $shop_id = null, $size = null, $sort = null, $status = null, $transaction_status = null, $user_agent = null, string $contentType = self::contentTypes['getShipments'][0])
@@ -2560,13 +2620,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -2621,6 +2693,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShipmentsRequest($barcode = null, $carrier_id = null, $created = null, $delayed = null, $delivered = null, $dropoff_today = null, $filter_hidden_shops = null, $hidden = null, $link_consumer_portal = null, $order = null, $package_type = null, $page = null, $q = null, $reference_identifier = null, $region = null, $shipment_type = null, $shop_id = null, $size = null, $sort = null, $status = null, $transaction_status = null, $user_agent = null, string $contentType = self::contentTypes['getShipments'][0])
@@ -2898,7 +2971,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -2948,6 +3021,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getShipmentsById($ids, $link_consumer_portal = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsById'][0])
@@ -2968,6 +3042,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShipmentsByIdWithHttpInfo($ids, $link_consumer_portal = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsById'][0])
@@ -3098,6 +3173,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipmentsById'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShipmentsByIdAsync($ids, $link_consumer_portal = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsById'][0])
@@ -3121,6 +3197,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipmentsById'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShipmentsByIdAsyncWithHttpInfo($ids, $link_consumer_portal = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsById'][0])
@@ -3131,13 +3208,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -3173,6 +3262,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipmentsById'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShipmentsByIdRequest($ids, $link_consumer_portal = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsById'][0])
@@ -3244,7 +3334,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -3297,6 +3387,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function getShipmentsLabels($ids, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsLabels'][0])
@@ -3319,6 +3410,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function getShipmentsLabelsWithHttpInfo($ids, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsLabels'][0])
@@ -3406,6 +3498,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipmentsLabels'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShipmentsLabelsAsync($ids, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsLabels'][0])
@@ -3432,6 +3525,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipmentsLabels'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getShipmentsLabelsAsyncWithHttpInfo($ids, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsLabels'][0])
@@ -3442,7 +3536,7 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -3474,6 +3568,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getShipmentsLabels'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getShipmentsLabelsRequest($ids, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['getShipmentsLabels'][0])
@@ -3578,7 +3673,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -3632,6 +3727,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getTrackTraces($barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTraces'][0])
@@ -3656,6 +3752,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getTrackTracesWithHttpInfo($barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTraces'][0])
@@ -3825,6 +3922,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getTrackTracesAsync($barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTraces'][0])
@@ -3852,6 +3950,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getTrackTracesAsyncWithHttpInfo($barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTraces'][0])
@@ -3862,13 +3961,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -3908,6 +4019,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTraces'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getTrackTracesRequest($barcode = null, $country_code = null, $external_identifier = null, $extra_info = null, $postal_code = null, $sort = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTraces'][0])
@@ -4053,7 +4165,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -4104,6 +4216,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getTrackTracesByIds($ids, $sort = null, $extra_info = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
@@ -4125,6 +4238,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesTracktraces|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getTrackTracesByIdsWithHttpInfo($ids, $sort = null, $extra_info = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
@@ -4256,6 +4370,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getTrackTracesByIdsAsync($ids, $sort = null, $extra_info = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
@@ -4280,6 +4395,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getTrackTracesByIdsAsyncWithHttpInfo($ids, $sort = null, $extra_info = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
@@ -4290,13 +4406,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -4333,6 +4461,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTrackTracesByIds'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getTrackTracesByIdsRequest($ids, $sort = null, $extra_info = null, $user_agent = null, string $contentType = self::contentTypes['getTrackTracesByIds'][0])
@@ -4417,7 +4546,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -4466,6 +4595,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postCapabilities($capabilities_post_capabilities_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilities'][0])
@@ -4485,6 +4615,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postCapabilitiesWithHttpInfo($capabilities_post_capabilities_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilities'][0])
@@ -4649,6 +4780,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postCapabilitiesAsync($capabilities_post_capabilities_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilities'][0])
@@ -4671,6 +4803,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postCapabilitiesAsyncWithHttpInfo($capabilities_post_capabilities_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilities'][0])
@@ -4681,13 +4814,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -4722,6 +4867,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilities'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postCapabilitiesRequest($capabilities_post_capabilities_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilities'][0])
@@ -4761,7 +4907,7 @@ class ShipmentApi
         if (isset($capabilities_post_capabilities_request_v2)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($capabilities_post_capabilities_request_v2));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($capabilities_post_capabilities_request_v2), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $capabilities_post_capabilities_request_v2;
             }
@@ -4782,7 +4928,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -4831,6 +4977,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postCapabilitiesContractDefinitions($capabilities_post_contract_definitions_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilitiesContractDefinitions'][0])
@@ -4850,6 +4997,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postCapabilitiesContractDefinitionsWithHttpInfo($capabilities_post_contract_definitions_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilitiesContractDefinitions'][0])
@@ -5014,6 +5162,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilitiesContractDefinitions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postCapabilitiesContractDefinitionsAsync($capabilities_post_contract_definitions_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilitiesContractDefinitions'][0])
@@ -5036,6 +5185,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilitiesContractDefinitions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postCapabilitiesContractDefinitionsAsyncWithHttpInfo($capabilities_post_contract_definitions_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilitiesContractDefinitions'][0])
@@ -5046,13 +5196,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -5087,6 +5249,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postCapabilitiesContractDefinitions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postCapabilitiesContractDefinitionsRequest($capabilities_post_contract_definitions_request_v2, $user_agent = null, string $contentType = self::contentTypes['postCapabilitiesContractDefinitions'][0])
@@ -5126,7 +5289,7 @@ class ShipmentApi
         if (isset($capabilities_post_contract_definitions_request_v2)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($capabilities_post_contract_definitions_request_v2));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($capabilities_post_contract_definitions_request_v2), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $capabilities_post_contract_definitions_request_v2;
             }
@@ -5147,7 +5310,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -5196,6 +5359,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponseRateV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postRates($rates_post_rates_request_v2, $user_agent = null, string $contentType = self::contentTypes['postRates'][0])
@@ -5215,6 +5379,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefRatesResponseRateV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postRatesWithHttpInfo($rates_post_rates_request_v2, $user_agent = null, string $contentType = self::contentTypes['postRates'][0])
@@ -5379,6 +5544,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postRates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postRatesAsync($rates_post_rates_request_v2, $user_agent = null, string $contentType = self::contentTypes['postRates'][0])
@@ -5401,6 +5567,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postRates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postRatesAsyncWithHttpInfo($rates_post_rates_request_v2, $user_agent = null, string $contentType = self::contentTypes['postRates'][0])
@@ -5411,13 +5578,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -5452,6 +5631,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postRates'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postRatesRequest($rates_post_rates_request_v2, $user_agent = null, string $contentType = self::contentTypes['postRates'][0])
@@ -5491,7 +5671,7 @@ class ShipmentApi
         if (isset($rates_post_rates_request_v2)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($rates_post_rates_request_v2));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($rates_post_rates_request_v2), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $rates_post_rates_request_v2;
             }
@@ -5512,7 +5692,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -5565,6 +5745,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postShipments($shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['postShipments'][0])
@@ -5588,6 +5769,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postShipmentsWithHttpInfo($shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['postShipments'][0])
@@ -5756,6 +5938,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postShipmentsAsync($shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['postShipments'][0])
@@ -5782,6 +5965,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postShipmentsAsyncWithHttpInfo($shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['postShipments'][0])
@@ -5792,13 +5976,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -5837,6 +6033,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postShipmentsRequest($shipment_post_shipments_request_v11, $format = null, $positions = null, $collect_date = null, $delivery_options_identifier = null, $user_agent = null, string $contentType = self::contentTypes['postShipments'][0])
@@ -5919,7 +6116,7 @@ class ShipmentApi
         if (isset($shipment_post_shipments_request_v11)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($shipment_post_shipments_request_v11));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($shipment_post_shipments_request_v11), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $shipment_post_shipments_request_v11;
             }
@@ -5940,7 +6137,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -5988,6 +6185,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postUnrelatedReturnShipments($user_agent = null, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
@@ -6006,6 +6204,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesDownloadUrl|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postUnrelatedReturnShipmentsWithHttpInfo($user_agent = null, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
@@ -6169,6 +6368,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postUnrelatedReturnShipmentsAsync($user_agent = null, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
@@ -6190,6 +6390,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postUnrelatedReturnShipmentsAsyncWithHttpInfo($user_agent = null, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
@@ -6200,13 +6401,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -6240,6 +6453,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postUnrelatedReturnShipments'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postUnrelatedReturnShipmentsRequest($user_agent = null, string $contentType = self::contentTypes['postUnrelatedReturnShipments'][0])
@@ -6286,7 +6500,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -6335,6 +6549,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function putShipment($shipment_put_shipments_request_v11, $user_agent = null, string $contentType = self::contentTypes['putShipment'][0])
@@ -6354,6 +6569,7 @@ class ShipmentApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function putShipmentWithHttpInfo($shipment_put_shipments_request_v11, $user_agent = null, string $contentType = self::contentTypes['putShipment'][0])
@@ -6518,6 +6734,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putShipment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function putShipmentAsync($shipment_put_shipments_request_v11, $user_agent = null, string $contentType = self::contentTypes['putShipment'][0])
@@ -6540,6 +6757,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putShipment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function putShipmentAsyncWithHttpInfo($shipment_put_shipments_request_v11, $user_agent = null, string $contentType = self::contentTypes['putShipment'][0])
@@ -6550,13 +6768,25 @@ class ShipmentApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -6591,6 +6821,7 @@ class ShipmentApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putShipment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function putShipmentRequest($shipment_put_shipments_request_v11, $user_agent = null, string $contentType = self::contentTypes['putShipment'][0])
@@ -6630,7 +6861,7 @@ class ShipmentApi
         if (isset($shipment_put_shipments_request_v11)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($shipment_put_shipments_request_v11));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($shipment_put_shipments_request_v11), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $shipment_put_shipments_request_v11;
             }
@@ -6651,7 +6882,7 @@ class ShipmentApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
