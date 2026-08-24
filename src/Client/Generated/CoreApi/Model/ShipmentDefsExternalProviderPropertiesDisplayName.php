@@ -45,8 +45,6 @@ class ShipmentDefsExternalProviderPropertiesDisplayName
      */
     public const FACEBOOK = 'Facebook';
 
-    public const GOOGLE = 'Google';
-
     public const FLESPAKKET_NL = 'Flespakket.nl';
 
     public const AMAZON = 'Amazon';
@@ -73,7 +71,6 @@ class ShipmentDefsExternalProviderPropertiesDisplayName
     {
         return [
             self::FACEBOOK,
-            self::GOOGLE,
             self::FLESPAKKET_NL,
             self::AMAZON,
             self::BOL_COM,

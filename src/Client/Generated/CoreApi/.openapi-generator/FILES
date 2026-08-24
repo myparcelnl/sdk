@@ -266,6 +266,9 @@ Model/ShipmentParametersPaperSize.php
 Model/ShipmentParametersShipmentType.php
 Model/ShipmentParametersSortShipment.php
 Model/ShipmentParametersStatus.php
+Model/ShipmentPatchShipmentsRequest.php
+Model/ShipmentPatchShipmentsRequestData.php
+Model/ShipmentPatchShipmentsRequestDataShipmentsInner.php
 Model/ShipmentPostReturnShipmentsRequest.php
 Model/ShipmentPostReturnShipmentsRequestData.php
 Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.php
@@ -639,6 +642,9 @@ docs/Model/ShipmentParametersPaperSize.md
 docs/Model/ShipmentParametersShipmentType.md
 docs/Model/ShipmentParametersSortShipment.md
 docs/Model/ShipmentParametersStatus.md
+docs/Model/ShipmentPatchShipmentsRequest.md
+docs/Model/ShipmentPatchShipmentsRequestData.md
+docs/Model/ShipmentPatchShipmentsRequestDataShipmentsInner.md
 docs/Model/ShipmentPostReturnShipmentsRequest.md
 docs/Model/ShipmentPostReturnShipmentsRequestData.md
 docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.md

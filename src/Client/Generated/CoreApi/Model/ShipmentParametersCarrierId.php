@@ -145,6 +145,11 @@ class ShipmentParametersCarrierId
     public const VIA_TIM = '20';
 
     /**
+     * DHL Freight
+     */
+    public const DHL_FREIGHT = '21';
+
+    /**
      * Gets allowable values of the enum
      * @return string[]
      */
@@ -170,7 +175,8 @@ class ShipmentParametersCarrierId
             self::INPOST,
             self::POSTE_ITALIANE,
             self::SPRING,
-            self::VIA_TIM
+            self::VIA_TIM,
+            self::DHL_FREIGHT
         ];
     }
 }

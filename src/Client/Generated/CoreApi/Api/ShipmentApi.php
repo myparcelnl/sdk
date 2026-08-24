@@ -99,6 +99,9 @@ class ShipmentApi
         'getTrackTracesByIds' => [
             'application/json',
         ],
+        'patchShipments' => [
+            'application/vnd.shipment+json',
+        ],
         'postCapabilities' => [
             'application/json;version=2.0',
             'application/json',
@@ -4578,6 +4581,256 @@ class ShipmentApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation patchShipments
+     *
+     * Patch Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest $shipment_patch_shipments_request Array of Shipment objects to partially update. (required)
+     * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShipments'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return void
+     */
+    public function patchShipments($shipment_patch_shipments_request, $user_agent = null, string $contentType = self::contentTypes['patchShipments'][0])
+    {
+        $this->patchShipmentsWithHttpInfo($shipment_patch_shipments_request, $user_agent, $contentType);
+    }
+
+    /**
+     * Operation patchShipmentsWithHttpInfo
+     *
+     * Patch Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest $shipment_patch_shipments_request Array of Shipment objects to partially update. (required)
+     * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShipments'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function patchShipmentsWithHttpInfo($shipment_patch_shipments_request, $user_agent = null, string $contentType = self::contentTypes['patchShipments'][0])
+    {
+        $request = $this->patchShipmentsRequest($shipment_patch_shipments_request, $user_agent, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                
+                
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation patchShipmentsAsync
+     *
+     * Patch Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest $shipment_patch_shipments_request Array of Shipment objects to partially update. (required)
+     * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShipments'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function patchShipmentsAsync($shipment_patch_shipments_request, $user_agent = null, string $contentType = self::contentTypes['patchShipments'][0])
+    {
+        return $this->patchShipmentsAsyncWithHttpInfo($shipment_patch_shipments_request, $user_agent, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation patchShipmentsAsyncWithHttpInfo
+     *
+     * Patch Shipment
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest $shipment_patch_shipments_request Array of Shipment objects to partially update. (required)
+     * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShipments'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function patchShipmentsAsyncWithHttpInfo($shipment_patch_shipments_request, $user_agent = null, string $contentType = self::contentTypes['patchShipments'][0])
+    {
+        $returnType = '';
+        $request = $this->patchShipmentsRequest($shipment_patch_shipments_request, $user_agent, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType, $request) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'patchShipments'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest $shipment_patch_shipments_request Array of Shipment objects to partially update. (required)
+     * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchShipments'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function patchShipmentsRequest($shipment_patch_shipments_request, $user_agent = null, string $contentType = self::contentTypes['patchShipments'][0])
+    {
+
+        // verify the required parameter 'shipment_patch_shipments_request' is set
+        if ($shipment_patch_shipments_request === null || (is_array($shipment_patch_shipments_request) && count($shipment_patch_shipments_request) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $shipment_patch_shipments_request when calling patchShipments'
+            );
+        }
+
+
+
+        $resourcePath = '/shipments';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($user_agent !== null) {
+            $headerParams['User-Agent'] = ObjectSerializer::toHeaderValue($user_agent);
+        }
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/*', 'application/problem+json', 'application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($shipment_patch_shipments_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($shipment_patch_shipments_request), JSON_THROW_ON_ERROR);
+            } else {
+                $httpBody = $shipment_patch_shipments_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('Authorization');
+        if ($apiKey !== null) {
+            $headers['Authorization'] = $apiKey;
+        }
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PATCH',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

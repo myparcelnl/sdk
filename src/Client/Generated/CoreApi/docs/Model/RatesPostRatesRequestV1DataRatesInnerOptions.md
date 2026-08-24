@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **extra_assurance** | **object** | Additional insurance option | [optional]
 **hide_sender** | **object** | Hide sender option | [optional]
 **large_format** | **object** | Oversized package option | [optional]
+**no_tracking** | **object** | Ship without track and trace option | [optional]
 **only_recipient** | **object** | Recipient only delivery option | [optional]
 **priority_delivery** | **object** | Priority delivery option | [optional]
 **receipt_code** | **object** | Requires receipt code option | [optional]
@@ -19,7 +20,6 @@ Name | Type | Description | Notes
 **same_day_delivery** | **object** | Same day delivery option | [optional]
 **saturday_delivery** | **object** | Saturday delivery option | [optional]
 **signature** | **object** | Requires signature option | [optional]
-**no_tracking** | **object** | Ship without track and trace option | [optional]
 **tracked** | **object** | DEPRECATED: replaced by no_tracking (its inverse). | [optional]
 **insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV1DataRatesInnerOptionsInsurance**](RatesPostRatesRequestV1DataRatesInnerOptionsInsurance.md) |  | [optional]
 
