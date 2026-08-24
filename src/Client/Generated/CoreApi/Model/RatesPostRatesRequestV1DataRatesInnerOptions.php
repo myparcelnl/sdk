@@ -67,6 +67,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'extra_assurance' => 'object',
         'hide_sender' => 'object',
         'large_format' => 'object',
+        'no_tracking' => 'object',
         'only_recipient' => 'object',
         'priority_delivery' => 'object',
         'receipt_code' => 'object',
@@ -94,6 +95,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'extra_assurance' => null,
         'hide_sender' => null,
         'large_format' => null,
+        'no_tracking' => null,
         'only_recipient' => null,
         'priority_delivery' => null,
         'receipt_code' => null,
@@ -119,6 +121,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'extra_assurance' => false,
         'hide_sender' => false,
         'large_format' => false,
+        'no_tracking' => false,
         'only_recipient' => false,
         'priority_delivery' => false,
         'receipt_code' => false,
@@ -224,6 +227,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'extra_assurance' => 'extra_assurance',
         'hide_sender' => 'hide_sender',
         'large_format' => 'large_format',
+        'no_tracking' => 'no_tracking',
         'only_recipient' => 'only_recipient',
         'priority_delivery' => 'priority_delivery',
         'receipt_code' => 'receipt_code',
@@ -249,6 +253,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'extra_assurance' => 'setExtraAssurance',
         'hide_sender' => 'setHideSender',
         'large_format' => 'setLargeFormat',
+        'no_tracking' => 'setNoTracking',
         'only_recipient' => 'setOnlyRecipient',
         'priority_delivery' => 'setPriorityDelivery',
         'receipt_code' => 'setReceiptCode',
@@ -274,6 +279,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         'extra_assurance' => 'getExtraAssurance',
         'hide_sender' => 'getHideSender',
         'large_format' => 'getLargeFormat',
+        'no_tracking' => 'getNoTracking',
         'only_recipient' => 'getOnlyRecipient',
         'priority_delivery' => 'getPriorityDelivery',
         'receipt_code' => 'getReceiptCode',
@@ -350,6 +356,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
         $this->setIfExists('extra_assurance', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('large_format', $data ?? [], null);
+        $this->setIfExists('no_tracking', $data ?? [], null);
         $this->setIfExists('only_recipient', $data ?? [], null);
         $this->setIfExists('priority_delivery', $data ?? [], null);
         $this->setIfExists('receipt_code', $data ?? [], null);
@@ -620,6 +627,33 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
     }
 
     /**
+     * Gets no_tracking
+     *
+     * @return object|null
+     */
+    public function getNoTracking()
+    {
+        return $this->container['no_tracking'];
+    }
+
+    /**
+     * Sets no_tracking
+     *
+     * @param object|null $no_tracking Ship without track and trace option
+     *
+     * @return self
+     */
+    public function setNoTracking($no_tracking)
+    {
+        if (is_null($no_tracking)) {
+            throw new \InvalidArgumentException('non-nullable no_tracking cannot be null');
+        }
+        $this->container['no_tracking'] = $no_tracking;
+
+        return $this;
+    }
+
+    /**
      * Gets only_recipient
      *
      * @return object|null
@@ -821,7 +855,7 @@ class RatesPostRatesRequestV1DataRatesInnerOptions implements ModelInterface, Ar
     /**
      * Sets tracked
      *
-     * @param object|null $tracked Tracking option
+     * @param object|null $tracked DEPRECATED: replaced by no_tracking (its inverse).
      *
      * @return self
      */

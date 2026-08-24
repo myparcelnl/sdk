@@ -73,6 +73,8 @@ class Carrier
 
     public const VIA_TIM = 'VIA_TIM';
 
+    public const DHL_FREIGHT = 'DHL_FREIGHT';
+
     public const BOL = 'BOL';
 
     /**
@@ -97,6 +99,7 @@ class Carrier
             self::UPS_EXPRESS_SAVER,
             self::UPS_STANDARD,
             self::VIA_TIM,
+            self::DHL_FREIGHT,
             self::BOL
         ];
     }

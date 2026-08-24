@@ -69,6 +69,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         'frozen' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'hide_sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'large_format' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
+        'no_tracking' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'only_recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'priority_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'receipt_code' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
@@ -102,6 +103,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         'frozen' => null,
         'hide_sender' => null,
         'large_format' => null,
+        'no_tracking' => null,
         'only_recipient' => null,
         'priority_delivery' => null,
         'receipt_code' => null,
@@ -133,6 +135,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         'frozen' => false,
         'hide_sender' => false,
         'large_format' => false,
+        'no_tracking' => false,
         'only_recipient' => false,
         'priority_delivery' => false,
         'receipt_code' => false,
@@ -244,6 +247,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         'frozen' => 'frozen',
         'hide_sender' => 'hide_sender',
         'large_format' => 'large_format',
+        'no_tracking' => 'no_tracking',
         'only_recipient' => 'only_recipient',
         'priority_delivery' => 'priority_delivery',
         'receipt_code' => 'receipt_code',
@@ -275,6 +279,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         'frozen' => 'setFrozen',
         'hide_sender' => 'setHideSender',
         'large_format' => 'setLargeFormat',
+        'no_tracking' => 'setNoTracking',
         'only_recipient' => 'setOnlyRecipient',
         'priority_delivery' => 'setPriorityDelivery',
         'receipt_code' => 'setReceiptCode',
@@ -306,6 +311,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         'frozen' => 'getFrozen',
         'hide_sender' => 'getHideSender',
         'large_format' => 'getLargeFormat',
+        'no_tracking' => 'getNoTracking',
         'only_recipient' => 'getOnlyRecipient',
         'priority_delivery' => 'getPriorityDelivery',
         'receipt_code' => 'getReceiptCode',
@@ -415,6 +421,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
         $this->setIfExists('frozen', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('large_format', $data ?? [], null);
+        $this->setIfExists('no_tracking', $data ?? [], null);
         $this->setIfExists('only_recipient', $data ?? [], null);
         $this->setIfExists('priority_delivery', $data ?? [], null);
         $this->setIfExists('receipt_code', $data ?? [], null);
@@ -788,6 +795,33 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
     }
 
     /**
+     * Gets no_tracking
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean|null
+     */
+    public function getNoTracking()
+    {
+        return $this->container['no_tracking'];
+    }
+
+    /**
+     * Sets no_tracking
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean|null $no_tracking no_tracking
+     *
+     * @return self
+     */
+    public function setNoTracking($no_tracking)
+    {
+        if (is_null($no_tracking)) {
+            throw new \InvalidArgumentException('non-nullable no_tracking cannot be null');
+        }
+        $this->container['no_tracking'] = $no_tracking;
+
+        return $this;
+    }
+
+    /**
      * Gets only_recipient
      *
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean|null
@@ -989,7 +1023,7 @@ class RefShipmentShipmentOptions implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets tracked
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean|null $tracked tracked
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean|null $tracked DEPRECATED: replaced by no_tracking (its inverse).
      *
      * @return self
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * ExternalReferences
+ * ExternalReferencesImport
  *
  * PHP version 7.4
  *
@@ -32,24 +32,25 @@ use \ArrayAccess;
 use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
 
 /**
- * ExternalReferences Class Doc Comment
+ * ExternalReferencesImport Class Doc Comment
  *
  * @category Class
+ * @description This external reference is set when the order originates from a generic ecommerce order import
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializable
+class ExternalReferencesImport implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    public const DISCRIMINATOR = 'source';
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
       *
       * @var string
       */
-    protected static $openAPIModelName = 'ExternalReferences';
+    protected static $openAPIModelName = 'ExternalReferencesImport';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +59,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
       */
     protected static $openAPITypes = [
         'source' => 'string',
-        'sales_channel' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceSalesChannel',
-        'ecommerce_platform' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform',
         'source_id' => 'string'
     ];
 
@@ -72,8 +71,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
       */
     protected static $openAPIFormats = [
         'source' => null,
-        'sales_channel' => null,
-        'ecommerce_platform' => null,
         'source_id' => null
     ];
 
@@ -84,8 +81,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
       */
     protected static array $openAPINullables = [
         'source' => false,
-        'sales_channel' => false,
-        'ecommerce_platform' => false,
         'source_id' => false
     ];
 
@@ -176,8 +171,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     protected static $attributeMap = [
         'source' => 'source',
-        'sales_channel' => 'salesChannel',
-        'ecommerce_platform' => 'ecommercePlatform',
         'source_id' => 'sourceId'
     ];
 
@@ -188,8 +181,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     protected static $setters = [
         'source' => 'setSource',
-        'sales_channel' => 'setSalesChannel',
-        'ecommerce_platform' => 'setEcommercePlatform',
         'source_id' => 'setSourceId'
     ];
 
@@ -200,8 +191,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     protected static $getters = [
         'source' => 'getSource',
-        'sales_channel' => 'getSalesChannel',
-        'ecommerce_platform' => 'getEcommercePlatform',
         'source_id' => 'getSourceId'
     ];
 
@@ -276,12 +265,7 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
     public function __construct(?array $data = null)
     {
         $this->setIfExists('source', $data ?? [], null);
-        $this->setIfExists('sales_channel', $data ?? [], null);
-        $this->setIfExists('ecommerce_platform', $data ?? [], null);
         $this->setIfExists('source_id', $data ?? [], null);
-
-        // Initialize discriminator property with the model name.
-        $this->container['source'] = static::$openAPIModelName;
     }
 
     /**
@@ -325,12 +309,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
             );
         }
 
-        if ($this->container['sales_channel'] === null) {
-            $invalidProperties[] = "'sales_channel' can't be null";
-        }
-        if ($this->container['ecommerce_platform'] === null) {
-            $invalidProperties[] = "'ecommerce_platform' can't be null";
-        }
         if ($this->container['source_id'] === null) {
             $invalidProperties[] = "'source_id' can't be null";
         }
@@ -385,60 +363,6 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     /**
-     * Gets sales_channel
-     *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceSalesChannel
-     */
-    public function getSalesChannel()
-    {
-        return $this->container['sales_channel'];
-    }
-
-    /**
-     * Sets sales_channel
-     *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceSalesChannel $sales_channel sales_channel
-     *
-     * @return self
-     */
-    public function setSalesChannel($sales_channel)
-    {
-        if (is_null($sales_channel)) {
-            throw new \InvalidArgumentException('non-nullable sales_channel cannot be null');
-        }
-        $this->container['sales_channel'] = $sales_channel;
-
-        return $this;
-    }
-
-    /**
-     * Gets ecommerce_platform
-     *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform
-     */
-    public function getEcommercePlatform()
-    {
-        return $this->container['ecommerce_platform'];
-    }
-
-    /**
-     * Sets ecommerce_platform
-     *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferenceEcommercePlatform $ecommerce_platform ecommerce_platform
-     *
-     * @return self
-     */
-    public function setEcommercePlatform($ecommerce_platform)
-    {
-        if (is_null($ecommerce_platform)) {
-            throw new \InvalidArgumentException('non-nullable ecommerce_platform cannot be null');
-        }
-        $this->container['ecommerce_platform'] = $ecommerce_platform;
-
-        return $this;
-    }
-
-    /**
      * Gets source_id
      *
      * @return string
@@ -461,10 +385,10 @@ class ExternalReferences implements ModelInterface, ArrayAccess, \JsonSerializab
             throw new \InvalidArgumentException('non-nullable source_id cannot be null');
         }
         if ((mb_strlen($source_id) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $source_id when calling ExternalReferences., must be smaller than or equal to 50.');
+            throw new \InvalidArgumentException('invalid length for $source_id when calling ExternalReferencesImport., must be smaller than or equal to 50.');
         }
         if ((mb_strlen($source_id) < 1)) {
-            throw new \InvalidArgumentException('invalid length for $source_id when calling ExternalReferences., must be bigger than or equal to 1.');
+            throw new \InvalidArgumentException('invalid length for $source_id when calling ExternalReferencesImport., must be bigger than or equal to 1.');
         }
 
         $this->container['source_id'] = $source_id;

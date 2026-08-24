@@ -68,6 +68,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         'frozen' => 'object',
         'hide_sender' => 'object',
         'large_format' => 'object',
+        'no_tracking' => 'object',
         'only_recipient' => 'object',
         'priority_delivery' => 'object',
         'printerless_return' => 'object',
@@ -97,6 +98,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         'frozen' => null,
         'hide_sender' => null,
         'large_format' => null,
+        'no_tracking' => null,
         'only_recipient' => null,
         'priority_delivery' => null,
         'printerless_return' => null,
@@ -124,6 +126,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         'frozen' => false,
         'hide_sender' => false,
         'large_format' => false,
+        'no_tracking' => false,
         'only_recipient' => false,
         'priority_delivery' => false,
         'printerless_return' => false,
@@ -231,6 +234,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         'frozen' => 'frozen',
         'hide_sender' => 'hide_sender',
         'large_format' => 'large_format',
+        'no_tracking' => 'no_tracking',
         'only_recipient' => 'only_recipient',
         'priority_delivery' => 'priority_delivery',
         'printerless_return' => 'printerless_return',
@@ -258,6 +262,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         'frozen' => 'setFrozen',
         'hide_sender' => 'setHideSender',
         'large_format' => 'setLargeFormat',
+        'no_tracking' => 'setNoTracking',
         'only_recipient' => 'setOnlyRecipient',
         'priority_delivery' => 'setPriorityDelivery',
         'printerless_return' => 'setPrinterlessReturn',
@@ -285,6 +290,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         'frozen' => 'getFrozen',
         'hide_sender' => 'getHideSender',
         'large_format' => 'getLargeFormat',
+        'no_tracking' => 'getNoTracking',
         'only_recipient' => 'getOnlyRecipient',
         'priority_delivery' => 'getPriorityDelivery',
         'printerless_return' => 'getPrinterlessReturn',
@@ -363,6 +369,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
         $this->setIfExists('frozen', $data ?? [], null);
         $this->setIfExists('hide_sender', $data ?? [], null);
         $this->setIfExists('large_format', $data ?? [], null);
+        $this->setIfExists('no_tracking', $data ?? [], null);
         $this->setIfExists('only_recipient', $data ?? [], null);
         $this->setIfExists('priority_delivery', $data ?? [], null);
         $this->setIfExists('printerless_return', $data ?? [], null);
@@ -661,6 +668,33 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
     }
 
     /**
+     * Gets no_tracking
+     *
+     * @return object|null
+     */
+    public function getNoTracking()
+    {
+        return $this->container['no_tracking'];
+    }
+
+    /**
+     * Sets no_tracking
+     *
+     * @param object|null $no_tracking Ship without track and trace option
+     *
+     * @return self
+     */
+    public function setNoTracking($no_tracking)
+    {
+        if (is_null($no_tracking)) {
+            throw new \InvalidArgumentException('non-nullable no_tracking cannot be null');
+        }
+        $this->container['no_tracking'] = $no_tracking;
+
+        return $this;
+    }
+
+    /**
      * Gets only_recipient
      *
      * @return object|null
@@ -889,7 +923,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions implemen
     /**
      * Sets tracked
      *
-     * @param object|null $tracked Tracking option
+     * @param object|null $tracked DEPRECATED: replaced by no_tracking (its inverse).
      *
      * @return self
      */

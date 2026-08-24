@@ -83,16 +83,6 @@ All URIs are relative to *https://api.myparcel.nl*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**getIndex**](docs/Api/DefaultApi.md#getindex) | **GET** / | 
-*NotificationApi* | [**deleteNotificationGroups**](docs/Api/NotificationApi.md#deletenotificationgroups) | **DELETE** /notification_groups/{ids} | Delete notification groups
-*NotificationApi* | [**disableAllNotificationTemplatesByGroup**](docs/Api/NotificationApi.md#disableallnotificationtemplatesbygroup) | **PUT** /notification_groups/{notification_group_id}/notification_templates/disable | Disable all notification templates in a notification group
-*NotificationApi* | [**disableNotificationTemplate**](docs/Api/NotificationApi.md#disablenotificationtemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/disable | Disable notification template
-*NotificationApi* | [**enableAllNotificationTemplatesByGroup**](docs/Api/NotificationApi.md#enableallnotificationtemplatesbygroup) | **PUT** /notification_groups/{notification_group_id}/notification_templates/enable | Enable all notification templates in a notification group
-*NotificationApi* | [**enableNotificationTemplate**](docs/Api/NotificationApi.md#enablenotificationtemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/enable | Enable notification template
-*NotificationApi* | [**getNotificationGroups**](docs/Api/NotificationApi.md#getnotificationgroups) | **GET** /notification_groups | Get notification groups
-*NotificationApi* | [**getNotificationTemplates**](docs/Api/NotificationApi.md#getnotificationtemplates) | **GET** /notification_groups/{notification_group_id}/notification_templates | Get notification templates
-*NotificationApi* | [**postNotificationGroups**](docs/Api/NotificationApi.md#postnotificationgroups) | **POST** /notification_groups | Create notification groups
-*NotificationApi* | [**putNotificationTemplate**](docs/Api/NotificationApi.md#putnotificationtemplate) | **PUT** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id} | Update notification template
-*NotificationApi* | [**sendTestNotification**](docs/Api/NotificationApi.md#sendtestnotification) | **POST** /notification_groups/{notification_group_id}/notification_templates/{notification_template_id}/test | Send test notification
 *ShipmentApi* | [**deleteShipments**](docs/Api/ShipmentApi.md#deleteshipments) | **DELETE** /shipments/{ids} | Delete Shipment
 *ShipmentApi* | [**getDeliveryOptions**](docs/Api/ShipmentApi.md#getdeliveryoptions) | **GET** /delivery_options | Get Delivery Options
 *ShipmentApi* | [**getDropOffPoints**](docs/Api/ShipmentApi.md#getdropoffpoints) | **GET** /drop_off_points | Get drop off points
@@ -102,6 +92,7 @@ Class | Method | HTTP request | Description
 *ShipmentApi* | [**getShipmentsLabels**](docs/Api/ShipmentApi.md#getshipmentslabels) | **GET** /shipment_labels/{ids} | Get Shipment labels
 *ShipmentApi* | [**getTrackTraces**](docs/Api/ShipmentApi.md#gettracktraces) | **GET** /tracktraces | Track Shipment
 *ShipmentApi* | [**getTrackTracesByIds**](docs/Api/ShipmentApi.md#gettracktracesbyids) | **GET** /tracktraces/{ids} | Track Shipment
+*ShipmentApi* | [**patchShipments**](docs/Api/ShipmentApi.md#patchshipments) | **PATCH** /shipments | Patch Shipment
 *ShipmentApi* | [**postCapabilities**](docs/Api/ShipmentApi.md#postcapabilities) | **POST** /shipments/capabilities | List shipment capabilities (Beta)
 *ShipmentApi* | [**postCapabilitiesContractDefinitions**](docs/Api/ShipmentApi.md#postcapabilitiescontractdefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user. (Beta)
 *ShipmentApi* | [**postRates**](docs/Api/ShipmentApi.md#postrates) | **POST** /shipments/rates | List shipment rates
@@ -201,12 +192,6 @@ Class | Method | HTTP request | Description
 - [GetIndex200Response](docs/Model/GetIndex200Response.md)
 - [GetShipmentsOrderParameter](docs/Model/GetShipmentsOrderParameter.md)
 - [InlineObject](docs/Model/InlineObject.md)
-- [NotificationPostNotificationGroupRequest](docs/Model/NotificationPostNotificationGroupRequest.md)
-- [NotificationPostNotificationGroupRequestOneOf](docs/Model/NotificationPostNotificationGroupRequestOneOf.md)
-- [NotificationPostNotificationGroupRequestOneOf1](docs/Model/NotificationPostNotificationGroupRequestOneOf1.md)
-- [NotificationPutNotificationTemplateRequest](docs/Model/NotificationPutNotificationTemplateRequest.md)
-- [NotificationResponsesNotificationGroups](docs/Model/NotificationResponsesNotificationGroups.md)
-- [NotificationResponsesNotificationTemplates](docs/Model/NotificationResponsesNotificationTemplates.md)
 - [PhysicalPropertiesHeightV2](docs/Model/PhysicalPropertiesHeightV2.md)
 - [PhysicalPropertiesLengthV2](docs/Model/PhysicalPropertiesLengthV2.md)
 - [PhysicalPropertiesWeightV2](docs/Model/PhysicalPropertiesWeightV2.md)
@@ -261,9 +246,6 @@ Class | Method | HTTP request | Description
 - [RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1](docs/Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1.md)
 - [RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2](docs/Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2.md)
 - [RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount](docs/Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount.md)
-- [RefNotificationNotificationTemplateType](docs/Model/RefNotificationNotificationTemplateType.md)
-- [RefNotificationResponseNotificationGroup](docs/Model/RefNotificationResponseNotificationGroup.md)
-- [RefNotificationResponseNotificationTemplate](docs/Model/RefNotificationResponseNotificationTemplate.md)
 - [RefRatesResponseContract](docs/Model/RefRatesResponseContract.md)
 - [RefRatesResponseContractV2](docs/Model/RefRatesResponseContractV2.md)
 - [RefRatesResponsePriceCompositionPriceCompositionV1](docs/Model/RefRatesResponsePriceCompositionPriceCompositionV1.md)
@@ -384,6 +366,9 @@ Class | Method | HTTP request | Description
 - [ShipmentParametersShipmentType](docs/Model/ShipmentParametersShipmentType.md)
 - [ShipmentParametersSortShipment](docs/Model/ShipmentParametersSortShipment.md)
 - [ShipmentParametersStatus](docs/Model/ShipmentParametersStatus.md)
+- [ShipmentPatchShipmentsRequest](docs/Model/ShipmentPatchShipmentsRequest.md)
+- [ShipmentPatchShipmentsRequestData](docs/Model/ShipmentPatchShipmentsRequestData.md)
+- [ShipmentPatchShipmentsRequestDataShipmentsInner](docs/Model/ShipmentPatchShipmentsRequestDataShipmentsInner.md)
 - [ShipmentPostReturnShipmentsRequest](docs/Model/ShipmentPostReturnShipmentsRequest.md)
 - [ShipmentPostReturnShipmentsRequestData](docs/Model/ShipmentPostReturnShipmentsRequestData.md)
 - [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.md)

@@ -1,6 +1,5 @@
 .php-cs-fixer.dist.php
 Api/DefaultApi.php
-Api/NotificationApi.php
 Api/ShipmentApi.php
 Api/WebhookApi.php
 ApiException.php
@@ -93,12 +92,6 @@ Model/GetIndex200Response.php
 Model/GetShipmentsOrderParameter.php
 Model/InlineObject.php
 Model/ModelInterface.php
-Model/NotificationPostNotificationGroupRequest.php
-Model/NotificationPostNotificationGroupRequestOneOf.php
-Model/NotificationPostNotificationGroupRequestOneOf1.php
-Model/NotificationPutNotificationTemplateRequest.php
-Model/NotificationResponsesNotificationGroups.php
-Model/NotificationResponsesNotificationTemplates.php
 Model/PhysicalPropertiesHeightV2.php
 Model/PhysicalPropertiesLengthV2.php
 Model/PhysicalPropertiesWeightV2.php
@@ -153,9 +146,6 @@ Model/RefCapabilitiesSharedOptionsBaseOptionsV2.php
 Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1.php
 Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2.php
 Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount.php
-Model/RefNotificationNotificationTemplateType.php
-Model/RefNotificationResponseNotificationGroup.php
-Model/RefNotificationResponseNotificationTemplate.php
 Model/RefRatesResponseContract.php
 Model/RefRatesResponseContractV2.php
 Model/RefRatesResponsePriceCompositionPriceCompositionV1.php
@@ -276,6 +266,9 @@ Model/ShipmentParametersPaperSize.php
 Model/ShipmentParametersShipmentType.php
 Model/ShipmentParametersSortShipment.php
 Model/ShipmentParametersStatus.php
+Model/ShipmentPatchShipmentsRequest.php
+Model/ShipmentPatchShipmentsRequestData.php
+Model/ShipmentPatchShipmentsRequestDataShipmentsInner.php
 Model/ShipmentPostReturnShipmentsRequest.php
 Model/ShipmentPostReturnShipmentsRequestData.php
 Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.php
@@ -387,7 +380,6 @@ Model/WebhooksResponsesWebhookV11.php
 ObjectSerializer.php
 README.md
 docs/Api/DefaultApi.md
-docs/Api/NotificationApi.md
 docs/Api/ShipmentApi.md
 docs/Api/WebhookApi.md
 docs/Model/AccountDefsContact.md
@@ -476,12 +468,6 @@ docs/Model/Error.md
 docs/Model/GetIndex200Response.md
 docs/Model/GetShipmentsOrderParameter.md
 docs/Model/InlineObject.md
-docs/Model/NotificationPostNotificationGroupRequest.md
-docs/Model/NotificationPostNotificationGroupRequestOneOf.md
-docs/Model/NotificationPostNotificationGroupRequestOneOf1.md
-docs/Model/NotificationPutNotificationTemplateRequest.md
-docs/Model/NotificationResponsesNotificationGroups.md
-docs/Model/NotificationResponsesNotificationTemplates.md
 docs/Model/PhysicalPropertiesHeightV2.md
 docs/Model/PhysicalPropertiesLengthV2.md
 docs/Model/PhysicalPropertiesWeightV2.md
@@ -536,9 +522,6 @@ docs/Model/RefCapabilitiesSharedOptionsBaseOptionsV2.md
 docs/Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1.md
 docs/Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2.md
 docs/Model/RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount.md
-docs/Model/RefNotificationNotificationTemplateType.md
-docs/Model/RefNotificationResponseNotificationGroup.md
-docs/Model/RefNotificationResponseNotificationTemplate.md
 docs/Model/RefRatesResponseContract.md
 docs/Model/RefRatesResponseContractV2.md
 docs/Model/RefRatesResponsePriceCompositionPriceCompositionV1.md
@@ -659,6 +642,9 @@ docs/Model/ShipmentParametersPaperSize.md
 docs/Model/ShipmentParametersShipmentType.md
 docs/Model/ShipmentParametersSortShipment.md
 docs/Model/ShipmentParametersStatus.md
+docs/Model/ShipmentPatchShipmentsRequest.md
+docs/Model/ShipmentPatchShipmentsRequestData.md
+docs/Model/ShipmentPatchShipmentsRequestDataShipmentsInner.md
 docs/Model/ShipmentPostReturnShipmentsRequest.md
 docs/Model/ShipmentPostReturnShipmentsRequestData.md
 docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.md
