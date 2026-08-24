@@ -92,6 +92,7 @@ Class | Method | HTTP request | Description
 *ShipmentApi* | [**getShipmentsLabels**](docs/Api/ShipmentApi.md#getshipmentslabels) | **GET** /shipment_labels/{ids} | Get Shipment labels
 *ShipmentApi* | [**getTrackTraces**](docs/Api/ShipmentApi.md#gettracktraces) | **GET** /tracktraces | Track Shipment
 *ShipmentApi* | [**getTrackTracesByIds**](docs/Api/ShipmentApi.md#gettracktracesbyids) | **GET** /tracktraces/{ids} | Track Shipment
+*ShipmentApi* | [**patchShipments**](docs/Api/ShipmentApi.md#patchshipments) | **PATCH** /shipments | Patch Shipment
 *ShipmentApi* | [**postCapabilities**](docs/Api/ShipmentApi.md#postcapabilities) | **POST** /shipments/capabilities | List shipment capabilities (Beta)
 *ShipmentApi* | [**postCapabilitiesContractDefinitions**](docs/Api/ShipmentApi.md#postcapabilitiescontractdefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user. (Beta)
 *ShipmentApi* | [**postRates**](docs/Api/ShipmentApi.md#postrates) | **POST** /shipments/rates | List shipment rates
@@ -365,6 +366,9 @@ Class | Method | HTTP request | Description
 - [ShipmentParametersShipmentType](docs/Model/ShipmentParametersShipmentType.md)
 - [ShipmentParametersSortShipment](docs/Model/ShipmentParametersSortShipment.md)
 - [ShipmentParametersStatus](docs/Model/ShipmentParametersStatus.md)
+- [ShipmentPatchShipmentsRequest](docs/Model/ShipmentPatchShipmentsRequest.md)
+- [ShipmentPatchShipmentsRequestData](docs/Model/ShipmentPatchShipmentsRequestData.md)
+- [ShipmentPatchShipmentsRequestDataShipmentsInner](docs/Model/ShipmentPatchShipmentsRequestDataShipmentsInner.md)
 - [ShipmentPostReturnShipmentsRequest](docs/Model/ShipmentPostReturnShipmentsRequest.md)
 - [ShipmentPostReturnShipmentsRequestData](docs/Model/ShipmentPostReturnShipmentsRequestData.md)
 - [ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner](docs/Model/ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner.md)
