@@ -144,6 +144,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return void
      */
     public function deleteWebhookSubscriptions($ids, $user_agent = null, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
@@ -162,6 +163,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteWebhookSubscriptionsWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
@@ -212,6 +214,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteWebhookSubscriptionsAsync($ids, $user_agent = null, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
@@ -234,6 +237,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteWebhookSubscriptionsAsyncWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
@@ -244,7 +248,7 @@ class WebhookApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 },
                 function ($exception) {
@@ -272,6 +276,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function deleteWebhookSubscriptionsRequest($ids, $user_agent = null, string $contentType = self::contentTypes['deleteWebhookSubscriptions'][0])
@@ -333,7 +338,7 @@ class WebhookApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -382,6 +387,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getWebhookSubscriptions($hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptions'][0])
@@ -401,6 +407,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getWebhookSubscriptionsWithHttpInfo($hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptions'][0])
@@ -530,6 +537,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getWebhookSubscriptionsAsync($hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptions'][0])
@@ -552,6 +560,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getWebhookSubscriptionsAsyncWithHttpInfo($hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptions'][0])
@@ -562,13 +571,25 @@ class WebhookApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -603,6 +624,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getWebhookSubscriptionsRequest($hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptions'][0])
@@ -659,7 +681,7 @@ class WebhookApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -708,6 +730,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function getWebhookSubscriptionsById($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
@@ -727,6 +750,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function getWebhookSubscriptionsByIdWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
@@ -856,6 +880,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getWebhookSubscriptionsByIdAsync($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
@@ -878,6 +903,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getWebhookSubscriptionsByIdAsyncWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
@@ -888,13 +914,25 @@ class WebhookApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -929,6 +967,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getWebhookSubscriptionsByIdRequest($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
@@ -990,7 +1029,7 @@ class WebhookApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1039,6 +1078,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postWebhookSubscriptions($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
@@ -1058,6 +1098,7 @@ class WebhookApi
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postWebhookSubscriptionsWithHttpInfo($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
@@ -1187,6 +1228,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postWebhookSubscriptionsAsync($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
@@ -1209,6 +1251,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function postWebhookSubscriptionsAsyncWithHttpInfo($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
@@ -1219,13 +1262,25 @@ class WebhookApi
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
-                function ($response) use ($returnType) {
+                function ($response) use ($returnType, $request) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1260,6 +1315,7 @@ class WebhookApi
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postWebhookSubscriptions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
+     * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function postWebhookSubscriptionsRequest($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
@@ -1299,7 +1355,7 @@ class WebhookApi
         if (isset($webhooks_post_webhook_subscriptions_request_v11)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($webhooks_post_webhook_subscriptions_request_v11));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($webhooks_post_webhook_subscriptions_request_v11), JSON_THROW_ON_ERROR);
             } else {
                 $httpBody = $webhooks_post_webhook_subscriptions_request_v11;
             }
@@ -1320,7 +1376,7 @@ class WebhookApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);

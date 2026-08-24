@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.32](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.31...v11.0.0-beta.32) (2026-08-18)
+
+
+### :bug: Bug Fixes
+
+* replace deprecated JSON encoding ([#635](https://github.com/myparcelnl/sdk/issues/635)) ([583641a](https://github.com/myparcelnl/sdk/commit/583641a4ee270197dcbec7c99844364f37f7161d))
+
+## [11.0.0-beta.31](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.30...v11.0.0-beta.31) (2026-07-30)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#633](https://github.com/myparcelnl/sdk/issues/633)) ([5e7e49e](https://github.com/myparcelnl/sdk/commit/5e7e49ec6df592c47dfe13a9158d0794388d21c9))
+
 ## [11.0.0-beta.30](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.29...v11.0.0-beta.30) (2026-07-14)
 
 
