@@ -70,6 +70,11 @@ class RefCapabilitiesSharedCarrierV2
     public const DHL_FOR_YOU = 'DHL_FOR_YOU';
 
     /**
+     * DHL Freight
+     */
+    public const DHL_FREIGHT = 'DHL_FREIGHT';
+
+    /**
      * DHL Parcel Connect
      */
     public const DHL_PARCEL_CONNECT = 'DHL_PARCEL_CONNECT';
@@ -136,6 +141,7 @@ class RefCapabilitiesSharedCarrierV2
             self::CHEAP_CARGO,
             self::DHL_EUROPLUS,
             self::DHL_FOR_YOU,
+            self::DHL_FREIGHT,
             self::DHL_PARCEL_CONNECT,
             self::DPD,
             self::GLS,

@@ -13,6 +13,7 @@ All URIs are relative to https://api.myparcel.nl, except if the operation define
 | [**getShipmentsLabels()**](ShipmentApi.md#getShipmentsLabels) | **GET** /shipment_labels/{ids} | Get Shipment labels |
 | [**getTrackTraces()**](ShipmentApi.md#getTrackTraces) | **GET** /tracktraces | Track Shipment |
 | [**getTrackTracesByIds()**](ShipmentApi.md#getTrackTracesByIds) | **GET** /tracktraces/{ids} | Track Shipment |
+| [**patchShipments()**](ShipmentApi.md#patchShipments) | **PATCH** /shipments | Patch Shipment |
 | [**postCapabilities()**](ShipmentApi.md#postCapabilities) | **POST** /shipments/capabilities | List shipment capabilities (Beta) |
 | [**postCapabilitiesContractDefinitions()**](ShipmentApi.md#postCapabilitiesContractDefinitions) | **POST** /shipments/capabilities/contract-definitions | List a superset of available capabilities for the carriers and contracts associated with the logged-in user. (Beta) |
 | [**postRates()**](ShipmentApi.md#postRates) | **POST** /shipments/rates | List shipment rates |
@@ -779,6 +780,72 @@ try {
 
 - **Content-Type**: Not defined
 - **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `patchShipments()`
+
+```php
+patchShipments($shipment_patch_shipments_request, $user_agent)
+```
+
+Patch Shipment
+
+Partially update shipments. This operation can be used to update the hidden, status, or delivered fields of one or more shipments.  The status is only accepted as an actual state change when cancelling a Trunkrs shipment: the shipment must still be in the Pending - Registered status and within its cancellation window. For every other carrier the status must match the current status of the shipment.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure API key authorization: apiKey
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
+// Configure Bearer authorization: bearer
+$config = MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$shipment_patch_shipments_request = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest | Array of Shipment objects to partially update.
+$user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
+
+try {
+    $apiInstance->patchShipments($shipment_patch_shipments_request, $user_agent);
+} catch (Exception $e) {
+    echo 'Exception when calling ShipmentApi->patchShipments: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **shipment_patch_shipments_request** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPatchShipmentsRequest**](../Model/ShipmentPatchShipmentsRequest.md)| Array of Shipment objects to partially update. | |
+| **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[apiKey](../../README.md#apiKey), [bearer](../../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: `application/vnd.shipment+json`
+- **Accept**: `application/*`, `application/problem+json`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
