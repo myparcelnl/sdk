@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Crypto;
 
+use MyParcelNL\Sdk\Concerns\RequiresOpenssl;
 use MyParcelNL\Sdk\Support\Str;
 use RuntimeException;
 
@@ -17,6 +18,8 @@ use RuntimeException;
  */
 final class DpopKeyPair implements DpopKeyInterface
 {
+    use RequiresOpenssl;
+
     /**
      * The only curve MyParcel accepts. 'prime256v1' is the OpenSSL name for it; the same curve is
      * called 'P-256' in a JWK.
@@ -194,21 +197,6 @@ final class DpopKeyPair implements DpopKeyInterface
         }
 
         return $pem;
-    }
-
-    /**
-     * Fail with a readable message instead of a fatal call to a missing function.
-     *
-     * ext-openssl is a suggest and not a require, because only MyParcel Connect needs it and the SDK
-     * ships to hosts that do not have it.
-     *
-     * @throws \RuntimeException
-     */
-    private static function assertOpensslIsLoaded(): void
-    {
-        if (!extension_loaded('openssl')) {
-            throw new RuntimeException('MyParcel Connect needs the openssl PHP extension');
-        }
     }
 
     /**

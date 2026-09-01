@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Crypto;
 
+use MyParcelNL\Sdk\Concerns\RequiresOpenssl;
 use MyParcelNL\Sdk\Support\Str;
 use RuntimeException;
 
@@ -16,6 +17,8 @@ use RuntimeException;
  */
 final class OpensslJwsSigner implements JwsSignerInterface
 {
+    use RequiresOpenssl;
+
     /**
      * The only algorithm MyParcel accepts: ECDSA on P-256 with SHA-256.
      */
@@ -23,6 +26,10 @@ final class OpensslJwsSigner implements JwsSignerInterface
 
     public function sign(array $payload, DpopKeyInterface $key, array $protectedHeader): string
     {
+        // A DpopKeyInterface can come from anywhere, so this cannot lean on DpopKeyPair having
+        // checked already.
+        self::assertOpensslIsLoaded();
+
         if (self::ALGORITHM !== $key->getAlgorithm()) {
             throw new RuntimeException(sprintf('A DPoP proof must be signed with %s', self::ALGORITHM));
         }
