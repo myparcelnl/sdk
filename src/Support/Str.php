@@ -3,6 +3,7 @@
 namespace MyParcelNL\Sdk\Support;
 
 use Exception;
+use InvalidArgumentException;
 
 class Str
 {
@@ -59,6 +60,48 @@ class Str
         }
 
         return preg_replace('/[^\x20-\x7E]/u', '', $value);
+    }
+
+    /**
+     * Encode bytes as base64url: base64 that is safe to put in a URL.
+     *
+     * Plain base64 uses '+' and '/', which have their own meaning in a URL, and pads the end with
+     * '='. base64url swaps those two characters for '-' and '_' and drops the padding. JWTs and the
+     * values in a connect URL all use this form. PHP has base64_encode() and nothing for this.
+     *
+     * @param  string $value Raw bytes.
+     * @return string
+     */
+    public static function base64UrlEncode(string $value): string
+    {
+        return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+    }
+
+    /**
+     * Decode a base64url string back to raw bytes.
+     *
+     * @param  string $value
+     * @return string Raw bytes.
+     * @throws \InvalidArgumentException When the input is not base64url.
+     */
+    public static function base64UrlDecode(string $value): string
+    {
+        // The D modifier matters: without it '$' also matches before a trailing newline, so a value
+        // read from a file would pass here and then decode, because base64_decode() skips whitespace.
+        // A length of one more than a multiple of four cannot come out of base64 at all.
+        if (1 !== preg_match('/^[A-Za-z0-9_-]*$/D', $value) || 1 === strlen($value) % 4) {
+            throw new InvalidArgumentException('Value is not base64url encoded');
+        }
+
+        // base64_decode() needs the padding back, to a multiple of four characters.
+        $padded  = str_pad($value, (int) (ceil(strlen($value) / 4) * 4), '=');
+        $decoded = base64_decode(strtr($padded, '-_', '+/'), true);
+
+        if (false === $decoded) {
+            throw new InvalidArgumentException('Value is not base64url encoded');
+        }
+
+        return $decoded;
     }
 
     /**

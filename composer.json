@@ -43,6 +43,9 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6"
     },
+    "suggest": {
+        "ext-openssl": "Required for MyParcel Connect. Nothing else in the SDK needs it."
+    },
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",
         "mockery/mockery": "^1.6",
