@@ -110,14 +110,11 @@ class AesGcmCipherTest extends TestCase
         new AesGcmCipher('');
     }
 
-    public function testUsesTheInjectedRandomSourceForTheIv(): void
+    public function testTheEnvelopeIsAVersionByteAnIvATagAndTheCiphertext(): void
     {
-        $cipher = new AesGcmCipher(self::KEY, static function (int $length): string {
-            return str_repeat("\x07", $length);
-        });
+        $raw = base64_decode((new AesGcmCipher(self::KEY))->encrypt('a value'));
 
-        $raw = base64_decode($cipher->encrypt('value'));
-
-        self::assertSame(str_repeat("\x07", 12), substr($raw, 1, 12), 'a 12 byte iv follows the version');
+        // 1 + 12 + 16 of envelope, and GCM ciphertext is the same length as the plaintext.
+        self::assertSame(1 + 12 + 16 + strlen('a value'), strlen($raw));
     }
 }

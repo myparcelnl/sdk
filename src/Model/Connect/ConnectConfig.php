@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\Model\Connect;
 use MyParcelNL\Sdk\Exception\ConnectException;
 
 /**
- * What the consumer sets once, before any connect call.
+ * What you set once, before any connect call.
  *
  * Immutable: every with* method returns a copy, so a config can be shared without anything changing
  * it underneath.
