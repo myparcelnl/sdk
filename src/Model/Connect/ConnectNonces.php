@@ -18,8 +18,8 @@ use MyParcelNL\Sdk\Model\Connect\Concerns\HasRecordVersion;
  *
  * They share a record because they need identical treatment: neither is a secret, both are short
  * lived, and both are safe to lose. Only their origin differs, which changes nothing about storing
- * them. ConnectStorageInterface::saveNonces() has the guidance, because that is where a consumer
- * writes the code.
+ * them. ConnectStorageInterface::saveNonces() has the guidance, because that is where you write the
+ * code.
  */
 final class ConnectNonces
 {

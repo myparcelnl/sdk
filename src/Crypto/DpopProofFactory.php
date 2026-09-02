@@ -40,28 +40,12 @@ final class DpopProofFactory
     private $signer;
 
     /**
-     * @var callable Returns the current time in whole seconds.
+     * @param JwsSignerInterface|null $signer Defaults to signing with ext-openssl. See
+     *                                        {@see JwsSignerInterface} for why this is a seam.
      */
-    private $clock;
-
-    /**
-     * @var callable Takes a length and returns that many random bytes.
-     */
-    private $randomBytes;
-
-    /**
-     * @param JwsSignerInterface|null $signer      Defaults to signing with ext-openssl.
-     * @param callable|null           $clock       Only for tests, to pin iat.
-     * @param callable|null           $randomBytes Only for tests, to pin jti.
-     */
-    public function __construct(
-        ?JwsSignerInterface $signer = null,
-        ?callable $clock = null,
-        ?callable $randomBytes = null
-    ) {
-        $this->signer      = $signer ?? new OpensslJwsSigner();
-        $this->clock       = $clock ?? 'time';
-        $this->randomBytes = $randomBytes ?? 'random_bytes';
+    public function __construct(?JwsSignerInterface $signer = null)
+    {
+        $this->signer = $signer ?? new OpensslJwsSigner();
     }
 
     /**
@@ -127,10 +111,10 @@ final class DpopProofFactory
         }
 
         return [
-            'jti' => Str::base64UrlEncode(($this->randomBytes)(self::JTI_LENGTH)),
+            'jti' => Str::base64UrlEncode(random_bytes(self::JTI_LENGTH)),
             'htm' => $htm,
             'htu' => $htu,
-            'iat' => ($this->clock)(),
+            'iat' => time(),
         ];
     }
 

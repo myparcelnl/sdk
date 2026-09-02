@@ -43,21 +43,15 @@ final class AesGcmCipher
     private $key;
 
     /**
-     * @var callable Takes a length and returns that many random bytes.
-     */
-    private $randomBytes;
-
-    /**
-     * @param string        $key         Any non-empty string. Hashed to the 32 bytes AES needs, so
-     *                                   the consumer can pass a passphrase.
-     * @param callable|null $randomBytes Only for tests, to pin the iv.
+     * @param string $key Any non-empty string. Hashed to the 32 bytes AES needs, so the consumer
+     *                    can pass a passphrase.
      * @throws \MyParcelNL\Sdk\Exception\ConnectException When the key is empty.
      * @throws \RuntimeException                          When ext-openssl is missing. ConnectService
      *                                                    checks for it first and reports it as a
      *                                                    ConnectException, so a consumer that starts
      *                                                    there never sees this one.
      */
-    public function __construct(string $key, ?callable $randomBytes = null)
+    public function __construct(string $key)
     {
         self::assertOpensslIsLoaded();
 
@@ -65,8 +59,7 @@ final class AesGcmCipher
             throw ConnectException::invalidArgument('The encryption key cannot be empty');
         }
 
-        $this->key         = hash('sha256', $key, true);
-        $this->randomBytes = $randomBytes ?? 'random_bytes';
+        $this->key = hash('sha256', $key, true);
     }
 
     /**
@@ -76,7 +69,7 @@ final class AesGcmCipher
     public function encrypt(string $plaintext): string
     {
         $version = chr(self::VERSION);
-        $iv      = ($this->randomBytes)(self::IV_LENGTH);
+        $iv      = random_bytes(self::IV_LENGTH);
         $tag     = '';
 
         // The version travels as additional authenticated data: it is not encrypted, but changing it

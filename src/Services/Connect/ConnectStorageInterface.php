@@ -9,7 +9,7 @@ use MyParcelNL\Sdk\Model\Connect\ConnectNonces;
 use MyParcelNL\Sdk\Model\Connect\ConnectToken;
 
 /**
- * Where a shop's connect state is kept. The consumer writes this.
+ * Where a shop's connect state is kept. You write this.
  *
  * Three records rather than one blob, because they do not last equally long. Each save method below
  * says where its record belongs and how long to keep it. Putting all three in one place works too:

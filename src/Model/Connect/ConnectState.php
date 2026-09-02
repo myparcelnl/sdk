@@ -9,9 +9,9 @@ use MyParcelNL\Sdk\Exception\ConnectException;
 /**
  * Everything the SDK knows about one shop's connection, with the secrets readable.
  *
- * This is the working view: ConnectService reads and returns it, and a consumer reads it to see the
- * scope, the connection id or whether there is a token. It never reaches storage. The three records
- * do that, and ConnectStateRepository maps between them, encrypting on the way out.
+ * This is the working view: ConnectService reads and returns it, and you read it to see the scope,
+ * the connection id or whether there is a token. It never reaches storage. The three records do
+ * that, and ConnectStateRepository maps between them, encrypting on the way out.
  *
  * Immutable: every with* method returns a copy.
  */
