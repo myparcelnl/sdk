@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
@@ -518,7 +518,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     private function createMinimalNlShipment(string $referenceIdentifier): Shipment
     {
         return (new Shipment())
-            ->setCarrier(RefTypesCarrierV2::POSTNL)
+            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
             ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
             ->withWeight(1000)
             ->setRecipient([

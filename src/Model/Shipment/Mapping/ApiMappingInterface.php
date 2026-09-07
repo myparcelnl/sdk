@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment\Mapping;
 
+/**
+ * @deprecated Use {@see \MyParcelNL\Sdk\Services\Mapping\ApiMapperService}, which returns null
+ *             on a miss instead of throwing.
+ */
 interface ApiMappingInterface
 {
     /**

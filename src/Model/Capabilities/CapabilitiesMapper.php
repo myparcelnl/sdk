@@ -159,20 +159,36 @@ class CapabilitiesMapper
     }
 
     /**
-     * Map SDK shipment option data to a Core API CapabilitiesOptionsV2 instance.
+     * Map option names through explicit aliases and generated v2 properties.
      *
-     * Unknown options are ignored silently.
+     * Unknown options are ignored because callers may pass merchant-configured option bags.
+     * Spec tests require every concrete v1 request option to map or be explicitly unsupported.
      *
-     * @param array<string, mixed> $optionsData
+     * @param  array<string, mixed> $optionsData
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2
      */
     private function mapOptions(array $optionsData): CoreOptionsV2
     {
-        $options = new CoreOptionsV2();
+        $options          = new CoreOptionsV2();
+        $setters          = CoreOptionsV2::setters();
+        $wireToLocalNames = array_flip(CoreOptionsV2::attributeMap());
+        $setterNames      = array_combine(array_map('strtolower', $setters), $setters);
 
         foreach ($optionsData as $key => $value) {
-            $setter = self::KNOWN_OPTION_SETTERS[$key] ?? $this->getFallbackSetterName($key);
+            if (in_array($key, self::UNMAPPABLE_OPTIONS, true)) {
+                continue;
+            }
 
-            if (! method_exists($options, $setter)) {
+            // Accept generated local names and public wire names.
+            $targetProperty = self::KNOWN_OPTION_ALIASES[$key] ?? $wireToLocalNames[$key] ?? $key;
+
+            // PHP method lookup was case-insensitive in the original fallback. Preserve its
+            // accepted spellings, while restricting the result to generated option setters.
+            $fallback = 'set' . strtolower(str_replace(['_', ' '], '', $targetProperty));
+            $setter   = $setters[$targetProperty] ?? $setterNames[$fallback] ?? null;
+
+            if (null === $setter) {
                 continue;
             }
 
@@ -183,30 +199,55 @@ class CapabilitiesMapper
     }
 
     /**
-     * Explicit mappings where the Core API v2 setter name differs semantically from the option key.
-     * New options should flow through via the fallback setter mapping.
+     * Renamed v1 options, mapped to generated v2 property keys.
+     * Options with a shared property name are resolved automatically.
+     *
+     * @var array<string, string>
      */
-    private const KNOWN_OPTION_SETTERS = [
-        'signature'          => 'setRequiresSignature',
-        'only_recipient'     => 'setRecipientOnlyDelivery',
-        'age_check'          => 'setRequiresAgeVerification',
-        'receipt_code'       => 'setRequiresReceiptCode',
-        'large_format'       => 'setOversizedPackage',
-        'printerless_return' => 'setPrintReturnLabelAtDropOff',
-        'collect'            => 'setScheduledCollection',
-        'return'             => 'setReturnOnFirstFailedDelivery',
+    private const KNOWN_OPTION_ALIASES = [
+        'signature'                => 'requires_signature',
+        'only_recipient'           => 'recipient_only_delivery',
+        'age_check'                => 'requires_age_verification',
+        'receipt_code'             => 'requires_receipt_code',
+        'large_format'             => 'oversized_package',
+        'printerless_return'       => 'print_return_label_at_drop_off',
+        'collect'                  => 'scheduled_collection',
+        'return'                   => 'return_on_first_failed_delivery',
+        'cash_on_delivery'         => 'requires_cash_on_delivery',
+        'drop_off_at_postal_point' => 'deliver_at_postal_point',
+        'extra_assurance'          => 'additional_insurance',
     ];
 
     /**
-     * Convert snake_case to a setter name.
+     * Options unsupported by the concrete capabilities v2 request.
      *
-     * Example: same_day_delivery → setSameDayDelivery
+     * Other v2 models expose tracked, but this request only has no_tracking. The option values
+     * are configuration objects, so mapping tracked by boolean inversion has no defined meaning.
+     *
+     * @var string[]
      */
-    private function getFallbackSetterName(string $key): string
-    {
-        $studly = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+    private const UNMAPPABLE_OPTIONS = [
+        'tracked',
+    ];
 
-        return 'set' . $studly;
+    /**
+     * @internal Exposed for mapping invariant tests.
+     *
+     * @return array<string, string> v1 option key to generated v2 property key
+     */
+    public static function knownOptionAliases(): array
+    {
+        return self::KNOWN_OPTION_ALIASES;
+    }
+
+    /**
+     * @internal Exposed for mapping invariant tests.
+     *
+     * @return string[]
+     */
+    public static function unmappableOptions(): array
+    {
+        return self::UNMAPPABLE_OPTIONS;
     }
 
     /**
