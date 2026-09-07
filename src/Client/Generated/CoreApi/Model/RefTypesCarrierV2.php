@@ -38,6 +38,8 @@ use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @deprecated 11.0.0 Use {@see RefCapabilitiesSharedCarrierV2} instead. This compatibility
+ *             snapshot remains available throughout v11 and will be removed in v12.
  */
 class RefTypesCarrierV2
 {
@@ -144,5 +146,4 @@ class RefTypesCarrierV2
         ];
     }
 }
-
 

@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\Test\Capabilities;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
@@ -20,7 +20,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $req = CapabilitiesRequest::forCountry('NL')
             ->withShopId(42)
             ->withDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->withCarrier(RefTypesCarrierV2::POSTNL)
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
             ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
             ->withDirection(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND)
             ->withPickup([
@@ -35,7 +35,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertSame('NL', $coreReq->getRecipient()->getCountryCode());
         $this->assertSame(42, $coreReq->getShopId());
         $this->assertSame(RefTypesDeliveryTypeV2::STANDARD, $coreReq->getDeliveryType());
-        $this->assertSame(RefTypesCarrierV2::POSTNL, $coreReq->getCarrier());
+        $this->assertSame(RefCapabilitiesSharedCarrierV2::POSTNL, $coreReq->getCarrier());
         $this->assertSame(RefShipmentPackageTypeV2::PACKAGE, $coreReq->getPackageType());
         $this->assertSame(CapabilitiesPostCapabilitiesRequestV2::DIRECTION_OUTBOUND, $coreReq->getDirection());
         $this->assertNotNull($coreReq->getPickup());
@@ -73,6 +73,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
             ->withSender(['country_code' => 'DE', 'is_business' => true])
             ->withPhysicalProperties([
                 'height' => ['value' => 10.5, 'unit' => 'cm'],
+                'length' => ['value' => 20.4, 'unit' => 'cm'],
                 'weight' => ['value' => 250.0, 'unit' => 'g'],
                 'width'  => ['value' => 15.2, 'unit' => 'cm'],
             ]);
@@ -102,7 +103,9 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertSame(15.2, $physical->getWidth()->getValue());
         $this->assertSame('cm', $physical->getWidth()->getUnit());
 
-        $this->assertNull($physical->getLength());
+        $this->assertNotNull($physical->getLength());
+        $this->assertSame(20.4, $physical->getLength()->getValue());
+        $this->assertSame('cm', $physical->getLength()->getUnit());
     }
 
     public function testMapToCoreApiCreatesSenderObjectEvenWhenNoKnownFieldsArePresent(): void
@@ -147,6 +150,81 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertInstanceOf(\stdClass::class, $options->getSaturdayDelivery());
 
         $this->assertNotNull($options->getInsurance());
+    }
+
+    /**
+     * Regression test for the three semantic aliases that mapOptions() used to drop silently.
+     */
+    public function testMapToCoreApiMapsPreviouslyDroppedOptionAliases(): void
+    {
+        $request = CapabilitiesRequest::forCountry('NL')
+            ->withOptions([
+                'cash_on_delivery'         => null,
+                'drop_off_at_postal_point' => null,
+                'extra_assurance'          => null,
+            ]);
+
+        $coreOptions = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
+
+        $this->assertNotNull($coreOptions);
+        $this->assertInstanceOf(\stdClass::class, $coreOptions->getRequiresCashOnDelivery());
+        $this->assertInstanceOf(\stdClass::class, $coreOptions->getDeliverAtPostalPoint());
+        $this->assertInstanceOf(\stdClass::class, $coreOptions->getAdditionalInsurance());
+    }
+
+    public function testMapToCoreApiMapsNoTrackingButExplicitlyIgnoresTracked(): void
+    {
+        $noTracking = new \stdClass();
+        $tracked    = new \stdClass();
+        $request    = CapabilitiesRequest::forCountry('NL')
+            ->withOptions([
+                'no_tracking' => $noTracking,
+                // Deliberately comes second: it must not overwrite no_tracking by inversion.
+                'tracked'     => $tracked,
+            ]);
+
+        $coreOptions = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
+
+        $this->assertNotNull($coreOptions);
+        $this->assertSame($noTracking, $coreOptions->getNoTracking());
+
+        $trackedOnly = CapabilitiesRequest::forCountry('NL')
+            ->withOptions(['tracked' => new \stdClass()]);
+        $trackedOnlyOptions = (new CapabilitiesMapper())->mapToCoreApi($trackedOnly)->getOptions();
+
+        $this->assertNotNull($trackedOnlyOptions);
+        $this->assertNull($trackedOnlyOptions->getNoTracking());
+    }
+
+    public function testMapToCoreApiKeepsAcceptingGeneratedV2WireOptionNames(): void
+    {
+        $signature = new \stdClass();
+        $sameDay   = new \stdClass();
+        $request   = CapabilitiesRequest::forCountry('NL')
+            ->withOptions([
+                'requiresSignature' => $signature,
+                'sameDayDelivery'   => $sameDay,
+            ]);
+
+        $coreOptions = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
+
+        $this->assertNotNull($coreOptions);
+        $this->assertSame($signature, $coreOptions->getRequiresSignature());
+        $this->assertSame($sameDay, $coreOptions->getSameDayDelivery());
+    }
+
+    /**
+     * The original setter lookup accepted case variants and spaces as well as snake_case.
+     */
+    public function testMapToCoreApiPreservesOptionSetterNameVariants(): void
+    {
+        foreach (['SAME_DAY_DELIVERY', 'SameDayDelivery', 'samedaydelivery', 'same day delivery'] as $key) {
+            $value   = new \stdClass();
+            $request = CapabilitiesRequest::forCountry('NL')->withOptions([$key => $value]);
+            $options = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
+
+            $this->assertSame($value, $options->getSameDayDelivery(), $key);
+        }
     }
 
     public function testMapToCoreApiIgnoresUnknownOptionKeysWithoutCrashing(): void
