@@ -1,0 +1,17 @@
+'!include': 'common.yaml'
+
+# OpenAPI Generator configuration
+# The e-commerce service spec: the connect endpoints and /webhook/orders in one document. OFF
+# delivered it as oauth-connect.yaml, which is why the spec file keeps that name.
+# @todo replace inputSpec with the public URL once it is hosted, mirroring coreapi.yaml, iam.yaml
+# and order.yaml. The local copy lives under openapi/specs/ until then.
+inputSpec: /local/openapi/specs/oauth-connect.yaml
+outputDir: src/Client/Generated/EcommerceApi
+typeMappings:
+  # @todo remove when the generator can represent the /webhook/orders 202 oneOf.
+  # It flattens the three branches into one model whose validation no accepted item can pass.
+  WebhookOrdersPost202ResponseInner: FixedWebhookOrderResult
+additionalProperties:
+  '!include': 'commonProperties.yaml'
+  packageName: MyParcelNL\Sdk\Client\Generated\EcommerceApi
+  invokerPackage: MyParcelNL\Sdk\Client\Generated\EcommerceApi
