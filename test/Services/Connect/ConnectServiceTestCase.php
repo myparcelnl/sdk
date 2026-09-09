@@ -239,13 +239,20 @@ abstract class ConnectServiceTestCase extends TestCase
         return count($this->history);
     }
 
-    protected function request(int $index): RequestInterface
+    /**
+     * @param array<int, array{request: RequestInterface, response: mixed}>|null $history Defaults to
+     *                                                                                   the connect
+     *                                                                                   client's.
+     */
+    protected function request(int $index, ?array $history = null): RequestInterface
     {
-        if (!isset($this->history[$index])) {
-            throw new RuntimeException(sprintf('There was no call %d, only %d', $index, count($this->history)));
+        $history = $history ?? $this->history;
+
+        if (!isset($history[$index])) {
+            throw new RuntimeException(sprintf('There was no call %d, only %d', $index, count($history)));
         }
 
-        return $this->history[$index]['request'];
+        return $history[$index]['request'];
     }
 
     /**
@@ -255,7 +262,17 @@ abstract class ConnectServiceTestCase extends TestCase
      */
     protected function proofClaims(int $index): array
     {
-        $segments = explode('.', $this->request($index)->getHeaderLine('DPoP'));
+        return self::dpopClaimsOf($this->request($index));
+    }
+
+    /**
+     * The claims of the proof on one request.
+     *
+     * @return array<string, mixed>
+     */
+    protected static function dpopClaimsOf(RequestInterface $request): array
+    {
+        $segments = explode('.', $request->getHeaderLine('DPoP'));
 
         return (array) json_decode(Str::base64UrlDecode($segments[1] ?? ''), true);
     }
