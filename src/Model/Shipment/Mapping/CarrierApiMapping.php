@@ -8,7 +8,8 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
- * Preserves the existing v2-to-id API and its exceptions for unknown values.
+ * Converts carrier values between v2 names and v1 IDs.
+ * Conversion methods throw InvalidArgumentException when a value has no mapping.
  *
  * @deprecated Use {@see \MyParcelNL\Sdk\Services\Mapping\ApiMapperService::forCarrier()},
  *             which returns null for unknown values.

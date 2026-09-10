@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
-use LogicException;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionClass;
@@ -79,6 +78,16 @@ class ApiMapperServiceTest extends TestCase
         sort($sorted);
 
         $this->assertSame($sorted, $keys);
+    }
+
+    public function testReadingSortedRowsDoesNotChangeTheCompatibilityMapOrder(): void
+    {
+        $mapper = ApiMapperService::forPackageType();
+        $before = $mapper->v2ToIdMap();
+
+        $mapper->allRows();
+
+        $this->assertSame($before, $mapper->v2ToIdMap());
     }
 
     public function testAllDomainsReturnsEveryTable(): void
@@ -444,10 +453,10 @@ class ApiMapperServiceTest extends TestCase
     }
 
     /**
-     * The canonical key is an array key, not a wire format. RefTypesDeliveryTypeV2::PICKUP is
+     * The canonical key is an array key, not an API value. RefTypesDeliveryTypeV2::PICKUP is
      * keyed 'PICKUP' but spelled 'PICKUP_DELIVERY', so the key itself does not resolve.
      */
-    public function testTheCanonicalKeyIsNotAWireValue(): void
+    public function testConstantNamesAreNotApiValues(): void
     {
         $this->assertNull(ApiMapperService::forDeliveryType()->idFromV2Name('PICKUP'));
         $this->assertSame(4, ApiMapperService::forDeliveryType()->idFromV2Name('PICKUP_DELIVERY'));
@@ -483,33 +492,16 @@ class ApiMapperServiceTest extends TestCase
 
     public function testAliasToSparseRowDoesNotFallThroughToAnotherConcept(): void
     {
-        $rows = [
-            'SOURCE_CONCEPT' => $this->row('new_name', 42, null),
-            'TARGET_CONCEPT' => $this->row(null, null, 'OLD_NAME'),
-        ];
-        $method = new ReflectionMethod(ApiMapperService::class, 'compileAliases');
-
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
-
-        /** @var array<string, array<string, string>> $aliases */
-        $aliases = $method->invoke(
-            null,
-            'fixture',
-            $rows,
+        $mapper = $this->mapperFixture(
+            ApiMapperService::DOMAIN_PACKAGE_TYPE,
             [
-                'SOURCE_CONCEPT' => [
-                    ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old_name']],
-                ],
-            ]
+                'SOURCE_CONCEPT' => $this->row('new_name', 42, null),
+                'TARGET_CONCEPT' => $this->row(null, null, 'OLD_NAME'),
+            ],
+            ['SOURCE_CONCEPT' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old_name']]]]
         );
-        $mapper = $this->mapperFixture(ApiMapperService::DOMAIN_PACKAGE_TYPE, $rows, $aliases);
 
-        $this->assertNull(
-            $mapper->v2NameFromLegacyName('old_name'),
-            'A tier-1 alias selects SOURCE_CONCEPT; tier 3 must not leak to TARGET_CONCEPT.'
-        );
+        $this->assertNull($mapper->v2NameFromLegacyName('old_name'));
     }
 
     public function testExplicitNullTargetBlocksTierThree(): void
@@ -520,8 +512,7 @@ class ApiMapperServiceTest extends TestCase
                 'SOURCE_SPELLING' => $this->row('digitalStamp', null, null),
                 'TARGET_SPELLING' => $this->row(null, null, 'DIGITAL_STAMP'),
             ],
-            [],
-            ['SOURCE_SPELLING' => [ApiMapperService::COLUMN_V2_NAME => true]]
+            ['SOURCE_SPELLING' => [ApiMapperService::COLUMN_V2_NAME => ['value' => null]]]
         );
 
         $this->assertNull($mapper->v2NameFromLegacyName('digitalStamp'));
@@ -535,8 +526,7 @@ class ApiMapperServiceTest extends TestCase
                 'SOURCE_CONCEPT' => $this->row('manual_name', 42, null),
                 'TARGET_CONCEPT' => $this->row(null, null, 'MANUAL_NAME'),
             ],
-            [],
-            ['SOURCE_CONCEPT' => [ApiMapperService::COLUMN_LEGACY_NAME => true]]
+            ['SOURCE_CONCEPT' => [ApiMapperService::COLUMN_LEGACY_NAME => ['value' => 'manual_name']]]
         );
 
         $this->assertNull($mapper->v2NameFromLegacyName('manual_name'));
@@ -549,31 +539,15 @@ class ApiMapperServiceTest extends TestCase
      */
     public function testAliasOnlyOverrideCanTargetEitherNameColumn(): void
     {
-        $rows = ['EXAMPLE' => $this->row('new_name', 42, 'NEW_NAME')];
-
-        $method = new ReflectionMethod(ApiMapperService::class, 'compileAliases');
-
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
-
-        /** @var array<string, array<string, string>> $aliases */
-        $aliases = $method->invoke(
-            null,
-            'fixture',
-            $rows,
+        $mapper = $this->mapperFixture(
+            ApiMapperService::DOMAIN_PACKAGE_TYPE,
+            ['EXAMPLE' => $this->row('new_name', 42, 'NEW_NAME')],
             [
                 'EXAMPLE' => [
                     ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old_name']],
                     ApiMapperService::COLUMN_V2_NAME     => ['aliases' => ['OLD_NAME']],
                 ],
             ]
-        );
-
-        $mapper = $this->mapperFixture(
-            ApiMapperService::DOMAIN_PACKAGE_TYPE,
-            $rows,
-            $aliases
         );
 
         $this->assertSame(42, $mapper->idFromLegacyName('old_name'));
@@ -607,162 +581,6 @@ class ApiMapperServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider provideTestInvalidAliasConfigurationFailsLoudlyData
-     *
-     * @param  array<string, array<string, array{aliases: string[]}>> $overrides
-     */
-    public function testInvalidAliasConfigurationFailsLoudly(array $overrides, string $message): void
-    {
-        $method = new ReflectionMethod(ApiMapperService::class, 'compileAliases');
-
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
-
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage($message);
-
-        $method->invoke(
-            null,
-            'fixture',
-            [
-                'ONE' => $this->row('one', 1, 'ONE'),
-                'TWO' => $this->row('two', 2, 'TWO'),
-            ],
-            $overrides
-        );
-    }
-
-    /**
-     * @dataProvider provideTestInvalidOverrideConfigurationFailsLoudlyData
-     *
-     * @param  array<string, mixed> $overrides
-     */
-    public function testInvalidOverrideConfigurationFailsLoudly(array $overrides, string $message): void
-    {
-        $method = new ReflectionMethod(ApiMapperService::class, 'validateOverrides');
-
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
-
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage($message);
-
-        $method->invoke(
-            null,
-            ApiMapperService::DOMAIN_PACKAGE_TYPE,
-            ApiMapperService::profiles()[ApiMapperService::DOMAIN_PACKAGE_TYPE],
-            $overrides
-        );
-    }
-
-    /**
-     * @return array<string, array{0: array<string, mixed>, 1: string}>
-     */
-    public function provideTestInvalidOverrideConfigurationFailsLoudlyData(): array
-    {
-        $legacy = ApiMapperService::COLUMN_LEGACY_NAME;
-        $id     = ApiMapperService::COLUMN_ID;
-
-        return [
-            'unknown constant'       => [
-                ['DOES_NOT_EXIST' => [$legacy => ['value' => 'example']]],
-                'Unknown constant DOES_NOT_EXIST',
-            ],
-            'invalid columns'        => [
-                ['PACKAGE' => 'not-an-array'],
-                'Invalid override columns',
-            ],
-            'unknown column'         => [
-                ['PACKAGE' => ['typo' => ['value' => 'example']]],
-                'Invalid override',
-            ],
-            'invalid payload'        => [
-                ['PACKAGE' => [$legacy => 'not-an-array']],
-                'Invalid override',
-            ],
-            'unknown payload key'    => [
-                ['PACKAGE' => [$legacy => ['vale' => 'example']]],
-                'Unknown or empty override option',
-            ],
-            'empty payload'          => [
-                ['PACKAGE' => [$legacy => []]],
-                'Unknown or empty override option',
-            ],
-            'wrong name value type'  => [
-                ['PACKAGE' => [$legacy => ['value' => 1]]],
-                'Invalid override value',
-            ],
-            'wrong id value type'    => [
-                ['PACKAGE' => [$id => ['value' => '1']]],
-                'Invalid override value',
-            ],
-            'aliases is not an array' => [
-                ['PACKAGE' => [$legacy => ['aliases' => 'old_name']]],
-                'Invalid aliases',
-            ],
-            'empty alias-only entry' => [
-                ['PACKAGE' => [$legacy => ['aliases' => []]]],
-                'Empty alias-only override',
-            ],
-            'wrong alias value type' => [
-                ['PACKAGE' => [$legacy => ['aliases' => [null]]]],
-                'Invalid alias value',
-            ],
-        ];
-    }
-
-    /**
-     * @return array<string, array{0: array<string, array<string, array{aliases: string[]}>>, 1: string}>
-     */
-    public function provideTestInvalidAliasConfigurationFailsLoudlyData(): array
-    {
-        return [
-            'empty'     => [
-                ['ONE' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['  ']]]],
-                'Empty alias configured',
-            ],
-            'duplicate' => [
-                [
-                    'ONE' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old']]],
-                    'TWO' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old']]],
-                ],
-                "Duplicate alias 'old'",
-            ],
-            'canonical' => [
-                ['ONE' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['two']]]],
-                "Alias 'two'",
-            ],
-        ];
-    }
-
-    public function testValueOverridesAreCompiledAsAuthoritativeCells(): void
-    {
-        $method = new ReflectionMethod(ApiMapperService::class, 'compileOverriddenCells');
-
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
-
-        $this->assertSame(
-            ['EXAMPLE' => [
-                ApiMapperService::COLUMN_LEGACY_NAME => true,
-                ApiMapperService::COLUMN_V2_NAME     => true,
-            ]],
-            $method->invoke(
-                null,
-                [
-                    'EXAMPLE' => [
-                        ApiMapperService::COLUMN_LEGACY_NAME => ['value' => 'example'],
-                        ApiMapperService::COLUMN_V2_NAME     => ['value' => null],
-                    ],
-                ]
-            )
-        );
-    }
-
-    /**
      * Keep existing values and their relative order while allowing new generated entries.
      *
      * @param  string[] $expected
@@ -785,50 +603,33 @@ class ApiMapperServiceTest extends TestCase
      */
     private function compiledMapperFixture(array $profile, array $overrides = []): ApiMapperService
     {
-        $invoke = static function (string $name, array $arguments) {
-            $method = new ReflectionMethod(ApiMapperService::class, $name);
+        $method = new ReflectionMethod(ApiMapperService::class, 'compile');
 
-            if (PHP_VERSION_ID < 80100) {
-                $method->setAccessible(true);
-            }
+        if (PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
 
-            return $method->invokeArgs(null, $arguments);
-        };
+        $rows = $method->invoke(null, $profile, $overrides);
 
-        $invoke('validateOverrides', ['fixture', $profile, $overrides]);
-        $rows    = $invoke('compile', [$profile, $overrides]);
-        $aliases = $invoke('compileAliases', ['fixture', $rows, $overrides]);
-        $cells   = $invoke('compileOverriddenCells', [$overrides]);
-
-        return $this->mapperFixture(ApiMapperService::DOMAIN_PACKAGE_TYPE, $rows, $aliases, $cells);
+        return $this->mapperFixture(ApiMapperService::DOMAIN_PACKAGE_TYPE, $rows, $overrides);
     }
 
     /**
+     * @param  string                                       $domain
      * @param  array<string, array<string, int|string|null>> $rows
-     * @param  array<string, array<string, string>>          $aliases
-     * @param  array<string, array<string, bool>>            $overriddenCells
+     * @param  array<string, mixed>                         $overrides
+     *
+     * @return \MyParcelNL\Sdk\Services\Mapping\ApiMapperService
      */
-    private function mapperFixture(
-        string $domain,
-        array $rows,
-        array $aliases = [],
-        array $overriddenCells = []
-    ): ApiMapperService {
+    private function mapperFixture(string $domain, array $rows, array $overrides = []): ApiMapperService
+    {
         $reflection = new ReflectionClass(ApiMapperService::class);
 
-        /** @var ApiMapperService $mapper */
+        /** @var \MyParcelNL\Sdk\Services\Mapping\ApiMapperService $mapper */
         $mapper = $reflection->newInstanceWithoutConstructor();
 
-        foreach (
-            [
-                'domain'          => $domain,
-                'rows'            => $rows,
-                'aliases'         => $aliases,
-                'overriddenCells' => $overriddenCells,
-                'columns'         => [],
-            ] as $propertyName => $value
-        ) {
-            $property = $reflection->getProperty($propertyName);
+        foreach (['domain' => $domain, 'rows' => $rows, 'mappingOverrides' => $overrides] as $name => $value) {
+            $property = $reflection->getProperty($name);
 
             if (PHP_VERSION_ID < 80100) {
                 $property->setAccessible(true);

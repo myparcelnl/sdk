@@ -196,7 +196,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertNull($trackedOnlyOptions->getNoTracking());
     }
 
-    public function testMapToCoreApiKeepsAcceptingGeneratedV2WireOptionNames(): void
+    public function testMapToCoreApiKeepsAcceptingGeneratedV2JsonOptionNames(): void
     {
         $signature = new \stdClass();
         $sameDay   = new \stdClass();

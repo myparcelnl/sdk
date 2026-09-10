@@ -416,6 +416,7 @@ $mapper->v2NameFromId(9);              // 'DHL_FOR_YOU'
 
 Use `forDeliveryType()` or `forPackageType()` for the other types.
 Conversion methods return `null` if no mapping exists. Use `allRows()` to get the full map.
+See [Value mapping](README.md#value-mapping) for usage.
 
 `CarrierApiMapping`, `DeliveryTypeApiMapping`, `PackageTypeApiMapping` and `ApiMappingInterface`
 are deprecated. Existing calls still work and throw `InvalidArgumentException` for unknown values.
@@ -428,3 +429,4 @@ and `DHL_FREIGHT`.
 `CapabilitiesRequest::withOptions()` now sends `cash_on_delivery`, `drop_off_at_postal_point`
 and `extra_assurance` to the API. These options were previously ignored. `tracked` remains unsupported
 in capabilities v2 requests.
+Use `getUnsupportedOptions()` on the request to check which option names will be omitted.

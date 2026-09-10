@@ -8,22 +8,13 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRe
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 /**
- * Shipment options, the INT-1441 way: derive what the naming rule can derive, write down only
- * real deviations, and let the build report when that list stops matching the spec.
+ * Verifies that all generated v1 options are mapped or explicitly unsupported in v2 requests.
  *
- * Shipment options do not fit ApiMapperService — they have no id layer, and their names are
- * object attributes rather than enum constants, so there is nothing for the shared-constant-name
- * join to work on. The same principle still applies, and this file is what enforces it.
- *
- * Before INT-1441 four options were dropped without a trace: cash_on_delivery,
- * drop_off_at_postal_point and extra_assurance were missing aliases, and 'tracked' cannot be
- * represented by the concrete v2 capabilities request. The first three are fixed; the fourth is
- * now declared instead of silent.
- *
- * @see \MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper
+ * @see \MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper
  */
 class CapabilitiesOptionMappingTest extends TestCase
 {
@@ -34,13 +25,13 @@ class CapabilitiesOptionMappingTest extends TestCase
     public function testEveryOptionInTheSpecIsAccountedFor(): void
     {
         $unaccounted = [];
-        $mustMap     = array_diff($this->specOptionKeys(), CapabilitiesMapper::unmappableOptions());
+        $mustMap     = array_diff($this->specOptionKeys(), ShipmentOptionMapper::unmappableOptions());
 
         foreach ($mustMap as $key) {
             $targetProperty = $this->resolvedTargetProperty($key);
 
             if (null === $targetProperty) {
-                $unaccounted[$key] = CapabilitiesMapper::knownOptionAliases()[$key] ?? $key;
+                $unaccounted[$key] = ShipmentOptionMapper::aliases()[$key] ?? $key;
             }
         }
 
@@ -48,8 +39,8 @@ class CapabilitiesOptionMappingTest extends TestCase
             [],
             $unaccounted,
             "These concrete v1 request options resolve to no property on CapabilitiesOptionsV2, so "
-            . "mapOptions() would skip them. For each: add an alias to KNOWN_OPTION_ALIASES if v2 "
-            . "renamed the concept, or add it to UNMAPPABLE_OPTIONS with a request-specific reason. "
+            . "mapOptions() would skip them. For each: add an alias to LEGACY_TO_V2_PROPERTIES if v2 "
+            . "renamed the concept, or add it to UNSUPPORTED_OPTIONS with a request-specific reason. "
             . "Source key => attempted target property: "
             . json_encode($unaccounted)
         );
@@ -59,7 +50,7 @@ class CapabilitiesOptionMappingTest extends TestCase
     {
         $input = [];
 
-        foreach (array_diff($this->specOptionKeys(), CapabilitiesMapper::unmappableOptions()) as $key) {
+        foreach (array_diff($this->specOptionKeys(), ShipmentOptionMapper::unmappableOptions()) as $key) {
             $input[$key] = (object) ['source' => $key];
         }
 
@@ -77,14 +68,14 @@ class CapabilitiesOptionMappingTest extends TestCase
         }
     }
 
-    public function testEveryGeneratedV2WireNameRemainsAcceptedAsInput(): void
+    public function testEveryGeneratedV2JsonNameRemainsAcceptedAsInput(): void
     {
         $input   = [];
         $markers = [];
 
-        foreach (CapabilitiesOptionsV2::attributeMap() as $local => $wire) {
-            $input[$wire] = (object) ['source' => $wire];
-            $markers[$local] = $input[$wire];
+        foreach (CapabilitiesOptionsV2::attributeMap() as $property => $jsonName) {
+            $input[$jsonName] = (object) ['source' => $jsonName];
+            $markers[$property] = $input[$jsonName];
         }
 
         $request = CapabilitiesRequest::forCountry('NL')->withOptions($input);
@@ -92,10 +83,10 @@ class CapabilitiesOptionMappingTest extends TestCase
 
         $this->assertNotNull($options);
 
-        foreach ($markers as $local => $marker) {
-            $getter = CapabilitiesOptionsV2::getters()[$local];
+        foreach ($markers as $property => $marker) {
+            $getter = CapabilitiesOptionsV2::getters()[$property];
 
-            $this->assertSame($marker, $options->{$getter}(), sprintf('%s wire input must remain accepted.', $local));
+            $this->assertSame($marker, $options->{$getter}(), sprintf('%s JSON input must remain accepted.', $property));
         }
     }
 
@@ -108,7 +99,7 @@ class CapabilitiesOptionMappingTest extends TestCase
         $sourceKeys    = $this->specOptionKeys();
         $targetSetters = CapabilitiesOptionsV2::setters();
 
-        foreach (CapabilitiesMapper::knownOptionAliases() as $source => $target) {
+        foreach (ShipmentOptionMapper::aliases() as $source => $target) {
             $this->assertContains(
                 $source,
                 $sourceKeys,
@@ -121,7 +112,7 @@ class CapabilitiesOptionMappingTest extends TestCase
             );
             $this->assertNotContains(
                 $source,
-                CapabilitiesMapper::unmappableOptions(),
+                ShipmentOptionMapper::unmappableOptions(),
                 sprintf('%s is both aliased and declared unmappable.', $source)
             );
         }
@@ -133,7 +124,7 @@ class CapabilitiesOptionMappingTest extends TestCase
      */
     public function testNoAliasDuplicatesWhatTheNamingRuleAlreadyDerives(): void
     {
-        foreach (CapabilitiesMapper::knownOptionAliases() as $source => $target) {
+        foreach (ShipmentOptionMapper::aliases() as $source => $target) {
             $this->assertNotSame(
                 $source,
                 $target,
@@ -151,7 +142,7 @@ class CapabilitiesOptionMappingTest extends TestCase
     {
         $targetSetters = CapabilitiesOptionsV2::setters();
 
-        foreach (CapabilitiesMapper::unmappableOptions() as $key) {
+        foreach (ShipmentOptionMapper::unmappableOptions() as $key) {
             $this->assertContains(
                 $key,
                 $this->specOptionKeys(),
@@ -166,7 +157,7 @@ class CapabilitiesOptionMappingTest extends TestCase
 
             $this->assertArrayNotHasKey(
                 $key,
-                CapabilitiesMapper::knownOptionAliases(),
+                ShipmentOptionMapper::aliases(),
                 sprintf('%s is both aliased and declared unmappable.', $key)
             );
         }
@@ -183,7 +174,7 @@ class CapabilitiesOptionMappingTest extends TestCase
             'extra_assurance'          => 'additional_insurance',
         ];
 
-        $this->assertSame($expected, array_intersect_key(CapabilitiesMapper::knownOptionAliases(), $expected));
+        $this->assertSame($expected, array_intersect_key(ShipmentOptionMapper::aliases(), $expected));
     }
 
     /**
@@ -197,7 +188,7 @@ class CapabilitiesOptionMappingTest extends TestCase
         $aliased   = [];
         $targets   = [];
 
-        foreach (array_diff($this->specOptionKeys(), CapabilitiesMapper::unmappableOptions()) as $key) {
+        foreach (array_diff($this->specOptionKeys(), ShipmentOptionMapper::unmappableOptions()) as $key) {
             $target = $this->resolvedTargetProperty($key);
             $this->assertNotNull($target, $key);
             $this->assertNotContains(
@@ -207,7 +198,7 @@ class CapabilitiesOptionMappingTest extends TestCase
             );
             $targets[] = $target;
 
-            if (array_key_exists($key, CapabilitiesMapper::knownOptionAliases())) {
+            if (array_key_exists($key, ShipmentOptionMapper::aliases())) {
                 $aliased[] = $key;
                 continue;
             }
@@ -217,7 +208,7 @@ class CapabilitiesOptionMappingTest extends TestCase
 
         $this->assertSame(
             count($this->specOptionKeys()),
-            count($automatic) + count($aliased) + count(CapabilitiesMapper::unmappableOptions())
+            count($automatic) + count($aliased) + count(ShipmentOptionMapper::unmappableOptions())
         );
 
         // At least one mapping must remain derived; insurance proves the concrete request model,
@@ -233,9 +224,7 @@ class CapabilitiesOptionMappingTest extends TestCase
      */
     private function resolvedTargetProperty(string $key): ?string
     {
-        $property = CapabilitiesMapper::knownOptionAliases()[$key] ?? $key;
-
-        return array_key_exists($property, CapabilitiesOptionsV2::setters()) ? $property : null;
+        return (new ShipmentOptionMapper())->v2PropertyFromName($key);
     }
 
     /**
