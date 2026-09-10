@@ -18,7 +18,8 @@ composer require myparcelnl/sdk
 
 ## Quick start
 
-All v11 services take an API key in the constructor and wrap the generated API client.
+Most v11 services take an API key in the constructor and wrap the generated API client. MyParcel
+Connect is the exception, see [MyParcel Connect](#myparcel-connect).
 
 ```php
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
@@ -60,8 +61,22 @@ $mapping = $service->create((new ShipmentCollection())->push($shipment));
 | `CarrierContractDefinitionsService` | Fetch account-level carrier contract definitions |
 | `WebhookService` | Subscribe, unsubscribe, list webhooks |
 | `ApiKeyService` | Validate API key, get principal info |
+| `ConnectService` | Connect a shop with MyParcel Connect and keep its access token usable |
 
 See [UPGRADE.md](UPGRADE.md) for detailed before/after examples per service.
+
+## MyParcel Connect
+
+`ConnectService` authorises a shop in the merchant's browser instead of taking an API key. It is for
+integrations you publish and other people install, rather than a single shop you run yourself.
+`EcommerceApiFactory` then builds an e-commerce client that signs every call, which is how orders
+are pushed.
+
+Connect covers one call for now, `POST /webhook/orders`. Every other service in this SDK still takes
+an API key.
+
+See [PHP SDK v11] on the developer portal for how to use it. `dev/connect-poc` in this repository is
+a page that runs the whole flow.
 
 ## Legacy services
 
@@ -104,5 +119,6 @@ developers directly on [Slack].
 5. Submit a pull request
 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
+[PHP SDK v11]: https://developer.myparcel.com/guides/php-sdk-v11.html
 [PHP SDK documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
 [MyParcel Developer Portal]: https://developer.myparcel.nl
