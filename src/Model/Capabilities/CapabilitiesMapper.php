@@ -16,6 +16,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesLengthV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWidthV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
+use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 
 class CapabilitiesMapper
 {
@@ -159,54 +160,31 @@ class CapabilitiesMapper
     }
 
     /**
-     * Map SDK shipment option data to a Core API CapabilitiesOptionsV2 instance.
+     * Map supported options to the capabilities v2 request model.
+     * Call CapabilitiesRequest::getUnsupportedOptions() before sending to handle omitted options.
      *
-     * Unknown options are ignored silently.
+     * @param  array<string, mixed> $optionsData
      *
-     * @param array<string, mixed> $optionsData
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2
      */
     private function mapOptions(array $optionsData): CoreOptionsV2
     {
         $options = new CoreOptionsV2();
+        $mapper  = new ShipmentOptionMapper();
+        $setters = CoreOptionsV2::setters();
 
         foreach ($optionsData as $key => $value) {
-            $setter = self::KNOWN_OPTION_SETTERS[$key] ?? $this->getFallbackSetterName($key);
+            $property = $mapper->v2PropertyFromName((string) $key);
 
-            if (! method_exists($options, $setter)) {
+            if (null === $property) {
                 continue;
             }
 
+            $setter = $setters[$property];
             $options->{$setter}($this->normalizeOptionValue($value));
         }
 
         return $options;
-    }
-
-    /**
-     * Explicit mappings where the Core API v2 setter name differs semantically from the option key.
-     * New options should flow through via the fallback setter mapping.
-     */
-    private const KNOWN_OPTION_SETTERS = [
-        'signature'          => 'setRequiresSignature',
-        'only_recipient'     => 'setRecipientOnlyDelivery',
-        'age_check'          => 'setRequiresAgeVerification',
-        'receipt_code'       => 'setRequiresReceiptCode',
-        'large_format'       => 'setOversizedPackage',
-        'printerless_return' => 'setPrintReturnLabelAtDropOff',
-        'collect'            => 'setScheduledCollection',
-        'return'             => 'setReturnOnFirstFailedDelivery',
-    ];
-
-    /**
-     * Convert snake_case to a setter name.
-     *
-     * Example: same_day_delivery → setSameDayDelivery
-     */
-    private function getFallbackSetterName(string $key): string
-    {
-        $studly = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-
-        return 'set' . $studly;
     }
 
     /**

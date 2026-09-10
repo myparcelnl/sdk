@@ -399,3 +399,34 @@ The following classes and namespaces have been fully removed:
 - `MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory`
 - `MyParcelNL\Sdk\Exception\InvalidConsignmentException`, `NoConsignmentFoundException`
 - `MyParcelNL\Sdk\Concerns\HasDebugLabels`, `HasInstance`
+
+## Enum mapping between API versions
+
+Use `ApiMapperService` to convert carrier, delivery type and package type values between
+delivery-options names, v1 IDs and v2 names.
+
+```php
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+
+$mapper = ApiMapperService::forCarrier();
+
+$mapper->idFromLegacyName('dhlforyou'); // 9
+$mapper->v2NameFromId(9);              // 'DHL_FOR_YOU'
+```
+
+Use `forDeliveryType()` or `forPackageType()` for the other types.
+Conversion methods return `null` if no mapping exists. Use `allRows()` to get the full map.
+See [Value mapping](README.md#value-mapping) for usage.
+
+`CarrierApiMapping`, `DeliveryTypeApiMapping`, `PackageTypeApiMapping` and `ApiMappingInterface`
+are deprecated. Existing calls still work and throw `InvalidArgumentException` for unknown values.
+
+Replace `RefTypesCarrierV2` with `RefCapabilitiesSharedCarrierV2`. The old class remains available in v11.
+
+`Carrier::toId()`, `Carrier::isValid()` and `Carrier::all()` now also support `SPRING`, `VIA_TIM`
+and `DHL_FREIGHT`.
+
+`CapabilitiesRequest::withOptions()` now sends `cash_on_delivery`, `drop_off_at_postal_point`
+and `extra_assurance` to the API. These options were previously ignored. `tracked` remains unsupported
+in capabilities v2 requests.
+Use `getUnsupportedOptions()` on the request to check which option names will be omitted.

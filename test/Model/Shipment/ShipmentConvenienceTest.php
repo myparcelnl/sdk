@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro;
@@ -80,7 +80,7 @@ final class ShipmentConvenienceTest extends TestCase
     public function testGetCarrierLazilyNormalizesSdkNameToId(): void
     {
         $shipment = new Shipment([
-            'carrier' => RefTypesCarrierV2::POSTNL,
+            'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
         ]);
 
         $carrier = $shipment->getCarrier();
@@ -92,7 +92,7 @@ final class ShipmentConvenienceTest extends TestCase
     public function testSetCarrierAcceptsSdkCarrierNameAndStoresId(): void
     {
         $shipment = (new Shipment())
-            ->setCarrier(RefTypesCarrierV2::POSTNL);
+            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
 
         $this->assertSame(RefTypesCarrier::POSTNL, $shipment->getCarrier());
     }

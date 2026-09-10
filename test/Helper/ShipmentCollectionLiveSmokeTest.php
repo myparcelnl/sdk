@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Helper;
 
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
@@ -251,7 +251,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
     private function createMinimalNlShipment(?string $referenceIdentifier = null): Shipment
     {
         $shipment = (new Shipment())
-            ->setCarrier(RefTypesCarrierV2::POSTNL)
+            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
             ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
             ->withWeight(1000)
             ->setRecipient([
