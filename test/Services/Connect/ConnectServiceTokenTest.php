@@ -203,7 +203,7 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         $this->seedConnectedShop();
 
         $other = new ConnectService(
-            (new \MyParcelNL\Sdk\Model\Connect\ConnectConfig(ConnectPlatform::GENERIC, 'a different key')),
+            (new \MyParcelNL\Sdk\Model\Connect\ConnectConfig(ConnectPlatform::SHOPIFY, 'a different key')),
             $this->storage,
             $this->httpAnswering()
         );

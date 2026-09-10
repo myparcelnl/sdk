@@ -17,12 +17,12 @@ class ConnectConfigTest extends TestCase
 
     public function testDefaults(): void
     {
-        $config = new ConnectConfig(ConnectPlatform::GENERIC, self::KEY);
+        $config = new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY);
 
         self::assertFalse($config->isAcceptance());
         self::assertSame(30, $config->getExpiryLeewaySeconds());
         self::assertSame(
-            ['integration', 'write:orders', 'write:products'],
+            ['integration'],
             $config->getScopes(),
             'every scope, unless withScopes() narrows it'
         );
@@ -31,8 +31,8 @@ class ConnectConfigTest extends TestCase
     public function testBuildsTheProductionHostFromThePlatform(): void
     {
         self::assertSame(
-            'https://generic.ecommerce.api.myparcel.nl',
-            (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))->getHost()
+            'https://shopify.ecommerce.api.myparcel.nl',
+            (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->getHost()
         );
     }
 
@@ -46,32 +46,31 @@ class ConnectConfigTest extends TestCase
 
     public function testTheHostLabelIsNotTheLowercasedPlatform(): void
     {
-        $config = new ConnectConfig(ConnectPlatform::WOOCOMMERCE, self::KEY);
-
-        self::assertSame('WOOCOMMERCE', $config->getPlatform());
-        self::assertSame('woo', $config->getServicePrefix());
-        self::assertSame('https://woo.ecommerce.api.myparcel.nl', $config->getHost());
+        // WOOCOMMERCE maps to 'woo', which is the only pair where the two differ. It is commented
+        // out in ConnectPlatform::SERVICE_PREFIXES, and SHOPIFY maps to 'shopify', so there is
+        // nothing left to tell apart. Restore this with the platform.
+        self::markTestSkipped('only SHOPIFY is enabled, and its host label is its lowercased name');
     }
 
     public function testScopeStringIsSpaceDelimited(): void
     {
         self::assertSame(
-            'integration write:orders write:products',
-            (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))->getScopeString()
+            'integration',
+            (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->getScopeString()
         );
     }
 
     public function testWithScopesNarrowsTheList(): void
     {
-        $config = (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))
-            ->withScopes([ConnectScope::INTEGRATION, ConnectScope::WRITE_ORDERS]);
+        $config = (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))
+            ->withScopes([ConnectScope::INTEGRATION]);
 
-        self::assertSame('integration write:orders', $config->getScopeString());
+        self::assertSame('integration', $config->getScopeString());
     }
 
     public function testWithScopesDropsARepeatedScope(): void
     {
-        $config = (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))
+        $config = (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))
             ->withScopes([ConnectScope::INTEGRATION, ConnectScope::INTEGRATION]);
 
         self::assertSame(['integration'], $config->getScopes());
@@ -81,30 +80,30 @@ class ConnectConfigTest extends TestCase
     {
         $this->expectException(ConnectException::class);
 
-        (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))->withScopes(['read:capabilities']);
+        (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->withScopes(['delete:everything']);
     }
 
     public function testWithScopesRejectsAnEmptyList(): void
     {
         $this->expectException(ConnectException::class);
 
-        (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))->withScopes([]);
+        (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->withScopes([]);
     }
 
     public function testWithMethodsLeaveTheOriginalAlone(): void
     {
-        $config  = new ConnectConfig(ConnectPlatform::GENERIC, self::KEY);
+        $config  = new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY);
         $changed = $config->withAcceptance(true)
             ->withExpiryLeewaySeconds(90)
-            ->withScopes([ConnectScope::WRITE_ORDERS]);
+            ->withScopes([ConnectScope::INTEGRATION]);
 
         self::assertFalse($config->isAcceptance());
         self::assertSame(30, $config->getExpiryLeewaySeconds());
-        self::assertCount(3, $config->getScopes());
+        self::assertCount(1, $config->getScopes());
 
         self::assertTrue($changed->isAcceptance());
         self::assertSame(90, $changed->getExpiryLeewaySeconds());
-        self::assertSame(['write:orders'], $changed->getScopes());
+        self::assertSame(['integration'], $changed->getScopes());
     }
 
     /**
@@ -143,7 +142,7 @@ class ConnectConfigTest extends TestCase
     public function testListsTheAcceptedPlatforms(): void
     {
         self::assertSame(
-            ['GENERIC', 'MAGENTO', 'PRESTA', 'SHOPIFY', 'WOOCOMMERCE'],
+            ['SHOPIFY'],
             ConnectPlatform::getAllowableEnumValues()
         );
     }
@@ -175,8 +174,10 @@ class ConnectConfigTest extends TestCase
             new ConnectConfig(ConnectStartConfig::PLATFORM_LIGHTSPEED, self::KEY);
             self::fail('expected a ConnectException');
         } catch (ConnectException $exception) {
-            self::assertStringContainsString('GENERIC', $exception->getMessage());
-            self::assertStringContainsString('SHOPIFY', $exception->getMessage());
+            // Every accepted platform is named, so a caller can see what to pass instead.
+            foreach (ConnectPlatform::getAllowableEnumValues() as $accepted) {
+                self::assertStringContainsString($accepted, $exception->getMessage());
+            }
         }
     }
 
@@ -184,20 +185,20 @@ class ConnectConfigTest extends TestCase
     {
         $this->expectException(ConnectException::class);
 
-        new ConnectConfig(ConnectPlatform::GENERIC, '');
+        new ConnectConfig(ConnectPlatform::SHOPIFY, '');
     }
 
     public function testRejectsANegativeLeeway(): void
     {
         $this->expectException(ConnectException::class);
 
-        (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))->withExpiryLeewaySeconds(-1);
+        (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->withExpiryLeewaySeconds(-1);
     }
 
     public function testListsTheScopesTheServiceAllows(): void
     {
         self::assertSame(
-            ['integration', 'write:orders', 'write:products'],
+            ['integration'],
             ConnectScope::getAllowableEnumValues()
         );
     }
