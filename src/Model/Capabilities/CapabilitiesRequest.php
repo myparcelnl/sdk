@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 
 /**
  * Request DTO used for capabilities lookups.
  *
- * @see \MyParcelNL\Sdk\Mapper\CapabilitiesMapper
+ * @see \MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper
  */
 class CapabilitiesRequest
 {
@@ -160,6 +161,9 @@ class CapabilitiesRequest
     }
 
     /**
+     * Set the requested shipment options. Unknown and unsupported names are omitted when sent.
+     * Use getUnsupportedOptions() to decide whether to reject or change the request first.
+     *
      * @param  array|null $options
      *
      * @return self
@@ -260,6 +264,27 @@ class CapabilitiesRequest
     public function getOptions(): ?array
     {
         return $this->options;
+    }
+
+    /**
+     * Return option names that cannot be sent in the capabilities v2 request.
+     * This includes unknown names and explicitly unsupported options such as tracked.
+     * The request is not changed, and option values are not validated by this check.
+     *
+     * @return string[]
+     */
+    public function getUnsupportedOptions(): array
+    {
+        $mapper      = new ShipmentOptionMapper();
+        $unsupported = [];
+
+        foreach (array_keys($this->options ?? []) as $name) {
+            if (null === $mapper->v2PropertyFromName((string) $name)) {
+                $unsupported[] = (string) $name;
+            }
+        }
+
+        return $unsupported;
     }
 
     /**

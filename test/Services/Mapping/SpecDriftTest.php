@@ -121,13 +121,7 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * Checked against the RAW enum constants, not against the compiled rows.
-     *
-     * compile() seeds a row for every override key before returning, so asserting against
-     * allRows() would be tautological — it would hold for any key, including a typo. A typo is
-     * exactly the failure worth catching: 'PICUKP' would create a phantom row carrying the
-     * legacy name while the real PICKUP row keeps a null one, and idFromLegacyName('pickup')
-     * would silently return null instead of 4.
+     * Check exception keys against source constants so misspellings cannot create extra rows.
      */
     public function testEveryOverrideStillPointsAtAKnownConstant(): void
     {
@@ -170,11 +164,40 @@ class SpecDriftTest extends TestCase
         }
     }
 
+    public function testOverrideConfigurationHasValidValuesAndAliases(): void
+    {
+        foreach (ApiMapperService::overrides() as $overrides) {
+            foreach ($overrides as $columns) {
+                foreach ($columns as $column => $override) {
+                    $this->assertNotEmpty($override);
+                    $this->assertSame([], array_diff(array_keys($override), ['value', 'aliases']));
+
+                    $values = $override['aliases'] ?? [];
+                    $this->assertIsArray($values);
+
+                    if (isset($override['value'])) {
+                        $values[] = $override['value'];
+                    }
+
+                    foreach ($values as $value) {
+                        if (ApiMapperService::COLUMN_ID === $column) {
+                            $this->assertIsInt($value);
+                        } else {
+                            $this->assertIsString($value);
+                            $this->assertNotSame('', trim($value));
+                        }
+                    }
+
+                    if (! array_key_exists('value', $override)) {
+                        $this->assertNotEmpty($values);
+                    }
+                }
+            }
+        }
+    }
+
     /**
-     * A duplicate value in a column would make array_search return whichever row happens to come
-     * first, which is a silent wrong answer rather than a null. Asserted here rather than guarded
-     * at runtime: there is no such input today, and throwing would turn a spec change into a
-     * merchant-facing outage instead of a red build.
+     * Duplicate values would make one input refer to more than one row.
      */
     public function testEveryColumnHasUniqueValues(): void
     {
@@ -203,17 +226,8 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * Catches the one way automatic matching degrades silently: a constant NAME that disagrees
-     * between two source enums.
-     *
-     * The join key is the constant name, so if a regeneration spells the same concept
-     * ACME_EXPRESS in one enum and ACME_XPRESS in another, compile() produces two half-filled
-     * rows instead of one complete one. Every lookup crossing that boundary then returns null —
-     * a miss rather than a wrong answer, but a silent one.
-     *
-     * Every concept today is named by at least two of its three sources (17 carriers by all
-     * three, 4 by legacy + id), so a single-cell row means either a name disagreement or a
-     * concept that has genuinely appeared in one API before the others. Both deserve a look.
+     * A value present in only one source can indicate different constant names across versions.
+     * Review such changes before accepting them as an incomplete mapping.
      */
     public function testNoConceptIsNamedByOnlyOneSource(): void
     {

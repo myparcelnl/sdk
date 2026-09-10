@@ -63,6 +63,44 @@ $mapping = $service->create((new ShipmentCollection())->push($shipment));
 
 See [UPGRADE.md](UPGRADE.md) for detailed before/after examples per service.
 
+## Value mapping
+
+Use `ApiMapperService` to convert between delivery-options names, v1 IDs and v2 names.
+
+```php
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+
+$mapper = ApiMapperService::forCarrier();
+
+$mapper->idFromLegacyName('dhlforyou'); // 9
+$mapper->v2NameFromId(9);              // 'DHL_FOR_YOU'
+$mapper->legacyNameFromV2Name('DPD');  // 'dpd'
+```
+
+Use `forDeliveryType()` or `forPackageType()` for the other categories. Conversion methods return
+`null` if no mapping exists. Use `allRows()` for one category or `allDomains()` for all three.
+
+Shipment option names are handled by `Services\Mapping\ShipmentOptionMapper`. Its
+`v2PropertyFromName()` method returns the generated capabilities v2 model property, or `null`.
+For example, `signature` and `requiresSignature` both map to `requires_signature`.
+
+## Unsupported capabilities options
+
+Capabilities requests omit unknown or unsupported option names. Check the request before sending
+it so your application can report these options or change the request.
+
+```php
+use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+
+$request = CapabilitiesRequest::forCountry('NL')
+    ->withOptions(['signature' => null, 'tracked' => null]);
+
+$request->getUnsupportedOptions(); // ['tracked']
+```
+
+This check validates option names accepted by the request model. It does not validate option
+values or determine which options a carrier offers.
+
 ## Legacy services
 
 The following are still available but will be replaced in a future release:
