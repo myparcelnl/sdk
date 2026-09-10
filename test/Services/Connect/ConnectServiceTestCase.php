@@ -34,7 +34,7 @@ abstract class ConnectServiceTestCase extends TestCase
 {
     protected const KEY = 'an encryption key';
 
-    protected const HOST = 'https://generic.ecommerce.api.acceptance.myparcel.nl';
+    protected const HOST = 'https://shopify.ecommerce.api.acceptance.myparcel.nl';
 
     protected const HTU = 'https://account.acceptance.myparcel.nl/oauth/token';
 
@@ -73,7 +73,7 @@ abstract class ConnectServiceTestCase extends TestCase
 
     protected function config(): ConnectConfig
     {
-        return (new ConnectConfig(ConnectPlatform::GENERIC, self::KEY))->withAcceptance(true);
+        return (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->withAcceptance(true);
     }
 
     /**

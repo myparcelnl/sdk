@@ -39,7 +39,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $query = $this->query($this->service()->start('My Shop', 'https://shop.example.test'));
 
         self::assertSame(['jkt', 'config', 'nonce', 'scope'], array_keys($query));
-        self::assertSame('integration write:orders write:products', $query['scope']);
+        self::assertSame('integration', $query['scope']);
     }
 
     public function testStartPointsAtTheConfiguredHost(): void
@@ -55,7 +55,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
         self::assertSame(
             [
-                'platform' => 'GENERIC',
+                'platform' => 'SHOPIFY',
                 'shopName' => 'My Shop',
                 'shopUrl'  => 'https://shop.example.test',
             ],
@@ -65,12 +65,12 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
     public function testStartTellsMyParcelWhichPlatformThisIs(): void
     {
-        $config = (new ConnectConfig(ConnectPlatform::WOOCOMMERCE, self::KEY))->withAcceptance(true);
+        $config = (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))->withAcceptance(true);
         $service = new ConnectService($config, $this->storage, $this->httpAnswering($this->tokenResponse()));
 
         $query = $this->query($service->start('My Shop', 'https://shop.example.test'));
 
-        self::assertSame('WOOCOMMERCE', $this->configPayload($query)['platform']);
+        self::assertSame('SHOPIFY', $this->configPayload($query)['platform']);
     }
 
     public function testStartSendsThePluginVersionWhenItIsGiven(): void
@@ -138,7 +138,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $longestUrl = 'https://' . str_repeat('a', 128 - strlen('https://') - strlen('.test')) . '.test';
 
         $atTheLimit = new ConnectStartConfig([
-            'platform'  => ConnectPlatform::GENERIC,
+            'platform'  => ConnectPlatform::SHOPIFY,
             'shop_name' => str_repeat('a', 64),
             'shop_url'  => $longestUrl,
             'version'   => str_repeat('9', 256),
@@ -160,7 +160,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
         foreach ($overTheLimit as $field => $value) {
             $config = new ConnectStartConfig([
-                'platform'  => ConnectPlatform::GENERIC,
+                'platform'  => ConnectPlatform::SHOPIFY,
                 'shop_name' => str_repeat('a', 64),
                 'shop_url'  => $longestUrl,
                 'version'   => str_repeat('9', 256),
@@ -201,7 +201,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         // A + in a query is only a space under form encoding, so %20 leaves nothing to interpret.
         $url = $this->service()->start('My Shop', 'https://shop.example.test');
 
-        self::assertStringContainsString('scope=integration%20write%3Aorders%20write%3Aproducts', $url);
+        self::assertStringContainsString('scope=integration', $url);
         self::assertStringNotContainsString('+', $url);
     }
 
@@ -277,8 +277,25 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $this->service()->start('My Shop', 'https://shop.example.test');
 
         $this->expectException(ConnectException::class);
+        // Names the missing parameter, because a flow was started: pointing at storage would send
+        // the reader looking in the wrong place.
+        $this->expectExceptionMessage('it carried no nonce');
 
         $this->service()->handleCallback(['code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
+    }
+
+    public function testCallbackAfterTheFlowIsGoneSaysSo(): void
+    {
+        // disconnect() drops the nonces and keeps the key pair, so the shop is still installed but
+        // no flow is waiting. A callback that arrives late lands here.
+        $service = $this->service();
+        $service->start('My Shop', 'https://shop.example.test');
+        $service->disconnect();
+
+        $this->expectException(ConnectException::class);
+        $this->expectExceptionMessage('this shop has no connect flow waiting');
+
+        $service->handleCallback(['nonce' => 'anything', 'code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
     }
 
     public function testCallbackWithTheWrongNonceLeavesTheFlowAlone(): void

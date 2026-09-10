@@ -24,7 +24,7 @@ use Psr\Http\Message\RequestInterface;
  */
 class DpopMiddlewareTest extends ConnectServiceTestCase
 {
-    private const RESOURCE = 'https://generic.ecommerce.api.acceptance.myparcel.nl/webhook/orders';
+    private const RESOURCE = 'https://shopify.ecommerce.api.acceptance.myparcel.nl/webhook/orders';
 
     /**
      * @var array<int, array{request: RequestInterface, response: mixed}>
