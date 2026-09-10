@@ -35,12 +35,20 @@ use Throwable;
  * on its own. Nothing else needs calling.
  *
  * To use it: supply a ConnectConfig and a ConnectStorageInterface, redirect the browser to what
- * start() returns, and offer one route at {shopUrl}/myparcel-connect/callback that calls
+ * start() returns, and offer one route at {shopUrl}{self::CALLBACK_PATH} that calls
  * handleCallback(). Everything else is here.
  */
 final class ConnectService
 {
     use HasUserAgent;
+
+    /**
+     * The path MyParcel returns the merchant to, appended to the shop URL passed to start().
+     *
+     * Register a route on this path and call handleCallback() from it. MyParcel builds the return
+     * URL as {shopUrl}{self::CALLBACK_PATH}, so the path is not yours to choose.
+     */
+    public const CALLBACK_PATH = '/myparcel-connect/callback';
 
     /**
      * How long a started flow stays valid, in seconds.
@@ -168,7 +176,7 @@ final class ConnectService
      * @param  string      $shopName What the merchant sees in MyParcel. 1 to 64 characters.
      * @param  string      $shopUrl  The shop's own https base URL, no query and no fragment.
      *                               MyParcel returns the browser to
-     *                               {shopUrl}/myparcel-connect/callback.
+     *                               {shopUrl}{self::CALLBACK_PATH}.
      * @param  string|null $version  Your plugin's version, so MyParcel can tell which build a shop
      *                               runs. Leave it out and MyParcel records 0.0.1.
      * @return string The URL to redirect to.
@@ -223,7 +231,7 @@ final class ConnectService
     /**
      * Finish connecting a shop: check the callback, redeem its code, and store the token.
      *
-     * Call this from the route at {shopUrl}/myparcel-connect/callback and pass it the query
+     * Call this from the route at {shopUrl}{self::CALLBACK_PATH} and pass it the query
      * parameters. It exchanges the code for a token, which is only valid for 60 seconds, so do it in
      * the same request rather than later.
      *
@@ -652,7 +660,11 @@ final class ConnectService
         $sent   = self::text($query, 'nonce');
         $stored = $state->getStartNonce();
 
-        if ('' === $sent || null === $stored) {
+        if ('' === $sent) {
+            throw ConnectException::invalidCallback('it carried no nonce');
+        }
+
+        if (null === $stored) {
             throw ConnectException::invalidCallback('this shop has no connect flow waiting');
         }
 

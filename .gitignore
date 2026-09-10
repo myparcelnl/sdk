@@ -22,3 +22,9 @@ composer.lock
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+# The connect PoC writes its state here.
+/dev/connect-poc/state.json
+
+# Local settings for the connect PoC. Copy .env.example to start.
+/dev/connect-poc/.env
