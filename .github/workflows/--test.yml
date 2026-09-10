@@ -25,7 +25,6 @@ jobs:
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@v7
-        if: github.actor != 'dependabot[bot]'
         with:
           token: ${{ steps.credentials.outputs.token || github.token }}
 
