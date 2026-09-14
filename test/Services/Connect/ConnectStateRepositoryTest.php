@@ -46,8 +46,9 @@ class ConnectStateRepositoryTest extends TestCase
         $this->repository->load();
         $this->repository->load();
         $this->repository->load();
+        $this->repository->load();
 
-        self::assertSame(3, $this->reads() - $before, 'three records, read once between them');
+        self::assertSame(3, $this->reads() - $before, 'three records, read once no matter how often load() is called');
     }
 
     public function testAFreshReadSkipsWhatWasRemembered(): void
