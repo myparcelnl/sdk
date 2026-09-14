@@ -114,9 +114,9 @@ $config = new \MyParcelNL\Sdk\Model\Connect\ConnectConfig($settings['platform'],
 //         How early to refresh the access token, in seconds. The default of 30 keeps a request that
 //         is already on its way from expiring halfway through.
 //
-//     $config = $config->withScopes([ConnectScope::WRITE_ORDERS]);
-//         Ask for fewer permissions than the default of all of them. Ask for what you use: a
-//         merchant sees this list on the consent screen.
+//     $config = $config->withScopes([\MyParcelNL\Sdk\Model\Connect\ConnectScope::INTEGRATION]);
+//         Ask for fewer permissions than the default. Ask for what you use: a merchant sees this
+//         list on the consent screen. Integration is the only scope today, so this narrows nothing.
 $config = $config->withAcceptance($settings['acceptance']);
 
 // 3. The service. Everything Connect does goes through it, and it needs nothing else.
