@@ -8,6 +8,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Api\DefaultApi;
+use MyParcelNL\Sdk\Client\Generated\EcommerceApi\ApiException;
 use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory;
@@ -109,6 +110,32 @@ final class EcommerceApiFactoryTest extends ConnectServiceTestCase
         $api->webhookOrdersPost([new Order()]);
 
         self::assertCount(0, $orders, 'the 401 and the retry, so both answers were used');
+    }
+
+    public function testARedirectIsNotFollowed(): void
+    {
+        // Guzzle drops Authorization on a cross-origin redirect, but the redirected request comes
+        // back down the stack through DpopMiddleware, which signs it again. Following one would hand
+        // the token, a proof for the other host and on a 307 the order body to whatever Location
+        // names. So a redirect is an error, not a detour.
+        $this->seedConnectedShop();
+
+        $api     = EcommerceApiFactory::make($this->service());
+        $answers = new MockHandler([
+            new Response(307, ['Location' => 'https://elsewhere.example.test/collect']),
+            new Response(202, ['Content-Type' => 'application/json'], '[]'),
+        ]);
+
+        self::stackOf($api)->setHandler($answers);
+
+        try {
+            $api->webhookOrdersPost([new Order()]);
+            self::fail('the 307 was followed');
+        } catch (ApiException $e) {
+            self::assertSame(307, $e->getCode(), 'the redirect itself is what surfaces');
+        }
+
+        self::assertCount(1, $answers, 'the 202 behind the redirect was never asked for');
     }
 
     /**

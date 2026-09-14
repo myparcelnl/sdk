@@ -76,10 +76,14 @@ final class EcommerceApiFactory
 
         return new DefaultApi(
             new GuzzleClient([
-                'timeout'  => self::DEFAULT_HTTP_TIMEOUT,
-                'handler'  => self::createHandlerStack($connect),
-                'base_uri' => $resolvedHost,
-                'debug'    => false,
+                'timeout'         => self::DEFAULT_HTTP_TIMEOUT,
+                'handler'         => self::createHandlerStack($connect),
+                'base_uri'        => $resolvedHost,
+                'debug'           => false,
+                // A redirected request comes back down the stack through DpopMiddleware, which
+                // signs it again for the new host. Guzzle's own Authorization strip on a cross-origin
+                // redirect never gets the last word. A 3xx surfaces as an ApiException instead.
+                'allow_redirects' => false,
             ]),
             $config
         );
