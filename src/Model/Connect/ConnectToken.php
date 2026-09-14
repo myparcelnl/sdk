@@ -136,6 +136,8 @@ final class ConnectToken
             return null;
         }
 
+        // A record below self::VERSION is read as if it were current. Once VERSION is bumped,
+        // map the older fields here before this line.
         return new self($encryptedAccessToken, (int) $expiresAt, $scope);
     }
 
