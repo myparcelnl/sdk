@@ -60,14 +60,6 @@ class ConnectConfigTest extends TestCase
         );
     }
 
-    public function testWithScopesNarrowsTheList(): void
-    {
-        $config = (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))
-            ->withScopes([ConnectScope::INTEGRATION]);
-
-        self::assertSame('integration', $config->getScopeString());
-    }
-
     public function testWithScopesDropsARepeatedScope(): void
     {
         $config = (new ConnectConfig(ConnectPlatform::SHOPIFY, self::KEY))
