@@ -74,7 +74,7 @@ final class ConnectStateRepository
     }
 
     /**
-     * The same, for a caller that cannot work without one.
+     * Load the stored state, for a caller that cannot work without one.
      *
      * @param  bool $fresh Skip the remembered read.
      * @throws \MyParcelNL\Sdk\Exception\ConnectException When this shop has no installation.
