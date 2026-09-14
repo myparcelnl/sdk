@@ -65,6 +65,7 @@ final class AesGcmCipher
             throw ConnectException::invalidArgument('The encryption key cannot be empty');
         }
 
+        // sha256 gives the 32 bytes that self::CIPHER needs as a key, whatever length $key has.
         $this->key         = hash('sha256', $key, true);
         $this->randomBytes = $randomBytes ?? 'random_bytes';
     }
