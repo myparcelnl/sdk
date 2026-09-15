@@ -16,6 +16,32 @@ services:
       - ./:/app
     command: ['composer', 'test:coverage']
 
+  # The connect proof of concept, served by the traefik from myparcel-core so it gets an https URL
+  # with a real certificate. See dev/connect-poc/README.md.
+  connect-poc:
+    <<: *common
+    volumes:
+      - ./:/app
+    environment:
+      # Passed through empty when your shell does not set them, so dev/connect-poc/.env decides and
+      # the defaults stay in one place: the settings block in index.php.
+      MYPARCEL_CONNECT_KEY:      ${MYPARCEL_CONNECT_KEY:-}
+      MYPARCEL_CONNECT_PLATFORM: ${MYPARCEL_CONNECT_PLATFORM:-}
+      MYPARCEL_CONNECT_ENV:      ${MYPARCEL_CONNECT_ENV:-}
+      MYPARCEL_CONNECT_SHOP_NAME: ${MYPARCEL_CONNECT_SHOP_NAME:-}
+      # Not passed through: it has to match the host traefik serves, set by CONNECT_POC_HOST.
+      MYPARCEL_CONNECT_SHOP_URL: https://${CONNECT_POC_HOST:-connect-poc.dev.myparcel.nl}
+    command: ['php', '-S', '0.0.0.0:80', '-t', 'dev/connect-poc', 'dev/connect-poc/index.php']
+    networks: [traefik]
+    labels:
+      traefik.enable:                                              'true'
+      traefik.docker.network:                                      traefik_default
+      traefik.http.routers.connect-poc.rule:                       'Host(`${CONNECT_POC_HOST:-connect-poc.dev.myparcel.nl}`)'
+      traefik.http.routers.connect-poc.entrypoints:                secureweb
+      traefik.http.routers.connect-poc.tls:                        'true'
+      traefik.http.services.connect-poc.loadbalancer.server.port:  '80'
+    profiles: [poc]
+
   generate-api:
     image: openapitools/openapi-generator-cli:v7.12.0
     environment:
@@ -27,3 +53,8 @@ services:
     command: >
       batch /local/openapi/coreapi.yaml /local/openapi/coreapi-private.yaml /local/openapi/order.yaml /local/openapi/iam.yaml /local/openapi/ecommerce.yaml --includes-base-dir=/local/openapi --root-dir=/local --threads=1
     profiles: [openapi]
+
+networks:
+  traefik: # The traefik from myparcel-core, started separately.
+    external: true
+    name:     traefik_default

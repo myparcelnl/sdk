@@ -41,11 +41,11 @@ class ConnectPlatform
      * A fixed list, because the label is not the lowercased platform name. WOOCOMMERCE is 'woo'.
      */
     private const SERVICE_PREFIXES = [
-        self::GENERIC     => 'generic',
-        self::MAGENTO     => 'magento',
-        self::PRESTA      => 'presta',
+        // self::GENERIC     => 'generic',
+        // self::MAGENTO     => 'magento',
+        // self::PRESTA      => 'presta',
         self::SHOPIFY     => 'shopify',
-        self::WOOCOMMERCE => 'woo',
+        // self::WOOCOMMERCE => 'woo',
     ];
 
     /**
