@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.34](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.33...v11.0.0-beta.34) (2026-09-15)
+
+
+### :sparkles: New Features
+
+* **api:** add the ecommerce api factory ([#646](https://github.com/myparcelnl/sdk/issues/646)) ([809863c](https://github.com/myparcelnl/sdk/commit/809863c4fa80026e66e40031eaf8a62f0b96b176)), closes [#645](https://github.com/myparcelnl/sdk/issues/645) [#645](https://github.com/myparcelnl/sdk/issues/645) [#645](https://github.com/myparcelnl/sdk/issues/645)
+* **api:** generate the ecommerce api client ([#643](https://github.com/myparcelnl/sdk/issues/643)) ([88a1977](https://github.com/myparcelnl/sdk/commit/88a1977d44b1afe1a81122c182f6054e5b595673)), closes [#638](https://github.com/myparcelnl/sdk/issues/638)
+* **connect:** add connect config, state and storage contract ([#639](https://github.com/myparcelnl/sdk/issues/639)) ([9f93d1a](https://github.com/myparcelnl/sdk/commit/9f93d1a4e522745b9241a5bd79ff8e17cc4ced1e)), closes [#643](https://github.com/myparcelnl/sdk/issues/643)
+* **connect:** add DPoP crypto primitives ([#638](https://github.com/myparcelnl/sdk/issues/638)) ([fd4a30f](https://github.com/myparcelnl/sdk/commit/fd4a30f2c9ffb9a8bd4b489739dc2bebfd441bb5))
+* **connect:** add the connect proof of concept ([#649](https://github.com/myparcelnl/sdk/issues/649)) ([7b1843a](https://github.com/myparcelnl/sdk/commit/7b1843af0b20b053169309b36a688bef5a5d8c6d)), closes [#646](https://github.com/myparcelnl/sdk/issues/646)
+* **connect:** add the connect service and its transport ([#641](https://github.com/myparcelnl/sdk/issues/641)) ([85ccefc](https://github.com/myparcelnl/sdk/commit/85ccefcfe7ac4f4c36ff8e4bf8d1005a020a67ff)), closes [#639](https://github.com/myparcelnl/sdk/issues/639)
+* **connect:** sign ecommerce requests with DPoP ([#645](https://github.com/myparcelnl/sdk/issues/645)) ([8214bfe](https://github.com/myparcelnl/sdk/commit/8214bfecb5bc65f7b5a63d8a82d339a52ca9d854)), closes [#641](https://github.com/myparcelnl/sdk/issues/641)
+
 ## [11.0.0-beta.33](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.32...v11.0.0-beta.33) (2026-08-24)
 
 
