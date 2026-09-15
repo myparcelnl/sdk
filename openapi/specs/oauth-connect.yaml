@@ -1,0 +1,1678 @@
+info:
+  description: Plugin authentication through OAuth 2.0 with DPoP, and the webhook
+    plugins push orders to.
+  title: MyParcel OAuth Connect API
+  version: 1.0.0
+openapi: 3.1.0
+security:
+  - dpop: []
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    dpop:
+      description: "Access token as Authorization: DPoP <token>, plus a DPoP proof
+        header per request."
+      scheme: dpop
+      type: http
+  schemas:
+    ConnectStartConfig:
+      type: object
+      properties:
+        platform:
+          type:
+            - string
+            - "null"
+          enum:
+            - CSCART
+            - GENERIC
+            - LIGHTSPEED
+            - MAGENTO
+            - PRESTA
+            - SHOPIFY
+            - WOOCOMMERCE
+          description: Defaults to the platform of this deployment.
+        shopName:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^[^\p{C}]+$
+          description: Display name of the shop.
+        shopUrl:
+          type: string
+          maxLength: 128
+          format: uri
+          pattern: ^[^?#]*$
+          description: HTTPS base URL of the shop. The browser returns to
+            <shopUrl>/myparcel-connect/callback.
+        version:
+          type:
+            - string
+            - "null"
+          minLength: 1
+          maxLength: 256
+          description: Semver version of the plugin. Defaults to 0.0.1.
+      required:
+        - shopName
+        - shopUrl
+      additionalProperties: false
+      description: Decoded config query parameter of GET /connect/start.
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The city of the address.
+        countryCode:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: "[A-Z]{2}"
+          description: ISO 3166-1 alpha-2 country code.
+        street:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The street of the address.
+        additionalInformation:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Additional information about the address.
+        boxNumber:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: The box number of the address, only applicable for specific country
+            codes.
+        houseNumber:
+          type: string
+          minLength: 1
+          maxLength: 25
+          description: The house number of the address.
+        houseNumberSuffix:
+          type: string
+          minLength: 1
+          maxLength: 25
+          description: The house number suffix of the address.
+        postalCode:
+          type: string
+          minLength: 1
+          maxLength: 15
+          description: The postal code of the address.
+        region:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The region of the address.
+        state:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The state of the address.
+      required:
+        - city
+        - countryCode
+        - street
+      description: A physical address.
+    Contact:
+      oneOf:
+        - type: object
+          properties:
+            emailAddress:
+              type: string
+              minLength: 1
+              maxLength: 320
+              description: An email address.
+            locale:
+              anyOf:
+                - type: string
+                  minLength: 5
+                  maxLength: 5
+                  description: Combination of ISO 639-1 and ISO 3166-1 alpha-2 separated by a
+                    hyphen.
+                - type: string
+                  minLength: 2
+                  maxLength: 2
+                  description: ISO 639-1 language code.
+              description: A value that is either a full locale or just a language code.
+            phoneNumber:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: The phone number of the contact.
+            type:
+              type: string
+              enum:
+                - BUSINESS
+              description: Discriminator for business contacts.
+            company:
+              type: string
+              minLength: 1
+              maxLength: 100
+              description: The name of the company.
+            attention:
+              type: string
+              minLength: 1
+              maxLength: 100
+              description: The name of the contact person.
+          required:
+            - type
+            - company
+        - type: object
+          properties:
+            emailAddress:
+              type: string
+              minLength: 1
+              maxLength: 320
+              description: An email address.
+            locale:
+              anyOf:
+                - type: string
+                  minLength: 5
+                  maxLength: 5
+                  description: Combination of ISO 639-1 and ISO 3166-1 alpha-2 separated by a
+                    hyphen.
+                - type: string
+                  minLength: 2
+                  maxLength: 2
+                  description: ISO 639-1 language code.
+              description: A value that is either a full locale or just a language code.
+            phoneNumber:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: The phone number of the contact.
+            type:
+              type: string
+              enum:
+                - PRIVATE
+              description: Discriminator for private contacts.
+            name:
+              type: string
+              minLength: 1
+              maxLength: 200
+              description: The name of the contact person.
+          required:
+            - type
+            - name
+      description: A contact.
+    MultiEmailContact:
+      oneOf:
+        - type: object
+          properties:
+            locale:
+              anyOf:
+                - type: string
+                  minLength: 5
+                  maxLength: 5
+                  description: Combination of ISO 639-1 and ISO 3166-1 alpha-2 separated by a
+                    hyphen.
+                - type: string
+                  minLength: 2
+                  maxLength: 2
+                  description: ISO 639-1 language code.
+              description: A value that is either a full locale or just a language code.
+            phoneNumber:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: The phone number of the contact.
+            type:
+              type: string
+              enum:
+                - BUSINESS
+              description: Discriminator for business contacts.
+            company:
+              type: string
+              minLength: 1
+              maxLength: 100
+              description: The name of the company.
+            attention:
+              type: string
+              minLength: 1
+              maxLength: 100
+              description: The name of the contact person.
+            emailAddresses:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 320
+                description: An email address.
+              minItems: 1
+              maxItems: 5
+              description: The email addresses of the contact. The first email address will be
+                used as the primary email address. The remaining will be used as
+                extra email addresses if the right permissions are present.
+          required:
+            - type
+            - company
+          description: A business contact that supports multiple email addresses.
+        - type: object
+          properties:
+            locale:
+              anyOf:
+                - type: string
+                  minLength: 5
+                  maxLength: 5
+                  description: Combination of ISO 639-1 and ISO 3166-1 alpha-2 separated by a
+                    hyphen.
+                - type: string
+                  minLength: 2
+                  maxLength: 2
+                  description: ISO 639-1 language code.
+              description: A value that is either a full locale or just a language code.
+            phoneNumber:
+              type: string
+              minLength: 1
+              maxLength: 50
+              description: The phone number of the contact.
+            type:
+              type: string
+              enum:
+                - PRIVATE
+              description: Discriminator for private contacts.
+            name:
+              type: string
+              minLength: 1
+              maxLength: 200
+              description: The name of the contact person.
+            emailAddresses:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 320
+                description: An email address.
+              minItems: 1
+              maxItems: 5
+              description: The email addresses of the contact. The first email address will be
+                used as the primary email address. The remaining will be used as
+                extra email addresses if the right permissions are present.
+          required:
+            - type
+            - name
+          description: A private contact that supports multiple email addresses.
+      description: A contact entity capable of holding multiple email addresses.
+    Carrier:
+      type: string
+      enum:
+        - BPOST
+        - BRT
+        - CHEAP_CARGO
+        - DHL_EUROPLUS
+        - DHL_FOR_YOU
+        - DHL_FREIGHT
+        - DHL_PARCEL_CONNECT
+        - DPD
+        - GLS
+        - INPOST
+        - POSTNL
+        - POSTE_ITALIANE
+        - SPRING
+        - TRUNKRS
+        - UPS_EXPRESS_SAVER
+        - UPS_STANDARD
+        - VIA_TIM
+      description: The carrier to select to ship a package with.
+    BillingDetails:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        contact:
+          $ref: "#/components/schemas/Contact"
+    LengthUnit:
+      type: string
+      enum:
+        - mm
+        - cm
+        - m
+      description: The unit of measurement for length, width, or height.
+    PhysicalProperties:
+      type: object
+      properties:
+        height:
+          type: object
+          properties:
+            unit:
+              $ref: "#/components/schemas/LengthUnit"
+            value:
+              type: integer
+              minimum: 1
+              maximum: 1000000
+              description: The dimension value.
+          required:
+            - unit
+            - value
+          description: The height.
+        length:
+          type: object
+          properties:
+            unit:
+              $ref: "#/components/schemas/LengthUnit"
+            value:
+              type: integer
+              minimum: 1
+              maximum: 1000000
+              description: The dimension value.
+          required:
+            - unit
+            - value
+          description: The length.
+        weight:
+          type: object
+          properties:
+            unit:
+              type: string
+              enum:
+                - g
+                - kg
+              description: The unit of weight.
+            value:
+              type: integer
+              minimum: 1
+              maximum: 999999999
+          required:
+            - unit
+            - value
+          description: The weight.
+        width:
+          type: object
+          properties:
+            unit:
+              $ref: "#/components/schemas/LengthUnit"
+            value:
+              type: integer
+              minimum: 1
+              maximum: 1000000
+              description: The dimension value.
+          required:
+            - unit
+            - value
+          description: The width.
+      description: The physical dimensions.
+    Money:
+      type: object
+      properties:
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: ISO 4217 three-letter currency code.
+        micros:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+          description: The amount of money in integer micros.
+      required:
+        - currency
+        - micros
+      description: A monetary value represented by split integral and fractional parts
+        to avoid floating point errors.
+    SalesPrice:
+      type: object
+      properties:
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: ISO 4217 three-letter currency code.
+        micros:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+          description: The amount of money in integer micros.
+        taxRate:
+          type: integer
+          minimum: 0
+          maximum: 100
+      required:
+        - currency
+        - micros
+        - taxRate
+      description: A monetary value represented by split integral and fractional parts
+        to avoid floating point errors.
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        sourceId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The product ID as defined in the source system.
+        barcode:
+          type: string
+          minLength: 6
+          maxLength: 24
+        countryCodeOfOrigin:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: "[A-Z]{2}"
+          description: ISO 3166-1 alpha-2 country code.
+        descriptions:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+                minLength: 1
+                maxLength: 2500
+                description: The text of one of the product descriptions.
+              languageCode:
+                type: string
+                minLength: 2
+                maxLength: 2
+                description: The language code (ISO 639-1) of one of the product descriptions.
+            required:
+              - text
+              - languageCode
+          minItems: 1
+          maxItems: 200
+          description: The descriptions of the product.
+        ean:
+          type: string
+          minLength: 1
+          maxLength: 13
+        hsCode:
+          type: string
+          minLength: 6
+          maxLength: 10
+          description: The HS code of the product.
+        physicalProperties:
+          $ref: "#/components/schemas/PhysicalProperties"
+        purchasePrice:
+          $ref: "#/components/schemas/Money"
+        salesPrice:
+          $ref: "#/components/schemas/SalesPrice"
+        sku:
+          type: string
+      required:
+        - name
+        - sourceId
+    OrderLine:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          type: integer
+          exclusiveMinimum: 0
+        sourceId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The line ID as defined in the source system.
+        price:
+          $ref: "#/components/schemas/Money"
+      required:
+        - product
+        - quantity
+        - sourceId
+    ShipmentOptions:
+      type: object
+      properties:
+        additionalInsurance:
+          type: object
+          additionalProperties: false
+          description: Provides enhanced insurance coverage beyond the standard amount.
+        deliverAtPostalPoint:
+          type: object
+          additionalProperties: false
+          description: Indicates that the parcel will be delivered to a designated postal
+            service point rather than the recipient's address, requiring the
+            recipient to collect it from that location.
+        freshFood:
+          type: object
+          additionalProperties: false
+          description: Designates the shipment as containing perishable, non-frozen food
+            items, ensuring appropriate handling procedures are applied to
+            maintain freshness and prevent spoilage during transit.
+        frozen:
+          type: object
+          additionalProperties: false
+          description: Specifies that the shipment contains items that must remain frozen,
+            necessitating strict, continuous temperature-controlled environments
+            throughout the transit process to prevent thawing.
+        hideSender:
+          type: object
+          additionalProperties: false
+          description: Omits the sender's information from the shipping label, maintaining
+            sender anonymity in the delivery process.
+        insurance:
+          type: object
+          properties:
+            amount:
+              type: object
+              properties:
+                currency:
+                  type: string
+                  minLength: 3
+                  maxLength: 3
+                  description: ISO 4217 three-letter currency code.
+                micros:
+                  type: integer
+                  minimum: 0
+                  maximum: 9007199254740991
+                  description: The amount of money in integer micros.
+              required:
+                - currency
+                - micros
+              description: The amount to insure.
+          required:
+            - amount
+          description: Provides standard insurance coverage up to the specified monetary
+            amount.
+        noTracking:
+          type: object
+          additionalProperties: false
+          description: Disables all tracking and tracing capabilities for the shipment.
+        oversizedPackage:
+          type: object
+          additionalProperties: false
+          description: Designates the shipment as exceeding standard size limitations,
+            requiring special handling procedures and potentially incurring
+            additional fees.
+        printReturnLabelAtDropOff:
+          type: object
+          additionalProperties: false
+          description: Provides the recipient with a digital identifier that can be
+            presented at a drop-off location to print the return label on-site.
+            This option is only applicable for inbound shipments.
+        priorityDelivery:
+          type: object
+          additionalProperties: false
+          description: Designates the shipment for expedited processing and transport
+            through the delivery network, often resulting in a faster transit
+            time compared to standard services.
+        recipientOnlyDelivery:
+          type: object
+          additionalProperties: false
+          description: Restricts delivery exclusively to the named recipient, requiring
+            verification of recipient identity and prohibiting delivery to
+            anyone else at the same address.
+        requiresAgeVerification:
+          type: object
+          additionalProperties: false
+          description: Requires the recipient to provide valid identification to verify
+            they meet the minimum age requirement before the package can be
+            released, typically used for age-restricted items.
+        requiresCashOnDelivery:
+          type: object
+          additionalProperties: false
+          description: Mandates that the carrier collect the full order amount in cash
+            from the recipient upon delivery, ensuring payment is secured before
+            the goods are handed over.
+        requiresReceiptCode:
+          type: object
+          additionalProperties: false
+          description: Requires the recipient to provide a specific verification code at
+            the time of delivery, adding an extra layer of security and
+            confirmation for sensitive shipments.
+        requiresSignature:
+          type: object
+          additionalProperties: false
+          description: Mandates that the recipient or authorized representative must
+            provide a signature upon delivery, creating proof of receipt and
+            transfer of responsibility.
+        returnContributionFee:
+          type: object
+          properties:
+            amount:
+              type: object
+              properties:
+                currency:
+                  type: string
+                  minLength: 3
+                  maxLength: 3
+                  description: ISO 4217 three-letter currency code.
+                micros:
+                  type: integer
+                  minimum: 0
+                  maximum: 9007199254740991
+                  description: The amount of money in integer micros.
+              required:
+                - currency
+                - micros
+              description: The amount of the contribution.
+          required:
+            - amount
+          description: Specifies that the recipient must pay the designated contribution
+            amount toward the cost of returning the item. This option is only
+            applicable for inbound shipments.
+        returnOnFirstFailedDelivery:
+          type: object
+          additionalProperties: false
+          description: Instructs the carrier to return the package to the sender
+            immediately after the first unsuccessful delivery attempt, bypassing
+            the standard redelivery procedures or holding period.
+        sameDayDelivery:
+          type: object
+          additionalProperties: false
+          description: Expedited delivery within the same calendar day that the shipping
+            label is created.
+        saturdayDelivery:
+          type: object
+          additionalProperties: false
+          description: Enables delivery on Saturday, which is typically outside standard
+            delivery days, ensuring the package arrives before the start of the
+            following work week.
+        scheduledCollection:
+          type: object
+          additionalProperties: false
+          description: Arranges for the carrier to pick up the package from the sender's
+            location, eliminating the need for the sender to drop off the
+            package.
+        customLabelText:
+          type: object
+          properties:
+            text:
+              type: string
+              minLength: 1
+              maxLength: 45
+              description: Allows adding personalized text to be printed on the shipping
+                label, which can include special handling instructions or
+                reference information.
+          required:
+            - text
+          description: Defines a custom text to be printed on the shipping label.
+      description: The complete set of shipment options.
+    Order:
+      type: object
+      properties:
+        orderedAt:
+          type: string
+          format: date-time
+          description: An ISO 8601 formatted datetime string with timezone offset.
+        sourceId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The order ID as defined in the source system.
+        billingDetails:
+          allOf:
+            - $ref: "#/components/schemas/BillingDetails"
+            - description: Billing details of the order.
+        customerReference:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The customer reference of the order.
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderLine"
+          minItems: 1
+        shipping:
+          type: object
+          properties:
+            carrier:
+              $ref: "#/components/schemas/Carrier"
+            delivery:
+              type: object
+              properties:
+                options:
+                  type: object
+                  properties:
+                    notifyOnDelivery:
+                      type: object
+                      additionalProperties: false
+                      description: Notify sender upon package delivery.
+                    preferredDate:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date
+                          description: Recipient specified preferred delivery date.
+                      required:
+                        - date
+                      description: This option allows you to set a preferred date for delivery, so a
+                        drop off date can be calculated.
+                  description: Options regarding delivery timing and notifications.
+                type:
+                  type: string
+                  enum:
+                    - EARLY_MORNING_DELIVERY
+                    - EVENING_DELIVERY
+                    - EXPRESS_DELIVERY
+                    - MORNING_DELIVERY
+                    - PICKUP_EXPRESS_DELIVERY
+                    - PICKUP_DELIVERY
+                    - SAME_DAY_DELIVERY
+                    - STANDARD_DELIVERY
+                  description: The delivery type of the shipment.
+              description: The delivery details of the shipment.
+            options:
+              $ref: "#/components/schemas/ShipmentOptions"
+            packageType:
+              type: string
+              enum:
+                - DIGITAL_STAMP
+                - ENVELOPE
+                - MAILBOX
+                - PACKAGE
+                - PALLET
+                - SMALL_PACKAGE
+                - UNFRANKED
+              description: The type of the package.
+            pickup:
+              anyOf:
+                - type: object
+                  properties:
+                    address:
+                      type: object
+                      properties:
+                        city:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The city of the address.
+                        countryCode:
+                          type: string
+                          minLength: 2
+                          maxLength: 2
+                          pattern: "[A-Z]{2}"
+                          description: ISO 3166-1 alpha-2 country code.
+                        street:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The street of the address.
+                        additionalInformation:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: Additional information about the address.
+                        boxNumber:
+                          type: string
+                          minLength: 1
+                          maxLength: 20
+                          description: The box number of the address, only applicable for specific country
+                            codes.
+                        houseNumber:
+                          type: string
+                          minLength: 1
+                          maxLength: 25
+                          description: The house number of the address.
+                        houseNumberSuffix:
+                          type: string
+                          minLength: 1
+                          maxLength: 25
+                          description: The house number suffix of the address.
+                        postalCode:
+                          type: string
+                          minLength: 1
+                          maxLength: 15
+                          description: The postal code of the address.
+                        region:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The region of the address.
+                        state:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The state of the address.
+                      required:
+                        - city
+                        - countryCode
+                        - street
+                      description: The address of the pickup location.
+                    location:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          minLength: 1
+                          maxLength: 200
+                          description: The name of the pickup location.
+                        code:
+                          type: string
+                          minLength: 1
+                          maxLength: 64
+                          description: The location code of the pickup location.
+                        type:
+                          type: string
+                          enum:
+                            - CLICK_COLLECT
+                            - PARCEL_LOCKER
+                            - PARCEL_POINT
+                            - POST_OFFICE
+                            - POST_POINT
+                          description: The bpost pickup location type.
+                      required:
+                        - name
+                        - type
+                      description: The pickup location details.
+                  required:
+                    - address
+                    - location
+                  description: The bpost pickup details.
+                - type: object
+                  properties:
+                    address:
+                      type: object
+                      properties:
+                        city:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The city of the address.
+                        countryCode:
+                          type: string
+                          minLength: 2
+                          maxLength: 2
+                          pattern: "[A-Z]{2}"
+                          description: ISO 3166-1 alpha-2 country code.
+                        street:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The street of the address.
+                        additionalInformation:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: Additional information about the address.
+                        boxNumber:
+                          type: string
+                          minLength: 1
+                          maxLength: 20
+                          description: The box number of the address, only applicable for specific country
+                            codes.
+                        houseNumber:
+                          type: string
+                          minLength: 1
+                          maxLength: 25
+                          description: The house number of the address.
+                        houseNumberSuffix:
+                          type: string
+                          minLength: 1
+                          maxLength: 25
+                          description: The house number suffix of the address.
+                        postalCode:
+                          type: string
+                          minLength: 1
+                          maxLength: 15
+                          description: The postal code of the address.
+                        region:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The region of the address.
+                        state:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The state of the address.
+                      required:
+                        - city
+                        - countryCode
+                        - street
+                      description: The address of the pickup location.
+                    location:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          minLength: 1
+                          maxLength: 200
+                          description: The name of the pickup location.
+                        code:
+                          type: string
+                          minLength: 1
+                          maxLength: 64
+                          description: The location code of the pickup location.
+                      required:
+                        - name
+                      description: The pickup location details.
+                    retailNetworkId:
+                      type: string
+                      enum:
+                        - PNPNL-01
+                        - PNPBE-01
+                      description: PostNL Retail network ID.
+                  required:
+                    - address
+                    - location
+                    - retailNetworkId
+                  description: The PostNL pickup details.
+                - type: object
+                  properties:
+                    address:
+                      type: object
+                      properties:
+                        city:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The city of the address.
+                        countryCode:
+                          type: string
+                          minLength: 2
+                          maxLength: 2
+                          pattern: "[A-Z]{2}"
+                          description: ISO 3166-1 alpha-2 country code.
+                        street:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The street of the address.
+                        additionalInformation:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: Additional information about the address.
+                        boxNumber:
+                          type: string
+                          minLength: 1
+                          maxLength: 20
+                          description: The box number of the address, only applicable for specific country
+                            codes.
+                        houseNumber:
+                          type: string
+                          minLength: 1
+                          maxLength: 25
+                          description: The house number of the address.
+                        houseNumberSuffix:
+                          type: string
+                          minLength: 1
+                          maxLength: 25
+                          description: The house number suffix of the address.
+                        postalCode:
+                          type: string
+                          minLength: 1
+                          maxLength: 15
+                          description: The postal code of the address.
+                        region:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The region of the address.
+                        state:
+                          type: string
+                          minLength: 1
+                          maxLength: 100
+                          description: The state of the address.
+                      required:
+                        - city
+                        - countryCode
+                        - street
+                      description: The address of the pickup location.
+                    location:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          minLength: 1
+                          maxLength: 200
+                          description: The name of the pickup location.
+                        code:
+                          type: string
+                          minLength: 1
+                          maxLength: 64
+                          description: The location code of the pickup location.
+                      required:
+                        - name
+                      description: The pickup location details.
+                  required:
+                    - address
+                    - location
+                  description: The general pickup details.
+              description: The pickup details.
+            recipient:
+              type: object
+              properties:
+                address:
+                  $ref: "#/components/schemas/Address"
+                contact:
+                  $ref: "#/components/schemas/MultiEmailContact"
+              description: The recipient of the shipment.
+      required:
+        - orderedAt
+        - sourceId
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - about:blank
+            - urn:problem:client
+            - urn:problem:invalid-request-syntax
+            - urn:problem:not-found
+            - urn:problem:server
+            - urn:problem:unauthorized
+            - urn:problem:unsupported-media-type
+          description: A URI reference that identifies the problem type.
+        status:
+          type: integer
+          enum:
+            - 400
+            - 401
+            - 404
+            - 415
+            - 500
+          description: The HTTP status code generated by the origin server.
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: A short human-readable summary of the problem type.
+        detail:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: A human-readable explanation specific to this occurrence of the
+            problem.
+        instance:
+          type: string
+          format: uri
+          description: A URI reference that identifies the specific occurrence of the
+            problem.
+        cause:
+          description: The cause of this problem when debug mode is enabled.
+      required:
+        - type
+        - status
+        - title
+        - detail
+        - instance
+    ProblemDetailsInvalidRequestSyntax:
+      allOf:
+        - $ref: "#/components/schemas/ProblemDetails"
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - urn:problem:invalid-request-syntax
+              description: A URI reference that identifies the problem type.
+            status:
+              type: integer
+              enum:
+                - 400
+              description: The HTTP status code generated by the origin server.
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    minLength: 1
+                    maxLength: 5000
+                  pointer:
+                    type: string
+                    minLength: 1
+                    maxLength: 200
+                    description: This is a JSON pointer to the request (body, parameters, ...). When
+                      an aggregate has a conflict (e.g. not allowed due to the
+                      status) this value is for bulk request on the index
+                      (/body/{index}) and for any other on root (/).
+                required:
+                  - detail
+                  - pointer
+              minItems: 1
+              description: Detailed information regarding the syntactic violations.
+          required:
+            - errors
+    ProblemDetailsClient:
+      allOf:
+        - $ref: "#/components/schemas/ProblemDetails"
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - urn:problem:client
+              description: A URI reference that identifies the problem type.
+            status:
+              type: integer
+              enum:
+                - 400
+              description: The HTTP status code generated by the origin server.
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    minLength: 1
+                    maxLength: 5000
+                  pointer:
+                    type: string
+                    minLength: 1
+                    maxLength: 200
+                    description: This is a JSON pointer to the request (body, parameters, ...). When
+                      an aggregate has a conflict (e.g. not allowed due to the
+                      status) this value is for bulk request on the index
+                      (/body/{index}) and for any other on root (/).
+                required:
+                  - detail
+                  - pointer
+              minItems: 1
+              description: Detailed information regarding the violations.
+          required:
+            - errors
+    ProblemDetailsInternalServerError:
+      allOf:
+        - $ref: "#/components/schemas/ProblemDetails"
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - urn:problem:server
+              description: A URI reference that identifies the problem type.
+            status:
+              type: integer
+              enum:
+                - 500
+              description: The HTTP status code generated by the origin server.
+    ProblemDetailsNotFound:
+      allOf:
+        - $ref: "#/components/schemas/ProblemDetails"
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - urn:problem:not-found
+              description: A URI reference that identifies the problem type.
+            status:
+              type: integer
+              enum:
+                - 404
+              description: The HTTP status code generated by the origin server.
+  parameters: {}
+paths:
+  /connect/start:
+    get:
+      description: Opened in the merchant browser by the plugin to start the connect
+        flow. Redirects to the identity provider login.
+      security: []
+      summary: Start the connect flow in the merchant browser
+      parameters:
+        - schema:
+            type: string
+            minLength: 1
+            description: RFC 7638 thumbprint of the plugin public key. Identifies the
+              installation.
+            examples:
+              - NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs
+          required: true
+          name: jkt
+          in: query
+        - schema:
+            type: string
+            minLength: 1
+            maxLength: 1024
+            description: Base64url-encoded JSON, see ConnectStartConfig.
+            examples:
+              - eyJwbGF0Zm9ybSI6IlNIT1BJRlkiLCJzaG9wTmFtZSI6Ik15IFdlYnNob3AiLCJzaG9wVXJsIjoiaHR0cHM6Ly9zaG9wLmV4YW1wbGUuY29tIiwidmVyc2lvbiI6IjEuMi4zIn0
+          required: true
+          name: config
+          in: query
+        - schema:
+            type: string
+            minLength: 16
+            maxLength: 256
+            description: Random value generated by the plugin, returned on the redirect back
+              to the shop.
+            examples:
+              - nonce-0123456789abcdef
+          required: true
+          name: nonce
+          in: query
+        - schema:
+            type: string
+            minLength: 1
+            maxLength: 64
+            description: "Space-delimited scopes: read:capabilities, write:orders,
+              write:products."
+            examples:
+              - write:orders
+          required: true
+          name: scope
+          in: query
+      responses:
+        "302":
+          description: Redirect to the identity provider login.
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                description: Identity provider login.
+              required: true
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+            Set-Cookie:
+              schema:
+                type: string
+                description: Session cookie __Host-connect_session, Max-Age 3600.
+              required: false
+        "400":
+          description: Invalid query parameters. HTML error page.
+          content:
+            text/html:
+              schema:
+                type: string
+        "500":
+          description: HTML error page.
+          content:
+            text/html:
+              schema:
+                type: string
+  /connect/token:
+    post:
+      description: Redeems the one-time code from the connect flow for the first
+        access token. The code is single-use.
+      security: []
+      summary: Exchange a one-time code for an access token
+      parameters:
+        - schema:
+            type: string
+            minLength: 1
+            description: DPoP proof JWT bound to the identity provider token endpoint.
+          required: true
+          name: dpop
+          in: header
+      requestBody:
+        description: The one-time code to redeem.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  pattern: ^[A-Za-z0-9_-]{43}$
+                  description: One-time code from the redirect back to the shop. Valid for 60
+                    seconds.
+                  examples:
+                    - q-i7pxt49_vfkqxIel2oXjiQWOYUM2B7OyfyZUpA81c
+              required:
+                - code
+      responses:
+        "200":
+          description: Access token issued.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    minLength: 1
+                  connectionId:
+                    type: string
+                    format: uuid
+                  tokenType:
+                    type: string
+                    enum:
+                      - DPoP
+                  expiresIn:
+                    type: integer
+                    exclusiveMinimum: 0
+                  scope:
+                    type: string
+                    minLength: 1
+                required:
+                  - accessToken
+                  - connectionId
+                  - tokenType
+                  - expiresIn
+                  - scope
+        "400":
+          description: invalid_code, invalid_grant, invalid_sales_channel or
+            use_dpop_nonce. Problem details for a malformed request.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+            DPoP-Nonce:
+              schema:
+                type: string
+                minLength: 1
+                description: Present with use_dpop_nonce. Use as the nonce claim of the next
+                  proof.
+              required: false
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        enum:
+                          - invalid_code
+                    required:
+                      - error
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        enum:
+                          - invalid_grant
+                    required:
+                      - error
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        enum:
+                          - invalid_sales_channel
+                    required:
+                      - error
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        enum:
+                          - use_dpop_nonce
+                    required:
+                      - error
+                  - $ref: "#/components/schemas/ProblemDetailsInvalidRequestSyntax"
+        "401":
+          description: The DPoP proof failed verification.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - invalid_dpop_proof
+                required:
+                  - error
+        "500":
+          description: server_error.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - server_error
+                required:
+                  - error
+  /connect/refresh:
+    post:
+      description: Issues a fresh access token for an established connection. No body,
+        the DPoP proof is the credential.
+      security: []
+      summary: Obtain a fresh access token for an established connection
+      parameters:
+        - schema:
+            type: string
+            minLength: 1
+            description: DPoP proof JWT bound to the identity provider token endpoint.
+          required: true
+          name: dpop
+          in: header
+      responses:
+        "200":
+          description: Access token renewed.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    minLength: 1
+                  tokenType:
+                    type: string
+                    enum:
+                      - DPoP
+                  expiresIn:
+                    type: integer
+                    exclusiveMinimum: 0
+                  scope:
+                    type: string
+                    minLength: 1
+                required:
+                  - accessToken
+                  - tokenType
+                  - expiresIn
+                  - scope
+        "400":
+          description: invalid_grant or use_dpop_nonce.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+            DPoP-Nonce:
+              schema:
+                type: string
+                minLength: 1
+                description: Present with use_dpop_nonce. Use as the nonce claim of the next
+                  proof.
+              required: false
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        enum:
+                          - invalid_grant
+                    required:
+                      - error
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        enum:
+                          - use_dpop_nonce
+                    required:
+                      - error
+        "401":
+          description: The DPoP proof is missing, invalid or replayed.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - invalid_dpop_proof
+                required:
+                  - error
+        "500":
+          description: server_error.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                enum:
+                  - no-store
+              required: true
+            Pragma:
+              schema:
+                type: string
+                enum:
+                  - no-cache
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - server_error
+                required:
+                  - error
+  /webhook/orders:
+    post:
+      description: Receives orders from a connected sales channel plugin. The plugin
+        calls this endpoint whenever new orders are available in the shop.
+      security:
+        - dpop: []
+      summary: Push orders from a sales channel plugin
+      requestBody:
+        description: The orders to import.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Order"
+              minItems: 1
+              maxItems: 50
+      responses:
+        "202":
+          description: The request is successfully accepted.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - type: object
+                      properties:
+                        status:
+                          type: integer
+                          enum:
+                            - 202
+                      required:
+                        - status
+                    - $ref: "#/components/schemas/ProblemDetailsClient"
+                    - $ref: "#/components/schemas/ProblemDetailsInternalServerError"
+                maxItems: 50
+                description: The result per item.
+        "400":
+          description: Invalid request syntax
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetailsInvalidRequestSyntax"
+        "404":
+          description: Sales channel not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetailsNotFound"
+webhooks: {}
