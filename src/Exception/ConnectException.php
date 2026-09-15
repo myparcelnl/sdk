@@ -12,8 +12,8 @@ use MyParcelNL\Sdk\Model\Connect\ConnectErrorCode;
 /**
  * Everything that can go wrong in MyParcel Connect.
  *
- * One type, so a consumer catches one thing. Which case it is, is in getErrorCode() when the failure
- * came off the wire, and in the message otherwise.
+ * One type, so you catch one thing. Which case it is, is in getErrorCode() when the failure came off
+ * the wire, and in the message otherwise.
  *
  * The named constructors are the whole list of failures the flow can produce. Use them instead of
  * `new ConnectException(...)`, so every message reads the same wherever it is thrown.
@@ -181,12 +181,13 @@ class ConnectException extends Exception
      * A call to MyParcel failed. Carries what came back, so the caller can read an error code or a
      * DPoP-Nonce header off it.
      *
-     * @param int                        $statusCode
-     * @param array<string, mixed>       $headers    Header names in lower case.
-     * @param array<string, mixed>|null  $body       The decoded response body.
-     * @param \Throwable|null            $previous   What the HTTP layer raised. Its message names
-     *                                               the method, the URL and part of the body,
-     *                                               which this message does not carry.
+     * @param int                          $statusCode
+     * @param array<string, string[]>      $headers    As Guzzle reports them: one list of values
+     *                                                 per header, names in the wire's own casing.
+     * @param array<string, mixed>|null    $body       The decoded response body.
+     * @param \Throwable|null              $previous   What the HTTP layer raised. Its message names
+     *                                                 the method, the URL and part of the body,
+     *                                                 which this message does not carry.
      */
     public static function httpError(
         int $statusCode,
@@ -201,6 +202,36 @@ class ConnectException extends Exception
         $exception->statusCode      = $statusCode;
         $exception->responseHeaders = $headers;
         $exception->responseBody    = $body;
+
+        return $exception;
+    }
+
+    /**
+     * Copy the HTTP detail of a failed call onto a case that names it better.
+     *
+     * So a translated failure still reports the status, the body and the value MyParcel actually
+     * wrote, which is what support needs, while the message says what it means.
+     */
+    public function withHttpContextOf(self $source): self
+    {
+        // A new one rather than a clone: PHP exceptions are uncloneable. The source becomes the
+        // previous exception, so the chain back to what the HTTP layer said survives the rename.
+        $exception                  = new self($this->getMessage(), $this->getCode(), $source);
+        $exception->errorCode       = $source->getErrorCode();
+        $exception->statusCode      = $source->getStatusCode();
+        $exception->responseHeaders = $source->getResponseHeaders();
+        $exception->responseBody    = $source->getResponseBody();
+
+        return $exception;
+    }
+
+    /**
+     * The call never reached MyParcel: no DNS, no route, no TLS, or it timed out.
+     */
+    public static function networkFailure(string $reason): self
+    {
+        $exception             = new self(sprintf('Could not reach MyParcel: %s', $reason));
+        $exception->statusCode = 0;
 
         return $exception;
     }

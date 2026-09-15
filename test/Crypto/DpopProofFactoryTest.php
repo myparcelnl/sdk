@@ -19,8 +19,6 @@ class DpopProofFactoryTest extends TestCase
     private const RFC9449_TOKEN = 'Kz~8mXK1EalYznwH-LC-1fBAo.4Ljp~zsPE_NeO.gxU';
     private const RFC9449_ATH   = 'fUHyO2r2Z3DZ53EsNrWBb0xWXoaNy59IiKCAqksmQEo';
 
-    private const IAT = 1735689600;
-
     public function testTokenEndpointProofHasTheRequiredClaimsAndNoAth(): void
     {
         $claims = $this->claims($this->factory()->createForTokenEndpoint(
@@ -31,7 +29,8 @@ class DpopProofFactoryTest extends TestCase
 
         self::assertSame('POST', $claims['htm']);
         self::assertSame('https://account.acceptance.myparcel.nl/oauth/token', $claims['htu']);
-        self::assertSame(self::IAT, $claims['iat']);
+        self::assertGreaterThanOrEqual(time() - 5, $claims['iat'], 'iat is when the proof was made');
+        self::assertLessThanOrEqual(time() + 5, $claims['iat']);
         self::assertArrayHasKey('jti', $claims);
 
         // There is no access token yet at the token endpoint, so there is nothing to hash.
@@ -132,20 +131,9 @@ class DpopProofFactoryTest extends TestCase
         $this->key = DpopKeyPair::generate();
     }
 
-    /**
-     * A factory with a fixed clock and a fixed random source, so iat and jti are predictable.
-     */
     private function factory(): DpopProofFactory
     {
-        return new DpopProofFactory(
-            null,
-            static function (): int {
-                return self::IAT;
-            },
-            static function (int $length): string {
-                return str_repeat("\x2a", $length);
-            }
-        );
+        return new DpopProofFactory();
     }
 
     /**
