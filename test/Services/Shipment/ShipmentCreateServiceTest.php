@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
@@ -97,7 +97,7 @@ final class ShipmentCreateServiceTest extends TestCase
     {
         $shipment = (new Shipment())
             ->setReferenceIdentifier('order-enum')
-            ->setCarrier(RefTypesCarrierV2::POSTNL)
+            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
             ->withPackageType(RefShipmentPackageTypeV2::PACKAGE);
 
         $api = $this->createMock(ShipmentApi::class);
