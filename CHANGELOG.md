@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.35](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.34...v11.0.0-beta.35) (2026-09-18)
+
+
+### :sparkles: New Features
+
+* derive API mappings from generated definitions ([#642](https://github.com/myparcelnl/sdk/issues/642)) ([7573721](https://github.com/myparcelnl/sdk/commit/7573721cdb683e07d81231cc779ad1148fec7ff5))
+
 ## [11.0.0-beta.34](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.33...v11.0.0-beta.34) (2026-09-15)
 
 
