@@ -7,7 +7,7 @@
     "extends": "@myparcel-dev/semantic-release-config/github-composer"
   },
   "devDependencies": {
-    "@myparcel-dev/semantic-release-config": "^6.0.12"
+    "@myparcel-dev/semantic-release-config": "^7.0.2"
   },
   "resolutions": {
     "tar": "7.5.11"
