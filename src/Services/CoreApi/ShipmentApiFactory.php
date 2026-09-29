@@ -28,11 +28,13 @@ final class ShipmentApiFactory
      * @param string|null $apiKey Optional API key.
      * @param string|null $host Optional API host override.
      * @param string|null $userAgent Optional custom User-Agent.
+     * @param array<string, string> $headers Sent on every request, such as `x-dmp-*` API feature flags.
      */
     public static function make(
         ?string $apiKey = null,
         ?string $host = null,
-        ?string $userAgent = null
+        ?string $userAgent = null,
+        array $headers = []
     ): ShipmentApi {
         $resolvedKey = self::resolveApiKey($apiKey);
 
@@ -63,6 +65,10 @@ final class ShipmentApiFactory
 
         if ($host) {
             $httpOptions['base_uri'] = $host;
+        }
+
+        if ($headers) {
+            $httpOptions['headers'] = $headers;
         }
 
         $http = new GuzzleClient($httpOptions);
