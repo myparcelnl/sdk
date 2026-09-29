@@ -167,9 +167,9 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
-     *
-     * @return \MyParcelNL\Sdk\Model\Fulfilment\Order
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
     public function testSaveSendsTheGivenHeaders(): void
@@ -201,6 +201,12 @@ class OrderCollectionTest extends TestCase
         $orderCollection->save(['x-dmp-no-tracking' => 'true']);
     }
 
+    /**
+     * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
+     *
+     * @return \MyParcelNL\Sdk\Model\Fulfilment\Order
+     * @throws \Exception
+     */
     protected function generateOrder(ShipmentOptions $deliveryOptions): Order
     {
         return (new Order())
