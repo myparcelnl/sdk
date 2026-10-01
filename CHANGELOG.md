@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.36](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.35...v11.0.0-beta.36) (2026-10-01)
+
+
+### :sparkles: New Features
+
+* accept request headers on the shipment api factory and order save ([#654](https://github.com/myparcelnl/sdk/issues/654)) ([af37a94](https://github.com/myparcelnl/sdk/commit/af37a949348f38bb81d316514508bb1858afa274))
+
 ## [11.0.0-beta.35](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.34...v11.0.0-beta.35) (2026-09-18)
 
 
