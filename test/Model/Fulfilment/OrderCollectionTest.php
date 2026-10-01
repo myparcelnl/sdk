@@ -167,6 +167,41 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function testSaveSendsTheGivenHeaders(): void
+    {
+        $this->faker     = Factory::create('nl_NL');
+        $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
+        $shipmentOptions = (new ShipmentOptions())
+            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
+            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+
+        $order      = $this->generateOrder($shipmentOptions);
+        $orderLines = $this->generateOrderLines();
+        $order->setCarrierId(1);
+        $order->setOrderLines($orderLines);
+        $order->setWeight($orderLines->sum('weight'));
+        $orderCollection->push($order);
+
+        $mockCurl = $this->mockCurl();
+        $mockCurl->shouldReceive('write')
+            ->once()
+            ->with('POST', \Mockery::any(), \Mockery::on(static function (array $headers): bool {
+                return 'true' === ($headers['x-dmp-no-tracking'] ?? null)
+                    && 0 === strpos($headers['Authorization'] ?? '', 'basic ');
+            }), \Mockery::any())
+            ->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($this->prepareSaveResponse($orderCollection));
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+
+        $orderCollection->save(['x-dmp-no-tracking' => 'true']);
+    }
+
+    /**
      * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
      *
      * @return \MyParcelNL\Sdk\Model\Fulfilment\Order

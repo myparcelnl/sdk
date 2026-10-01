@@ -57,13 +57,15 @@ class OrderCollection extends Collection
      * For backwards compatibility it remains possible to set the api key on the collection itself, when set that
      * is the api key that will be used for all orders in the collection, to stay consistent with how it was.
      *
+     * @param  array<string, string> $headers sent with each request, such as `x-dmp-*` API feature flags
+     *
      * @return self
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function save(): self
+    public function save(array $headers = []): self
     {
         $collections = [];
         // for now we default to the common api key of the collection if set, but you should set it on each order
@@ -87,7 +89,7 @@ class OrderCollection extends Collection
             $requestBody = new RequestBody('orders', $orders->createRequestBody());
             $request     = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
-                ->setRequestParameters($key, $requestBody)
+                ->setRequestParameters($key, $requestBody, $headers)
                 ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
 
             $orders = self::createCollectionFromResponse($request);
