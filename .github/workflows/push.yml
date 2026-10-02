@@ -34,7 +34,7 @@ jobs:
 
       - uses: myparcelnl/actions/yarn-install@v5
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version: 24
 
       - uses: myparcelnl/actions/semantic-release@v5
         with:
