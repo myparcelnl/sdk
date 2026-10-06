@@ -329,6 +329,11 @@ class ApiMapperServiceTest extends TestCase
 
         $this->assertSame('package_small', $packageType->legacyNameFromId(6));
         $this->assertSame(6, $packageType->idFromLegacyName('package_small'));
+
+        $this->assertSame('envelope', $packageType->legacyNameFromId(7));
+        $this->assertSame('envelope', $packageType->legacyNameFromV2Name('ENVELOPE'));
+        $this->assertSame(7, $packageType->idFromLegacyName('envelope'));
+        $this->assertSame('ENVELOPE', $packageType->v2NameFromLegacyName('envelope'));
     }
 
     /**
