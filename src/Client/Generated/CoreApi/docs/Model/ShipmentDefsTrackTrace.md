@@ -24,5 +24,6 @@ Name | Type | Description | Notes
 **delivery_moment** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryMomentPropertiesTimeFrame**](ShipmentDefsDeliveryMomentPropertiesTimeFrame.md) |  | [optional]
 **signature** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTraceProofOfDelivery**](ShipmentDefsTrackTraceProofOfDelivery.md) |  | [optional]
 **returnable** | **bool** |  | [optional]
+**last_mile_carrier_name** | **string** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

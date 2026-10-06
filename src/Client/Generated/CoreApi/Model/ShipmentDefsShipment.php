@@ -97,6 +97,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'link_consumer_portal' => 'string',
         'partner_tracktraces' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPartnerTracktracesInner[]',
         'pickup_request_number' => 'string',
+        'last_mile_carrier_name' => 'string',
         'order_shipment_identifier' => 'mixed',
         'shipped_items' => 'mixed',
         'created' => 'string',
@@ -152,6 +153,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'link_consumer_portal' => null,
         'partner_tracktraces' => null,
         'pickup_request_number' => null,
+        'last_mile_carrier_name' => null,
         'order_shipment_identifier' => 'uuid',
         'shipped_items' => null,
         'created' => null,
@@ -180,7 +182,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'customs_declaration' => false,
         'physical_properties' => false,
         'reference_identifier' => true,
-        'transaction_status' => true,
+        'transaction_status' => false,
         'drop_off_point' => false,
         'hidden' => false,
         'price' => false,
@@ -188,7 +190,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'region' => false,
         'external_provider' => false,
         'external_provider_id' => false,
-        'payment_status' => true,
+        'payment_status' => false,
         'carrier_id' => false,
         'platform_id' => false,
         'origin' => false,
@@ -205,6 +207,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'link_consumer_portal' => false,
         'partner_tracktraces' => false,
         'pickup_request_number' => false,
+        'last_mile_carrier_name' => false,
         'order_shipment_identifier' => false,
         'shipped_items' => false,
         'created' => false,
@@ -338,6 +341,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'link_consumer_portal' => 'link_consumer_portal',
         'partner_tracktraces' => 'partner_tracktraces',
         'pickup_request_number' => 'pickup_request_number',
+        'last_mile_carrier_name' => 'last_mile_carrier_name',
         'order_shipment_identifier' => 'order_shipment_identifier',
         'shipped_items' => 'shipped_items',
         'created' => 'created',
@@ -391,6 +395,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'link_consumer_portal' => 'setLinkConsumerPortal',
         'partner_tracktraces' => 'setPartnerTracktraces',
         'pickup_request_number' => 'setPickupRequestNumber',
+        'last_mile_carrier_name' => 'setLastMileCarrierName',
         'order_shipment_identifier' => 'setOrderShipmentIdentifier',
         'shipped_items' => 'setShippedItems',
         'created' => 'setCreated',
@@ -444,6 +449,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'link_consumer_portal' => 'getLinkConsumerPortal',
         'partner_tracktraces' => 'getPartnerTracktraces',
         'pickup_request_number' => 'getPickupRequestNumber',
+        'last_mile_carrier_name' => 'getLastMileCarrierName',
         'order_shipment_identifier' => 'getOrderShipmentIdentifier',
         'shipped_items' => 'getShippedItems',
         'created' => 'getCreated',
@@ -548,6 +554,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         $this->setIfExists('link_consumer_portal', $data ?? [], null);
         $this->setIfExists('partner_tracktraces', $data ?? [], null);
         $this->setIfExists('pickup_request_number', $data ?? [], null);
+        $this->setIfExists('last_mile_carrier_name', $data ?? [], null);
         $this->setIfExists('order_shipment_identifier', $data ?? [], null);
         $this->setIfExists('shipped_items', $data ?? [], null);
         $this->setIfExists('created', $data ?? [], null);
@@ -625,8 +632,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
             $invalidProperties[] = "'reference_identifier' is required";
         }
-        if ($this->container['transaction_status'] === null && !$this->isNullableSetToNull('transaction_status')) {
-            $invalidProperties[] = "'transaction_status' is required";
+        if ($this->container['transaction_status'] === null) {
+            $invalidProperties[] = "'transaction_status' can't be null";
         }
         if ($this->container['drop_off_point'] === null) {
             $invalidProperties[] = "'drop_off_point' can't be null";
@@ -653,8 +660,8 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         if ($this->container['external_provider_id'] === null) {
             $invalidProperties[] = "'external_provider_id' can't be null";
         }
-        if ($this->container['payment_status'] === null && !$this->isNullableSetToNull('payment_status')) {
-            $invalidProperties[] = "'payment_status' is required";
+        if ($this->container['payment_status'] === null) {
+            $invalidProperties[] = "'payment_status' can't be null";
         }
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
@@ -1120,7 +1127,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets transaction_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
      */
     public function getTransactionStatus()
     {
@@ -1130,21 +1137,14 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets transaction_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null $transaction_status transaction_status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus $transaction_status transaction_status
      *
      * @return self
      */
     public function setTransactionStatus($transaction_status)
     {
         if (is_null($transaction_status)) {
-            array_push($this->openAPINullablesSetToNull, 'transaction_status');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('transaction_status', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new \InvalidArgumentException('non-nullable transaction_status cannot be null');
         }
         $this->container['transaction_status'] = $transaction_status;
 
@@ -1347,7 +1347,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets payment_status
      *
-     * @return string|null
+     * @return string
      */
     public function getPaymentStatus()
     {
@@ -1357,21 +1357,14 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets payment_status
      *
-     * @param string|null $payment_status payment_status
+     * @param string $payment_status payment_status
      *
      * @return self
      */
     public function setPaymentStatus($payment_status)
     {
         if (is_null($payment_status)) {
-            array_push($this->openAPINullablesSetToNull, 'payment_status');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('payment_status', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new \InvalidArgumentException('non-nullable payment_status cannot be null');
         }
         $this->container['payment_status'] = $payment_status;
 
@@ -1828,6 +1821,33 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
             throw new \InvalidArgumentException('non-nullable pickup_request_number cannot be null');
         }
         $this->container['pickup_request_number'] = $pickup_request_number;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_mile_carrier_name
+     *
+     * @return string|null
+     */
+    public function getLastMileCarrierName()
+    {
+        return $this->container['last_mile_carrier_name'];
+    }
+
+    /**
+     * Sets last_mile_carrier_name
+     *
+     * @param string|null $last_mile_carrier_name last_mile_carrier_name
+     *
+     * @return self
+     */
+    public function setLastMileCarrierName($last_mile_carrier_name)
+    {
+        if (is_null($last_mile_carrier_name)) {
+            throw new \InvalidArgumentException('non-nullable last_mile_carrier_name cannot be null');
+        }
+        $this->container['last_mile_carrier_name'] = $last_mile_carrier_name;
 
         return $this;
     }

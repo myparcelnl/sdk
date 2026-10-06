@@ -62,6 +62,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_status' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PaymentStatus',
         'barcode' => 'string',
         'delayed' => 'bool',
+        'additional_identifiers' => 'string[]',
         'partner_barcodes' => 'string[]'
     ];
 
@@ -78,6 +79,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_status' => null,
         'barcode' => null,
         'delayed' => null,
+        'additional_identifiers' => null,
         'partner_barcodes' => null
     ];
 
@@ -92,6 +94,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_status' => false,
         'barcode' => false,
         'delayed' => false,
+        'additional_identifiers' => false,
         'partner_barcodes' => false
     ];
 
@@ -186,6 +189,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_status' => 'paymentStatus',
         'barcode' => 'barcode',
         'delayed' => 'delayed',
+        'additional_identifiers' => 'additionalIdentifiers',
         'partner_barcodes' => 'partnerBarcodes'
     ];
 
@@ -200,6 +204,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_status' => 'setPaymentStatus',
         'barcode' => 'setBarcode',
         'delayed' => 'setDelayed',
+        'additional_identifiers' => 'setAdditionalIdentifiers',
         'partner_barcodes' => 'setPartnerBarcodes'
     ];
 
@@ -214,6 +219,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_status' => 'getPaymentStatus',
         'barcode' => 'getBarcode',
         'delayed' => 'getDelayed',
+        'additional_identifiers' => 'getAdditionalIdentifiers',
         'partner_barcodes' => 'getPartnerBarcodes'
     ];
 
@@ -279,6 +285,7 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('payment_status', $data ?? [], null);
         $this->setIfExists('barcode', $data ?? [], null);
         $this->setIfExists('delayed', $data ?? [], null);
+        $this->setIfExists('additional_identifiers', $data ?? [], null);
         $this->setIfExists('partner_barcodes', $data ?? [], null);
     }
 
@@ -326,6 +333,14 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['delayed'] === null) {
             $invalidProperties[] = "'delayed' can't be null";
         }
+        if (!is_null($this->container['additional_identifiers']) && (count($this->container['additional_identifiers']) > 5)) {
+            $invalidProperties[] = "invalid value for 'additional_identifiers', number of items must be less than or equal to 5.";
+        }
+
+        if (!is_null($this->container['additional_identifiers']) && (count($this->container['additional_identifiers']) < 1)) {
+            $invalidProperties[] = "invalid value for 'additional_identifiers', number of items must be greater than or equal to 1.";
+        }
+
         if (!is_null($this->container['partner_barcodes']) && (count($this->container['partner_barcodes']) > 5)) {
             $invalidProperties[] = "invalid value for 'partner_barcodes', number of items must be less than or equal to 5.";
         }
@@ -487,6 +502,40 @@ class LabelWithBarcode implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable delayed cannot be null');
         }
         $this->container['delayed'] = $delayed;
+
+        return $this;
+    }
+
+    /**
+     * Gets additional_identifiers
+     *
+     * @return string[]|null
+     */
+    public function getAdditionalIdentifiers()
+    {
+        return $this->container['additional_identifiers'];
+    }
+
+    /**
+     * Sets additional_identifiers
+     *
+     * @param string[]|null $additional_identifiers Additional shipment identifiers provided by the carrier.
+     *
+     * @return self
+     */
+    public function setAdditionalIdentifiers($additional_identifiers)
+    {
+        if (is_null($additional_identifiers)) {
+            throw new \InvalidArgumentException('non-nullable additional_identifiers cannot be null');
+        }
+
+        if ((count($additional_identifiers) > 5)) {
+            throw new \InvalidArgumentException('invalid value for $additional_identifiers when calling LabelWithBarcode., number of items must be less than or equal to 5.');
+        }
+        if ((count($additional_identifiers) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $additional_identifiers when calling LabelWithBarcode., number of items must be greater than or equal to 1.');
+        }
+        $this->container['additional_identifiers'] = $additional_identifiers;
 
         return $this;
     }

@@ -78,7 +78,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'delivery_moment_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryMomentPropertiesType',
         'delivery_moment' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryMomentPropertiesTimeFrame',
         'signature' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTraceProofOfDelivery',
-        'returnable' => 'bool'
+        'returnable' => 'bool',
+        'last_mile_carrier_name' => 'string'
     ];
 
     /**
@@ -108,7 +109,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'delivery_moment_type' => null,
         'delivery_moment' => null,
         'signature' => null,
-        'returnable' => null
+        'returnable' => null,
+        'last_mile_carrier_name' => null
     ];
 
     /**
@@ -136,7 +138,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'delivery_moment_type' => true,
         'delivery_moment' => false,
         'signature' => true,
-        'returnable' => false
+        'returnable' => false,
+        'last_mile_carrier_name' => false
     ];
 
     /**
@@ -244,7 +247,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'delivery_moment_type' => 'delivery_moment_type',
         'delivery_moment' => 'delivery_moment',
         'signature' => 'signature',
-        'returnable' => 'returnable'
+        'returnable' => 'returnable',
+        'last_mile_carrier_name' => 'last_mile_carrier_name'
     ];
 
     /**
@@ -272,7 +276,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'delivery_moment_type' => 'setDeliveryMomentType',
         'delivery_moment' => 'setDeliveryMoment',
         'signature' => 'setSignature',
-        'returnable' => 'setReturnable'
+        'returnable' => 'setReturnable',
+        'last_mile_carrier_name' => 'setLastMileCarrierName'
     ];
 
     /**
@@ -300,7 +305,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         'delivery_moment_type' => 'getDeliveryMomentType',
         'delivery_moment' => 'getDeliveryMoment',
         'signature' => 'getSignature',
-        'returnable' => 'getReturnable'
+        'returnable' => 'getReturnable',
+        'last_mile_carrier_name' => 'getLastMileCarrierName'
     ];
 
     /**
@@ -380,6 +386,7 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         $this->setIfExists('delivery_moment', $data ?? [], null);
         $this->setIfExists('signature', $data ?? [], null);
         $this->setIfExists('returnable', $data ?? [], null);
+        $this->setIfExists('last_mile_carrier_name', $data ?? [], null);
     }
 
     /**
@@ -1031,6 +1038,33 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
             throw new \InvalidArgumentException('non-nullable returnable cannot be null');
         }
         $this->container['returnable'] = $returnable;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_mile_carrier_name
+     *
+     * @return string|null
+     */
+    public function getLastMileCarrierName()
+    {
+        return $this->container['last_mile_carrier_name'];
+    }
+
+    /**
+     * Sets last_mile_carrier_name
+     *
+     * @param string|null $last_mile_carrier_name last_mile_carrier_name
+     *
+     * @return self
+     */
+    public function setLastMileCarrierName($last_mile_carrier_name)
+    {
+        if (is_null($last_mile_carrier_name)) {
+            throw new \InvalidArgumentException('non-nullable last_mile_carrier_name cannot be null');
+        }
+        $this->container['last_mile_carrier_name'] = $last_mile_carrier_name;
 
         return $this;
     }

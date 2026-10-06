@@ -1,6 +1,6 @@
 <?php
 /**
- * RefTypesCarrierReturns
+ * ShipmentParametersDeliveryOptionsPackageType
  *
  * PHP version 7.4
  *
@@ -31,39 +31,28 @@ namespace MyParcelNL\Sdk\Client\Generated\CoreApi\Model;
 use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
- * RefTypesCarrierReturns Class Doc Comment
+ * ShipmentParametersDeliveryOptionsPackageType Class Doc Comment
  *
  * @category Class
+ * @description Package type to get the delivery options for. When omitted a carrier-specific default is used.
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class RefTypesCarrierReturns
+class ShipmentParametersDeliveryOptionsPackageType
 {
     /**
      * Possible values of this enum
      */
-    public const NUMBER_1 = 1;
+    public const PACKAGE = 'package';
 
-    public const NUMBER_2 = 2;
+    public const MAILBOX = 'mailbox';
 
-    public const NUMBER_4 = 4;
+    public const DIGITAL_STAMP = 'digital_stamp';
 
-    public const NUMBER_9 = 9;
+    public const SMALL_PACKAGE = 'package_small';
 
-    public const NUMBER_10 = 10;
-
-    public const NUMBER_11 = 11;
-
-    public const NUMBER_14 = 14;
-
-    public const NUMBER_15 = 15;
-
-    public const NUMBER_17 = 17;
-
-    public const NUMBER_18 = 18;
-
-    public const NUMBER_19 = 19;
+    public const PALLET = 'pallet';
 
     /**
      * Gets allowable values of the enum
@@ -72,17 +61,11 @@ class RefTypesCarrierReturns
     public static function getAllowableEnumValues()
     {
         return [
-            self::NUMBER_1,
-            self::NUMBER_2,
-            self::NUMBER_4,
-            self::NUMBER_9,
-            self::NUMBER_10,
-            self::NUMBER_11,
-            self::NUMBER_14,
-            self::NUMBER_15,
-            self::NUMBER_17,
-            self::NUMBER_18,
-            self::NUMBER_19
+            self::PACKAGE,
+            self::MAILBOX,
+            self::DIGITAL_STAMP,
+            self::SMALL_PACKAGE,
+            self::PALLET
         ];
     }
 }
