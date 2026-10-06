@@ -180,7 +180,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'customs_declaration' => true,
         'physical_properties' => false,
         'reference_identifier' => true,
-        'transaction_status' => true,
+        'transaction_status' => false,
         'drop_off_point' => false,
         'hidden' => false,
         'price' => false,
@@ -188,7 +188,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         'region' => true,
         'external_provider' => true,
         'external_provider_id' => false,
-        'payment_status' => true,
+        'payment_status' => false,
         'carrier_id' => false,
         'platform_id' => false,
         'origin' => false,
@@ -625,8 +625,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['reference_identifier'] === null && !$this->isNullableSetToNull('reference_identifier')) {
             $invalidProperties[] = "'reference_identifier' is required";
         }
-        if ($this->container['transaction_status'] === null && !$this->isNullableSetToNull('transaction_status')) {
-            $invalidProperties[] = "'transaction_status' is required";
+        if ($this->container['transaction_status'] === null) {
+            $invalidProperties[] = "'transaction_status' can't be null";
         }
         if ($this->container['drop_off_point'] === null) {
             $invalidProperties[] = "'drop_off_point' can't be null";
@@ -653,8 +653,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['external_provider_id'] === null) {
             $invalidProperties[] = "'external_provider_id' can't be null";
         }
-        if ($this->container['payment_status'] === null && !$this->isNullableSetToNull('payment_status')) {
-            $invalidProperties[] = "'payment_status' is required";
+        if ($this->container['payment_status'] === null) {
+            $invalidProperties[] = "'payment_status' can't be null";
         }
         if ($this->container['carrier_id'] === null) {
             $invalidProperties[] = "'carrier_id' can't be null";
@@ -1132,7 +1132,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets transaction_status
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
      */
     public function getTransactionStatus()
     {
@@ -1142,21 +1142,14 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets transaction_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus|null $transaction_status transaction_status
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus $transaction_status transaction_status
      *
      * @return self
      */
     public function setTransactionStatus($transaction_status)
     {
         if (is_null($transaction_status)) {
-            array_push($this->openAPINullablesSetToNull, 'transaction_status');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('transaction_status', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new \InvalidArgumentException('non-nullable transaction_status cannot be null');
         }
         $this->container['transaction_status'] = $transaction_status;
 
@@ -1373,7 +1366,7 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets payment_status
      *
-     * @return string|null
+     * @return string
      */
     public function getPaymentStatus()
     {
@@ -1383,21 +1376,14 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets payment_status
      *
-     * @param string|null $payment_status payment_status
+     * @param string $payment_status payment_status
      *
      * @return self
      */
     public function setPaymentStatus($payment_status)
     {
         if (is_null($payment_status)) {
-            array_push($this->openAPINullablesSetToNull, 'payment_status');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('payment_status', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new \InvalidArgumentException('non-nullable payment_status cannot be null');
         }
         $this->container['payment_status'] = $payment_status;
 

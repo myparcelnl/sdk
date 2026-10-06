@@ -91,7 +91,7 @@ void (empty response body)
 ## `getDeliveryOptions()`
 
 ```php
-getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2
+getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $package_type, $weight, $delivery_type, $same_day_delivery, $saturday_delivery, $include, $shipment_id): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2
 ```
 
 Get Delivery Options
@@ -139,9 +139,16 @@ $exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyP
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
 $latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
 $longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
+$package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType | Package type to get the delivery options for. When omitted a carrier-specific default is used.
+$weight = 56; // int | Weight in grams. Used to determine which package types and delivery options are available. Defaults to a carrier-specific weight when omitted.
+$delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Delivery type to get the delivery options for.
+$same_day_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Include same day delivery options. Only available for carriers that support it.
+$saturday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Include Saturday delivery options. Only available for carriers that support it.
+$include = 'include_example'; // string | Semicolon-separated list of related resources to include in the response. Currently only `price` is supported.
+$shipment_id = 56; // int | Identifier of an existing shipment to base the delivery options on. Used by carriers such as UPS and bol.com.
 
 try {
-    $result = $apiInstance->getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
+    $result = $apiInstance->getDeliveryOptions($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $package_type, $weight, $delivery_type, $same_day_delivery, $saturday_delivery, $include, $shipment_id);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getDeliveryOptions: ', $e->getMessage(), PHP_EOL;
@@ -171,6 +178,13 @@ try {
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
 | **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
 | **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
+| **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType**](../Model/.md)| Package type to get the delivery options for. When omitted a carrier-specific default is used. | [optional] |
+| **weight** | **int**| Weight in grams. Used to determine which package types and delivery options are available. Defaults to a carrier-specific weight when omitted. | [optional] |
+| **delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Delivery type to get the delivery options for. | [optional] |
+| **same_day_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Include same day delivery options. Only available for carriers that support it. | [optional] |
+| **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Include Saturday delivery options. Only available for carriers that support it. | [optional] |
+| **include** | **string**| Semicolon-separated list of related resources to include in the response. Currently only &#x60;price&#x60; is supported. | [optional] |
+| **shipment_id** | **int**| Identifier of an existing shipment to base the delivery options on. Used by carriers such as UPS and bol.com. | [optional] |
 
 ### Return type
 
@@ -390,7 +404,7 @@ try {
 ## `getShipments()`
 
 ```php
-getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $filter_hidden_shops, $hidden, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
+getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $hidden, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
 ```
 
 Gets a list of Shipments, optionally filtered using parameters.
@@ -420,20 +434,22 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     $config
 );
 $barcode = 'barcode_example'; // string
-$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId
+$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds
 $created = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | When set, only resources created after this date will be returned. Inclusive.
 $delayed = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Filter on whether the current event code means the shipment has been delayed.
 $delivered = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
 $dropoff_today = True; // bool | Use this parameter to only show Shipments that need to be dropped off today.
+$external_identifier = 'external_identifier_example'; // string
 $filter_hidden_shops = True; // bool
 $hidden = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
+$include_secondary_shipments = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean | Whether to include secondary (multicollo child) Shipments in the results. Pass `1` to include them; `0` (the default) excludes them.
 $link_consumer_portal = True; // bool
 $order = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter | Specify whether the results should be sorted in ascending or descending order.
 $package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType | Filter by Package Type.
 $page = 56; // int | Request a specific page of the results, used for paginated results.
 $q = 'q_example'; // string | If this parameter is provided results will be filtered by the provided query or keyword.
 $reference_identifier = 'reference_identifier_example'; // string | Filter by `reference_identifier`, an optional arbitrary identifier to identify the Shipment.
-$region = 'region_example'; // string | The region, department, state or province of the address.
+$region = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersRegion(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersRegion | The region grouping of a Shipment. The concrete country value corresponds to the home country of the Shipment's platform; other country values yield no results for that platform.
 $shipment_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType
 $shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
 $size = 56; // int | Specify the number of resources returned per page, used for paginated results.
@@ -443,7 +459,7 @@ $transaction_status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParc
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $filter_hidden_shops, $hidden, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent);
+    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $hidden, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getShipments: ', $e->getMessage(), PHP_EOL;
@@ -455,20 +471,22 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **barcode** | **string**|  | [optional] |
-| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId**](../Model/.md)|  | [optional] |
+| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds**](../Model/.md)|  | [optional] |
 | **created** | **\DateTime**| When set, only resources created after this date will be returned. Inclusive. | [optional] |
 | **delayed** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Filter on whether the current event code means the shipment has been delayed. | [optional] |
 | **delivered** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
 | **dropoff_today** | **bool**| Use this parameter to only show Shipments that need to be dropped off today. | [optional] |
+| **external_identifier** | **string**|  | [optional] |
 | **filter_hidden_shops** | **bool**|  | [optional] |
 | **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
+| **include_secondary_shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean**](../Model/.md)| Whether to include secondary (multicollo child) Shipments in the results. Pass &#x60;1&#x60; to include them; &#x60;0&#x60; (the default) excludes them. | [optional] |
 | **link_consumer_portal** | **bool**|  | [optional] |
 | **order** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter**](../Model/.md)| Specify whether the results should be sorted in ascending or descending order. | [optional] |
 | **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType**](../Model/.md)| Filter by Package Type. | [optional] |
 | **page** | **int**| Request a specific page of the results, used for paginated results. | [optional] |
 | **q** | **string**| If this parameter is provided results will be filtered by the provided query or keyword. | [optional] |
 | **reference_identifier** | **string**| Filter by &#x60;reference_identifier&#x60;, an optional arbitrary identifier to identify the Shipment. | [optional] |
-| **region** | **string**| The region, department, state or province of the address. | [optional] |
+| **region** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersRegion**](../Model/.md)| The region grouping of a Shipment. The concrete country value corresponds to the home country of the Shipment&#39;s platform; other country values yield no results for that platform. | [optional] |
 | **shipment_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType**](../Model/.md)|  | [optional] |
 | **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
 | **size** | **int**| Specify the number of resources returned per page, used for paginated results. | [optional] |

@@ -1,6 +1,6 @@
 <?php
 /**
- * RefTypesCarrierReturns
+ * ShipmentParametersRegion
  *
  * PHP version 7.4
  *
@@ -31,39 +31,28 @@ namespace MyParcelNL\Sdk\Client\Generated\CoreApi\Model;
 use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
- * RefTypesCarrierReturns Class Doc Comment
+ * ShipmentParametersRegion Class Doc Comment
  *
  * @category Class
+ * @description The region grouping of a Shipment. The concrete country value corresponds to the home country of the Shipment&#39;s platform; other country values yield no results for that platform.
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class RefTypesCarrierReturns
+class ShipmentParametersRegion
 {
     /**
      * Possible values of this enum
      */
-    public const NUMBER_1 = 1;
+    public const NL = 'NL';
 
-    public const NUMBER_2 = 2;
+    public const BE = 'BE';
 
-    public const NUMBER_4 = 4;
+    public const IT = 'IT';
 
-    public const NUMBER_9 = 9;
+    public const EU = 'EU';
 
-    public const NUMBER_10 = 10;
-
-    public const NUMBER_11 = 11;
-
-    public const NUMBER_14 = 14;
-
-    public const NUMBER_15 = 15;
-
-    public const NUMBER_17 = 17;
-
-    public const NUMBER_18 = 18;
-
-    public const NUMBER_19 = 19;
+    public const WORLD = 'WERELD';
 
     /**
      * Gets allowable values of the enum
@@ -72,17 +61,11 @@ class RefTypesCarrierReturns
     public static function getAllowableEnumValues()
     {
         return [
-            self::NUMBER_1,
-            self::NUMBER_2,
-            self::NUMBER_4,
-            self::NUMBER_9,
-            self::NUMBER_10,
-            self::NUMBER_11,
-            self::NUMBER_14,
-            self::NUMBER_15,
-            self::NUMBER_17,
-            self::NUMBER_18,
-            self::NUMBER_19
+            self::NL,
+            self::BE,
+            self::IT,
+            self::EU,
+            self::WORLD
         ];
     }
 }

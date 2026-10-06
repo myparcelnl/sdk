@@ -53,6 +53,8 @@ class CarrierToCreate
 
     public const DHL_FOR_YOU = 'DHL_FOR_YOU';
 
+    public const DHL_FREIGHT = 'DHL_FREIGHT';
+
     public const DHL_PARCEL_CONNECT = 'DHL_PARCEL_CONNECT';
 
     public const DPD = 'DPD';
@@ -65,6 +67,8 @@ class CarrierToCreate
 
     public const POSTE_ITALIANE = 'POSTE_ITALIANE';
 
+    public const SPRING = 'SPRING';
+
     public const TRUNKRS = 'TRUNKRS';
 
     public const UPS_EXPRESS_SAVER = 'UPS_EXPRESS_SAVER';
@@ -72,8 +76,6 @@ class CarrierToCreate
     public const UPS_STANDARD = 'UPS_STANDARD';
 
     public const VIA_TIM = 'VIA_TIM';
-
-    public const DHL_FREIGHT = 'DHL_FREIGHT';
 
     /**
      * Gets allowable values of the enum
@@ -87,17 +89,18 @@ class CarrierToCreate
             self::CHEAP_CARGO,
             self::DHL_EUROPLUS,
             self::DHL_FOR_YOU,
+            self::DHL_FREIGHT,
             self::DHL_PARCEL_CONNECT,
             self::DPD,
             self::GLS,
             self::INPOST,
             self::POSTNL,
             self::POSTE_ITALIANE,
+            self::SPRING,
             self::TRUNKRS,
             self::UPS_EXPRESS_SAVER,
             self::UPS_STANDARD,
-            self::VIA_TIM,
-            self::DHL_FREIGHT
+            self::VIA_TIM
         ];
     }
 }

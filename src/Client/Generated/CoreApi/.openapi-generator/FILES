@@ -62,6 +62,7 @@ Model/CommonParametersBigids.php
 Model/CommonParametersBoolean.php
 Model/CommonParametersFilterValidateBool.php
 Model/CommonParametersIds.php
+Model/CommonParametersIntBoolean.php
 Model/CommonParametersOrder.php
 Model/CommonResponsesDownloadLink.php
 Model/CommonResponsesDownloadLinkData.php
@@ -221,6 +222,7 @@ Model/ShipmentDefsDeliveryOptionsOpeningHours.php
 Model/ShipmentDefsDeliveryOptionsPickup.php
 Model/ShipmentDefsDeliveryOptionsPickupDate.php
 Model/ShipmentDefsDeliveryOptionsPickupHoliday.php
+Model/ShipmentDefsDeliveryOptionsPickupHolidayAnyOf.php
 Model/ShipmentDefsDeliveryOptionsPickupStartTime.php
 Model/ShipmentDefsDeliveryOptionsPickupTime.php
 Model/ShipmentDefsExternalProviderPropertiesDisplayName.php
@@ -258,11 +260,14 @@ Model/ShipmentDefsTrackTraceStatus.php
 Model/ShipmentDefsTrackingLocation.php
 Model/ShipmentParametersCarrierId.php
 Model/ShipmentParametersCarrierIdentifier.php
+Model/ShipmentParametersCarrierIds.php
 Model/ShipmentParametersCarrierName.php
+Model/ShipmentParametersDeliveryOptionsPackageType.php
 Model/ShipmentParametersDeliveryType.php
 Model/ShipmentParametersLabelPosition.php
 Model/ShipmentParametersPackageType.php
 Model/ShipmentParametersPaperSize.php
+Model/ShipmentParametersRegion.php
 Model/ShipmentParametersShipmentType.php
 Model/ShipmentParametersSortShipment.php
 Model/ShipmentParametersStatus.php
@@ -439,6 +444,7 @@ docs/Model/CommonParametersBigids.md
 docs/Model/CommonParametersBoolean.md
 docs/Model/CommonParametersFilterValidateBool.md
 docs/Model/CommonParametersIds.md
+docs/Model/CommonParametersIntBoolean.md
 docs/Model/CommonParametersOrder.md
 docs/Model/CommonResponsesDownloadLink.md
 docs/Model/CommonResponsesDownloadLinkData.md
@@ -597,6 +603,7 @@ docs/Model/ShipmentDefsDeliveryOptionsOpeningHours.md
 docs/Model/ShipmentDefsDeliveryOptionsPickup.md
 docs/Model/ShipmentDefsDeliveryOptionsPickupDate.md
 docs/Model/ShipmentDefsDeliveryOptionsPickupHoliday.md
+docs/Model/ShipmentDefsDeliveryOptionsPickupHolidayAnyOf.md
 docs/Model/ShipmentDefsDeliveryOptionsPickupStartTime.md
 docs/Model/ShipmentDefsDeliveryOptionsPickupTime.md
 docs/Model/ShipmentDefsExternalProviderPropertiesDisplayName.md
@@ -634,11 +641,14 @@ docs/Model/ShipmentDefsTrackTraceStatus.md
 docs/Model/ShipmentDefsTrackingLocation.md
 docs/Model/ShipmentParametersCarrierId.md
 docs/Model/ShipmentParametersCarrierIdentifier.md
+docs/Model/ShipmentParametersCarrierIds.md
 docs/Model/ShipmentParametersCarrierName.md
+docs/Model/ShipmentParametersDeliveryOptionsPackageType.md
 docs/Model/ShipmentParametersDeliveryType.md
 docs/Model/ShipmentParametersLabelPosition.md
 docs/Model/ShipmentParametersPackageType.md
 docs/Model/ShipmentParametersPaperSize.md
+docs/Model/ShipmentParametersRegion.md
 docs/Model/ShipmentParametersShipmentType.md
 docs/Model/ShipmentParametersSortShipment.md
 docs/Model/ShipmentParametersStatus.md

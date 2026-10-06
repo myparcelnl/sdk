@@ -55,11 +55,6 @@ class ShipmentResponsesDeliveryOptionsPackageTypeV2
     public const MAILBOX = 'mailbox';
 
     /**
-     * The label is unpaid meaning that you will need to pay when dropping off the letter/package.
-     */
-    public const UNFRANKED = 'unfranked';
-
-    /**
      * Digital Stamp
      */
     public const DIGITAL_STAMP = 'digital_stamp';
@@ -72,12 +67,7 @@ class ShipmentResponsesDeliveryOptionsPackageTypeV2
     /**
      * Small Package
      */
-    public const SMALL_PACKAGE = 'small_package';
-
-    /**
-     * Small and light shipment that fits through a mailbox slot.
-     */
-    public const ENVELOPE = 'envelope';
+    public const SMALL_PACKAGE = 'package_small';
 
     /**
      * Gets allowable values of the enum
@@ -88,11 +78,9 @@ class ShipmentResponsesDeliveryOptionsPackageTypeV2
         return [
             self::PACKAGE,
             self::MAILBOX,
-            self::UNFRANKED,
             self::DIGITAL_STAMP,
             self::PALLET,
-            self::SMALL_PACKAGE,
-            self::ENVELOPE
+            self::SMALL_PACKAGE
         ];
     }
 }

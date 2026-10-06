@@ -55,16 +55,20 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * The spec values the package-type overrides displace, recorded exactly.
+     * The spec values behind the package-type overrides, recorded exactly.
      *
-     * If either changes, review before touching the override. The two entries have different
-     * causes: SMALL_PACKAGE is spec lag and retires when core-api ships the fix; UNFRANKED is a
-     * domain-name choice with no working delivery-options counterpart and probably does not.
+     * If one changes, review the override before you touch it. SMALL_PACKAGE caught up with the
+     * delivery-options spelling, so only its old small_package alias remains. UNFRANKED and ENVELOPE
+     * are never returned by delivery options, so their legacy names letter and envelope come from
+     * the overrides.
      */
     public function testDisplacedPackageTypeSpecValuesAreUnchanged(): void
     {
-        $this->assertSame('unfranked', ShipmentResponsesDeliveryOptionsPackageTypeV2::UNFRANKED);
-        $this->assertSame('small_package', ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE);
+        $enumClass = ShipmentResponsesDeliveryOptionsPackageTypeV2::class;
+
+        $this->assertSame('package_small', ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE);
+        $this->assertFalse(defined($enumClass . '::UNFRANKED'));
+        $this->assertFalse(defined($enumClass . '::ENVELOPE'));
     }
 
     public function testPickupIsStillAbsentFromTheDeliveryOptionsEnum(): void
@@ -85,6 +89,9 @@ class SpecDriftTest extends TestCase
      */
     public function testNoOverrideDuplicatesWhatTheGeneratedEnumAlreadySupplies(): void
     {
+        // Passes without further assertions when no override value has a generated counterpart.
+        $this->addToAssertionCount(1);
+
         foreach (ApiMapperService::overrides() as $domain => $overrides) {
             foreach ($overrides as $constantName => $columnOverrides) {
                 foreach ($columnOverrides as $column => $override) {

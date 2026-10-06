@@ -77,7 +77,6 @@ final class ApiMapperService
      * accepted as well as letter, but conversions back to a legacy name always return letter.
      * An entry with only aliases keeps old input spellings working after a definition changes.
      *
-     * SMALL_PACKAGE uses the delivery-options spelling package_small until the spec catches up.
      * UNFRANKED uses the domain name letter; review that convention separately from spec changes.
      *
      * @var array<string, array<string, array<string, array{
@@ -100,9 +99,13 @@ final class ApiMapperService
                     'aliases' => ['unfranked'],
                 ],
             ],
+            // Not present in ShipmentResponsesDeliveryOptionsPackageTypeV2: delivery options never return it.
+            'ENVELOPE'      => [
+                self::COLUMN_LEGACY_NAME => ['value' => 'envelope'],
+            ],
+            // The generated enum supplies package_small; keep accepting the old spec spelling.
             'SMALL_PACKAGE' => [
                 self::COLUMN_LEGACY_NAME => [
-                    'value'   => 'package_small',
                     'aliases' => ['small_package'],
                 ],
             ],
