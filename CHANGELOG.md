@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.7.15](https://github.com/myparcelnl/sdk/compare/v10.7.14...v10.7.15) (2026-10-08)
+
 ## [10.7.14](https://github.com/myparcelnl/sdk/compare/v10.7.13...v10.7.14) (2026-09-29)
 
 ## [10.7.13](https://github.com/myparcelnl/sdk/compare/v10.7.12...v10.7.13) (2026-09-10)
