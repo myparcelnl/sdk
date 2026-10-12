@@ -92,7 +92,7 @@ class CustomsDeclaration extends BaseModel
         return [
             'contents' => $this->contents,
             'items'    => array_map(static function (MyParcelCustomsItem $item): array {
-                return $item->toArray();
+                return $item->toArrayWithoutNull();
             }, $this->items),
             'invoice'  => $this->invoice,
             'weight'   => $this->weight,
