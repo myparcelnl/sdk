@@ -20,7 +20,7 @@ use MyParcelNL\Sdk\Support\Str;
  *
  * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
-class MyParcelCustomsItem
+class MyParcelCustomsItem extends BaseModel
 {
     private const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
     private const DEFAULT_CURRENCY = 'EUR';
@@ -226,5 +226,20 @@ class MyParcelCustomsItem
                 throw new MissingFieldException("set$methodAlias() must be set");
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'description'    => $this->description,
+            'amount'         => $this->amount,
+            'weight'         => $this->weight,
+            'item_value'     => $this->item_value,
+            'classification' => $this->classification,
+            'country'        => $this->country,
+        ];
     }
 }
