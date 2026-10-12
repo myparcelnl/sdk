@@ -49,11 +49,21 @@ Make as many commits as you'd like. We use [Conventional Commits] and [semantic-
 
 ## Generated Code (API Client)
 
-Some parts of this SDK use **generated code** from the Core API specification to ensure zero-maintenance updates for new carriers, delivery types, and configuration options.
+Some parts of this SDK use **generated code** from the MyParcel API specifications. A new field, carrier or option in a specification gets into the SDK by regenerating the client.
 
 ### Generated Files Location
 
-- `src/Services/CoreApi/Generated/Shipments/` — **DO NOT EDIT MANUALLY**
+- `src/Client/Generated/<Client>/` — **DO NOT EDIT MANUALLY**
+
+Each client has a configuration file in `openapi/`:
+
+| Configuration                  | Specification                                   | Output                                |
+|--------------------------------|-------------------------------------------------|---------------------------------------|
+| `openapi/coreapi.yaml`         | `https://api.myparcel.nl/openapi.min.json`      | `src/Client/Generated/CoreApi`        |
+| `openapi/order.yaml`           | `https://order.api.myparcel.nl/openapi.json`    | `src/Client/Generated/OrderApi`       |
+| `openapi/iam.yaml`             | `https://iam.api.myparcel.nl/openapi.json`      | `src/Client/Generated/IamApi`         |
+| `openapi/coreapi-private.yaml` | `openapi/specs/coreapi-private.yaml` (local)    | `src/Client/Generated/CoreApiPrivate` |
+| `openapi/ecommerce.yaml`       | `openapi/specs/oauth-connect.yaml` (local)      | `src/Client/Generated/EcommerceApi`   |
 
 ### Regenerating Code
 
@@ -61,22 +71,18 @@ Some parts of this SDK use **generated code** from the Core API specification to
 # Make sure Docker is available
 docker --version
 
-# Regenerate the API client (includes shipments, capabilities, notifications)
+# Regenerate all API clients
 composer generate:api
 ```
 
-This command runs `openapitools/openapi-generator-cli` inside a Docker container, using the specification at:
-
-```
-https://api.myparcel.nl/openapi.min.json
-```
+This command runs `openapitools/openapi-generator-cli` inside a Docker container with the configurations in `openapi/`, and then refreshes the Composer autoloader.
 
 ### Notes for Development
 
-- Do not edit any files under `Generated/Shipments` manually
-- All changes must originate from the Core API specification
-- The generated code is produced by OpenAPI Generator (supports OpenAPI 3.1)
-- The generation command automatically refreshes autoloading via Composer
+- Do not edit generated files manually. A change must come from the specification.
+- To change a client with a local specification, edit the file in `openapi/specs/` and regenerate.
+- Put workarounds for generator problems in the `typeMappings` of the client configuration.
+- Every Monday, the workflow `.github/workflows/regenerate-api-client.yml` regenerates the clients and opens a `feat(api): update API clients` pull request.
 
 ---
 
