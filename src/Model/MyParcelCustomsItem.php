@@ -234,12 +234,12 @@ class MyParcelCustomsItem extends BaseModel
     public function toArray(): array
     {
         return [
-            'description'    => $this->description,
-            'amount'         => $this->amount,
-            'weight'         => $this->weight,
-            'item_value'     => $this->item_value,
-            'classification' => $this->classification,
-            'country'        => $this->country,
+            'description'    => $this->getDescription(),
+            'amount'         => $this->getAmount(),
+            'weight'         => $this->getWeight(),
+            'item_value'     => $this->getItemValue(),
+            'classification' => $this->getClassification(),
+            'country'        => $this->getCountry(),
         ];
     }
 }
