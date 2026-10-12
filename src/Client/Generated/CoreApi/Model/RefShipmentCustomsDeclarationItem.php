@@ -63,7 +63,8 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         'weight' => 'int',
         'item_value' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney',
         'classification' => 'string',
-        'country' => 'string'
+        'country' => 'string',
+        'external_product_reference' => 'string'
     ];
 
     /**
@@ -79,7 +80,8 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         'weight' => null,
         'item_value' => null,
         'classification' => null,
-        'country' => null
+        'country' => null,
+        'external_product_reference' => null
     ];
 
     /**
@@ -93,7 +95,8 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         'weight' => false,
         'item_value' => false,
         'classification' => false,
-        'country' => true
+        'country' => true,
+        'external_product_reference' => true
     ];
 
     /**
@@ -187,7 +190,8 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         'weight' => 'weight',
         'item_value' => 'item_value',
         'classification' => 'classification',
-        'country' => 'country'
+        'country' => 'country',
+        'external_product_reference' => 'external_product_reference'
     ];
 
     /**
@@ -201,7 +205,8 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         'weight' => 'setWeight',
         'item_value' => 'setItemValue',
         'classification' => 'setClassification',
-        'country' => 'setCountry'
+        'country' => 'setCountry',
+        'external_product_reference' => 'setExternalProductReference'
     ];
 
     /**
@@ -215,7 +220,8 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         'weight' => 'getWeight',
         'item_value' => 'getItemValue',
         'classification' => 'getClassification',
-        'country' => 'getCountry'
+        'country' => 'getCountry',
+        'external_product_reference' => 'getExternalProductReference'
     ];
 
     /**
@@ -294,6 +300,7 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
         $this->setIfExists('item_value', $data ?? [], null);
         $this->setIfExists('classification', $data ?? [], null);
         $this->setIfExists('country', $data ?? [], null);
+        $this->setIfExists('external_product_reference', $data ?? [], null);
     }
 
     /**
@@ -367,6 +374,10 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
                 $this->container['country'],
                 implode("', '", $allowedValues)
             );
+        }
+
+        if (!is_null($this->container['external_product_reference']) && (mb_strlen($this->container['external_product_reference']) > 64)) {
+            $invalidProperties[] = "invalid value for 'external_product_reference', the character length must be smaller than or equal to 64.";
         }
 
         return $invalidProperties;
@@ -569,6 +580,44 @@ class RefShipmentCustomsDeclarationItem implements ModelInterface, ArrayAccess, 
             }
         }
         $this->container['country'] = $country;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_product_reference
+     *
+     * @return string|null
+     */
+    public function getExternalProductReference()
+    {
+        return $this->container['external_product_reference'];
+    }
+
+    /**
+     * Sets external_product_reference
+     *
+     * @param string|null $external_product_reference Reference to the product in an external product catalog. Required for PostNL shipments to the United States and Puerto Rico, where it must contain the Zonos Catalog Item ID (e.g. `catalog_item_` followed by 13 characters).
+     *
+     * @return self
+     */
+    public function setExternalProductReference($external_product_reference)
+    {
+        if (is_null($external_product_reference)) {
+            array_push($this->openAPINullablesSetToNull, 'external_product_reference');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_product_reference', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($external_product_reference) && (mb_strlen($external_product_reference) > 64)) {
+            throw new \InvalidArgumentException('invalid length for $external_product_reference when calling RefShipmentCustomsDeclarationItem., must be smaller than or equal to 64.');
+        }
+
+        $this->container['external_product_reference'] = $external_product_reference;
 
         return $this;
     }
