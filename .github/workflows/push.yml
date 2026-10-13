@@ -1,4 +1,4 @@
-name: 'Push to main 🚀'
+name: 'Push to release branches 🚀'
 
 on:
   push:

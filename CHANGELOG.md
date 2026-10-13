@@ -3,6 +3,292 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0-beta.37](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.36...v11.0.0-beta.37) (2026-10-06)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#655](https://github.com/myparcelnl/sdk/issues/655)) ([092e81f](https://github.com/myparcelnl/sdk/commit/092e81f07cdd058c3bda45da7ac3fdd2222c7628))
+
+## [11.0.0-beta.36](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.35...v11.0.0-beta.36) (2026-10-01)
+
+
+### :sparkles: New Features
+
+* accept request headers on the shipment api factory and order save ([#654](https://github.com/myparcelnl/sdk/issues/654)) ([af37a94](https://github.com/myparcelnl/sdk/commit/af37a949348f38bb81d316514508bb1858afa274))
+
+## [11.0.0-beta.35](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.34...v11.0.0-beta.35) (2026-09-18)
+
+
+### :sparkles: New Features
+
+* derive API mappings from generated definitions ([#642](https://github.com/myparcelnl/sdk/issues/642)) ([7573721](https://github.com/myparcelnl/sdk/commit/7573721cdb683e07d81231cc779ad1148fec7ff5))
+
+## [11.0.0-beta.34](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.33...v11.0.0-beta.34) (2026-09-15)
+
+
+### :sparkles: New Features
+
+* **api:** add the ecommerce api factory ([#646](https://github.com/myparcelnl/sdk/issues/646)) ([809863c](https://github.com/myparcelnl/sdk/commit/809863c4fa80026e66e40031eaf8a62f0b96b176)), closes [#645](https://github.com/myparcelnl/sdk/issues/645) [#645](https://github.com/myparcelnl/sdk/issues/645) [#645](https://github.com/myparcelnl/sdk/issues/645)
+* **api:** generate the ecommerce api client ([#643](https://github.com/myparcelnl/sdk/issues/643)) ([88a1977](https://github.com/myparcelnl/sdk/commit/88a1977d44b1afe1a81122c182f6054e5b595673)), closes [#638](https://github.com/myparcelnl/sdk/issues/638)
+* **connect:** add connect config, state and storage contract ([#639](https://github.com/myparcelnl/sdk/issues/639)) ([9f93d1a](https://github.com/myparcelnl/sdk/commit/9f93d1a4e522745b9241a5bd79ff8e17cc4ced1e)), closes [#643](https://github.com/myparcelnl/sdk/issues/643)
+* **connect:** add DPoP crypto primitives ([#638](https://github.com/myparcelnl/sdk/issues/638)) ([fd4a30f](https://github.com/myparcelnl/sdk/commit/fd4a30f2c9ffb9a8bd4b489739dc2bebfd441bb5))
+* **connect:** add the connect proof of concept ([#649](https://github.com/myparcelnl/sdk/issues/649)) ([7b1843a](https://github.com/myparcelnl/sdk/commit/7b1843af0b20b053169309b36a688bef5a5d8c6d)), closes [#646](https://github.com/myparcelnl/sdk/issues/646)
+* **connect:** add the connect service and its transport ([#641](https://github.com/myparcelnl/sdk/issues/641)) ([85ccefc](https://github.com/myparcelnl/sdk/commit/85ccefcfe7ac4f4c36ff8e4bf8d1005a020a67ff)), closes [#639](https://github.com/myparcelnl/sdk/issues/639)
+* **connect:** sign ecommerce requests with DPoP ([#645](https://github.com/myparcelnl/sdk/issues/645)) ([8214bfe](https://github.com/myparcelnl/sdk/commit/8214bfecb5bc65f7b5a63d8a82d339a52ca9d854)), closes [#641](https://github.com/myparcelnl/sdk/issues/641)
+
+## [11.0.0-beta.33](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.32...v11.0.0-beta.33) (2026-08-24)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#637](https://github.com/myparcelnl/sdk/issues/637)) ([9b48696](https://github.com/myparcelnl/sdk/commit/9b48696c1fdea83126d09e6f2b71c270b321e6e4))
+
+## [11.0.0-beta.32](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.31...v11.0.0-beta.32) (2026-08-18)
+
+
+### :bug: Bug Fixes
+
+* replace deprecated JSON encoding ([#635](https://github.com/myparcelnl/sdk/issues/635)) ([583641a](https://github.com/myparcelnl/sdk/commit/583641a4ee270197dcbec7c99844364f37f7161d))
+
+## [11.0.0-beta.31](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.30...v11.0.0-beta.31) (2026-07-30)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#633](https://github.com/myparcelnl/sdk/issues/633)) ([5e7e49e](https://github.com/myparcelnl/sdk/commit/5e7e49ec6df592c47dfe13a9158d0794388d21c9))
+
+## [11.0.0-beta.30](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.29...v11.0.0-beta.30) (2026-07-14)
+
+
+### :bug: Bug Fixes
+
+* **api:** fix `isBusiness` defaulting to `true` rathern than `null` in capabilities requests ([#631](https://github.com/myparcelnl/sdk/issues/631)) ([44f2f63](https://github.com/myparcelnl/sdk/commit/44f2f631a51a104b089bdeabcaca3e81330f812a))
+
+## [11.0.0-beta.29](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.28...v11.0.0-beta.29) (2026-07-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **openapi:** loosen and apply consistent validation for enum values, fix required nullables (#623)
+
+### :sparkles: New Features
+
+* **openapi:** loosen and apply consistent validation for enum values, fix required nullables ([#623](https://github.com/myparcelnl/sdk/issues/623)) ([2164721](https://github.com/myparcelnl/sdk/commit/2164721c572844cb1350f9aa407bbdd18e6a1660)), closes [OpenAPITools/openapi-generator#22292](https://github.com/OpenAPITools/openapi-generator/issues/22292) [OpenAPITools/openapi-generator#22292](https://github.com/OpenAPITools/openapi-generator/issues/22292)
+
+## [11.0.0-beta.28](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.27...v11.0.0-beta.28) (2026-06-24)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#622](https://github.com/myparcelnl/sdk/issues/622)) ([aadda1a](https://github.com/myparcelnl/sdk/commit/aadda1a9ac391415da9cb9dacd0ca50ddbfe4903))
+
+## [11.0.0-beta.27](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.26...v11.0.0-beta.27) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* accept tracktrace sender email values ([34d60ae](https://github.com/myparcelnl/sdk/commit/34d60ae2ab83f878cfbf5045db87dbb0e81ca359))
+
+## [11.0.0-beta.26](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.25...v11.0.0-beta.26) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* align service calls with regenerated user-agent parameter ([cd5d37f](https://github.com/myparcelnl/sdk/commit/cd5d37f1152709b406f3c0eaab5ab9b74f429fec))
+
+## [11.0.0-beta.25](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.24...v11.0.0-beta.25) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* pass tracktrace user agent correctly ([1c87b32](https://github.com/myparcelnl/sdk/commit/1c87b32a3d1fab16f22407bae07fba225bf726be))
+
+## [11.0.0-beta.24](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.23...v11.0.0-beta.24) (2026-06-24)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#621](https://github.com/myparcelnl/sdk/issues/621)) ([fb413c2](https://github.com/myparcelnl/sdk/commit/fb413c2320b96065080f9a323473de1efb5f2c67))
+
+## [11.0.0-beta.23](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.22...v11.0.0-beta.23) (2026-06-24)
+
+
+### :bug: Bug Fixes
+
+* consumer portal link mapping ([#620](https://github.com/myparcelnl/sdk/issues/620)) ([c258878](https://github.com/myparcelnl/sdk/commit/c258878778e39f4a394939097f7d005bdb21e589))
+
+## [11.0.0-beta.22](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.21...v11.0.0-beta.22) (2026-06-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove legacy consignment stack and finalize v11 migration paths (#615)
+
+* remove legacy consignment stack and finalize v11 migration paths ([#615](https://github.com/myparcelnl/sdk/issues/615)) ([ac6103c](https://github.com/myparcelnl/sdk/commit/ac6103cb0e2cd98e3a4e20a9b3662e2e8f3fbfce))
+
+## [11.0.0-beta.21](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.20...v11.0.0-beta.21) (2026-06-08)
+
+
+### :sparkles: New Features
+
+* add carrier contract definitions service ([#619](https://github.com/myparcelnl/sdk/issues/619)) ([20d000a](https://github.com/myparcelnl/sdk/commit/20d000a31ea9c3ddbf9f5353bba37458ebc892b4))
+
+## [11.0.0-beta.20](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.19...v11.0.0-beta.20) (2026-06-01)
+
+
+### :bug: Bug Fixes
+
+* add Italian carriers to legacy factory ([94669d6](https://github.com/myparcelnl/sdk/commit/94669d681e04dce9a786471993e870b5e51ea84d))
+
+## [11.0.0-beta.19](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.18...v11.0.0-beta.19) (2026-05-21)
+
+
+### :sparkles: New Features
+
+* **api:** add private coreapi client for shipping rules ([#617](https://github.com/myparcelnl/sdk/issues/617)) ([1b0ac66](https://github.com/myparcelnl/sdk/commit/1b0ac66acbfe7ae37cba788269bc87f1a9ae44c3))
+
+## [11.0.0-beta.18](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.17...v11.0.0-beta.18) (2026-05-15)
+
+
+### :bug: Bug Fixes
+
+* **ci:** correct phpunit coverage exclude path to ./src/Client/Generated ([e9af8da](https://github.com/myparcelnl/sdk/commit/e9af8dad28eb81e1c371bb757ef9c96ac015d38c)), closes [#590](https://github.com/myparcelnl/sdk/issues/590)
+
+## [11.0.0-beta.17](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.16...v11.0.0-beta.17) (2026-04-16)
+
+
+### :bug: Bug Fixes
+
+* harden v11 shipment service wrappers against spec/client drift ([#614](https://github.com/myparcelnl/sdk/issues/614)) ([8da1df9](https://github.com/myparcelnl/sdk/commit/8da1df9c4f3868517d399c7962ed828409f1c8b9))
+
+## [11.0.0-beta.16](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.15...v11.0.0-beta.16) (2026-04-13)
+
+## [11.0.0-beta.15](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.14...v11.0.0-beta.15) (2026-04-09)
+
+
+### :bug: Bug Fixes
+
+* override iam principal deserialization ([#611](https://github.com/myparcelnl/sdk/issues/611)) ([459a957](https://github.com/myparcelnl/sdk/commit/459a9572587f68252151081367062aaff8de04a9))
+
+## [11.0.0-beta.14](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.13...v11.0.0-beta.14) (2026-04-08)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#610](https://github.com/myparcelnl/sdk/issues/610)) ([1942dca](https://github.com/myparcelnl/sdk/commit/1942dcad2718b7ab5c1c36ebb00a3e0a39b59c20))
+
+## [11.0.0-beta.13](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.12...v11.0.0-beta.13) (2026-04-08)
+
+## [11.0.0-beta.12](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.11...v11.0.0-beta.12) (2026-04-07)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#608](https://github.com/myparcelnl/sdk/issues/608)) ([f92a508](https://github.com/myparcelnl/sdk/commit/f92a508b33737b9736d747fe90d260d90eeac9c6))
+
+## [11.0.0-beta.11](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.10...v11.0.0-beta.11) (2026-03-24)
+
+
+### :bug: Bug Fixes
+
+* **v11:** security fix tar vulnerability and update @myparcel-dev/semantic-release-config ([#600](https://github.com/myparcelnl/sdk/issues/600)) ([60bda93](https://github.com/myparcelnl/sdk/commit/60bda93a68c776c4e8c5202a3c058192a9ed4f1e))
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#603](https://github.com/myparcelnl/sdk/issues/603)) ([bd4342c](https://github.com/myparcelnl/sdk/commit/bd4342ce6c350cdd2f7941fc90ca102050abb4fa))
+* **api:** update API clients ([#604](https://github.com/myparcelnl/sdk/issues/604)) ([625b153](https://github.com/myparcelnl/sdk/commit/625b15398ddc2f604c560b337b11d39dcf39f5bc))
+* introduce shipment query, delete, return and multi-collo services ([#596](https://github.com/myparcelnl/sdk/issues/596)) ([1c8bbda](https://github.com/myparcelnl/sdk/commit/1c8bbdae5f6baf10eb47bf0aaebb728f388564cb))
+
+## [11.0.0-beta.10](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.9...v11.0.0-beta.10) (2026-03-18)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([cf62321](https://github.com/myparcelnl/sdk/commit/cf62321a8e988fdf1071a50ad4b0c46ee0a543f1))
+
+## [11.0.0-beta.9](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.8...v11.0.0-beta.9) (2026-03-16)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#601](https://github.com/myparcelnl/sdk/issues/601)) ([c99f14f](https://github.com/myparcelnl/sdk/commit/c99f14f840fc100dc2339a76c1b5350667469e6e))
+
+## [11.0.0-beta.8](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.7...v11.0.0-beta.8) (2026-03-16)
+
+
+### :bug: Bug Fixes
+
+* **openapi:** fix monetary amounts not being serialized ([#598](https://github.com/myparcelnl/sdk/issues/598)) ([c62efda](https://github.com/myparcelnl/sdk/commit/c62efdace82edd42babc8e00ace88d099f5e5496))
+
+## [11.0.0-beta.7](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.6...v11.0.0-beta.7) (2026-03-10)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#597](https://github.com/myparcelnl/sdk/issues/597)) ([da449c6](https://github.com/myparcelnl/sdk/commit/da449c64f04e2b826750c542feb133581109ee45))
+
+## [11.0.0-beta.6](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.5...v11.0.0-beta.6) (2026-03-05)
+
+
+### :sparkles: New Features
+
+* introduce label- and track & trace services for shipment domain ([#588](https://github.com/myparcelnl/sdk/issues/588)) ([0198cc2](https://github.com/myparcelnl/sdk/commit/0198cc2a7c0235521d218a12edb9ef5c42ef92ff))
+
+## [11.0.0-beta.5](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.4...v11.0.0-beta.5) (2026-03-02)
+
+
+### :sparkles: New Features
+
+* Shipment-first create flow (generated Core API client) ([#587](https://github.com/myparcelnl/sdk/issues/587)) ([82a1555](https://github.com/myparcelnl/sdk/commit/82a155595f70ac4cde386fc3b61873a4d4aef6a7))
+
+## [11.0.0-beta.4](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.3...v11.0.0-beta.4) (2026-03-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove dropoff point from maintained code (#589)
+
+### :sparkles: New Features
+
+* remove dropoff point from maintained code ([#589](https://github.com/myparcelnl/sdk/issues/589)) ([98376de](https://github.com/myparcelnl/sdk/commit/98376ded89b875c0a5100d350850c47f326dc392))
+
+## [11.0.0-beta.3](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.2...v11.0.0-beta.3) (2026-02-27)
+
+
+### :sparkles: New Features
+
+* **api:** update API clients ([#594](https://github.com/myparcelnl/sdk/issues/594)) ([4b94bd5](https://github.com/myparcelnl/sdk/commit/4b94bd59c21e332f3ed637523707713db4fd950d))
+
+## [11.0.0-beta.2](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.1...v11.0.0-beta.2) (2026-02-26)
+
+
+### :sparkles: New Features
+
+* **api:** include API updates in releases ([32a1098](https://github.com/myparcelnl/sdk/commit/32a109840d301d9a3059e90d8ed708f8e84eb8a1))
+
+## [11.0.0-beta.1](https://github.com/myparcelnl/sdk/compare/v10.7.5...v11.0.0-beta.1) (2026-02-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** add clients for iam- and order (v2) services (#590)
+* **capabilities:** add capabilities functionality to the SDK (#551)
+
+### :bug: Bug Fixes
+
+* conform to json standard in composer ([4bee915](https://github.com/myparcelnl/sdk/commit/4bee915c15e84b2fa952fbbe153ee0e75333a1cd))
+* **v11:** Shipment extends correct generated class ([f00275f](https://github.com/myparcelnl/sdk/commit/f00275f8b0b8462cc48b3dda97f0d955ef225478))
+
+
+### :sparkles: New Features
+
+* add pickup support to capabilities request ([9b59497](https://github.com/myparcelnl/sdk/commit/9b5949704db837835c96bc814fdcad30e857d2e6))
+* **api:** add clients for iam- and order (v2) services ([#590](https://github.com/myparcelnl/sdk/issues/590)) ([bc75b9d](https://github.com/myparcelnl/sdk/commit/bc75b9dabaa43adc3a3ca2315f0e0e63bd3b5875))
+* capabilities from shipments ([#584](https://github.com/myparcelnl/sdk/issues/584)) ([7178156](https://github.com/myparcelnl/sdk/commit/71781561a1a2a2dd7ee574a78ac01181a7f5e307))
+* **capabilities:** add capabilities functionality to the SDK ([#551](https://github.com/myparcelnl/sdk/issues/551)) ([c286a44](https://github.com/myparcelnl/sdk/commit/c286a44cc8675dd51cf97dbd82517161f45a66be))
+
 ## [10.7.15](https://github.com/myparcelnl/sdk/compare/v10.7.14...v10.7.15) (2026-10-08)
 
 ## [10.7.14](https://github.com/myparcelnl/sdk/compare/v10.7.13...v10.7.14) (2026-09-29)

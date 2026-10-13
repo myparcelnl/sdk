@@ -1,0 +1,3 @@
+{
+  "extends": "@myparcel-dev/semantic-release-config/github-composer"
+}

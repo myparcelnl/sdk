@@ -8,6 +8,7 @@ use Exception;
 
 /**
  * Class MyParcelCurl.
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
 class MyParcelCurl
 {

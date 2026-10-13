@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Collection\Fulfilment;
 
 use DateTime;
-use MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Model\Consignment\DropOffPoint;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
+use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Support\Arr;
 use MyParcelNL\Sdk\Support\Collection;
 
 /**
+ * @internal Legacy Order v1 (fulfilment) collection.
+ *
  * @property \MyParcelNL\Sdk\Model\Fulfilment\Order[] $items
  */
 class OrderCollection extends Collection
@@ -55,13 +57,15 @@ class OrderCollection extends Collection
      * For backwards compatibility it remains possible to set the api key on the collection itself, when set that
      * is the api key that will be used for all orders in the collection, to stay consistent with how it was.
      *
+     * @param  array<string, string> $headers sent with each request, such as `x-dmp-*` API feature flags
+     *
      * @return self
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function save(): self
+    public function save(array $headers = []): self
     {
         $collections = [];
         // for now we default to the common api key of the collection if set, but you should set it on each order
@@ -85,7 +89,7 @@ class OrderCollection extends Collection
             $requestBody = new RequestBody('orders', $orders->createRequestBody());
             $request     = (new MyParcelRequest())
                 ->setUserAgents($this->getUserAgent())
-                ->setRequestParameters($key, $requestBody)
+                ->setRequestParameters($key, $requestBody, $headers)
                 ->sendRequest('POST', MyParcelRequest::REQUEST_TYPE_ORDERS);
 
             $orders = self::createCollectionFromResponse($request);
@@ -110,9 +114,7 @@ class OrderCollection extends Collection
         return $this->map(
             function (Order $order) {
                 $order->validate();
-                $deliveryOptions     = $order->getDeliveryOptions();
-                $dropOffPoint        = $order->getDropOffPoint();
-                $dropOffPointAsArray = $dropOffPoint ? $this->getDropOffPointAsArray($dropOffPoint) : null;
+                $options = $order->getDeliveryOptions();
 
                 return [
                     'external_identifier'           => $order->getExternalIdentifier(),
@@ -121,11 +123,10 @@ class OrderCollection extends Collection
                     'invoice_address'               => $order->getInvoiceAddress()->toArrayWithoutNull(),
                     'order_lines'                   => $order->getOrderLines()->toArrayWithoutNull(),
                     'shipment'                      => [
-                        'carrier'             => $deliveryOptions->getCarrierId(),
+                        'carrier'             => $order->getCarrierId(),
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
-                        'options'             => $this->getShipmentOptions($deliveryOptions),
+                        'options'             => $this->getShipmentOptions($options),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
-                        'drop_off_point'      => $dropOffPointAsArray,
                         'customs_declaration' => $order->getCustomsDeclaration(),
                         'physical_properties' => $order->getPhysicalProperties()->toArray(),
                     ],
@@ -135,64 +136,50 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter $deliveryOptions
+     * @param \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $options
      *
      * @return array
      * @throws \Exception
      */
-    private function getShipmentOptions(AbstractDeliveryOptionsAdapter $deliveryOptions): array
+    private function getShipmentOptions(ShipmentOptions $options): array
     {
-        $deliveryDate = $deliveryOptions->getDate();
+        $deliveryDate = $options->getDeliveryDate();
 
         if ($deliveryDate) {
             $date         = new DateTime($deliveryDate);
             $deliveryDate = $date->format(AbstractOrder::DATE_FORMAT_FULL);
         }
 
-        $shipmentOptions = $deliveryOptions->getShipmentOptions();
-
-        $options = [
-            'package_type'      => $deliveryOptions->getPackageTypeId(),
-            'delivery_type'     => $deliveryOptions->getDeliveryTypeId(),
+        $result = [
+            'package_type'      => $options->getPackageType(),
+            'delivery_type'     => $options->getDeliveryType(),
             'delivery_date'     => $deliveryDate ?: null,
-            'signature'         => (int) $shipmentOptions->hasSignature(),
-            'collect'           => (int) $shipmentOptions->hasCollect(),
-            'receipt_code'      => (int) $shipmentOptions->hasReceiptCode(),
-            'only_recipient'    => (int) $shipmentOptions->hasOnlyRecipient(),
-            'age_check'         => (int) $shipmentOptions->hasAgeCheck(),
-            'large_format'      => (int) $shipmentOptions->hasLargeFormat(),
-            'return'            => (int) $shipmentOptions->isReturn(),
-            'priority_delivery' => (int) $shipmentOptions->isPriorityDelivery(),
-            'label_description' => (string) $shipmentOptions->getLabelDescription(),
+            'signature'         => (int) $options->getSignature(),
+            'collect'           => (int) $options->getCollect(),
+            'receipt_code'      => (int) $options->getReceiptCode(),
+            'only_recipient'    => (int) $options->getOnlyRecipient(),
+            'age_check'         => (int) $options->getAgeCheck(),
+            'large_format'      => (int) $options->getLargeFormat(),
+            'return'            => (int) $options->getReturn(),
+            'priority_delivery' => (int) $options->getPriorityDelivery(),
+            'label_description' => (string) $options->getLabelDescription(),
         ];
 
-        if ($shipmentOptions->getInsurance()) {
-            $options['insurance'] = [
-                'amount'   => (int) $shipmentOptions->getInsurance() * 100,
+        $insurance = $options->getInsurance();
+
+        if ($insurance instanceof RefTypesPriceEuro) {
+            $result['insurance'] = [
+                'amount'   => (int) $insurance->getAmount(),
+                'currency' => $insurance->getCurrency() ?: 'EUR',
+            ];
+        } elseif (is_numeric($insurance)) {
+            $result['insurance'] = [
+                'amount'   => (int) $insurance * 100,
                 'currency' => 'EUR',
             ];
         }
 
-        return $options;
-    }
-
-    /**
-     * @param \MyParcelNL\Sdk\Model\Consignment\DropOffPoint $dropOffPoint
-     *
-     * @return array
-     */
-    private function getDropOffPointAsArray(DropOffPoint $dropOffPoint): array
-    {
-        return [
-            'location_code' => $dropOffPoint->getLocationCode(),
-            'location_name' => $dropOffPoint->getLocationName(),
-            'postal_code'   => $dropOffPoint->getPostalCode(),
-            'street'        => $dropOffPoint->getStreet(),
-            'number'        => $dropOffPoint->getNumber(),
-            'number_suffix' => $dropOffPoint->getNumberSuffix() ?? '',
-            'city'          => $dropOffPoint->getCity(),
-            'cc'            => $dropOffPoint->getCc(),
-        ];
+        return $result;
     }
 
     /**

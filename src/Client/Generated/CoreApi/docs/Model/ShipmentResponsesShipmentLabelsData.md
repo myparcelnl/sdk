@@ -1,0 +1,11 @@
+# # ShipmentResponsesShipmentLabelsData
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**ids** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner[]**](ShipmentResponsesShipmentIdsDataIdsInner.md) | A list of Shipment IDs. |
+**pdf** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf**](ShipmentResponsesPostShipmentsV12DataPdf.md) |  |
+**zpl** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl**](ShipmentResponsesPostShipmentsV12DataZpl.md) |  |
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

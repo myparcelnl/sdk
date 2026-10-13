@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Validator;
 
 use MyParcelNL\Sdk\Support\Classes;
 
+/**
+ * @internal Legacy — used by Order v1 (fulfilment) and web services.
+ */
 class ValidatorFactory
 {
     /**

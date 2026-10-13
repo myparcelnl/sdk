@@ -1,0 +1,27 @@
+# # CapabilitiesOptionsV2
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**additional_insurance** | **object** | Additional insurance option | [optional]
+**deliver_at_postal_point** | **object** | Deliver at postal point option | [optional]
+**fresh_food** | **object** | Fresh food delivery option | [optional]
+**frozen** | **object** | Frozen delivery option | [optional]
+**hide_sender** | **object** | Hide sender option | [optional]
+**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2OptionsInsurance**](CapabilitiesPostCapabilitiesRequestV2OptionsInsurance.md) |  | [optional]
+**no_tracking** | **object** | Ship without track and trace option | [optional]
+**oversized_package** | **object** | Oversized package option | [optional]
+**print_return_label_at_drop_off** | **object** | Print return label at drop off package option | [optional]
+**priority_delivery** | **object** | Priority delivery package option | [optional]
+**recipient_only_delivery** | **object** | Recipient only delivery option | [optional]
+**return_on_first_failed_delivery** | **object** | Return on first failed delivery option | [optional]
+**requires_age_verification** | **object** | Requires age verification option | [optional]
+**requires_cash_on_delivery** | **object** | Cash on delivery option | [optional]
+**requires_receipt_code** | **object** | Requires receipt code option | [optional]
+**requires_signature** | **object** | Requires signature option | [optional]
+**same_day_delivery** | **object** | Same day delivery option | [optional]
+**saturday_delivery** | **object** | Saturday delivery option | [optional]
+**scheduled_collection** | **object** | Scheduled collection option | [optional]
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

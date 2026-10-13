@@ -1,0 +1,51 @@
+'!include': 'common.yaml'
+
+# OpenAPI Generator configuration
+inputSpec: https://api.myparcel.nl/openapi.min.json
+outputDir: src/Client/Generated/CoreApi
+# Maps inline schema names to shorter, cleaner class names
+inlineSchemaNameMappings:
+  # Capabilities V2 - used in CapabilitiesMapper
+  capabilities_post_capabilities_request_v2_recipient: CapabilitiesRecipientV2
+  capabilities_post_capabilities_request_v2_sender: CapabilitiesSenderV2
+  capabilities_post_capabilities_request_v2_options: CapabilitiesOptionsV2
+  capabilities_post_capabilities_request_v2_physicalProperties: CapabilitiesPhysicalPropertiesV2
+  capabilities_post_capabilities_request_v2_physicalProperties_height: PhysicalPropertiesHeightV2
+  capabilities_post_capabilities_request_v2_physicalProperties_length: PhysicalPropertiesLengthV2
+  capabilities_post_capabilities_request_v2_physicalProperties_width: PhysicalPropertiesWidthV2
+  capabilities_post_capabilities_request_v2_physicalProperties_weight: PhysicalPropertiesWeightV2
+
+  # Shipment V1.1 - test mappings
+  shipment_post_shipments_request_v1_1_data_shipments_inner: ShipmentRequest
+  shipment_post_shipments_request_v1_1_data_shipments_inner_secondary_shipments_inner: SecondaryShipmentRequest
+typeMappings:
+  # Map Empty model classes (oneOf) to primitives to avoid generating empty classes
+  RefTypesMoneyAmount: int
+  RefTypesMoneyPropertiesAmount: int
+
+  # @todo remove when upstream spec fixes the street pattern.
+  # Redirects to an override class that fixes the broken setStreet() regex (missing
+  # regex delimiters). The email pseudo-enum bug is handled generically by the
+  # value-less-enum guards in the ObjectSerializer/model templates.
+  ShipmentDefsShipmentRecipient: FixedShipmentRecipient
+  # @todo remove when upstream spec fixes type: "null" properties
+  # Prevents ObjectSerializer from trying to instantiate a class named 'Null'.
+  Null: mixed
+  # @todo remove when upstream spec fixes reference_identifier union type
+  # The union ['null','integer','string'] generates an empty wrapper model that loses data.
+  RefShipmentReferenceIdentifier: string
+  # @todo remove when upstream spec/codegen fixes link_consumer_portal oneOf(uri | empty-string)
+  # The current codegen produces empty wrapper models that lose the actual URL.
+  ShipmentDefsShipmentLinkConsumerPortal: string
+  ShipmentDefsShipmentPropertiesLinkConsumerPortal: string
+  # @todo remove when upstream spec/codegen fixes region oneOf(string pattern | enum)
+  # The current codegen produces unusable model wrappers/enums for shipment resource regions.
+  ShipmentDefsShipmentRegion: string
+  ShipmentDefsShipmentPropertiesRegion: string
+  # @todo remove when upstream spec fixes return shipment payment_status empty-string responses
+  # Live return-shipment responses currently return "", which violates the enum and breaks deserialization.
+  ShipmentDefsShipmentPaymentStatus: string
+additionalProperties:
+  '!include': 'commonProperties.yaml'
+  packageName: MyParcelNL\Sdk\Client\Generated\CoreApi
+  invokerPackage: MyParcelNL\Sdk\Client\Generated\CoreApi

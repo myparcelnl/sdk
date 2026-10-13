@@ -1,0 +1,8 @@
+# Common values for the additionalProperties section of the OpenAPI Generator configuration files.
+# This file is included in the individual configuration files using the !include directive.
+modelPackage: Model
+srcBasePath: .
+apiPackage: Api
+# Disabled: unknown enum handling is done in our ObjectSerializer/model templates
+# (raw passthrough on read, strict on write) instead of the sentinel-value approach.
+enumUnknownDefaultCase: false

@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Services\Web;
 
 use MyParcelNL\Sdk\Model\Carrier\CarrierFactory;
 
+/**
+ * @internal Legacy web service — no generated client equivalent yet.
+ */
 trait HasCarrier
 {
     /**

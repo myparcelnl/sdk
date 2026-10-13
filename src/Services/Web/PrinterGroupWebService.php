@@ -8,6 +8,9 @@ use MyParcelNL\Sdk\Model\Account\PrinterGroup;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Collection;
 
+/**
+ * @internal Legacy web service — no generated client equivalent yet.
+ */
 class PrinterGroupWebService extends AbstractWebService
 {
     public const ENDPOINT = 'printer-groups';

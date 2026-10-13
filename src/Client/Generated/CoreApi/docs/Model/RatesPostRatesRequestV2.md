@@ -1,0 +1,20 @@
+# # RatesPostRatesRequestV2
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**shop_id** | **int** | The ID of the shop for which the rates are requested. | [optional]
+**contract_id** | **int** | The ID of the contract for which the rates are requested. | [optional]
+**recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2**](CapabilitiesRecipientV2.md) |  |
+**sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2**](CapabilitiesSenderV2.md) |  | [optional]
+**pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2**](RefShipmentPickupV2.md) |  | [optional]
+**carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2**](RefCapabilitiesSharedCarrierV2.md) |  |
+**package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2**](RefShipmentPackageTypeV2.md) |  |
+**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties**](RatesPostRatesRequestV2PhysicalProperties.md) |  | [optional]
+**options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2Options**](RatesPostRatesRequestV2Options.md) |  | [optional]
+**delivery_type** | **string** |  | [optional]
+**direction** | **string** | The shipment direction for which the rates are requested. | [optional]
+**collo** | **int** | The number of collo for which the rates are requested. | [optional]
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
