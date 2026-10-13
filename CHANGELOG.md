@@ -289,6 +289,10 @@ All notable changes to this project will be documented in this file. See
 * capabilities from shipments ([#584](https://github.com/myparcelnl/sdk/issues/584)) ([7178156](https://github.com/myparcelnl/sdk/commit/71781561a1a2a2dd7ee574a78ac01181a7f5e307))
 * **capabilities:** add capabilities functionality to the SDK ([#551](https://github.com/myparcelnl/sdk/issues/551)) ([c286a44](https://github.com/myparcelnl/sdk/commit/c286a44cc8675dd51cf97dbd82517161f45a66be))
 
+## [10.7.15](https://github.com/myparcelnl/sdk/compare/v10.7.14...v10.7.15) (2026-10-08)
+
+## [10.7.14](https://github.com/myparcelnl/sdk/compare/v10.7.13...v10.7.14) (2026-09-29)
+
 ## [10.7.13](https://github.com/myparcelnl/sdk/compare/v10.7.12...v10.7.13) (2026-09-10)
 
 ## [10.7.12](https://github.com/myparcelnl/sdk/compare/v10.7.11...v10.7.12) (2026-09-09)

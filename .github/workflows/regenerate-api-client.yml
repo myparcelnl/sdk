@@ -74,8 +74,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.credentials.outputs.token }}
-          base: v11
-          branch: chore/regenerate-api-client-v11
+          base: main
+          branch: chore/regenerate-api-client
           delete-branch: true
           commit-message: 'feat(api): update API clients'
           title: 'feat(api): update API clients'
