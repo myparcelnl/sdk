@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0](https://github.com/myparcelnl/sdk/compare/v10.7.15...v11.0.0) (2026-10-13)
+
+### ⚠ BREAKING CHANGES
+
+* **openapi:** loosen and apply consistent validation for enum values, fix required nullables (#623)
+* remove legacy consignment stack and finalize v11 migration paths (#615)
+* remove dropoff point from maintained code (#589)
+* **api:** add clients for iam- and order (v2) services (#590)
+* **capabilities:** add capabilities functionality to the SDK (#551)
+
+* remove legacy consignment stack and finalize v11 migration paths ([#615](https://github.com/myparcelnl/sdk/issues/615)) ([8e7bf22](https://github.com/myparcelnl/sdk/commit/8e7bf226a9fa658dbe10a4d269a339a980bc4fec))
+
+### :sparkles: New Features
+
+* accept request headers on the shipment api factory and order save ([#654](https://github.com/myparcelnl/sdk/issues/654)) ([af37a94](https://github.com/myparcelnl/sdk/commit/af37a949348f38bb81d316514508bb1858afa274))
+* add carrier contract definitions service ([#619](https://github.com/myparcelnl/sdk/issues/619)) ([4d10df2](https://github.com/myparcelnl/sdk/commit/4d10df2c3536408bdf85fb403ff08d9e871efcb8))
+* add pickup support to capabilities request ([8968981](https://github.com/myparcelnl/sdk/commit/8968981edaf450b7ceeed2800263e17cb98c199a))
+* **api:** add clients for iam- and order (v2) services ([#590](https://github.com/myparcelnl/sdk/issues/590)) ([5dcff2c](https://github.com/myparcelnl/sdk/commit/5dcff2cf794a35eddac2c6c9e38221e343460d17))
+* **api:** add private coreapi client for shipping rules ([#617](https://github.com/myparcelnl/sdk/issues/617)) ([48dbee8](https://github.com/myparcelnl/sdk/commit/48dbee820ddb058f23360f9b1357838799a63d1d))
+* **api:** add the ecommerce api factory ([#646](https://github.com/myparcelnl/sdk/issues/646)) ([809863c](https://github.com/myparcelnl/sdk/commit/809863c4fa80026e66e40031eaf8a62f0b96b176)), closes [#645](https://github.com/myparcelnl/sdk/issues/645)
+* **api:** generate the ecommerce api client ([#643](https://github.com/myparcelnl/sdk/issues/643)) ([88a1977](https://github.com/myparcelnl/sdk/commit/88a1977d44b1afe1a81122c182f6054e5b595673))
+* **api:** include API updates in releases ([a42b978](https://github.com/myparcelnl/sdk/commit/a42b97882c7cb260310ca1df4b527c1fbd38c8a3))
+* **api:** update API clients ([658d49f](https://github.com/myparcelnl/sdk/commit/658d49f51b5ff52275960ccee2b8f37692c72b27))
+* **api:** update API clients ([#594](https://github.com/myparcelnl/sdk/issues/594)) ([dc9addb](https://github.com/myparcelnl/sdk/commit/dc9addb9a795dc088d68d66b5618aeaaf3fb15a0))
+* **api:** update API clients ([#597](https://github.com/myparcelnl/sdk/issues/597)) ([d771ebe](https://github.com/myparcelnl/sdk/commit/d771ebeddca38aedd0267be9800f7cceb31cc4c1))
+* **api:** update API clients ([#601](https://github.com/myparcelnl/sdk/issues/601)) ([09a6c99](https://github.com/myparcelnl/sdk/commit/09a6c9992077cb898205a6ca1eda9109ba996ae4))
+* **api:** update API clients ([#603](https://github.com/myparcelnl/sdk/issues/603)) ([e73d7a8](https://github.com/myparcelnl/sdk/commit/e73d7a898dd733df90632a025aa828920dbe51be))
+* **api:** update API clients ([#604](https://github.com/myparcelnl/sdk/issues/604)) ([6e570d3](https://github.com/myparcelnl/sdk/commit/6e570d322e0ed48a7bdadc327243eb2e9de84443))
+* **api:** update API clients ([#608](https://github.com/myparcelnl/sdk/issues/608)) ([11d17cc](https://github.com/myparcelnl/sdk/commit/11d17cc070eb0dc8df472ff1740465d38a9bea4c))
+* **api:** update API clients ([#610](https://github.com/myparcelnl/sdk/issues/610)) ([82d9ad9](https://github.com/myparcelnl/sdk/commit/82d9ad9c7075ec6cadcaee51d857d98145ad62e9))
+* **api:** update API clients ([#621](https://github.com/myparcelnl/sdk/issues/621)) ([e944f0f](https://github.com/myparcelnl/sdk/commit/e944f0f9823850a7593bfb939230a9378dd33978))
+* **api:** update API clients ([#622](https://github.com/myparcelnl/sdk/issues/622)) ([ee94860](https://github.com/myparcelnl/sdk/commit/ee9486020804d92c291c6ee22dc2b7efa4c5a3fe))
+* **api:** update API clients ([#633](https://github.com/myparcelnl/sdk/issues/633)) ([cccc3e3](https://github.com/myparcelnl/sdk/commit/cccc3e3c89dfa067c3c28e13404b266758ea245c))
+* **api:** update API clients ([#637](https://github.com/myparcelnl/sdk/issues/637)) ([4e1e58b](https://github.com/myparcelnl/sdk/commit/4e1e58b7a810c985f24696a7cff43bffaff1f3a7))
+* **api:** update API clients ([#655](https://github.com/myparcelnl/sdk/issues/655)) ([092e81f](https://github.com/myparcelnl/sdk/commit/092e81f07cdd058c3bda45da7ac3fdd2222c7628))
+* capabilities from shipments ([#584](https://github.com/myparcelnl/sdk/issues/584)) ([3c5a6bc](https://github.com/myparcelnl/sdk/commit/3c5a6bcdcda646a47ebdbfec1b326ecb25a3ada2))
+* **capabilities:** add capabilities functionality to the SDK ([#551](https://github.com/myparcelnl/sdk/issues/551)) ([41d76e0](https://github.com/myparcelnl/sdk/commit/41d76e04899ca02d67d85c73e06952308f0de34a))
+* **connect:** add connect config, state and storage contract ([#639](https://github.com/myparcelnl/sdk/issues/639)) ([9f93d1a](https://github.com/myparcelnl/sdk/commit/9f93d1a4e522745b9241a5bd79ff8e17cc4ced1e))
+* **connect:** add DPoP crypto primitives ([#638](https://github.com/myparcelnl/sdk/issues/638)) ([fd4a30f](https://github.com/myparcelnl/sdk/commit/fd4a30f2c9ffb9a8bd4b489739dc2bebfd441bb5))
+* **connect:** add the connect proof of concept ([#649](https://github.com/myparcelnl/sdk/issues/649)) ([7b1843a](https://github.com/myparcelnl/sdk/commit/7b1843af0b20b053169309b36a688bef5a5d8c6d))
+* **connect:** add the connect service and its transport ([#641](https://github.com/myparcelnl/sdk/issues/641)) ([85ccefc](https://github.com/myparcelnl/sdk/commit/85ccefcfe7ac4f4c36ff8e4bf8d1005a020a67ff))
+* **connect:** sign ecommerce requests with DPoP ([#645](https://github.com/myparcelnl/sdk/issues/645)) ([8214bfe](https://github.com/myparcelnl/sdk/commit/8214bfecb5bc65f7b5a63d8a82d339a52ca9d854))
+* derive API mappings from generated definitions ([#642](https://github.com/myparcelnl/sdk/issues/642)) ([7573721](https://github.com/myparcelnl/sdk/commit/7573721cdb683e07d81231cc779ad1148fec7ff5))
+* introduce label- and track & trace services for shipment domain ([#588](https://github.com/myparcelnl/sdk/issues/588)) ([22b97fa](https://github.com/myparcelnl/sdk/commit/22b97fa9dd31109cbbeb6003b5a3f2c3d7ba5021))
+* introduce shipment query, delete, return and multi-collo services ([#596](https://github.com/myparcelnl/sdk/issues/596)) ([a0773b3](https://github.com/myparcelnl/sdk/commit/a0773b3fb47aa5d62fbaee477823b7aada0f4d7c))
+* **openapi:** loosen and apply consistent validation for enum values, fix required nullables ([#623](https://github.com/myparcelnl/sdk/issues/623)) ([9d20c57](https://github.com/myparcelnl/sdk/commit/9d20c57642f7548e1003fdee985f66d6f42a0340)), closes [OpenAPITools/openapi-generator#22292](https://github.com/OpenAPITools/openapi-generator/issues/22292) [OpenAPITools/openapi-generator#22292](https://github.com/OpenAPITools/openapi-generator/issues/22292)
+* remove dropoff point from maintained code ([#589](https://github.com/myparcelnl/sdk/issues/589)) ([d7d9f0c](https://github.com/myparcelnl/sdk/commit/d7d9f0cf7332daf1b1996ecbe82c4ff4dc50a04f))
+* Shipment-first create flow (generated Core API client) ([#587](https://github.com/myparcelnl/sdk/issues/587)) ([4bff98a](https://github.com/myparcelnl/sdk/commit/4bff98accfb37abe9587a1884b7e16bbff413575))
+
+### :bug: Bug Fixes
+
+* accept tracktrace sender email values ([83dcb2a](https://github.com/myparcelnl/sdk/commit/83dcb2a1aa29dcc0cbff3844389e4a5cfc397f6e))
+* add Italian carriers to legacy factory ([9f2e75d](https://github.com/myparcelnl/sdk/commit/9f2e75d50c1baf481447a095c858d6ef36031dce))
+* align service calls with regenerated user-agent parameter ([35be807](https://github.com/myparcelnl/sdk/commit/35be80739b74ca981aee4e27134b6aa9e8b5add2))
+* **api:** fix `isBusiness` defaulting to `true` rathern than `null` in capabilities requests ([#631](https://github.com/myparcelnl/sdk/issues/631)) ([847d86f](https://github.com/myparcelnl/sdk/commit/847d86f1c6c9ceaf982dd68b76d005d299f0f9c3))
+* **ci:** correct phpunit coverage exclude path to ./src/Client/Generated ([1335e9d](https://github.com/myparcelnl/sdk/commit/1335e9dc645993151530e691f23e2320de4753ca)), closes [#590](https://github.com/myparcelnl/sdk/issues/590)
+* conform to json standard in composer ([e4faff5](https://github.com/myparcelnl/sdk/commit/e4faff51dc6058329b29ec0368e7c6b6bed43752))
+* consumer portal link mapping ([#620](https://github.com/myparcelnl/sdk/issues/620)) ([a38d977](https://github.com/myparcelnl/sdk/commit/a38d9776b997fcfd81301c1f1b1da626b78235c0))
+* harden v11 shipment service wrappers against spec/client drift ([#614](https://github.com/myparcelnl/sdk/issues/614)) ([1a43a87](https://github.com/myparcelnl/sdk/commit/1a43a877c7d632bb64ca3cd5dd597a4e7bb3ec6b))
+* **openapi:** fix monetary amounts not being serialized ([#598](https://github.com/myparcelnl/sdk/issues/598)) ([8fe3148](https://github.com/myparcelnl/sdk/commit/8fe31486e9487daba7ad995f736475b0d7f485c4))
+* override iam principal deserialization ([#611](https://github.com/myparcelnl/sdk/issues/611)) ([d190cbf](https://github.com/myparcelnl/sdk/commit/d190cbf3fe3dd2bff29131a88b0f72ebcd0283a6))
+* pass tracktrace user agent correctly ([bcabf79](https://github.com/myparcelnl/sdk/commit/bcabf7945bb0e0f78a8c90b9b4ef06bdb2c72593))
+* replace deprecated JSON encoding ([#635](https://github.com/myparcelnl/sdk/issues/635)) ([04d81e2](https://github.com/myparcelnl/sdk/commit/04d81e268289444880402bf819021948e2cee4ee))
+* **v11:** security fix tar vulnerability and update @myparcel-dev/semantic-release-config ([#600](https://github.com/myparcelnl/sdk/issues/600)) ([a82c1bb](https://github.com/myparcelnl/sdk/commit/a82c1bb58d53a76867ab41145e9237311fcf6809))
+* **v11:** Shipment extends correct generated class ([5510e6b](https://github.com/myparcelnl/sdk/commit/5510e6b8ebb20b110ffe66c63589e4e464907e90))
+
+### :rewind: Reverts
+
+* Revert "ci: block broken release action" ([36352e0](https://github.com/myparcelnl/sdk/commit/36352e022338772381dc8abb2df59bcfd011ba8e))
+
 ## [11.0.0-beta.37](https://github.com/myparcelnl/sdk/compare/v11.0.0-beta.36...v11.0.0-beta.37) (2026-10-06)
 
 
