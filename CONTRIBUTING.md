@@ -55,15 +55,7 @@ Some parts of this SDK use **generated code** from the MyParcel API specificatio
 
 - `src/Client/Generated/<Client>/` — **DO NOT EDIT MANUALLY**
 
-Each client has a configuration file in `openapi/`:
-
-| Configuration                  | Specification                                   | Output                                |
-|--------------------------------|-------------------------------------------------|---------------------------------------|
-| `openapi/coreapi.yaml`         | `https://api.myparcel.nl/openapi.min.json`      | `src/Client/Generated/CoreApi`        |
-| `openapi/order.yaml`           | `https://order.api.myparcel.nl/openapi.json`    | `src/Client/Generated/OrderApi`       |
-| `openapi/iam.yaml`             | `https://iam.api.myparcel.nl/openapi.json`      | `src/Client/Generated/IamApi`         |
-| `openapi/coreapi-private.yaml` | `openapi/specs/coreapi-private.yaml` (local)    | `src/Client/Generated/CoreApiPrivate` |
-| `openapi/ecommerce.yaml`       | `openapi/specs/oauth-connect.yaml` (local)      | `src/Client/Generated/EcommerceApi`   |
+Each client has a configuration file in `openapi/`. Its `inputSpec` key gives the specification, and its `outputDir` key gives the output directory.
 
 ### Regenerating Code
 
