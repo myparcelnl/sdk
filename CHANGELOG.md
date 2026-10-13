@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file. See
 
 ## [11.0.0](https://github.com/myparcelnl/sdk/compare/v10.7.15...v11.0.0) (2026-10-13)
 
+### Summary
+
+The SDK now uses API clients that are generated from the MyParcel OpenAPI specifications. This lets us release new API changes to the SDK more frequently and faster. v11 replaces the consignment stack (`MyParcelCollection`, the consignment models and the delivery options adapters) with these clients and with service classes on top of them.
+
+- **Shipments**: create, query, delete, labels, print, track & trace, returns and multi-collo use `Shipment`, `ShipmentCollection` and the `Shipment*Service` classes.
+- **Webhooks and API keys**: use `WebhookService` and `ApiKeyService`.
+- **New**: capabilities, carrier contract definitions, generated clients for the Core API, IAM, Order v2 and the e-commerce API, and MyParcel Connect (OAuth with DPoP).
+- **Value mapping**: `ApiMapperService` converts carrier, delivery type and package type values between v1 IDs, v2 names and delivery options names.
+- **Removed**: drop-off points. Order v1 (fulfilment) and some legacy web services still work. See "What still works" in UPGRADE.md.
+- **PHP**: the requirement does not change (`^7.4 || ^8.0`).
+
+To upgrade, start with [UPGRADE.md](https://github.com/myparcelnl/sdk/blob/v11.0.0/UPGRADE.md). It shows each v10 call next to its v11 replacement. The [PHP SDK v11 guide](https://developer.myparcel.com/guides/php-sdk-v11.html) on the developer portal explains how to use the SDK.
+
+The list below has every change since v10.7.15. The "update API clients" entries bring the latest API changes into the SDK.
+
 ### ⚠ BREAKING CHANGES
 
 * **openapi:** loosen and apply consistent validation for enum values, fix required nullables (#623)
