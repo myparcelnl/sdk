@@ -16,12 +16,9 @@ interface DpopKeyInterface
     /**
      * The key in whatever form a signer accepts.
      *
-     * Untyped on purpose: it is a resource on PHP 7.4 and an OpenSSLAsymmetricKey on 8.0 and later,
-     * and PHP 7.4 has no union types. Mirrors Firebase\JWT\Key::getKeyMaterial().
-     *
-     * @return resource|\OpenSSLAsymmetricKey
+     * @return \OpenSSLAsymmetricKey
      */
-    public function getKeyMaterial();
+    public function getKeyMaterial(): \OpenSSLAsymmetricKey;
 
     /**
      * The JWS algorithm name that goes in the proof header. Always 'ES256' here.

@@ -36,14 +36,14 @@ final class DpopKeyPair implements DpopKeyInterface
     private const COORDINATE_LENGTH = 32;
 
     /**
-     * @var resource|\OpenSSLAsymmetricKey
+     * @var \OpenSSLAsymmetricKey
      */
     private $key;
 
     /**
-     * @param resource|\OpenSSLAsymmetricKey $key
+     * @param \OpenSSLAsymmetricKey $key
      */
-    private function __construct($key)
+    private function __construct(\OpenSSLAsymmetricKey $key)
     {
         $this->key = $key;
     }
@@ -132,9 +132,9 @@ final class DpopKeyPair implements DpopKeyInterface
     }
 
     /**
-     * @return resource|\OpenSSLAsymmetricKey
+     * @return \OpenSSLAsymmetricKey
      */
-    public function getKeyMaterial()
+    public function getKeyMaterial(): \OpenSSLAsymmetricKey
     {
         return $this->key;
     }
@@ -217,11 +217,11 @@ final class DpopKeyPair implements DpopKeyInterface
     }
 
     /**
-     * @param  resource|\OpenSSLAsymmetricKey $key
-     * @return resource|\OpenSSLAsymmetricKey
+     * @param  \OpenSSLAsymmetricKey $key
+     * @return \OpenSSLAsymmetricKey
      * @throws \RuntimeException
      */
-    private static function assertIsP256($key)
+    private static function assertIsP256(\OpenSSLAsymmetricKey $key): \OpenSSLAsymmetricKey
     {
         $details = openssl_pkey_get_details($key);
 

@@ -121,7 +121,7 @@ class OpensslJwsSignerTest extends TestCase
                 $this->algorithm = $algorithm;
             }
 
-            public function getKeyMaterial()
+            public function getKeyMaterial(): \OpenSSLAsymmetricKey
             {
                 return $this->real->getKeyMaterial();
             }

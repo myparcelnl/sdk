@@ -114,10 +114,7 @@ class EcdsaSignatureTest extends TestCase
         EcdsaSignature::signatureToDER(str_repeat("\x01", 63));
     }
 
-    /**
-     * @return resource|\OpenSSLAsymmetricKey
-     */
-    private function newKey()
+    private function newKey(): \OpenSSLAsymmetricKey
     {
         return openssl_pkey_new([
             'private_key_type' => OPENSSL_KEYTYPE_EC,
