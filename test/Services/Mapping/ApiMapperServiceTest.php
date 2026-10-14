@@ -609,13 +609,7 @@ class ApiMapperServiceTest extends TestCase
     private function compiledMapperFixture(array $profile, array $overrides = []): ApiMapperService
     {
         $method = new ReflectionMethod(ApiMapperService::class, 'compile');
-
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
-
         $rows = $method->invoke(null, $profile, $overrides);
-
         return $this->mapperFixture(ApiMapperService::DOMAIN_PACKAGE_TYPE, $rows, $overrides);
     }
 
@@ -635,11 +629,6 @@ class ApiMapperServiceTest extends TestCase
 
         foreach (['domain' => $domain, 'rows' => $rows, 'mappingOverrides' => $overrides] as $name => $value) {
             $property = $reflection->getProperty($name);
-
-            if (PHP_VERSION_ID < 80100) {
-                $property->setAccessible(true);
-            }
-
             $property->setValue($mapper, $value);
         }
 
