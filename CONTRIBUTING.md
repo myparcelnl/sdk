@@ -31,6 +31,12 @@ docker compose run --rm test
 
 > You can use this to make sure your new or updated code has 100% coverage.
 
+The tests run on PHP 8.3 by default. Set `PHP_VERSION` to run them on another supported version:
+
+```bash
+PHP_VERSION=8.5 docker compose run --rm php composer test
+```
+
 Enable XDebug:
 
 ```bash
