@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: myparcelnl/actions/yarn-install@v5
+      - uses: myparcelnl/actions/pnpm-install@v5
         with:
           node-version: 24
 
