@@ -227,12 +227,10 @@ class DpopMiddlewareTest extends ConnectServiceTestCase
      * exception. History is pushed after it, and so sits inside it, which is what lets these tests
      * assert on the signed request rather than the one that went in.
      *
-     * @param \GuzzleHttp\Psr7\Response[]|null $answers        What the e-commerce host answers.
-     *                                                       Nullable because new Response() cannot
-     *                                                       be a parameter default before PHP 8.1.
+     * @param \GuzzleHttp\Psr7\Response[] $answers        What the e-commerce host answers.
      * @param \GuzzleHttp\Psr7\Response[]      $connectAnswers What /connect/refresh answers.
      */
-    private function ecommerce(?array $answers = null, array $connectAnswers = []): Client
+    private function ecommerce(array $answers = [new Response(200, [], '[]')], array $connectAnswers = []): Client
     {
         $connect = new ConnectService(
             $this->config(),
@@ -240,7 +238,7 @@ class DpopMiddlewareTest extends ConnectServiceTestCase
             $this->httpAnswering(...$connectAnswers)
         );
 
-        $stack = HandlerStack::create(new MockHandler($answers ?? [new Response(200, [], '[]')]));
+        $stack = HandlerStack::create(new MockHandler($answers));
         $stack->push(new DpopMiddleware($connect));
         $stack->push(Middleware::history($this->calls));
 
