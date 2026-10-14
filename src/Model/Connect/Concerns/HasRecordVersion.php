@@ -10,11 +10,6 @@ namespace MyParcelNL\Sdk\Model\Connect\Concerns;
  * A consumer writes these arrays into its own storage, so the shape is a contract. The version is
  * there so a record written by a newer SDK reads as absent instead of being misread: the merchant
  * then reconnects, which is recoverable, where a wrong read is not.
- *
- * Each record declares its own VERSION constant, so they can bump independently. The constant lives
- * on the record and not here, because a trait cannot hold one before PHP 8.2 and this SDK runs on
- * 7.4. This is not the version byte inside an AesGcmCipher envelope, which covers the encryption
- * layout rather than the record.
  */
 trait HasRecordVersion
 {
