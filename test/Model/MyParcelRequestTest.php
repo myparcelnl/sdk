@@ -45,7 +45,6 @@ class MyParcelRequestTest extends TestCase
     public function testGetRequestBody(): void
     {
         $testMethod = new ReflectionMethod(MyParcelRequest::class, 'createRequestUrl');
-        $testMethod->setAccessible(true);
 
         $request = (new MyParcelRequest())->setApiKey($this->getApiKey())
             ->setQuery(['account_id' => '12345', 'size' => 50]);

@@ -148,7 +148,6 @@ final class EcommerceApiFactoryTest extends ConnectServiceTestCase
     private static function stackOf(DefaultApi $api): HandlerStack
     {
         $property = new ReflectionProperty(DefaultApi::class, 'client');
-        $property->setAccessible(true);
 
         return $property->getValue($api)->getConfig('handler');
     }

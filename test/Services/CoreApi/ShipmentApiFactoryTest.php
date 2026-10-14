@@ -43,7 +43,6 @@ class ShipmentApiFactoryTest extends TestCase
     private function httpClientOf(ShipmentApi $api): ClientInterface
     {
         $property = new ReflectionProperty(ShipmentApi::class, 'client');
-        $property->setAccessible(true);
 
         return $property->getValue($api);
     }
