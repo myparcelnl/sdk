@@ -5,6 +5,16 @@
 <a href="https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM" target="_blank"><img src="https://img.shields.io/badge/Slack-Chat%20with%20us-white?logo=slack&labelColor=4a154b" alt="Slack support"></a>
 [![Coverage Status](https://img.shields.io/codecov/c/github/myparcelnl/sdk?logo=codecov)](https://codecov.io/gh/myparcelnl/sdk)
 
+## SDK Versions
+We currently actively support three SDK versions, v10, v11 and v12.
+
+The matrix below helps you choose: We recommend using the latest version supported by your environment.
+
+| SDK Version | Supported PHP Versions | Active development | Bug Fixes | Security Fixes | Highlights                                                                                   |
+|-------------|------------------------|--------------------|-----------|----------------|----------------------------------------------------------------------------------------------|
+| v10         | 7.4 - 8.4              | ❌                 | ✅        | ✅             | Legacy consignment stack (`MyParcelCollection`).                                             |
+| v11         | 7.4 - 8.4              | ❌                 | ✅        | ✅             | Generated OpenAPI clients, capabilities, MyParcel Connect. Partial order management support. |
+| v12 (beta)  | 8.3 - 8.5              | ✅                 | ✅        | ✅             | New typed API clients, full order management support. Requires PHP 8.3 or higher.            |
 
 ## Requirements
 
