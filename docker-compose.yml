@@ -1,6 +1,6 @@
 # volumes are not in common, because phpstorm doesn't understand it
 x-common: &common
-  image: ghcr.io/myparcelnl/php-xd:8.3
+  image: ghcr.io/myparcelnl/php-xd:${PHP_VERSION:-8.3}
   init: true
 
 services:
