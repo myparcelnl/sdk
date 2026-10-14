@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Query/fetch service for shipments using generated Core API endpoints.
@@ -35,6 +38,7 @@ final class ShipmentQueryService
      * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
      *                                         parameters (barcode, carrier_id, created, status, etc.).
      * @return ShipmentDefsShipment[]
+     * @throws InvalidArgumentException When a key is not a getShipments query parameter.
      */
     public function query(array $parameters = []): array
     {
@@ -86,15 +90,10 @@ final class ShipmentQueryService
         // Explicitly pass size=null to use the API default; the API returns 0 results
         // when size >= 200 is combined with reference_identifier.
         return $this->query(['reference_identifier' => $referenceIdentifier, 'size' => null]);
-
     }
 
     /**
      * Build and execute the getShipments query from a parameter array.
-     *
-     * Maps the associative $parameters array to the generated getShipments()
-     * positional argument list. PHP 7.4 does not support named arguments, so the
-     * generated method signature dictates this mapping.
      */
     private function buildGetShipmentsQuery(array $parameters): ShipmentResponsesShipments
     {
@@ -102,29 +101,23 @@ final class ShipmentQueryService
             ? $parameters['size']
             : self::DEFAULT_QUERY_PAGE_SIZE;
 
+        // Unset parameters which we override, so they are not passed twice.
+        unset($parameters['size'], $parameters['user_agent']);
+
+        $known   = array_map(
+            static fn (ReflectionParameter $parameter): string => $parameter->getName(),
+            (new ReflectionMethod($this->api, 'getShipments'))->getParameters()
+        );
+        $unknown = array_diff(array_keys($parameters), $known);
+
+        if ($unknown) {
+            throw new InvalidArgumentException('Unknown query parameter(s): ' . implode(', ', $unknown));
+        }
+
         return $this->api->getShipments(
-            $parameters['barcode'] ?? null,
-            $parameters['carrier_id'] ?? null,
-            $parameters['created'] ?? null,
-            $parameters['delayed'] ?? null,
-            $parameters['delivered'] ?? null,
-            $parameters['dropoff_today'] ?? null,
-            $parameters['filter_hidden_shops'] ?? null,
-            $parameters['hidden'] ?? null,
-            $parameters['link_consumer_portal'] ?? null,
-            $parameters['order'] ?? null,
-            $parameters['package_type'] ?? null,
-            $parameters['page'] ?? null,
-            $parameters['q'] ?? null,
-            $parameters['reference_identifier'] ?? null,
-            $parameters['region'] ?? null,
-            $parameters['shipment_type'] ?? null,
-            $parameters['shop_id'] ?? null,
-            $size,
-            $parameters['sort'] ?? null,
-            $parameters['status'] ?? null,
-            $parameters['transaction_status'] ?? null,
-            $this->getUserAgentHeader()
+            ...$parameters,
+            size: $size,
+            user_agent: $this->getUserAgentHeader()
         );
     }
 
@@ -143,5 +136,4 @@ final class ShipmentQueryService
 
         return $data->getShipments() ?? [];
     }
-
 }
