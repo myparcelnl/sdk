@@ -21,6 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: beta # @TODO: remove this ref line for `main`
           fetch-depth: 0
 
       # Composer install in PHP 7.4 (our image includes composer)
@@ -74,8 +75,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.credentials.outputs.token }}
-          base: main
-          branch: chore/regenerate-api-client
+          base: beta # @TODO: replace this with `main` when merging the v12 changes to that branch
+          branch: beta/v12-regenerate-api-client # @TODO: replace this with `chore/regenerate-api-client` when merging the v12 changes to the main branch
           delete-branch: true
           commit-message: 'feat(api): update API clients'
           title: 'feat(api): update API clients'
