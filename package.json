@@ -4,11 +4,19 @@
   "repository": "github:myparcelnl/sdk",
   "license": "MIT",
   "devDependencies": {
-    "@myparcel-dev/semantic-release-config": "^7.0.2"
+    "@myparcel-dev/semantic-release-config": "^7.0.2",
+    "semantic-release": "^25.0.9"
   },
-  "packageManager": "yarn@4.12.0",
-  "volta": {
-    "yarn": "4.12.0",
-    "node": "24.14.0"
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24",
+      "onFail": "download"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12",
+      "onFail": "download"
+    }
   }
 }
