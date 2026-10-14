@@ -10,7 +10,10 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentsData;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use ReflectionMethod;
+use ReflectionParameter;
 
 final class ShipmentQueryServiceTest extends TestCase
 {
@@ -75,14 +78,15 @@ final class ShipmentQueryServiceTest extends TestCase
         $api->expects(self::once())
             ->method('getShipments')
             ->willReturnCallback(function (...$args) {
-                // Verify key parameters are passed correctly
-                self::assertSame('3SMYPA1234567', $args[0]); // barcode
-                self::assertSame(2, $args[11]); // page
-                self::assertSame('order-100', $args[13]); // reference_identifier
-                self::assertSame(300, $args[17]); // size (default)
-                self::assertSame('desc', $args[18]); // sort
-                self::assertSame(1, $args[19]); // status
-                self::assertIsString($args[21]); // user_agent
+                $args = $this->getShipmentsArguments($args);
+
+                self::assertSame('3SMYPA1234567', $args['barcode']);
+                self::assertSame(2, $args['page']);
+                self::assertSame('order-100', $args['reference_identifier']);
+                self::assertSame(300, $args['size']);
+                self::assertSame('desc', $args['sort']);
+                self::assertSame(1, $args['status']);
+                self::assertIsString($args['user_agent']);
 
                 return $this->buildShipmentsResponse([new ShipmentDefsShipment(['id' => 123])]);
             });
@@ -99,15 +103,26 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertCount(1, $result);
     }
 
+    public function testQueryThrowsOnUnknownParameter(): void
+    {
+        $service = new ShipmentQueryService($this->getApiKey(), $this->createMock(ShipmentApi::class));
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $service->query(['barcod' => '3SMYPA1234567']);
+    }
+
     public function testFindByReferenceIdReturnsAllMatches(): void
     {
         $api = $this->createMock(ShipmentApi::class);
         $api->expects(self::once())
             ->method('getShipments')
             ->willReturnCallback(function (...$args) {
-                self::assertSame('ref-a', $args[13]);
-                self::assertNull($args[17]);
-                self::assertIsString($args[21]);
+                $args = $this->getShipmentsArguments($args);
+
+                self::assertSame('ref-a', $args['reference_identifier']);
+                self::assertNull($args['size']);
+                self::assertIsString($args['user_agent']);
 
                 return $this->buildShipmentsResponse([
                     new ShipmentDefsShipment(['id' => 1001]),
@@ -163,5 +178,21 @@ final class ShipmentQueryServiceTest extends TestCase
         $response->setData($data);
 
         return $response;
+    }
+
+    /**
+     * Key the arguments the mock received by the parameter names of the generated getShipments().
+     *
+     * @param  array<int, mixed> $args
+     * @return array<string, mixed>
+     */
+    private function getShipmentsArguments(array $args): array
+    {
+        $names = array_map(
+            static fn (ReflectionParameter $parameter) => $parameter->getName(),
+            (new ReflectionMethod(ShipmentApi::class, 'getShipments'))->getParameters()
+        );
+
+        return array_combine(array_slice($names, 0, count($args)), $args);
     }
 }
