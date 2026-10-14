@@ -24,27 +24,27 @@ jobs:
           ref: beta # @TODO: remove this ref line for `main`
           fetch-depth: 0
 
-      # Composer install in PHP 7.4 (our image includes composer)
-      - name: Install dependencies (PHP 7.4)
+      # Composer install in PHP 8.3 (our image includes composer)
+      - name: Install dependencies (PHP 8.3)
         run: |
           docker run --rm -t \
             -v "${{ github.workspace }}:/app" \
             -w /app \
-            ghcr.io/myparcelnl/php-xd:7.4 \
+            ghcr.io/myparcelnl/php-xd:8.3 \
             composer install --no-interaction --no-progress
 
-      # Generate client using pinned openapi-generator (v7.12.0) from docker-compose
-      - name: Generate API client (pinned generator)
+      # Generate client with the latest openapi-generator release from docker-compose
+      - name: Generate API client
         run: |
           docker compose --profile openapi run --rm generate-api
 
-      # Optimize autoload in PHP 7.4 (so the generated code + SDK autoload is consistent)
-      - name: Dump optimized autoload (PHP 7.4)
+      # Optimize autoload in PHP 8.3 (so the generated code + SDK autoload is consistent)
+      - name: Dump optimized autoload (PHP 8.3)
         run: |
           docker run --rm -t \
             -v "${{ github.workspace }}:/app" \
             -w /app \
-            ghcr.io/myparcelnl/php-xd:7.4 \
+            ghcr.io/myparcelnl/php-xd:8.3 \
             composer dump-autoload -o
 
       - name: Detect changes
@@ -83,7 +83,7 @@ jobs:
           body: |
             Automated update of OpenAPI-based clients in the SDK based on changes in the MyParcel OpenAPI schemas.
 
-            - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator v7.12.0)
+            - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator `latest-release`)
           labels: |
             automated
             api-client
