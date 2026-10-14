@@ -68,7 +68,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * @param  array       $array2
      * @param  string|null $message
      */
-    protected static function assertArraySame(array $array1, array $array2, string $message = null): void
+    protected static function assertArraySame(array $array1, array $array2, ?string $message = null): void
     {
         ksort($array1);
         ksort($array2);

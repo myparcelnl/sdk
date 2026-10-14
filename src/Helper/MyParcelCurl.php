@@ -69,7 +69,6 @@ class MyParcelCurl
      */
     public function close(): self
     {
-        curl_close($this->_getResource());
         $this->_resource = null;
 
         return $this;
