@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV2
+# RatesPostRatesRequestV2
 
 ## Properties
 

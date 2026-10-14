@@ -1,4 +1,4 @@
-# # ShipmentDefsDeliveryOptionsDeliveryNameV2
+# ShipmentDefsDeliveryOptionsDeliveryNameV2
 
 ## Properties
 

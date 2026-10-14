@@ -1,4 +1,4 @@
-# # CommonHttpStatusCode4xxClientError406NotAcceptable
+# CommonHttpStatusCode4xxClientError406NotAcceptable
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShippingRulesResponsesShippingRulesPaginated
+# ShippingRulesResponsesShippingRulesPaginated
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # RefTypesCarrier
+# RefTypesCarrier
 
 ## Properties
 

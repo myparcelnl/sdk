@@ -1,4 +1,4 @@
-# # ContactBusiness
+# ContactBusiness
 
 ## Properties
 

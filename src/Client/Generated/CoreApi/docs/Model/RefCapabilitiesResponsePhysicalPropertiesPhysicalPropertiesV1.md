@@ -1,4 +1,4 @@
-# # RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV1
+# RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV1
 
 ## Properties
 

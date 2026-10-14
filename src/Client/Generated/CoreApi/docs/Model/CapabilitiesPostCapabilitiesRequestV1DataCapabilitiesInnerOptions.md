@@ -1,4 +1,4 @@
-# # CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions
+# CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions
 
 ## Properties
 

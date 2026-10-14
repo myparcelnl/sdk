@@ -1,4 +1,4 @@
-# # OrderShippingRecipient
+# OrderShippingRecipient
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # CommonHttpStatusCode4xxClientError400BadRequest
+# CommonHttpStatusCode4xxClientError400BadRequest
 
 ## Properties
 

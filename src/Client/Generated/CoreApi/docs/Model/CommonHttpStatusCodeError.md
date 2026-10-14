@@ -1,4 +1,4 @@
-# # CommonHttpStatusCodeError
+# CommonHttpStatusCodeError
 
 ## Properties
 

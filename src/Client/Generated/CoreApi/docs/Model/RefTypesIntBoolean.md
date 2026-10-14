@@ -1,4 +1,4 @@
-# # RefTypesIntBoolean
+# RefTypesIntBoolean
 
 ## Properties
 

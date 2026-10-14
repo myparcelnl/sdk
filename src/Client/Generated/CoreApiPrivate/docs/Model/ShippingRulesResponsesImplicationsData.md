@@ -1,4 +1,4 @@
-# # ShippingRulesResponsesImplicationsData
+# ShippingRulesResponsesImplicationsData
 
 ## Properties
 

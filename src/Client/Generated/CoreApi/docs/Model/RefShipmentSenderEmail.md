@@ -1,4 +1,4 @@
-# # RefShipmentSenderEmail
+# RefShipmentSenderEmail
 
 ## Properties
 

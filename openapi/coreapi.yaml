@@ -28,23 +28,30 @@ typeMappings:
   # regex delimiters). The email pseudo-enum bug is handled generically by the
   # value-less-enum guards in the ObjectSerializer/model templates.
   ShipmentDefsShipmentRecipient: FixedShipmentRecipient
-  # @todo remove when upstream spec fixes type: "null" properties
-  # Prevents ObjectSerializer from trying to instantiate a class named 'Null'.
-  Null: mixed
   # @todo remove when upstream spec fixes reference_identifier union type
   # The union ['null','integer','string'] generates an empty wrapper model that loses data.
   RefShipmentReferenceIdentifier: string
   # @todo remove when upstream spec/codegen fixes link_consumer_portal oneOf(uri | empty-string)
   # The current codegen produces empty wrapper models that lose the actual URL.
-  ShipmentDefsShipmentLinkConsumerPortal: string
   ShipmentDefsShipmentPropertiesLinkConsumerPortal: string
   # @todo remove when upstream spec/codegen fixes region oneOf(string pattern | enum)
   # The current codegen produces unusable model wrappers/enums for shipment resource regions.
-  ShipmentDefsShipmentRegion: string
   ShipmentDefsShipmentPropertiesRegion: string
   # @todo remove when upstream spec fixes return shipment payment_status empty-string responses
   # Live return-shipment responses currently return "", which violates the enum and breaks deserialization.
   ShipmentDefsShipmentPaymentStatus: string
+  # @todo remove when the generator represents type: ["string", "integer"] as a scalar
+  # Generator 7.26.0 turns the collection contact number and the request reference_identifier
+  # into empty wrapper models. Both keep the type they had in v11.
+  ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContactNumber: string
+  ShipmentPostShipmentsRequestV11DataShipmentsInnerReferenceIdentifier: int
+  # @todo remove when the generator resolves oneOf(null | $ref) on SecondaryShipmentResource
+  # Generator 7.26.0 makes empty wrapper models here, which drop the value on deserialization.
+  ShipmentDefsShipmentPropertiesCurrency: BillingDefsCurrency
+  ShipmentDefsShipmentPropertiesExternalProvider: ShipmentDefsExternalProviderPropertiesDisplayName
+  # @todo remove when the generator keeps the allOf members of an inline insurance schema
+  # Generator 7.26.0 makes a model with only a mixed amount, which drops the currency.
+  RefShipmentOptionsInsuranceMaxAllOfInsurance: RefTypesPriceEuro
 additionalProperties:
   '!include': 'commonProperties.yaml'
   packageName: MyParcelNL\Sdk\Client\Generated\CoreApi

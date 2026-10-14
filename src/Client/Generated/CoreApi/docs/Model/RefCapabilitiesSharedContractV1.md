@@ -1,4 +1,4 @@
-# # RefCapabilitiesSharedContractV1
+# RefCapabilitiesSharedContractV1
 
 ## Properties
 

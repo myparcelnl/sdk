@@ -1,4 +1,4 @@
-# # DeliveryType
+# DeliveryType
 
 ## Properties
 

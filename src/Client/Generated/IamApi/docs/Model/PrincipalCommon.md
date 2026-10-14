@@ -1,4 +1,4 @@
-# # PrincipalCommon
+# PrincipalCommon
 
 ## Properties
 

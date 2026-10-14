@@ -1,4 +1,4 @@
-# # ShipmentDefsDeliveryMomentPropertiesType
+# ShipmentDefsDeliveryMomentPropertiesType
 
 ## Properties
 

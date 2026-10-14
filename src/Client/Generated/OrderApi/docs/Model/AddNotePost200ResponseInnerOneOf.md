@@ -1,4 +1,4 @@
-# # AddNotePost200ResponseInnerOneOf
+# AddNotePost200ResponseInnerOneOf
 
 ## Properties
 

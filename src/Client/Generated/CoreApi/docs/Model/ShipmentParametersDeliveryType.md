@@ -1,4 +1,4 @@
-# # ShipmentParametersDeliveryType
+# ShipmentParametersDeliveryType
 
 ## Properties
 

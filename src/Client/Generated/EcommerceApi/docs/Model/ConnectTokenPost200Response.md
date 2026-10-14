@@ -1,4 +1,4 @@
-# # ConnectTokenPost200Response
+# ConnectTokenPost200Response
 
 ## Properties
 

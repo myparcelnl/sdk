@@ -1,4 +1,4 @@
-# # CapabilitiesRecipientV2
+# CapabilitiesRecipientV2
 
 ## Properties
 

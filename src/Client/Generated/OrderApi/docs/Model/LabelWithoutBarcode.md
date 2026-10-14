@@ -1,4 +1,4 @@
-# # LabelWithoutBarcode
+# LabelWithoutBarcode
 
 ## Properties
 

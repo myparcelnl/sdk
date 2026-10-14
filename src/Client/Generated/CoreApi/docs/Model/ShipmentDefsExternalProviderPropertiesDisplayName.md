@@ -1,4 +1,4 @@
-# # ShipmentDefsExternalProviderPropertiesDisplayName
+# ShipmentDefsExternalProviderPropertiesDisplayName
 
 ## Properties
 

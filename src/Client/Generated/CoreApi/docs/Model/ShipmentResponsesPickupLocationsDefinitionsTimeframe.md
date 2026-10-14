@@ -1,4 +1,4 @@
-# # ShipmentResponsesPickupLocationsDefinitionsTimeframe
+# ShipmentResponsesPickupLocationsDefinitionsTimeframe
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # WebhookOrdersPost202ResponseInnerOneOf
+# WebhookOrdersPost202ResponseInnerOneOf
 
 ## Properties
 

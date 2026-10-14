@@ -1,4 +1,4 @@
-# # CapabilitiesResponsesCapabilitiesV1Data
+# CapabilitiesResponsesCapabilitiesV1Data
 
 ## Properties
 

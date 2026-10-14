@@ -1,4 +1,4 @@
-# # CommonResponsesUserErrorNotFoundAllOfErrors
+# CommonResponsesUserErrorNotFoundAllOfErrors
 
 ## Properties
 

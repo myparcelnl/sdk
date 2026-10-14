@@ -1,4 +1,4 @@
-# # LineProduct
+# LineProduct
 
 ## Properties
 

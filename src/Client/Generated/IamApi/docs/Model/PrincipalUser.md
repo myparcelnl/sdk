@@ -1,4 +1,4 @@
-# # PrincipalUser
+# PrincipalUser
 
 ## Properties
 

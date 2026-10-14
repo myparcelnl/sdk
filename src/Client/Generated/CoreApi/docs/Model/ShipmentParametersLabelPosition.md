@@ -1,4 +1,4 @@
-# # ShipmentParametersLabelPosition
+# ShipmentParametersLabelPosition
 
 ## Properties
 

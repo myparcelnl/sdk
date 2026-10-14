@@ -1,4 +1,4 @@
-# # CommonParametersIntBoolean
+# CommonParametersIntBoolean
 
 ## Properties
 

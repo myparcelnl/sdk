@@ -1,4 +1,4 @@
-# # RefTypesTransactionTypes
+# RefTypesTransactionTypes
 
 ## Properties
 

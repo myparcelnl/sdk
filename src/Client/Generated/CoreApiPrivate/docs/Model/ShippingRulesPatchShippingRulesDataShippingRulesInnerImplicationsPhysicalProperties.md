@@ -1,4 +1,4 @@
-# # ShippingRulesPatchShippingRulesDataShippingRulesInnerImplicationsPhysicalProperties
+# ShippingRulesPatchShippingRulesDataShippingRulesInnerImplicationsPhysicalProperties
 
 ## Properties
 

@@ -7,8 +7,7 @@ This API features all functionality around orders.
 
 ### Requirements
 
-PHP 7.4 and later.
-Should also work with PHP 8.0.
+PHP 8.1 and later.
 
 ### Composer
 
@@ -77,6 +76,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**assignToUserPost**](docs/Api/DefaultApi.md#assigntouserpost) | **POST** /assign-to-user | 
 *DefaultApi* | [**cancelPost**](docs/Api/DefaultApi.md#cancelpost) | **POST** /cancel | Cancel orders.
 *DefaultApi* | [**createFromShippablePackagesPost**](docs/Api/DefaultApi.md#createfromshippablepackagespost) | **POST** /create-from-shippable-packages | Create an order from shippable packages.
+*DefaultApi* | [**createPost**](docs/Api/DefaultApi.md#createpost) | **POST** /create | Create orders.
 *DefaultApi* | [**editNotePost**](docs/Api/DefaultApi.md#editnotepost) | **POST** /edit-note | Edit a note of an order.
 *DefaultApi* | [**evaluateRulesPost**](docs/Api/DefaultApi.md#evaluaterulespost) | **POST** /evaluate-rules | Evaluate order rules.
 *DefaultApi* | [**importPost**](docs/Api/DefaultApi.md#importpost) | **POST** /import | Import an order after it is discovered from a sales channel.
@@ -109,12 +109,12 @@ Class | Method | HTTP request | Description
 - [ContactMultiEmailBusiness](docs/Model/ContactMultiEmailBusiness.md)
 - [ContactMultiEmailPrivate](docs/Model/ContactMultiEmailPrivate.md)
 - [ContactPrivate](docs/Model/ContactPrivate.md)
-- [CreateFromShippablePackagesPost200ResponseInner](docs/Model/CreateFromShippablePackagesPost200ResponseInner.md)
-- [CreateFromShippablePackagesPost200ResponseInnerOneOf](docs/Model/CreateFromShippablePackagesPost200ResponseInnerOneOf.md)
 - [CreateOrderFromShippablePackages](docs/Model/CreateOrderFromShippablePackages.md)
 - [CreateOrderFromShippablePackagesAnyOf](docs/Model/CreateOrderFromShippablePackagesAnyOf.md)
 - [CreateOrderFromShippablePackagesAnyOf1](docs/Model/CreateOrderFromShippablePackagesAnyOf1.md)
 - [CreateOrderFromShippablePackagesAnyOf1Multicollo](docs/Model/CreateOrderFromShippablePackagesAnyOf1Multicollo.md)
+- [CreatePost202ResponseInner](docs/Model/CreatePost202ResponseInner.md)
+- [CreatePost202ResponseInnerOneOf](docs/Model/CreatePost202ResponseInnerOneOf.md)
 - [CustomsDeclaration](docs/Model/CustomsDeclaration.md)
 - [CustomsDeclarationGroupsInner](docs/Model/CustomsDeclarationGroupsInner.md)
 - [CustomsDeclarationGroupsInnerTotalValue](docs/Model/CustomsDeclarationGroupsInnerTotalValue.md)
@@ -142,7 +142,6 @@ Class | Method | HTTP request | Description
 - [LabelWithoutBarcode](docs/Model/LabelWithoutBarcode.md)
 - [Line](docs/Model/Line.md)
 - [LineExternalReference](docs/Model/LineExternalReference.md)
-- [LinePrice](docs/Model/LinePrice.md)
 - [LineProduct](docs/Model/LineProduct.md)
 - [Money](docs/Model/Money.md)
 - [Note](docs/Model/Note.md)
@@ -152,7 +151,7 @@ Class | Method | HTTP request | Description
 - [NoteFromImportedUpdatedAt](docs/Model/NoteFromImportedUpdatedAt.md)
 - [NoteFromPrincipal](docs/Model/NoteFromPrincipal.md)
 - [Order](docs/Model/Order.md)
-- [OrderExternalReferences](docs/Model/OrderExternalReferences.md)
+- [OrderLineToCreate](docs/Model/OrderLineToCreate.md)
 - [OrderOrderedAt](docs/Model/OrderOrderedAt.md)
 - [OrderRules](docs/Model/OrderRules.md)
 - [OrderRulesSetShippingPreferences](docs/Model/OrderRulesSetShippingPreferences.md)
@@ -164,6 +163,19 @@ Class | Method | HTTP request | Description
 - [OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf.md)
 - [OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf1](docs/Model/OrderRulesSetShippingPreferencesPathInnerAnyOf1ConditionAnyOf1.md)
 - [OrderStatus](docs/Model/OrderStatus.md)
+- [OrderToCreate](docs/Model/OrderToCreate.md)
+- [OrderToCreateBillingDetails](docs/Model/OrderToCreateBillingDetails.md)
+- [OrderToCreateBillingDetailsContact](docs/Model/OrderToCreateBillingDetailsContact.md)
+- [OrderToCreateShipping](docs/Model/OrderToCreateShipping.md)
+- [OrderToCreateShippingOptions](docs/Model/OrderToCreateShippingOptions.md)
+- [OrderToCreateShippingPickup](docs/Model/OrderToCreateShippingPickup.md)
+- [OrderToCreateShippingPickupAnyOf](docs/Model/OrderToCreateShippingPickupAnyOf.md)
+- [OrderToCreateShippingPickupAnyOf1](docs/Model/OrderToCreateShippingPickupAnyOf1.md)
+- [OrderToCreateShippingPickupAnyOf2](docs/Model/OrderToCreateShippingPickupAnyOf2.md)
+- [OrderToCreateShippingPickupAnyOfAddress](docs/Model/OrderToCreateShippingPickupAnyOfAddress.md)
+- [OrderToCreateShippingRecipient](docs/Model/OrderToCreateShippingRecipient.md)
+- [OrderToCreateShippingRecipientAddress](docs/Model/OrderToCreateShippingRecipientAddress.md)
+- [OrderToCreateShippingRecipientContact](docs/Model/OrderToCreateShippingRecipientContact.md)
 - [OrdersGet200Response](docs/Model/OrdersGet200Response.md)
 - [OrdersGet200ResponseAggregations](docs/Model/OrdersGet200ResponseAggregations.md)
 - [OrdersGet200ResponseAggregationsStatusInner](docs/Model/OrdersGet200ResponseAggregationsStatusInner.md)
@@ -214,6 +226,11 @@ Class | Method | HTTP request | Description
 - [ProblemDetailsClientAllOfErrors](docs/Model/ProblemDetailsClientAllOfErrors.md)
 - [ProblemDetailsInternalServerError](docs/Model/ProblemDetailsInternalServerError.md)
 - [ProblemDetailsInvalidRequestSyntax](docs/Model/ProblemDetailsInvalidRequestSyntax.md)
+- [ProductToCreate](docs/Model/ProductToCreate.md)
+- [ProductToCreateDescriptionsInner](docs/Model/ProductToCreateDescriptionsInner.md)
+- [ProductToCreateFulfilment](docs/Model/ProductToCreateFulfilment.md)
+- [ProductToCreatePhysicalProperties](docs/Model/ProductToCreatePhysicalProperties.md)
+- [ProductToCreateSalesPrice](docs/Model/ProductToCreateSalesPrice.md)
 - [RegionCode](docs/Model/RegionCode.md)
 - [RemoveNotesPostRequestInner](docs/Model/RemoveNotesPostRequestInner.md)
 - [Shipment](docs/Model/Shipment.md)
@@ -271,5 +288,5 @@ vendor/bin/phpunit
 This PHP package is automatically generated by the [OpenAPI Generator](https://openapi-generator.tech) project:
 
 - API version: `1.0.0`
-    - Generator version: `7.12.0`
+    - Generator version: `7.26.0`
 - Build package: `org.openapitools.codegen.languages.PhpClientCodegen`

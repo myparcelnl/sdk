@@ -1,4 +1,4 @@
-# # OrdersGet200ResponseAggregationsStatusInner
+# OrdersGet200ResponseAggregationsStatusInner
 
 ## Properties
 

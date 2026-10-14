@@ -1,4 +1,4 @@
-# # WebhooksPostWebhookSubscriptionsRequestV10Data
+# WebhooksPostWebhookSubscriptionsRequestV10Data
 
 ## Properties
 

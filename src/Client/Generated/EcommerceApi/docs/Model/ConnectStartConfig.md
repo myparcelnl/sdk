@@ -1,4 +1,4 @@
-# # ConnectStartConfig
+# ConnectStartConfig
 
 ## Properties
 

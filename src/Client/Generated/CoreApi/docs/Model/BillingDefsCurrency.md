@@ -1,4 +1,4 @@
-# # BillingDefsCurrency
+# BillingDefsCurrency
 
 ## Properties
 

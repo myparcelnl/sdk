@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV2PhysicalPropertiesLength
+# RatesPostRatesRequestV2PhysicalPropertiesLength
 
 ## Properties
 

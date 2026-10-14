@@ -1,4 +1,4 @@
-# # NoteFromImported
+# NoteFromImported
 
 ## Properties
 

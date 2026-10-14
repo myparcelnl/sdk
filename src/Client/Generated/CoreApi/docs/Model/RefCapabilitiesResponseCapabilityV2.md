@@ -1,4 +1,4 @@
-# # RefCapabilitiesResponseCapabilityV2
+# RefCapabilitiesResponseCapabilityV2
 
 ## Properties
 

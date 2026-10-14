@@ -186,12 +186,18 @@ final class ConnectService
     {
         self::assertShopUrlAndVersion($shopUrl, $version);
 
-        $config = new ConnectStartConfig([
+        $fields = [
             'platform'  => $this->config->getPlatform(),
             'shop_name' => self::shopNameToSend($shopName),
             'shop_url'  => $shopUrl,
-            'version'   => $version,
-        ]);
+        ];
+
+        // The generated model sends a nullable field that is set to null, so leave it out instead.
+        if (null !== $version) {
+            $fields['version'] = $version;
+        }
+
+        $config = new ConnectStartConfig($fields);
 
         $json = json_encode($config, JSON_UNESCAPED_SLASHES);
 

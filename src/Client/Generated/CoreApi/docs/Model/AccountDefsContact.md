@@ -1,4 +1,4 @@
-# # AccountDefsContact
+# AccountDefsContact
 
 ## Properties
 

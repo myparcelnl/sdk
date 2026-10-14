@@ -1,4 +1,4 @@
-# # PickupAnyOf1Location
+# PickupAnyOf1Location
 
 ## Properties
 

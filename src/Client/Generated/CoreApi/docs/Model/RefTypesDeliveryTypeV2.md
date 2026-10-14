@@ -1,4 +1,4 @@
-# # RefTypesDeliveryTypeV2
+# RefTypesDeliveryTypeV2
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PhysicalPropertiesWeightV2
+# PhysicalPropertiesWeightV2
 
 ## Properties
 

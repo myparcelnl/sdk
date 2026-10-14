@@ -1,4 +1,4 @@
-# # ShipmentParametersPaperSize
+# ShipmentParametersPaperSize
 
 ## Properties
 

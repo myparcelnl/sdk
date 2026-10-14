@@ -1,4 +1,4 @@
-# # RefShipmentPackageType
+# RefShipmentPackageType
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentDirection
+# ShipmentDirection
 
 ## Properties
 

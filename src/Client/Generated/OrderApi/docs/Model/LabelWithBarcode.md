@@ -1,4 +1,4 @@
-# # LabelWithBarcode
+# LabelWithBarcode
 
 ## Properties
 

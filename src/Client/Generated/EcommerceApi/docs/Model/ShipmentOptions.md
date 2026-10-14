@@ -1,4 +1,4 @@
-# # ShipmentOptions
+# ShipmentOptions
 
 ## Properties
 

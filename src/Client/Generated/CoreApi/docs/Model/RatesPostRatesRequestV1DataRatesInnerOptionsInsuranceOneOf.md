@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV1DataRatesInnerOptionsInsuranceOneOf
+# RatesPostRatesRequestV1DataRatesInnerOptionsInsuranceOneOf
 
 ## Properties
 

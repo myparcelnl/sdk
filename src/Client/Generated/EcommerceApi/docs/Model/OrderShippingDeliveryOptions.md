@@ -1,4 +1,4 @@
-# # OrderShippingDeliveryOptions
+# OrderShippingDeliveryOptions
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PackageStatusAnyOf13
+# PackageStatusAnyOf13
 
 ## Properties
 

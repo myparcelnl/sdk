@@ -1,4 +1,4 @@
-# # ShipmentOptionsPackageCustomLabelText
+# ShipmentOptionsPackageCustomLabelText
 
 ## Properties
 

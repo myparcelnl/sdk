@@ -1,4 +1,4 @@
-# # Delivery
+# Delivery
 
 ## Properties
 

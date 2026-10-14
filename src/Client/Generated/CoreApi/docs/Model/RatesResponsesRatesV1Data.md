@@ -1,4 +1,4 @@
-# # RatesResponsesRatesV1Data
+# RatesResponsesRatesV1Data
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # CapabilitiesResponsesContractDefinitionsV1Data
+# CapabilitiesResponsesContractDefinitionsV1Data
 
 ## Properties
 

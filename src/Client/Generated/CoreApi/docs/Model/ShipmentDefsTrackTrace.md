@@ -1,4 +1,4 @@
-# # ShipmentDefsTrackTrace
+# ShipmentDefsTrackTrace
 
 ## Properties
 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient**](ShipmentDefsShipmentRecipient.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSender**](ShipmentDefsShipmentSender.md) |  |
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions**](RefShipmentShipmentOptions.md) |  |
-**pickup** | [**mixed**](Null.md) |  |
+**pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentPickup**](ShipmentDefsShipmentPickup.md) |  |
 **delayed** | **bool** |  |
 **location** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackingLocation**](ShipmentDefsTrackingLocation.md) |  |
 **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsTrackTraceStatus**](ShipmentDefsTrackTraceStatus.md) |  |

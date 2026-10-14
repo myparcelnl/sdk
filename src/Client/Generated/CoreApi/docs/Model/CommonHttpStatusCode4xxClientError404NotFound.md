@@ -1,4 +1,4 @@
-# # CommonHttpStatusCode4xxClientError404NotFound
+# CommonHttpStatusCode4xxClientError404NotFound
 
 ## Properties
 

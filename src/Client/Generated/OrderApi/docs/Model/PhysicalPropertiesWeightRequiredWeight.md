@@ -1,4 +1,4 @@
-# # PhysicalPropertiesWeightRequiredWeight
+# PhysicalPropertiesWeightRequiredWeight
 
 ## Properties
 

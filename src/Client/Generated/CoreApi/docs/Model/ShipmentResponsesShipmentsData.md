@@ -1,4 +1,4 @@
-# # ShipmentResponsesShipmentsData
+# ShipmentResponsesShipmentsData
 
 ## Properties
 

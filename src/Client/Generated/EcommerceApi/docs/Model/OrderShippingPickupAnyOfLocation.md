@@ -1,4 +1,4 @@
-# # OrderShippingPickupAnyOfLocation
+# OrderShippingPickupAnyOfLocation
 
 ## Properties
 

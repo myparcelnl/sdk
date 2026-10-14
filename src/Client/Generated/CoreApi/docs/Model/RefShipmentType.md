@@ -1,4 +1,4 @@
-# # RefShipmentType
+# RefShipmentType
 
 ## Properties
 

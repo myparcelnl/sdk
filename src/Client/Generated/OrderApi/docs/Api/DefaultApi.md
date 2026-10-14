@@ -1,5 +1,7 @@
 # MyParcelNL\Sdk\Client\Generated\OrderApi\DefaultApi
 
+
+
 All URIs are relative to https://order.api.myparcel.nl, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
@@ -9,6 +11,7 @@ All URIs are relative to https://order.api.myparcel.nl, except if the operation 
 | [**assignToUserPost()**](DefaultApi.md#assignToUserPost) | **POST** /assign-to-user |  |
 | [**cancelPost()**](DefaultApi.md#cancelPost) | **POST** /cancel | Cancel orders. |
 | [**createFromShippablePackagesPost()**](DefaultApi.md#createFromShippablePackagesPost) | **POST** /create-from-shippable-packages | Create an order from shippable packages. |
+| [**createPost()**](DefaultApi.md#createPost) | **POST** /create | Create orders. |
 | [**editNotePost()**](DefaultApi.md#editNotePost) | **POST** /edit-note | Edit a note of an order. |
 | [**evaluateRulesPost()**](DefaultApi.md#evaluateRulesPost) | **POST** /evaluate-rules | Evaluate order rules. |
 | [**importPost()**](DefaultApi.md#importPost) | **POST** /import | Import an order after it is discovered from a sales channel. |
@@ -248,7 +251,7 @@ No authorization required
 ## `createFromShippablePackagesPost()`
 
 ```php
-createFromShippablePackagesPost($create_order_from_shippable_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]
+createFromShippablePackagesPost($create_order_from_shippable_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]
 ```
 
 Create an order from shippable packages.
@@ -286,7 +289,63 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]**](../Model/CreateFromShippablePackagesPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]**](../Model/CreatePost202ResponseInner.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `createPost()`
+
+```php
+createPost($order_to_create): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]
+```
+
+Create orders.
+
+Create orders for a shop. Accepted orders are processed asynchronously.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
+$order_to_create = array(new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreate()); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreate[] | Body for creating orders.
+
+try {
+    $result = $apiInstance->createPost($order_to_create);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->createPost: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **order_to_create** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreate[]**](../Model/OrderToCreate.md)| Body for creating orders. | |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]**](../Model/CreatePost202ResponseInner.md)
 
 ### Authorization
 

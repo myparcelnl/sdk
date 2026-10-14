@@ -1,4 +1,4 @@
-# # ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInnerSchema
+# ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInnerSchema
 
 ## Properties
 

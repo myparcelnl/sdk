@@ -1,4 +1,4 @@
-# # WebhooksResponsesWebhookV10
+# WebhooksResponsesWebhookV10
 
 ## Properties
 

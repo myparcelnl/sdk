@@ -1,4 +1,4 @@
-# # ShipmentCreatedAt
+# ShipmentCreatedAt
 
 ## Properties
 

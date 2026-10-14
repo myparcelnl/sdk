@@ -1,4 +1,4 @@
-# # RefShipmentPickupLocationType
+# RefShipmentPickupLocationType
 
 ## Properties
 

@@ -1,10 +1,10 @@
-# # ShipmentResponsesDeliveryOptionsDeliveryPossibility
+# ShipmentResponsesDeliveryOptionsDeliveryPossibility
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsDeliveryPossibilityType**](ShipmentResponsesDeliveryOptionsDeliveryPossibilityType.md) |  |
+**type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2**](ShipmentDefsDeliveryOptionsDeliveryNameV2.md) |  |
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2**](ShipmentResponsesDeliveryOptionsPackageTypeV2.md) |  |
 **delivery_time_frames** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryTimeFrame[]**](ShipmentDefsDeliveryOptionsDeliveryTimeFrame.md) |  |
 **shipment_options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInner[]**](ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInner.md) |  |

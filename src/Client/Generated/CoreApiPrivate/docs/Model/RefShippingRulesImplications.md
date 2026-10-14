@@ -1,4 +1,4 @@
-# # RefShippingRulesImplications
+# RefShippingRulesImplications
 
 ## Properties
 

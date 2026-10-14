@@ -1,9 +1,10 @@
-# # Shipping
+# Shipping
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**additional_context** | **string** | Additional shipping context of the order. | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier**](Carrier.md) |  | [optional]
 **custom_contract_id** | **string** | The unique identifier of the contract. | [optional]
 **customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse**](CustomsDeclarationResponse.md) |  | [optional]

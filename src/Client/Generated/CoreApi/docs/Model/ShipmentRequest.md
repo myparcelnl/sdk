@@ -1,4 +1,4 @@
-# # ShipmentRequest
+# ShipmentRequest
 
 ## Properties
 
@@ -7,12 +7,12 @@ Name | Type | Description | Notes
 **account_id** | **int** |  | [optional]
 **shop_id** | **int** |  | [optional]
 **contract_id** | **int** |  | [optional]
-**reference_identifier** | **int** |  | [optional]
+**reference_identifier** | [**int**](ShipmentPostShipmentsRequestV11DataShipmentsInnerReferenceIdentifier.md) |  | [optional]
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient.md) |  |
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender**](RefShipmentSender.md) |  | [optional]
 **recipients** | **float[]** |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties**](ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties.md) |  | [optional]
-**options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions**](ShipmentDefsShipmentOptions.md) |  |
+**options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions**](RefShipmentShipmentOptions.md) |  |
 **customs_declaration** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration**](RefShipmentCustomsDeclaration.md) |  | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickup**](RefShipmentPickup.md) |  | [optional]

@@ -1,4 +1,4 @@
-# # ExternalReferences
+# ExternalReferences
 
 ## Properties
 

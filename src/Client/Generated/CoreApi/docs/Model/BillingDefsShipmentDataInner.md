@@ -1,4 +1,4 @@
-# # BillingDefsShipmentDataInner
+# BillingDefsShipmentDataInner
 
 ## Properties
 

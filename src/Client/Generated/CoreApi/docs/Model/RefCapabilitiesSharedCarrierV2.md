@@ -1,4 +1,4 @@
-# # RefCapabilitiesSharedCarrierV2
+# RefCapabilitiesSharedCarrierV2
 
 ## Properties
 

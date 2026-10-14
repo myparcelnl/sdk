@@ -1,25 +1,25 @@
-# # ShipmentDefsShipmentPropertiesRecipient
+# ShipmentDefsShipmentPropertiesRecipient
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**person** | **string** |  |
+**account_id** | **int** |  | [optional]
+**person** | **mixed** |  |
 **first_name** | **string** |  | [optional]
 **last_name** | **string** |  | [optional]
-**company** | **string** |  | [optional]
-**street** | **string** |  | [optional]
-**street_additional_info** | **string** |  | [optional]
-**number** | **string** |  | [optional]
-**number_suffix** | **string** |  | [optional]
-**postal_code** | **string** |  | [optional]
-**city** | **string** |  | [optional]
-**state** | **string** |  | [optional]
-**area** | **string** |  | [optional]
-**phone** | **string** |  | [optional]
-**account_id** | **int** |  | [optional]
+**company** | **mixed** |  | [optional]
+**street** | **mixed** |  | [optional]
+**street_additional_info** | **mixed** |  | [optional]
+**number** | **mixed** |  | [optional]
+**number_suffix** | **mixed** |  | [optional]
+**postal_code** | **mixed** |  | [optional]
+**city** | **mixed** |  | [optional]
+**state** | **mixed** |  | [optional]
 **cc** | **string** |  |
 **region** | **string** |  | [optional]
+**area** | **mixed** |  | [optional]
+**phone** | **mixed** |  | [optional]
 **email** | **string** |  | [optional]
 **billing_email** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContactPropertiesEmail**](AccountDefsContactPropertiesEmail.md) |  | [optional]
 **secondary_emails** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSenderPropertiesEmail[]**](ShipmentDefsShipmentSenderPropertiesEmail.md) |  | [optional]

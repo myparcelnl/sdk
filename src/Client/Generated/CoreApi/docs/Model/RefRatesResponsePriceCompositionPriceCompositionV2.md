@@ -1,4 +1,4 @@
-# # RefRatesResponsePriceCompositionPriceCompositionV2
+# RefRatesResponsePriceCompositionPriceCompositionV2
 
 ## Properties
 

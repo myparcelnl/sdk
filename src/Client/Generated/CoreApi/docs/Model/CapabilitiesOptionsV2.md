@@ -1,4 +1,4 @@
-# # CapabilitiesOptionsV2
+# CapabilitiesOptionsV2
 
 ## Properties
 

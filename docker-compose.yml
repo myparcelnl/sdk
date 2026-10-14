@@ -51,7 +51,7 @@ services:
     profiles: [poc]
 
   generate-api:
-    image: openapitools/openapi-generator-cli:latest-release
+    image: openapitools/openapi-generator-cli:v7.26.0
     environment:
       - JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=1
     volumes:

@@ -1,4 +1,4 @@
-# # OrdersGetSortParameter
+# OrdersGetSortParameter
 
 ## Properties
 

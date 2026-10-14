@@ -1,4 +1,4 @@
-# # CustomsDeclaration
+# CustomsDeclaration
 
 ## Properties
 

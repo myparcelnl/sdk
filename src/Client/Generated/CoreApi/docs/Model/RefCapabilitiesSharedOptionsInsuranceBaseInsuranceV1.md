@@ -1,4 +1,4 @@
-# # RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1
+# RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1
 
 ## Properties
 

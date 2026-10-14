@@ -1,4 +1,4 @@
-# # CommonDefsTimeZoneType
+# CommonDefsTimeZoneType
 
 ## Properties
 

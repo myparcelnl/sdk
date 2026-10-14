@@ -1,4 +1,4 @@
-# # ShipmentResponsesPickupLocationsDefinitionsOpeningHours
+# ShipmentResponsesPickupLocationsDefinitionsOpeningHours
 
 ## Properties
 

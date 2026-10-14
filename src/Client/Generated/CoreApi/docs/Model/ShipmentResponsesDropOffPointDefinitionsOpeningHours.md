@@ -1,4 +1,4 @@
-# # ShipmentResponsesDropOffPointDefinitionsOpeningHours
+# ShipmentResponsesDropOffPointDefinitionsOpeningHours
 
 ## Properties
 

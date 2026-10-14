@@ -1,4 +1,4 @@
-# # CommonHttpStatusCode4xxClientError415UnsupportedMediaType
+# CommonHttpStatusCode4xxClientError415UnsupportedMediaType
 
 ## Properties
 

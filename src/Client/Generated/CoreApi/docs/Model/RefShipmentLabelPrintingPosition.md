@@ -1,4 +1,4 @@
-# # RefShipmentLabelPrintingPosition
+# RefShipmentLabelPrintingPosition
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PickupAnyOf
+# PickupAnyOf
 
 ## Properties
 

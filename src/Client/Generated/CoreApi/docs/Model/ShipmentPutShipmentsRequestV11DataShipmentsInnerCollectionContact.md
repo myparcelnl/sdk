@@ -1,4 +1,4 @@
-# # ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact
+# ShipmentPutShipmentsRequestV11DataShipmentsInnerCollectionContact
 
 ## Properties
 
@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **first_name** | **string** |  | [optional]
 **gender** | **string** |  | [optional]
 **last_name** | **string** |  | [optional]
-**number** | **string** |  |
+**number** | [**string**](ShipmentPostShipmentsRequestV11DataShipmentsInnerCollectionContactNumber.md) |  |
 **number_suffix** | **string** |  | [optional]
 **phone** | **string** |  |
 **postal_code** | **string** |  |

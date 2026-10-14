@@ -1,4 +1,4 @@
-# # CommonResponsesDownloadUrl
+# CommonResponsesDownloadUrl
 
 ## Properties
 

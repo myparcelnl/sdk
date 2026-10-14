@@ -1,4 +1,4 @@
-# # RefShippingRulesShipmentOptions
+# RefShippingRulesShipmentOptions
 
 ## Properties
 

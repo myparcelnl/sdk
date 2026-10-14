@@ -4,6 +4,7 @@
 Api/DefaultApi.php
 ApiException.php
 Configuration.php
+FormDataProcessor.php
 HeaderSelector.php
 Model/Feature.php
 Model/FulfilmentPlatform.php

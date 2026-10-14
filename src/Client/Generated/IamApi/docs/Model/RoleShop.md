@@ -1,4 +1,4 @@
-# # RoleShop
+# RoleShop
 
 ## Properties
 

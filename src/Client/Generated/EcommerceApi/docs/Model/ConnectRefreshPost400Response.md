@@ -1,4 +1,4 @@
-# # ConnectRefreshPost400Response
+# ConnectRefreshPost400Response
 
 ## Properties
 

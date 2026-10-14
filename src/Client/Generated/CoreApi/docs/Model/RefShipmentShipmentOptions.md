@@ -1,10 +1,10 @@
-# # RefShipmentShipmentOptions
+# RefShipmentShipmentOptions
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro**](RefTypesPriceEuro.md) |  | [optional]
+**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro**](RefShipmentOptionsInsuranceMaxAllOfInsurance.md) |  | [optional]
 **age_check** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **cash_on_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney**](RefTypesMoney.md) |  | [optional]
 **collect** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]

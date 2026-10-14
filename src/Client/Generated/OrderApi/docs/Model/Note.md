@@ -1,4 +1,4 @@
-# # Note
+# Note
 
 ## Properties
 

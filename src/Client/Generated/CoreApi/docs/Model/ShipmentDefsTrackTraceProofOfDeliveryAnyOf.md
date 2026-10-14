@@ -1,4 +1,4 @@
-# # ShipmentDefsTrackTraceProofOfDeliveryAnyOf
+# ShipmentDefsTrackTraceProofOfDeliveryAnyOf
 
 ## Properties
 

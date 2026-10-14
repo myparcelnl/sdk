@@ -1,4 +1,4 @@
-# # CommonHttpStatusCode4xxClientError401Unauthorized
+# CommonHttpStatusCode4xxClientError401Unauthorized
 
 ## Properties
 

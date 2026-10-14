@@ -1,4 +1,4 @@
-# # ShipmentParametersRegion
+# ShipmentParametersRegion
 
 ## Properties
 

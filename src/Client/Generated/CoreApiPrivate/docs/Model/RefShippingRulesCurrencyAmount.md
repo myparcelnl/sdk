@@ -1,4 +1,4 @@
-# # RefShippingRulesCurrencyAmount
+# RefShippingRulesCurrencyAmount
 
 ## Properties
 

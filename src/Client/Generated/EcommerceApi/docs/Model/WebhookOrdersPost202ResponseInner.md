@@ -1,4 +1,4 @@
-# # WebhookOrdersPost202ResponseInner
+# WebhookOrdersPost202ResponseInner
 
 ## Properties
 
@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **title** | **string** | A short human-readable summary of the problem type. |
 **detail** | **string** | A human-readable explanation specific to this occurrence of the problem. |
 **instance** | **string** | A URI reference that identifies the specific occurrence of the problem. |
-**cause** | **mixed** |  | [optional]
+**cause** | **mixed** | The cause of this problem when debug mode is enabled. | [optional]
 **errors** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ProblemDetailsInvalidRequestSyntaxAllOfErrors[]**](ProblemDetailsInvalidRequestSyntaxAllOfErrors.md) | Detailed information regarding the violations. |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

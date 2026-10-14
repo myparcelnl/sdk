@@ -1,4 +1,4 @@
-# # CommonResponsesDownloadLinkDataOneOf
+# CommonResponsesDownloadLinkDataOneOf
 
 ## Properties
 

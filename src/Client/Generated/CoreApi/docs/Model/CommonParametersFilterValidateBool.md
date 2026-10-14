@@ -1,4 +1,4 @@
-# # CommonParametersFilterValidateBool
+# CommonParametersFilterValidateBool
 
 ## Properties
 

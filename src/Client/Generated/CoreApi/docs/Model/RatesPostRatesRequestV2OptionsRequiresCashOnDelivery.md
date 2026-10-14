@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV2OptionsRequiresCashOnDelivery
+# RatesPostRatesRequestV2OptionsRequiresCashOnDelivery
 
 ## Properties
 

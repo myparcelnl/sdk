@@ -25,12 +25,9 @@ typeMappings:
   # parameter that always serializes as a string (e.g. "1;2;3")
   CommonParametersBigids: string
 
-  # anyOf(_ref_types_cc=string, null) — nullable 2-char country code; nullability
-  # is preserved on the parent property, the wrapper itself is just a string
-  ShippingRulesPatchShippingRulesDataShippingRulesInnerCriteriaCountry: string
-
-  # oneOf(null, _ref_shipping_rules_region=string enum) — same pattern as country
-  ShippingRulesPatchShippingRulesDataShippingRulesInnerCriteriaRegion: string
+  # @todo remove when the generator keeps the allOf members of an inline insurance schema
+  # Generator 7.26.0 makes a model with only a mixed amount, which drops the currency.
+  RefShipmentOptionsInsuranceMaxAllOfInsurance: RefTypesPriceEuro
 additionalProperties:
   '!include': 'commonProperties.yaml'
   packageName: MyParcelNL\Sdk\Client\Generated\CoreApiPrivate

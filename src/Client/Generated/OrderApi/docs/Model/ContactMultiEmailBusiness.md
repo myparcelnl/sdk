@@ -1,4 +1,4 @@
-# # ContactMultiEmailBusiness
+# ContactMultiEmailBusiness
 
 ## Properties
 

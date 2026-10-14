@@ -1,4 +1,4 @@
-# # ShipmentResponsesShipmentLabelsDataOneOf1
+# ShipmentResponsesShipmentLabelsDataOneOf1
 
 ## Properties
 

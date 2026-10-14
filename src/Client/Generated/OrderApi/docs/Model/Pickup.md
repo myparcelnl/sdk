@@ -1,4 +1,4 @@
-# # Pickup
+# Pickup
 
 ## Properties
 

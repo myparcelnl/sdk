@@ -1,4 +1,4 @@
-# # ShipmentResponsesPickupLocations
+# ShipmentResponsesPickupLocations
 
 ## Properties
 

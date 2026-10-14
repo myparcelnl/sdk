@@ -1,4 +1,4 @@
-# # ShipmentParametersPackageType
+# ShipmentParametersPackageType
 
 ## Properties
 

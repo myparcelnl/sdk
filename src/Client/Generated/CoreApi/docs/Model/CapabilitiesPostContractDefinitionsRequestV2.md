@@ -1,4 +1,4 @@
-# # CapabilitiesPostContractDefinitionsRequestV2
+# CapabilitiesPostContractDefinitionsRequestV2
 
 ## Properties
 

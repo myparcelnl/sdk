@@ -1,4 +1,4 @@
-# # ConnectTokenPost400ResponseAnyOf2
+# ConnectTokenPost400ResponseAnyOf2
 
 ## Properties
 

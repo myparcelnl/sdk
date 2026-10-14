@@ -1,4 +1,4 @@
-# # ShipmentDefsCarrierTrackTraceEvent
+# ShipmentDefsCarrierTrackTraceEvent
 
 ## Properties
 

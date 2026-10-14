@@ -1,4 +1,4 @@
-# # OrderOrderedAt
+# OrderOrderedAt
 
 ## Properties
 

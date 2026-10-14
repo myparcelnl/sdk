@@ -1,4 +1,4 @@
-# # RefCapabilitiesSharedOptionsBaseOptionV2
+# RefCapabilitiesSharedOptionsBaseOptionV2
 
 ## Properties
 

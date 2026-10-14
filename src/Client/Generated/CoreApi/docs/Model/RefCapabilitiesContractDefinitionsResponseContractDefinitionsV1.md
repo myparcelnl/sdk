@@ -1,4 +1,4 @@
-# # RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1
+# RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1
 
 ## Properties
 

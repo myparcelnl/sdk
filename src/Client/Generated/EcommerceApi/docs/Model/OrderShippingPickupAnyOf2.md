@@ -1,4 +1,4 @@
-# # OrderShippingPickupAnyOf2
+# OrderShippingPickupAnyOf2
 
 ## Properties
 

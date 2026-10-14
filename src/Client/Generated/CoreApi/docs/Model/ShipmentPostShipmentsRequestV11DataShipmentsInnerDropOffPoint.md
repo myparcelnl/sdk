@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint
+# ShipmentPostShipmentsRequestV11DataShipmentsInnerDropOffPoint
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # NoteFromImportedLocale
+# NoteFromImportedLocale
 
 ## Properties
 

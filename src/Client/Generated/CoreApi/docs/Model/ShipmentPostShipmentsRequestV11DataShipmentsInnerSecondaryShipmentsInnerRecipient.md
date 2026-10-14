@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient
+# ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient
 
 ## Properties
 
@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **person** | **string** |  | [optional]
 **company** | **string** |  | [optional]
 **email** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md) |  | [optional]
-**secondary_emails** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentRecipientSecondaryEmailsInner[]**](RefShipmentRecipientSecondaryEmailsInner.md) |  | [optional]
+**secondary_emails** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail[]**](ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail.md) |  | [optional]
 **phone** | **string** |  | [optional]
 **eori_number** | **string** |  | [optional]
 **vat_number** | **string** |  | [optional]

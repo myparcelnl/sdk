@@ -1,5 +1,7 @@
 # MyParcelNL\Sdk\Client\Generated\CoreApi\DefaultApi
 
+
+
 All URIs are relative to https://api.myparcel.nl, except if the operation defines another base path.
 
 | Method | HTTP request | Description |

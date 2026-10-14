@@ -1,4 +1,4 @@
-# # RefTypesPriceEuro
+# RefTypesPriceEuro
 
 ## Properties
 

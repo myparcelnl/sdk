@@ -1,4 +1,4 @@
-# # ShipmentDefsShipmentSender
+# ShipmentDefsShipmentSender
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV1DataRatesInnerOptions
+# RatesPostRatesRequestV1DataRatesInnerOptions
 
 ## Properties
 

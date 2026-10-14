@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV2OptionsInsurance
+# RatesPostRatesRequestV2OptionsInsurance
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentDefsDeliveryOptionsPickupTime
+# ShipmentDefsDeliveryOptionsPickupTime
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentDefsShipmentPaymentStatus
+# ShipmentDefsShipmentPaymentStatus
 
 ## Properties
 

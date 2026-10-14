@@ -1,4 +1,4 @@
-# # CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerPickup
+# CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerPickup
 
 ## Properties
 

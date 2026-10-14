@@ -1,4 +1,4 @@
-# # CommonResponsesUserErrorPermissionDenied
+# CommonResponsesUserErrorPermissionDenied
 
 ## Properties
 

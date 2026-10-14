@@ -1,4 +1,4 @@
-# # ShipmentOptionsInsurance
+# ShipmentOptionsInsurance
 
 ## Properties
 

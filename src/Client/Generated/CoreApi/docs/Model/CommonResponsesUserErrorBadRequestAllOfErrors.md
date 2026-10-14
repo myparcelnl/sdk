@@ -1,4 +1,4 @@
-# # CommonResponsesUserErrorBadRequestAllOfErrors
+# CommonResponsesUserErrorBadRequestAllOfErrors
 
 ## Properties
 

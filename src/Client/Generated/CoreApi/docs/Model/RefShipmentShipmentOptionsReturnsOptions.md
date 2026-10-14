@@ -1,13 +1,11 @@
-# # RefShipmentShipmentOptionsReturnsOptions
+# RefShipmentShipmentOptionsReturnsOptions
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**contribution** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptionsReturnsOptionsContribution**](RefShipmentShipmentOptionsReturnsOptionsContribution.md) |  | [optional]
-**printerless_return** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentOptionsPackageTypeReturnsPackageType**](RefShipmentOptionsPackageTypeReturnsPackageType.md) |  | [optional]
-**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro**](RefTypesPriceEuro.md) |  | [optional]
+**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro**](RefShipmentOptionsInsuranceMaxAllOfInsurance.md) |  | [optional]
 **age_check** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **cooled_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **drop_off_at_postal_point** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
@@ -21,5 +19,7 @@ Name | Type | Description | Notes
 **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **signature** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **label_description** | **string** |  | [optional]
+**contribution** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptionsReturnsOptionsAllOfContribution**](RefShipmentShipmentOptionsReturnsOptionsAllOfContribution.md) |  | [optional]
+**printerless_return** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

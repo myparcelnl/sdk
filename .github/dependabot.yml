@@ -65,3 +65,11 @@ updates:
         patterns:
           - '@myparcel-pdk/*'
           - '@myparcel-dev/pdk-*'
+
+  - package-ecosystem: 'docker-compose'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    commit-message:
+      prefix: 'build'
+      include: 'scope'

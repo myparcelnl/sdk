@@ -1,4 +1,4 @@
-# # ShipmentResponsesDeliveryOptionsDeliveryTime
+# ShipmentResponsesDeliveryOptionsDeliveryTime
 
 ## Properties
 

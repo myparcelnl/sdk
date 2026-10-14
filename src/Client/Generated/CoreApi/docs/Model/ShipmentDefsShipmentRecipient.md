@@ -1,9 +1,10 @@
-# # ShipmentDefsShipmentRecipient
+# ShipmentDefsShipmentRecipient
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**account_id** | **int** |  | [optional]
 **person** | **mixed** |  | [optional]
 **first_name** | **string** |  | [optional]
 **last_name** | **string** |  | [optional]
@@ -15,11 +16,10 @@ Name | Type | Description | Notes
 **postal_code** | **mixed** |  | [optional]
 **city** | **mixed** |  | [optional]
 **state** | **mixed** |  | [optional]
-**area** | **mixed** |  | [optional]
-**phone** | **mixed** |  | [optional]
-**account_id** | **int** |  | [optional]
 **cc** | **string** |  |
 **region** | **string** |  | [optional]
+**area** | **mixed** |  | [optional]
+**phone** | **mixed** |  | [optional]
 **email** | **string** |  | [optional]
 **billing_email** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsContactPropertiesEmail**](AccountDefsContactPropertiesEmail.md) |  | [optional]
 **secondary_emails** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentSenderPropertiesEmail[]**](ShipmentDefsShipmentSenderPropertiesEmail.md) |  | [optional]

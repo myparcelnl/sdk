@@ -1,4 +1,4 @@
-# # ShipmentLabel
+# ShipmentLabel
 
 ## Properties
 

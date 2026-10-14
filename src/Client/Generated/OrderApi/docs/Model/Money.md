@@ -1,4 +1,4 @@
-# # Money
+# Money
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PackageCommon
+# PackageCommon
 
 ## Properties
 

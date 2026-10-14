@@ -1,4 +1,4 @@
-# # ExternalReferenceSalesChannel
+# ExternalReferenceSalesChannel
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PhysicalPropertiesWidthV2
+# PhysicalPropertiesWidthV2
 
 ## Properties
 
