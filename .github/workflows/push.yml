@@ -37,6 +37,8 @@ jobs:
       - uses: myparcelnl/actions/pnpm-install@v5
         with:
           node-version: 24
+          # setup-node already installs Node, so skip the one devEngines.runtime downloads.
+          pnpm-args: --no-runtime
 
       - uses: myparcelnl/actions/semantic-release@v5
         with:
