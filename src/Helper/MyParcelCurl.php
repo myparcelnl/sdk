@@ -42,7 +42,7 @@ class MyParcelCurl
     /**
      * Curl handle.
      *
-     * @var resource
+     * @var \CurlHandle|null
      */
     protected $_resource;
 
@@ -357,7 +357,7 @@ class MyParcelCurl
     /**
      * Returns a cURL handle on success.
      *
-     * @return false|resource
+     * @return \CurlHandle|false
      */
     protected function _getResource()
     {

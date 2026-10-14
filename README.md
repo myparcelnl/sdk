@@ -1,5 +1,4 @@
-MyParcel PHP SDK
-===
+# MyParcel PHP SDK
 
 <a href="https://github.com/myparcelnl/sdk/releases" target="_blank"><img src="https://img.shields.io/packagist/v/myparcelnl/sdk?label=Latest%20version" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/myparcelnl/sdk" target="_blank"><img src="https://img.shields.io/packagist/dm/myparcelnl/sdk" alt="Total Downloads"></a>
@@ -9,7 +8,7 @@ MyParcel PHP SDK
 
 ## Requirements
 
-- PHP >=7.4
+- PHP >= 8.3 (8.4 and 8.5 are also supported and tested)
 - Composer
 
 ```bash
@@ -150,11 +149,7 @@ developers directly on [Slack].
 
 ## Contribute
 
-1. Check for open issues or open a new issue to start a discussion
-2. Fork the repository and branch off from `main`
-3. Write tests for the new feature or bug fix
-4. Ensure all tests pass: `./vendor/bin/phpunit`
-5. Submit a pull request
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to this repository.
 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
 [PHP SDK v11]: https://developer.myparcel.com/guides/php-sdk-v11.html

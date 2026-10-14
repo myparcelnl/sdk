@@ -1,8 +1,17 @@
-# Upgrading to v11
+# Upgrade instructions
+
+## Upgrading to v12
+
+v12 requires PHP 8.3 or higher, up from 7.4 in v11. Please ensure your hosting environment meets this requirement.
+PHP 8.2 and lower are already no longer officially supported by PHP itself.
+
+The PHP upgrade brings along some additional breaking changes to the SDK itself. Those will be documented below.
+
+## Upgrading to v11
 
 v11 replaces the consignment stack with generated API clients and typed service wrappers. This guide covers every breaking change and shows before/after examples for each use case.
 
-## Quick reference
+### Quick reference
 
 | v10 (removed)                                  | v11 (replacement)                          |
 |------------------------------------------------|--------------------------------------------|
@@ -21,9 +30,9 @@ v11 replaces the consignment stack with generated API clients and typed service 
 | `CheckApiKeyWebService::apiKeyIsCorrect()`     | `ApiKeyService::isValid()`                 |
 | `AbstractDeliveryOptionsAdapter` + adapters     | `Shipment\ShipmentOptions` + `Order::setCarrierId()` (fulfilment orders) |
 
-## Create shipments
+### Create shipments
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 use MyParcelNL\Sdk\Helper\MyParcelCollection;
@@ -46,7 +55,7 @@ $collection->createConcepts();
 $shipmentId = $collection->first()->getMyParcelConsignmentId();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
@@ -72,9 +81,9 @@ $mapping = $service->create($collection);
 // $mapping = [shipmentId => referenceIdentifier, ...]
 ```
 
-## Query shipments
+### Query shipments
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 $collection = MyParcelCollection::find(12345, 'your-api-key');
@@ -82,7 +91,7 @@ $consignment = $collection->first();
 $status = $consignment->getStatus();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
@@ -97,15 +106,15 @@ $shipments = $service->findMany([12345, 12346]);
 $shipments = $service->findByReferenceId('order-42');
 ```
 
-## Delete shipments
+### Delete shipments
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 $collection->deleteConcepts();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Shipment\ShipmentDeleteService;
@@ -114,16 +123,16 @@ $service = new ShipmentDeleteService('your-api-key');
 $service->deleteMany([12345, 12346]);
 ```
 
-## Labels (PDF)
+### Labels (PDF)
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 $collection->setPdfOfLabels();
 $pdf = $collection->getLabelPdf();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
@@ -140,9 +149,9 @@ $url = $service->getLinkOfLabels();
 $service->downloadPdfOfLabels(true);
 ```
 
-## Direct print (printDirect)
+### Direct print (printDirect)
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 $collection->createConcepts();
@@ -150,7 +159,7 @@ $collection->setLinkOfLabels();
 // Direct print was handled through MyParcelCollection internals
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Shipment\ShipmentPrintService;
@@ -160,9 +169,9 @@ $service = new ShipmentPrintService('your-api-key');
 $result  = $service->print($collection, 'your-printer-group-id');
 ```
 
-## Track & trace
+### Track & trace
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 $consignment->getBarcode();
@@ -172,7 +181,7 @@ $collection->setLatestData();
 $history = $consignment->getStatus();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
@@ -184,9 +193,9 @@ $traces  = $service->fetchTrackTraceData([12345]);
 
 Barcodes are available on the shipment object via `ShipmentQueryService::find()` → `getBarcode()`. The consumer portal link is on the shipment too: `getLinkConsumerPortal()`. Full track-trace history comes from `ShipmentTrackTraceService::fetchTrackTraceData()`, where each trace entry exposes `getLinkTracktrace()` for the carrier tracking URL.
 
-## Webhooks
+### Webhooks
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 use MyParcelNL\Sdk\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService;
@@ -197,7 +206,7 @@ $id = $service->subscribe('https://example.com/webhook');
 $service->unsubscribe($id);
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Webhook\WebhookService;
@@ -215,9 +224,9 @@ $all = $service->getAll();
 
 Available hooks: `HOOK_SHIPMENT_STATUS_CHANGE`, `HOOK_SHIPMENT_LABEL_CREATED`, `HOOK_ORDER_STATUS_CHANGE`, `HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED`, `HOOK_SHOP_UPDATED`.
 
-## API key validation
+### API key validation
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 use MyParcelNL\Sdk\Services\Web\CheckApiKeyWebService;
@@ -227,7 +236,7 @@ $service->setApiKey('your-api-key');
 $isValid = $service->apiKeyIsCorrect();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Auth\ApiKeyService;
@@ -237,13 +246,13 @@ $isValid   = $service->isValid();
 $principal = $service->getPrincipal();
 ```
 
-## Capabilities
+### Capabilities
 
-### Before (v10)
+#### Before (v10)
 
 No equivalent.
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
@@ -257,7 +266,7 @@ $shipment = (new Shipment())
 $capabilities = $service->fromShipment($shipment);
 ```
 
-## Carrier contract definitions
+### Carrier contract definitions
 
 Use `CarrierContractDefinitionsService` when you need account-level carrier contract definitions, for example to build carrier settings or discover which carriers are available for an account. Use `CapabilitiesService` when you need shipment-specific capabilities based on shipment input such as country, weight, package type or delivery options.
 
@@ -265,7 +274,7 @@ This is the recommended replacement when you previously used `CarrierOptionsWebS
 
 The service returns the generated Core API contract definition models directly. The generated client is the source of truth for request validation and response shape.
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 use MyParcelNL\Sdk\Services\Web\CarrierOptionsWebService;
@@ -275,7 +284,7 @@ $carrierOptions = (new CarrierOptionsWebService())
     ->getCarrierOptions($shopId);
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
@@ -287,9 +296,9 @@ $definitions = $service->getContractDefinitions();
 $inPost      = $service->getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2::CARRIER_INPOST);
 ```
 
-## Return shipments
+### Return shipments
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\Returns\ReturnShipmentService;
@@ -307,9 +316,9 @@ $returns = $service->createUnrelated([
 ]);
 ```
 
-## Multi-collo
+### Multi-collo
 
-### After (v11)
+#### After (v11)
 
 ```php
 use MyParcelNL\Sdk\Services\MultiCollo\MultiColloShipmentService;
@@ -323,11 +332,11 @@ $shipment = (new Shipment())->setCarrier(1)
 $multiCollo = $service->splitShipment($shipment, 3);
 ```
 
-## Delivery options on fulfilment orders
+### Delivery options on fulfilment orders
 
 The old delivery options adapters (`DeliveryOptionsAdapterFactory`, `AbstractDeliveryOptionsAdapter`, etc.) parsed checkout delivery options and are fully removed. For fulfilment Order v1, shipment options now use the shared shipment options contract from `MyParcelNL\Sdk\Model\Shipment\ShipmentOptions`. Carrier remains shipment-level data and is exposed separately on the order.
 
-### Before (v10)
+#### Before (v10)
 
 ```php
 use MyParcelNL\Sdk\Adapter\DeliveryOptions\DeliveryOptionsFromOrderAdapter;
@@ -338,7 +347,7 @@ $deliveryType = $adapter->getDeliveryType();
 $shipmentOptions = $adapter->getShipmentOptions();
 ```
 
-### After (v11)
+#### After (v11)
 
 ```php
 // ShipmentOptions is hydrated from the order API response automatically.
@@ -369,7 +378,7 @@ $order->setDeliveryOptions($options);
 $collection->save();
 ```
 
-## What still works
+### What still works
 
 The following legacy classes are still available. Classes marked `@internal` should not be used in new integrations.
 
@@ -383,7 +392,7 @@ The following legacy classes are still available. Classes marked `@internal` sho
 
 These will be replaced when their respective API endpoints are added to the generated client.
 
-## Removed classes
+### Removed classes
 
 The following classes and namespaces have been fully removed:
 
@@ -400,7 +409,7 @@ The following classes and namespaces have been fully removed:
 - `MyParcelNL\Sdk\Exception\InvalidConsignmentException`, `NoConsignmentFoundException`
 - `MyParcelNL\Sdk\Concerns\HasDebugLabels`, `HasInstance`
 
-## Enum mapping between API versions
+### Enum mapping between API versions
 
 Use `ApiMapperService` to convert carrier, delivery type and package type values between
 delivery-options names, v1 IDs and v2 names.
