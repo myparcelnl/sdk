@@ -1,4 +1,4 @@
-# # OrderRulesSetShippingPreferencesPathInnerAnyOf1
+# OrderRulesSetShippingPreferencesPathInnerAnyOf1
 
 ## Properties
 

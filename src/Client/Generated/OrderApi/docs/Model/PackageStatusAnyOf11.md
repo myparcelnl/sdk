@@ -1,4 +1,4 @@
-# # PackageStatusAnyOf11
+# PackageStatusAnyOf11
 
 ## Properties
 

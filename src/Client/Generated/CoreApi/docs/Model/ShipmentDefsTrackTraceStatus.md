@@ -1,4 +1,4 @@
-# # ShipmentDefsTrackTraceStatus
+# ShipmentDefsTrackTraceStatus
 
 ## Properties
 

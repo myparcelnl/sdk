@@ -1,4 +1,4 @@
-# # ConnectRefreshPost200Response
+# ConnectRefreshPost200Response
 
 ## Properties
 

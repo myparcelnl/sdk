@@ -1,4 +1,4 @@
-# # Order
+# Order
 
 ## Properties
 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **assigned_user_id** | **string** | The user ID assigned to the order. | [optional]
 **billing_details** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails**](BillingDetails.md) |  | [optional]
 **customer_reference** | **string** | The customer reference of the order. | [optional]
-**external_references** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences**](OrderExternalReferences.md) |  | [optional]
+**external_references** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences**](ExternalReferences.md) | The external references of the order. These are read-only and automatically populated by the system based on the source. | [optional]
 **lines** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Line[]**](Line.md) | The lines of the order | [optional]
 **notes** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Note[]**](Note.md) | The notes of the order. | [optional]
 **packages** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageResponse[]**](PackageResponse.md) | The packages of the order. | [optional]

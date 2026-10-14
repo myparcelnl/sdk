@@ -1,4 +1,4 @@
-# # RefCapabilitiesResponseOptionsOptionV2
+# RefCapabilitiesResponseOptionsOptionV2
 
 ## Properties
 

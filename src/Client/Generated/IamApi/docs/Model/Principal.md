@@ -1,4 +1,4 @@
-# # Principal
+# Principal
 
 ## Properties
 

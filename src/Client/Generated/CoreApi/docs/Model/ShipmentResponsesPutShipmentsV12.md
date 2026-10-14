@@ -1,4 +1,4 @@
-# # ShipmentResponsesPutShipmentsV12
+# ShipmentResponsesPutShipmentsV12
 
 ## Properties
 

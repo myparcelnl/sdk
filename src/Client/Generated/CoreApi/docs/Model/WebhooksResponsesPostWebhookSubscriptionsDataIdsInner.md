@@ -1,4 +1,4 @@
-# # WebhooksResponsesPostWebhookSubscriptionsDataIdsInner
+# WebhooksResponsesPostWebhookSubscriptionsDataIdsInner
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # CustomsDeclarationGroupsInnerTotalWeight
+# CustomsDeclarationGroupsInnerTotalWeight
 
 ## Properties
 

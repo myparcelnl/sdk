@@ -1,4 +1,4 @@
-# # CapabilitiesPostContractDefinitionsRequestV1Data
+# CapabilitiesPostContractDefinitionsRequestV1Data
 
 ## Properties
 

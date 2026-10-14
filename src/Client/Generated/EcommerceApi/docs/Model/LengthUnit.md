@@ -1,4 +1,4 @@
-# # LengthUnit
+# LengthUnit
 
 ## Properties
 

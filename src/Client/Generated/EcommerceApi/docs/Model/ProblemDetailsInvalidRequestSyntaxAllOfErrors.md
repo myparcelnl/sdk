@@ -1,4 +1,4 @@
-# # ProblemDetailsInvalidRequestSyntaxAllOfErrors
+# ProblemDetailsInvalidRequestSyntaxAllOfErrors
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # AccountDefsLocationPropertiesNumber
+# AccountDefsLocationPropertiesNumber
 
 ## Properties
 

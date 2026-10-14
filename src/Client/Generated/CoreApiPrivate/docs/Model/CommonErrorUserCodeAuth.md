@@ -1,4 +1,4 @@
-# # CommonErrorUserCodeAuth
+# CommonErrorUserCodeAuth
 
 ## Properties
 

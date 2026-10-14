@@ -1,4 +1,4 @@
-# # ExternalReferenceEcommercePlatform
+# ExternalReferenceEcommercePlatform
 
 ## Properties
 

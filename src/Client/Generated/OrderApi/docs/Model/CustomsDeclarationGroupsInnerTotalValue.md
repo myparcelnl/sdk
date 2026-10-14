@@ -1,4 +1,4 @@
-# # CustomsDeclarationGroupsInnerTotalValue
+# CustomsDeclarationGroupsInnerTotalValue
 
 ## Properties
 

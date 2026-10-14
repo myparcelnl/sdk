@@ -1,4 +1,4 @@
-# # RefShippingRulesType
+# RefShippingRulesType
 
 ## Properties
 

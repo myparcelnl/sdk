@@ -1,4 +1,4 @@
-# # ShipmentDefsShipmentPickupLocationType
+# ShipmentDefsShipmentPickupLocationType
 
 ## Properties
 

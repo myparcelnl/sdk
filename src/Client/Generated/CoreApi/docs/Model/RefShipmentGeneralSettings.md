@@ -1,4 +1,4 @@
-# # RefShipmentGeneralSettings
+# RefShipmentGeneralSettings
 
 ## Properties
 

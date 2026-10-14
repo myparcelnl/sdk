@@ -1,4 +1,4 @@
-# # CommonDefsPrice
+# CommonDefsPrice
 
 ## Properties
 

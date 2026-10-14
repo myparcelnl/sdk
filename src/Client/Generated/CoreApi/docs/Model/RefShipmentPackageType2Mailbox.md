@@ -1,4 +1,4 @@
-# # RefShipmentPackageType2Mailbox
+# RefShipmentPackageType2Mailbox
 
 ## Properties
 

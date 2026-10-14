@@ -1,4 +1,4 @@
-# # DeliveryOptionsPreferredDate
+# DeliveryOptionsPreferredDate
 
 ## Properties
 

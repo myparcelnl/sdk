@@ -1,4 +1,4 @@
-# # MultiEmailContactOneOf
+# MultiEmailContactOneOf
 
 ## Properties
 

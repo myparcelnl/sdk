@@ -1,4 +1,4 @@
-# # RefRatesResponseContractV2
+# RefRatesResponseContractV2
 
 ## Properties
 

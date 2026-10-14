@@ -1,4 +1,4 @@
-# # ContactOneOf1
+# ContactOneOf1
 
 ## Properties
 

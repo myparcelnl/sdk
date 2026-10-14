@@ -1,4 +1,4 @@
-# # PhysicalProperties
+# PhysicalProperties
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # Platform
+# Platform
 
 ## Properties
 

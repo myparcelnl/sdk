@@ -1,4 +1,4 @@
-# # DeliveryOptions
+# DeliveryOptions
 
 ## Properties
 

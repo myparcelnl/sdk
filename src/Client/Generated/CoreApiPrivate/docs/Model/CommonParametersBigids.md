@@ -1,4 +1,4 @@
-# # CommonParametersBigids
+# CommonParametersBigids
 
 ## Properties
 

@@ -1,10 +1,10 @@
-# # ShipmentDefsShipmentPropertiesOptions
+# ShipmentDefsShipmentPropertiesOptions
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro**](RefTypesPriceEuro.md) |  | [optional]
+**insurance** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro**](RefShipmentOptionsInsuranceMaxAllOfInsurance.md) |  | [optional]
 **age_check** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **cash_on_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney**](RefTypesMoney.md) |  | [optional]
 **collect** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **signature** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **tracked** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) | DEPRECATED: replaced by no_tracking (its inverse). | [optional]
-**package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType**](RefShipmentPackageType.md) |  |
+**package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType**](RefShipmentPackageType.md) |  | [optional]
 **delivery_type** | **int** |  | [optional]
 **delivery_date** | **string** |  | [optional]
 **label_description** | **string** |  | [optional]

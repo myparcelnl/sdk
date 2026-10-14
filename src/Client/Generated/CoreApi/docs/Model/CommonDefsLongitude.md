@@ -1,4 +1,4 @@
-# # CommonDefsLongitude
+# CommonDefsLongitude
 
 ## Properties
 

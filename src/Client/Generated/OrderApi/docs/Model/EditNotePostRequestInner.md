@@ -1,4 +1,4 @@
-# # EditNotePostRequestInner
+# EditNotePostRequestInner
 
 ## Properties
 

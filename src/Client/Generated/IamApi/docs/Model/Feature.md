@@ -1,4 +1,4 @@
-# # Feature
+# Feature
 
 ## Properties
 

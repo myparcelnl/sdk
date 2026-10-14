@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli
+# ShipmentPostShipmentsRequestDataShipmentsInnerMultiColli
 
 ## Properties
 

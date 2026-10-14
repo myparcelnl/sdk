@@ -1,4 +1,4 @@
-# # GeoAreaCode
+# GeoAreaCode
 
 ## Properties
 

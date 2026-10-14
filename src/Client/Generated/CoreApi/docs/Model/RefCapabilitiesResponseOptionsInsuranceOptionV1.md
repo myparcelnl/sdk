@@ -1,4 +1,4 @@
-# # RefCapabilitiesResponseOptionsInsuranceOptionV1
+# RefCapabilitiesResponseOptionsInsuranceOptionV1
 
 ## Properties
 

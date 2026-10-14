@@ -1,4 +1,4 @@
-# # CustomsDeclarationResponseTotalWeight
+# CustomsDeclarationResponseTotalWeight
 
 ## Properties
 

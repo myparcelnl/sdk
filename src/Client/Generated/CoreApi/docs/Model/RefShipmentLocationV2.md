@@ -1,4 +1,4 @@
-# # RefShipmentLocationV2
+# RefShipmentLocationV2
 
 ## Properties
 

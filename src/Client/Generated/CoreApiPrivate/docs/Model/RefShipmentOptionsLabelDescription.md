@@ -1,4 +1,4 @@
-# # RefShipmentOptionsLabelDescription
+# RefShipmentOptionsLabelDescription
 
 ## Properties
 

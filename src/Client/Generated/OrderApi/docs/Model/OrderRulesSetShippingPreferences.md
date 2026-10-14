@@ -1,4 +1,4 @@
-# # OrderRulesSetShippingPreferences
+# OrderRulesSetShippingPreferences
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentResponsesPostShipmentsV12DataPdf
+# ShipmentResponsesPostShipmentsV12DataPdf
 
 ## Properties
 

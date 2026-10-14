@@ -1,4 +1,4 @@
-# # ShipmentOptionsReturnContributionFeeAmount
+# ShipmentOptionsReturnContributionFeeAmount
 
 ## Properties
 

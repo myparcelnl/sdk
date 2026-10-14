@@ -1,4 +1,4 @@
-# # ShipmentDefsShipmentPropertiesLinkConsumerPortal
+# ShipmentDefsShipmentPropertiesLinkConsumerPortal
 
 ## Properties
 

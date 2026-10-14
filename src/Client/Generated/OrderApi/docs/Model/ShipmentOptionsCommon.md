@@ -1,4 +1,4 @@
-# # ShipmentOptionsCommon
+# ShipmentOptionsCommon
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentResponsesTracktracesData
+# ShipmentResponsesTracktracesData
 
 ## Properties
 

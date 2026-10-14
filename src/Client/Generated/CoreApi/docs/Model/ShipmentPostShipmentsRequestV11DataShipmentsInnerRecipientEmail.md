@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail
+# ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipientEmail
 
 ## Properties
 

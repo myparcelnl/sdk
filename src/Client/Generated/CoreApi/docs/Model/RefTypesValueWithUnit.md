@@ -1,4 +1,4 @@
-# # RefTypesValueWithUnit
+# RefTypesValueWithUnit
 
 ## Properties
 

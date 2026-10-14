@@ -1,4 +1,4 @@
-# # ShipmentDefsCustomsShipmentType
+# ShipmentDefsCustomsShipmentType
 
 ## Properties
 

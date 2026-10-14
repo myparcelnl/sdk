@@ -1,4 +1,4 @@
-# # ShipmentRequestRecipient
+# ShipmentRequestRecipient
 
 ## Properties
 

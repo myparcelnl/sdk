@@ -1,4 +1,4 @@
-# # ShippablePackage
+# ShippablePackage
 
 ## Properties
 

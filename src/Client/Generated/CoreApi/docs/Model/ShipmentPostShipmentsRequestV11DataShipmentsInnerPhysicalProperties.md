@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties
+# ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties
 
 ## Properties
 

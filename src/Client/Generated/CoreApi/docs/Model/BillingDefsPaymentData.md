@@ -1,4 +1,4 @@
-# # BillingDefsPaymentData
+# BillingDefsPaymentData
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # CapabilitiesPostCapabilitiesRequestV1
+# CapabilitiesPostCapabilitiesRequestV1
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PackageStatusAnyOf
+# PackageStatusAnyOf
 
 ## Properties
 

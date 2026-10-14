@@ -1,4 +1,4 @@
-# # CustomsDeclarationTotalWeight
+# CustomsDeclarationTotalWeight
 
 ## Properties
 

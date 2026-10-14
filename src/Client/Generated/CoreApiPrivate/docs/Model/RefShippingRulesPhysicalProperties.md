@@ -1,4 +1,4 @@
-# # RefShippingRulesPhysicalProperties
+# RefShippingRulesPhysicalProperties
 
 ## Properties
 

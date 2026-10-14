@@ -1,4 +1,4 @@
-# # ShipmentResponsesDropOffPoints
+# ShipmentResponsesDropOffPoints
 
 ## Properties
 

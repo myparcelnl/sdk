@@ -1,4 +1,4 @@
-# # RefShipmentBpostBpostPugoType
+# RefShipmentBpostBpostPugoType
 
 ## Properties
 

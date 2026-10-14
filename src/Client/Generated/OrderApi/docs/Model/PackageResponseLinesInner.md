@@ -1,4 +1,4 @@
-# # PackageResponseLinesInner
+# PackageResponseLinesInner
 
 ## Properties
 

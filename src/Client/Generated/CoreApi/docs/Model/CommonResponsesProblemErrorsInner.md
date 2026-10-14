@@ -1,4 +1,4 @@
-# # CommonResponsesProblemErrorsInner
+# CommonResponsesProblemErrorsInner
 
 ## Properties
 

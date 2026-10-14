@@ -1,4 +1,4 @@
-# # CommonResponsesProblem
+# CommonResponsesProblem
 
 ## Properties
 

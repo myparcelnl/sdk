@@ -1,4 +1,4 @@
-# # RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2
+# RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2
 
 ## Properties
 

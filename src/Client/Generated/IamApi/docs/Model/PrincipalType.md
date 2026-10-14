@@ -1,4 +1,4 @@
-# # PrincipalType
+# PrincipalType
 
 ## Properties
 

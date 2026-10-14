@@ -1,4 +1,4 @@
-# # ShipmentDefsExternalTrackTraceLink
+# ShipmentDefsExternalTrackTraceLink
 
 ## Properties
 

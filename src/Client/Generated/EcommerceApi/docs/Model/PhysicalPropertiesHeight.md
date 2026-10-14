@@ -1,4 +1,4 @@
-# # PhysicalPropertiesHeight
+# PhysicalPropertiesHeight
 
 ## Properties
 

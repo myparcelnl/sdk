@@ -1,4 +1,4 @@
-# # ShipmentResponsesBulkShipmentLabelsPaymentRequired
+# ShipmentResponsesBulkShipmentLabelsPaymentRequired
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # GetIndex200Response
+# GetIndex200Response
 
 ## Properties
 

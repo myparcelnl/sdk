@@ -1,4 +1,4 @@
-# # ContactOneOfLocale
+# ContactOneOfLocale
 
 ## Properties
 

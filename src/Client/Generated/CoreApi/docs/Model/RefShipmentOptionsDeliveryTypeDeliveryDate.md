@@ -1,4 +1,4 @@
-# # RefShipmentOptionsDeliveryTypeDeliveryDate
+# RefShipmentOptionsDeliveryTypeDeliveryDate
 
 ## Properties
 

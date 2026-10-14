@@ -1,4 +1,4 @@
-# # ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInner
+# ShipmentResponsesDeliveryOptionsDeliveryPossibilityShipmentOptionsInner
 
 ## Properties
 

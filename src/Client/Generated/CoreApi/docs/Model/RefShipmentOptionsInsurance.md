@@ -1,4 +1,4 @@
-# # RefShipmentOptionsInsurance
+# RefShipmentOptionsInsurance
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # WebhooksResponsesWebhookSubscriptionsV11Data
+# WebhooksResponsesWebhookSubscriptionsV11Data
 
 ## Properties
 

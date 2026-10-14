@@ -1,4 +1,4 @@
-# # ShippingRulesPatchShippingRulesData
+# ShippingRulesPatchShippingRulesData
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # RoleUser
+# RoleUser
 
 ## Properties
 

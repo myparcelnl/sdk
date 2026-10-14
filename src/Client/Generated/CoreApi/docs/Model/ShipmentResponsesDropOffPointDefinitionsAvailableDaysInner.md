@@ -1,4 +1,4 @@
-# # ShipmentResponsesDropOffPointDefinitionsAvailableDaysInner
+# ShipmentResponsesDropOffPointDefinitionsAvailableDaysInner
 
 ## Properties
 

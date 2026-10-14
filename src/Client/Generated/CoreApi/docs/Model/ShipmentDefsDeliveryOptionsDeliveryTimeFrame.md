@@ -1,4 +1,4 @@
-# # ShipmentDefsDeliveryOptionsDeliveryTimeFrame
+# ShipmentDefsDeliveryOptionsDeliveryTimeFrame
 
 ## Properties
 

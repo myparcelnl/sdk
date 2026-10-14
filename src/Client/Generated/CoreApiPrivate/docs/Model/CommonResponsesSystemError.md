@@ -1,4 +1,4 @@
-# # CommonResponsesSystemError
+# CommonResponsesSystemError
 
 ## Properties
 

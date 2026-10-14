@@ -1,4 +1,4 @@
-# # CommonResponsesUserErrorNotAcceptableAllOfErrors
+# CommonResponsesUserErrorNotAcceptableAllOfErrors
 
 ## Properties
 

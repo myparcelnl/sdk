@@ -1,4 +1,4 @@
-# # AccountDefsPlatformName
+# AccountDefsPlatformName
 
 ## Properties
 

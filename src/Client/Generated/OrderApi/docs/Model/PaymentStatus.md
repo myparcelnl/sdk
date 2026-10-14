@@ -1,4 +1,4 @@
-# # PaymentStatus
+# PaymentStatus
 
 ## Properties
 

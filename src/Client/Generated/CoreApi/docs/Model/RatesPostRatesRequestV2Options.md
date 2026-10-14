@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV2Options
+# RatesPostRatesRequestV2Options
 
 ## Properties
 

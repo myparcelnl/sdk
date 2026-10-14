@@ -1,4 +1,4 @@
-# # ConnectTokenPost401Response
+# ConnectTokenPost401Response
 
 ## Properties
 

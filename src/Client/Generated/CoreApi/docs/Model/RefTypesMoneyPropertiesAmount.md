@@ -1,4 +1,4 @@
-# # RefTypesMoneyPropertiesAmount
+# RefTypesMoneyPropertiesAmount
 
 ## Properties
 

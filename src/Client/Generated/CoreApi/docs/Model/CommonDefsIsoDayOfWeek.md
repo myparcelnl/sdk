@@ -1,4 +1,4 @@
-# # CommonDefsIsoDayOfWeek
+# CommonDefsIsoDayOfWeek
 
 ## Properties
 

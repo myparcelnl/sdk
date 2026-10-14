@@ -7,6 +7,44 @@ PHP 8.2 and lower are already no longer officially supported by PHP itself.
 
 The PHP upgrade brings along some additional breaking changes to the SDK itself. Those will be documented below.
 
+### Services
+
+| Class                  | v11                                | v12                                                         |
+|------------------------|------------------------------------|-------------------------------------------------------------|
+| `ShipmentQueryService` | `query()` ignores a key it does not know | `query()` throws an `InvalidArgumentException` for a key it does not know |
+
+### Generated OpenAPI models
+
+> [!IMPORTANT]
+> The changes below are changes in the generated OpenAPI models in `MyParcelNL\Sdk\Client\Generated`. v12 generates them with openapi-generator 7.26.0 instead of 7.12.0. They reach you through the services, or directly when you use the generated API clients and models.
+
+#### Through the services
+
+A queried shipment is the `ShipmentDefsShipment` that `ShipmentQueryService::find()`, `findMany()`, `findByReferenceId()` and `query()` return.
+
+| Service | Class with the change | v11 | v12 |
+|---------|-----------------------|-----|-----|
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getPickup()`, `getDropOffPoint()` and `getShippedItems()` return decoded JSON | They return `ShipmentDefsShipmentPickup`, `ShipmentDefsShipmentDropOffPoint` and `ShipmentDefsShipmentShippedItem[]` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCurrency()` returns `ShipmentDefsShipmentCurrency` | `BillingDefsCurrency` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCustomsDeclaration()` returns `ShipmentDefsShipmentCustomsDeclaration` | `RefShipmentCustomsDeclaration` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCollectionContact()` returns `ShipmentDefsShipmentCollectionContact` | `AccountDefsContact` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getExternalProvider()` returns `ShipmentDefsShipmentExternalProvider` | `ShipmentDefsExternalProviderPropertiesDisplayName` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getOptions()` returns `ShipmentDefsShipmentOptions` | `RefShipmentShipmentOptions` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getOrigin()`, `getParentId()` and `getExternalProviderId()` return a wrapper model | `string`, `int` and `int` |
+| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCreatedBy()` and `getModifiedBy()` are typed `int` | Typed `mixed`. They return the same value. |
+| `ShipmentCreateService` and the other services that send a `Shipment` | 111 setters on the request models, such as `CoreApi\Model\RefShipmentShipmentOptions::setDeliveryDate()` | The setter throws an `InvalidArgumentException` for `null`, and a `null` in the constructor array is left out of the request | The setter accepts `null`, and the `null` is sent to the API |
+| `ShipmentCreateService` and the other services that send a request body | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| `MultiColloShipmentService` | `CoreApi\Model\SecondaryShipmentRequest` | `splitShipment()` sets the physical properties as `ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties` | `ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties` |
+
+#### Direct use of `MyParcelNL\Sdk\Client\Generated`
+
+The rows above also apply when you use these classes directly. In addition:
+
+| Class with the change | v11 | v12 |
+|-----------------------|-----|-----|
+| Every generated `Api` class, such as `CoreApi\Api\ShipmentApi` and `IamApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| Every generated `Api` class | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
+
 ## Upgrading to v11
 
 v11 replaces the consignment stack with generated API clients and typed service wrappers. This guide covers every breaking change and shows before/after examples for each use case.

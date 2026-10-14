@@ -1,4 +1,4 @@
-# # RatesPostRatesRequestV1DataRatesInnerOptionsCashOnDelivery
+# RatesPostRatesRequestV1DataRatesInnerOptionsCashOnDelivery
 
 ## Properties
 

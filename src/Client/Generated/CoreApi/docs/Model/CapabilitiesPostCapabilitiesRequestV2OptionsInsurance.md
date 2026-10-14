@@ -1,4 +1,4 @@
-# # CapabilitiesPostCapabilitiesRequestV2OptionsInsurance
+# CapabilitiesPostCapabilitiesRequestV2OptionsInsurance
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentParametersCarrierIdentifier
+# ShipmentParametersCarrierIdentifier
 
 ## Properties
 

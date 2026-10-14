@@ -1,4 +1,4 @@
-# # CommonDefsLatitude
+# CommonDefsLatitude
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentResponsesDeliveryOptionsV1ErrorsInner
+# ShipmentResponsesDeliveryOptionsV1ErrorsInner
 
 ## Properties
 

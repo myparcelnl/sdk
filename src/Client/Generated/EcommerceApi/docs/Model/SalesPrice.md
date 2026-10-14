@@ -1,4 +1,4 @@
-# # SalesPrice
+# SalesPrice
 
 ## Properties
 

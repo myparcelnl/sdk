@@ -1,4 +1,4 @@
-# # AssignToUserPost200ResponseInnerOneOf
+# AssignToUserPost200ResponseInnerOneOf
 
 ## Properties
 

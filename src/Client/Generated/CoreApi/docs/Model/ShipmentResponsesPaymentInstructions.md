@@ -1,4 +1,4 @@
-# # ShipmentResponsesPaymentInstructions
+# ShipmentResponsesPaymentInstructions
 
 ## Properties
 

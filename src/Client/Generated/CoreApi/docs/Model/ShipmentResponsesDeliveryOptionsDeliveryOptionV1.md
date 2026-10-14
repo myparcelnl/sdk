@@ -1,4 +1,4 @@
-# # ShipmentResponsesDeliveryOptionsDeliveryOptionV1
+# ShipmentResponsesDeliveryOptionsDeliveryOptionV1
 
 ## Properties
 

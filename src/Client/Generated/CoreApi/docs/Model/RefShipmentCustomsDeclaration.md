@@ -1,4 +1,4 @@
-# # RefShipmentCustomsDeclaration
+# RefShipmentCustomsDeclaration
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # PackageStatusAnyOf5
+# PackageStatusAnyOf5
 
 ## Properties
 

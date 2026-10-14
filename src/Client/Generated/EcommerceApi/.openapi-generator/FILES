@@ -4,6 +4,7 @@
 Api/DefaultApi.php
 ApiException.php
 Configuration.php
+FormDataProcessor.php
 HeaderSelector.php
 Model/Address.php
 Model/BillingDetails.php
@@ -31,7 +32,6 @@ Model/MultiEmailContact.php
 Model/MultiEmailContactOneOf.php
 Model/MultiEmailContactOneOf1.php
 Model/Order.php
-Model/OrderBillingDetails.php
 Model/OrderLine.php
 Model/OrderShipping.php
 Model/OrderShippingDelivery.php
@@ -96,7 +96,6 @@ docs/Model/MultiEmailContact.md
 docs/Model/MultiEmailContactOneOf.md
 docs/Model/MultiEmailContactOneOf1.md
 docs/Model/Order.md
-docs/Model/OrderBillingDetails.md
 docs/Model/OrderLine.md
 docs/Model/OrderShipping.md
 docs/Model/OrderShippingDelivery.md

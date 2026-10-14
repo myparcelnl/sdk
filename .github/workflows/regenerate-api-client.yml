@@ -83,7 +83,7 @@ jobs:
           body: |
             Automated update of OpenAPI-based clients in the SDK based on changes in the MyParcel OpenAPI schemas.
 
-            - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator `latest-release`)
+            - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator version from `docker-compose.yml`)
           labels: |
             automated
             api-client

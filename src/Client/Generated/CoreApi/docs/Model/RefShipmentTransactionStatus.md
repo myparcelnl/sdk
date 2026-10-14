@@ -1,4 +1,4 @@
-# # RefShipmentTransactionStatus
+# RefShipmentTransactionStatus
 
 ## Properties
 

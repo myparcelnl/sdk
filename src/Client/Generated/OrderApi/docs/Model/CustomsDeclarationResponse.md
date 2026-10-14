@@ -1,4 +1,4 @@
-# # CustomsDeclarationResponse
+# CustomsDeclarationResponse
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ProductDescriptionsInner
+# ProductDescriptionsInner
 
 ## Properties
 

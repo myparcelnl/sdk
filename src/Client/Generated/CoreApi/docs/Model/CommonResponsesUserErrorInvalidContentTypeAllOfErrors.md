@@ -1,4 +1,4 @@
-# # CommonResponsesUserErrorInvalidContentTypeAllOfErrors
+# CommonResponsesUserErrorInvalidContentTypeAllOfErrors
 
 ## Properties
 

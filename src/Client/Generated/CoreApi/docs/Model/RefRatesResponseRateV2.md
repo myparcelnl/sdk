@@ -1,4 +1,4 @@
-# # RefRatesResponseRateV2
+# RefRatesResponseRateV2
 
 ## Properties
 

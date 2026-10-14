@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerGeneralSettings
+# ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerGeneralSettings
 
 ## Properties
 

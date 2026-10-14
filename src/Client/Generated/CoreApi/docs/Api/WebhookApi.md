@@ -1,5 +1,7 @@
 # MyParcelNL\Sdk\Client\Generated\CoreApi\WebhookApi
 
+Webhook related endpoints.
+
 All URIs are relative to https://api.myparcel.nl, except if the operation defines another base path.
 
 | Method | HTTP request | Description |

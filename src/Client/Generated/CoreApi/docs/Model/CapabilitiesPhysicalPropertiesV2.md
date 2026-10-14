@@ -1,4 +1,4 @@
-# # CapabilitiesPhysicalPropertiesV2
+# CapabilitiesPhysicalPropertiesV2
 
 ## Properties
 

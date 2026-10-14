@@ -1,4 +1,4 @@
-# # CommonDefsDownloadUrl
+# CommonDefsDownloadUrl
 
 ## Properties
 

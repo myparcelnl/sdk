@@ -1,4 +1,4 @@
-# # ShipmentDefsDeliveryOptionsPickupHoliday
+# ShipmentDefsDeliveryOptionsPickupHoliday
 
 ## Properties
 

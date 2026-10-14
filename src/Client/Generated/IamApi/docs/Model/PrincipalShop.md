@@ -1,4 +1,4 @@
-# # PrincipalShop
+# PrincipalShop
 
 ## Properties
 

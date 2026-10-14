@@ -1,4 +1,4 @@
-# # ShipmentDefsShipmentPhysicalPropertiesCarrierWeight
+# ShipmentDefsShipmentPhysicalPropertiesCarrierWeight
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ShipmentDefsDeliveryOptionsOpeningHours
+# ShipmentDefsDeliveryOptionsOpeningHours
 
 ## Properties
 

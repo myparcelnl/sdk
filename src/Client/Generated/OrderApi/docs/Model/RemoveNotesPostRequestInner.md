@@ -1,4 +1,4 @@
-# # RemoveNotesPostRequestInner
+# RemoveNotesPostRequestInner
 
 ## Properties
 

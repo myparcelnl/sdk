@@ -1,4 +1,4 @@
-# # ShipmentParametersSortShipment
+# ShipmentParametersSortShipment
 
 ## Properties
 

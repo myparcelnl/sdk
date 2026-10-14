@@ -1,4 +1,4 @@
-# # ShipmentPostShipmentsRequestV11Data
+# ShipmentPostShipmentsRequestV11Data
 
 ## Properties
 

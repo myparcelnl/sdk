@@ -1,4 +1,4 @@
-# # CommonErrorSystem
+# CommonErrorSystem
 
 ## Properties
 

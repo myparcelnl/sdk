@@ -1,4 +1,4 @@
-# # CapabilitiesPostCapabilitiesRequestV2Pickup
+# CapabilitiesPostCapabilitiesRequestV2Pickup
 
 ## Properties
 

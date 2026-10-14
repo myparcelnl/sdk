@@ -1,4 +1,4 @@
-# # SortDirection
+# SortDirection
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # CapabilitiesSenderV2
+# CapabilitiesSenderV2
 
 ## Properties
 
