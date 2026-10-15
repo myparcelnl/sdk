@@ -1,0 +1,34 @@
+# Throwaway check: can the app token read the Connect spec in mypadev? Delete with the branch.
+name: Probe Connect spec token
+
+on:
+  push:
+    branches:
+      - ci/INT-1924-probe-connect-spec-token
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Setup app credentials for mypadev
+        id: spec-token
+        uses: myparcelnl/actions/setup-app-credentials@v4
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+          owner: mypadev
+          repositories: oauth-connect-library
+
+      - name: Download the Connect spec
+        env:
+          GH_TOKEN: ${{ steps.spec-token.outputs.token }}
+        run: |
+          gh api repos/mypadev/oauth-connect-library/contents/docs/api/openapi.yaml \
+            -H 'Accept: application/vnd.github.raw' > openapi.yaml
+          wc -l openapi.yaml
+          grep -q 'refreshExpiresIn' openapi.yaml
+          echo "The token can read the spec."
