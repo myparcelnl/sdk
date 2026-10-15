@@ -19,7 +19,8 @@ class CustomsDeclarationTest extends TestCase
             ->setWeight(500)
             ->setItemValue(1000)
             ->setClassification('6403')
-            ->setCountry('US');
+            ->setCountry('US')
+            ->setExternalProductReference('catalog_item_abc123def456g');
 
         $declaration = (new CustomsDeclaration())
             ->setContents(1)
@@ -30,7 +31,7 @@ class CustomsDeclarationTest extends TestCase
         $this->assertSame(
             [
                 'contents' => 1,
-                'items'    => [$item->toArray()],
+                'items'    => [$item->toArrayWithoutNull()],
                 'invoice'  => '1234',
                 'weight'   => 500,
             ],
