@@ -1,6 +1,6 @@
 # MyParcelNL\Sdk\Client\Generated\EcommerceApi
 
-Plugin authentication through OAuth 2.0 with DPoP, and the webhook plugins push orders to.
+Plugin authentication through OAuth 2.0 with DPoP, the webhooks plugins push orders and products to, and (under webhooks) the commands MyParcel sends to the plugin.
 
 
 ## Installation & Usage
@@ -75,6 +75,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**connectStartGet**](docs/Api/DefaultApi.md#connectstartget) | **GET** /connect/start | Start the connect flow in the merchant browser
 *DefaultApi* | [**connectTokenPost**](docs/Api/DefaultApi.md#connecttokenpost) | **POST** /connect/token | Exchange a one-time code for an access token
 *DefaultApi* | [**webhookOrdersPost**](docs/Api/DefaultApi.md#webhookorderspost) | **POST** /webhook/orders | Push orders from a sales channel plugin
+*DefaultApi* | [**webhookProductsPost**](docs/Api/DefaultApi.md#webhookproductspost) | **POST** /webhook/products | Push products from a sales channel plugin
 
 ## Models
 
@@ -97,13 +98,15 @@ Class | Method | HTTP request | Description
 - [ContactOneOf](docs/Model/ContactOneOf.md)
 - [ContactOneOf1](docs/Model/ContactOneOf1.md)
 - [ContactOneOfLocale](docs/Model/ContactOneOfLocale.md)
-- [LengthUnit](docs/Model/LengthUnit.md)
+- [Dimension](docs/Model/Dimension.md)
 - [Money](docs/Model/Money.md)
 - [MultiEmailContact](docs/Model/MultiEmailContact.md)
 - [MultiEmailContactOneOf](docs/Model/MultiEmailContactOneOf.md)
 - [MultiEmailContactOneOf1](docs/Model/MultiEmailContactOneOf1.md)
 - [Order](docs/Model/Order.md)
 - [OrderLine](docs/Model/OrderLine.md)
+- [OrderLineProduct](docs/Model/OrderLineProduct.md)
+- [OrderLineProductDescriptionsInner](docs/Model/OrderLineProductDescriptionsInner.md)
 - [OrderShipping](docs/Model/OrderShipping.md)
 - [OrderShippingDelivery](docs/Model/OrderShippingDelivery.md)
 - [OrderShippingDeliveryOptions](docs/Model/OrderShippingDeliveryOptions.md)
@@ -117,10 +120,7 @@ Class | Method | HTTP request | Description
 - [OrderShippingPickupAnyOfLocation](docs/Model/OrderShippingPickupAnyOfLocation.md)
 - [OrderShippingRecipient](docs/Model/OrderShippingRecipient.md)
 - [PhysicalProperties](docs/Model/PhysicalProperties.md)
-- [PhysicalPropertiesHeight](docs/Model/PhysicalPropertiesHeight.md)
-- [PhysicalPropertiesLength](docs/Model/PhysicalPropertiesLength.md)
 - [PhysicalPropertiesWeight](docs/Model/PhysicalPropertiesWeight.md)
-- [PhysicalPropertiesWidth](docs/Model/PhysicalPropertiesWidth.md)
 - [ProblemDetails](docs/Model/ProblemDetails.md)
 - [ProblemDetailsClient](docs/Model/ProblemDetailsClient.md)
 - [ProblemDetailsInternalServerError](docs/Model/ProblemDetailsInternalServerError.md)
@@ -128,7 +128,7 @@ Class | Method | HTTP request | Description
 - [ProblemDetailsInvalidRequestSyntaxAllOfErrors](docs/Model/ProblemDetailsInvalidRequestSyntaxAllOfErrors.md)
 - [ProblemDetailsNotFound](docs/Model/ProblemDetailsNotFound.md)
 - [Product](docs/Model/Product.md)
-- [ProductDescriptionsInner](docs/Model/ProductDescriptionsInner.md)
+- [ProductChild](docs/Model/ProductChild.md)
 - [SalesPrice](docs/Model/SalesPrice.md)
 - [ShipmentOptions](docs/Model/ShipmentOptions.md)
 - [ShipmentOptionsCustomLabelText](docs/Model/ShipmentOptionsCustomLabelText.md)
@@ -154,6 +154,13 @@ Authentication schemes defined for the API:
 - **Type**: Bearer authentication (JWT)
 
 ### dpop
+
+### myparcelSignature
+
+- **Type**: API key
+- **API key parameter name**: Signature
+- **Location**: HTTP header
+
 
 ## Tests
 
