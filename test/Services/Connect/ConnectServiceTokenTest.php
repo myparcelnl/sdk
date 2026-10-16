@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Connect;
 
+use MyParcelNL\Sdk\Crypto\AesGcmCipher;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Model\Connect\ConnectPlatform;
 use MyParcelNL\Sdk\Services\Connect\ConnectService;
@@ -92,14 +93,87 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         self::assertNotSame('a.b.c', $reloaded->getAccessToken());
     }
 
-    public function testRefreshLeavesTheInstallationAlone(): void
+    public function testRefreshKeepsTheKeyConnectionIdAndChallenge(): void
     {
+        // A refresh writes the new refresh token expiry onto the installation and keeps everything else.
         $this->seedConnectedShop();
         $before = $this->storage->row('installation');
 
-        $this->service()->refresh();
+        $this->service($this->refreshResponse())->refresh();
 
-        self::assertSame($before, $this->storage->row('installation'));
+        $after  = $this->storage->row('installation');
+        $cipher = new AesGcmCipher(self::KEY);
+
+        self::assertSame(
+            $cipher->decrypt($before['encryptedPrivateKey']),
+            $cipher->decrypt($after['encryptedPrivateKey'])
+        );
+        self::assertSame($before['connectionId'], $after['connectionId']);
+        self::assertSame($before['challengeHtm'], $after['challengeHtm']);
+        self::assertSame($before['challengeHtu'], $after['challengeHtu']);
+    }
+
+    public function testRefreshStoresTheNewRefreshTokenExpiry(): void
+    {
+        $this->seedConnectedShop(null, 1790000000);
+
+        $state = $this->service($this->refreshResponse())->refresh();
+
+        self::assertExpiresIn(31536000, (int) $state->getRefreshTokenExpiresAt());
+        self::assertExpiresIn(31536000, (int) $this->storage->row('installation')['refreshTokenExpiresAt']);
+    }
+
+    public function testGetRefreshTokenExpiresAtAnswersFromStorage(): void
+    {
+        $this->seedConnectedShop(null, 1790000000);
+
+        $expiresAt = $this->service()->getRefreshTokenExpiresAt();
+
+        self::assertNotNull($expiresAt);
+        self::assertSame(1790000000, $expiresAt->getTimestamp());
+        self::assertSame('+00:00', $expiresAt->getTimezone()->getName());
+        self::assertSame(0, $this->callCount());
+    }
+
+    public function testGetRefreshTokenExpiresAtIsNullForAShopConnectedBeforeTheSdkStoredIt(): void
+    {
+        $this->seedConnectedShop();
+
+        self::assertNull($this->service()->getRefreshTokenExpiresAt());
+    }
+
+    public function testGetRefreshTokenExpiresAtIsNullForAShopThatNeverConnected(): void
+    {
+        self::assertNull($this->service()->getRefreshTokenExpiresAt());
+    }
+
+    public function testDisconnectForgetsTheRefreshTokenExpiry(): void
+    {
+        // A plugin must not show an expiry notice for a shop that is no longer connected.
+        $this->seedConnectedShop(null, 1790000000);
+
+        $this->service()->disconnect();
+
+        self::assertNull($this->service()->getRefreshTokenExpiresAt());
+    }
+
+    public function testGetAccessTokenExpiresAtAnswersFromStorage(): void
+    {
+        $this->seedConnectedShop(1790000000);
+
+        $expiresAt = $this->service()->getAccessTokenExpiresAt();
+
+        self::assertNotNull($expiresAt);
+        self::assertSame(1790000000, $expiresAt->getTimestamp());
+        self::assertSame('+00:00', $expiresAt->getTimezone()->getName());
+        self::assertSame(0, $this->callCount());
+    }
+
+    public function testGetAccessTokenExpiresAtIsNullWithoutAToken(): void
+    {
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU);
+
+        self::assertNull($this->service()->getAccessTokenExpiresAt());
     }
 
     public function testANonceDemandCostsOneExtraCallAndThenSucceeds(): void
@@ -166,6 +240,21 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
 
         self::assertNull($this->storage->row('token'), 'the token is gone');
         self::assertNotNull($this->storage->row('installation'), 'the key pair is not');
+    }
+
+    public function testARevokedConnectionForgetsTheRefreshTokenExpiry(): void
+    {
+        // A plugin must not show an expiry notice for a connection MyParcel already dropped.
+        $this->seedConnectedShop(null, 1790000000);
+
+        try {
+            $this->service(self::errorResponse(400, 'invalid_grant'))->refresh();
+            self::fail('expected a ConnectException');
+        } catch (ConnectException $exception) {
+            self::assertSame('invalid_grant', $exception->getErrorCode());
+        }
+
+        self::assertNull($this->service()->getRefreshTokenExpiresAt());
     }
 
     public function testARefusedProofIsNotTreatedAsARevokedConnection(): void
@@ -323,6 +412,24 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         }
 
         self::assertNotNull($this->storage->row('token'));
+    }
+
+    public function testADisconnectDuringARefreshStaysDisconnected(): void
+    {
+        // The refresh writes the new expiry after its request returns. It must not write back the
+        // challenge it loaded before the merchant disconnected.
+        $this->seedConnectedShop(null, 1790000000);
+        $refreshResponse = $this->refreshResponse();
+
+        $this->service(function () use ($refreshResponse) {
+            $this->service()->disconnect();
+
+            return $refreshResponse;
+        })->refresh();
+
+        self::assertNull($this->storage->row('installation')['challengeHtm']);
+        self::assertNull($this->storage->row('installation')['refreshTokenExpiresAt']);
+        self::assertFalse($this->service()->isConnected());
     }
 
     public function testRefreshAfterADisconnectDoesNotBringTheShopBack(): void

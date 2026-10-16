@@ -30,7 +30,7 @@ final class ConnectInstallation
     /**
      * Bumped only when the fields of this record change.
      */
-    private const VERSION = 1;
+    private const VERSION = 2;
 
     /**
      * @var string
@@ -53,28 +53,36 @@ final class ConnectInstallation
     private $challengeHtu;
 
     /**
+     * @var int|null Epoch seconds. Null until the first exchange, and for a record from before version 2.
+     */
+    private $refreshTokenExpiresAt;
+
+    /**
      * Build an installation record.
      *
-     * @param  string      $encryptedPrivateKey An AesGcmCipher envelope, never a readable key.
-     * @param  string|null $connectionId        Null until the first successful exchange.
-     * @param  string|null $challengeHtm        Null until the first callback.
-     * @param  string|null $challengeHtu        Null until the first callback.
+     * @param  string      $encryptedPrivateKey   An AesGcmCipher envelope, never a readable key.
+     * @param  string|null $connectionId          Null until the first successful exchange.
+     * @param  string|null $challengeHtm          Null until the first callback.
+     * @param  string|null $challengeHtu          Null until the first callback.
+     * @param  int|null    $refreshTokenExpiresAt Null until the first exchange.
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
     public function __construct(
         string $encryptedPrivateKey,
         ?string $connectionId = null,
         ?string $challengeHtm = null,
-        ?string $challengeHtu = null
+        ?string $challengeHtu = null,
+        ?int $refreshTokenExpiresAt = null
     ) {
         if ('' === $encryptedPrivateKey) {
             throw ConnectException::invalidArgument('An installation needs a key');
         }
 
-        $this->encryptedPrivateKey = $encryptedPrivateKey;
-        $this->connectionId        = $connectionId;
-        $this->challengeHtm        = $challengeHtm;
-        $this->challengeHtu        = $challengeHtu;
+        $this->encryptedPrivateKey   = $encryptedPrivateKey;
+        $this->connectionId          = $connectionId;
+        $this->challengeHtm          = $challengeHtm;
+        $this->challengeHtu          = $challengeHtu;
+        $this->refreshTokenExpiresAt = $refreshTokenExpiresAt;
     }
 
     /**
@@ -138,6 +146,25 @@ final class ConnectInstallation
     }
 
     /**
+     * Get when the refresh token expires, in epoch seconds. Null when it is unknown.
+     */
+    public function getRefreshTokenExpiresAt(): ?int
+    {
+        return $this->refreshTokenExpiresAt;
+    }
+
+    /**
+     * Replace the refresh token expiry, as every exchange and refresh sends a new one.
+     */
+    public function withRefreshTokenExpiresAt(?int $refreshTokenExpiresAt): self
+    {
+        $clone                        = clone $this;
+        $clone->refreshTokenExpiresAt = $refreshTokenExpiresAt;
+
+        return $clone;
+    }
+
+    /**
      * Flatten the record for a consumer's storage, version included.
      *
      * @return array<string, mixed>
@@ -145,11 +172,12 @@ final class ConnectInstallation
     public function toArray(): array
     {
         return [
-            'version'             => self::VERSION,
-            'encryptedPrivateKey' => $this->encryptedPrivateKey,
-            'connectionId'        => $this->connectionId,
-            'challengeHtm'        => $this->challengeHtm,
-            'challengeHtu'        => $this->challengeHtu,
+            'version'               => self::VERSION,
+            'encryptedPrivateKey'   => $this->encryptedPrivateKey,
+            'connectionId'          => $this->connectionId,
+            'challengeHtm'          => $this->challengeHtm,
+            'challengeHtu'          => $this->challengeHtu,
+            'refreshTokenExpiresAt' => $this->refreshTokenExpiresAt,
         ];
     }
 
@@ -175,7 +203,8 @@ final class ConnectInstallation
             $encryptedPrivateKey,
             self::optionalString($data, 'connectionId'),
             self::optionalString($data, 'challengeHtm'),
-            self::optionalString($data, 'challengeHtu')
+            self::optionalString($data, 'challengeHtu'),
+            self::optionalInt($data, 'refreshTokenExpiresAt')
         );
     }
 
@@ -185,5 +214,15 @@ final class ConnectInstallation
     private static function optionalString(array $data, string $field): ?string
     {
         return isset($data[$field]) && is_string($data[$field]) ? $data[$field] : null;
+    }
+
+    /**
+     * A per-column table or a cache layer can hand back '1790000000' instead of 1790000000.
+     *
+     * @param array<string, mixed> $data
+     */
+    private static function optionalInt(array $data, string $field): ?int
+    {
+        return isset($data[$field]) && is_numeric($data[$field]) ? (int) $data[$field] : null;
     }
 }

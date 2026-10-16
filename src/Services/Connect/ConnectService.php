@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Connect;
 
+use DateTimeImmutable;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
@@ -290,7 +291,8 @@ final class ConnectService
         $state = $state
             ->withTokenChallenge($htm, $htu)
             ->withConnectionId($token->getConnectionId() ?? $state->getConnectionId())
-            ->withToken($token->getAccessToken(), $this->expiryOf($token), $token->getScope());
+            ->withToken($token->getAccessToken(), $token->getExpiresAt()->getTimestamp(), $token->getScope())
+            ->withRefreshTokenExpiresAt($token->getRefreshExpiresAt()->getTimestamp());
 
         $this->repository->saveInstallation($state);
         $this->repository->saveToken($state);
@@ -346,11 +348,38 @@ final class ConnectService
         );
 
         // The refresh answer carries no connection id: the one from the exchange stays valid.
-        $state = $state->withToken($token->getAccessToken(), $this->expiryOf($token), $token->getScope());
+        $state = $state
+            ->withToken($token->getAccessToken(), $token->getExpiresAt()->getTimestamp(), $token->getScope())
+            ->withRefreshTokenExpiresAt($token->getRefreshExpiresAt()->getTimestamp());
 
+        $this->repository->saveRefreshTokenExpiresAt($state->getRefreshTokenExpiresAt());
         $this->repository->saveToken($state);
 
         return $state;
+    }
+
+    /**
+     * Get when the access token expires, from storage only. Null when no token is stored.
+     *
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    public function getAccessTokenExpiresAt(): ?DateTimeImmutable
+    {
+        $state = $this->repository->load();
+
+        return self::utcDate(null === $state ? null : $state->getAccessTokenExpiresAt());
+    }
+
+    /**
+     * Get when the shop has to reconnect, from storage only. Null when it is unknown.
+     *
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    public function getRefreshTokenExpiresAt(): ?DateTimeImmutable
+    {
+        $state = $this->repository->load();
+
+        return self::utcDate(null === $state ? null : $state->getRefreshTokenExpiresAt());
     }
 
     /**
@@ -386,7 +415,9 @@ final class ConnectService
         if (null !== $state) {
             // The challenge goes too, so a scheduled refresh cannot quietly reconnect the shop. It
             // is only useful while there is a connection, and a reconnect delivers a fresh pair.
-            $this->repository->saveInstallation($state->withTokenChallenge(null, null));
+            $this->repository->saveInstallation(
+                $state->withTokenChallenge(null, null)->withRefreshTokenExpiresAt(null)
+            );
         }
 
         $this->repository->clearToken();
@@ -548,6 +579,7 @@ final class ConnectService
             case ConnectErrorCode::INVALID_GRANT:
                 if (self::ENDPOINT_REFRESH === $endpoint) {
                     $this->repository->clearToken();
+                    $this->repository->saveRefreshTokenExpiresAt(null);
 
                     return ConnectException::connectionRevoked()->withHttpContextOf($exception);
                 }
@@ -653,11 +685,6 @@ final class ConnectService
         }
     }
 
-    private function expiryOf(ConnectTokenResponse $token): int
-    {
-        return time() + $token->getExpiresIn();
-    }
-
     /**
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
@@ -746,6 +773,11 @@ final class ConnectService
         }
 
         return null;
+    }
+
+    private static function utcDate(?int $epochSeconds): ?DateTimeImmutable
+    {
+        return null === $epochSeconds ? null : new DateTimeImmutable('@' . $epochSeconds);
     }
 
     /**
