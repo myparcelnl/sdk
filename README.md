@@ -78,6 +78,28 @@ an API key.
 See [PHP SDK v11] on the developer portal for how to use it. `dev/connect-poc` in this repository is
 a page that runs the whole flow.
 
+### When the connection expires
+
+Show the merchant a notice from about one month before the connection expires, so they reconnect in
+time. When the refresh token expires, the next refresh fails and the shop has to connect again.
+
+A refresh token lasts about a year. MyParcel sends its lifetime as `refreshExpiresIn` in the answers
+of `/connect/token` and `/connect/refresh`, and the SDK stores the expiry with the installation.
+`ConnectService::getRefreshTokenExpiresAt()` returns it as a UTC `DateTimeImmutable`, read from
+storage without a request. It returns `null` when the shop is not connected, or connected with an
+SDK version that did not store the expiry yet. The first refresh after an update stores it.
+
+```php
+$expiresAt = $connect->getRefreshTokenExpiresAt();
+
+if (null !== $expiresAt && $expiresAt < new DateTimeImmutable('+1 month')) {
+    // Show the reconnect notice.
+}
+```
+
+`ConnectService::getAccessTokenExpiresAt()` does the same for the access token, which lasts about an
+hour. The SDK refreshes the access token itself, so you only need this date for display.
+
 ## Value mapping
 
 Use `ApiMapperService` to convert between delivery-options names, v1 IDs and v2 names.
