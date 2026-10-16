@@ -33,6 +33,11 @@ final class ConnectState
     private $accessTokenExpiresAt;
 
     /**
+     * @var int|null
+     */
+    private $refreshTokenExpiresAt;
+
+    /**
      * @var string|null
      */
     private $connectionId;
@@ -111,6 +116,15 @@ final class ConnectState
     }
 
     /**
+     * When the refresh token stops working and the shop has to reconnect, in epoch seconds. Null when
+     * the shop is not connected, or connected before the SDK stored this.
+     */
+    public function getRefreshTokenExpiresAt(): ?int
+    {
+        return $this->refreshTokenExpiresAt;
+    }
+
+    /**
      * MyParcel's id for this connection. Keep it: MyParcel puts it on requests it makes to the shop.
      */
     public function getConnectionId(): ?string
@@ -179,6 +193,17 @@ final class ConnectState
         $clone->accessToken          = $accessToken;
         $clone->accessTokenExpiresAt = $expiresAt;
         $clone->scope                = $scope;
+
+        return $clone;
+    }
+
+    /**
+     * After an exchange or a refresh, as both answers carry a new refresh token expiry.
+     */
+    public function withRefreshTokenExpiresAt(?int $expiresAt): self
+    {
+        $clone                        = clone $this;
+        $clone->refreshTokenExpiresAt = $expiresAt;
 
         return $clone;
     }
