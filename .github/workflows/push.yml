@@ -1,18 +1,33 @@
-name: 'Push to release branches 🚀'
+name: 'Release 🚀'
 
 on:
-  push:
-    branches:
-      - main
-
   workflow_dispatch:
 
+  schedule:
+    # every day at 16:00
+    - cron: '0 16 * * *'
+
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
+  # Scheduled workflows only run on the default branch, so start a manual run on each release branch.
+  dispatch:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-22.04
+    permissions:
+      actions: write
+    strategy:
+      matrix:
+        branch: [main, beta, 10.x]
+    steps:
+      - run: gh workflow run push.yml --repo ${{ github.repository }} --ref ${{ matrix.branch }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+
   test:
+    if: github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/--test.yml
     secrets: inherit
 
@@ -41,7 +56,7 @@ jobs:
           token: ${{ secrets.GH_REPO_TOKEN }}
 
   rebase-prs:
-    if: always()
+    if: always() && github.event_name == 'workflow_dispatch'
     needs: release
     runs-on: ubuntu-22.04
     steps:
