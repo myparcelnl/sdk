@@ -64,13 +64,11 @@ For users of the generated API clients:
   value: created_by, modified_by, origin, parent_id and external_provider_id
   on SecondaryShipmentResource, and the 11 string fields of
   ShipmentDefsShipmentPropertiesRecipient.
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-* **shipment:** A parameter that cannot be sent to the `getShipments` API, now throws an error rather than quietly ignoring it
+* **shipment:** A parameter that cannot be sent to the `getShipments` API now throws an error, instead of being ignored.
 * **auth:** `getKeyMaterial` in the DpopKeyInterface has a typed return value, and returns \OpenSSLAsymmetricKey. Update your implementations to match.
-* bump minimum supported PHP version to 8.3
+* The minimum supported PHP version is 8.3.
 
-### build
+### Build System
 
 * **api:** generate the API clients with openapi-generator 7.26.0 ([1401d84](https://github.com/myparcelnl/sdk/commit/1401d848c83d696f8cab195c901b9985b5987d1b))
 
@@ -81,7 +79,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 
 ### :bug: Bug Fixes
 
-* **auth:** type openssql asymetic keys as \OpenSSLAsymmetricKey ([52a3ea1](https://github.com/myparcelnl/sdk/commit/52a3ea199231f141af7d732b1995060b19befa44))
+* **auth:** type OpenSSL asymmetric keys as \OpenSSLAsymmetricKey ([52a3ea1](https://github.com/myparcelnl/sdk/commit/52a3ea199231f141af7d732b1995060b19befa44))
 * remove the deprecations that PHP 8.4 and 8.5 report ([7f75cd8](https://github.com/myparcelnl/sdk/commit/7f75cd8b4e977c43306b46c543df90526751c4dd)), closes [#634](https://github.com/myparcelnl/sdk/issues/634)
 
 ## [11.0.0](https://github.com/myparcelnl/sdk/compare/v10.7.15...v11.0.0) (2026-10-13)
