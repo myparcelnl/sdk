@@ -83,6 +83,7 @@ class InterimTypesTest extends TestCase
         self::assertSame('a.b.c', $response->getAccessToken());
         self::assertSame('6f1e6f3e-0000-4000-8000-000000000000', $response->getConnectionId());
         self::assertSame(86400, $response->getExpiresIn());
+        self::assertSame(31536000, $response->getRefreshExpiresIn());
         self::assertSame('integration', $response->getScope());
     }
 
@@ -95,6 +96,7 @@ class InterimTypesTest extends TestCase
         self::assertNull($response->getConnectionId());
         self::assertSame('a.b.c', $response->getAccessToken());
         self::assertSame(3600, $response->getExpiresIn());
+        self::assertSame(31536000, $response->getRefreshExpiresIn());
     }
 
     public function testTokenResponseCarriesTheNonceHeaderWhichIsNotABodyField(): void
@@ -149,6 +151,23 @@ class InterimTypesTest extends TestCase
         ConnectTokenResponse::fromRefresh(self::refreshBody(['access_token' => '']));
     }
 
+    public function testTokenResponseGivesTheExpiryMomentsInUtc(): void
+    {
+        $before   = time();
+        $response = ConnectTokenResponse::fromRefresh(self::refreshBody());
+        $after    = time();
+
+        $expiresAt        = $response->getExpiresAt();
+        $refreshExpiresAt = $response->getRefreshExpiresAt();
+
+        self::assertGreaterThanOrEqual($before + 3600, $expiresAt->getTimestamp());
+        self::assertLessThanOrEqual($after + 3600, $expiresAt->getTimestamp());
+        self::assertGreaterThanOrEqual($before + 31536000, $refreshExpiresAt->getTimestamp());
+        self::assertLessThanOrEqual($after + 31536000, $refreshExpiresAt->getTimestamp());
+        self::assertSame('+00:00', $expiresAt->getTimezone()->getName());
+        self::assertSame('+00:00', $refreshExpiresAt->getTimezone()->getName());
+    }
+
     public function testTokenResponseAcceptsAnExpiryThatArrivesAsAString(): void
     {
         $response = ConnectTokenResponse::fromRefresh(self::refreshBody(['expires_in' => '3600']));
@@ -166,6 +185,16 @@ class InterimTypesTest extends TestCase
         $this->expectException(ConnectException::class);
 
         ConnectTokenResponse::fromRefresh(self::refreshBody(['expires_in' => $expiresIn]));
+    }
+
+    /**
+     * @dataProvider provideUnusableExpiries
+     */
+    public function testTokenResponseRejectsARefreshExpiryItCannotUse($refreshExpiresIn): void
+    {
+        $this->expectException(ConnectException::class);
+
+        ConnectTokenResponse::fromRefresh(self::refreshBody(['refresh_expires_in' => $refreshExpiresIn]));
     }
 
     public function provideUnusableExpiries(): array

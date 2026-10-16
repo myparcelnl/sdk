@@ -284,7 +284,7 @@ final class ConnectService
         $state = $state
             ->withTokenChallenge($htm, $htu)
             ->withConnectionId($token->getConnectionId() ?? $state->getConnectionId())
-            ->withToken($token->getAccessToken(), $this->expiryOf($token), $token->getScope());
+            ->withToken($token->getAccessToken(), $token->getExpiresAt()->getTimestamp(), $token->getScope());
 
         $this->repository->saveInstallation($state);
         $this->repository->saveToken($state);
@@ -340,7 +340,7 @@ final class ConnectService
         );
 
         // The refresh answer carries no connection id: the one from the exchange stays valid.
-        $state = $state->withToken($token->getAccessToken(), $this->expiryOf($token), $token->getScope());
+        $state = $state->withToken($token->getAccessToken(), $token->getExpiresAt()->getTimestamp(), $token->getScope());
 
         $this->repository->saveToken($state);
 
@@ -645,11 +645,6 @@ final class ConnectService
         } catch (Throwable $exception) {
             throw ConnectException::invalidArgument('The stored key pair cannot be read');
         }
-    }
-
-    private function expiryOf(ConnectTokenResponse $token): int
-    {
-        return time() + $token->getExpiresIn();
     }
 
     /**
