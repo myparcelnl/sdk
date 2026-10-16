@@ -13,6 +13,24 @@ typeMappings:
   # @todo remove when the generator can represent the /webhook/orders 202 oneOf.
   # It flattens the three branches into one model whose validation no accepted item can pass.
   WebhookOrdersPost202ResponseInner: FixedWebhookOrderResult
+# @todo remove in v12, when the SDK supports webhooks. These schemas are used only by the command
+# webhook under webhooks:, so they are mapped away and not generated.
+schemaMappings:
+  Command: Command
+  CommandEnvelope: CommandEnvelope
+  OrderShipmentsCommand: OrderShipmentsCommand
+  OrderShipmentsOrder: OrderShipmentsOrder
+  OrderShipmentsOrderLine: OrderShipmentsOrderLine
+  OrderShipmentsShipment: OrderShipmentsShipment
+# Lists apis, models and supportingFiles so the generator leaves out webhooks: with webhooks on,
+# 7.12.0 overwrites Api/DefaultApi.php with the webhook (openapi-generator#20346). This block
+# replaces the one in common.yaml, so it repeats apiTests and modelTests.
+globalProperties:
+  apiTests: false
+  modelTests: false
+  apis: ''
+  models: ''
+  supportingFiles: ''
 additionalProperties:
   '!include': 'commonProperties.yaml'
   packageName: MyParcelNL\Sdk\Client\Generated\EcommerceApi

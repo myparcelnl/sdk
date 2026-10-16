@@ -72,11 +72,12 @@ class InterimTypesTest extends TestCase
     public function testTokenResponseReadsAnExchangeBody(): void
     {
         $response = ConnectTokenResponse::fromExchange(new ConnectTokenPost200Response([
-            'access_token'  => 'a.b.c',
-            'connection_id' => '6f1e6f3e-0000-4000-8000-000000000000',
-            'token_type'    => 'DPoP',
-            'expires_in'    => 86400,
-            'scope'         => 'integration',
+            'access_token'       => 'a.b.c',
+            'connection_id'      => '6f1e6f3e-0000-4000-8000-000000000000',
+            'token_type'         => 'DPoP',
+            'expires_in'         => 86400,
+            'refresh_expires_in' => 31536000,
+            'scope'              => 'integration',
         ]));
 
         self::assertSame('a.b.c', $response->getAccessToken());
@@ -121,11 +122,12 @@ class InterimTypesTest extends TestCase
     public function provideIncompleteExchangeBodies(): array
     {
         $complete = [
-            'access_token'  => 'a.b.c',
-            'connection_id' => '6f1e6f3e-0000-4000-8000-000000000000',
-            'token_type'    => 'DPoP',
-            'expires_in'    => 3600,
-            'scope'         => 'integration',
+            'access_token'       => 'a.b.c',
+            'connection_id'      => '6f1e6f3e-0000-4000-8000-000000000000',
+            'token_type'         => 'DPoP',
+            'expires_in'         => 3600,
+            'refresh_expires_in' => 31536000,
+            'scope'              => 'integration',
         ];
 
         $sets = ['nothing at all' => [[]]];
@@ -214,10 +216,11 @@ class InterimTypesTest extends TestCase
     private static function refreshBody(array $overrides = []): ConnectRefreshPost200Response
     {
         return new ConnectRefreshPost200Response($overrides + [
-            'access_token' => 'a.b.c',
-            'token_type'   => 'DPoP',
-            'expires_in'   => 3600,
-            'scope'        => 'integration',
+            'access_token'       => 'a.b.c',
+            'token_type'         => 'DPoP',
+            'expires_in'         => 3600,
+            'refresh_expires_in' => 31536000,
+            'scope'              => 'integration',
         ]);
     }
 }
