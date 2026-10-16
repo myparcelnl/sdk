@@ -18,8 +18,8 @@ use MyParcelNL\Sdk\Model\Connect\ConnectToken;
  * key and the access token on the way out and decrypting them on the way in. So ConnectService never
  * sees an envelope, and a ConnectStorageInterface implementation never sees a readable secret.
  *
- * Each save writes one record. A refresh therefore rewrites the token and leaves the installation and
- * the nonces alone.
+ * Each save writes one record. A refresh rewrites the token and only the refresh token expiry on the
+ * installation, and leaves the nonces alone.
  *
  * A read is remembered for the life of this instance, because signing one API call reads the state
  * twice and an order import signs hundreds. Every save forgets it again. Memoised per instance and
@@ -226,6 +226,24 @@ final class ConnectStateRepository
         }
 
         $this->storage->saveNonces($nonces->withoutStartNonce());
+    }
+
+    /**
+     * Write only the refresh token expiry onto the installation as it is stored now.
+     */
+    public function saveRefreshTokenExpiresAt(?int $refreshTokenExpiresAt): void
+    {
+        $this->forget();
+
+        // Read the record again: a disconnect during the refresh request removed the challenge, and
+        // the state loaded before that request would put it back.
+        $installation = $this->storage->loadInstallation();
+
+        if (null === $installation || null === $installation->getChallengeHtm()) {
+            return;
+        }
+
+        $this->storage->saveInstallation($installation->withRefreshTokenExpiresAt($refreshTokenExpiresAt));
     }
 
     /**
