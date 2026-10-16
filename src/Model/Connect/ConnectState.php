@@ -116,8 +116,8 @@ final class ConnectState
     }
 
     /**
-     * When the refresh token stops working and the shop has to reconnect, in epoch seconds. Null when
-     * the shop is not connected, or connected before the SDK stored this.
+     * Get when the shop has to reconnect, in epoch seconds. Null when the shop is not connected, or
+     * connected before the SDK stored this.
      */
     public function getRefreshTokenExpiresAt(): ?int
     {
@@ -198,7 +198,7 @@ final class ConnectState
     }
 
     /**
-     * After an exchange or a refresh, as both answers carry a new refresh token expiry.
+     * Set the refresh token expiry that an exchange or a refresh sends.
      */
     public function withRefreshTokenExpiresAt(?int $expiresAt): self
     {

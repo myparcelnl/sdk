@@ -346,7 +346,7 @@ final class ConnectService
             ->withToken($token->getAccessToken(), $token->getExpiresAt()->getTimestamp(), $token->getScope())
             ->withRefreshTokenExpiresAt($token->getRefreshExpiresAt()->getTimestamp());
 
-        $this->repository->saveInstallation($state);
+        $this->repository->saveRefreshTokenExpiresAt($state->getRefreshTokenExpiresAt());
         $this->repository->saveToken($state);
 
         return $state;
@@ -573,7 +573,7 @@ final class ConnectService
             case ConnectErrorCode::INVALID_GRANT:
                 if (self::ENDPOINT_REFRESH === $endpoint) {
                     $this->repository->clearToken();
-                    $this->forgetRefreshTokenExpiry();
+                    $this->repository->saveRefreshTokenExpiresAt(null);
 
                     return ConnectException::connectionRevoked()->withHttpContextOf($exception);
                 }
@@ -767,18 +767,6 @@ final class ConnectService
         }
 
         return null;
-    }
-
-    /**
-     * @throws \MyParcelNL\Sdk\Exception\ConnectException
-     */
-    private function forgetRefreshTokenExpiry(): void
-    {
-        $state = $this->repository->load();
-
-        if (null !== $state) {
-            $this->repository->saveInstallation($state->withRefreshTokenExpiresAt(null));
-        }
     }
 
     private static function utcDate(?int $epochSeconds): ?DateTimeImmutable

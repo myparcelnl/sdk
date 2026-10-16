@@ -95,7 +95,7 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
 
     public function testRefreshKeepsTheKeyConnectionIdAndChallenge(): void
     {
-        // The installation is written on every refresh now, for the new refresh token expiry.
+        // A refresh writes the new refresh token expiry onto the installation and keeps everything else.
         $this->seedConnectedShop();
         $before = $this->storage->row('installation');
 
@@ -412,6 +412,24 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         }
 
         self::assertNotNull($this->storage->row('token'));
+    }
+
+    public function testADisconnectDuringARefreshStaysDisconnected(): void
+    {
+        // The refresh writes the new expiry after its request returns. It must not write back the
+        // challenge it loaded before the merchant disconnected.
+        $this->seedConnectedShop(null, 1790000000);
+        $refreshResponse = $this->refreshResponse();
+
+        $this->service(function () use ($refreshResponse) {
+            $this->service()->disconnect();
+
+            return $refreshResponse;
+        })->refresh();
+
+        self::assertNull($this->storage->row('installation')['challengeHtm']);
+        self::assertNull($this->storage->row('installation')['refreshTokenExpiresAt']);
+        self::assertFalse($this->service()->isConnected());
     }
 
     public function testRefreshAfterADisconnectDoesNotBringTheShopBack(): void
