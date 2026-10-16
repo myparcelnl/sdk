@@ -25,7 +25,7 @@ Model/Contact.php
 Model/ContactOneOf.php
 Model/ContactOneOf1.php
 Model/ContactOneOfLocale.php
-Model/LengthUnit.php
+Model/Dimension.php
 Model/ModelInterface.php
 Model/Money.php
 Model/MultiEmailContact.php
@@ -33,6 +33,8 @@ Model/MultiEmailContactOneOf.php
 Model/MultiEmailContactOneOf1.php
 Model/Order.php
 Model/OrderLine.php
+Model/OrderLineProduct.php
+Model/OrderLineProductDescriptionsInner.php
 Model/OrderShipping.php
 Model/OrderShippingDelivery.php
 Model/OrderShippingDeliveryOptions.php
@@ -46,10 +48,7 @@ Model/OrderShippingPickupAnyOfAddress.php
 Model/OrderShippingPickupAnyOfLocation.php
 Model/OrderShippingRecipient.php
 Model/PhysicalProperties.php
-Model/PhysicalPropertiesHeight.php
-Model/PhysicalPropertiesLength.php
 Model/PhysicalPropertiesWeight.php
-Model/PhysicalPropertiesWidth.php
 Model/ProblemDetails.php
 Model/ProblemDetailsClient.php
 Model/ProblemDetailsInternalServerError.php
@@ -57,7 +56,7 @@ Model/ProblemDetailsInvalidRequestSyntax.php
 Model/ProblemDetailsInvalidRequestSyntaxAllOfErrors.php
 Model/ProblemDetailsNotFound.php
 Model/Product.php
-Model/ProductDescriptionsInner.php
+Model/ProductChild.php
 Model/SalesPrice.php
 Model/ShipmentOptions.php
 Model/ShipmentOptionsCustomLabelText.php
@@ -90,13 +89,15 @@ docs/Model/Contact.md
 docs/Model/ContactOneOf.md
 docs/Model/ContactOneOf1.md
 docs/Model/ContactOneOfLocale.md
-docs/Model/LengthUnit.md
+docs/Model/Dimension.md
 docs/Model/Money.md
 docs/Model/MultiEmailContact.md
 docs/Model/MultiEmailContactOneOf.md
 docs/Model/MultiEmailContactOneOf1.md
 docs/Model/Order.md
 docs/Model/OrderLine.md
+docs/Model/OrderLineProduct.md
+docs/Model/OrderLineProductDescriptionsInner.md
 docs/Model/OrderShipping.md
 docs/Model/OrderShippingDelivery.md
 docs/Model/OrderShippingDeliveryOptions.md
@@ -110,10 +111,7 @@ docs/Model/OrderShippingPickupAnyOfAddress.md
 docs/Model/OrderShippingPickupAnyOfLocation.md
 docs/Model/OrderShippingRecipient.md
 docs/Model/PhysicalProperties.md
-docs/Model/PhysicalPropertiesHeight.md
-docs/Model/PhysicalPropertiesLength.md
 docs/Model/PhysicalPropertiesWeight.md
-docs/Model/PhysicalPropertiesWidth.md
 docs/Model/ProblemDetails.md
 docs/Model/ProblemDetailsClient.md
 docs/Model/ProblemDetailsInternalServerError.md
@@ -121,7 +119,7 @@ docs/Model/ProblemDetailsInvalidRequestSyntax.md
 docs/Model/ProblemDetailsInvalidRequestSyntaxAllOfErrors.md
 docs/Model/ProblemDetailsNotFound.md
 docs/Model/Product.md
-docs/Model/ProductDescriptionsInner.md
+docs/Model/ProductChild.md
 docs/Model/SalesPrice.md
 docs/Model/ShipmentOptions.md
 docs/Model/ShipmentOptionsCustomLabelText.md

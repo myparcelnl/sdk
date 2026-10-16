@@ -44,6 +44,21 @@ The rows above also apply when you use these classes directly. In addition:
 |-----------------------|-----|-----|
 | Every generated `Api` class, such as `CoreApi\Api\ShipmentApi` and `IamApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
 | Every generated `Api` class | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
+| `EcommerceApi\Model\PhysicalProperties` | `getHeight()`, `getLength()` and `getWidth()` return `PhysicalPropertiesHeight`, `PhysicalPropertiesLength` and `PhysicalPropertiesWidth` | They return `Dimension`, and the three classes are removed. Use the `UNIT_MM`, `UNIT_CM` and `UNIT_M` constants on `Dimension`. |
+
+## Upgrading to v11.1
+
+v11.1 renames generated models in the Ecommerce client. Code that uses them must change.
+
+| Before | After |
+| --- | --- |
+| `EcommerceApi\Model\Product` (order line) | `EcommerceApi\Model\OrderLineProduct` |
+| `EcommerceApi\Model\ProductDescriptionsInner` | `EcommerceApi\Model\OrderLineProductDescriptionsInner` |
+| `EcommerceApi\Model\LengthUnit::MM` / `CM` / `M` | `PhysicalPropertiesHeight::UNIT_MM` / `UNIT_CM` / `UNIT_M` (same on `PhysicalPropertiesLength` and `PhysicalPropertiesWidth`) |
+
+`EcommerceApi\Model\Product` still exists, but is now the body of `/webhook/products`. Code that builds order lines with it breaks. `unit` on height, length and width is now a plain string with these constants. The new `Dimension` model is generated, but `PhysicalProperties` does not use it.
+
+v12 replaces the three `PhysicalProperties*` classes with `Dimension`. See "Direct use of `MyParcelNL\Sdk\Client\Generated`" under "Upgrading to v12".
 
 ## Upgrading to v11
 

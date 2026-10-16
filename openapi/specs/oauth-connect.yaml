@@ -1,6 +1,7 @@
 info:
-  description: Plugin authentication through OAuth 2.0 with DPoP, and the webhook
-    plugins push orders to.
+  description: Plugin authentication through OAuth 2.0 with DPoP, the webhooks
+    plugins push orders and products to, and (under webhooks) the commands
+    MyParcel sends to the plugin.
   title: MyParcel OAuth Connect API
   version: 1.0.0
 openapi: 3.1.0
@@ -21,7 +22,24 @@ components:
         header per request."
       scheme: dpop
       type: http
+    myparcelSignature:
+      description: RFC 9421 HTTP message signature by MyParcel. Signature-Input and
+        Signature have one member, label "myparcel"; components ("@method"
+        "@target-uri" "content-type" "content-digest"), created, expires
+        (created + 60), keyid (a kid in /.well-known/jwks.json) and alg
+        "ecdsa-p256-sha256". Use the stored commandEndpoint as @target-uri.
+        Content-Digest is the RFC 9530 sha-256 of the raw body.
+      in: header
+      name: Signature
+      type: apiKey
   schemas:
+    Command:
+      oneOf:
+        - $ref: "#/components/schemas/OrderShipmentsCommand"
+      discriminator:
+        propertyName: type
+        mapping:
+          ORDER_SHIPMENTS: "#/components/schemas/OrderShipmentsCommand"
     ConnectStartConfig:
       type: object
       properties:
@@ -58,6 +76,16 @@ components:
           minLength: 1
           maxLength: 256
           description: Semver version of the plugin. Defaults to 0.0.1.
+        commandEndpoint:
+          type: string
+          maxLength: 250
+          format: uri
+          pattern: ^[^#]*$
+          description: Optional absolute HTTPS URL that receives every MyParcel command
+            for this connection. A reconnect replaces it; without it the plugin
+            gets no commands. Must be canonical (lowercase host, no default
+            port, path starts with /, no user name or password); other forms are
+            rejected.
       required:
         - shopName
         - shopUrl
@@ -331,44 +359,36 @@ components:
           $ref: "#/components/schemas/Address"
         contact:
           $ref: "#/components/schemas/Contact"
-    LengthUnit:
-      type: string
-      enum:
-        - mm
-        - cm
-        - m
-      description: The unit of measurement for length, width, or height.
+    Dimension:
+      type: object
+      properties:
+        unit:
+          type: string
+          enum:
+            - mm
+            - cm
+            - m
+          description: The unit of measurement for length, width, or height.
+        value:
+          type: integer
+          minimum: 1
+          maximum: 1000000
+          description: The dimension value.
+      required:
+        - unit
+        - value
+      description: The physical dimension.
     PhysicalProperties:
       type: object
       properties:
         height:
-          type: object
-          properties:
-            unit:
-              $ref: "#/components/schemas/LengthUnit"
-            value:
-              type: integer
-              minimum: 1
-              maximum: 1000000
-              description: The dimension value.
-          required:
-            - unit
-            - value
-          description: The height.
+          allOf:
+            - $ref: "#/components/schemas/Dimension"
+            - description: The height.
         length:
-          type: object
-          properties:
-            unit:
-              $ref: "#/components/schemas/LengthUnit"
-            value:
-              type: integer
-              minimum: 1
-              maximum: 1000000
-              description: The dimension value.
-          required:
-            - unit
-            - value
-          description: The length.
+          allOf:
+            - $ref: "#/components/schemas/Dimension"
+            - description: The length.
         weight:
           type: object
           properties:
@@ -387,19 +407,9 @@ components:
             - value
           description: The weight.
         width:
-          type: object
-          properties:
-            unit:
-              $ref: "#/components/schemas/LengthUnit"
-            value:
-              type: integer
-              minimum: 1
-              maximum: 1000000
-              description: The dimension value.
-          required:
-            - unit
-            - value
-          description: The width.
+          allOf:
+            - $ref: "#/components/schemas/Dimension"
+            - description: The width.
       description: The physical dimensions.
     Money:
       type: object
@@ -442,7 +452,7 @@ components:
         - taxRate
       description: A monetary value represented by split integral and fractional parts
         to avoid floating point errors.
-    Product:
+    OrderLineProduct:
       type: object
       properties:
         name:
@@ -507,7 +517,7 @@ components:
       type: object
       properties:
         product:
-          $ref: "#/components/schemas/Product"
+          $ref: "#/components/schemas/OrderLineProduct"
         quantity:
           type: integer
           exclusiveMinimum: 0
@@ -719,6 +729,11 @@ components:
         shipping:
           type: object
           properties:
+            additionalContext:
+              type: string
+              minLength: 1
+              maxLength: 256
+              description: Additional shipping context of the order.
             carrier:
               $ref: "#/components/schemas/Carrier"
             delivery:
@@ -1046,6 +1061,176 @@ components:
       required:
         - orderedAt
         - sourceId
+    ProductChild:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          exclusiveMinimum: 0
+        sourceId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The ID of the child product as defined in the source system.
+      required:
+        - quantity
+        - sourceId
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        sourceId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The product ID as defined in the source system.
+        trackInventory:
+          type: boolean
+          description: Whether the shop tracks the stock of this product.
+        barcode:
+          type: string
+          minLength: 6
+          maxLength: 24
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductChild"
+          minItems: 1
+          description: The parts of a bundle product, identified by their own source ID.
+        containsDangerousSubstances:
+          type: boolean
+        countryCodeOfOrigin:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: "[A-Z]{2}"
+          description: ISO 3166-1 alpha-2 country code.
+        descriptions:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+                minLength: 1
+                maxLength: 2500
+                description: The text of one of the product descriptions.
+              languageCode:
+                type: string
+                minLength: 2
+                maxLength: 2
+                description: The language code (ISO 639-1) of one of the product descriptions.
+            required:
+              - text
+              - languageCode
+          minItems: 1
+          maxItems: 200
+          description: The descriptions of the product.
+        ean:
+          type: string
+          minLength: 1
+          maxLength: 13
+        hasUnlimitedShelfLife:
+          type: boolean
+        hsCode:
+          type: string
+          minLength: 6
+          maxLength: 10
+          description: The HS code of the product.
+        physicalProperties:
+          $ref: "#/components/schemas/PhysicalProperties"
+        purchasePrice:
+          $ref: "#/components/schemas/Money"
+        salesPrice:
+          $ref: "#/components/schemas/SalesPrice"
+        sku:
+          type: string
+      required:
+        - name
+        - sourceId
+        - trackInventory
+    OrderShipmentsOrder:
+      type: object
+      properties:
+        sourceId:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          enum:
+            - PARTIALLY_SHIPPED
+            - SHIPPED
+      required:
+        - sourceId
+        - status
+    OrderShipmentsOrderLine:
+      type: object
+      properties:
+        sourceId:
+          type: string
+          minLength: 1
+        quantity:
+          type: integer
+          exclusiveMinimum: 0
+      required:
+        - sourceId
+        - quantity
+    OrderShipmentsShipment:
+      type: object
+      properties:
+        shipmentId:
+          type: string
+          minLength: 1
+        orderLines:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderShipmentsOrderLine"
+          minItems: 1
+      required:
+        - shipmentId
+        - orderLines
+    CommandEnvelope:
+      type: object
+      properties:
+        commandId:
+          type: string
+          description: Identifies one command. An opaque string; do not parse it. The same
+            value on every resend. Drop duplicates per (connectionId, commandId)
+            for at least 14 days; it is also the replay protection.
+        connectionId:
+          type: string
+          format: uuid
+          description: Must equal the connection id from /connect/token. Changes on
+            reconnect.
+        type:
+          type: string
+          description: The command name. Reply 404 for a type the plugin does not support.
+      required:
+        - commandId
+        - connectionId
+        - type
+      discriminator:
+        propertyName: type
+        mapping:
+          ORDER_SHIPMENTS: "#/components/schemas/OrderShipmentsCommand"
+    OrderShipmentsCommand:
+      allOf:
+        - $ref: "#/components/schemas/CommandEnvelope"
+        - type: object
+          properties:
+            type:
+              type: string
+              description: Always ORDER_SHIPMENTS for this command.
+              const: ORDER_SHIPMENTS
+            order:
+              $ref: "#/components/schemas/OrderShipmentsOrder"
+            shipment:
+              $ref: "#/components/schemas/OrderShipmentsShipment"
+          required:
+            - order
+            - shipment
+      description: Order lines of an order are shipped. One command holds one shipment.
     ProblemDetails:
       type: object
       properties:
@@ -1245,10 +1430,9 @@ paths:
             type: string
             minLength: 1
             maxLength: 64
-            description: "Space-delimited scopes: read:capabilities, write:orders,
-              write:products."
+            description: Space-delimited scopes. The only supported scope is integration.
             examples:
-              - write:orders
+              - integration
           required: true
           name: scope
           in: query
@@ -1349,11 +1533,15 @@ paths:
                   connectionId:
                     type: string
                     format: uuid
+                    description: A Universally Unique Identifier (UUID).
                   tokenType:
                     type: string
                     enum:
                       - DPoP
                   expiresIn:
+                    type: integer
+                    exclusiveMinimum: 0
+                  refreshExpiresIn:
                     type: integer
                     exclusiveMinimum: 0
                   scope:
@@ -1364,6 +1552,7 @@ paths:
                   - connectionId
                   - tokenType
                   - expiresIn
+                  - refreshExpiresIn
                   - scope
         "400":
           description: invalid_code, invalid_grant, invalid_sales_channel or
@@ -1522,6 +1711,9 @@ paths:
                   expiresIn:
                     type: integer
                     exclusiveMinimum: 0
+                  refreshExpiresIn:
+                    type: integer
+                    exclusiveMinimum: 0
                   scope:
                     type: string
                     minLength: 1
@@ -1529,6 +1721,7 @@ paths:
                   - accessToken
                   - tokenType
                   - expiresIn
+                  - refreshExpiresIn
                   - scope
         "400":
           description: invalid_grant or use_dpop_nonce.
@@ -1675,4 +1868,111 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProblemDetailsNotFound"
-webhooks: {}
+  /webhook/products:
+    post:
+      description: Receives products from a connected sales channel plugin. The plugin
+        calls this endpoint whenever products are created or changed in the
+        shop.
+      security:
+        - dpop: []
+      summary: Push products from a sales channel plugin
+      requestBody:
+        description: The products to import.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Product"
+              minItems: 1
+              maxItems: 50
+      responses:
+        "202":
+          description: The request is successfully accepted.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - type: object
+                      properties:
+                        status:
+                          type: integer
+                          enum:
+                            - 202
+                      required:
+                        - status
+                    - $ref: "#/components/schemas/ProblemDetailsClient"
+                    - $ref: "#/components/schemas/ProblemDetailsInternalServerError"
+                maxItems: 50
+                description: The result per item.
+        "400":
+          description: Invalid request syntax
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetailsInvalidRequestSyntax"
+        "404":
+          description: Sales channel not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetailsNotFound"
+webhooks:
+  command:
+    post:
+      description: MyParcel posts every command to the commandEndpoint that the plugin
+        gave at /connect/start. Run all safeguard checks before acting. Reply
+        within 10 s, preferably 202, and process later.
+      security:
+        - myparcelSignature: []
+      summary: Receive a MyParcel command (plugin endpoint)
+      parameters:
+        - schema:
+            type: string
+            description: 'RFC 9421 signature parameters: one member, label "myparcel".'
+          required: true
+          name: Signature-Input
+          in: header
+        - schema:
+            type: string
+            description: "RFC 9421 signature: myparcel=:<base64 r||s>:. See the
+              myparcelSignature security scheme."
+          required: true
+          name: Signature
+          in: header
+        - schema:
+            type: string
+            description: "RFC 9530 digest of the raw body: sha-256=:<base64>:."
+          required: true
+          name: Content-Digest
+          in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Command"
+      responses:
+        "401":
+          description: A safeguard check failed. MyParcel drops the command. Use 5xx when
+            the plugin itself fails.
+        "404":
+          description: Unsupported type or unknown order. MyParcel logs a warning and
+            drops the command.
+        "408":
+          description: Busy. MyParcel retries later.
+        "429":
+          description: Busy. MyParcel retries later.
+        2XX:
+          description: Command accepted, or a duplicate. Preferably 202. The body is
+            ignored.
+        3XX:
+          description: Do not use. MyParcel does not follow redirects; it drops the command.
+        4XX:
+          description: Invalid command (400, 409, 422). MyParcel drops the command.
+        5XX:
+          description: Temporary failure, preferably 503. MyParcel retries later; also on
+            a timeout or a network error.

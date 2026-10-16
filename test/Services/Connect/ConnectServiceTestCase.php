@@ -132,10 +132,11 @@ abstract class ConnectServiceTestCase extends TestCase
     private function tokenFields(?string $thumbprint): array
     {
         return [
-            'accessToken' => $this->jwt(['cnf' => ['jkt' => $thumbprint ?? self::THUMBPRINT]]),
-            'tokenType'   => 'DPoP',
-            'expiresIn'   => 3600,
-            'scope'       => 'integration',
+            'accessToken'      => $this->jwt(['cnf' => ['jkt' => $thumbprint ?? self::THUMBPRINT]]),
+            'tokenType'        => 'DPoP',
+            'expiresIn'        => 3600,
+            'refreshExpiresIn' => 31536000,
+            'scope'            => 'integration',
         ];
     }
 

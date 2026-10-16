@@ -64,10 +64,11 @@ class ConnectServiceTransportTest extends ConnectServiceTestCase
             200,
             ['DPoP-Nonce' => ['first', 'second'], 'Content-Type' => 'application/json'],
             (string) json_encode([
-                'accessToken' => $this->jwt(['cnf' => ['jkt' => self::THUMBPRINT]]),
-                'tokenType'   => 'DPoP',
-                'expiresIn'   => 3600,
-                'scope'       => 'integration',
+                'accessToken'      => $this->jwt(['cnf' => ['jkt' => self::THUMBPRINT]]),
+                'tokenType'        => 'DPoP',
+                'expiresIn'        => 3600,
+                'refreshExpiresIn' => 31536000,
+                'scope'            => 'integration',
             ])
         ))->refresh();
 
