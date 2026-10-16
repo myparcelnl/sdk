@@ -24,4 +24,30 @@ class MyParcelCustomsItemTest extends TestCase
 
         $this->assertSame('8541', $item->getClassification());
     }
+
+    public function testToArray(): void
+    {
+        $this->assertSame(
+            [
+                'description'    => 'Shoes',
+                'amount'         => 2,
+                'weight'         => 500,
+                'item_value'     => ['amount' => 1000, 'currency' => 'EUR'],
+                'classification' => '6403',
+                'country'        => 'NL',
+            ],
+            $this->createItem()->toArray()
+        );
+    }
+
+    private function createItem(): MyParcelCustomsItem
+    {
+        return (new MyParcelCustomsItem())
+            ->setDescription('Shoes')
+            ->setAmount(2)
+            ->setWeight(500)
+            ->setItemValue(1000)
+            ->setClassification('6403')
+            ->setCountry('NL');
+    }
 }
