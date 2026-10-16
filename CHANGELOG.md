@@ -3,6 +3,85 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.1](https://github.com/myparcelnl/sdk/compare/v11.0.0...v12.0.0-beta.1) (2026-10-16)
+
+### ⚠ BREAKING CHANGES
+
+* **api:** These are changes in the generated OpenAPI models in
+MyParcelNL\Sdk\Client\Generated, which are now generated with
+openapi-generator 7.26.0 instead of 7.12.0.
+
+For users of the services:
+
+- The shipments that ShipmentQueryService returns (ShipmentDefsShipment) have
+  different property types. getPickup(), getDropOffPoint() and
+  getShippedItems() return generated models instead of plain decoded JSON.
+  getCurrency(), getCustomsDeclaration(), getCollectionContact(),
+  getExternalProvider() and getOptions() return the shared models
+  BillingDefsCurrency, RefShipmentCustomsDeclaration, AccountDefsContact,
+  ShipmentDefsExternalProviderPropertiesDisplayName and
+  RefShipmentShipmentOptions. getOrigin(), getParentId() and
+  getExternalProviderId() return a string or int instead of a wrapper model.
+  getCreatedBy() and getModifiedBy() are typed mixed instead of int. They
+  still return the same value.
+- 111 fields that the API spec marks as nullable now accept null in their
+  setter, where v11 threw an InvalidArgumentException, and a null value is
+  sent in the request instead of left out. For example
+  RefShipmentShipmentOptions::setDeliveryDate(null).
+  RefShipmentOptionsInsuranceMax::setInsurance() no longer accepts null.
+- When a request body cannot be encoded as JSON, for example because a
+  shipment note has invalid UTF-8, the services throw an
+  InvalidArgumentException that wraps the JsonException. Before, they threw
+  the JsonException.
+- MultiColloShipmentService::splitShipment() gives each secondary shipment
+  (SecondaryShipmentRequest) a
+  ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties instead
+  of a ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties.
+
+For users of the generated API clients:
+
+- The request methods of every generated Api class throw an
+  InvalidArgumentException that wraps the JsonException when the body cannot
+  be encoded as JSON.
+- The *Async() methods no longer reject the promise with an ApiException when
+  the response is not valid JSON. The promise resolves with null.
+- Identical inline schemas now share one model, so 35 models are removed.
+  For example, use ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties
+  instead of ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties,
+  OrderApi\Model\Money instead of OrderApi\Model\LinePrice, and
+  EcommerceApi\Model\BillingDetails instead of EcommerceApi\Model\OrderBillingDetails.
+- An inline schema inside an allOf gets AllOf in its model name. For example,
+  ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerSender is now
+  ShipmentPostReturnShipmentsRequestDataReturnShipmentsInnerAllOfSender.
+- ShippingRulesPatchShippingRulesDataShippingRulesInnerCriteria::getRegion()
+  returns RefShippingRulesRegion instead of a string.
+- ShipmentResponsesDeliveryOptionsDeliveryPossibility::getType() returns
+  ShipmentDefsDeliveryOptionsDeliveryNameV2. The model
+  ShipmentResponsesDeliveryOptionsDeliveryPossibilityType is removed.
+- These fields are typed mixed instead of int or string, and keep the same
+  value: created_by, modified_by, origin, parent_id and external_provider_id
+  on SecondaryShipmentResource, and the 11 string fields of
+  ShipmentDefsShipmentPropertiesRecipient.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* **shipment:** A parameter that cannot be sent to the `getShipments` API, now throws an error rather than quietly ignoring it
+* **auth:** `getKeyMaterial` in the DpopKeyInterface has a typed return value, and returns \OpenSSLAsymmetricKey. Update your implementations to match.
+* bump minimum supported PHP version to 8.3
+
+### build
+
+* **api:** generate the API clients with openapi-generator 7.26.0 ([1401d84](https://github.com/myparcelnl/sdk/commit/1401d848c83d696f8cab195c901b9985b5987d1b))
+
+### :sparkles: New Features
+
+* bump minimum supported PHP version to 8.3 ([0271d75](https://github.com/myparcelnl/sdk/commit/0271d75f6fae26f845640dd6f92679bf81698466))
+* **shipment:** throw an error when the ShipmentQueryService is passed an unknown parameter ([aa32055](https://github.com/myparcelnl/sdk/commit/aa320556077c8fd4ce92f14b58b3c9b70b3ca3d1))
+
+### :bug: Bug Fixes
+
+* **auth:** type openssql asymetic keys as \OpenSSLAsymmetricKey ([52a3ea1](https://github.com/myparcelnl/sdk/commit/52a3ea199231f141af7d732b1995060b19befa44))
+* remove the deprecations that PHP 8.4 and 8.5 report ([7f75cd8](https://github.com/myparcelnl/sdk/commit/7f75cd8b4e977c43306b46c543df90526751c4dd)), closes [#634](https://github.com/myparcelnl/sdk/issues/634)
+
 ## [11.0.0](https://github.com/myparcelnl/sdk/compare/v10.7.15...v11.0.0) (2026-10-13)
 
 ### Summary
