@@ -1,3 +1,15 @@
+# Upgrading to v11.1
+
+v11.1 renames generated models in the Ecommerce client. Code that uses them must change.
+
+| Before | After |
+| --- | --- |
+| `EcommerceApi\Model\Product` (order line) | `EcommerceApi\Model\OrderLineProduct` |
+| `EcommerceApi\Model\ProductDescriptionsInner` | `EcommerceApi\Model\OrderLineProductDescriptionsInner` |
+| `EcommerceApi\Model\LengthUnit::MM` / `CM` / `M` | `PhysicalPropertiesHeight::UNIT_MM` / `UNIT_CM` / `UNIT_M` (same on `PhysicalPropertiesLength` and `PhysicalPropertiesWidth`) |
+
+`EcommerceApi\Model\Product` still exists, but is now the body of `/webhook/products`. Code that builds order lines with it breaks. `unit` on height, length and width is now a plain string with these constants. The new `Dimension` model is generated, but `PhysicalProperties` does not use it.
+
 # Upgrading to v11
 
 v11 replaces the consignment stack with generated API clients and typed service wrappers. This guide covers every breaking change and shows before/after examples for each use case.

@@ -215,10 +215,11 @@ class DpopMiddlewareTest extends ConnectServiceTestCase
     private function shortLivedRefresh(int $serial): Response
     {
         return self::jsonBody(200, [
-            'accessToken' => $this->jwt(['cnf' => ['jkt' => self::THUMBPRINT], 'serial' => $serial]),
-            'tokenType'   => 'DPoP',
-            'expiresIn'   => 10,
-            'scope'       => 'integration',
+            'accessToken'      => $this->jwt(['cnf' => ['jkt' => self::THUMBPRINT], 'serial' => $serial]),
+            'tokenType'        => 'DPoP',
+            'expiresIn'        => 10,
+            'refreshExpiresIn' => 31536000,
+            'scope'            => 'integration',
         ]);
     }
 

@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**additional_context** | **string** | Additional shipping context of the order. | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Carrier**](Carrier.md) |  | [optional]
 **delivery** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\OrderShippingDelivery**](OrderShippingDelivery.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ShipmentOptions**](ShipmentOptions.md) |  | [optional]
