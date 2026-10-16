@@ -113,7 +113,9 @@ final class ConnectStateRepository
         $state = ConnectState::withKey($this->cipher->decrypt($installation->getEncryptedPrivateKey()))
             ->withConnectionId($installation->getConnectionId());
 
-        $state = $state->withTokenChallenge($installation->getChallengeHtm(), $installation->getChallengeHtu());
+        $state = $state
+            ->withTokenChallenge($installation->getChallengeHtm(), $installation->getChallengeHtu())
+            ->withRefreshTokenExpiresAt($installation->getRefreshTokenExpiresAt());
 
         $token = $this->storage->loadToken();
 
@@ -149,7 +151,8 @@ final class ConnectStateRepository
             $this->cipher->encrypt($state->getPrivateKeyPem()),
             $state->getConnectionId(),
             null === $challenge ? null : $challenge['htm'],
-            null === $challenge ? null : $challenge['htu']
+            null === $challenge ? null : $challenge['htu'],
+            $state->getRefreshTokenExpiresAt()
         ));
     }
 
