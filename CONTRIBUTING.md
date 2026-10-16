@@ -45,13 +45,13 @@ docker compose run --rm -it php php -dxdebug.mode=debug vendor/bin/phpunit
 
 ## 4. Commit
 
-Make as many commits as you'd like. We use [Conventional Commits] and [semantic-release] to simplify the process of releasing updates by automating release notes and changelogs based on the rules of [@commitlint/config-conventional]. Your branch will be squashed into one single valid commit.
+We use [Conventional Commits] and [semantic-release] to automate release notes and changelogs, based on the rules of [@commitlint/config-conventional]. We squash a pull request into one commit by default. The PR title becomes the commit subject and the PR description the commit body, so write the title as a conventional commit. When each commit of a pull request needs its own changelog entry, we rebase it instead, and then every commit needs a valid conventional commit message.
 
 ## 5. Create a pull request
 
 - Keep your pull requests focused on single subjects
 - Please explain what you changed and why
-- We will review your code and thoroughly test it before squashing and merging your pull request
+- We will review your code and thoroughly test it before we merge your pull request
 
 ## Generated Code (API Client)
 
