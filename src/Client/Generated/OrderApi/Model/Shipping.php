@@ -58,6 +58,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
+        'additional_context' => 'string',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier',
         'custom_contract_id' => 'string',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse',
@@ -79,6 +80,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
+        'additional_context' => null,
         'carrier' => null,
         'custom_contract_id' => null,
         'customs_declaration' => null,
@@ -98,6 +100,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
+        'additional_context' => false,
         'carrier' => false,
         'custom_contract_id' => false,
         'customs_declaration' => false,
@@ -197,6 +200,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
+        'additional_context' => 'additionalContext',
         'carrier' => 'carrier',
         'custom_contract_id' => 'customContractId',
         'customs_declaration' => 'customsDeclaration',
@@ -216,6 +220,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
+        'additional_context' => 'setAdditionalContext',
         'carrier' => 'setCarrier',
         'custom_contract_id' => 'setCustomContractId',
         'customs_declaration' => 'setCustomsDeclaration',
@@ -235,6 +240,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
+        'additional_context' => 'getAdditionalContext',
         'carrier' => 'getCarrier',
         'custom_contract_id' => 'getCustomContractId',
         'customs_declaration' => 'getCustomsDeclaration',
@@ -305,6 +311,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('additional_context', $data ?? [], null);
         $this->setIfExists('carrier', $data ?? [], null);
         $this->setIfExists('custom_contract_id', $data ?? [], null);
         $this->setIfExists('customs_declaration', $data ?? [], null);
@@ -345,6 +352,14 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['additional_context']) && (mb_strlen($this->container['additional_context']) > 256)) {
+            $invalidProperties[] = "invalid value for 'additional_context', the character length must be smaller than or equal to 256.";
+        }
+
+        if (!is_null($this->container['additional_context']) && (mb_strlen($this->container['additional_context']) < 1)) {
+            $invalidProperties[] = "invalid value for 'additional_context', the character length must be bigger than or equal to 1.";
+        }
+
         if (!is_null($this->container['custom_contract_id']) && (mb_strlen($this->container['custom_contract_id']) > 50)) {
             $invalidProperties[] = "invalid value for 'custom_contract_id', the character length must be smaller than or equal to 50.";
         }
@@ -375,6 +390,40 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets additional_context
+     *
+     * @return string|null
+     */
+    public function getAdditionalContext()
+    {
+        return $this->container['additional_context'];
+    }
+
+    /**
+     * Sets additional_context
+     *
+     * @param string|null $additional_context Additional shipping context of the order.
+     *
+     * @return self
+     */
+    public function setAdditionalContext($additional_context)
+    {
+        if (is_null($additional_context)) {
+            throw new \InvalidArgumentException('non-nullable additional_context cannot be null');
+        }
+        if ((mb_strlen($additional_context) > 256)) {
+            throw new \InvalidArgumentException('invalid length for $additional_context when calling Shipping., must be smaller than or equal to 256.');
+        }
+        if ((mb_strlen($additional_context) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $additional_context when calling Shipping., must be bigger than or equal to 1.');
+        }
+
+        $this->container['additional_context'] = $additional_context;
+
+        return $this;
+    }
 
     /**
      * Gets carrier

@@ -10,5 +10,6 @@ Name | Type | Description | Notes
 **total_value** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue**](CustomsDeclarationGroupsInnerTotalValue.md) |  |
 **total_weight** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseGroupsInnerTotalWeight**](CustomsDeclarationResponseGroupsInnerTotalWeight.md) |  |
 **country_code_of_origin** | [**StringMixed**](StringMixed.md) |  | [optional]
+**external_product_reference** | **string** | Reference to the product in an external product catalog. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

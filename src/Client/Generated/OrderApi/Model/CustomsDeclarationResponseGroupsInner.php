@@ -63,7 +63,8 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'number_of_items' => 'int',
         'total_value' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue',
         'total_weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseGroupsInnerTotalWeight',
-        'country_code_of_origin' => 'StringMixed'
+        'country_code_of_origin' => 'StringMixed',
+        'external_product_reference' => 'string'
     ];
 
     /**
@@ -79,7 +80,8 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'number_of_items' => null,
         'total_value' => null,
         'total_weight' => null,
-        'country_code_of_origin' => null
+        'country_code_of_origin' => null,
+        'external_product_reference' => null
     ];
 
     /**
@@ -93,7 +95,8 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'number_of_items' => false,
         'total_value' => false,
         'total_weight' => false,
-        'country_code_of_origin' => false
+        'country_code_of_origin' => false,
+        'external_product_reference' => false
     ];
 
     /**
@@ -187,7 +190,8 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'number_of_items' => 'numberOfItems',
         'total_value' => 'totalValue',
         'total_weight' => 'totalWeight',
-        'country_code_of_origin' => 'countryCodeOfOrigin'
+        'country_code_of_origin' => 'countryCodeOfOrigin',
+        'external_product_reference' => 'externalProductReference'
     ];
 
     /**
@@ -201,7 +205,8 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'number_of_items' => 'setNumberOfItems',
         'total_value' => 'setTotalValue',
         'total_weight' => 'setTotalWeight',
-        'country_code_of_origin' => 'setCountryCodeOfOrigin'
+        'country_code_of_origin' => 'setCountryCodeOfOrigin',
+        'external_product_reference' => 'setExternalProductReference'
     ];
 
     /**
@@ -215,7 +220,8 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'number_of_items' => 'getNumberOfItems',
         'total_value' => 'getTotalValue',
         'total_weight' => 'getTotalWeight',
-        'country_code_of_origin' => 'getCountryCodeOfOrigin'
+        'country_code_of_origin' => 'getCountryCodeOfOrigin',
+        'external_product_reference' => 'getExternalProductReference'
     ];
 
     /**
@@ -281,6 +287,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         $this->setIfExists('total_value', $data ?? [], null);
         $this->setIfExists('total_weight', $data ?? [], null);
         $this->setIfExists('country_code_of_origin', $data ?? [], null);
+        $this->setIfExists('external_product_reference', $data ?? [], null);
     }
 
     /**
@@ -349,6 +356,14 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         if ($this->container['total_weight'] === null) {
             $invalidProperties[] = "'total_weight' can't be null";
         }
+        if (!is_null($this->container['external_product_reference']) && (mb_strlen($this->container['external_product_reference']) > 64)) {
+            $invalidProperties[] = "invalid value for 'external_product_reference', the character length must be smaller than or equal to 64.";
+        }
+
+        if (!is_null($this->container['external_product_reference']) && (mb_strlen($this->container['external_product_reference']) < 1)) {
+            $invalidProperties[] = "invalid value for 'external_product_reference', the character length must be bigger than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -544,6 +559,40 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
             throw new \InvalidArgumentException('non-nullable country_code_of_origin cannot be null');
         }
         $this->container['country_code_of_origin'] = $country_code_of_origin;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_product_reference
+     *
+     * @return string|null
+     */
+    public function getExternalProductReference()
+    {
+        return $this->container['external_product_reference'];
+    }
+
+    /**
+     * Sets external_product_reference
+     *
+     * @param string|null $external_product_reference Reference to the product in an external product catalog.
+     *
+     * @return self
+     */
+    public function setExternalProductReference($external_product_reference)
+    {
+        if (is_null($external_product_reference)) {
+            throw new \InvalidArgumentException('non-nullable external_product_reference cannot be null');
+        }
+        if ((mb_strlen($external_product_reference) > 64)) {
+            throw new \InvalidArgumentException('invalid length for $external_product_reference when calling CustomsDeclarationResponseGroupsInner., must be smaller than or equal to 64.');
+        }
+        if ((mb_strlen($external_product_reference) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $external_product_reference when calling CustomsDeclarationResponseGroupsInner., must be bigger than or equal to 1.');
+        }
+
+        $this->container['external_product_reference'] = $external_product_reference;
 
         return $this;
     }
