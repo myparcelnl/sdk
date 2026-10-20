@@ -24,6 +24,7 @@ class MyParcelCustomsItem extends BaseModel
 {
     private const CUSTOMS_DECLARATION_DESCRIPTION_MAX_LENGTH = 50;
     private const DEFAULT_CURRENCY = 'EUR';
+    private const EXTERNAL_PRODUCT_REFERENCE_MAX_LENGTH = 64;
 
     public $description;
     public $amount;
@@ -31,6 +32,7 @@ class MyParcelCustomsItem extends BaseModel
     public $item_value = [];
     public $classification;
     public $country;
+    public $external_product_reference;
 
     /**
      * @return mixed
@@ -206,6 +208,42 @@ class MyParcelCustomsItem extends BaseModel
     }
 
     /**
+     * @return string|null
+     */
+    public function getExternalProductReference(): ?string
+    {
+        return $this->external_product_reference;
+    }
+
+    /**
+     * Reference to the product in an external product catalog
+     *
+     * For PostNL shipments to the United States and Puerto Rico this is the Zonos Catalog Item ID.
+     * Example: catalog_item_abc123def456g
+     * Required: Yes for PostNL shipments to the United States and Puerto Rico
+     *
+     * @param string|null $externalProductReference
+     * @return $this
+     * @throws \InvalidArgumentException when the reference is longer than 64 characters
+     */
+    public function setExternalProductReference(?string $externalProductReference): self
+    {
+        if (null !== $externalProductReference
+            && mb_strlen($externalProductReference) > self::EXTERNAL_PRODUCT_REFERENCE_MAX_LENGTH) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'External product reference must be %d characters or less',
+                    self::EXTERNAL_PRODUCT_REFERENCE_MAX_LENGTH
+                )
+            );
+        }
+
+        $this->external_product_reference = $externalProductReference;
+
+        return $this;
+    }
+
+    /**
      * Check if object is fully filled
      *
      * @return void
@@ -234,12 +272,13 @@ class MyParcelCustomsItem extends BaseModel
     public function toArray(): array
     {
         return [
-            'description'    => $this->getDescription(),
-            'amount'         => $this->getAmount(),
-            'weight'         => $this->getWeight(),
-            'item_value'     => $this->getItemValue(),
-            'classification' => $this->getClassification(),
-            'country'        => $this->getCountry(),
+            'description'                => $this->getDescription(),
+            'amount'                     => $this->getAmount(),
+            'weight'                     => $this->getWeight(),
+            'item_value'                 => $this->getItemValue(),
+            'classification'             => $this->getClassification(),
+            'country'                    => $this->getCountry(),
+            'external_product_reference' => $this->getExternalProductReference(),
         ];
     }
 }

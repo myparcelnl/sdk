@@ -209,9 +209,22 @@ class OrderCollectionTest extends TestCase
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
-    public function testSaveSendsTheCustomsDeclaration(): void
+    public function testSaveSendsTheExternalProductReference(): void
     {
-        $customsDeclaration = $this->saveAndCaptureCustomsDeclaration();
+        $customsDeclaration = $this->saveAndCaptureCustomsDeclaration('catalog_item_abc123def456g');
+
+        self::assertSame('catalog_item_abc123def456g', $customsDeclaration['items'][0]['external_product_reference']);
+    }
+
+    /**
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function testSaveLeavesOutAnUnsetExternalProductReference(): void
+    {
+        $customsDeclaration = $this->saveAndCaptureCustomsDeclaration(null);
 
         self::assertSame(
             [
@@ -242,11 +255,14 @@ class OrderCollectionTest extends TestCase
         $order       = $this->generateOrder(new ShipmentOptions())
             ->setCarrierId(1)
             ->setOrderLines($this->generateOrderLines())
-            ->setCustomsDeclaration($this->generateCustomsDeclaration());
+            ->setCustomsDeclaration($this->generateCustomsDeclaration('catalog_item_abc123def456g'));
 
         $orders = (new OrderCollection([$order]))->toArray();
 
-        self::assertSame('Shoes', $orders[0]['customs_declaration']['items'][0]['description']);
+        self::assertSame(
+            'catalog_item_abc123def456g',
+            $orders[0]['customs_declaration']['items'][0]['external_product_reference']
+        );
     }
 
     /**
@@ -257,7 +273,7 @@ class OrderCollectionTest extends TestCase
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
-    protected function saveAndCaptureCustomsDeclaration(): array
+    protected function saveAndCaptureCustomsDeclaration(?string $externalProductReference): array
     {
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
@@ -270,7 +286,7 @@ class OrderCollectionTest extends TestCase
         $order->setCarrierId(1);
         $order->setOrderLines($orderLines);
         $order->setWeight($orderLines->sum('weight'));
-        $order->setCustomsDeclaration($this->generateCustomsDeclaration());
+        $order->setCustomsDeclaration($this->generateCustomsDeclaration($externalProductReference));
         $orderCollection->push($order);
 
         $body     = [];
@@ -291,7 +307,7 @@ class OrderCollectionTest extends TestCase
         return $body['data']['orders'][0]['shipment']['customs_declaration'];
     }
 
-    protected function generateCustomsDeclaration(): CustomsDeclaration
+    protected function generateCustomsDeclaration(?string $externalProductReference): CustomsDeclaration
     {
         $customsDeclaration = (new CustomsDeclaration())
             ->setContents(1)
@@ -305,6 +321,7 @@ class OrderCollectionTest extends TestCase
                 ->setItemValue(1000)
                 ->setClassification('6403')
                 ->setCountry('NL')
+                ->setExternalProductReference($externalProductReference)
         );
 
         return $customsDeclaration;
