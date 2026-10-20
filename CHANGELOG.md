@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.2](https://github.com/myparcelnl/sdk/compare/v11.0.1...v11.0.2) (2026-10-20)
+
+### :bug: Bug Fixes
+
+* serialize the Order v1 customs declaration with toArray() ([#659](https://github.com/myparcelnl/sdk/issues/659)) ([3b39875](https://github.com/myparcelnl/sdk/commit/3b398759b052e17a22a617a48b7166b80249377f))
+
 ## [11.0.1](https://github.com/myparcelnl/sdk/compare/v11.0.0...v11.0.1) (2026-10-14)
 
 ## [11.0.0](https://github.com/myparcelnl/sdk/compare/v10.7.15...v11.0.0) (2026-10-13)
