@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -64,14 +64,14 @@ jobs:
       - name: Setup app credentials
         if: steps.diff.outputs.changed == 'true'
         id: credentials
-        uses: myparcelnl/actions/setup-app-credentials@v4
+        uses: myparcelnl/actions/setup-app-credentials@v5
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
 
       - name: Create Pull Request
         if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.credentials.outputs.token }}
           base: main
