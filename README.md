@@ -132,6 +132,14 @@ installation. `ConnectService::getCommandEndpoint()` returns it, read from stora
 or `null` when MyParcel sends no commands. A reconnect replaces it, also with `null` when you leave it
 out. A disconnect removes it.
 
+`CommandReader::read()` turns the raw body of a command into its model, such as
+`OrderShipmentsCommand`. It throws `UnknownCommandException` for a type the SDK does not know, and
+`InvalidCommandException` for a body that is not a command. Check the signature of the request and
+its connection id before you read the body.
+
+[Receiving commands] on the developer portal describes the request, the checks your plugin must run,
+and how to reply.
+
 ## Value mapping
 
 Use `ApiMapperService` to convert between delivery-options names, v1 IDs and v2 names.
@@ -208,5 +216,6 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to 
 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
 [PHP SDK v11]: https://developer.myparcel.com/guides/php-sdk-v11.html
+[Receiving commands]: https://developer.myparcel.com/guides/php-sdk-v12.html#receiving-commands
 [PHP SDK documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
 [MyParcel Developer Portal]: https://developer.myparcel.nl
