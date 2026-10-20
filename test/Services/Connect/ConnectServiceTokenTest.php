@@ -157,6 +157,53 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         self::assertNull($this->service()->getRefreshTokenExpiresAt());
     }
 
+    public function testGetCommandEndpointAnswersFromStorage(): void
+    {
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, self::COMMAND_ENDPOINT);
+
+        self::assertSame(self::COMMAND_ENDPOINT, $this->service()->getCommandEndpoint());
+        self::assertSame(0, $this->callCount(), 'no request to MyParcel');
+    }
+
+    public function testGetCommandEndpointIsNullForAShopThatNeverConnected(): void
+    {
+        self::assertNull($this->service()->getCommandEndpoint());
+    }
+
+    public function testGetCommandEndpointIgnoresAFlowThatHasNotCompleted(): void
+    {
+        // MyParcel only takes the endpoint when the callback succeeds, so a started flow changes
+        // nothing yet.
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, self::COMMAND_ENDPOINT);
+        $service = $this->service();
+
+        $service->start('My Shop', 'https://shop.example.test', null, 'https://shop.example.test/new');
+
+        self::assertSame(self::COMMAND_ENDPOINT, $service->getCommandEndpoint());
+    }
+
+    public function testDisconnectForgetsTheCommandEndpoint(): void
+    {
+        // MyParcel can still send commands after a local disconnect. Without a stored endpoint the
+        // plugin cannot check them, so it refuses them.
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, self::COMMAND_ENDPOINT);
+
+        $this->service()->disconnect();
+
+        self::assertNull($this->service()->getCommandEndpoint());
+    }
+
+    public function testRefreshKeepsTheCommandEndpoint(): void
+    {
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, self::COMMAND_ENDPOINT);
+        $this->seedToken('a.b.c', time() + 3600);
+
+        $state = $this->service()->refresh();
+
+        self::assertSame(self::COMMAND_ENDPOINT, $state->getCommandEndpoint());
+        self::assertSame(self::COMMAND_ENDPOINT, $this->storage->row('installation')['commandEndpoint']);
+    }
+
     public function testGetAccessTokenExpiresAtAnswersFromStorage(): void
     {
         $this->seedConnectedShop(1790000000);

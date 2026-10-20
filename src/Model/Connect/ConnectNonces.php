@@ -11,7 +11,8 @@ use MyParcelNL\Sdk\Model\Connect\Concerns\HasRecordVersion;
  *
  * The start nonce is ours: start() makes it, puts it in the connect URL, and matches it against the
  * one the callback sends back. That match is what proves the callback belongs to a flow this shop
- * began. Single use.
+ * began. Single use. The command endpoint start() sent goes with it, because MyParcel only takes
+ * that endpoint when the same flow completes.
  *
  * The DPoP nonce is MyParcel's: the identity provider sends one in a DPoP-Nonce response header and
  * expects it in later proofs. Keeping it means only the first call pays for a retry.
@@ -28,7 +29,7 @@ final class ConnectNonces
     /**
      * Bumped only when the fields of this record change.
      */
-    private const VERSION = 1;
+    private const VERSION = 2;
 
     /**
      * @var string|null
@@ -46,13 +47,23 @@ final class ConnectNonces
     private $dpopNonce;
 
     /**
-     * Build a nonce record. Both are optional: a record holding neither is a valid empty one.
+     * @var string|null
      */
-    public function __construct(?string $startNonce = null, ?int $startNonceExpiresAt = null, ?string $dpopNonce = null)
-    {
-        $this->startNonce          = $startNonce;
-        $this->startNonceExpiresAt = $startNonceExpiresAt;
-        $this->dpopNonce           = $dpopNonce;
+    private $startCommandEndpoint;
+
+    /**
+     * Build a nonce record. All are optional: a record holding none is a valid empty one.
+     */
+    public function __construct(
+        ?string $startNonce = null,
+        ?int $startNonceExpiresAt = null,
+        ?string $dpopNonce = null,
+        ?string $startCommandEndpoint = null
+    ) {
+        $this->startNonce           = $startNonce;
+        $this->startNonceExpiresAt  = $startNonceExpiresAt;
+        $this->dpopNonce            = $dpopNonce;
+        $this->startCommandEndpoint = $startCommandEndpoint;
     }
 
     /**
@@ -80,13 +91,22 @@ final class ConnectNonces
     }
 
     /**
+     * Get the command endpoint start() sent. It moves to the installation when the callback succeeds.
+     */
+    public function getStartCommandEndpoint(): ?string
+    {
+        return $this->startCommandEndpoint;
+    }
+
+    /**
      * Burn the start nonce, so the same callback cannot be used twice.
      */
     public function withoutStartNonce(): self
     {
-        $clone                      = clone $this;
-        $clone->startNonce          = null;
-        $clone->startNonceExpiresAt = null;
+        $clone                       = clone $this;
+        $clone->startNonce           = null;
+        $clone->startNonceExpiresAt  = null;
+        $clone->startCommandEndpoint = null;
 
         return $clone;
     }
@@ -110,10 +130,11 @@ final class ConnectNonces
     public function toArray(): array
     {
         return [
-            'version'             => self::VERSION,
-            'startNonce'          => $this->startNonce,
-            'startNonceExpiresAt' => $this->startNonceExpiresAt,
-            'dpopNonce'           => $this->dpopNonce,
+            'version'              => self::VERSION,
+            'startNonce'           => $this->startNonce,
+            'startNonceExpiresAt'  => $this->startNonceExpiresAt,
+            'dpopNonce'            => $this->dpopNonce,
+            'startCommandEndpoint' => $this->startCommandEndpoint,
         ];
     }
 
@@ -132,7 +153,8 @@ final class ConnectNonces
         return new self(
             isset($data['startNonce']) ? (string) $data['startNonce'] : null,
             isset($data['startNonceExpiresAt']) ? (int) $data['startNonceExpiresAt'] : null,
-            isset($data['dpopNonce']) ? (string) $data['dpopNonce'] : null
+            isset($data['dpopNonce']) ? (string) $data['dpopNonce'] : null,
+            isset($data['startCommandEndpoint']) ? (string) $data['startCommandEndpoint'] : null
         );
     }
 }

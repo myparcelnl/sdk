@@ -77,6 +77,8 @@ final class ConnectService
 
     private const VERSION_MAX_LENGTH = 256;
 
+    private const COMMAND_ENDPOINT_MAX_LENGTH = 250;
+
     private const CONFIG_MAX_LENGTH = 1024;
 
     private const DEFAULT_HTTP_TIMEOUT = 10;
@@ -180,12 +182,20 @@ final class ConnectService
      *                               {shopUrl}{self::CALLBACK_PATH}.
      * @param  string|null $version  Your plugin's version, so MyParcel can tell which build a shop
      *                               runs. Leave it out and MyParcel records 0.0.1.
+     * @param  string|null $commandEndpoint The https URL MyParcel sends commands to. Leave it out and
+     *                                      the shop gets no commands. It replaces the stored one once
+     *                                      the callback succeeds.
      * @return string The URL to redirect to.
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
-    public function start(string $shopName, string $shopUrl, ?string $version = null): string
-    {
+    public function start(
+        string $shopName,
+        string $shopUrl,
+        ?string $version = null,
+        ?string $commandEndpoint = null
+    ): string {
         self::assertShopUrlAndVersion($shopUrl, $version);
+        self::assertCommandEndpoint($commandEndpoint);
 
         $fields = [
             'platform'  => $this->config->getPlatform(),
@@ -196,6 +206,10 @@ final class ConnectService
         // The generated model sends a nullable field that is set to null, so leave it out instead.
         if (null !== $version) {
             $fields['version'] = $version;
+        }
+
+        if (null !== $commandEndpoint) {
+            $fields['command_endpoint'] = $commandEndpoint;
         }
 
         $config = new ConnectStartConfig($fields);
@@ -222,7 +236,7 @@ final class ConnectService
         $nonce = Str::base64UrlEncode(random_bytes(self::START_NONCE_LENGTH));
 
         $this->repository->saveStartNonce(
-            $state->withStartNonce($nonce, time() + self::START_NONCE_LIFETIME)
+            $state->withStartNonce($nonce, time() + self::START_NONCE_LIFETIME, $commandEndpoint)
         );
 
         // The path, the parameter names and the query encoding all come from the spec. It cannot
@@ -292,7 +306,8 @@ final class ConnectService
             ->withTokenChallenge($htm, $htu)
             ->withConnectionId($token->getConnectionId() ?? $state->getConnectionId())
             ->withToken($token->getAccessToken(), $token->getExpiresAt()->getTimestamp(), $token->getScope())
-            ->withRefreshTokenExpiresAt($token->getRefreshExpiresAt()->getTimestamp());
+            ->withRefreshTokenExpiresAt($token->getRefreshExpiresAt()->getTimestamp())
+            ->withCommandEndpoint($state->getStartCommandEndpoint());
 
         $this->repository->saveInstallation($state);
         $this->repository->saveToken($state);
@@ -383,6 +398,21 @@ final class ConnectService
     }
 
     /**
+     * Get the URL MyParcel sends commands to, from storage only. Null when it sends none.
+     *
+     * This is the endpoint of the last connect flow that completed. A flow that start() began but
+     * the callback did not finish does not change it.
+     *
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    public function getCommandEndpoint(): ?string
+    {
+        $state = $this->repository->load();
+
+        return null === $state ? null : $state->getCommandEndpoint();
+    }
+
+    /**
      * Check whether this shop has a usable connection.
      *
      * Answered from storage alone, because the contract has no endpoint that reports on a
@@ -416,7 +446,7 @@ final class ConnectService
             // The challenge goes too, so a scheduled refresh cannot quietly reconnect the shop. It
             // is only useful while there is a connection, and a reconnect delivers a fresh pair.
             $this->repository->saveInstallation(
-                $state->withTokenChallenge(null, null)->withRefreshTokenExpiresAt(null)
+                $state->withTokenChallenge(null, null)->withRefreshTokenExpiresAt(null)->withCommandEndpoint(null)
             );
         }
 
@@ -865,16 +895,62 @@ final class ConnectService
             );
         }
 
-        $parts = parse_url($shopUrl);
-
-        if (false === $parts || !isset($parts['scheme'], $parts['host']) || 'https' !== $parts['scheme']) {
-            throw ConnectException::invalidArgument('The shop URL must be an https URL');
-        }
+        $parts = self::httpsUrlParts($shopUrl, 'The shop URL');
 
         // MyParcel appends its callback path to this, so anything after the path would end up in the
         // middle of the URL it builds.
         if (isset($parts['query']) || isset($parts['fragment'])) {
             throw ConnectException::invalidArgument('The shop URL cannot carry a query or a fragment');
         }
+    }
+
+    /**
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    private static function assertCommandEndpoint(?string $commandEndpoint): void
+    {
+        if (null === $commandEndpoint) {
+            return;
+        }
+
+        if (strlen($commandEndpoint) > self::COMMAND_ENDPOINT_MAX_LENGTH) {
+            throw ConnectException::invalidArgument(
+                sprintf('The command endpoint cannot be longer than %d characters', self::COMMAND_ENDPOINT_MAX_LENGTH)
+            );
+        }
+
+        $parts = self::httpsUrlParts($commandEndpoint, 'The command endpoint');
+
+        if (isset($parts['fragment'])) {
+            throw ConnectException::invalidArgument('The command endpoint cannot carry a fragment');
+        }
+
+        // MyParcel refuses a URL that is not canonical. Refused there, the merchant gets an error page
+        // instead of the plugin getting an exception.
+        if (strtolower((string) $parts['host']) !== $parts['host']
+            || 443 === ($parts['port'] ?? null)
+            || isset($parts['user'])
+            || isset($parts['pass'])
+            || 0 !== strpos((string) ($parts['path'] ?? ''), '/')
+        ) {
+            throw ConnectException::invalidArgument(
+                'The command endpoint must be canonical: a lowercase host, no default port, a path and no user name or password'
+            );
+        }
+    }
+
+    /**
+     * @return array<string, int|string> What parse_url() returns.
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    private static function httpsUrlParts(string $url, string $name): array
+    {
+        $parts = parse_url($url);
+
+        if (false === $parts || !isset($parts['scheme'], $parts['host']) || 'https' !== $parts['scheme']) {
+            throw ConnectException::invalidArgument($name . ' must be an https URL');
+        }
+
+        return $parts;
     }
 }

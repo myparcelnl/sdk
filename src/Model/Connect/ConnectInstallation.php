@@ -30,7 +30,7 @@ final class ConnectInstallation
     /**
      * Bumped only when the fields of this record change.
      */
-    private const VERSION = 2;
+    private const VERSION = 3;
 
     /**
      * @var string
@@ -58,6 +58,12 @@ final class ConnectInstallation
     private $refreshTokenExpiresAt;
 
     /**
+     * @var string|null Null until a connect flow that sent one completes, and for a record from before
+     *                  version 3.
+     */
+    private $commandEndpoint;
+
+    /**
      * Build an installation record.
      *
      * @param  string      $encryptedPrivateKey   An AesGcmCipher envelope, never a readable key.
@@ -65,6 +71,7 @@ final class ConnectInstallation
      * @param  string|null $challengeHtm          Null until the first callback.
      * @param  string|null $challengeHtu          Null until the first callback.
      * @param  int|null    $refreshTokenExpiresAt Null until the first exchange.
+     * @param  string|null $commandEndpoint       Where MyParcel sends commands. Null when it sends none.
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
     public function __construct(
@@ -72,7 +79,8 @@ final class ConnectInstallation
         ?string $connectionId = null,
         ?string $challengeHtm = null,
         ?string $challengeHtu = null,
-        ?int $refreshTokenExpiresAt = null
+        ?int $refreshTokenExpiresAt = null,
+        ?string $commandEndpoint = null
     ) {
         if ('' === $encryptedPrivateKey) {
             throw ConnectException::invalidArgument('An installation needs a key');
@@ -83,6 +91,7 @@ final class ConnectInstallation
         $this->challengeHtm          = $challengeHtm;
         $this->challengeHtu          = $challengeHtu;
         $this->refreshTokenExpiresAt = $refreshTokenExpiresAt;
+        $this->commandEndpoint       = $commandEndpoint;
     }
 
     /**
@@ -165,6 +174,25 @@ final class ConnectInstallation
     }
 
     /**
+     * Get the URL MyParcel sends commands to for this connection. Null when it sends none.
+     */
+    public function getCommandEndpoint(): ?string
+    {
+        return $this->commandEndpoint;
+    }
+
+    /**
+     * Replace the command endpoint, as every completed connect flow sets a new one.
+     */
+    public function withCommandEndpoint(?string $commandEndpoint): self
+    {
+        $clone                  = clone $this;
+        $clone->commandEndpoint = $commandEndpoint;
+
+        return $clone;
+    }
+
+    /**
      * Flatten the record for a consumer's storage, version included.
      *
      * @return array<string, mixed>
@@ -178,6 +206,7 @@ final class ConnectInstallation
             'challengeHtm'          => $this->challengeHtm,
             'challengeHtu'          => $this->challengeHtu,
             'refreshTokenExpiresAt' => $this->refreshTokenExpiresAt,
+            'commandEndpoint'       => $this->commandEndpoint,
         ];
     }
 
@@ -204,7 +233,8 @@ final class ConnectInstallation
             self::optionalString($data, 'connectionId'),
             self::optionalString($data, 'challengeHtm'),
             self::optionalString($data, 'challengeHtu'),
-            self::optionalInt($data, 'refreshTokenExpiresAt')
+            self::optionalInt($data, 'refreshTokenExpiresAt'),
+            self::optionalString($data, 'commandEndpoint')
         );
     }
 

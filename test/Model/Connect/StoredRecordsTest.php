@@ -93,6 +93,28 @@ class StoredRecordsTest extends TestCase
         ]);
     }
 
+    public function testInstallationRoundTripsTheCommandEndpoint(): void
+    {
+        $installation = (new ConnectInstallation('envelope'))->withCommandEndpoint('https://shop.test/commands');
+        $restored     = ConnectInstallation::fromArray($installation->toArray());
+
+        self::assertSame('https://shop.test/commands', $restored->getCommandEndpoint());
+    }
+
+    public function testAVersionTwoInstallationReadsWithoutACommandEndpoint(): void
+    {
+        // A shop connected before this field existed must stay connected. It gets commands once it
+        // reconnects with an endpoint.
+        $restored = ConnectInstallation::fromArray([
+            'version'               => 2,
+            'encryptedPrivateKey'   => 'envelope',
+            'refreshTokenExpiresAt' => 1790000000,
+        ]);
+
+        self::assertSame(1790000000, $restored->getRefreshTokenExpiresAt());
+        self::assertNull($restored->getCommandEndpoint());
+    }
+
     public function testInstallationWithTokenChallengeLeavesTheOriginalAlone(): void
     {
         $installation = new ConnectInstallation('envelope');
@@ -156,6 +178,22 @@ class StoredRecordsTest extends TestCase
         self::assertSame('dpop-nonce', $restored->getDpopNonce());
     }
 
+    public function testNoncesRoundTripTheStartCommandEndpoint(): void
+    {
+        $nonces   = new ConnectNonces('start-nonce', 1735689600, 'dpop-nonce', 'https://shop.test/commands');
+        $restored = ConnectNonces::fromArray($nonces->toArray());
+
+        self::assertSame('https://shop.test/commands', $restored->getStartCommandEndpoint());
+    }
+
+    public function testAVersionOneNoncesRecordReadsWithoutAStartCommandEndpoint(): void
+    {
+        $restored = ConnectNonces::fromArray(['version' => 1, 'startNonce' => 'start', 'dpopNonce' => 'dpop']);
+
+        self::assertSame('start', $restored->getStartNonce());
+        self::assertNull($restored->getStartCommandEndpoint());
+    }
+
     public function testNoncesAreAllOptional(): void
     {
         $nonces = new ConnectNonces();
@@ -163,15 +201,17 @@ class StoredRecordsTest extends TestCase
         self::assertNull($nonces->getStartNonce());
         self::assertNull($nonces->getStartNonceExpiresAt());
         self::assertNull($nonces->getDpopNonce());
+        self::assertNull($nonces->getStartCommandEndpoint());
     }
 
     public function testNoncesCanDropTheStartNonceAndKeepTheDpopNonce(): void
     {
         // handleCallback() burns the start nonce; the DPoP nonce stays useful for the next call.
-        $nonces = (new ConnectNonces('start', 1, 'dpop'))->withoutStartNonce();
+        $nonces = (new ConnectNonces('start', 1, 'dpop', 'https://shop.test/commands'))->withoutStartNonce();
 
         self::assertNull($nonces->getStartNonce());
         self::assertNull($nonces->getStartNonceExpiresAt());
+        self::assertNull($nonces->getStartCommandEndpoint(), 'it belongs to the flow the nonce began');
         self::assertSame('dpop', $nonces->getDpopNonce());
     }
 
@@ -236,9 +276,9 @@ class StoredRecordsTest extends TestCase
     public function provideRecordClasses(): array
     {
         return [
-            'installation' => [ConnectInstallation::class, ['envelope', 'a-connection-id'], 2],
+            'installation' => [ConnectInstallation::class, ['envelope', 'a-connection-id'], 3],
             'token'        => [ConnectToken::class, ['envelope', 1735689600, 'write:orders'], 1],
-            'nonces'       => [ConnectNonces::class, ['start-nonce', 1735689600, 'dpop-nonce'], 1],
+            'nonces'       => [ConnectNonces::class, ['start-nonce', 1735689600, 'dpop-nonce'], 2],
         ];
     }
 
