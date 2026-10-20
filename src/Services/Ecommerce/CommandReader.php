@@ -50,6 +50,8 @@ final class CommandReader
      * not stop the read.
      *
      * @param  string $body The raw request body, exactly as received.
+     * @return \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope The model for the
+     *         command type, a subclass such as OrderShipmentsCommand. Never a plain CommandEnvelope.
      * @throws \MyParcelNL\Sdk\Exception\UnknownCommandException For a type this SDK version does not know.
      * @throws \MyParcelNL\Sdk\Exception\InvalidCommandException For a body that is not a command.
      */
