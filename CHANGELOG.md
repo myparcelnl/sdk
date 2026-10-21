@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.2.0](https://github.com/myparcelnl/sdk/compare/v11.1.0...v11.2.0) (2026-10-21)
+
+### :sparkles: New Features
+
+* **api:** support the products webhook in the ecommerce client ([#677](https://github.com/myparcelnl/sdk/issues/677)) ([9a532d8](https://github.com/myparcelnl/sdk/commit/9a532d893cc228127dbf6ca12e3a6ab425adcaae))
+* **connect:** tell when a shop has to reconnect ([#678](https://github.com/myparcelnl/sdk/issues/678)) ([e1a43a4](https://github.com/myparcelnl/sdk/commit/e1a43a4b9f3d575ed8dc90d2596db2f7853d9118))
+
 ## [11.1.0](https://github.com/myparcelnl/sdk/compare/v11.0.2...v11.1.0) (2026-10-20)
 
 ### :sparkles: New Features
