@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 /**
- * A worked example of connecting a shop to MyParcel Connect and pushing an order.
+ * A worked example of connecting a shop to MyParcel Connect, pushing an order, and receiving the
+ * commands MyParcel sends back.
  *
  * Read this to see what your own integration has to do. Every call into the SDK is in this file, so
  * you can follow the whole flow from top to bottom. See README.md for how to run it.
@@ -16,18 +17,24 @@ declare(strict_types=1);
  *   the private key, so a stolen access token is useless without it.
  * - The token that comes back is short lived. The SDK refreshes it for you when it is near expiry.
  *
- * Your integration needs four things, and this file shows each one:
+ * Your integration needs five things, and this file shows each one:
  *
  * 1. A ConnectConfig: which platform you are, and a key to encrypt what you store. Made below.
- * 2. A place to keep three records, as a ConnectStorageInterface. See FileConnectStorage.php.
+ * 2. A place to keep three records, as a ConnectStorageInterface, and one more for MyParcel's public
+ *    keys, as a JwksStorageInterface. See FileConnectStorage.php.
  * 3. A route that starts the flow, from a button in your settings screen. See act().
  * 4. A route at your shop URL plus ConnectService::CALLBACK_PATH that finishes it. See
  *    receiveCallback().
+ * 5. A route at the command endpoint you pass to start(), where MyParcel posts commands such as
+ *    ORDER_SHIPMENTS. See receiveCommand().
  *
  * Once connected, EcommerceApiFactory gives you an API client that signs every call. See pushOrder().
  *
  * The file is in two halves. Everything down to connectExceptionFacts() is what your integration
  * does. Everything after that draws this page and is none of your concern.
+ *
+ * The page doubles as a debugging tool for commands: every request to the command endpoint is
+ * checked, read and kept in commands.json, and the page shows the last ones with the outcome.
  *
  * This file is not part of the SDK, and it is not a template to copy. It keeps state in a JSON file
  * and has no login, so never put it on a host that is reachable from the internet.
@@ -84,6 +91,11 @@ $settings = [
     // plugin, use the shop name from the platform's own settings.
     'shopName' => env('MYPARCEL_CONNECT_SHOP_NAME', 'Connect PoC'),
 
+    // Where MyParcel posts commands for this shop: an https URL on your shop, in canonical form. It
+    // is sent to MyParcel at the start of the connect flow, so changing it means reconnecting. A
+    // plugin builds it from the same configuration as the shop URL, never from the request.
+    'commandEndpoint' => env('MYPARCEL_CONNECT_COMMAND_ENDPOINT', rtrim(env('MYPARCEL_CONNECT_SHOP_URL'), '/') . '/myparcel/commands'),
+
     // Only used by this page, to link the backoffice. Not an SDK setting.
     'backofficeUrl' => env('MYPARCEL_BACKOFFICE_URL'),
 ];
@@ -124,16 +136,32 @@ $connect = new \MyParcelNL\Sdk\Services\Connect\ConnectService($config, $storage
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
-// A hand written router, because this page has no framework. Your app needs two routes:
+// A hand written router, because this page has no framework. Your app needs three routes:
 //
-// - One your own buttons post to, wherever you like. Here that is every POST.
+// - One your own buttons post to, wherever you like. Here that is every other POST.
 // - One on ConnectService::CALLBACK_PATH, which MyParcel redirects the merchant's browser to. That
 //   path is fixed by MyParcel, so this is the one route you do not get to name.
+// - One on the command endpoint you passed to start(), which MyParcel itself posts to. You name
+//   this one, and MyParcel only learns it through start().
 //
 // Actions are POSTs that redirect afterwards, so a browser refresh never repeats them. The callback
 // is a GET, because a browser redirect is always a GET.
+// Both the configured endpoint and the one MyParcel has, which differ until the shop reconnects.
+if (in_array($path, commandPaths($connect, $settings), true)) {
+    receiveCommand($connect, $storage);
+    exit;
+}
+
 if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')) {
     act($connect, $settings, (string) ($_POST['action'] ?? ''));
+    exit;
+}
+
+// This page only: the received commands as JSON, polled by the page so it reloads itself when a
+// new command arrives.
+if ('/commands.json' === $path) {
+    header('Content-Type: application/json');
+    echo json_encode(loadCommands(), JSON_UNESCAPED_SLASHES);
     exit;
 }
 
@@ -146,8 +174,9 @@ render($connect, $storage, $config, $settings);
 
 /*
  * ---------------------------------------------------------------------------------------------
- * What your integration has to do. These six functions are the whole of it, in the order they
- * happen: connect a shop, take the callback, call the API, read the answer, read a failure.
+ * What your integration has to do. These functions are the whole of it, in the order they
+ * happen: connect a shop, take the callback, call the API, read the answer, read a failure, and
+ * receive a command.
  * ---------------------------------------------------------------------------------------------
  */
 
@@ -177,8 +206,14 @@ function act(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect, array $se
                 // iframe: MyParcel sets a cookie that its own callback checks.
                 //
                 // The shop name is the merchant's own shop title, shown to them at MyParcel. Pass a
-                // plugin version as the third argument if you have one.
-                redirect($connect->start($settings['shopName'], $settings['shopUrl']));
+                // plugin version as the third argument if you have one. The command endpoint is
+                // where MyParcel posts commands for this shop; leave it out and it sends none.
+                redirect($connect->start(
+                    $settings['shopName'],
+                    $settings['shopUrl'],
+                    null,
+                    $settings['commandEndpoint']
+                ));
 
                 return;
 
@@ -211,6 +246,12 @@ function act(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect, array $se
             case 'push-order':
                 // The only action that calls the e-commerce API rather than Connect itself.
                 pushOrder($connect);
+                break;
+
+            case 'clear-commands':
+                // This page only: forget the commands shown below.
+                saveCommands([]);
+                flash('ok', 'Received commands cleared', []);
                 break;
 
             default:
@@ -444,6 +485,100 @@ function connectExceptionFacts(\MyParcelNL\Sdk\Exception\ConnectException $excep
     ];
 }
 
+/**
+ * Take a command that MyParcel posts to the command endpoint.
+ *
+ * MyParcel signs every command, so the first thing to do is prove the request is MyParcel's and
+ * meant for this shop. CommandRequestVerifier does that: it reads the stored connection id and
+ * command endpoint from the ConnectService, and MyParcel's public keys through the JwksStorage. Then
+ * CommandReader turns the body into its model. Both throw exceptions that carry the status to reply
+ * with, so one catch block answers all of them.
+ *
+ * What is yours after that, and shown here in its simplest form:
+ *
+ * - Drop duplicates. MyParcel sends a command again after a timeout, with the same commandId. Keep
+ *   the (connectionId, commandId) pair for 14 days and reply 202 without doing the work again.
+ * - Store the command and the pair together, reply 202 within 10 seconds, and do the work later.
+ *   This page only stores: a plugin would mark the order lines in $command->shipment->orderLines
+ *   as shipped, in a job that runs after the reply.
+ * - Never log the Signature header. This page keeps the other headers and the body, so you can see
+ *   what arrived and why it was accepted or refused.
+ */
+function receiveCommand(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect, FileConnectStorage $storage): void
+{
+    $method  = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    $headers = getallheaders() ?: [];
+    $rawBody = (string) file_get_contents('php://input');
+    $log     = loadCommands();
+
+    try {
+        (new \MyParcelNL\Sdk\Services\Ecommerce\CommandRequestVerifier($connect, $storage))->verify($method, $headers, $rawBody);
+
+        $command = (new \MyParcelNL\Sdk\Services\Ecommerce\CommandReader())->read($rawBody);
+
+        $status  = 202;
+        $outcome = isDuplicate($log, $command)
+            ? 'duplicate of a command received before, nothing done'
+            : sprintf('accepted %s, order %s', $command->type, $command->order->sourceId ?? '?');
+    } catch (\Throwable $exception) {
+        // 401 for a failed check, 503 when the keys could not be fetched, 404 for an unknown type,
+        // 400 for a body that is not a command. Anything else, such as a stored state that cannot
+        // be read, is a 503 so MyParcel tries again. The message is for this page, never for the
+        // reply.
+        $command = null;
+        $status  = $exception instanceof \MyParcelNL\Sdk\Exception\CommandResponseInterface ? $exception->getStatusCode() : 503;
+        $outcome = get_class($exception) . ': ' . $exception->getMessage();
+    }
+
+    logCommand($log, $status, $outcome, $command, $headers, $rawBody);
+
+    http_response_code($status);
+}
+
+/**
+ * The paths that receive commands: the configured endpoint, and the one stored at connect time.
+ *
+ * @return string[]
+ */
+function commandPaths(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect, array $settings): array
+{
+    $paths = [parse_url($settings['commandEndpoint'], PHP_URL_PATH)];
+
+    try {
+        $stored = $connect->getCommandEndpoint();
+    } catch (\MyParcelNL\Sdk\Exception\ConnectException $exception) {
+        // Unreadable state. The page reports that itself when it renders.
+        $stored = null;
+    }
+
+    if (null !== $stored) {
+        $paths[] = parse_url($stored, PHP_URL_PATH);
+    }
+
+    return array_filter($paths);
+}
+
+/**
+ * Whether this (connectionId, commandId) pair was accepted before.
+ *
+ * A plugin keeps the pairs in a table with the pair as its key, for 14 days. This page keeps the
+ * last 20 commands it received, and Clear forgets them, so here a pair lives as long as that list.
+ *
+ * @param array<int, array<string, mixed>> $log
+ */
+function isDuplicate(array $log, \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope $command): bool
+{
+    foreach ($log as $entry) {
+        if (202 === $entry['status']
+            && $entry['connectionId'] === $command->connectionId
+            && $entry['commandId'] === $command->commandId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /*
  * ---------------------------------------------------------------------------------------------
  * Below here is this page only: HTML, buttons, styling, and reading the .env file. None of it is
@@ -484,17 +619,18 @@ function render(
     // Environment
     echo '<section><h2>Environment</h2>';
     facts([
-        'PHP'          => PHP_VERSION,
+        'PHP'              => PHP_VERSION,
         // Call this before you offer Connect at all. It needs ext-openssl, which is a composer
         // suggest rather than a require, so a shop can be missing it. Then your settings screen can
         // say why the feature is unavailable instead of showing a button that throws.
-        'ext-openssl'  => \MyParcelNL\Sdk\Services\Connect\ConnectService::isSupported() ? 'usable' : 'cannot run Connect',
-        'environment'  => $settings['acceptance'] ? 'acceptance' : 'production',
-        'platform'     => $config->getPlatform(),
-        'API host'     => $config->getHost(),
-        'shop URL'     => $settings['shopUrl'],
-        'callback URL' => rtrim($settings['shopUrl'], '/') . \MyParcelNL\Sdk\Services\Connect\ConnectService::CALLBACK_PATH,
-        'scopes'       => $config->getScopeString(),
+        'ext-openssl'      => \MyParcelNL\Sdk\Services\Connect\ConnectService::isSupported() ? 'usable' : 'cannot run Connect',
+        'environment'      => $settings['acceptance'] ? 'acceptance' : 'production',
+        'platform'         => $config->getPlatform(),
+        'API host'         => $config->getHost(),
+        'shop URL'         => $settings['shopUrl'],
+        'callback URL'     => rtrim($settings['shopUrl'], '/') . \MyParcelNL\Sdk\Services\Connect\ConnectService::CALLBACK_PATH,
+        'command endpoint' => $settings['commandEndpoint'],
+        'scopes'           => $config->getScopeString(),
     ]);
     echo '</section>';
 
@@ -505,8 +641,14 @@ function render(
         'connection id'     => $install['connectionId'] ?? null,
         'scope granted'     => $token['scope'] ?? null,
         'token valid until' => isset($token['expiresAt']) ? moment((int) $token['expiresAt']) : null,
+        'commands go to'    => $install['commandEndpoint'] ?? null,
         'stored records'    => [] === $stored ? 'nothing stored yet' : implode(', ', array_keys($stored)),
     ]);
+
+    if ($connected && ($install['commandEndpoint'] ?? null) !== $settings['commandEndpoint']) {
+        echo '<p class="note">MyParcel has ' . e((string) ($install['commandEndpoint'] ?? 'no command endpoint'))
+            . ' for this shop. Reconnect to send the one configured above.</p>';
+    }
 
     if (!$connected) {
         echo '<p class="note">Press Connect. MyParcel asks you to log in and sends you back to the callback URL above.</p>';
@@ -543,6 +685,121 @@ function render(
         . 'per item with 202 or a problem, and that answer carries no order id, so there is no link to the '
         . 'order itself. ' . backofficeLink($settings) . '</p>';
     echo '</section>';
+
+    // Received commands
+    $commands = loadCommands();
+
+    echo '<section><h2>Received commands ' . badge((string) count($commands), true) . '</h2>';
+    pollCommands(count($commands), $commands[0]['received'] ?? '');
+    echo '<p class="note">Every request to <code>' . e($settings['commandEndpoint']) . '</code> lands here, with the '
+        . 'status this page replied and why. MyParcel has to reach that URL, so it needs a public https URL: '
+        . 'see the README. Ship an order of a connected shop in the backoffice to receive an ORDER_SHIPMENTS '
+        . 'command. The Signature header is not kept.</p>';
+
+    foreach ($commands as $entry) {
+        $ok = 202 === $entry['status'];
+
+        printf('<div class="flash %s"><b>%s %s</b>', $ok ? 'ok' : 'error', e((string) $entry['status']), e((string) $entry['outcome']));
+        facts([
+            'received'      => $entry['received'],
+            'command'       => $entry['command'],
+            'command id'    => $entry['commandId'],
+            'connection id' => $entry['connectionId'],
+            'headers'       => $entry['headers'],
+            'body'          => commandBody((string) $entry['body']),
+        ]);
+        echo '</div>';
+    }
+
+    if ([] !== $commands) {
+        echo '<div class="row">';
+        button('clear-commands', 'Clear');
+        echo '</div>';
+    }
+
+    echo '</section>';
+}
+
+/**
+ * Reload the page when a command arrives, so you can watch them come in. Polls /commands.json
+ * every three seconds and compares the count and the newest timestamp with what this page shows.
+ */
+function pollCommands(int $count, string $newest): void
+{
+    printf(
+        '<script>
+        setInterval(async () => {
+            const commands = await (await fetch("/commands.json", { cache: "no-store" })).json();
+            if (commands.length !== %d || (commands[0]?.received ?? "") !== %s) {
+                location.reload();
+            }
+        }, 3000);
+        </script>',
+        $count,
+        json_encode($newest)
+    );
+}
+
+/**
+ * Show a body as the JSON it is, or as it came when it is not JSON.
+ *
+ * @return mixed
+ */
+function commandBody(string $body)
+{
+    $decoded = json_decode($body, true);
+
+    return null === $decoded ? $body : $decoded;
+}
+
+/**
+ * Keep what arrived and what this page replied, newest first, 20 at most. Without the Signature
+ * header: the SDK docs say not to log it, and this page is a log.
+ *
+ * @param array<int, array<string, mixed>>                                            $log
+ * @param \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope|null $command
+ * @param array<string, string>                                                       $headers
+ */
+function logCommand(array $log, int $status, string $outcome, $command, array $headers, string $rawBody): void
+{
+    $entry = [
+        'received'     => date('Y-m-d H:i:s'),
+        'status'       => $status,
+        'outcome'      => $outcome,
+        'command'      => null === $command ? null : get_class($command),
+        'commandId'    => null === $command ? null : $command->commandId,
+        'connectionId' => null === $command ? null : $command->connectionId,
+        'headers'      => array_filter($headers, fn (string $name): bool => 0 !== strcasecmp($name, 'Signature'), ARRAY_FILTER_USE_KEY),
+        'body'         => $rawBody,
+    ];
+
+    saveCommands(array_slice(array_merge([$entry], $log), 0, 20));
+}
+
+/**
+ * The commands this page received, newest first. This page only.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function loadCommands(): array
+{
+    $path = __DIR__ . '/commands.json';
+
+    if (!is_file($path)) {
+        return [];
+    }
+
+    $decoded = json_decode((string) file_get_contents($path), true);
+
+    return is_array($decoded) ? $decoded : [];
+}
+
+/**
+ * @param array<int, array<string, mixed>> $commands
+ */
+function saveCommands(array $commands): void
+{
+    file_put_contents(__DIR__ . '/commands.json', (string) json_encode($commands, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
 
 /**

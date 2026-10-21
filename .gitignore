@@ -21,3 +21,4 @@ composer.lock
 
 # Local settings for the connect PoC. Copy .env.example to start.
 /dev/connect-poc/.env
+/dev/connect-poc/commands.json

@@ -1,7 +1,8 @@
 # Connect proof of concept
 
-Connect a shop to MyParcel Connect in your browser, then push a demo order. Use this to try the
-flow by hand, or to reproduce a problem outside a plugin.
+Connect a shop to MyParcel Connect in your browser, push a demo order, and watch the commands
+MyParcel sends back. Use this to try the flow by hand, to reproduce a problem outside a plugin, or
+to see what an incoming command looks like and why the SDK accepted or refused it.
 
 This directory is not part of the SDK. `.gitattributes` export-ignores `/dev`, so it never reaches
 a plugin's `vendor/myparcelnl/sdk/`.
@@ -15,8 +16,9 @@ a plugin's `vendor/myparcelnl/sdk/`.
 - Docker.
 - The traefik from `myparcel-core`, which serves the page at an https URL with a real certificate.
   MyParcel redirects the merchant browser to `<shopUrl>/myparcel-connect/callback`, and
-  `/connect/start` refuses a shop URL that is not https. Nothing at MyParcel calls your machine, so
-  the URL only has to work in your own browser. You do not need a tunnel.
+  `/connect/start` refuses a shop URL that is not https. For connecting and pushing orders the URL
+  only has to work in your own browser, so you do not need a tunnel. To receive commands, MyParcel
+  has to reach the command endpoint: see [Receiving commands](#receiving-commands).
 - Access to the `mp-dev` AWS profile, which traefik uses to fetch the certificate.
 
 ## Run it
@@ -78,6 +80,39 @@ MyParcel answers an order push per item, with either an acceptance or a problem 
 wrong. That answer carries no order id, so the page cannot link to the order it created. Look for
 the order in the backoffice.
 
+- **Received commands** lists every request that reached the command endpoint, newest first, with
+  the status the page replied, why, the headers without `Signature`, and the body. The page reloads
+  itself when a new one arrives. **Clear** empties the list.
+
+## Receiving commands
+
+MyParcel posts a command, such as `ORDER_SHIPMENTS`, to the command endpoint the page passed to
+`start()`: the shop URL plus `/myparcel/commands`, or `MYPARCEL_CONNECT_COMMAND_ENDPOINT`. The page
+runs `CommandRequestVerifier` and `CommandReader` on every request to that path, keeps the outcome
+in `dev/connect-poc/commands.json`, and replies with the status the SDK's exception names. A
+command with a `commandId` that is among the last 20 accepted requests is listed as a duplicate and
+gets a `202`; a plugin keeps those pairs for 14 days instead. `receiveCommand()` in `index.php` is
+the whole route.
+
+MyParcel has to reach that URL, which the traefik setup does not provide. Give the page a public
+https URL with a tunnel such as ngrok or Cloudflare Tunnel, set it as `MYPARCEL_CONNECT_SHOP_URL`
+(see [Without traefik](#without-traefik)), and connect again so MyParcel learns the command
+endpoint. Then ship an order of the connected shop in the backoffice and reload the page.
+
+> [!WARNING]
+> With a tunnel, every button on the page is reachable from the internet too. Keep the tunnel open
+> only while you test, and uninstall when you are done.
+
+To see the checks fail without a tunnel, post anything to the endpoint yourself:
+
+```console
+curl -i -X POST http://127.0.0.1:8080/myparcel/commands -H 'Content-Type: application/json' -d '{}'
+```
+
+The page replies `401` and lists the request with the check that refused it. A request from
+MyParcel to a shop that is not connected is refused the same way: there is no stored connection
+to check it against.
+
 ## Settings
 
 `dev/connect-poc/.env.example` lists every setting with its default and what it does. Copy it and
@@ -101,6 +136,11 @@ These failures come from the setup rather than the API:
 
 - **"Could not decrypt the stored connect state"** means `MYPARCEL_CONNECT_KEY` is not the key that
   wrote `state.json`. Restore that key, or delete `dev/connect-poc/state.json` and connect again.
+- **A command refused with "This shop has no command endpoint"** means the shop connected before
+  the endpoint was configured. Reconnect; the Connection section says what MyParcel has.
+- **Commands keep arriving on the old path** after you changed `MYPARCEL_CONNECT_COMMAND_ENDPOINT`:
+  MyParcel posts to the endpoint it got at connect time, and the SDK checks against that stored one,
+  so they still verify. The page receives both paths. Reconnect to make the change take effect.
 - **A callback that is refused** means the query MyParcel sent does not match the flow this shop
   began. Select **Connect** and complete the flow in one go, without reusing an old callback URL.
 - **A traefik 404** means traefik has not registered the route yet, or it is not running. Check
