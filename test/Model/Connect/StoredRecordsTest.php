@@ -46,6 +46,53 @@ class StoredRecordsTest extends TestCase
         self::assertNull($installation->getChallengeHtu());
     }
 
+    public function testInstallationRoundTripsTheRefreshTokenExpiry(): void
+    {
+        $installation = (new ConnectInstallation('envelope'))->withRefreshTokenExpiresAt(1790000000);
+        $restored     = ConnectInstallation::fromArray($installation->toArray());
+
+        self::assertSame(1790000000, $restored->getRefreshTokenExpiresAt());
+    }
+
+    public function testAVersionOneInstallationReadsWithAnUnknownExpiry(): void
+    {
+        // A shop connected before this field existed must stay connected.
+        $restored = ConnectInstallation::fromArray([
+            'version'             => 1,
+            'encryptedPrivateKey' => 'envelope',
+            'connectionId'        => 'a-connection-id',
+        ]);
+
+        self::assertSame('a-connection-id', $restored->getConnectionId());
+        self::assertNull($restored->getRefreshTokenExpiresAt());
+    }
+
+    /**
+     * @dataProvider provideStoredRefreshTokenExpiries
+     * @param mixed $stored
+     */
+    public function testInstallationReadsTheStoredRefreshTokenExpiry($stored, ?int $expected): void
+    {
+        $restored = ConnectInstallation::fromArray([
+            'version'               => 2,
+            'encryptedPrivateKey'   => 'envelope',
+            'refreshTokenExpiresAt' => $stored,
+        ]);
+
+        self::assertSame($expected, $restored->getRefreshTokenExpiresAt());
+    }
+
+    public function provideStoredRefreshTokenExpiries(): array
+    {
+        return $this->createProviderDataset([
+            'an integer'                          => [1790000000, 1790000000],
+            'a string from per-column storage'    => ['1790000000', 1790000000],
+            'not a number'                        => ['abc', null],
+            'an array'                            => [[], null],
+            'null, written for an unknown expiry' => [null, null],
+        ]);
+    }
+
     public function testInstallationWithTokenChallengeLeavesTheOriginalAlone(): void
     {
         $installation = new ConnectInstallation('envelope');
@@ -139,11 +186,11 @@ class StoredRecordsTest extends TestCase
     /**
      * @dataProvider provideRecordClasses
      */
-    public function testEveryRecordWritesVersionOne(string $class, array $arguments): void
+    public function testEveryRecordWritesItsCurrentVersion(string $class, array $arguments, int $version): void
     {
         $record = new $class(...$arguments);
 
-        self::assertSame(1, $record->toArray()['version'], "$class must write version 1");
+        self::assertSame($version, $record->toArray()['version'], "$class must write version $version");
     }
 
     /**
@@ -189,9 +236,9 @@ class StoredRecordsTest extends TestCase
     public function provideRecordClasses(): array
     {
         return [
-            'installation' => [ConnectInstallation::class, ['envelope', 'a-connection-id']],
-            'token'        => [ConnectToken::class, ['envelope', 1735689600, 'write:orders']],
-            'nonces'       => [ConnectNonces::class, ['start-nonce', 1735689600, 'dpop-nonce']],
+            'installation' => [ConnectInstallation::class, ['envelope', 'a-connection-id'], 2],
+            'token'        => [ConnectToken::class, ['envelope', 1735689600, 'write:orders'], 1],
+            'nonces'       => [ConnectNonces::class, ['start-nonce', 1735689600, 'dpop-nonce'], 1],
         ];
     }
 

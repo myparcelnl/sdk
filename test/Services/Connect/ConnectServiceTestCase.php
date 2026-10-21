@@ -169,13 +169,18 @@ abstract class ConnectServiceTestCase extends TestCase
     /**
      * Put a known key pair in storage, so a test knows the thumbprint a token must be bound to.
      */
-    protected function seedInstallation(?string $connectionId = null, ?string $htm = null, ?string $htu = null): void
-    {
+    protected function seedInstallation(
+        ?string $connectionId = null,
+        ?string $htm = null,
+        ?string $htu = null,
+        ?int $refreshTokenExpiresAt = null
+    ): void {
         $this->storage->saveInstallation(new ConnectInstallation(
             (new AesGcmCipher(self::KEY))->encrypt(self::PEM),
             $connectionId,
             $htm,
-            $htu
+            $htu,
+            $refreshTokenExpiresAt
         ));
     }
 
@@ -196,9 +201,9 @@ abstract class ConnectServiceTestCase extends TestCase
     /**
      * A shop that has already connected: key, connection id, challenge and a fresh token.
      */
-    protected function seedConnectedShop(?int $expiresAt = null): void
+    protected function seedConnectedShop(?int $expiresAt = null, ?int $refreshTokenExpiresAt = null): void
     {
-        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU);
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, $refreshTokenExpiresAt);
         $this->seedToken('a.b.c', $expiresAt ?? time() + 3600);
     }
 

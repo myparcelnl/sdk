@@ -341,6 +341,14 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         self::assertSame(['htm' => 'POST', 'htu' => self::HTU], $state->getTokenChallenge());
     }
 
+    public function testTheCallbackStoresTheRefreshTokenExpiry(): void
+    {
+        $state = $this->connect();
+
+        self::assertExpiresIn(31536000, (int) $state->getRefreshTokenExpiresAt());
+        self::assertExpiresIn(31536000, (int) $this->storage->row('installation')['refreshTokenExpiresAt']);
+    }
+
     public function testASuccessfulCallbackBurnsTheStartNonceAndKeepsTheDpopNonce(): void
     {
         $this->seedNonces(null, null, 'a-stored-nonce');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Connect;
 
+use DateTimeImmutable;
 use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectRefreshPost200Response;
 use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost200Response;
 use MyParcelNL\Sdk\Exception\ConnectException;
@@ -35,6 +36,11 @@ final class ConnectTokenResponse
     private $dpopNonce;
 
     /**
+     * @var int Epoch seconds when the answer was read, which the expiries count from.
+     */
+    private $receivedAt;
+
+    /**
      * @param  \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectRefreshPost200Response|\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost200Response $model
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
@@ -53,9 +59,17 @@ final class ConnectTokenResponse
             throw ConnectException::invalidArgument('MyParcel returned no usable expiresIn');
         }
 
+        // Same for refreshExpiresIn.
+        if ((int) $model->getRefreshExpiresIn() < 1) {
+            throw ConnectException::invalidArgument('MyParcel returned no usable refreshExpiresIn');
+        }
+
         $this->model        = $model;
         $this->connectionId = $connectionId;
         $this->dpopNonce    = $dpopNonce;
+        // MyParcel counts from when it built the answer, so the expiries come out late by the network
+        // delay. Accepted: the refresh leeway and the month of reconnect notice cover a few seconds.
+        $this->receivedAt   = time();
     }
 
     /**
@@ -95,6 +109,30 @@ final class ConnectTokenResponse
     public function getExpiresIn(): int
     {
         return (int) $this->model->getExpiresIn();
+    }
+
+    /**
+     * Get when the access token expires, in UTC.
+     */
+    public function getExpiresAt(): DateTimeImmutable
+    {
+        return new DateTimeImmutable('@' . ($this->receivedAt + $this->getExpiresIn()));
+    }
+
+    /**
+     * Get how long the refresh token lasts, in seconds from now.
+     */
+    public function getRefreshExpiresIn(): int
+    {
+        return (int) $this->model->getRefreshExpiresIn();
+    }
+
+    /**
+     * Get when the refresh token expires, in UTC.
+     */
+    public function getRefreshExpiresAt(): DateTimeImmutable
+    {
+        return new DateTimeImmutable('@' . ($this->receivedAt + $this->getRefreshExpiresIn()));
     }
 
     public function getScope(): string
