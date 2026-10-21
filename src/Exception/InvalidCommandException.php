@@ -9,6 +9,10 @@ namespace MyParcelNL\Sdk\Exception;
  *
  * Reply 400, so MyParcel drops the command instead of sending it again.
  */
-final class InvalidCommandException extends \Exception
+final class InvalidCommandException extends \Exception implements CommandResponseInterface
 {
+    public function getStatusCode(): int
+    {
+        return 400;
+    }
 }

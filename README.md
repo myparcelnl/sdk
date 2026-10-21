@@ -132,13 +132,71 @@ installation. `ConnectService::getCommandEndpoint()` returns it, read from stora
 or `null` when MyParcel sends no commands. A reconnect replaces it, also with `null` when you leave it
 out. A disconnect removes it.
 
-`CommandReader::read()` turns the raw body of a command into its model, such as
-`OrderShipmentsCommand`. It throws `UnknownCommandException` for a type the SDK does not know, and
-`InvalidCommandException` for a body that is not a command. Check the signature of the request and
-its connection id before you read the body.
+Once a shop uses this endpoint, stop listening to the shipment webhooks and events of the Core API
+for that shop. The commands carry the same information, and handling both ships every order twice.
 
-[Receiving commands] on the developer portal describes the request, the checks your plugin must run,
-and how to reply.
+#### Verifying and reading a command
+
+Every command is a `POST` with a JSON body, signed by MyParcel with an [RFC 9421] HTTP message
+signature and an [RFC 9530] `Content-Digest`. `CommandRequestVerifier::verify()` runs the checks that
+[Receiving commands] lists, in that order: the signature headers, the time window, the digest of the raw body, the
+key from MyParcel's JWKS, the signature itself, and the `connectionId` in the body. Run it before
+anything else reads the request.
+
+The verifier keeps MyParcel's public keys for an hour in a `JwksStorageInterface` that you write, the
+same way you write `ConnectStorageInterface`. It fetches them again when they are older, or when a
+command names a key it does not have, at most once a minute.
+
+```php
+use MyParcelNL\Sdk\Services\Ecommerce\CommandReader;
+use MyParcelNL\Sdk\Services\Ecommerce\CommandRequestVerifier;
+
+$rawBody  = file_get_contents('php://input');
+$verifier = new CommandRequestVerifier($connect, $jwksStorage);
+
+try {
+    $verifier->verify($_SERVER['REQUEST_METHOD'], getallheaders(), $rawBody);
+    $command = (new CommandReader())->read($rawBody);
+} catch (\MyParcelNL\Sdk\Exception\CommandResponseInterface $exception) {
+    // 401 when a check failed, 503 when the keys could not be fetched, 404 for a type this
+    // plugin does not support, 400 for an invalid command. Log the message, never send it.
+    http_response_code($exception->getStatusCode());
+    exit;
+}
+```
+
+`verify()` also throws a `ConnectException` when it cannot read the stored connection, for example
+after the encryption key changed. Let that one reach your 5xx handler, so MyParcel tries again.
+
+`$connect` is your `ConnectService`, `$jwksStorage` your `JwksStorageInterface`. Pass the body bytes
+exactly as received: the digest is over those bytes, so a decoded and re-encoded body fails the check.
+
+`CommandReader::read()` turns the body into the model for its type, such as `OrderShipmentsCommand`.
+The `type`, `commandId` and `connectionId` are on every model. A status value the SDK does not know
+yet stays a plain string.
+
+#### What your plugin does after the checks
+
+MyParcel sends each command at least once, waits 10 seconds for a reply, and retries only after a
+timeout, a network error, 408, 429 or 5xx. Every other status drops the command for good.
+
+1. Drop duplicates. Store the pair (`connectionId`, `commandId`) for at least 14 days, as an
+   insert-if-absent. If the pair exists, reply 202 and do nothing else. A retry has a new signature
+   but the same `commandId`.
+2. Store the command and the pair in one transaction, then reply 202. If the store fails, roll back
+   and reply 503.
+3. Do the work after the reply, for example in a queue or a cron job. An order status change that
+   sends an email takes longer than the 10 seconds MyParcel waits.
+4. Never log the `Signature` header, and check that the request logging of your framework does not
+   write request headers.
+
+An `ORDER_SHIPMENTS` command holds one shipment of an order, with the shipped order lines and their
+quantities. Create the shipment in your platform, or update it when you already have one for its
+`shipmentId`: MyParcel can send a command for a shipment it sent before, with a new `commandId`. If
+your platform cannot ship separate order lines, mark the order as shipped.
+
+[Receiving commands] on the developer portal describes the request, the checks, and the replies in
+full.
 
 ## Value mapping
 
@@ -217,5 +275,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
 [PHP SDK v11]: https://developer.myparcel.com/guides/php-sdk-v11.html
 [Receiving commands]: https://developer.myparcel.com/guides/php-sdk-v12.html#receiving-commands
+[RFC 9421]: https://www.rfc-editor.org/rfc/rfc9421
+[RFC 9530]: https://www.rfc-editor.org/rfc/rfc9530
 [PHP SDK documentation]: https://developer.myparcel.nl/documentation/50.php-sdk.html
 [MyParcel Developer Portal]: https://developer.myparcel.nl
