@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.4](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.3...v12.0.0-beta.4) (2026-10-21)
+
+### :sparkles: New Features
+
+* **api:** support the products webhook in the ecommerce client ([#680](https://github.com/myparcelnl/sdk/issues/680)) ([d59754e](https://github.com/myparcelnl/sdk/commit/d59754ed369f04a1346938c7519cfb1381d24d4c)), closes [#677](https://github.com/myparcelnl/sdk/issues/677)
+* **connect:** tell when a shop has to reconnect ([#681](https://github.com/myparcelnl/sdk/issues/681)) ([36282f3](https://github.com/myparcelnl/sdk/commit/36282f3afdef513274d83c3172a9bc3cfa9cf2cb)), closes [#678](https://github.com/myparcelnl/sdk/issues/678)
+
 ## [12.0.0-beta.3](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.2...v12.0.0-beta.3) (2026-10-16)
 
 ### ⚠ BREAKING CHANGES
