@@ -46,9 +46,9 @@ The rows above also apply when you use these classes directly. In addition:
 | Every generated `Api` class | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
 | `EcommerceApi\Model\PhysicalProperties` | `getHeight()`, `getLength()` and `getWidth()` return `PhysicalPropertiesHeight`, `PhysicalPropertiesLength` and `PhysicalPropertiesWidth` | They return `Dimension`, and the three classes are removed. Use the `UNIT_MM`, `UNIT_CM` and `UNIT_M` constants on `Dimension`. |
 
-## Upgrading to v11.1
+## Upgrading to v11.2
 
-v11.1 renames generated models in the Ecommerce client. Code that uses them must change.
+v11.2 renames generated models in the Ecommerce client. Code that uses them must change.
 
 | Before | After |
 | --- | --- |
