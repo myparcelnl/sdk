@@ -393,11 +393,12 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
         // A token with no cnf.jkt claim: nothing says which key it belongs to.
         $this->connect(self::jsonBody(200, [
-            'accessToken'  => $this->jwt(['iss' => 'nobody']),
-            'connectionId' => self::CONNECTION_ID,
-            'tokenType'    => 'DPoP',
-            'expiresIn'    => 3600,
-            'scope'        => 'integration',
+            'accessToken'      => $this->jwt(['iss' => 'nobody']),
+            'connectionId'     => self::CONNECTION_ID,
+            'tokenType'        => 'DPoP',
+            'expiresIn'        => 3600,
+            'refreshExpiresIn' => 31536000,
+            'scope'            => 'integration',
         ]));
     }
 

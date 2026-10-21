@@ -10,6 +10,7 @@ All URIs are relative to http://localhost, except if the operation defines anoth
 | [**connectStartGet()**](DefaultApi.md#connectStartGet) | **GET** /connect/start | Start the connect flow in the merchant browser |
 | [**connectTokenPost()**](DefaultApi.md#connectTokenPost) | **POST** /connect/token | Exchange a one-time code for an access token |
 | [**webhookOrdersPost()**](DefaultApi.md#webhookOrdersPost) | **POST** /webhook/orders | Push orders from a sales channel plugin |
+| [**webhookProductsPost()**](DefaultApi.md#webhookProductsPost) | **POST** /webhook/products | Push products from a sales channel plugin |
 
 
 ## `connectRefreshPost()`
@@ -227,6 +228,64 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **order** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order[]**](../Model/Order.md)| The orders to import. | |
+
+### Return type
+
+[**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\FixedWebhookOrderResult[]**](../Model/WebhookOrdersPost202ResponseInner.md)
+
+### Authorization
+
+[dpop](../../README.md#dpop)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `webhookProductsPost()`
+
+```php
+webhookProductsPost($product): \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\FixedWebhookOrderResult[]
+```
+
+Push products from a sales channel plugin
+
+Receives products from a connected sales channel plugin. The plugin calls this endpoint whenever products are created or changed in the shop.
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+
+
+$apiInstance = new MyParcelNL\Sdk\Client\Generated\EcommerceApi\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$product = array(new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Product()); // \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Product[] | The products to import.
+
+try {
+    $result = $apiInstance->webhookProductsPost($product);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->webhookProductsPost: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **product** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Product[]**](../Model/Product.md)| The products to import. | |
 
 ### Return type
 
