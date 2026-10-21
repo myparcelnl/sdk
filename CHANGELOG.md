@@ -12,18 +12,6 @@ All notable changes to this project will be documented in this file. See
 
 ## [12.0.0-beta.3](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.2...v12.0.0-beta.3) (2026-10-16)
 
-### ⚠ BREAKING CHANGES
-
-* note.
-- Renames the `### build` heading to `### Build System`.
-- Rewords the shipment and PHP 8.3 breaking change notes.
-- Fixes the typo "openssql asymetic".
-- CONTRIBUTING.md now says that pull requests are squashed by default,
-with the PR title and description as the commit message, and rebased
-when every commit needs its own changelog entry.
-
-* correct the 12.0.0-beta.1 changelog entry and the contributing guide ([#672](https://github.com/myparcelnl/sdk/issues/672)) ([651cf2f](https://github.com/myparcelnl/sdk/commit/651cf2f354815e33c6db775425addbbf4ca05092))
-
 ## [12.0.0-beta.2](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.1...v12.0.0-beta.2) (2026-10-16)
 
 ## [12.0.0-beta.1](https://github.com/myparcelnl/sdk/compare/v11.0.0...v12.0.0-beta.1) (2026-10-16)
