@@ -1,6 +1,6 @@
-# Upgrading to v11.1
+# Upgrading to v11.2
 
-v11.1 renames generated models in the Ecommerce client. Code that uses them must change.
+v11.2 renames generated models in the Ecommerce client. Code that uses them must change.
 
 | Before | After |
 | --- | --- |
