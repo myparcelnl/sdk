@@ -115,7 +115,8 @@ final class ConnectStateRepository
 
         $state = $state
             ->withTokenChallenge($installation->getChallengeHtm(), $installation->getChallengeHtu())
-            ->withRefreshTokenExpiresAt($installation->getRefreshTokenExpiresAt());
+            ->withRefreshTokenExpiresAt($installation->getRefreshTokenExpiresAt())
+            ->withCommandEndpoint($installation->getCommandEndpoint());
 
         $token = $this->storage->loadToken();
 
@@ -131,7 +132,11 @@ final class ConnectStateRepository
 
         if (null !== $nonces) {
             $state = $state
-                ->withStartNonce($nonces->getStartNonce(), $nonces->getStartNonceExpiresAt())
+                ->withStartNonce(
+                    $nonces->getStartNonce(),
+                    $nonces->getStartNonceExpiresAt(),
+                    $nonces->getStartCommandEndpoint()
+                )
                 ->withDpopNonce($nonces->getDpopNonce());
         }
 
@@ -152,7 +157,8 @@ final class ConnectStateRepository
             $state->getConnectionId(),
             null === $challenge ? null : $challenge['htm'],
             null === $challenge ? null : $challenge['htu'],
-            $state->getRefreshTokenExpiresAt()
+            $state->getRefreshTokenExpiresAt(),
+            $state->getCommandEndpoint()
         ));
     }
 
@@ -193,7 +199,12 @@ final class ConnectStateRepository
         $nonces = $this->storage->loadNonces() ?? new ConnectNonces();
 
         $this->storage->saveNonces(
-            (new ConnectNonces($state->getStartNonce(), $state->getStartNonceExpiresAt(), $nonces->getDpopNonce()))
+            new ConnectNonces(
+                $state->getStartNonce(),
+                $state->getStartNonceExpiresAt(),
+                $nonces->getDpopNonce(),
+                $state->getStartCommandEndpoint()
+            )
         );
     }
 

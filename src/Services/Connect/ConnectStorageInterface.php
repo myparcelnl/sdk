@@ -75,7 +75,8 @@ interface ConnectStorageInterface
      *
      * One record in one place. It holds two nonces that come from different places, but they need
      * the same treatment, so there is nothing to route and nothing to tell apart: store the array as
-     * it arrives. If you do look inside it, the keys are `startNonce` and `dpopNonce`.
+     * it arrives. If you do look inside it, the keys are `startNonce`, `dpopNonce` and
+     * `startCommandEndpoint`, the command endpoint of the flow the start nonce belongs to.
      *
      * Not a PHP session, even though this is the shortest lived of the three. The SDK refreshes the
      * access token whenever it has expired, and that happens in cron jobs and webhook handlers where

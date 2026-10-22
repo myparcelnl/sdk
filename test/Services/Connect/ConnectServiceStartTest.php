@@ -8,6 +8,7 @@ use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectStartConfig;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Model\Connect\ConnectConfig;
 use MyParcelNL\Sdk\Model\Connect\ConnectPlatform;
+use MyParcelNL\Sdk\Model\Connect\ConnectState;
 use MyParcelNL\Sdk\Services\Connect\ConnectService;
 use MyParcelNL\Sdk\Support\Str;
 
@@ -86,6 +87,89 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $query = $this->query($this->service()->start('My Shop', 'https://shop.example.test'));
 
         self::assertArrayNotHasKey('version', $this->configPayload($query));
+    }
+
+    public function testStartSendsTheCommandEndpointWhenItIsGiven(): void
+    {
+        $query = $this->query(
+            $this->service()->start('My Shop', 'https://shop.example.test', null, self::COMMAND_ENDPOINT)
+        );
+
+        self::assertSame(self::COMMAND_ENDPOINT, $this->configPayload($query)['commandEndpoint']);
+    }
+
+    public function testStartAcceptsACommandEndpointWithAnotherPortAndAQuery(): void
+    {
+        $commandEndpoint = 'https://shop.example.test:8443/index.php?route=myparcel/commands';
+
+        $query = $this->query(
+            $this->service()->start('My Shop', 'https://shop.example.test', null, $commandEndpoint)
+        );
+
+        self::assertSame($commandEndpoint, $this->configPayload($query)['commandEndpoint']);
+    }
+
+    public function testStartSendsNoCommandEndpointWhenThereIsNone(): void
+    {
+        $query = $this->query($this->service()->start('My Shop', 'https://shop.example.test'));
+
+        self::assertArrayNotHasKey('commandEndpoint', $this->configPayload($query));
+    }
+
+    /**
+     * @dataProvider provideUnusableCommandEndpoints
+     */
+    public function testStartRefusesSomethingThatIsNotAUsableCommandEndpoint(string $commandEndpoint): void
+    {
+        $this->expectException(ConnectException::class);
+
+        $this->service()->start('My Shop', 'https://shop.example.test', null, $commandEndpoint);
+    }
+
+    public function provideUnusableCommandEndpoints(): array
+    {
+        return $this->createProviderDataset([
+            'not https'  => ['http://shop.example.test/commands'],
+            'a fragment' => ['https://shop.example.test/commands#x'],
+            'empty'      => [''],
+            'too long'   => ['https://shop.example.test/' . str_repeat('a', 226)],
+            'not a url'  => ['shop.example.test/commands'],
+            'upper case' => ['https://Shop.example.test/commands'],
+            'port 443'   => ['https://shop.example.test:443/commands'],
+            'a user'     => ['https://user@shop.example.test/commands'],
+            'a password' => ['https://user:secret@shop.example.test/commands'],
+            'no path'    => ['https://shop.example.test'],
+        ]);
+    }
+
+    public function testTheCommandEndpointBoundIsTheOneTheSpecDeclares(): void
+    {
+        $longest = 'https://shop.example.test/' . str_repeat('a', 250 - strlen('https://shop.example.test/'));
+
+        $config = static function (string $commandEndpoint): ConnectStartConfig {
+            return new ConnectStartConfig([
+                'platform'         => ConnectPlatform::SHOPIFY,
+                'shop_name'        => 'My Shop',
+                'shop_url'         => 'https://shop.example.test',
+                'command_endpoint' => $commandEndpoint,
+            ]);
+        };
+
+        self::assertSame([], $config($longest)->listInvalidProperties(), 'the spec still allows our maximum');
+        self::assertNotSame([], $config($longest . 'a')->listInvalidProperties(), 'one over the limit');
+        self::assertNotSame('', $this->service()->start('My Shop', 'https://shop.example.test', null, $longest));
+    }
+
+    public function testStartKeepsTheCommandEndpointWithTheFlowUntilTheCallback(): void
+    {
+        // MyParcel only takes the new endpoint when the flow completes. A merchant who abandons a
+        // reconnect leaves MyParcel on the old one, so the stored one must not change yet.
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, 'https://shop.example.test/old');
+
+        $this->service()->start('My Shop', 'https://shop.example.test', null, self::COMMAND_ENDPOINT);
+
+        self::assertSame('https://shop.example.test/old', $this->storage->row('installation')['commandEndpoint']);
+        self::assertSame(self::COMMAND_ENDPOINT, $this->storage->row('nonces')['startCommandEndpoint']);
     }
 
     public function testStartRefusesAVersionTheConfigCannotHold(): void
@@ -349,6 +433,38 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         self::assertExpiresIn(31536000, (int) $this->storage->row('installation')['refreshTokenExpiresAt']);
     }
 
+    public function testTheCallbackStoresTheCommandEndpointTheFlowStartedWith(): void
+    {
+        $state = $this->connectWithCommandEndpoint(self::COMMAND_ENDPOINT);
+
+        self::assertSame(self::COMMAND_ENDPOINT, $state->getCommandEndpoint());
+        self::assertSame(self::COMMAND_ENDPOINT, $this->storage->row('installation')['commandEndpoint']);
+        self::assertNull($this->storage->row('nonces')['startCommandEndpoint'], 'burned with the start nonce');
+    }
+
+    public function testAReconnectWithoutACommandEndpointRemovesTheOldOne(): void
+    {
+        // MyParcel replaces the endpoint on a reconnect, so a flow without one stops the commands.
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, 'https://shop.example.test/old');
+
+        $state = $this->connectWithCommandEndpoint(null);
+
+        self::assertNull($state->getCommandEndpoint());
+        self::assertNull($this->storage->row('installation')['commandEndpoint']);
+    }
+
+    public function testAFailedExchangeKeepsTheOldCommandEndpoint(): void
+    {
+        $this->seedInstallation(self::CONNECTION_ID, 'POST', self::HTU, null, 'https://shop.example.test/old');
+
+        try {
+            $this->connectWithCommandEndpoint(self::COMMAND_ENDPOINT, self::errorResponse(400, 'invalid_grant'));
+            self::fail('expected a ConnectException');
+        } catch (ConnectException $exception) {
+            self::assertSame('https://shop.example.test/old', $this->storage->row('installation')['commandEndpoint']);
+        }
+    }
+
     public function testASuccessfulCallbackBurnsTheStartNonceAndKeepsTheDpopNonce(): void
     {
         $this->seedNonces(null, null, 'a-stored-nonce');
@@ -532,5 +648,27 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         }
 
         self::assertNull($this->storage->row('nonces')['startNonce']);
+    }
+
+    /**
+     * Run a whole connect flow that starts with this command endpoint.
+     *
+     * @param \GuzzleHttp\Psr7\Response|\Throwable ...$answers What /connect/token answers.
+     */
+    private function connectWithCommandEndpoint(?string $commandEndpoint, ...$answers): ConnectState
+    {
+        if (null === $this->storage->row('installation')) {
+            $this->seedInstallation();
+        }
+
+        $service = $this->service(...$answers);
+        $service->start('My Shop', 'https://shop.example.test', null, $commandEndpoint);
+
+        return $service->handleCallback([
+            'nonce' => $this->storage->row('nonces')['startNonce'],
+            'code'  => 'a-code',
+            'htm'   => 'POST',
+            'htu'   => self::HTU,
+        ]);
     }
 }

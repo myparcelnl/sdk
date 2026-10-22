@@ -72,6 +72,16 @@ final class ConnectState
      */
     private $dpopNonce;
 
+    /**
+     * @var string|null
+     */
+    private $commandEndpoint;
+
+    /**
+     * @var string|null
+     */
+    private $startCommandEndpoint;
+
     private function __construct(string $privateKeyPem)
     {
         $this->privateKeyPem = $privateKeyPem;
@@ -176,6 +186,22 @@ final class ConnectState
         return $this->dpopNonce;
     }
 
+    /**
+     * Get the URL MyParcel sends commands to for this connection. Null when it sends none.
+     */
+    public function getCommandEndpoint(): ?string
+    {
+        return $this->commandEndpoint;
+    }
+
+    /**
+     * Get the command endpoint start() sent, which the callback makes the connection's own.
+     */
+    public function getStartCommandEndpoint(): ?string
+    {
+        return $this->startCommandEndpoint;
+    }
+
     public function withConnectionId(?string $connectionId): self
     {
         $clone               = clone $this;
@@ -236,11 +262,23 @@ final class ConnectState
         return $clone;
     }
 
-    public function withStartNonce(?string $startNonce, ?int $expiresAt): self
+    public function withStartNonce(?string $startNonce, ?int $expiresAt, ?string $commandEndpoint = null): self
     {
-        $clone                      = clone $this;
-        $clone->startNonce          = $startNonce;
-        $clone->startNonceExpiresAt = $expiresAt;
+        $clone                       = clone $this;
+        $clone->startNonce           = $startNonce;
+        $clone->startNonceExpiresAt  = $expiresAt;
+        $clone->startCommandEndpoint = $commandEndpoint;
+
+        return $clone;
+    }
+
+    /**
+     * Set the URL MyParcel sends commands to, after a callback or a disconnect.
+     */
+    public function withCommandEndpoint(?string $commandEndpoint): self
+    {
+        $clone                  = clone $this;
+        $clone->commandEndpoint = $commandEndpoint;
 
         return $clone;
     }

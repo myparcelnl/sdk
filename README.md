@@ -109,6 +109,29 @@ if (null !== $expiresAt && $expiresAt < new DateTimeImmutable('+1 month')) {
 `ConnectService::getAccessTokenExpiresAt()` does the same for the access token, which lasts about an
 hour. The SDK refreshes the access token itself, so you only need this date for display.
 
+### Receiving commands
+
+MyParcel sends commands, such as `ORDER_SHIPMENTS`, to a URL in your plugin: the `commandEndpoint`.
+Pass it as the `commandEndpoint` argument of `start()`. Without it, the shop gets no commands.
+
+```php
+$url = $connect->start(
+    shopName: 'My Shop',
+    shopUrl: 'https://shop.example.com',
+    version: '1.2.3',
+    commandEndpoint: 'https://shop.example.com/myparcel/commands',
+);
+```
+
+The URL must be https, at most 250 characters and without a fragment. It must also be canonical: a
+lowercase host, no default port, a path, and no user name or password. `start()` throws a
+`ConnectException` for a URL that breaks one of these rules.
+
+MyParcel takes the URL when the connect flow completes. Then the SDK stores it with the
+installation. `ConnectService::getCommandEndpoint()` returns it, read from storage without a request,
+or `null` when MyParcel sends no commands. A reconnect replaces it, also with `null` when you leave it
+out. A disconnect removes it.
+
 ## Value mapping
 
 Use `ApiMapperService` to convert between delivery-options names, v1 IDs and v2 names.

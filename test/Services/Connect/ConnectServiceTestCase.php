@@ -40,6 +40,8 @@ abstract class ConnectServiceTestCase extends TestCase
 
     protected const CONNECTION_ID = '6f1e6f3e-0000-4000-8000-000000000000';
 
+    protected const COMMAND_ENDPOINT = 'https://shop.example.test/myparcel/commands';
+
     /**
      * A real P-256 key and its thumbprint, so a test can mint a token bound to it.
      */
@@ -173,14 +175,16 @@ abstract class ConnectServiceTestCase extends TestCase
         ?string $connectionId = null,
         ?string $htm = null,
         ?string $htu = null,
-        ?int $refreshTokenExpiresAt = null
+        ?int $refreshTokenExpiresAt = null,
+        ?string $commandEndpoint = null
     ): void {
         $this->storage->saveInstallation(new ConnectInstallation(
             (new AesGcmCipher(self::KEY))->encrypt(self::PEM),
             $connectionId,
             $htm,
             $htu,
-            $refreshTokenExpiresAt
+            $refreshTokenExpiresAt,
+            $commandEndpoint
         ));
     }
 
