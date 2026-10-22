@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.5](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.4...v12.0.0-beta.5) (2026-10-22)
+
+### :sparkles: New Features
+
+* **api:** read the commands that MyParcel sends to a plugin ([#689](https://github.com/myparcelnl/sdk/issues/689)) ([b65577f](https://github.com/myparcelnl/sdk/commit/b65577f4fe4d2ec3385e235904f1abcd90be81c3))
+* **api:** verify the signature on the commands that MyParcel sends ([#694](https://github.com/myparcelnl/sdk/issues/694)) ([56198e4](https://github.com/myparcelnl/sdk/commit/56198e48782916c8c6bf2fe6224e1fb89aa03586)), closes [#689](https://github.com/myparcelnl/sdk/issues/689)
+* **connect:** send the command endpoint when a shop connects ([#688](https://github.com/myparcelnl/sdk/issues/688)) ([7d056ab](https://github.com/myparcelnl/sdk/commit/7d056abcc9a4aa38a2e1045083436c0677020415)), closes [#681](https://github.com/myparcelnl/sdk/issues/681)
+
 ## [12.0.0-beta.4](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.3...v12.0.0-beta.4) (2026-10-21)
 
 ### :sparkles: New Features
