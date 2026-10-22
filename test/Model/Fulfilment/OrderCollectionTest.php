@@ -9,9 +9,11 @@ use Faker\Factory;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
+use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\Model\Fulfilment\Product;
+use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\Model\Recipient;
 use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Collection;
@@ -199,6 +201,130 @@ class OrderCollectionTest extends TestCase
         $mockCurl->shouldReceive('close')->once()->andReturnSelf();
 
         $orderCollection->save(['x-dmp-no-tracking' => 'true']);
+    }
+
+    /**
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function testSaveSendsTheExternalProductReference(): void
+    {
+        $customsDeclaration = $this->saveAndCaptureCustomsDeclaration('catalog_item_abc123def456g');
+
+        self::assertSame('catalog_item_abc123def456g', $customsDeclaration['items'][0]['external_product_reference']);
+    }
+
+    /**
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    public function testSaveLeavesOutAnUnsetExternalProductReference(): void
+    {
+        $customsDeclaration = $this->saveAndCaptureCustomsDeclaration(null);
+
+        self::assertSame(
+            [
+                'contents' => 1,
+                'items'    => [
+                    [
+                        'description'    => 'Shoes',
+                        'amount'         => 2,
+                        'weight'         => 500,
+                        'item_value'     => ['amount' => 1000, 'currency' => 'EUR'],
+                        'classification' => '6403',
+                        'country'        => 'NL',
+                    ],
+                ],
+                'invoice'  => '1234',
+                'weight'   => 500,
+            ],
+            $customsDeclaration
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testToArrayContainsTheCustomsDeclaration(): void
+    {
+        $this->faker = Factory::create('nl_NL');
+        $order       = $this->generateOrder(new ShipmentOptions())
+            ->setCarrierId(1)
+            ->setOrderLines($this->generateOrderLines())
+            ->setCustomsDeclaration($this->generateCustomsDeclaration('catalog_item_abc123def456g'));
+
+        $orders = (new OrderCollection([$order]))->toArray();
+
+        self::assertSame(
+            'catalog_item_abc123def456g',
+            $orders[0]['customs_declaration']['items'][0]['external_product_reference']
+        );
+    }
+
+    /**
+     * Saves one order with a customs declaration and returns the customs declaration from the request body.
+     *
+     * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
+     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
+     * @throws \Exception
+     */
+    protected function saveAndCaptureCustomsDeclaration(?string $externalProductReference): array
+    {
+        $this->faker     = Factory::create('nl_NL');
+        $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
+        $shipmentOptions = (new ShipmentOptions())
+            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
+            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+
+        $order      = $this->generateOrder($shipmentOptions);
+        $orderLines = $this->generateOrderLines();
+        $order->setCarrierId(1);
+        $order->setOrderLines($orderLines);
+        $order->setWeight($orderLines->sum('weight'));
+        $order->setCustomsDeclaration($this->generateCustomsDeclaration($externalProductReference));
+        $orderCollection->push($order);
+
+        $body     = [];
+        $mockCurl = $this->mockCurl();
+        $mockCurl->shouldReceive('write')
+            ->once()
+            ->with('POST', \Mockery::any(), \Mockery::any(), \Mockery::on(static function (string $json) use (&$body): bool {
+                $body = json_decode($json, true);
+
+                return true;
+            }))
+            ->andReturnSelf();
+        $mockCurl->shouldReceive('getResponse')->once()->andReturn($this->prepareSaveResponse($orderCollection));
+        $mockCurl->shouldReceive('close')->once()->andReturnSelf();
+
+        $orderCollection->save();
+
+        return $body['data']['orders'][0]['shipment']['customs_declaration'];
+    }
+
+    protected function generateCustomsDeclaration(?string $externalProductReference): CustomsDeclaration
+    {
+        $customsDeclaration = (new CustomsDeclaration())
+            ->setContents(1)
+            ->setInvoice('1234');
+        $customsDeclaration->setWeight(500);
+        $customsDeclaration->addCustomsItem(
+            (new MyParcelCustomsItem())
+                ->setDescription('Shoes')
+                ->setAmount(2)
+                ->setWeight(500)
+                ->setItemValue(1000)
+                ->setClassification('6403')
+                ->setCountry('NL')
+                ->setExternalProductReference($externalProductReference)
+        );
+
+        return $customsDeclaration;
     }
 
     /**
