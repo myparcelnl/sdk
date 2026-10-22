@@ -1,15 +1,21 @@
 # Contributing
 
-## 1. Basics
+## Basics
 
 - Fork this repository and clone it to your machine
 
-## 2. Make your changes
+## Prerequisites
+You need to have the following installed on your machine:
+- Docker
+- Node, version 24.21 or higher
+- PNPM, version 12 or higher
 
-- Try to conform to our code style
+## Make your changes
+
+- You must conform to our code style
 - You should make only one change in each branch
 
-## 3. Add or update tests
+## Add or update tests
 
 - Coverage % needs to be equal to or greater than that of the previous commit.
 - When adding tests, keep the same namespace as source files.

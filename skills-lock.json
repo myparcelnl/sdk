@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "jane-openapi-sdk": {
+      "source": "janephp/janephp",
+      "sourceType": "github",
+      "skillPath": "skills/jane-openapi-sdk/SKILL.md",
+      "computedHash": "9fd55ac9d5309e7c6143cd61d95fcb8bb536c2a2e2efc10ee4c1d5c03670ec5e"
+    }
+  }
+}

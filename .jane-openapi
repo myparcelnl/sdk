@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'mapping' => [
+        __DIR__ . '/openapi/specs/oauth-connect.yaml' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/EcommerceApi',
+            'reference' => true,
+            'date-prefer-interface' => true,
+            'validation' => false // do not fail when validating a response that contains an unknown enum value
+        ],
+    ],
+    'enums-as-objects' => true,
+    'enums-unknown-value' => 'scalar', // treat unknown enum values as scalar instead of failing
+    'use-fixer' => true,
+    'clean-generated' => true,
+    'default-fetch-mode' => 'eager',
+];
