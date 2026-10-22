@@ -34,10 +34,12 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6",
         "jane-php/open-api-runtime": "^8.0",
-        "symfony/serializer": "^7.0 || ^8.0"
+        "symfony/serializer": "^7.0 || ^8.0",
+        "gapple/structured-fields": "^2.3",
+        "firebase/php-jwt": "^7.2"
     },
     "suggest": {
-        "ext-openssl": "Required for MyParcel Connect. Nothing else in the SDK needs it."
+        "ext-openssl": "Required for MyParcel Connect and for verifying the commands MyParcel sends. Nothing else in the SDK needs it."
     },
     "require-dev": {
         "fakerphp/faker": "^v1.16.0",

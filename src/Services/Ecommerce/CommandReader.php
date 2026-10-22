@@ -16,8 +16,7 @@ use TypeError;
 /**
  * Reads the body of a command that MyParcel sends to your commandEndpoint into its generated model.
  *
- * Check the request signature and the connection id first: this reads the body, it does not
- * authenticate it.
+ * Run CommandRequestVerifier::verify() first: this reads the body, it does not authenticate it.
  *
  *     try {
  *         $command = (new CommandReader())->read($rawBody);

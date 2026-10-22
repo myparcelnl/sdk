@@ -413,6 +413,20 @@ final class ConnectService
     }
 
     /**
+     * Get MyParcel's id for this connection, from storage only. Null until the shop has connected.
+     *
+     * Every command MyParcel sends carries it, and CommandRequestVerifier checks it against this.
+     *
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    public function getConnectionId(): ?string
+    {
+        $state = $this->repository->load();
+
+        return null === $state ? null : $state->getConnectionId();
+    }
+
+    /**
      * Check whether this shop has a usable connection.
      *
      * Answered from storage alone, because the contract has no endpoint that reports on a

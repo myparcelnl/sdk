@@ -9,7 +9,7 @@ namespace MyParcelNL\Sdk\Exception;
  *
  * Reply 404: the contract tells MyParcel that the plugin does not support the type.
  */
-final class UnknownCommandException extends \Exception
+final class UnknownCommandException extends \Exception implements CommandResponseInterface
 {
     /**
      * @var string
@@ -29,5 +29,10 @@ final class UnknownCommandException extends \Exception
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getStatusCode(): int
+    {
+        return 404;
     }
 }

@@ -7,15 +7,19 @@ namespace MyParcelNL\Sdk\Dev\ConnectPoc;
 use MyParcelNL\Sdk\Model\Connect\ConnectInstallation;
 use MyParcelNL\Sdk\Model\Connect\ConnectNonces;
 use MyParcelNL\Sdk\Model\Connect\ConnectToken;
+use MyParcelNL\Sdk\Model\Connect\JwksCache;
 use MyParcelNL\Sdk\Services\Connect\ConnectStorageInterface;
+use MyParcelNL\Sdk\Services\Connect\JwksStorageInterface;
 use RuntimeException;
 
 /**
- * An example implementation of ConnectStorageInterface, backed by one JSON file.
+ * An example implementation of ConnectStorageInterface and JwksStorageInterface, backed by one JSON
+ * file.
  *
- * Read this to see the shape your own storage needs: seven methods, three records, and one array
+ * Read this to see the shape your own storage needs: nine methods, four records, and one array
  * each way. Every record has toArray() and a static fromArray(), so each method is close to one
- * line. That part is worth copying.
+ * line. That part is worth copying. The two interfaces are separate because the JWKS record is a
+ * cache of public keys and not connection state, but one class may implement both, as this one does.
  *
  * A JSON file is not. Use your platform's own settings store or a database table instead:
  *
@@ -34,7 +38,7 @@ use RuntimeException;
  * interface documents each one. In short: the installation must last as long as the shop, the
  * token may be thrown away at any time, and the nonces are safe to lose.
  */
-final class FileConnectStorage implements ConnectStorageInterface
+final class FileConnectStorage implements ConnectStorageInterface, JwksStorageInterface
 {
     /**
      * @var string
@@ -95,6 +99,22 @@ final class FileConnectStorage implements ConnectStorageInterface
     public function saveNonces(?ConnectNonces $nonces): void
     {
         $this->write('nonces', null === $nonces ? null : $nonces->toArray());
+    }
+
+    /**
+     * Get MyParcel's public keys, as last fetched. Null makes the SDK fetch them.
+     */
+    public function loadJwks(): ?JwksCache
+    {
+        return JwksCache::fromArray($this->read('jwks'));
+    }
+
+    /**
+     * Store the keys. Nothing in them is secret, and losing them costs one fetch.
+     */
+    public function saveJwks(JwksCache $jwks): void
+    {
+        $this->write('jwks', $jwks->toArray());
     }
 
     /**
