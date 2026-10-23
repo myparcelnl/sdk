@@ -127,7 +127,7 @@ class OrderCollection extends Collection
                         'recipient'           => $order->getRecipient()->toArrayWithoutNull(),
                         'options'             => $this->getShipmentOptions($options),
                         'pickup'              => $order->getPickupLocation() ? $order->getPickupLocation()->toArrayWithoutNull() : null,
-                        'customs_declaration' => $order->getCustomsDeclaration(),
+                        'customs_declaration' => $order->getCustomsDeclaration() ? $order->getCustomsDeclaration()->toArrayWithoutNull() : null,
                         'physical_properties' => $order->getPhysicalProperties()->toArray(),
                     ],
                 ];

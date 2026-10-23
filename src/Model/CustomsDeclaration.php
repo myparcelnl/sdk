@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\Model;
 /**
  * @internal Legacy — used by Order v1 (fulfilment) and web services.
  */
-class CustomsDeclaration
+class CustomsDeclaration extends BaseModel
 {
     public $contents;
     public $items;
@@ -80,5 +80,22 @@ class CustomsDeclaration
     public function setWeight(int $weight): void
     {
         $this->weight = $weight;
+    }
+
+    /**
+     * Reads the properties directly, because the typed getters throw when a value is not set.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'contents' => $this->contents,
+            'items'    => array_map(static function (MyParcelCustomsItem $item): array {
+                return $item->toArrayWithoutNull();
+            }, $this->items),
+            'invoice'  => $this->invoice,
+            'weight'   => $this->weight,
+        ];
     }
 }
