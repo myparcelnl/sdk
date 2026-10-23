@@ -77,12 +77,12 @@ final class ShipmentQueryServiceTest extends TestCase
             ->willReturnCallback(function (...$args) {
                 // Verify key parameters are passed correctly
                 self::assertSame('3SMYPA1234567', $args[0]); // barcode
-                self::assertSame(2, $args[11]); // page
-                self::assertSame('order-100', $args[13]); // reference_identifier
-                self::assertSame(300, $args[17]); // size (default)
-                self::assertSame('desc', $args[18]); // sort
-                self::assertSame(1, $args[19]); // status
-                self::assertIsString($args[21]); // user_agent
+                self::assertSame(2, $args[13]); // page
+                self::assertSame('order-100', $args[15]); // reference_identifier
+                self::assertSame(300, $args[19]); // size (default)
+                self::assertSame('desc', $args[20]); // sort
+                self::assertSame(1, $args[21]); // status
+                self::assertIsString($args[23]); // user_agent
 
                 return $this->buildShipmentsResponse([new ShipmentDefsShipment(['id' => 123])]);
             });
@@ -105,9 +105,9 @@ final class ShipmentQueryServiceTest extends TestCase
         $api->expects(self::once())
             ->method('getShipments')
             ->willReturnCallback(function (...$args) {
-                self::assertSame('ref-a', $args[13]);
-                self::assertNull($args[17]);
-                self::assertIsString($args[21]);
+                self::assertSame('ref-a', $args[15]);
+                self::assertNull($args[19]);
+                self::assertIsString($args[23]);
 
                 return $this->buildShipmentsResponse([
                     new ShipmentDefsShipment(['id' => 1001]),
