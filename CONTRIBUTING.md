@@ -17,7 +17,7 @@ You need to have the following installed on your machine:
 
 ## Add or update tests
 
-- Coverage % needs to be equal to or greater than that of the previous commit.
+- Coverage % needs to be equal to or greater than that of the previous commit, and always aim for 100%.
 - When adding tests, keep the same namespace as source files.
     - If you have added a file at `\MyParcelNL\Sdk\Model\MyNamespace`, with a method named `myMethod`, you would create a test for this function in `\MyParcelNL\Sdk\Test\Model\MyNamespace` and call the method `testMyMethod`. If you're using a dataProvider it should be called `provideTestMyMethodData`.
 
@@ -63,9 +63,20 @@ We use [Conventional Commits] and [semantic-release] to automate release notes a
 
 Some parts of this SDK use **generated code** from the Core API specification to ensure zero-maintenance updates for new carriers, delivery types, and configuration options.
 
-### Generated Files Location
+When calling methods from these generated clients, always use named arguments. Positional arguments could move on updates to the specification, breaking your code.
 
-- `src/Services/CoreApi/Generated/Shipments/` — **DO NOT EDIT MANUALLY**
+### Generated Files Location
+ **DO NOT EDIT MANUALLY**
+- `src/Services/CoreApi/Generated/Jane` — The new clients/generated source, via `janephp`.
+- `src/Services/CoreApi/Generated/` — Legacy v11 generated code, to be replaced with Jane in successive v12 betas.
+
+We currently generate the following APIs, each API gets its own namespace, either in `Generated/Jane` for the new clients or in `Generated` for the legacy v11 clients.
+
+- CoreApi: The main API for interacting with shipments, capabilities, and notifications.
+- CoreApiPrivate: Temporary API for private endpoints, not intended for public use or not yet documented in our public open api spec.
+- EcommerceApi: Also called "Order v2". Manage e-commerce orders, and connect via oauth MyParcel Connect.
+- IamApi: Identify and access management via the iam microservice.
+- OrderApi: To be phased out. API is not actually consumed - only some types are used in our plugins, but these should move to the new EcommerceApi.
 
 ### Regenerating Code
 
@@ -77,17 +88,15 @@ docker --version
 composer generate:api
 ```
 
-This command runs `openapitools/openapi-generator-cli` inside a Docker container, using the specification at:
+This command runs the configured API generators (Jane in v12, the legacy OpenAPI Generator for v11), for all the configured APIs.
 
-```
-https://api.myparcel.nl/openapi.min.json
 ```
 
 ### Notes for Development
 
 - Do not edit any files under `Generated/Shipments` manually
-- All changes must originate from the Core API specification
-- The generated code is produced by OpenAPI Generator (supports OpenAPI 3.1)
+- All changes must originate from the openapi specifications
+- The generated code is produced by OpenAPI Generator (supports OpenAPI 3.1) or Jane (for v12).
 - The generation command automatically refreshes autoloading via Composer
 
 ---

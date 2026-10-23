@@ -1,4 +1,6 @@
 # MyParcel PHP SDK Agent instructions
+Agents must follow the guidelines not only in this document, but also those in the `CONTRIBUTING.md` and `README.md`.
+Those files, in addition to the developer portal documentation at [https://developer.myparcel.nl](https://developer.myparcel.nl), and [https://developer.myparcel.com](https://developer.myparcel.com) provide the full context for contributing to this SDK.
 
 ## Writing
 
