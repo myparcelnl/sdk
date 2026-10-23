@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Client;
 
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPutShipmentsV12;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -15,27 +17,36 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 class ShipmentRegionSerializationTest extends TestCase
 {
     /**
-     * @return array<string, array{string}>
+     * @return array<string, array{class-string, string}>
      */
-    public function provideRegions(): array
+    public function provideResponsesAndRegions(): array
     {
-        return [
-            'EU'     => ['EU'],
-            'NL'     => ['NL'],
-            'BE'     => ['BE'],
-            'Wereld' => ['Wereld'],
+        $responses = [
+            ShipmentResponsesShipments::class,
+            ShipmentResponsesPostShipmentsV12::class,
+            ShipmentResponsesPutShipmentsV12::class,
         ];
+        $cases = [];
+
+        foreach ($responses as $response) {
+            foreach (['EU', 'NL', 'BE', 'Wereld'] as $region) {
+                $cases[substr(strrchr($response, '\\'), 1) . " $region"] = [$response, $region];
+            }
+        }
+
+        return $cases;
     }
 
     /**
-     * @dataProvider provideRegions
+     * @dataProvider provideResponsesAndRegions
+     *
+     * @param class-string $responseClass
      */
-    public function testFetchedShipmentEncodesRegionToJson(string $region): void
+    public function testFetchedShipmentEncodesRegionToJson(string $responseClass, string $region): void
     {
         $body = (object) ['data' => (object) ['shipments' => [(object) ['id' => 1, 'region' => $region]]]];
 
-        /** @var ShipmentResponsesShipments $response */
-        $response = ObjectSerializer::deserialize($body, ShipmentResponsesShipments::class);
+        $response = ObjectSerializer::deserialize($body, $responseClass);
         $shipment = $response->getData()->getShipments()[0];
 
         $json = json_decode(json_encode($shipment, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
