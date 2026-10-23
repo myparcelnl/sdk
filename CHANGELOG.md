@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.2.1](https://github.com/myparcelnl/sdk/compare/v11.2.0...v11.2.1) (2026-10-23)
+
+### :bug: Bug Fixes
+
+* **shipment:** pass query filters to the correct getShipments() parameters ([#699](https://github.com/myparcelnl/sdk/issues/699)) ([f6dfeb0](https://github.com/myparcelnl/sdk/commit/f6dfeb0f33a5d98b4a84254a3f450f07cf9a0c92)), closes [#698](https://github.com/myparcelnl/sdk/issues/698)
+
 ## [11.2.0](https://github.com/myparcelnl/sdk/compare/v11.1.0...v11.2.0) (2026-10-21)
 
 ### :sparkles: New Features
