@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.6](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.5...v12.0.0-beta.6) (2026-10-23)
+
+### :sparkles: New Features
+
+* support the external product reference on customs items ([#696](https://github.com/myparcelnl/sdk/issues/696)) ([e026a7b](https://github.com/myparcelnl/sdk/commit/e026a7bce42d631ab0bdbbe273f01d0d4f08b7e1)), closes [#657](https://github.com/myparcelnl/sdk/issues/657) [#659](https://github.com/myparcelnl/sdk/issues/659)
+
 ## [12.0.0-beta.5](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.4...v12.0.0-beta.5) (2026-10-22)
 
 ### :sparkles: New Features
