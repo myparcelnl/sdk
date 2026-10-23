@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[]**](ShipmentDefsShipment.md) | A list of Shipment Resources. |
+**shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[]**](ShipmentDefsShipment.md) | A list of Shipment Resources. |
 **pdf** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf**](ShipmentResponsesPostShipmentsV12DataPdf.md) |  | [optional]
 **zpl** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl**](ShipmentResponsesPostShipmentsV12DataZpl.md) |  | [optional]
 

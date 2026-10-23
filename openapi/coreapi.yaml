@@ -37,6 +37,9 @@ typeMappings:
   # @todo remove when upstream spec/codegen fixes region oneOf(string pattern | enum)
   # The current codegen produces unusable model wrappers/enums for shipment resource regions.
   ShipmentDefsShipmentPropertiesRegion: string
+  # @todo remove when the generator keeps the pattern branch of region oneOf(pattern | enum)
+  # Generator 7.26.0 keeps only the enum "Wereld", so region "EU" fails on write.
+  ShipmentDefsShipment: FixedShipment
   # @todo remove when upstream spec fixes return shipment payment_status empty-string responses
   # Live return-shipment responses currently return "", which violates the enum and breaks deserialization.
   ShipmentDefsShipmentPaymentStatus: string
