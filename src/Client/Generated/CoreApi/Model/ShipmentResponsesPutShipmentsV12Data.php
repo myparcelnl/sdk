@@ -58,7 +58,7 @@ class ShipmentResponsesPutShipmentsV12Data implements ModelInterface, ArrayAcces
      * @var string[]
      */
     protected static $openAPITypes = [
-        'shipments' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[]'
+        'shipments' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[]'
     ];
 
     /**
@@ -296,7 +296,7 @@ class ShipmentResponsesPutShipmentsV12Data implements ModelInterface, ArrayAcces
     /**
      * Gets shipments
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[]
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[]
      */
     public function getShipments()
     {
@@ -306,7 +306,7 @@ class ShipmentResponsesPutShipmentsV12Data implements ModelInterface, ArrayAcces
     /**
      * Sets shipments
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[] $shipments A list of Shipment Resources.
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[] $shipments A list of Shipment Resources.
      *
      * @return self
      */

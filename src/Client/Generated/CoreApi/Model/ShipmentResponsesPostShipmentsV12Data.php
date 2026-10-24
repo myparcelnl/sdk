@@ -58,7 +58,7 @@ class ShipmentResponsesPostShipmentsV12Data implements ModelInterface, ArrayAcce
      * @var string[]
      */
     protected static $openAPITypes = [
-        'shipments' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[]',
+        'shipments' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[]',
         'pdf' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataPdf',
         'zpl' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12DataZpl'
     ];
@@ -310,7 +310,7 @@ class ShipmentResponsesPostShipmentsV12Data implements ModelInterface, ArrayAcce
     /**
      * Gets shipments
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[]
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[]
      */
     public function getShipments()
     {
@@ -320,7 +320,7 @@ class ShipmentResponsesPostShipmentsV12Data implements ModelInterface, ArrayAcce
     /**
      * Sets shipments
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[] $shipments A list of Shipment Resources.
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[] $shipments A list of Shipment Resources.
      *
      * @return self
      */
