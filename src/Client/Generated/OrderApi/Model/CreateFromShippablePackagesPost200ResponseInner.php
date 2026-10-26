@@ -64,7 +64,7 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
         'detail' => 'string',
         'instance' => 'string',
         'cause' => 'mixed',
-        'errors' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[]'
+        'errors' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[]'
     ];
 
     /**
@@ -642,7 +642,7 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
     /**
      * Gets errors
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[]
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[]
      */
     public function getErrors()
     {
@@ -652,7 +652,7 @@ class CreateFromShippablePackagesPost200ResponseInner implements ModelInterface,
     /**
      * Sets errors
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[] $errors Detailed information regarding the violations.
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[] $errors Detailed information regarding the violations.
      *
      * @return self
      */
