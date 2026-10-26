@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\IamApi;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\IamApi\Api\DefaultApi;
-use MyParcelNL\Sdk\Client\Generated\IamApi\Configuration;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 
 /**
  * Factory for creating the generated IAM API client.
@@ -20,7 +18,7 @@ final class IamApiFactory
      *
      * Shared with generated-client based services to ensure consistent behaviour.
      */
-    public const DEFAULT_HTTP_TIMEOUT = 10;
+    public const DEFAULT_HTTP_TIMEOUT = JaneClientFactory::DEFAULT_HTTP_TIMEOUT;
 
     /**
      * Create a configured IAM API client.
@@ -33,40 +31,14 @@ final class IamApiFactory
         ?string $apiKey = null,
         ?string $host = null,
         ?string $userAgent = null
-    ): DefaultApi {
+    ): Client {
         $resolvedKey = self::resolveApiKey($apiKey);
 
         if ('' === $resolvedKey) {
             throw new InvalidArgumentException('API key cannot be empty');
         }
 
-        $config = new Configuration();
-        $config->setAccessToken(base64_encode($resolvedKey));
-
-        if ($host) {
-            $config->setHost($host);
-        }
-
-        if ($userAgent) {
-            $config->setUserAgent($userAgent);
-        }
-
-        $httpOptions = [
-            'timeout' => self::DEFAULT_HTTP_TIMEOUT,
-            'handler' => self::createHandlerStack(),
-            'debug'   => false,
-        ];
-
-        if ($host) {
-            $httpOptions['base_uri'] = $host;
-        }
-
-        return new DefaultApi(new GuzzleClient($httpOptions), $config);
-    }
-
-    private static function createHandlerStack(): HandlerStack
-    {
-        return HandlerStack::create();
+        return JaneClientFactory::iamApi($resolvedKey, $host, $userAgent);
     }
 
     /**
