@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment[]**](ShipmentDefsShipment.md) | A list of Shipment Resources. |
+**shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipment[]**](ShipmentDefsShipment.md) | A list of Shipment Resources. |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
