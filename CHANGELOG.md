@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.7](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.6...v12.0.0-beta.7) (2026-10-26)
+
+### :bug: Bug Fixes
+
+* **api:** fix json_encode of shipments from ShipmentQueryService ([#697](https://github.com/myparcelnl/sdk/issues/697)) ([3bdfa50](https://github.com/myparcelnl/sdk/commit/3bdfa500a0ce2f37044c760dae9df1209a60cb5a))
+
 ## [12.0.0-beta.6](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.5...v12.0.0-beta.6) (2026-10-23)
 
 ### :sparkles: New Features
