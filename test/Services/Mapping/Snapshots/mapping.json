@@ -1,0 +1,514 @@
+{
+    "api_mapper": {
+        "all_domains": {
+            "carrier": {
+                "BOL": {
+                    "legacy_name": "bol.com",
+                    "id": 7,
+                    "v2_name": null
+                },
+                "BPOST": {
+                    "legacy_name": "bpost",
+                    "id": 2,
+                    "v2_name": "BPOST"
+                },
+                "BRT": {
+                    "legacy_name": "brt",
+                    "id": 15,
+                    "v2_name": "BRT"
+                },
+                "CHEAP_CARGO": {
+                    "legacy_name": "cheapcargo",
+                    "id": 3,
+                    "v2_name": "CHEAP_CARGO"
+                },
+                "DHL_CHEAP_CARGO": {
+                    "legacy_name": "dhl",
+                    "id": 6,
+                    "v2_name": null
+                },
+                "DHL_EUROPLUS": {
+                    "legacy_name": "dhleuroplus",
+                    "id": 11,
+                    "v2_name": "DHL_EUROPLUS"
+                },
+                "DHL_FOR_YOU": {
+                    "legacy_name": "dhlforyou",
+                    "id": 9,
+                    "v2_name": "DHL_FOR_YOU"
+                },
+                "DHL_FREIGHT": {
+                    "legacy_name": "dhlfreight",
+                    "id": 21,
+                    "v2_name": "DHL_FREIGHT"
+                },
+                "DHL_PARCEL_CONNECT": {
+                    "legacy_name": "dhlparcelconnect",
+                    "id": 10,
+                    "v2_name": "DHL_PARCEL_CONNECT"
+                },
+                "DPD": {
+                    "legacy_name": "dpd",
+                    "id": 4,
+                    "v2_name": "DPD"
+                },
+                "GLS": {
+                    "legacy_name": "gls",
+                    "id": 14,
+                    "v2_name": "GLS"
+                },
+                "INPOST": {
+                    "legacy_name": "inpost",
+                    "id": 17,
+                    "v2_name": "INPOST"
+                },
+                "INSTABOX": {
+                    "legacy_name": "instabox",
+                    "id": 5,
+                    "v2_name": null
+                },
+                "POSTE_ITALIANE": {
+                    "legacy_name": "posteitaliane",
+                    "id": 18,
+                    "v2_name": "POSTE_ITALIANE"
+                },
+                "POSTNL": {
+                    "legacy_name": "postnl",
+                    "id": 1,
+                    "v2_name": "POSTNL"
+                },
+                "SPRING": {
+                    "legacy_name": "spring",
+                    "id": 19,
+                    "v2_name": "SPRING"
+                },
+                "TRUNKRS": {
+                    "legacy_name": "trunkrs",
+                    "id": 16,
+                    "v2_name": "TRUNKRS"
+                },
+                "UPS": {
+                    "legacy_name": "ups",
+                    "id": 8,
+                    "v2_name": null
+                },
+                "UPS_EXPRESS_SAVER": {
+                    "legacy_name": "upsexpresssaver",
+                    "id": 13,
+                    "v2_name": "UPS_EXPRESS_SAVER"
+                },
+                "UPS_STANDARD": {
+                    "legacy_name": "upsstandard",
+                    "id": 12,
+                    "v2_name": "UPS_STANDARD"
+                },
+                "VIA_TIM": {
+                    "legacy_name": "viatim",
+                    "id": 20,
+                    "v2_name": "VIA_TIM"
+                }
+            },
+            "delivery_type": {
+                "EARLY_MORNING": {
+                    "legacy_name": "early_morning",
+                    "id": 8,
+                    "v2_name": "EARLY_MORNING_DELIVERY"
+                },
+                "EVENING": {
+                    "legacy_name": "evening",
+                    "id": 3,
+                    "v2_name": "EVENING_DELIVERY"
+                },
+                "EXPRESS": {
+                    "legacy_name": "express",
+                    "id": 7,
+                    "v2_name": "EXPRESS_DELIVERY"
+                },
+                "MORNING": {
+                    "legacy_name": "morning",
+                    "id": 1,
+                    "v2_name": "MORNING_DELIVERY"
+                },
+                "PICKUP": {
+                    "legacy_name": "pickup",
+                    "id": 4,
+                    "v2_name": "PICKUP_DELIVERY"
+                },
+                "SAME_DAY": {
+                    "legacy_name": "same_day",
+                    "id": 6,
+                    "v2_name": "SAME_DAY_DELIVERY"
+                },
+                "STANDARD": {
+                    "legacy_name": "standard",
+                    "id": 2,
+                    "v2_name": "STANDARD_DELIVERY"
+                }
+            },
+            "package_type": {
+                "DIGITAL_STAMP": {
+                    "legacy_name": "digital_stamp",
+                    "id": 4,
+                    "v2_name": "DIGITAL_STAMP"
+                },
+                "ENVELOPE": {
+                    "legacy_name": "envelope",
+                    "id": 7,
+                    "v2_name": "ENVELOPE"
+                },
+                "MAILBOX": {
+                    "legacy_name": "mailbox",
+                    "id": 2,
+                    "v2_name": "MAILBOX"
+                },
+                "PACKAGE": {
+                    "legacy_name": "package",
+                    "id": 1,
+                    "v2_name": "PACKAGE"
+                },
+                "PALLET": {
+                    "legacy_name": "pallet",
+                    "id": 5,
+                    "v2_name": "PALLET"
+                },
+                "SMALL_PACKAGE": {
+                    "legacy_name": "package_small",
+                    "id": 6,
+                    "v2_name": "SMALL_PACKAGE"
+                },
+                "UNFRANKED": {
+                    "legacy_name": "letter",
+                    "id": 3,
+                    "v2_name": "UNFRANKED"
+                }
+            }
+        },
+        "carrier": {
+            "v2_to_id_map": {
+                "POSTNL": 1,
+                "BPOST": 2,
+                "CHEAP_CARGO": 3,
+                "DPD": 4,
+                "DHL_FOR_YOU": 9,
+                "DHL_PARCEL_CONNECT": 10,
+                "DHL_EUROPLUS": 11,
+                "UPS_STANDARD": 12,
+                "UPS_EXPRESS_SAVER": 13,
+                "GLS": 14,
+                "BRT": 15,
+                "TRUNKRS": 16,
+                "INPOST": 17,
+                "POSTE_ITALIANE": 18,
+                "SPRING": 19,
+                "VIA_TIM": 20,
+                "DHL_FREIGHT": 21
+            },
+            "legacy_name_from_id": {
+                "7": "bol.com",
+                "2": "bpost",
+                "15": "brt",
+                "3": "cheapcargo",
+                "6": "dhl",
+                "11": "dhleuroplus",
+                "9": "dhlforyou",
+                "21": "dhlfreight",
+                "10": "dhlparcelconnect",
+                "4": "dpd",
+                "14": "gls",
+                "17": "inpost",
+                "5": "instabox",
+                "18": "posteitaliane",
+                "1": "postnl",
+                "19": "spring",
+                "16": "trunkrs",
+                "8": "ups",
+                "13": "upsexpresssaver",
+                "12": "upsstandard",
+                "20": "viatim"
+            },
+            "v2_name_from_id": {
+                "7": null,
+                "2": "BPOST",
+                "15": "BRT",
+                "3": "CHEAP_CARGO",
+                "6": null,
+                "11": "DHL_EUROPLUS",
+                "9": "DHL_FOR_YOU",
+                "21": "DHL_FREIGHT",
+                "10": "DHL_PARCEL_CONNECT",
+                "4": "DPD",
+                "14": "GLS",
+                "17": "INPOST",
+                "5": null,
+                "18": "POSTE_ITALIANE",
+                "1": "POSTNL",
+                "19": "SPRING",
+                "16": "TRUNKRS",
+                "8": null,
+                "13": "UPS_EXPRESS_SAVER",
+                "12": "UPS_STANDARD",
+                "20": "VIA_TIM"
+            },
+            "id_from_legacy_name": {
+                "bol.com": 7,
+                "bpost": 2,
+                "brt": 15,
+                "cheapcargo": 3,
+                "dhl": 6,
+                "dhleuroplus": 11,
+                "dhlforyou": 9,
+                "dhlfreight": 21,
+                "dhlparcelconnect": 10,
+                "dpd": 4,
+                "gls": 14,
+                "inpost": 17,
+                "instabox": 5,
+                "posteitaliane": 18,
+                "postnl": 1,
+                "spring": 19,
+                "trunkrs": 16,
+                "ups": 8,
+                "upsexpresssaver": 13,
+                "upsstandard": 12,
+                "viatim": 20
+            },
+            "v2_name_from_legacy_name": {
+                "bol.com": null,
+                "bpost": "BPOST",
+                "brt": "BRT",
+                "cheapcargo": "CHEAP_CARGO",
+                "dhl": null,
+                "dhleuroplus": "DHL_EUROPLUS",
+                "dhlforyou": "DHL_FOR_YOU",
+                "dhlfreight": "DHL_FREIGHT",
+                "dhlparcelconnect": "DHL_PARCEL_CONNECT",
+                "dpd": "DPD",
+                "gls": "GLS",
+                "inpost": "INPOST",
+                "instabox": null,
+                "posteitaliane": "POSTE_ITALIANE",
+                "postnl": "POSTNL",
+                "spring": "SPRING",
+                "trunkrs": "TRUNKRS",
+                "ups": null,
+                "upsexpresssaver": "UPS_EXPRESS_SAVER",
+                "upsstandard": "UPS_STANDARD",
+                "viatim": "VIA_TIM"
+            },
+            "id_from_v2_name": {
+                "BPOST": 2,
+                "BRT": 15,
+                "CHEAP_CARGO": 3,
+                "DHL_EUROPLUS": 11,
+                "DHL_FOR_YOU": 9,
+                "DHL_FREIGHT": 21,
+                "DHL_PARCEL_CONNECT": 10,
+                "DPD": 4,
+                "GLS": 14,
+                "INPOST": 17,
+                "POSTE_ITALIANE": 18,
+                "POSTNL": 1,
+                "SPRING": 19,
+                "TRUNKRS": 16,
+                "UPS_EXPRESS_SAVER": 13,
+                "UPS_STANDARD": 12,
+                "VIA_TIM": 20
+            },
+            "legacy_name_from_v2_name": {
+                "BPOST": "bpost",
+                "BRT": "brt",
+                "CHEAP_CARGO": "cheapcargo",
+                "DHL_EUROPLUS": "dhleuroplus",
+                "DHL_FOR_YOU": "dhlforyou",
+                "DHL_FREIGHT": "dhlfreight",
+                "DHL_PARCEL_CONNECT": "dhlparcelconnect",
+                "DPD": "dpd",
+                "GLS": "gls",
+                "INPOST": "inpost",
+                "POSTE_ITALIANE": "posteitaliane",
+                "POSTNL": "postnl",
+                "SPRING": "spring",
+                "TRUNKRS": "trunkrs",
+                "UPS_EXPRESS_SAVER": "upsexpresssaver",
+                "UPS_STANDARD": "upsstandard",
+                "VIA_TIM": "viatim"
+            }
+        },
+        "delivery_type": {
+            "v2_to_id_map": {
+                "MORNING_DELIVERY": 1,
+                "STANDARD_DELIVERY": 2,
+                "EVENING_DELIVERY": 3,
+                "PICKUP_DELIVERY": 4,
+                "SAME_DAY_DELIVERY": 6,
+                "EXPRESS_DELIVERY": 7,
+                "EARLY_MORNING_DELIVERY": 8
+            },
+            "legacy_name_from_id": {
+                "8": "early_morning",
+                "3": "evening",
+                "7": "express",
+                "1": "morning",
+                "4": "pickup",
+                "6": "same_day",
+                "2": "standard"
+            },
+            "v2_name_from_id": {
+                "8": "EARLY_MORNING_DELIVERY",
+                "3": "EVENING_DELIVERY",
+                "7": "EXPRESS_DELIVERY",
+                "1": "MORNING_DELIVERY",
+                "4": "PICKUP_DELIVERY",
+                "6": "SAME_DAY_DELIVERY",
+                "2": "STANDARD_DELIVERY"
+            },
+            "id_from_legacy_name": {
+                "early_morning": 8,
+                "evening": 3,
+                "express": 7,
+                "morning": 1,
+                "pickup": 4,
+                "same_day": 6,
+                "standard": 2
+            },
+            "v2_name_from_legacy_name": {
+                "early_morning": "EARLY_MORNING_DELIVERY",
+                "evening": "EVENING_DELIVERY",
+                "express": "EXPRESS_DELIVERY",
+                "morning": "MORNING_DELIVERY",
+                "pickup": "PICKUP_DELIVERY",
+                "same_day": "SAME_DAY_DELIVERY",
+                "standard": "STANDARD_DELIVERY"
+            },
+            "id_from_v2_name": {
+                "EARLY_MORNING_DELIVERY": 8,
+                "EVENING_DELIVERY": 3,
+                "EXPRESS_DELIVERY": 7,
+                "MORNING_DELIVERY": 1,
+                "PICKUP_DELIVERY": 4,
+                "SAME_DAY_DELIVERY": 6,
+                "STANDARD_DELIVERY": 2
+            },
+            "legacy_name_from_v2_name": {
+                "EARLY_MORNING_DELIVERY": "early_morning",
+                "EVENING_DELIVERY": "evening",
+                "EXPRESS_DELIVERY": "express",
+                "MORNING_DELIVERY": "morning",
+                "PICKUP_DELIVERY": "pickup",
+                "SAME_DAY_DELIVERY": "same_day",
+                "STANDARD_DELIVERY": "standard"
+            }
+        },
+        "package_type": {
+            "v2_to_id_map": {
+                "PACKAGE": 1,
+                "MAILBOX": 2,
+                "UNFRANKED": 3,
+                "DIGITAL_STAMP": 4,
+                "PALLET": 5,
+                "SMALL_PACKAGE": 6,
+                "ENVELOPE": 7
+            },
+            "legacy_name_from_id": {
+                "4": "digital_stamp",
+                "7": "envelope",
+                "2": "mailbox",
+                "1": "package",
+                "5": "pallet",
+                "6": "package_small",
+                "3": "letter"
+            },
+            "v2_name_from_id": {
+                "4": "DIGITAL_STAMP",
+                "7": "ENVELOPE",
+                "2": "MAILBOX",
+                "1": "PACKAGE",
+                "5": "PALLET",
+                "6": "SMALL_PACKAGE",
+                "3": "UNFRANKED"
+            },
+            "id_from_legacy_name": {
+                "digital_stamp": 4,
+                "envelope": 7,
+                "mailbox": 2,
+                "package": 1,
+                "pallet": 5,
+                "package_small": 6,
+                "letter": 3
+            },
+            "v2_name_from_legacy_name": {
+                "digital_stamp": "DIGITAL_STAMP",
+                "envelope": "ENVELOPE",
+                "mailbox": "MAILBOX",
+                "package": "PACKAGE",
+                "pallet": "PALLET",
+                "package_small": "SMALL_PACKAGE",
+                "letter": "UNFRANKED"
+            },
+            "id_from_v2_name": {
+                "DIGITAL_STAMP": 4,
+                "ENVELOPE": 7,
+                "MAILBOX": 2,
+                "PACKAGE": 1,
+                "PALLET": 5,
+                "SMALL_PACKAGE": 6,
+                "UNFRANKED": 3
+            },
+            "legacy_name_from_v2_name": {
+                "DIGITAL_STAMP": "digital_stamp",
+                "ENVELOPE": "envelope",
+                "MAILBOX": "mailbox",
+                "PACKAGE": "package",
+                "PALLET": "pallet",
+                "SMALL_PACKAGE": "package_small",
+                "UNFRANKED": "letter"
+            }
+        }
+    },
+    "shipment_option_mapper": {
+        "signature": "requires_signature",
+        "only_recipient": "recipient_only_delivery",
+        "age_check": "requires_age_verification",
+        "receipt_code": "requires_receipt_code",
+        "large_format": "oversized_package",
+        "printerless_return": "print_return_label_at_drop_off",
+        "collect": "scheduled_collection",
+        "return": "return_on_first_failed_delivery",
+        "cash_on_delivery": "requires_cash_on_delivery",
+        "drop_off_at_postal_point": "deliver_at_postal_point",
+        "extra_assurance": "additional_insurance",
+        "requires_signature": "requires_signature",
+        "recipient_only_delivery": "recipient_only_delivery",
+        "requires_age_verification": "requires_age_verification",
+        "requires_receipt_code": "requires_receipt_code",
+        "oversized_package": "oversized_package",
+        "print_return_label_at_drop_off": "print_return_label_at_drop_off",
+        "scheduled_collection": "scheduled_collection",
+        "return_on_first_failed_delivery": "return_on_first_failed_delivery",
+        "requires_cash_on_delivery": "requires_cash_on_delivery",
+        "deliver_at_postal_point": "deliver_at_postal_point",
+        "additional_insurance": "additional_insurance",
+        "tracked": null,
+        "additionalInsurance": "additional_insurance",
+        "deliverAtPostalPoint": "deliver_at_postal_point",
+        "freshFood": "fresh_food",
+        "frozen": "frozen",
+        "hideSender": "hide_sender",
+        "insurance": "insurance",
+        "noTracking": "no_tracking",
+        "oversizedPackage": "oversized_package",
+        "printReturnLabelAtDropOff": "print_return_label_at_drop_off",
+        "priorityDelivery": "priority_delivery",
+        "recipientOnlyDelivery": "recipient_only_delivery",
+        "returnOnFirstFailedDelivery": "return_on_first_failed_delivery",
+        "requiresAgeVerification": "requires_age_verification",
+        "requiresCashOnDelivery": "requires_cash_on_delivery",
+        "requiresReceiptCode": "requires_receipt_code",
+        "requiresSignature": "requires_signature",
+        "sameDayDelivery": "same_day_delivery",
+        "saturdayDelivery": "saturday_delivery",
+        "scheduledCollection": "scheduled_collection",
+        "SAME_DAY_DELIVERY": "same_day_delivery",
+        "unknown_option": null
+    }
+}
