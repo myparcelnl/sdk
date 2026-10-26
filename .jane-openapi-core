@@ -1,0 +1,43 @@
+<?php
+
+// Jane config for the Core API, the private Core API, the IAM API and the Order API.
+// Jane applies the top-level options to every spec in 'mapping'. In a 'mapping' entry, Jane reads only
+// 'namespace', 'directory' and the endpoint options, such as 'whitelisted-paths'.
+// INT-2034 merges this file with .jane-openapi.
+
+return [
+    'mapping' => [
+        'https://api.myparcel.nl/openapi.min.json' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApi',
+        ],
+        // A local copy, because the private Core API spec is not hosted yet.
+        __DIR__ . '/openapi/specs/coreapi-private.yaml' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApiPrivate',
+        ],
+        'https://iam.api.myparcel.nl/openapi.json' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/IamApi',
+        ],
+        // The SDK uses only the models of the Order API. Jane always generates the client too.
+        'https://order.api.myparcel.nl/openapi.json' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\OrderApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/OrderApi',
+        ],
+    ],
+    'validation' => true,
+    'strict' => true,
+    'enums-as-objects' => true,
+    'enums-unknown-value' => 'scalar',
+    'skip-null-values' => true,
+    'skip-required-fields' => true,
+    'include-null-value' => false,
+    'date-prefer-interface' => true,
+    'allow-external-refs' => true,
+    'external-ref-allowed-hosts' => ['myparcel.nl'],
+    'external-ref-follow-redirects' => false,
+    'use-fixer' => false, // @TODO INT-783
+    'clean-generated' => true,
+    'default-fetch-mode' => 'eager',
+];
