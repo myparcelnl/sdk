@@ -11,6 +11,10 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Authentication\BearerAuthentica
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\FormEncoder as CoreApiFormEncoder;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Authentication\JwtAuthentication as IamApiAuthentication;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer as IamApiNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder as IamApiFormEncoder;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
@@ -38,6 +42,11 @@ final class JaneClientFactory
      * The Core API host from the spec.
      */
     public const CORE_API_HOST = 'https://api.myparcel.nl';
+
+    /**
+     * The IAM API host from the spec.
+     */
+    public const IAM_API_HOST = 'https://iam.api.myparcel.nl';
 
     /**
      * Default HTTP client timeout in seconds.
@@ -71,6 +80,36 @@ final class JaneClientFactory
                 $httpClient
             ),
             self::createSerializer(new CoreApiNormalizer(), new CoreApiFormEncoder())
+        );
+    }
+
+    /**
+     * Create an IAM API client.
+     *
+     * The IAM spec calls the bearer scheme `jwt`. It accepts the same encoded API key as the Core API.
+     *
+     * @param string                   $apiKey     The API key as the Backoffice shows it. This method encodes it.
+     * @param string|null              $host       Overrides the IAM API host. An empty string uses the default.
+     * @param string|null              $userAgent  Sent as the User-Agent on every request.
+     * @param array<string, string>    $headers    Sent on every request.
+     * @param HttpClientInterface|null $httpClient Sends the requests. Tests pass a MockHttpClient.
+     */
+    public static function iamApi(
+        string $apiKey,
+        ?string $host = null,
+        ?string $userAgent = null,
+        array $headers = [],
+        ?HttpClientInterface $httpClient = null
+    ): IamApiClient {
+        return new IamApiClient(
+            self::createHttpClient(
+                $host ?: self::IAM_API_HOST,
+                new IamApiAuthentication(base64_encode($apiKey)),
+                $userAgent,
+                $headers,
+                $httpClient
+            ),
+            self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder())
         );
     }
 

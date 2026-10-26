@@ -12,6 +12,12 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 | Class                  | v11                                | v12                                                         |
 |------------------------|------------------------------------|-------------------------------------------------------------|
 | `ShipmentQueryService` | `query()` ignores a key it does not know | `query()` throws an `InvalidArgumentException` for a key it does not know |
+| `ApiKeyService`        | `getPrincipal()` returns an `IamApi\Model\Principal` with getters, such as `getShopIds()` | `getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser` with public properties, such as `$principal->shopIds`. `type`, `role` and `platform` are enums, or the raw string for a value the SDK does not know |
+| `ApiKeyService`        | The constructor takes an `IamApi\Api\DefaultApi` | The constructor takes a `Jane\IamApi\Client`, such as the one that `IamApiFactory::make()` returns |
+| `ApiKeyService`        | `isValid()` and `getPrincipal()` throw an `IamApi\ApiException` for a status other than 401 | They throw a `Jane\IamApi\Exception\ClientException`. For a principal type that the SDK does not know, they throw an `UnexpectedValueException` |
+| `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns the decoded JSON: use `ApiKeyService::getPrincipal()` for a model |
+
+The classes in the `Jane` namespace are in `MyParcelNL\Sdk\Client\Generated\Jane`. The others are in `MyParcelNL\Sdk\Client\Generated`.
 
 ### Generated OpenAPI models
 
