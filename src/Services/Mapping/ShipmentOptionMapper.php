@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Mapping;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
+use MyParcelNL\Sdk\Support\Str;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Maps shipment option names to properties of the capabilities v2 request model.
@@ -13,7 +16,8 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
  *     $mapper->v2PropertyFromName('signature'); // 'requires_signature'
  *     $mapper->v2PropertyFromName('tracked');   // null
  *
- * Options have no numeric IDs. This mapper only covers names accepted by CapabilitiesOptionsV2.
+ * Options have no numeric IDs. This mapper only covers names accepted by
+ * CapabilitiesPostCapabilitiesRequestV2Options.
  * Use CapabilitiesRequest::getUnsupportedOptions() to check a request before sending it.
  *
  * @see \MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest::getUnsupportedOptions()
@@ -49,6 +53,11 @@ final class ShipmentOptionMapper
     private const UNSUPPORTED_OPTIONS = ['tracked'];
 
     /**
+     * @var null|array<string, string>
+     */
+    private static ?array $v2Properties = null;
+
+    /**
      * Return the generated PHP property for a legacy option name or a v2 JSON/property name.
      * For example, both signature and requiresSignature resolve to requires_signature.
      * Unknown and unsupported names return null.
@@ -63,20 +72,46 @@ final class ShipmentOptionMapper
             return null;
         }
 
-        // V2 JSON names use camelCase; generated PHP properties use snake_case.
-        $v2NameToProperty = array_flip(CapabilitiesOptionsV2::attributeMap());
-        $property        = self::LEGACY_TO_V2_PROPERTIES[$name] ?? $v2NameToProperty[$name] ?? $name;
-        $setters         = CapabilitiesOptionsV2::setters();
+        $properties = self::v2Properties();
+        $property   = self::LEGACY_TO_V2_PROPERTIES[$name] ?? $properties[$name] ?? $name;
 
-        if (isset($setters[$property])) {
+        if (in_array($property, $properties, true)) {
             return $property;
         }
 
-        // Existing calls also accept case variants and spaces through PHP's method lookup.
-        $setterName = 'set' . strtolower(str_replace(['_', ' '], '', $property));
-        $property   = array_search($setterName, array_map('strtolower', $setters), true);
+        // Existing calls also accept case variants and spaces, as PHP's method lookup did before.
+        $normalised = strtolower(str_replace(['_', ' '], '', $property));
 
-        return false === $property ? null : $property;
+        foreach ($properties as $candidate) {
+            if (strtolower(str_replace('_', '', $candidate)) === $normalised) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the options of the v2 capabilities request as v2 JSON name => snake_case name.
+     *
+     * The snake_case name is the PHP property that openapi-generator generated, such as
+     * requires_signature. This mapper keeps returning it, because the PDK reads it. Jane names the
+     * PHP property after the v2 JSON name, such as requiresSignature.
+     *
+     * @return array<string, string>
+     */
+    private static function v2Properties(): array
+    {
+        if (null === self::$v2Properties) {
+            self::$v2Properties = [];
+            $reflection         = new ReflectionClass(CapabilitiesPostCapabilitiesRequestV2Options::class);
+
+            foreach ($reflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+                self::$v2Properties[$property->getName()] = Str::snake($property->getName());
+            }
+        }
+
+        return self::$v2Properties;
     }
 
     /**

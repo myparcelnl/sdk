@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Mapping;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierName;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
-use ReflectionClass;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentParametersCarrierName;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 
 /**
  * Converts carrier, delivery type and package type values between API versions.
@@ -137,8 +136,6 @@ final class ApiMapperService
 
     /**
      * @param  string $domain
-     *
-     * @throws \ReflectionException
      */
     private function __construct(string $domain)
     {
@@ -302,7 +299,7 @@ final class ApiMapperService
     }
 
     /**
-     * @internal Used to verify that source classes remain in the generator manifest.
+     * @internal Used to verify that the source enums still exist.
      *
      * @return array<string, array<string, class-string>>
      */
@@ -322,6 +319,29 @@ final class ApiMapperService
     public static function overrides(): array
     {
         return self::OVERRIDES;
+    }
+
+    /**
+     * Return the cases of a generated enum as constant name => value, such as 'DHL_CHEAP_CARGO' => 6.
+     *
+     * Jane names a case as the spec's x-enum-varnames does, such as DhlCheapCargo. openapi-generator
+     * converted that name to the constant DHL_CHEAP_CARGO. The rows keep the constant names, so
+     * allRows() and allDomains() return the same keys as before.
+     *
+     * @internal Also used by the mapping tests, so they compare the same names.
+     *
+     * @param  class-string<\BackedEnum> $enumClass
+     *
+     * @return array<string, int|string>
+     */
+    public static function constants(string $enumClass): array
+    {
+        $constants = [];
+        $cases     = $enumClass::cases();
+        foreach ($cases as $case) {
+            $constants[strtoupper(self::snakeCase($case->name))] = $case->value;
+        }
+        return $constants;
     }
 
     /**
@@ -416,7 +436,7 @@ final class ApiMapperService
         $profile = [self::COLUMN_ID => $profile[self::COLUMN_ID]] + $profile;
 
         foreach ($profile as $column => $enumClass) {
-            foreach ((new ReflectionClass($enumClass))->getConstants() as $constantName => $value) {
+            foreach (self::constants($enumClass) as $constantName => $value) {
                 $rows[$constantName]          = $rows[$constantName] ?? self::EMPTY_ROW;
                 $rows[$constantName][$column] = $value;
             }
