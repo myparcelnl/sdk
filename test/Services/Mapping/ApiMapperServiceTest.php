@@ -6,6 +6,10 @@ namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\CaseNameExamples;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\FutureId;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\FutureLegacyName;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\FutureV2Name;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -20,7 +24,7 @@ class ApiMapperServiceTest extends TestCase
             $expected = [];
 
             foreach ($profile as $enumClass) {
-                $expected += (new ReflectionClass($enumClass))->getConstants();
+                $expected += ApiMapperService::constants($enumClass);
             }
 
             ksort($expected);
@@ -130,22 +134,28 @@ class ApiMapperServiceTest extends TestCase
         }
     }
 
+    /**
+     * A Jane case name becomes the upper snake case constant name. An acronym stays one word.
+     */
+    public function testConstantsConvertsCaseNamesToConstantNames(): void
+    {
+        $this->assertSame(
+            [
+                'PACKAGE'         => 'package',
+                'DHL_CHEAP_CARGO' => 'dhl',
+                'DHL_FOR_YOU'     => 'dhlforyou',
+                'V2_ONLY'         => 'v2',
+            ],
+            ApiMapperService::constants(CaseNameExamples::class)
+        );
+    }
+
     public function testNewEnumConstantsMapWithoutHandWrittenEntries(): void
     {
-        $legacy = new class {
-            public const FUTURE = 'future_service';
-        };
-        $ids = new class {
-            public const FUTURE = 99;
-        };
-        $v2 = new class {
-            public const FUTURE  = 'FUTURE_SERVICE';
-            public const V2_ONLY = 'V2_ONLY';
-        };
         $mapper = $this->compiledMapperFixture([
-            ApiMapperService::COLUMN_LEGACY_NAME => get_class($legacy),
-            ApiMapperService::COLUMN_ID          => get_class($ids),
-            ApiMapperService::COLUMN_V2_NAME     => get_class($v2),
+            ApiMapperService::COLUMN_LEGACY_NAME => FutureLegacyName::class,
+            ApiMapperService::COLUMN_ID          => FutureId::class,
+            ApiMapperService::COLUMN_V2_NAME     => FutureV2Name::class,
         ]);
 
         $this->assertSame('future_service', $mapper->legacyNameFromId(99));

@@ -6,11 +6,10 @@ namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionClass;
 
 /**
  * Detects orphaned source models, redundant overrides and ambiguous mappings after regeneration.
@@ -20,21 +19,17 @@ class SpecDriftTest extends TestCase
     private const REPO_ROOT = __DIR__ . '/../../..';
 
     /**
-     * Scoped deliberately to the nine classes the profiles name. A repo-wide sweep would flag
-     * the hand-written typeMappings overrides (FixedShipmentRecipient, FixedPrincipal) that
-     * legitimately live outside the manifest.
+     * Jane removes the files of a class that the spec no longer has (`clean-generated`), so an
+     * enum that still exists is still generated.
      */
-    public function testEverySourceEnumIsStillProducedByTheGenerator(): void
+    public function testEverySourceEnumIsStillGenerated(): void
     {
         foreach (ApiMapperService::profiles() as $domain => $profile) {
             foreach ($profile as $column => $enumClass) {
                 $this->assertTrue(
-                    $this->isInGeneratorManifest($enumClass),
+                    enum_exists($enumClass),
                     sprintf(
-                        "%s (%s.%s) is not listed in its client's .openapi-generator/FILES manifest, "
-                        . 'so the generator no longer produces it. It is an orphan: the file may still '
-                        . 'be on disk and class_exists() may still return true, but its values are frozen. '
-                        . 'Point this profile at the enum that replaced it.',
+                        '%s (%s.%s) is no longer generated. Point this profile at the enum that replaced it.',
                         $enumClass,
                         $domain,
                         $column
@@ -64,16 +59,16 @@ class SpecDriftTest extends TestCase
      */
     public function testDisplacedPackageTypeSpecValuesAreUnchanged(): void
     {
-        $enumClass = ShipmentResponsesDeliveryOptionsPackageTypeV2::class;
+        $constants = ApiMapperService::constants(ShipmentResponsesDeliveryOptionsPackageTypeV2::class);
 
-        $this->assertSame('package_small', ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE);
-        $this->assertFalse(defined($enumClass . '::UNFRANKED'));
-        $this->assertFalse(defined($enumClass . '::ENVELOPE'));
+        $this->assertSame('package_small', $constants['SMALL_PACKAGE'] ?? null);
+        $this->assertArrayNotHasKey('UNFRANKED', $constants);
+        $this->assertArrayNotHasKey('ENVELOPE', $constants);
     }
 
     public function testPickupIsStillAbsentFromTheDeliveryOptionsEnum(): void
     {
-        $constants = (new ReflectionClass(ShipmentDefsDeliveryOptionsDeliveryNameV2::class))->getConstants();
+        $constants = ApiMapperService::constants(ShipmentDefsDeliveryOptionsDeliveryNameV2::class);
 
         $this->assertArrayNotHasKey(
             'PICKUP',
@@ -102,7 +97,7 @@ class SpecDriftTest extends TestCase
                     }
 
                     $enumClass = ApiMapperService::profiles()[$domain][$column];
-                    $generated = (new ReflectionClass($enumClass))->getConstants();
+                    $generated = ApiMapperService::constants($enumClass);
 
                     if (! array_key_exists($constantName, $generated)) {
                         continue;
@@ -136,7 +131,7 @@ class SpecDriftTest extends TestCase
             $known = [];
 
             foreach (ApiMapperService::profiles()[$domain] as $enumClass) {
-                $known += (new ReflectionClass($enumClass))->getConstants();
+                $known += ApiMapperService::constants($enumClass);
             }
 
             foreach (array_keys($overrides) as $constantName) {
@@ -317,7 +312,7 @@ class SpecDriftTest extends TestCase
     {
         foreach (ApiMapperService::profiles() as $domain => $profile) {
             foreach ($profile as $column => $enumClass) {
-                foreach ((new ReflectionClass($enumClass))->getConstants() as $name => $value) {
+                foreach (ApiMapperService::constants($enumClass) as $name => $value) {
                     $message = sprintf('%s::%s has an invalid type for %s.%s.', $enumClass, $name, $domain, $column);
 
                     if (ApiMapperService::COLUMN_ID === $column) {
