@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Collection\Fulfilment;
 
+use BackedEnum;
 use DateTime;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
@@ -169,8 +170,8 @@ class OrderCollection extends Collection
 
         if ($insurance instanceof RefTypesPriceEuro) {
             $result['insurance'] = [
-                'amount'   => (int) $insurance->getAmount(),
-                'currency' => $insurance->getCurrency() ?: 'EUR',
+                'amount'   => (int) ($insurance->amount ?? 0),
+                'currency' => ($insurance->currency ?? null) instanceof BackedEnum ? $insurance->currency->value : ($insurance->currency ?? 'EUR'),
             ];
         } elseif (is_numeric($insurance)) {
             $result['insurance'] = [

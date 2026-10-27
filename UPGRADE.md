@@ -16,6 +16,14 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 | `ShipmentTrackTraceService` | `fetchTrackTraceData()` returns `CoreApi\Model\ShipmentDefsTrackTrace` objects | It returns `Model\TrackTrace\TrackTrace` objects with the same getters, such as `getLinkTracktrace()`. A nested object is a `Jane` model with public properties |
 | `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | The constructor takes a `CoreApi\Api\ShipmentApi` | The constructor takes a `Jane\CoreApi\Client` |
 | `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | They throw a `CoreApi\ApiException` for an error response | They throw a `Jane\CoreApi\Exception\ApiException`. Read the status code with `getResponse()->getStatusCode()` |
+| `Shipment` | Extends the generated `CoreApi\Model\ShipmentRequest` | An own class with the same getters and setters. A setter of a nested object, such as `setRecipient()` or `setPickup()`, takes an array with the API field names or the `Jane` model. A getter of a nested object returns the `Jane` model with public properties. `toApiModel()` returns the `Jane` model that the request sends |
+| `ShipmentOptions` | Extends the generated `CoreApi\Model\RefShipmentShipmentOptions` | An own class with the same getters and setters. `getInsurance()` and `getCashOnDelivery()` return a `Jane` model. A flag, such as `getSignature()`, returns `0` or `1` |
+| `Shipment` and `ShipmentOptions` | The constructor ignores a field that it does not know | The constructor throws an `InvalidArgumentException` for a field that it does not know |
+| `Shipment` and `ShipmentOptions` | A setter throws an `InvalidArgumentException` for `null` | A setter that gets `null` sends `null` for a field that the API accepts as `null`, such as `pickup`. It leaves out every other field |
+| `ShipmentCreateService` and `ShipmentPrintService` | The constructor takes a `CoreApi\Api\ShipmentApi`. `ShipmentPrintService` also takes a PSR-18 HTTP client | The constructor takes a `Jane\CoreApi\Client`. The third argument of `ShipmentPrintService` is a Symfony `HttpClientInterface` |
+| `ShipmentCreateService` and `ShipmentPrintService` | The API rejects a shipment that does not match the spec. More than 100 shipments throw an `InvalidArgumentException` | The generated client checks the request before it sends it. It throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, for example for a shipment without a recipient, carrier or options, or for more than 100 shipments |
+| `ShipmentCreateService` and `ShipmentPrintService` | They throw a `CoreApi\ApiException` for an error response | They throw a `Jane\CoreApi\Exception\ApiException` |
+| `MultiColloShipmentService` | The secondary shipments of the returned shipment are `CoreApi\Model\SecondaryShipmentRequest` objects | They are `Jane` models with public properties |
 | `ApiKeyService`        | `getPrincipal()` returns an `IamApi\Model\Principal` with getters, such as `getShopIds()` | `getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser` with public properties, such as `$principal->shopIds`. `type`, `role` and `platform` are enums, or the raw string for a value the SDK does not know |
 | `ApiKeyService`        | The constructor takes an `IamApi\Api\DefaultApi` | The constructor takes a `Jane\IamApi\Client`, such as the one that `IamApiFactory::make()` returns |
 | `ApiKeyService`        | `isValid()` and `getPrincipal()` throw an `IamApi\ApiException` for a status other than 401 | They throw a `Jane\IamApi\Exception\ClientException`. For a principal type that the SDK does not know, they throw an `UnexpectedValueException` |
@@ -24,6 +32,49 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 The classes in the `Jane` namespace are in `MyParcelNL\Sdk\Client\Generated\Jane`. The others are in `MyParcelNL\Sdk\Client\Generated`.
 
 A getter of `FoundShipment` or `TrackTrace` returns `null` for a field that the API did not send. A `Jane` model does not initialize such a property, and reading it throws an `Error`. Use `??` or `isset()` on a nested object, such as `$shipment->getRecipient()->street ?? null`.
+
+### Nested objects
+
+`Shipment`, `ShipmentOptions`, `FoundShipment` and `TrackTrace` keep the getters and setters of v11. A nested object, such as the recipient, the pickup location or the customs declaration, is a `Jane` model. A `Jane` model has public properties instead of getters and setters.
+
+Read a field of a nested object with its property. The property has the camel case name of the API field:
+
+```php
+// v11
+$country = $shipment->getRecipient()->getCc();
+$city    = $foundShipment->getPickup()->getCity();
+
+// v12
+$country = $shipment->getRecipient()->cc;
+$city    = $foundShipment->getPickup()->city ?? null;
+```
+
+Give a nested object to a setter as an array with the API field names, as `setRecipient()` already did in v11:
+
+```php
+// v11
+$shipment->setPickup(
+    (new RefShipmentPickup())
+        ->setPostalCode('2132JE')
+        ->setCity('Hoofddorp')
+        ->setLocationCode('123456')
+);
+
+// v12
+$shipment->setPickup([
+    'postal_code'   => '2132JE',
+    'city'          => 'Hoofddorp',
+    'location_code' => '123456',
+]);
+```
+
+A setter also takes the `Jane` model, such as `Jane\CoreApi\Model\RefShipmentPickup`. Set its public properties, such as `$pickup->postalCode = '2132JE'`.
+
+The generated enums are PHP enums. Use the enum case instead of the class constant, such as `RefTypesCarrier::Postnl` instead of `RefTypesCarrier::POSTNL`. `setCarrier()` and `withPackageType()` also take the id or the v2 name, such as `'POSTNL'` and `'PACKAGE'`.
+
+### Validation before a request goes out
+
+The generated client checks a shipment against the API specification before it sends it. A shipment that does not match, for example without a recipient, throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, and no request goes out. `getViolationList()` lists each field and the problem. The API still checks the shipment too.
 
 ### Generated OpenAPI models
 
@@ -34,9 +85,7 @@ A getter of `FoundShipment` or `TrackTrace` returns `null` for a field that the 
 
 | Service | Class with the change | v11 | v12 |
 |---------|-----------------------|-----|-----|
-| `ShipmentCreateService` and the other services that send a `Shipment` | 111 setters on the request models, such as `CoreApi\Model\RefShipmentShipmentOptions::setDeliveryDate()` | The setter throws an `InvalidArgumentException` for `null`, and a `null` in the constructor array is left out of the request | The setter accepts `null`, and the `null` is sent to the API |
-| `ShipmentCreateService` and the other services that send a request body | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
-| `MultiColloShipmentService` | `CoreApi\Model\SecondaryShipmentRequest` | `splitShipment()` sets the physical properties as `ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties` | `ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties` |
+| `ReturnShipmentService` and the other services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
 
 #### Direct use of `MyParcelNL\Sdk\Client\Generated`
 
