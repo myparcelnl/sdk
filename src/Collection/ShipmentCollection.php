@@ -36,11 +36,21 @@ final class ShipmentCollection extends Collection
 
     /**
      * Filter by exact reference identifier.
+     *
+     * A reference identifier can be an int, so the filter compares it as a string.
      */
     public function whereReferenceIdentifier(string $referenceIdentifier): self
     {
         return $this
-            ->where('reference_identifier', $referenceIdentifier)
+            ->filter(static function ($shipment) use ($referenceIdentifier): bool {
+                if (! $shipment instanceof Shipment) {
+                    return false;
+                }
+
+                $value = $shipment->getReferenceIdentifier();
+
+                return null !== $value && (string) $value === $referenceIdentifier;
+            })
             ->values();
     }
 

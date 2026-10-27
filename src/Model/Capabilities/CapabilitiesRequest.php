@@ -322,8 +322,7 @@ class CapabilitiesRequest
      */
     public static function fromShipment(Shipment $shipment): self
     {
-        $recipient = $shipment->getRecipient();
-        $countryCode = $recipient ? $recipient->getCc() : null;
+        $countryCode = $shipment->getRecipient()->cc ?? null;
 
         if (! $countryCode) {
             throw new \InvalidArgumentException(
@@ -340,30 +339,30 @@ class CapabilitiesRequest
 
         $projectedPhysicalProperties = [];
 
-        if (null !== $physicalProperties->getWeight()) {
+        if (isset($physicalProperties->weight)) {
             $projectedPhysicalProperties['weight'] = [
-                'value' => (float) $physicalProperties->getWeight(),
+                'value' => (float) $physicalProperties->weight,
                 'unit'  => 'g',
             ];
         }
 
-        if (null !== $physicalProperties->getHeight()) {
+        if (isset($physicalProperties->height)) {
             $projectedPhysicalProperties['height'] = [
-                'value' => (float) $physicalProperties->getHeight(),
+                'value' => (float) $physicalProperties->height,
                 'unit'  => 'cm',
             ];
         }
 
-        if (null !== $physicalProperties->getLength()) {
+        if (isset($physicalProperties->length)) {
             $projectedPhysicalProperties['length'] = [
-                'value' => (float) $physicalProperties->getLength(),
+                'value' => (float) $physicalProperties->length,
                 'unit'  => 'cm',
             ];
         }
 
-        if (null !== $physicalProperties->getWidth()) {
+        if (isset($physicalProperties->width)) {
             $projectedPhysicalProperties['width'] = [
-                'value' => (float) $physicalProperties->getWidth(),
+                'value' => (float) $physicalProperties->width,
                 'unit'  => 'cm',
             ];
         }

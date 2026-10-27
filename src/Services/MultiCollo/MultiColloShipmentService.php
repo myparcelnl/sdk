@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\MultiCollo;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\SecondaryShipmentRequest;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 
 final class MultiColloShipmentService
@@ -34,23 +32,17 @@ final class MultiColloShipmentService
             $main->setPhysicalProperties(['weight' => $weightPerCollo]);
         }
 
-        $secondaryShipments = [];
-        for ($i = 1; $i < $amount; $i++) {
-            $secondary = new SecondaryShipmentRequest();
-            $secondary->setReferenceIdentifier($referenceId);
+        $secondary = ['reference_identifier' => $referenceId];
 
-            if (null !== $carrier) {
-                $secondary->setCarrier($carrier);
-            }
-
-            if (null !== $weightPerCollo) {
-                $secondaryPhysicalProperties = new ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties();
-                $secondaryPhysicalProperties->setWeight($weightPerCollo);
-                $secondary->setPhysicalProperties($secondaryPhysicalProperties);
-            }
-
-            $secondaryShipments[] = $secondary;
+        if (null !== $carrier) {
+            $secondary['carrier'] = $carrier;
         }
+
+        if (null !== $weightPerCollo) {
+            $secondary['physical_properties'] = ['weight' => $weightPerCollo];
+        }
+
+        $secondaryShipments = array_fill(0, max(0, $amount - 1), $secondary);
 
         $main->setSecondaryShipments($secondaryShipments);
 
@@ -76,7 +68,7 @@ final class MultiColloShipmentService
             return null;
         }
 
-        $totalWeight = (int) $physicalProperties->getWeight();
+        $totalWeight = $physicalProperties->weight ?? 0;
         if ($totalWeight <= 0) {
             return null;
         }
