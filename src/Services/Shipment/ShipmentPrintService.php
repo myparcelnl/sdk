@@ -4,60 +4,45 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
-use GuzzleHttp\Client as GuzzleClient;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIds;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentIdsDataIdsInner;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentIds;
+use MyParcelNL\Sdk\Client\Jane\PostShipmentsDirectPrint;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
+use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
-use Psr\Http\Client\ClientInterface as PsrClientInterface;
-use Psr\Http\Message\RequestInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Direct print flow for shipments.
- *
- * Uses hybrid approach (request builder + manual send) so we can override the Accept header
- * with the direct-print printer-group-id header. The response is still deserialized through
- * the generated shipment ids model so the generated client remains the contract source of truth.
- *
- * @todo revert to direct generated API method once the direct-print Accept header
- *       is supported as a first-class parameter in the OpenAPI spec/client.
  */
 final class ShipmentPrintService
 {
     use HasUserAgent;
     use EnsuresShipmentReferenceIds;
-    use ResolvesPostShipmentsContentType;
 
-    private const DIRECT_PRINT_ACCEPT_TEMPLATE = 'application/vnd.shipment_label+json+print;printer-group-id=%s';
+    private Client $api;
 
-    private ShipmentApi $api;
-
-    private PsrClientInterface $httpClient;
-
+    /**
+     * The third argument has the place of the PSR-18 client of v11, so the host stays the fourth argument.
+     *
+     * @param HttpClientInterface|null $httpClient Sends the requests when the service builds the client.
+     */
     public function __construct(
         string $apiKey,
-        ?ShipmentApi $api = null,
-        ?PsrClientInterface $httpClient = null,
+        ?Client $api = null,
+        ?HttpClientInterface $httpClient = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
+        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host, null, [], $httpClient);
     }
 
     /**
      * Create shipments and send labels directly to the given printer group.
-     *
-     * Hybrid note: the only manual part is the custom Accept header that carries printer-group-id.
-     * Request and response contracts still come from the generated client.
      *
      * @return array<int, string|null> Mapping shipment id => reference identifier.
      */
@@ -68,28 +53,25 @@ final class ShipmentPrintService
         $this->validateBeforePrint($shipments);
         $this->ensureReferenceIds($shipments);
 
-        $requestModel = $this->buildCreateRequest($shipments);
-        $request = $this->createDirectPrintRequest($requestModel, $printerGroupId);
+        $response = $this->api->executeEndpoint(new PostShipmentsDirectPrint(
+            $this->buildCreateRequest($shipments),
+            $printerGroupId,
+            ['User-Agent' => $this->getUserAgentHeader()]
+        ));
 
-        return $this->sendAndParseIdsResponse($request);
-    }
+        if (! $response instanceof ShipmentResponsesShipmentIds || ! isset($response->data)) {
+            throw new InvalidArgumentException('Unexpected response type returned while parsing direct print response.');
+        }
 
-    /**
-     * Build the generated shipment create request and then override Accept for direct print.
-     */
-    private function createDirectPrintRequest(
-        ShipmentPostShipmentsRequestV11 $requestModel,
-        string $printerGroupId
-    ): RequestInterface {
-        return $this->api->postShipmentsRequest(
-            $requestModel,
-            null,
-            null,
-            null,
-            null,
-            $this->getUserAgentHeader(),
-            $this->resolvePostShipmentsContentType('application/vnd.shipment+json')
-        )->withHeader('Accept', sprintf(self::DIRECT_PRINT_ACCEPT_TEMPLATE, $printerGroupId));
+        $mapping = [];
+
+        foreach ($response->data->ids ?? [] as $item) {
+            if (isset($item->id)) {
+                $mapping[$item->id] = isset($item->referenceIdentifier) ? (string) $item->referenceIdentifier : null;
+            }
+        }
+
+        return $mapping;
     }
 
     /**
@@ -107,59 +89,13 @@ final class ShipmentPrintService
      */
     private function buildCreateRequest(array $shipments): ShipmentPostShipmentsRequestV11
     {
-        $data = new ShipmentPostShipmentsRequestV11Data();
-        $data->setShipments($shipments);
-        $data->setUserAgent($this->getUserAgentHeader());
+        $data            = new ShipmentPostShipmentsRequestV11Data();
+        $data->shipments = array_map(static fn (Shipment $shipment) => $shipment->toApiModel(), $shipments);
+        $data->userAgent = $this->getUserAgentHeader();
 
-        $request = new ShipmentPostShipmentsRequestV11();
-        $request->setData($data);
+        $request       = new ShipmentPostShipmentsRequestV11();
+        $request->data = $data;
 
         return $request;
-    }
-
-    /**
-     * Send the prepared hybrid request and deserialize it with the generated ids response model.
-     *
-     * We intentionally let parse and contract errors bubble so hybrid transport does not invent
-     * its own fallback error semantics.
-     *
-     * @return array<int, string|null>
-     */
-    private function sendAndParseIdsResponse(RequestInterface $request): array
-    {
-        $response = $this->httpClient->sendRequest($request);
-        $decoded = json_decode((string) $response->getBody(), false, 512, JSON_THROW_ON_ERROR);
-        $responseModel = ObjectSerializer::deserialize(
-            $decoded,
-            ShipmentResponsesShipmentIds::class,
-            []
-        );
-
-        if (! $responseModel instanceof ShipmentResponsesShipmentIds || null === $responseModel->getData()) {
-            throw new InvalidArgumentException('Unexpected response type returned while parsing direct print response.');
-        }
-
-        return $this->mapCreatedShipmentIds($responseModel->getData()->getIds() ?? []);
-    }
-
-    /**
-     * @param ShipmentResponsesShipmentIdsDataIdsInner[] $ids
-     *
-     * @return array<int, string|null>
-     */
-    private function mapCreatedShipmentIds(array $ids): array
-    {
-        $mapping = [];
-
-        foreach ($ids as $item) {
-            $shipmentId = $item->getId();
-            if (null === $shipmentId) {
-                continue;
-            }
-
-            $mapping[(int) $shipmentId] = $item->getReferenceIdentifier();
-        }
-
-        return $mapping;
     }
 }
