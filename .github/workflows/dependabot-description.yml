@@ -1,0 +1,21 @@
+name: 'Rewrite Dependabot description'
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.event.pull_request.number }}'
+
+jobs:
+  rewrite:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: myparcelnl/actions/pr-dependabot-description@v5
