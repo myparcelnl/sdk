@@ -5,290 +5,227 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ShipmentCreateServiceTest extends TestCase
 {
+    /**
+     * @var array<int, array{method: string, url: string, headers: array<string, string[]>, body: array<string, mixed>}>
+     */
+    private array $requests = [];
+
     public function testCreateThrowsWhenNoShipmentsWereAdded(): void
     {
-        $service = new ShipmentCreateService($this->getApiKey(), $this->createMock(ShipmentApi::class));
-        $collection = new ShipmentCollection();
+        $service = $this->createService(self::createdResponse([]));
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one shipment must be added before calling create().');
 
-        $service->create($collection);
+        $service->create(new ShipmentCollection());
     }
 
-    public function testCreateThrowsWhenMoreThanHundredShipmentsWereAdded(): void
+    public function testCreateThrowsBeforeSendingMoreThanHundredShipments(): void
     {
-        $service = new ShipmentCreateService($this->getApiKey(), $this->createMock(ShipmentApi::class));
+        $service    = $this->createService(self::createdResponse([]));
         $collection = new ShipmentCollection();
 
         for ($i = 0; $i < 101; $i++) {
-            $collection->push(new Shipment());
+            $collection->push(self::shipment("order-{$i}"));
         }
 
-        $this->expectException(InvalidArgumentException::class);
-
-        $service->create($collection);
+        try {
+            $service->create($collection);
+            self::fail('More than 100 shipments must throw.');
+        } catch (ValidationException) {
+            self::assertSame([], $this->requests);
+        }
     }
 
-    public function testCreateSendsCorrectRequestBody(): void
+    public function testCreateSendsTheShipmentsTheLabelFormatAndTheUserAgent(): void
     {
-        $shipmentOne = (new Shipment())->setReferenceIdentifier('order-1');
-        $shipmentTwo = (new Shipment())->setReferenceIdentifier('order-2');
-
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
+        $service = $this->createService(self::createdResponse([
+            ['id' => 1001, 'reference_identifier' => 'order-1'],
+            ['id' => 1002, 'reference_identifier' => 'order-2'],
+        ]));
         $service->setUserAgentForProposition('Magento', '2.4.7');
 
-        $collection = new ShipmentCollection([$shipmentOne, $shipmentTwo]);
-        $expectedUserAgent = $service->getUserAgentHeader();
-
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->with(
-                self::callback(static function ($request) use ($expectedUserAgent): bool {
-                    self::assertInstanceOf(ShipmentPostShipmentsRequestV11::class, $request);
-                    self::assertInstanceOf(ShipmentPostShipmentsRequestV11Data::class, $request->getData());
-
-                    $data = $request->getData();
-                    self::assertSame($expectedUserAgent, $data->getUserAgent());
-
-                    $shipments = $data->getShipments();
-                    self::assertCount(2, $shipments);
-                    self::assertSame('order-1', $shipments[0]->getReferenceIdentifier());
-                    self::assertSame('order-2', $shipments[1]->getReferenceIdentifier());
-
-                    return true;
-                }),
-                self::identicalTo('A4'),
-                self::identicalTo('1;2'),
-                self::isNull(),
-                self::isNull(),
-                self::identicalTo($expectedUserAgent),
-                self::callback(static function (string $contentType): bool {
-                    return 0 === strpos($contentType, 'application/vnd.shipment+json');
-                })
-            )
-            ->willReturn($this->mockCreateResponse([
-                ['id' => 1001, 'reference_identifier' => 'order-1'],
-                ['id' => 1002, 'reference_identifier' => 'order-2'],
-            ]));
-
-        $result = $service->create($collection, 'A4', '1;2');
+        $result = $service->create(
+            new ShipmentCollection([
+                self::shipment('order-1'),
+                self::shipment('order-2'),
+            ]),
+            'A4',
+            '1;2'
+        );
 
         self::assertSame([1001 => 'order-1', 1002 => 'order-2'], $result);
+        self::assertSame('POST', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/shipments?format=A4&positions=1%3B2', $this->requests[0]['url']);
+        self::assertSame(['application/vnd.shipment+json;version=1.1'], $this->requests[0]['headers']['content-type']);
+        self::assertSame([$service->getUserAgentHeader()], $this->requests[0]['headers']['user-agent']);
+        self::assertSame($service->getUserAgentHeader(), $this->requests[0]['body']['data']['user_agent']);
+        self::assertSame(['order-1', 'order-2'], array_column($this->requests[0]['body']['data']['shipments'], 'reference_identifier'));
     }
 
-    public function testCreateCastsEnumValuesToIntegers(): void
+    public function testCreateSendsTheCarrierAndThePackageTypeAsIds(): void
     {
-        $shipment = (new Shipment())
-            ->setReferenceIdentifier('order-enum')
-            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-            ->withPackageType(RefShipmentPackageTypeV2::PACKAGE);
+        $shipment = self::shipment('order-enum')
+            ->setCarrier(RefCapabilitiesSharedCarrierV2::Postnl)
+            ->withPackageType(RefShipmentPackageTypeV2::Package);
 
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
-        $collection = new ShipmentCollection([$shipment]);
+        $result = $this->createService(self::createdResponse([['id' => 3001, 'reference_identifier' => 'order-enum']]))
+            ->create(new ShipmentCollection([$shipment]));
 
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->with(
-                self::callback(static function ($request): bool {
-                    self::assertInstanceOf(ShipmentPostShipmentsRequestV11::class, $request);
-                    $shipmentData = $request->getData()->getShipments()[0];
-
-                    $payload = json_decode(json_encode($shipmentData), true);
-                    self::assertIsArray($payload);
-                    self::assertIsInt($payload['carrier']);
-                    self::assertSame(1, $payload['carrier']);
-                    self::assertIsInt($payload['options']['package_type']);
-                    self::assertSame(1, $payload['options']['package_type']);
-
-                    return true;
-                }),
-                self::isNull(),
-                self::isNull(),
-                self::isNull(),
-                self::isNull(),
-                self::isType('string'),
-                self::callback(static function (string $contentType): bool {
-                    return 0 === strpos($contentType, 'application/vnd.shipment+json');
-                })
-            )
-            ->willReturn($this->mockCreateResponse([
-                ['id' => 3001, 'reference_identifier' => 'order-enum'],
-            ]));
-
-        $result = $service->create($collection);
         self::assertSame([3001 => 'order-enum'], $result);
+        self::assertSame(1, $this->requests[0]['body']['data']['shipments'][0]['carrier']);
+        self::assertSame(['package_type' => 1], $this->requests[0]['body']['data']['shipments'][0]['options']);
+    }
+
+    public function testCreateSendsARecipientWithoutEmail(): void
+    {
+        $this->createService(self::createdResponse([['id' => 1, 'reference_identifier' => 'order-1']]))
+            ->create(new ShipmentCollection([self::shipment('order-1')]));
+
+        self::assertArrayNotHasKey('email', $this->requests[0]['body']['data']['shipments'][0]['recipient']);
+        self::assertSame('Hoofddorp', $this->requests[0]['body']['data']['shipments'][0]['recipient']['city']);
     }
 
     public function testCreateAssignsMissingReferenceIdentifiers(): void
     {
-        $shipment = new Shipment();
-        $collection = new ShipmentCollection([$shipment]);
+        $shipment = self::shipment();
 
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
+        $result = $this->createService(self::createdResponse([['id' => 2001]]))
+            ->create(new ShipmentCollection([$shipment]));
 
-        $capturedReference = null;
-
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->with(
-                self::callback(static function ($request) use (&$capturedReference): bool {
-                    self::assertInstanceOf(ShipmentPostShipmentsRequestV11::class, $request);
-                    $capturedReference = $request->getData()->getShipments()[0]->getReferenceIdentifier();
-
-                    self::assertNotNull($capturedReference);
-                    self::assertStringStartsWith('sdk_', $capturedReference);
-
-                    return true;
-                }),
-                self::isNull(),
-                self::isNull(),
-                self::isNull(),
-                self::isNull(),
-                self::isType('string'),
-                self::callback(static function (string $contentType): bool {
-                    return 0 === strpos($contentType, 'application/vnd.shipment+json');
-                })
-            )
-            ->willReturnCallback(
-                fn () => $this->mockCreateResponse([
-                    ['id' => 2001, 'reference_identifier' => $shipment->getReferenceIdentifier()],
-                ])
-            );
-
-        $result = $service->create($collection);
-
-        self::assertNotNull($shipment->getReferenceIdentifier());
-        self::assertStringStartsWith('sdk_', $shipment->getReferenceIdentifier());
-        self::assertSame($capturedReference, $shipment->getReferenceIdentifier());
+        self::assertStringStartsWith('sdk_', (string) $shipment->getReferenceIdentifier());
+        self::assertSame($shipment->getReferenceIdentifier(), $this->requests[0]['body']['data']['shipments'][0]['reference_identifier']);
         self::assertSame([2001 => $shipment->getReferenceIdentifier()], $result);
     }
 
-    public function testCreateFallsBackToRequestReferenceWhenResponseReferenceIdentifierIsNull(): void
+    public function testCreateFallsBackToRequestReferenceWhenResponseReferenceIdentifierIsMissing(): void
     {
-        $shipment = (new Shipment())->setReferenceIdentifier('order-wrapper-ref');
-        $collection = new ShipmentCollection([$shipment]);
-
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
-
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->willReturn($this->mockCreateResponse([
-                ['id' => 7001, 'reference_identifier' => null],
-            ]));
-
-        $result = $service->create($collection);
+        $result = $this->createService(self::createdResponse([['id' => 7001]]))
+            ->create(new ShipmentCollection([self::shipment('order-wrapper-ref')]));
 
         self::assertSame([7001 => 'order-wrapper-ref'], $result);
     }
 
     public function testCreateThrowsWhenResponseDataIsMissing(): void
     {
-        $collection = new ShipmentCollection([
-            (new Shipment())->setReferenceIdentifier('order-missing-data'),
-        ]);
-
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
-
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->willReturn(new ShipmentResponsesPostShipmentsV12());
+        $service = $this->createService('{}');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('ShipmentApi::postShipments() returned a response without data.');
+        $this->expectExceptionMessage('postShipments() returned a response without data.');
 
-        $service->create($collection);
+        $service->create(new ShipmentCollection([self::shipment('order-1')]));
     }
 
     public function testCreateReturnsEmptyMappingWhenResponseHasNoShipments(): void
     {
-        $collection = new ShipmentCollection([
-            (new Shipment())->setReferenceIdentifier('order-no-shipments'),
-        ]);
+        $result = $this->createService(self::createdResponse([]))
+            ->create(new ShipmentCollection([self::shipment('order-1')]));
 
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
-
-        $data = new ShipmentResponsesPostShipmentsV12Data();
-        $response = new ShipmentResponsesPostShipmentsV12();
-        $response->setData($data);
-
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->willReturn($response);
-
-        self::assertSame([], $service->create($collection));
+        self::assertSame([], $result);
     }
 
     public function testCreateSkipsShipmentsWithoutIdInResponse(): void
     {
-        $collection = new ShipmentCollection([
-            (new Shipment())->setReferenceIdentifier('order-with-id'),
-            (new Shipment())->setReferenceIdentifier('order-without-id'),
-        ]);
+        $result = $this->createService(self::createdResponse([
+            ['reference_identifier' => 'order-1'],
+            ['id' => 8002, 'reference_identifier' => 'order-2'],
+        ]))->create(new ShipmentCollection([
+            self::shipment('order-1'),
+            self::shipment('order-2'),
+        ]));
 
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new ShipmentCreateService($this->getApiKey(), $api);
+        self::assertSame([8002 => 'order-2'], $result);
+    }
 
-        $shipmentWithId = new ShipmentDefsShipment();
-        $shipmentWithId->setId(8001);
-        $shipmentWithId->setReferenceIdentifier('order-with-id');
+    public function testAnErrorResponseThrowsTheGeneratedException(): void
+    {
+        $service = $this->createService(
+            '{"type":"urn:problem:validation","title":"Invalid shipment","status":422}',
+            422,
+            'application/problem+json'
+        );
 
-        $shipmentWithoutId = new ShipmentDefsShipment();
-        $shipmentWithoutId->setReferenceIdentifier('order-without-id');
+        try {
+            $service->create(new ShipmentCollection([self::shipment('order-1')]));
+            self::fail('A 422 response must throw.');
+        } catch (PostShipmentsClientErrorException $exception) {
+            self::assertSame(422, $exception->getResponse()->getStatusCode());
+        }
 
-        $data = new ShipmentResponsesPostShipmentsV12Data();
-        $data->setShipments([$shipmentWithId, $shipmentWithoutId]);
+        self::assertStringEndsWith(', application/problem+json', $this->requests[0]['headers']['accept'][0]);
+    }
 
-        $response = new ShipmentResponsesPostShipmentsV12();
-        $response->setData($data);
+    public function testCreateThrowsBeforeSendingAShipmentWithoutRecipient(): void
+    {
+        $service = $this->createService(self::createdResponse([]));
 
-        $api->expects(self::once())
-            ->method('postShipments')
-            ->willReturn($response);
-
-        self::assertSame([8001 => 'order-with-id'], $service->create($collection));
+        try {
+            $service->create(new ShipmentCollection([self::shipment('order-1')->setRecipient(null)]));
+            self::fail('A shipment without recipient must throw.');
+        } catch (ValidationException) {
+            self::assertSame([], $this->requests);
+        }
     }
 
     /**
-     * @param array<int, array{id:int, reference_identifier:mixed}> $ids
+     * A shipment with the fields that the spec requires.
      */
-    private function mockCreateResponse(array $ids): ShipmentResponsesPostShipmentsV12
+    private static function shipment(?string $referenceIdentifier = null): Shipment
     {
-        $shipmentModels = array_map(static function (array $row): ShipmentDefsShipment {
-            $model = new ShipmentDefsShipment();
-            $model->setId($row['id']);
-            $model->setReferenceIdentifier($row['reference_identifier']);
+        return (new Shipment())
+            ->setReferenceIdentifier($referenceIdentifier)
+            ->setCarrier('POSTNL')
+            ->withPackageType('PACKAGE')
+            ->setRecipient([
+                'cc'          => 'NL',
+                'postal_code' => '2132JE',
+                'city'        => 'Hoofddorp',
+                'street'      => 'Antareslaan',
+                'number'      => '31',
+                'person'      => 'Test Person',
+            ]);
+    }
 
-            return $model;
-        }, $ids);
+    private function createService(string $body, int $status = 200, string $contentType = 'application/json;charset=utf-8;version=1.2'): ShipmentCreateService
+    {
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body, $status, $contentType): MockResponse {
+            $headers = [];
+            foreach ($options['normalized_headers'] as $name => $lines) {
+                $headers[$name] = array_map(static fn (string $line): string => substr($line, strlen($name) + 2), $lines);
+            }
 
-        $data = new ShipmentResponsesPostShipmentsV12Data();
-        $data->setShipments($shipmentModels);
+            $this->requests[] = [
+                'method'  => $method,
+                'url'     => $url,
+                'headers' => $headers,
+                'body'    => json_decode((string) $options['body'], true, 512, JSON_THROW_ON_ERROR),
+            ];
 
-        $response = new ShipmentResponsesPostShipmentsV12();
-        $response->setData($data);
+            return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
+        });
 
-        return $response;
+        return new ShipmentCreateService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $shipments
+     */
+    private static function createdResponse(array $shipments): string
+    {
+        return json_encode(['data' => ['shipments' => $shipments]], JSON_THROW_ON_ERROR);
     }
 }
