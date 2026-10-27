@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
-use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
@@ -13,11 +12,11 @@ final class ShipmentDeleteService
 {
     use HasUserAgent;
 
-    private ShipmentApi $api;
+    private Client $api;
 
-    public function __construct(string $apiKey, ?ShipmentApi $api = null, ?string $host = null)
+    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
     {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
+        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
     }
 
     /**
@@ -33,6 +32,6 @@ final class ShipmentDeleteService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        $this->api->deleteShipments($ids, $this->getUserAgentHeader());
+        $this->api->deleteShipments($ids, ['User-Agent' => $this->getUserAgentHeader()]);
     }
 }
