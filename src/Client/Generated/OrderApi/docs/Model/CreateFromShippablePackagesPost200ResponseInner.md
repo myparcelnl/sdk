@@ -11,6 +11,6 @@ Name | Type | Description | Notes
 **detail** | **string** | A human-readable explanation specific to this occurrence of the problem. |
 **instance** | **string** | A URI reference that identifies the specific occurrence of the problem. |
 **cause** | **mixed** |  | [optional]
-**errors** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[]**](ProblemDetailsClientAllOfErrors.md) | Detailed information regarding the violations. |
+**errors** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[]**](CreatePost202ResponseResultsInnerOneOf1ErrorsInner.md) | Detailed information regarding the violations. |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

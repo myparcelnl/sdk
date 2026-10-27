@@ -3615,6 +3615,14 @@ class ShipmentApi
                     );
                     $e->setResponseObject($data);
                     break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorNotFound',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
                 case 406:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
