@@ -19,6 +19,9 @@ A connection error or a timeout throws a Symfony `TransportExceptionInterface`, 
 |------------------------|------------------------------------|-------------------------------------------------------------|
 | `ShipmentQueryService` | `query()` ignores a key it does not know | `query()` throws an `InvalidArgumentException` for a key it does not know |
 | `ApiKeyService`        | `getPrincipal()` returns an `IamApi\Model\Principal` with getters, such as `getShopIds()` | `getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser` with public properties, such as `$principal->shopIds`. `type` is the string `SHOP` or `USER`. `role` and `platform` are enums, or the raw string for a value that the SDK does not know. `features` and `fulfilmentPlatforms` hold `Jane\IamApi\Model\Feature` and `FulfilmentPlatform` enum cases, or the raw string for a value that the SDK does not know: compare with `Feature::OrderManagement`, or read `->value`. They are optional: read them with `$principal->features ?? []`, because a Jane model does not initialize a field that IAM leaves out |
+| `ShipmentQueryService` | `find()`, `findMany()`, `findByReferenceId()` and `query()` return a `CoreApi\Model\ShipmentDefsShipment` with getters, such as `getBarcode()` | They return a `Jane\CoreApi\Model\ShipmentDefsShipment` with public properties, such as `$shipment->barcode` |
+| `ShipmentTrackTraceService` | `fetchTrackTraceData()` returns `CoreApi\Model\ShipmentDefsTrackTrace` objects with getters, such as `getLinkTracktrace()` | It returns `Jane\CoreApi\Model\ShipmentDefsTrackTrace` objects with public properties, such as `$trace->linkTracktrace` |
+| `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | The constructor takes a `CoreApi\Api\ShipmentApi` | The constructor takes a `Jane\CoreApi\Client` |
 | `ApiKeyService`        | The constructor takes an `IamApi\Api\DefaultApi` | The constructor takes a `Jane\IamApi\Client`, such as the one that `IamApiFactory::make()` returns |
 | `ApiKeyService`        | `getPrincipal()` throws an `IamApi\ApiException` for every error, also for a network error. `isValid()` returns `false` for a 401 and throws the `ApiException` for every other error | `getPrincipal()` throws a `Jane\IamApi\Exception\ServerException` for a 500 with an `application/problem+json` body, a `Jane\IamApi\Exception\ClientException` for another error status or for a 200 without a JSON body, a Symfony `TransportExceptionInterface` for a network error or a timeout, and a `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` for a 200 with a body that is not valid JSON. `isValid()` returns `false` for a 401 and throws the others, also for a 200 without a JSON body, where v11 returned `true`. For a principal type that the SDK does not know, `getPrincipal()` throws an `UnexpectedValueException`, and `isValid()` returns `true`, because the 200 proves the key |
 | `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns the decoded JSON: use `ApiKeyService::getPrincipal()` for a model |
@@ -26,6 +29,8 @@ A connection error or a timeout throws a Symfony `TransportExceptionInterface`, 
 | `ShipmentOptionMapper` | `v2PropertyFromName()` returns the property name of the openapi-generator model, such as `requires_signature` | It returns the property name of the Jane model, such as `requiresSignature`. A snake_case name, such as `requires_signature`, is still accepted as input |
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
+
+A `Jane` model does not initialize a property that the API did not send. Reading that property throws an `Error`. Use `??` or `isset()`, such as `$shipment->pickup ?? null`.
 
 ### Order push
 
@@ -53,18 +58,8 @@ limits. When you pass the lines or the children in the constructor array, nothin
 
 #### Through the services
 
-A queried shipment is the `ShipmentDefsShipment` that `ShipmentQueryService::find()`, `findMany()`, `findByReferenceId()` and `query()` return.
-
 | Service | Class with the change | v11 | v12 |
 |---------|-----------------------|-----|-----|
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getPickup()`, `getDropOffPoint()` and `getShippedItems()` return decoded JSON | They return `ShipmentDefsShipmentPickup`, `ShipmentDefsShipmentDropOffPoint` and `ShipmentDefsShipmentShippedItem[]` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCurrency()` returns `ShipmentDefsShipmentCurrency` | `BillingDefsCurrency` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCustomsDeclaration()` returns `ShipmentDefsShipmentCustomsDeclaration` | `RefShipmentCustomsDeclaration` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCollectionContact()` returns `ShipmentDefsShipmentCollectionContact` | `AccountDefsContact` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getExternalProvider()` returns `ShipmentDefsShipmentExternalProvider` | `ShipmentDefsExternalProviderPropertiesDisplayName` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getOptions()` returns `ShipmentDefsShipmentOptions` | `RefShipmentShipmentOptions` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getOrigin()`, `getParentId()` and `getExternalProviderId()` return a wrapper model | `string`, `int` and `int` |
-| `ShipmentQueryService` | `CoreApi\Model\ShipmentDefsShipment` | `getCreatedBy()` and `getModifiedBy()` are typed `int` | Typed `mixed`. They return the same value. |
 | `ShipmentCreateService` and the other services that send a `Shipment` | 111 setters on the request models, such as `CoreApi\Model\RefShipmentShipmentOptions::setDeliveryDate()` | The setter throws an `InvalidArgumentException` for `null`, and a `null` in the constructor array is left out of the request | The setter accepts `null`, and the `null` is sent to the API |
 | `ShipmentCreateService` and the other services that send a request body | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
 | `MultiColloShipmentService` | `CoreApi\Model\SecondaryShipmentRequest` | `splitShipment()` sets the physical properties as `ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties` | `ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties` |

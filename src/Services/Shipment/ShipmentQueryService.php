@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * Query/fetch service for shipments using generated Core API endpoints.
@@ -22,14 +20,14 @@ final class ShipmentQueryService
 
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
 
-    private ShipmentApi $api;
+    private Client $api;
 
     public function __construct(
         string $apiKey,
-        ?ShipmentApi $api = null,
+        ?Client $api = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
+        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
     }
 
     /**
@@ -38,13 +36,12 @@ final class ShipmentQueryService
      * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
      *                                         parameters (barcode, carrier_id, created, status, etc.).
      * @return ShipmentDefsShipment[]
-     * @throws InvalidArgumentException When a key is not a getShipments query parameter.
+     * @throws InvalidArgumentException When a key is not a getShipments query parameter, or a value
+     *                                  has the wrong type.
      */
     public function query(array $parameters = []): array
     {
-        $response = $this->buildGetShipmentsQuery($parameters);
-
-        return $this->extractShipments($response);
+        return $this->extractShipments($this->api->getShipments($this->queryParameters($parameters), $this->headerParameters()));
     }
 
     /**
@@ -73,10 +70,7 @@ final class ShipmentQueryService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        /** @var ShipmentResponsesShipments $response */
-        $response = $this->api->getShipmentsById($ids, null, $this->getUserAgentHeader());
-
-        return $this->extractShipments($response);
+        return $this->extractShipments($this->api->getShipmentsById($ids, [], $this->headerParameters()));
     }
 
     /**
@@ -86,39 +80,41 @@ final class ShipmentQueryService
      */
     public function findByReferenceId(string $referenceIdentifier): array
     {
-
         // Explicitly pass size=null to use the API default; the API returns 0 results
         // when size >= 200 is combined with reference_identifier.
         return $this->query(['reference_identifier' => $referenceIdentifier, 'size' => null]);
     }
 
     /**
-     * Build and execute the getShipments query from a parameter array.
+     * Add the page size to the query parameters.
+     *
+     * The generated client checks the keys and the types. An unknown key or a wrong type throws an
+     * InvalidArgumentException.
+     *
+     * @param  array<string, mixed> $parameters
+     * @return array<string, mixed>
      */
-    private function buildGetShipmentsQuery(array $parameters): ShipmentResponsesShipments
+    private function queryParameters(array $parameters): array
     {
-        $size = array_key_exists('size', $parameters)
-            ? $parameters['size']
-            : self::DEFAULT_QUERY_PAGE_SIZE;
-
-        // Unset parameters which we override, so they are not passed twice.
-        unset($parameters['size'], $parameters['user_agent']);
-
-        $known   = array_map(
-            static fn (ReflectionParameter $parameter): string => $parameter->getName(),
-            (new ReflectionMethod($this->api, 'getShipments'))->getParameters()
-        );
-        $unknown = array_diff(array_keys($parameters), $known);
-
-        if ($unknown) {
-            throw new InvalidArgumentException('Unknown query parameter(s): ' . implode(', ', $unknown));
+        if (! array_key_exists('size', $parameters)) {
+            $parameters['size'] = self::DEFAULT_QUERY_PAGE_SIZE;
+        } elseif (null === $parameters['size']) {
+            // The generated client accepts only an int. Without the key, the API uses its default.
+            unset($parameters['size']);
         }
 
-        return $this->api->getShipments(
-            ...$parameters,
-            size: $size,
-            user_agent: $this->getUserAgentHeader()
-        );
+        return $parameters;
+    }
+
+    /**
+     * Read the User-Agent per call: an integrator can call setUserAgentForProposition() after the
+     * constructor.
+     *
+     * @return array<string, string>
+     */
+    private function headerParameters(): array
+    {
+        return ['User-Agent' => $this->getUserAgentHeader()];
     }
 
     /**
@@ -126,14 +122,8 @@ final class ShipmentQueryService
      *
      * @return ShipmentDefsShipment[]
      */
-    private function extractShipments(ShipmentResponsesShipments $response): array
+    private function extractShipments(?ShipmentResponsesShipments $response): array
     {
-        $data = $response->getData();
-
-        if (null === $data) {
-            return [];
-        }
-
-        return $data->getShipments() ?? [];
+        return $response?->data->shipments ?? [];
     }
 }

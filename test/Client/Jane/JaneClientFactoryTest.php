@@ -36,6 +36,8 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
+use Throwable;
+use TypeError;
 
 final class JaneClientFactoryTest extends TestCase
 {
@@ -179,6 +181,50 @@ final class JaneClientFactoryTest extends TestCase
         self::assertNotNull($httpClient->options);
         self::assertArrayNotHasKey('timeout', $httpClient->options, 'The factory must not replace the timeout of a client that the caller passes.');
         self::assertSame(['x-dmp-example' => 'true'], $httpClient->options['headers']);
+    }
+
+    public function testAProblemJsonErrorThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"type":"urn:problem:permission-denied","title":"Permission denied","status":401,"request_id":"1"}',
+            401,
+            'application/problem+json'
+        ));
+
+        try {
+            $client->deleteShipments('1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            self::assertSame(401, $exception->getResponse()->getStatusCode());
+            self::assertSame('Permission denied', $exception->getCommonResponsesProblem()->title);
+        }
+
+        self::assertSame('Accept: application/json, application/problem+json', $this->requests[0]['options']['normalized_headers']['accept'][0]);
+    }
+
+    /**
+     * Jane throws a TypeError for an `application/json` error of an operation that also lists
+     * `application/problem+json`. ProblemJsonAcceptHttpClient prevents that error format.
+     */
+    public function testJaneStillThrowsATypeErrorForAJsonErrorOfAProblemJsonOperation(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"message":"Permission denied","request_id":"1","status_code":401,"errors":[]}',
+            401
+        ));
+
+        $thrown = null;
+
+        try {
+            $client->deleteShipments('1');
+        } catch (Throwable $thrown) {
+        }
+
+        self::assertInstanceOf(
+            TypeError::class,
+            $thrown,
+            'Jane now reads an application/json error. Remove ProblemJsonAcceptHttpClient and this test.'
+        );
     }
 
     /**
