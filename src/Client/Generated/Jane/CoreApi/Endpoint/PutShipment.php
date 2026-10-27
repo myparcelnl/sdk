@@ -31,7 +31,7 @@ class PutShipment extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\
     public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer): array
     {
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequestV11) {
-            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], $this->body];
+            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
         }
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequest) {
             return [['Content-Type' => ['application/vnd.shipment+json']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
