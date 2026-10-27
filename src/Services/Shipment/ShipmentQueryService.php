@@ -9,6 +9,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
@@ -35,7 +36,7 @@ final class ShipmentQueryService
      *
      * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
      *                                         parameters (barcode, carrier_id, created, status, etc.).
-     * @return ShipmentDefsShipment[]
+     * @return FoundShipment[]
      * @throws InvalidArgumentException When a key is not a getShipments query parameter, or a value
      *                                  has the wrong type.
      */
@@ -47,9 +48,9 @@ final class ShipmentQueryService
     /**
      * Find a single shipment by its ID.
      *
-     * @return ShipmentDefsShipment|null The shipment, or null if not found.
+     * @return FoundShipment|null The shipment, or null if not found.
      */
-    public function find(int $shipmentId): ?ShipmentDefsShipment
+    public function find(int $shipmentId): ?FoundShipment
     {
         $shipments = $this->findMany([$shipmentId]);
 
@@ -60,7 +61,7 @@ final class ShipmentQueryService
      * Find multiple shipments by their IDs in a single API call.
      *
      * @param int[] $shipmentIds
-     * @return ShipmentDefsShipment[]
+     * @return FoundShipment[]
      */
     public function findMany(array $shipmentIds): array
     {
@@ -76,7 +77,7 @@ final class ShipmentQueryService
     /**
      * Find all shipments that match a single reference identifier.
      *
-     * @return ShipmentDefsShipment[]
+     * @return FoundShipment[]
      */
     public function findByReferenceId(string $referenceIdentifier): array
     {
@@ -120,10 +121,13 @@ final class ShipmentQueryService
     /**
      * Extract the shipments array from the generated response model.
      *
-     * @return ShipmentDefsShipment[]
+     * @return FoundShipment[]
      */
     private function extractShipments(?ShipmentResponsesShipments $response): array
     {
-        return $response?->data->shipments ?? [];
+        return array_map(
+            static fn (ShipmentDefsShipment $shipment): FoundShipment => new FoundShipment($shipment),
+            $response?->data->shipments ?? []
+        );
     }
 }

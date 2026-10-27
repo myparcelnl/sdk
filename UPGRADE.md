@@ -12,8 +12,8 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 | Class                  | v11                                | v12                                                         |
 |------------------------|------------------------------------|-------------------------------------------------------------|
 | `ShipmentQueryService` | `query()` ignores a key it does not know | `query()` throws an `InvalidArgumentException` for a key it does not know |
-| `ShipmentQueryService` | `find()`, `findMany()`, `findByReferenceId()` and `query()` return a `CoreApi\Model\ShipmentDefsShipment` with getters, such as `getBarcode()` | They return a `Jane\CoreApi\Model\ShipmentDefsShipment` with public properties, such as `$shipment->barcode` |
-| `ShipmentTrackTraceService` | `fetchTrackTraceData()` returns `CoreApi\Model\ShipmentDefsTrackTrace` objects with getters, such as `getLinkTracktrace()` | It returns `Jane\CoreApi\Model\ShipmentDefsTrackTrace` objects with public properties, such as `$trace->linkTracktrace` |
+| `ShipmentQueryService` | `find()`, `findMany()`, `findByReferenceId()` and `query()` return a `CoreApi\Model\ShipmentDefsShipment` | They return a `Model\Shipment\FoundShipment` with the same getters, such as `getBarcode()`. A getter of a nested object, such as `getRecipient()`, returns a `Jane` model with public properties: `$shipment->getRecipient()->cc` |
+| `ShipmentTrackTraceService` | `fetchTrackTraceData()` returns `CoreApi\Model\ShipmentDefsTrackTrace` objects | It returns `Model\TrackTrace\TrackTrace` objects with the same getters, such as `getLinkTracktrace()`. A nested object is a `Jane` model with public properties |
 | `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | The constructor takes a `CoreApi\Api\ShipmentApi` | The constructor takes a `Jane\CoreApi\Client` |
 | `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | They throw a `CoreApi\ApiException` for an error response | They throw a `Jane\CoreApi\Exception\ApiException`. Read the status code with `getResponse()->getStatusCode()` |
 | `ApiKeyService`        | `getPrincipal()` returns an `IamApi\Model\Principal` with getters, such as `getShopIds()` | `getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser` with public properties, such as `$principal->shopIds`. `type`, `role` and `platform` are enums, or the raw string for a value the SDK does not know |
@@ -23,7 +23,7 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 
 The classes in the `Jane` namespace are in `MyParcelNL\Sdk\Client\Generated\Jane`. The others are in `MyParcelNL\Sdk\Client\Generated`.
 
-A `Jane` model does not initialize a property that the API did not send. Reading that property throws an `Error`. Use `??` or `isset()`, such as `$shipment->pickup ?? null`.
+A getter of `FoundShipment` or `TrackTrace` returns `null` for a field that the API did not send. A `Jane` model does not initialize such a property, and reading it throws an `Error`. Use `??` or `isset()` on a nested object, such as `$shipment->getRecipient()->street ?? null`.
 
 ### Generated OpenAPI models
 
