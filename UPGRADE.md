@@ -30,7 +30,7 @@ A connection error or a timeout throws a Symfony `TransportExceptionInterface`, 
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
 
-A `Jane` model does not initialize a property that the API did not send. Reading that property throws an `Error`. Use `??` or `isset()`, such as `$shipment->pickup ?? null`.
+A getter of `FoundShipment` or `TrackTrace` returns `null` for a field that the API did not send. A `Jane` model does not initialize such a property, and reading it throws an `Error`. Use `??` or `isset()` on a nested object, such as `$shipment->getRecipient()->street ?? null`.
 
 ### Order push
 

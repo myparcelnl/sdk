@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
+use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -32,16 +32,16 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame('GET', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/10%3B20', $this->requests[0]['url']);
         self::assertCount(2, $result);
-        self::assertSame(10, $result[0]->id);
-        self::assertSame(20, $result[1]->id);
+        self::assertSame(10, $result[0]->getId());
+        self::assertSame(20, $result[1]->getId());
     }
 
     public function testFindReturnsFirstShipmentOrNull(): void
     {
         $result = $this->createService([['id' => 42]])->find(42);
 
-        self::assertInstanceOf(ShipmentDefsShipment::class, $result);
-        self::assertSame(42, $result->id);
+        self::assertInstanceOf(FoundShipment::class, $result);
+        self::assertSame(42, $result->getId());
     }
 
     public function testFindReturnsNullWhenNoShipmentExists(): void
@@ -99,7 +99,7 @@ final class ShipmentQueryServiceTest extends TestCase
         $result = $this->createService([['id' => 1001], ['id' => 1002], ['id' => 1003]])->findByReferenceId('ref-a');
 
         self::assertSame(['reference_identifier' => 'ref-a'], $this->queryOfRequest(0));
-        self::assertSame([1001, 1002, 1003], array_map(static fn (ShipmentDefsShipment $shipment) => $shipment->id, $result));
+        self::assertSame([1001, 1002, 1003], array_map(static fn (FoundShipment $shipment) => $shipment->getId(), $result));
     }
 
     public function testSendsTheUserAgentThatIsSetAfterTheConstructor(): void
@@ -133,12 +133,22 @@ final class ShipmentQueryServiceTest extends TestCase
         ]])->find(1);
 
         self::assertNotNull($result);
-        self::assertSame('Antareslaan', $result->recipient->street);
-        self::assertSame('NL', $result->recipient->cc);
-        self::assertSame('31', $result->recipient->number);
-        self::assertSame('2132JE', $result->recipient->postalCode);
-        self::assertSame('Hoofddorp', $result->recipient->city);
-        self::assertSame('Test Person', $result->recipient->person);
+        self::assertSame('Antareslaan', $result->getRecipient()->street);
+        self::assertSame('NL', $result->getRecipient()->cc);
+        self::assertSame('31', $result->getRecipient()->number);
+        self::assertSame('2132JE', $result->getRecipient()->postalCode);
+        self::assertSame('Hoofddorp', $result->getRecipient()->city);
+        self::assertSame('Test Person', $result->getRecipient()->person);
+    }
+
+    public function testAGetterReturnsNullForAFieldThatTheApiDidNotSend(): void
+    {
+        $result = $this->createService([['id' => 1]])->find(1);
+
+        self::assertNotNull($result);
+        self::assertNull($result->getBarcode());
+        self::assertNull($result->getRecipient());
+        self::assertFalse($result->getDelayed());
     }
 
     /**
