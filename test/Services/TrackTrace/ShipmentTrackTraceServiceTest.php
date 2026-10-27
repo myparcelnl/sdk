@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\TrackTrace;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTrace;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Model\TrackTrace\TrackTrace;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -47,11 +47,11 @@ final class ShipmentTrackTraceServiceTest extends TestCase
         self::assertSame('https://api.myparcel.nl/tracktraces/123%3B456', $this->requests[0]['url']);
         self::assertContains('User-Agent: ' . $service->getUserAgentHeader(), $this->requests[0]['headers']);
         self::assertSame([123, 456], array_keys($result));
-        self::assertInstanceOf(ShipmentDefsTrackTrace::class, $result[123]);
-        self::assertSame('https://track.test/123', $result[123]->linkTracktrace);
-        self::assertSame('https://track.test/456', $result[456]->linkTracktrace);
-        self::assertSame('DELIVERED', $result[123]->code);
-        self::assertSame('IN_TRANSIT', $result[456]->code);
+        self::assertInstanceOf(TrackTrace::class, $result[123]);
+        self::assertSame('https://track.test/123', $result[123]->getLinkTracktrace());
+        self::assertSame('https://track.test/456', $result[456]->getLinkTracktrace());
+        self::assertSame('DELIVERED', $result[123]->getCode());
+        self::assertSame('IN_TRANSIT', $result[456]->getCode());
     }
 
     public function testRecipientIsRead(): void
@@ -70,9 +70,9 @@ final class ShipmentTrackTraceServiceTest extends TestCase
             ],
         ]])->fetchTrackTraceData([99]);
 
-        self::assertSame('Package delivered', $result[99]->description);
-        self::assertSame('Antareslaan', $result[99]->recipient->street);
-        self::assertSame('NL', $result[99]->recipient->cc);
+        self::assertSame('Package delivered', $result[99]->getDescription());
+        self::assertSame('Antareslaan', $result[99]->getRecipient()->street);
+        self::assertSame('NL', $result[99]->getRecipient()->cc);
     }
 
     public function testATrackTraceWithoutShipmentIdIsSkipped(): void

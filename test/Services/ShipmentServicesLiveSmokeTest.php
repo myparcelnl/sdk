@@ -156,10 +156,10 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         self::assertArrayHasKey($shipmentId, $result, 'Expected tracktrace for created shipment was not returned.');
 
         $trace = $result[$shipmentId];
-        self::assertSame($shipmentId, $trace->shipmentId);
+        self::assertSame($shipmentId, $trace->getShipmentId());
 
         // Assert data completeness: the hybrid approach should preserve all fields.
-        self::assertNotNull($trace->code ?? null, 'Expected tracktrace code to be present.');
+        self::assertNotNull($trace->getCode(), 'Expected tracktrace code to be present.');
     }
 
     public function testQueryServiceFindsCreatedShipmentByIdAndReferenceIdentifier(): void
@@ -183,19 +183,19 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         self::assertNotNull($foundById, 'Expected created shipment to be returned by find().');
-        self::assertSame($shipmentId, $foundById->id);
+        self::assertSame($shipmentId, $foundById->getId());
 
         // Assert data completeness: the hybrid approach should preserve recipient/street.
-        $recipient = $foundById->recipient ?? null;
+        $recipient = $foundById->getRecipient();
         self::assertNotNull($recipient, 'Expected recipient to be present on queried shipment.');
         self::assertNotNull($recipient->street ?? null, 'Expected street to be present on recipient.');
         self::assertSame('NL', $recipient->cc);
 
         self::assertNotEmpty($foundByReference, 'Expected shipments to be returned by findByReferenceId().');
-        self::assertSame($shipmentId, $foundByReference[0]->id);
+        self::assertSame($shipmentId, $foundByReference[0]->getId());
 
         self::assertCount(1, $foundMany);
-        self::assertSame($shipmentId, $foundMany[0]->id);
+        self::assertSame($shipmentId, $foundMany[0]->getId());
     }
 
     public function testDeleteServiceDeletesCreatedShipmentConcept(): void
