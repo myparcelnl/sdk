@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesRecipientV2 as CoreRecipientV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesSenderV2 as CoreSenderV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2 as CoreOptionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2 as CorePhysicalPropertiesV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Pickup as CorePickupV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PickupLocation as CorePickupLocationV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesHeightV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesLengthV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWidthV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
+use BackedEnum;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponseCapabilityV2 as CoreCapabilityV2;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
+use MyParcelNL\Sdk\Support\Str;
 
+/**
+ * Maps a CapabilitiesRequest to the Jane request model, and the Jane response model to a CapabilitiesResponse.
+ *
+ * The v2 capabilities API uses camelCase field names, such as `physicalProperties`. A
+ * CapabilitiesRequest takes snake_case keys, such as `is_business`, as in v11.
+ */
 class CapabilitiesMapper
 {
+    private const PHYSICAL_PROPERTIES = ['height', 'width', 'length', 'weight'];
+
     /**
      * Map SDK request to the Core API request model.
      *
@@ -28,67 +30,20 @@ class CapabilitiesMapper
      */
     public function mapToCoreApi(CapabilitiesRequest $request): CoreRequestV2
     {
-        $core = new CoreRequestV2();
+        $data = array_filter([
+            'shopId'             => $request->getShopId(),
+            'recipient'          => ['countryCode' => $request->getCountryCode()],
+            'carrier'            => $request->getCarrier(),
+            'deliveryType'       => $request->getDeliveryType(),
+            'packageType'        => $request->getPackageType(),
+            'direction'          => $request->getDirection(),
+            'sender'             => $this->mapSender($request->getSender()),
+            'options'            => $this->mapOptions($request->getOptions()),
+            'physicalProperties' => $this->mapPhysicalProperties($request->getPhysicalProperties()),
+            'pickup'             => $this->mapPickup($request->getPickup()),
+        ], static fn($value): bool => null !== $value);
 
-        // Required: recipient.country_code
-        $recipient = new CoreRecipientV2();
-        $recipient->setCountryCode($request->getCountryCode());
-        $core->setRecipient($recipient);
-
-        // Optional: shop_id
-        if (null !== $request->getShopId()) {
-            $core->setShopId($request->getShopId());
-        }
-
-        // Optional: carrier / delivery_type / package_type / direction (pass-through)
-        if (null !== $request->getCarrier()) {
-            $core->setCarrier($request->getCarrier());
-        }
-
-        if (null !== $request->getDeliveryType()) {
-            $core->setDeliveryType($request->getDeliveryType());
-        }
-
-        if (null !== $request->getPackageType()) {
-            $core->setPackageType($request->getPackageType());
-        }
-
-        if (null !== $request->getDirection()) {
-            $core->setDirection($request->getDirection());
-        }
-
-        // Optional: sender
-        if ($request->getSender()) {
-            $senderData = $request->getSender();
-            $sender = new CoreSenderV2();
-
-            if (array_key_exists('country_code', $senderData)) {
-                $sender->setCountryCode($senderData['country_code']);
-            }
-
-            if (array_key_exists('is_business', $senderData)) {
-                $sender->setIsBusiness($senderData['is_business']);
-            }
-
-            $core->setSender($sender);
-        }
-
-        // Optional: options
-        if ($request->getOptions()) {
-            $core->setOptions($this->mapOptions($request->getOptions()));
-        }
-
-        // Optional: physical_properties
-        if ($request->getPhysicalProperties()) {
-            $core->setPhysicalProperties($this->mapPhysicalProperties($request->getPhysicalProperties()));
-        }
-
-        // Optional: pickup
-        if ($request->getPickup()) {
-            $core->setPickup($this->mapPickup($request->getPickup()));
-        }
-
-        return $core;
+        return CoreApiModels::withoutNullUntypedProperties(CoreApiModels::toModel($data, CoreRequestV2::class));
     }
 
     /**
@@ -98,7 +53,7 @@ class CapabilitiesMapper
      */
     public function mapFromCoreApi(CoreResponseV2 $core): CapabilitiesResponse
     {
-        $results = $core->getResults() ?? [];
+        $results = $core->results ?? [];
 
         if (empty($results)) {
             return new CapabilitiesResponse([], [], [], null, [], null);
@@ -115,21 +70,21 @@ class CapabilitiesMapper
         foreach ($results as $res) {
             $packageTypes = array_values(array_unique(array_merge(
                 $packageTypes,
-                (array) $res->getPackageTypes()
+                self::values($res->packageTypes ?? [])
             )));
 
             $deliveryTypes = array_values(array_unique(array_merge(
                 $deliveryTypes,
-                (array) $res->getDeliveryTypes()
+                self::values($res->deliveryTypes ?? [])
             )));
 
             $optionKeys = array_values(array_unique(array_merge(
                 $optionKeys,
-                array_keys((array) $res->getOptions())
+                $this->optionNames($res)
             )));
 
             if (! $carrierInconsistent) {
-                $resCarrier = $res->getCarrier();
+                $resCarrier = isset($res->carrier) ? self::value($res->carrier) : null;
                 if (null === $carrier) {
                     $carrier = $resCarrier;
                 } elseif ($carrier !== $resCarrier) {
@@ -140,12 +95,11 @@ class CapabilitiesMapper
 
             $transactionTypes = array_values(array_unique(array_merge(
                 $transactionTypes,
-                (array) $res->getTransactionTypes()
+                self::values($res->transactionTypes ?? [])
             )));
 
-            $collo = $res->getCollo();
-            if ($collo && method_exists($collo, 'getMax')) {
-                $colloMax = max($colloMax ?? 0, (int) $collo->getMax());
+            if (isset($res->collo->max)) {
+                $colloMax = max($colloMax ?? 0, $res->collo->max);
             }
         }
 
@@ -160,18 +114,69 @@ class CapabilitiesMapper
     }
 
     /**
-     * Map supported options to the capabilities v2 request model.
+     * The API names of the shipment options that the result allows, such as `requiresSignature`.
+     *
+     * The Jane model sets only the options that the API sent.
+     *
+     * @return string[]
+     */
+    private function optionNames(CoreCapabilityV2 $result): array
+    {
+        if (! isset($result->options)) {
+            return [];
+        }
+
+        $names = [];
+
+        foreach ($result->options->definedProperties() as $property => $apiName) {
+            if (isset($result->options->{$property})) {
+                $names[] = $apiName;
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param array<string, mixed>|null $senderData
+     *
+     * @return array<string, mixed>|null
+     */
+    private function mapSender(?array $senderData): ?array
+    {
+        if (! $senderData) {
+            return null;
+        }
+
+        $sender = [];
+
+        if (array_key_exists('country_code', $senderData)) {
+            $sender['countryCode'] = $senderData['country_code'];
+        }
+
+        if (array_key_exists('is_business', $senderData)) {
+            $sender['isBusiness'] = $senderData['is_business'];
+        }
+
+        return $sender;
+    }
+
+    /**
+     * Map supported options to the capabilities v2 request.
      * Call CapabilitiesRequest::getUnsupportedOptions() before sending to handle omitted options.
      *
-     * @param  array<string, mixed> $optionsData
+     * @param array<string, mixed>|null $optionsData
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2
+     * @return array<string, mixed>|null
      */
-    private function mapOptions(array $optionsData): CoreOptionsV2
+    private function mapOptions(?array $optionsData): ?array
     {
-        $options = new CoreOptionsV2();
+        if (! $optionsData) {
+            return null;
+        }
+
+        $options = [];
         $mapper  = new ShipmentOptionMapper();
-        $setters = CoreOptionsV2::setters();
 
         foreach ($optionsData as $key => $value) {
             $property = $mapper->v2PropertyFromName((string) $key);
@@ -180,8 +185,7 @@ class CapabilitiesMapper
                 continue;
             }
 
-            $setter = $setters[$property];
-            $options->{$setter}($this->normalizeOptionValue($value));
+            $options[Str::camel($property)] = $this->normalizeOptionValue($value);
         }
 
         return $options;
@@ -201,49 +205,25 @@ class CapabilitiesMapper
     }
 
     /**
-     * @param array<string, mixed> $physicalData
+     * Keep each dimension that has a value and a unit. The spec types the value as an integer.
+     *
+     * @param array<string, mixed>|null $physicalData
+     *
+     * @return array<string, array{value: mixed, unit: mixed}>|null
      */
-    private function mapPhysicalProperties(array $physicalData): CorePhysicalPropertiesV2
+    private function mapPhysicalProperties(?array $physicalData): ?array
     {
-        $physical = new CorePhysicalPropertiesV2();
-
-        if (isset($physicalData['height']) && is_array($physicalData['height'])) {
-            $h = $physicalData['height'];
-            if (array_key_exists('value', $h) && array_key_exists('unit', $h)) {
-                $height = new PhysicalPropertiesHeightV2();
-                $height->setValue($h['value']);
-                $height->setUnit($h['unit']);
-                $physical->setHeight($height);
-            }
+        if (! $physicalData) {
+            return null;
         }
 
-        if (isset($physicalData['width']) && is_array($physicalData['width'])) {
-            $w = $physicalData['width'];
-            if (array_key_exists('value', $w) && array_key_exists('unit', $w)) {
-                $width = new PhysicalPropertiesWidthV2();
-                $width->setValue($w['value']);
-                $width->setUnit($w['unit']);
-                $physical->setWidth($width);
-            }
-        }
+        $physical = [];
 
-        if (isset($physicalData['length']) && is_array($physicalData['length'])) {
-            $l = $physicalData['length'];
-            if (array_key_exists('value', $l) && array_key_exists('unit', $l)) {
-                $length = new PhysicalPropertiesLengthV2();
-                $length->setValue($l['value']);
-                $length->setUnit($l['unit']);
-                $physical->setLength($length);
-            }
-        }
+        foreach (self::PHYSICAL_PROPERTIES as $name) {
+            $dimension = $physicalData[$name] ?? null;
 
-        if (isset($physicalData['weight']) && is_array($physicalData['weight'])) {
-            $w = $physicalData['weight'];
-            if (array_key_exists('value', $w) && array_key_exists('unit', $w)) {
-                $weight = new PhysicalPropertiesWeightV2();
-                $weight->setValue($w['value']);
-                $weight->setUnit($w['unit']);
-                $physical->setWeight($weight);
+            if (is_array($dimension) && array_key_exists('value', $dimension) && array_key_exists('unit', $dimension)) {
+                $physical[$name] = ['value' => $dimension['value'], 'unit' => $dimension['unit']];
             }
         }
 
@@ -251,23 +231,41 @@ class CapabilitiesMapper
     }
 
     /**
-     * @param array<string, mixed> $pickupData
+     * @param array<string, mixed>|null $pickupData
+     *
+     * @return array<string, mixed>|null
      */
-    private function mapPickup(array $pickupData): CorePickupV2
+    private function mapPickup(?array $pickupData): ?array
     {
-        $pickup = new CorePickupV2();
+        if (! $pickupData) {
+            return null;
+        }
+
+        $pickup = [];
 
         if (isset($pickupData['location']) && is_array($pickupData['location'])) {
-            $locationData = $pickupData['location'];
-            $location = new CorePickupLocationV2();
-
-            if (array_key_exists('type', $locationData)) {
-                $location->setType($locationData['type']);
-            }
-
-            $pickup->setLocation($location);
+            $pickup['location'] = array_key_exists('type', $pickupData['location'])
+                ? ['type' => $pickupData['location']['type']]
+                : [];
         }
 
         return $pickup;
+    }
+
+    /**
+     * The API value of each item. Jane returns an enum case for a value it knows, and the raw string otherwise.
+     *
+     * @param array<BackedEnum|string> $items
+     *
+     * @return string[]
+     */
+    private static function values(array $items): array
+    {
+        return array_map([self::class, 'value'], $items);
+    }
+
+    private static function value(BackedEnum|string $item): string
+    {
+        return $item instanceof BackedEnum ? (string) $item->value : $item;
     }
 }

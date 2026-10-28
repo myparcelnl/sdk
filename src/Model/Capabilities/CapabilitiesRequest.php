@@ -312,8 +312,8 @@ class CapabilitiesRequest
      *
      * Example:
      * $request = CapabilitiesRequest::fromShipment($shipment)
-     *     ->withCarrier(\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2::POSTNL)
-     *     ->withPackageType(\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2::PACKAGE);
+     *     ->withCarrier(\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2::Postnl->value)
+     *     ->withPackageType(\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2::Package->value);
      *
      * @param  \MyParcelNL\Sdk\Model\Shipment\Shipment $shipment
      *
