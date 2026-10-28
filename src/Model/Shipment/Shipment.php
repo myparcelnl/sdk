@@ -29,6 +29,10 @@ use ReflectionProperty;
 /**
  * A shipment to create, with the getters and setters of v11.
  *
+ * The class wraps the generated Jane model. A Jane model has public properties and no getters or
+ * setters, so this class keeps the v11 methods for integrators. When a regeneration changes the
+ * Jane model, only this class must change, not the code of an integrator.
+ *
  * A setter of a nested object, such as setRecipient(), takes an array with the API field names or
  * the Jane model. A carrier can be an id, a v2 name such as `POSTNL`, or an enum case.
  * `WriteModelAccessorsTest` fails when the Jane model gets a property without a getter and a setter here.
@@ -82,10 +86,11 @@ class Shipment implements JsonSerializable
     }
 
     /**
-     * The generated Jane model that the shipment request sends.
+     * The Jane model that ShipmentCreateService and ShipmentPrintService send.
      *
-     * It contains the options, and it leaves out the fields without a type that nobody set.
-     * See CoreApiModels::withoutNullUntypedProperties().
+     * The Jane client accepts only its own model class, not this class. The method returns a copy
+     * with the options in it, so a send does not change this shipment. The copy leaves out the
+     * fields without a type that nobody set, see CoreApiModels::withoutNullUntypedProperties().
      */
     public function toApiModel(): ShipmentModel
     {
