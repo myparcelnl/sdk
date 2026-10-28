@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Labels;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Mockery;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ShipmentLabelsServiceTest extends TestCase
 {
+    /**
+     * @var array<int, array{method: string, url: string, accept: string[], user_agent: string[]}>
+     */
+    private array $requests = [];
+
     public function testUseLabelPrepareThreshold(): void
     {
         $service = new ShipmentLabelsService($this->getApiKey());
@@ -25,173 +26,42 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertTrue($service->useLabelPrepare(26));
     }
 
-    public function testSetLinkOfLabelsUsesRegularEndpointAndStoresLink(): void
+    public function testSetLinkOfLabelsSendsTheLinkAcceptHeaderAndStoresTheAbsoluteLink(): void
     {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101;102?format=A4&positions=2;3;4');
-
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                '101;102',
-                'A4',
-                '2;3;4',
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
-
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader(
-                    $request,
-                    'application/vnd.shipment_label_link+json'
-                );
-            }))
-            ->andReturn(new Response(200, [], json_encode([
-                'data' => [
-                    'pdfs' => [
-                        'url' => '/pdfs/download/101;102',
-                    ],
-                ],
-            ])));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+        $service = $this->createService(json_encode(['data' => ['pdfs' => ['url' => '/pdfs/download/101;102']]]));
 
         $result = $service->setLinkOfLabels([101, 102], 2);
 
-        $expected = 'https://api.myparcel.nl/pdfs/download/101;102';
-
-        self::assertSame($expected, $result);
-        self::assertSame($expected, $service->getLinkOfLabels());
+        self::assertSame('GET', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/shipment_labels/101%3B102?format=A4&positions=2%3B3%3B4', $this->requests[0]['url']);
+        self::assertSame(['application/vnd.shipment_label_link+json'], $this->requests[0]['accept']);
+        self::assertNotEmpty($this->requests[0]['user_agent']);
+        self::assertSame('https://api.myparcel.nl/pdfs/download/101;102', $result);
+        self::assertSame($result, $service->getLinkOfLabels());
     }
 
     public function testSetLinkOfLabelsKeepsLegacyEmptyPositionsForOutOfRangeNumericInput(): void
     {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=');
+        $service = $this->createService(json_encode(['data' => ['pdf' => ['url' => 'https://cdn.myparcel.nl/label.pdf']]]));
 
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                '101',
-                'A4',
-                '',
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
+        $result = $service->setLinkOfLabels([101], 7);
 
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader(
-                    $request,
-                    'application/vnd.shipment_label_link+json'
-                );
-            }))
-            ->andReturn(new Response(200, [], json_encode([
-                'data' => [
-                    'pdfs' => [
-                        'url' => '/pdfs/download/101',
-                    ],
-                ],
-            ])));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
-
-        $result = $service->setLinkOfLabels([101], 5);
-
-        $expected = 'https://api.myparcel.nl/pdfs/download/101';
-
-        self::assertSame($expected, $result);
-        self::assertSame($expected, $service->getLinkOfLabels());
+        self::assertSame('https://api.myparcel.nl/shipment_labels/101?format=A4&positions=', $this->requests[0]['url']);
+        self::assertSame('https://cdn.myparcel.nl/label.pdf', $result);
     }
 
-    public function testSetLinkOfLabelsUsesGeneratedEndpointForLargeBatch(): void
+    public function testSetLinkOfLabelsAsksForA6WithoutPositions(): void
     {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $ids = range(1, 26);
-        $idsAsString = implode(';', $ids);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/' . $idsAsString . '?format=A6');
+        $service = $this->createService(json_encode(['data' => ['pdfs' => ['url' => '/pdfs/download/1']]]));
 
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                $idsAsString,
-                'A6',
-                null,
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
+        $service->setLinkOfLabels(range(1, 26), false);
 
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader(
-                    $request,
-                    'application/vnd.shipment_label_link+json'
-                );
-            }))
-            ->andReturn(new Response(200, [], json_encode([
-                'data' => [
-                    'pdf' => [
-                        'url' => '/pdfs/prepared/abc',
-                    ],
-                ],
-            ])));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
-
-        $result = $service->setLinkOfLabels($ids, false);
-
-        $expected = 'https://api.myparcel.nl/pdfs/prepared/abc';
-
-        self::assertSame($expected, $result);
-        self::assertSame($expected, $service->getLinkOfLabels());
+        self::assertSame('https://api.myparcel.nl/shipment_labels/' . implode('%3B', range(1, 26)) . '?format=A6', $this->requests[0]['url']);
     }
 
     public function testSetLinkOfLabelsThrowsOnInvalidResponseBody(): void
     {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1;2;3;4');
-
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                '101',
-                'A4',
-                '1;2;3;4',
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
-
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader(
-                    $request,
-                    'application/vnd.shipment_label_link+json'
-                );
-            }))
-            ->andReturn(new Response(200, [], 'not-json'));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+        $service = $this->createService(json_encode(['data' => []]));
 
         $this->expectException(ApiException::class);
         $this->expectExceptionMessage('Did not receive expected label link response. Please contact MyParcel.');
@@ -199,39 +69,30 @@ final class ShipmentLabelsServiceTest extends TestCase
         $service->setLinkOfLabels([101]);
     }
 
+    public function testSetLinkOfLabelsThrowsOnAnErrorResponse(): void
+    {
+        $service = $this->createService(json_encode(['errors' => [['code' => 3501, 'message' => 'Not found']]]), 404);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Did not receive expected label link response. Please contact MyParcel.');
+
+        $service->setLinkOfLabels([101]);
+    }
+
+    public function testSetPdfOfLabelsSendsThePdfAcceptHeaderAndStoresThePdf(): void
+    {
+        $service = $this->createService('%PDF-1.4 label', 200, 'application/pdf');
+
+        $result = $service->setPdfOfLabels([101]);
+
+        self::assertSame(['application/pdf'], $this->requests[0]['accept']);
+        self::assertSame('%PDF-1.4 label', $result);
+        self::assertSame($result, $service->getLabelPdf());
+    }
+
     public function testSetPdfOfLabelsThrowsOnPaymentInstructions(): void
     {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1;2;3;4');
-
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                '101',
-                'A4',
-                '1;2;3;4',
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
-
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
-            }))
-            ->andReturn(new Response(200, [], json_encode([
-                'data' => [
-                    'payment_instructions' => [
-                        'link' => 'https://pay.example.test',
-                    ],
-                ],
-            ])));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+        $service = $this->createService(json_encode(['data' => ['payment_instructions' => [['id' => 1]]]]), 402);
 
         $this->expectException(ApiException::class);
         $this->expectExceptionMessage('Received payment link instead of pdf. Check your MyParcel account status.');
@@ -239,68 +100,9 @@ final class ShipmentLabelsServiceTest extends TestCase
         $service->setPdfOfLabels([101]);
     }
 
-    public function testSetPdfOfLabelsStoresPdfBody(): void
-    {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1;2;3;4');
-        $pdf = "%PDF-1.4\nfake-pdf";
-
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                '101',
-                'A4',
-                '1;2;3;4',
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
-
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
-            }))
-            ->andReturn(new Response(200, ['Content-Type' => 'application/pdf'], $pdf));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
-
-        $result = $service->setPdfOfLabels([101]);
-
-        self::assertSame($pdf, $result);
-        self::assertSame($pdf, $service->getLabelPdf());
-    }
-
     public function testSetPdfOfLabelsThrowsOnInvalidPdfResponse(): void
     {
-        $api = Mockery::mock(ShipmentApi::class);
-        $httpClient = Mockery::mock(ClientInterface::class);
-        $request = new Request('GET', 'https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1;2;3;4');
-
-        $api->shouldReceive('getShipmentsLabelsRequest')
-            ->once()
-            ->with(
-                '101',
-                'A4',
-                '1;2;3;4',
-                null,
-                null,
-                Mockery::type('string'),
-                ShipmentApi::contentTypes['getShipmentsLabels'][0]
-            )
-            ->andReturn($request);
-
-        $httpClient->shouldReceive('sendRequest')
-            ->once()
-            ->with(Mockery::on(static function (RequestInterface $request): bool {
-                return ShipmentLabelsServiceTest::assertAcceptHeader($request, 'application/pdf');
-            }))
-            ->andReturn(new Response(200, [], 'not-a-pdf'));
-
-        $service = new ShipmentLabelsService($this->getApiKey(), $api, $httpClient);
+        $service = $this->createService('not-a-pdf', 200, 'application/pdf');
 
         $this->expectException(ApiException::class);
         $this->expectExceptionMessage('Did not receive expected pdf response. Please contact MyParcel.');
@@ -310,11 +112,7 @@ final class ShipmentLabelsServiceTest extends TestCase
 
     public function testDownloadPdfOfLabelsThrowsWhenPdfIsMissing(): void
     {
-        $service = new ShipmentLabelsService(
-            $this->getApiKey(),
-            Mockery::mock(ShipmentApi::class),
-            Mockery::mock(ClientInterface::class)
-        );
+        $service = $this->createService('');
 
         $this->expectException(MissingFieldException::class);
         $this->expectExceptionMessage('First set label_pdf key with setPdfOfLabels() before running downloadPdfOfLabels()');
@@ -322,8 +120,19 @@ final class ShipmentLabelsServiceTest extends TestCase
         $service->downloadPdfOfLabels();
     }
 
-    private static function assertAcceptHeader(RequestInterface $request, string $expected): bool
+    private function createService(string $body, int $status = 200, string $contentType = 'application/json'): ShipmentLabelsService
     {
-        return $expected === $request->getHeaderLine('Accept');
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body, $status, $contentType): MockResponse {
+            $this->requests[] = [
+                'method'     => $method,
+                'url'        => $url,
+                'accept'     => array_map(static fn(string $line): string => substr($line, 8), $options['normalized_headers']['accept'] ?? []),
+                'user_agent' => $options['normalized_headers']['user-agent'] ?? [],
+            ];
+
+            return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
+        });
+
+        return new ShipmentLabelsService('my-api-key', null, $httpClient);
     }
 }
