@@ -81,8 +81,8 @@ final class CoreApiModels
      * `email` of a recipient. PHP sets such a property to null, so the normalizer sends the field as
      * null, also when nobody set it. The validation then rejects the request.
      *
-     * @todo Remove this method when Jane leaves out a field without a type that nobody set.
-     *       `CoreApiModelsTest` fails when Jane gives the recipient email a type.
+     * @todo Remove this method when a Jane release contains janephp#1141 and the client is generated
+     *       again. `CoreApiModelsTest::testJaneStillSendsAnUnsetRecipientEmailAsNull` then fails.
      *
      * @template T of object
      *
