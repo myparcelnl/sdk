@@ -92,7 +92,9 @@ class ShipmentOptions
     }
 
     /**
-     * The generated Jane model that the shipment request sends.
+     * The Jane model that Shipment::toApiModel() puts in the shipment.
+     *
+     * It is a copy, so a change to the model does not change these options.
      */
     public function toApiModel(): OptionsModel
     {
