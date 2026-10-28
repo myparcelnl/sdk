@@ -31,7 +31,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
      *
      * @param CapabilitiesRequest $request
      * @return CapabilitiesResponse
-     * @throws \MyParcelNL\Sdk\Exception\ApiException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\ApiException For an error response.
      */
     public function get(CapabilitiesRequest $request): CapabilitiesResponse
     {
