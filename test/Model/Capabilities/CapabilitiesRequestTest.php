@@ -32,11 +32,11 @@ final class CapabilitiesRequestTest extends TestCase
         $this->assertSame(['tracked', 'unknown_option'], $request->getUnsupportedOptions());
         $this->assertSame($input, $request->getOptions());
 
-        $options = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
+        $options = (new CapabilitiesMapper())->mapToCoreApi($request)->options;
 
-        $this->assertNotNull($options->getRequiresSignature());
-        $this->assertNotNull($options->getSameDayDelivery());
-        $this->assertNotNull($options->getNoTracking());
+        $this->assertNotNull($options->requiresSignature);
+        $this->assertNotNull($options->sameDayDelivery);
+        $this->assertNotNull($options->noTracking);
     }
 
     public function testGetUnsupportedOptionsUpdatesWhenTheCallerReplacesOptions(): void
