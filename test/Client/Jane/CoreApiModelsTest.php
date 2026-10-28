@@ -10,7 +10,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequ
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionProperty;
 
 final class CoreApiModelsTest extends TestCase
 {
@@ -42,22 +41,25 @@ final class CoreApiModelsTest extends TestCase
         $shipment            = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
         $shipment->recipient = CoreApiModels::toModel(['cc' => 'NL'], ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
 
-        self::assertSame(['cc' => 'NL', 'email' => null], CoreApiModels::toArray($shipment->recipient));
-
         CoreApiModels::withoutNullUntypedProperties($shipment);
 
         self::assertSame(['cc' => 'NL'], CoreApiModels::toArray($shipment->recipient));
     }
 
     /**
-     * CoreApiModels::withoutNullUntypedProperties() exists because Jane generates `email` without a type.
-     * When this test fails, Jane gives it a type: check whether that method can go.
+     * CoreApiModels::withoutNullUntypedProperties() exists because Jane sends a field without a type
+     * as null, also when nobody set it. When this test fails, Jane leaves the field out: remove that method.
+     *
+     * @see https://github.com/janephp/janephp/issues/1140
      */
-    public function testJaneStillGeneratesTheRecipientEmailWithoutAType(): void
+    public function testJaneStillSendsAnUnsetRecipientEmailAsNull(): void
     {
-        self::assertNull(
-            (new ReflectionProperty(ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class, 'email'))->getType(),
-            'Jane now gives the recipient email a type. Check whether CoreApiModels::withoutNullUntypedProperties() can go.'
+        $recipient = CoreApiModels::toModel(['cc' => 'NL'], ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
+
+        self::assertSame(
+            ['cc' => 'NL', 'email' => null],
+            CoreApiModels::toArray($recipient),
+            'Jane now leaves out an unset field without a type (janephp#1141). Remove CoreApiModels::withoutNullUntypedProperties().'
         );
     }
 }
