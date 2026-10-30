@@ -42,7 +42,7 @@ final class ReturnShipmentService
         ?HttpClientInterface $httpClient = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host, null, [], $httpClient);
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host, null, [], $httpClient);
     }
 
     /**

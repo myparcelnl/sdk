@@ -22,7 +22,7 @@ final class ShipmentDeleteService
 
     public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
     {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
     }
 
     /**

@@ -9,6 +9,8 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesServe
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
+use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -33,7 +35,9 @@ final class CapabilitiesLiveSmokeTest extends TestCase
             $this->markTestSkipped('Skipping live smoke tests: no API key found in env (API_KEY / API_KEY_NL / API_KEY_BE).');
         }
 
-        $this->service = new CapabilitiesService();
+        $this->service = new CapabilitiesService(
+            new HttpCapabilitiesClient(null, ShipmentApiFactory::make(null, self::liveApiHost()))
+        );
     }
 
     /**

@@ -28,7 +28,7 @@ final class ShipmentCreateService
         ?Client $api = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
     }
 
     /**

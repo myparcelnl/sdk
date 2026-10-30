@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\CoreApi;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\HandlerStack;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Factory for creating the generated ShipmentApi client.
+ * Factory for creating the Jane Core API client that the shipment services use.
  */
 final class ShipmentApiFactory
 {
@@ -24,70 +20,10 @@ final class ShipmentApiFactory
      * The MyParcel API typically responds within 2-3 seconds; 10 seconds
      * provides headroom for label generation and large batch queries.
      */
-    public const DEFAULT_HTTP_TIMEOUT = 10;
-    /**
-     * Create a configured ShipmentApi client.
-     *
-     * @param string|null $apiKey Optional API key.
-     * @param string|null $host Optional API host override.
-     * @param string|null $userAgent Optional custom User-Agent.
-     * @param array<string, string> $headers Sent on every request, such as `x-dmp-*` API feature flags.
-     */
-    public static function make(
-        ?string $apiKey = null,
-        ?string $host = null,
-        ?string $userAgent = null,
-        array $headers = []
-    ): ShipmentApi {
-        $resolvedKey = self::resolveApiKey($apiKey);
-
-        if ('' === $resolvedKey) {
-            throw new \InvalidArgumentException('API key cannot be empty');
-        }
-
-        $encoded = base64_encode($resolvedKey);
-
-        $config = new Configuration();
-        $config->setAccessToken($encoded);
-
-        if ($host) {
-            $config->setHost($host);
-        }
-
-        if ($userAgent) {
-            $config->setUserAgent($userAgent);
-        }
-
-        $stack = self::createHandlerStack();
-
-        $httpOptions = [
-            'timeout'  => self::DEFAULT_HTTP_TIMEOUT,
-            'handler'  => $stack,
-            'debug'    => false,
-        ];
-
-        if ($host) {
-            $httpOptions['base_uri'] = $host;
-        }
-
-        if ($headers) {
-            $httpOptions['headers'] = $headers;
-        }
-
-        $http = new GuzzleClient($httpOptions);
-
-        return new ShipmentApi($http, $config);
-    }
+    public const DEFAULT_HTTP_TIMEOUT = JaneClientFactory::DEFAULT_HTTP_TIMEOUT;
 
     /**
-     * Create the Jane Core API client, with the same API key handling as make().
-     *
-     * The shipment services move to Jane one at a time. Until the last one moves, make() returns
-     * the openapi-generator client.
-     *
-     * @todo INT-2033: remove this method when make() returns the Jane client.
-     *
-     * @internal Used by the services that run on Jane.
+     * Create a configured Core API client.
      *
      * @param string|null              $apiKey     Optional API key.
      * @param string|null              $host       Optional API host override.
@@ -95,13 +31,13 @@ final class ShipmentApiFactory
      * @param array<string, string>    $headers    Sent on every request, such as `x-dmp-*` API feature flags.
      * @param HttpClientInterface|null $httpClient Sends the requests. Tests pass a MockHttpClient.
      */
-    public static function client(
+    public static function make(
         ?string $apiKey = null,
         ?string $host = null,
         ?string $userAgent = null,
         array $headers = [],
         ?HttpClientInterface $httpClient = null
-    ): CoreApiClient {
+    ): Client {
         $resolvedKey = self::resolveApiKey($apiKey);
 
         if ('' === $resolvedKey) {
@@ -109,11 +45,6 @@ final class ShipmentApiFactory
         }
 
         return JaneClientFactory::coreApi($resolvedKey, $host, $userAgent, $headers, $httpClient);
-    }
-
-    private static function createHandlerStack(): HandlerStack
-    {
-        return HandlerStack::create();
     }
 
     /**
@@ -142,5 +73,4 @@ final class ShipmentApiFactory
 
         return '';
     }
-
 }

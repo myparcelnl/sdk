@@ -70,6 +70,6 @@ final class HttpCapabilitiesClientTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new HttpCapabilitiesClient(null, ShipmentApiFactory::client('my-api-key', null, null, [], $httpClient));
+        return new HttpCapabilitiesClient(null, ShipmentApiFactory::make('my-api-key', null, null, [], $httpClient));
     }
 }
