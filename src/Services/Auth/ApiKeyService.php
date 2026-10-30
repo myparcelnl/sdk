@@ -20,6 +20,10 @@ use UnexpectedValueException;
 
 /**
  * Service for validating API keys through the generated IAM API client.
+ *
+ * getPrincipal() returns the Jane models PrincipalShop and PrincipalUser, without v11 getters: the
+ * PDK and the Magento module do not call it, and the v11 docs read no field of the principal. The
+ * class tells a shop key from a user key.
  */
 final class ApiKeyService
 {
