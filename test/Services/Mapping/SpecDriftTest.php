@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
@@ -16,8 +15,6 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
  */
 class SpecDriftTest extends TestCase
 {
-    private const REPO_ROOT = __DIR__ . '/../../..';
-
     /**
      * Jane removes the files of a class that the spec no longer has (`clean-generated`), so an
      * enum that still exists is still generated.
@@ -39,14 +36,18 @@ class SpecDriftTest extends TestCase
         }
     }
 
-    public function testOptionModelsAreStillProducedByTheGenerator(): void
+    /**
+     * ShipmentOptionMapper reads the shipment option names from this model.
+     */
+    public function testTheOptionModelIsStillGenerated(): void
     {
-        foreach ([CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions::class, CapabilitiesOptionsV2::class] as $modelClass) {
-            $this->assertTrue(
-                $this->isInGeneratorManifest($modelClass),
-                sprintf('%s is no longer generated. Review the shipment-option mapping sources.', $modelClass)
-            );
-        }
+        $this->assertTrue(
+            class_exists(CapabilitiesPostCapabilitiesRequestV2Options::class),
+            sprintf(
+                '%s is no longer generated. Review the shipment-option mapping sources.',
+                CapabilitiesPostCapabilitiesRequestV2Options::class
+            )
+        );
     }
 
     /**
@@ -332,24 +333,5 @@ class SpecDriftTest extends TestCase
     private function rowsFor(string $domain): array
     {
         return ApiMapperService::allDomains()[$domain];
-    }
-
-    /**
-     * @param  class-string $enumClass
-     */
-    private function isInGeneratorManifest(string $enumClass): bool
-    {
-        $parts     = explode('\\', $enumClass);
-        $shortName = array_pop($parts);
-        $group     = array_pop($parts);          // Model
-        $client    = array_pop($parts);          // CoreApi, OrderApi, ...
-
-        $manifest = sprintf('%s/src/Client/Generated/%s/.openapi-generator/FILES', self::REPO_ROOT, $client);
-
-        $this->assertFileExists($manifest);
-
-        $entries = file($manifest, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
-
-        return in_array(sprintf('%s/%s.php', $group, $shortName), $entries, true);
     }
 }

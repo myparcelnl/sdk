@@ -67,10 +67,10 @@ When calling methods from these generated clients, always use named arguments. P
 
 ### Generated Files Location
  **DO NOT EDIT MANUALLY**
-- `src/Services/CoreApi/Generated/Jane` — The new clients/generated source, via `janephp`.
-- `src/Services/CoreApi/Generated/` — Legacy v11 generated code, to be replaced with Jane in successive v12 betas.
+- `src/Client/Generated/Jane/` — The clients that [Jane](https://github.com/janephp/janephp) generates. Each API gets its own namespace, such as `MyParcelNL\Sdk\Client\Generated\Jane\CoreApi`.
+- `src/Client/Generated/EcommerceApi/` — The legacy e-commerce client that OpenAPI Generator generates. INT-2034 replaces it with the Jane `EcommerceApi`.
 
-We currently generate the following APIs, each API gets its own namespace, either in `Generated/Jane` for the new clients or in `Generated` for the legacy v11 clients.
+Jane generates the following APIs:
 
 - CoreApi: The main API for interacting with shipments, capabilities, and notifications.
 - CoreApiPrivate: Temporary API for private endpoints, not intended for public use or not yet documented in our public open api spec.
@@ -78,26 +78,29 @@ We currently generate the following APIs, each API gets its own namespace, eithe
 - IamApi: Identify and access management via the iam microservice.
 - OrderApi: To be phased out. API is not actually consumed - only some types are used in our plugins, but these should move to the new EcommerceApi.
 
+The configuration is in these files:
+
+- `.jane-openapi` — The Jane `EcommerceApi`.
+- `.jane-openapi-core` — The Jane `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi`.
+- `openapi/ecommerce.yaml`, `openapi/common.yaml`, `openapi/commonProperties.yaml` and `openapi/templates/` — The legacy e-commerce client.
+
 ### Regenerating Code
 
 ```bash
 # Make sure Docker is available
 docker --version
 
-# Regenerate the API client (includes shipments, capabilities, notifications)
+# Regenerate the API clients
 composer generate:api
 ```
 
-This command runs the configured API generators (Jane in v12, the legacy OpenAPI Generator for v11), for all the configured APIs.
-
-```
+This command runs Jane for the Jane clients and OpenAPI Generator for the legacy e-commerce client. Then it refreshes the Composer autoloader. The `Regenerate API Client` workflow runs the same generators every Monday and opens a pull request with the changes.
 
 ### Notes for Development
 
-- Do not edit any files under `Generated/Shipments` manually
+- Do not edit any files under `src/Client/Generated/` manually
 - All changes must originate from the openapi specifications
-- The generated code is produced by OpenAPI Generator (supports OpenAPI 3.1) or Jane (for v12).
-- The generation command automatically refreshes autoloading via Composer
+- Put code that the generated clients need, such as a fix for a generator bug, in `src/Client/Jane/`. Give each workaround a `@todo` that says when it can go.
 
 ---
 

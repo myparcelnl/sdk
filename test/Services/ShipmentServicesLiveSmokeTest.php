@@ -6,9 +6,9 @@ namespace MyParcelNL\Sdk\Test\Services;
 
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrierReturns;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
@@ -22,7 +22,7 @@ use MyParcelNL\Sdk\Services\Shipment\ShipmentDeleteService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Services\Webhook\WebhookService;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
@@ -201,7 +201,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             $returnService = new ReturnShipmentService($this->liveApiKey, host: $this->liveHost);
             $result = $returnService->createRelated([[
                 'parent'               => $parentShipmentId,
-                'carrier'              => RefTypesCarrierReturns::NUMBER_1,
+                'carrier'              => RefTypesCarrierReturns::Value1->value,
                 'email'                => 'smoke@myparcel.nl',
                 'name'                 => 'Smoke Return',
                 'reference_identifier' => 'smoke-related-return-' . uniqid('', true),
@@ -224,7 +224,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         try {
             $returnService = new ReturnShipmentService($this->liveApiKey, host: $this->liveHost);
             $result = $returnService->createUnrelated([[
-                'carrier'              => RefTypesCarrierReturns::NUMBER_1,
+                'carrier'              => RefTypesCarrierReturns::Value1->value,
                 'email'                => 'smoke@myparcel.nl',
                 'name'                 => 'Smoke Unrelated Return',
                 'reference_identifier' => 'smoke-unrelated-return-' . uniqid('', true),
@@ -422,8 +422,8 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
             $shipmentOptions = (new ShipmentOptions())
                 ->setDeliveryDate((new \DateTime('+1 day'))->format('Y-m-d H:i:s'))
-                ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-                ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+                ->setDeliveryType(RefTypesDeliveryTypeV2::Standard)
+                ->setPackageType(RefShipmentPackageTypeV2::Package);
 
             $order = (new Order())
                 ->setStatus('open')
@@ -487,8 +487,8 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     private function createMinimalNlShipment(string $referenceIdentifier): Shipment
     {
         return (new Shipment())
-            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-            ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
+            ->setCarrier(RefCapabilitiesSharedCarrierV2::Postnl)
+            ->withPackageType(RefShipmentPackageTypeV2::Package)
             ->withWeight(1000)
             ->setRecipient([
                 'cc'          => 'NL',

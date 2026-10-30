@@ -33,10 +33,20 @@ jobs:
             ghcr.io/myparcelnl/php-xd:8.3 \
             composer install --no-interaction --no-progress
 
-      # Generate client with the latest openapi-generator release from docker-compose
-      - name: Generate API client
+      # Generate the legacy e-commerce client with the openapi-generator version from docker-compose
+      # @todo INT-2034: remove this step when the e-commerce client runs on Jane
+      - name: Generate legacy e-commerce client
         run: |
           docker compose --profile openapi run --rm generate-api
+
+      # Generate the Jane clients with the Jane version that composer.json requires (PHP 8.3)
+      - name: Generate Jane clients (PHP 8.3)
+        run: |
+          docker run --rm -t \
+            -v "${{ github.workspace }}:/app" \
+            -w /app \
+            ghcr.io/myparcelnl/php-xd:8.3 \
+            sh -c 'vendor/bin/jane-openapi generate && vendor/bin/jane-openapi generate --config-file=.jane-openapi-core'
 
       # Optimize autoload in PHP 8.3 (so the generated code + SDK autoload is consistent)
       - name: Dump optimized autoload (PHP 8.3)
@@ -83,7 +93,8 @@ jobs:
           body: |
             Automated update of OpenAPI-based clients in the SDK based on changes in the MyParcel OpenAPI schemas.
 
-            - Generated via `docker compose --profile openapi run --rm generate-api` (openapi-generator version from `docker-compose.yml`)
+            - Generated the Jane clients via `vendor/bin/jane-openapi generate`, with `.jane-openapi` and `.jane-openapi-core` (the Jane version that `composer.json` requires)
+            - Generated the legacy e-commerce client via `docker compose --profile openapi run --rm generate-api` (openapi-generator version from `docker-compose.yml`)
           labels: |
             automated
             api-client
