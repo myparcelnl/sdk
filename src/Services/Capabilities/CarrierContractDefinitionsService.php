@@ -22,6 +22,10 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  *
  * Use CapabilitiesService for shipment-specific capability checks based on
  * address, weight and shipment options.
+
+ *
+ * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
+ * it keeps working.
  */
 final class CarrierContractDefinitionsService
 {
