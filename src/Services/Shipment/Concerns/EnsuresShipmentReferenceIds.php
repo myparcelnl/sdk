@@ -6,6 +6,12 @@ namespace MyParcelNL\Sdk\Services\Shipment\Concerns;
 
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 
+/**
+ * Gives each shipment without a reference identifier one that starts with `sdk_`, as in v11.
+ *
+ * ShipmentCreateService and ShipmentPrintService return the created ids as id => reference
+ * identifier, so each shipment needs one.
+ */
 trait EnsuresShipmentReferenceIds
 {
     /**
