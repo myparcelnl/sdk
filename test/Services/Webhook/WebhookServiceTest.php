@@ -4,163 +4,121 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Webhook;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptionsData;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptionsDataIdsInner;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11Data;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteWebhookSubscriptionsClientErrorException;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Webhook\WebhookService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class WebhookServiceTest extends TestCase
 {
-    public function testSubscribeCallsPostAndReturnsId(): void
+    private const SUBSCRIPTIONS = '{"data":{"webhook_subscriptions":['
+        . '{"id":7,"account_id":1,"shop_id":2,"hook":"shipment_status_change","url":"https://example.com/status"},'
+        . '{"id":8,"account_id":1,"shop_id":2,"hook":"order_status_change","url":"https://example.com/order"}]}}';
+
+    /**
+     * @var array<int, array{method: string, url: string, content_type: string[], user_agent: string[], body: string}>
+     */
+    private array $requests = [];
+
+    public function testSubscribeSendsTheHookAndUrlAndReturnsTheId(): void
     {
-        $expectedId = 42;
+        $service = $this->createService('{"data":{"ids":[{"id":42}]}}');
 
-        $idObj = new WebhooksResponsesPostWebhookSubscriptionsDataIdsInner(['id' => $expectedId]);
-        $data  = new WebhooksResponsesPostWebhookSubscriptionsData(['ids' => [$idObj]]);
-        $response = new WebhooksResponsesPostWebhookSubscriptions(['data' => $data]);
+        $id = $service->subscribe(WebhookService::HOOK_SHIPMENT_STATUS_CHANGE, 'https://example.com/webhook');
 
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::once())
-            ->method('postWebhookSubscriptions')
-            ->with(
-                self::callback(static function (WebhooksPostWebhookSubscriptionsRequestV11 $request): bool {
-                    $subs = $request->getData()->getWebhookSubscriptions();
-                    self::assertCount(1, $subs);
-                    self::assertSame('shipment_status_change', $subs[0]->getHook());
-                    self::assertSame('https://example.com/webhook', $subs[0]->getUrl());
-
-                    return true;
-                }),
-                self::isType('string')
-            )
-            ->willReturn($response);
-
-        $service = new WebhookService($this->getApiKey(), $api);
-        $id = $service->subscribe(
-            WebhookService::HOOK_SHIPMENT_STATUS_CHANGE,
-            'https://example.com/webhook'
+        self::assertSame(42, $id);
+        self::assertSame('POST', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/webhook_subscriptions', $this->requests[0]['url']);
+        self::assertSame(['application/json;version=1.1'], $this->requests[0]['content_type']);
+        self::assertSame(['User-Agent: ' . $service->getUserAgentHeader()], $this->requests[0]['user_agent']);
+        self::assertJsonStringEqualsJsonString(
+            '{"data":{"webhook_subscriptions":[{"hook":"shipment_status_change","url":"https://example.com/webhook"}]}}',
+            $this->requests[0]['body']
         );
-
-        self::assertSame($expectedId, $id);
     }
 
-    public function testUnsubscribeCallsDeleteWithSemicolonSeparatedIds(): void
+    public function testSubscribeThrowsWhenTheResponseHasNoIds(): void
     {
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::once())
-            ->method('deleteWebhookSubscriptions')
-            ->with(
-                self::identicalTo('10;20;30'),
-                self::isType('string')
-            );
+        $service = $this->createService('{"data":{"ids":[]}}');
 
-        $service = new WebhookService($this->getApiKey(), $api);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unexpected response: no subscription IDs returned.');
+
+        $service->subscribe(WebhookService::HOOK_SHOP_UPDATED, 'https://example.com/shop');
+    }
+
+    public function testUnsubscribeSendsTheIdsSeparatedBySemicolons(): void
+    {
+        $service = $this->createService('', 204);
+
         $service->unsubscribe(10, 20, 30);
+
+        self::assertSame('DELETE', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/webhook_subscriptions/10%3B20%3B30', $this->requests[0]['url']);
     }
 
     public function testUnsubscribeReturnsEarlyOnNoIds(): void
     {
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::never())
-            ->method('deleteWebhookSubscriptions');
+        $this->createService('', 204)->unsubscribe();
 
-        $service = new WebhookService($this->getApiKey(), $api);
-        $service->unsubscribe();
+        self::assertSame([], $this->requests);
+    }
+
+    public function testAnErrorResponseThrowsTheGeneratedException(): void
+    {
+        $service = $this->createService('{"message":"Not found"}', 404);
+
+        try {
+            $service->unsubscribe(10);
+            self::fail('A 404 response must throw.');
+        } catch (DeleteWebhookSubscriptionsClientErrorException $exception) {
+            self::assertSame(404, $exception->getResponse()->getStatusCode());
+        }
     }
 
     public function testGetAllReturnsSubscriptions(): void
     {
-        $webhook1 = new WebhooksResponsesWebhookV11([
-            'id'   => 1,
-            'hook' => 'shipment_status_change',
-            'url'  => 'https://example.com/hook1',
-        ]);
-        $webhook2 = new WebhooksResponsesWebhookV11([
-            'id'   => 2,
-            'hook' => 'order_status_change',
-            'url'  => 'https://example.com/hook2',
-        ]);
+        $service = $this->createService(self::SUBSCRIPTIONS);
 
-        $data     = new WebhooksResponsesWebhookSubscriptionsV11Data(['webhook_subscriptions' => [$webhook1, $webhook2]]);
-        $response = new WebhooksResponsesWebhookSubscriptionsV11(['data' => $data]);
+        $result = $service->getAll();
 
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::once())
-            ->method('getWebhookSubscriptions')
-            ->with(self::isNull(), self::isType('string'))
-            ->willReturn($response);
-
-        $service = new WebhookService($this->getApiKey(), $api);
-        $result  = $service->getAll();
-
+        self::assertSame('GET', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/webhook_subscriptions', $this->requests[0]['url']);
         self::assertCount(2, $result);
-        self::assertSame('shipment_status_change', $result[0]->getHook());
-        self::assertSame('order_status_change', $result[1]->getHook());
+        self::assertSame(7, $result[0]->id);
+        self::assertSame('shipment_status_change', $result[0]->hook);
+        self::assertSame('order_status_change', $result[1]->hook);
     }
 
-    public function testGetAllWithHookFilterPassesHookToApi(): void
+    public function testGetAllWithHookFilterSendsTheHook(): void
     {
-        $data     = new WebhooksResponsesWebhookSubscriptionsV11Data(['webhook_subscriptions' => []]);
-        $response = new WebhooksResponsesWebhookSubscriptionsV11(['data' => $data]);
+        $service = $this->createService('{"data":{"webhook_subscriptions":[]}}');
 
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::once())
-            ->method('getWebhookSubscriptions')
-            ->with(
-                self::identicalTo('shipment_label_created'),
-                self::isType('string')
-            )
-            ->willReturn($response);
+        $result = $service->getAll(WebhookService::HOOK_SHIPMENT_LABEL_CREATED);
 
-        $service = new WebhookService($this->getApiKey(), $api);
-        $result  = $service->getAll(WebhookService::HOOK_SHIPMENT_LABEL_CREATED);
-
+        self::assertSame('https://api.myparcel.nl/webhook_subscriptions?hook=shipment_label_created', $this->requests[0]['url']);
         self::assertSame([], $result);
     }
 
     public function testGetByIdReturnsSubscriptions(): void
     {
-        $webhook = new WebhooksResponsesWebhookV11([
-            'id'   => 99,
-            'hook' => 'shop_updated',
-            'url'  => 'https://example.com/shop',
-        ]);
+        $service = $this->createService(
+            '{"data":{"webhook_subscriptions":[{"id":99,"account_id":1,"shop_id":2,"hook":"shop_updated","url":"https://example.com/shop"}]}}'
+        );
 
-        $data     = new WebhooksResponsesWebhookSubscriptionsV11Data(['webhook_subscriptions' => [$webhook]]);
-        $response = new WebhooksResponsesWebhookSubscriptionsV11(['data' => $data]);
+        $result = $service->getById(99);
 
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::once())
-            ->method('getWebhookSubscriptionsById')
-            ->with(
-                self::identicalTo('99'),
-                self::isType('string')
-            )
-            ->willReturn($response);
-
-        $service = new WebhookService($this->getApiKey(), $api);
-        $result  = $service->getById(99);
-
+        self::assertSame('https://api.myparcel.nl/webhook_subscriptions/99', $this->requests[0]['url']);
         self::assertCount(1, $result);
-        self::assertSame('shop_updated', $result[0]->getHook());
+        self::assertSame('shop_updated', $result[0]->hook);
     }
 
     public function testGetByIdReturnsEmptyOnNoIds(): void
     {
-        $api = $this->createMock(WebhookApi::class);
-        $api->expects(self::never())
-            ->method('getWebhookSubscriptionsById');
-
-        $service = new WebhookService($this->getApiKey(), $api);
-        $result  = $service->getById();
-
-        self::assertSame([], $result);
+        self::assertSame([], $this->createService(self::SUBSCRIPTIONS)->getById());
+        self::assertSame([], $this->requests);
     }
 
     public function testHookConstantsMatchLegacyValues(): void
@@ -170,5 +128,22 @@ final class WebhookServiceTest extends TestCase
         self::assertSame('order_status_change', WebhookService::HOOK_ORDER_STATUS_CHANGE);
         self::assertSame('shop_carrier_accessibility_updated', WebhookService::HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED);
         self::assertSame('shop_updated', WebhookService::HOOK_SHOP_UPDATED);
+    }
+
+    private function createService(string $body, int $status = 200): WebhookService
+    {
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body, $status): MockResponse {
+            $this->requests[] = [
+                'method'       => $method,
+                'url'          => $url,
+                'content_type' => array_map(static fn(string $line): string => substr($line, 14), $options['normalized_headers']['content-type'] ?? []),
+                'user_agent'   => $options['normalized_headers']['user-agent'] ?? [],
+                'body'         => (string) ($options['body'] ?? ''),
+            ];
+
+            return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]);
+        });
+
+        return new WebhookService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
     }
 }
