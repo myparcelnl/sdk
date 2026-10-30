@@ -20,6 +20,10 @@ trait HasUserAgent
     }
 
     /**
+     * The services that run on Jane send this header with each request, not once in the constructor.
+     * So a User-Agent that an integrator sets later, such as with setUserAgentForProposition(), also
+     * goes out.
+     *
      * @return string
      */
     public function getUserAgentHeader(): string
