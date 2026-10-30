@@ -98,7 +98,7 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
     {
         return new CarrierContractDefinitionsService(
             'my-api-key',
-            ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0', [], $this->mockHttpClient($body, $status, $contentType))
+            ShipmentApiFactory::make('my-api-key', null, 'MyPlugin/1.0', [], $this->mockHttpClient($body, $status, $contentType))
         );
     }
 }

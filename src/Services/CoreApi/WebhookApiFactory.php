@@ -29,6 +29,6 @@ final class WebhookApiFactory
         array $headers = [],
         ?HttpClientInterface $httpClient = null
     ): Client {
-        return ShipmentApiFactory::client($apiKey, $host, $userAgent, $headers, $httpClient);
+        return ShipmentApiFactory::make($apiKey, $host, $userAgent, $headers, $httpClient);
     }
 }

@@ -16,8 +16,9 @@ use RuntimeException;
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     use MockeryPHPUnitIntegration;
-    protected const ENV_CI          = 'CI';
-    protected const ENV_TEST_ORDERS = 'TEST_ORDERS';
+    protected const ENV_CI            = 'CI';
+    protected const ENV_TEST_ORDERS   = 'TEST_ORDERS';
+    protected const ENV_LIVE_API_HOST = 'MYPARCEL_API_BASE_URL';
 
     /**
      * @var \Faker\Factory
@@ -163,5 +164,18 @@ class TestCase extends \PHPUnit\Framework\TestCase
         }
 
         self::markTestSkipped("Test skipped: $reason\n\nSet environment variable '$env=true' to override.");
+    }
+
+    /**
+     * Return the API host for the live smoke tests.
+     *
+     * The legacy MyParcelRequest also reads MYPARCEL_API_BASE_URL. So one variable sends all live
+     * requests to the same host, such as https://api.acceptance.myparcel.nl.
+     *
+     * @return null|string Null when the variable is not set. The services then use the production host.
+     */
+    protected static function liveApiHost(): ?string
+    {
+        return getenv(self::ENV_LIVE_API_HOST) ?: null;
     }
 }
