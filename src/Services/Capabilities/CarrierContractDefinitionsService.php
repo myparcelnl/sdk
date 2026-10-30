@@ -46,7 +46,7 @@ final class CarrierContractDefinitionsService
         ?string $host = null,
         ?Client $api = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host, $this->getUserAgentHeader());
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host, $this->getUserAgentHeader());
     }
 
     /**

@@ -106,7 +106,7 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         return new CarrierContractDefinitionsService(
             'my-api-key',
             null,
-            ShipmentApiFactory::client('my-api-key', null, null, [], $httpClient)
+            ShipmentApiFactory::make('my-api-key', null, null, [], $httpClient)
         );
     }
 }

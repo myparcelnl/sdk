@@ -22,6 +22,8 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 {
     private string $liveApiKey;
 
+    private ?string $liveHost;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -33,6 +35,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
         }
 
         $this->liveApiKey = $key;
+        $this->liveHost   = self::liveApiHost();
 
         // Reset curl factory so real HTTP calls go through.
         \MyParcelNL\Sdk\Model\MyParcelRequest::setCurlFactory(null);
@@ -93,7 +96,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
         $collection = new ShipmentCollection();
         $collection->push($shipment);
-        $createService = new ShipmentCreateService($this->liveApiKey);
+        $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
 
         try {
             $result = $createService->create($collection);
@@ -121,7 +124,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
             $this->createMinimalNlShipment($ref1),
             $this->createMinimalNlShipment($ref2)
         );
-        $createService = new ShipmentCreateService($this->liveApiKey);
+        $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
 
         try {
             $result = $createService->create($collection);
@@ -150,7 +153,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
 
         $collection = new ShipmentCollection();
         $collection->push($shipment);
-        $createService = new ShipmentCreateService($this->liveApiKey);
+        $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
 
         try {
             $result = $createService->create($collection);
@@ -172,7 +175,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
         $refId = 'smoke-format-' . uniqid('', true);
         $collection = new ShipmentCollection();
         $collection->push($this->createMinimalNlShipment($refId));
-        $createService = new ShipmentCreateService($this->liveApiKey);
+        $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
 
         try {
             $result = $createService->create($collection, 'A4', '1;2;3;4');
@@ -194,7 +197,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
     public function testCreateConceptsThrowsWhenEmpty(): void
     {
         $collection = new ShipmentCollection();
-        $createService = new ShipmentCreateService($this->liveApiKey);
+        $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
 
         $this->expectException(\InvalidArgumentException::class);
         $createService->create($collection);
@@ -207,7 +210,7 @@ final class ShipmentCollectionLiveSmokeTest extends TestCase
     public function testCollectionIsReusableAfterClear(): void
     {
         $collection = new ShipmentCollection();
-        $createService = new ShipmentCreateService($this->liveApiKey);
+        $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
 
         // First batch
         $ref1 = 'smoke-reuse-1-' . uniqid('', true);

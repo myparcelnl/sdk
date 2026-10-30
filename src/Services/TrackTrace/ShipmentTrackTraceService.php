@@ -28,7 +28,7 @@ final class ShipmentTrackTraceService
         ?Client $api = null,
         ?string $baseUri = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $baseUri);
+        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $baseUri);
     }
 
     /**
