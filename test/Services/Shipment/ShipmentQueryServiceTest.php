@@ -152,6 +152,32 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
+     * The spec allows a region of two upper-case letters or `Wereld`.
+     *
+     * @return array<string, array{string}>
+     */
+    public function provideRegions(): array
+    {
+        return ['EU' => ['EU'], 'NL' => ['NL'], 'BE' => ['BE'], 'Wereld' => ['Wereld']];
+    }
+
+    /**
+     * @dataProvider provideRegions
+     */
+    public function testAFoundShipmentEncodesToJsonWithEveryRegion(string $region): void
+    {
+        $result = $this->createService([['id' => 1, 'region' => $region]])->find(1);
+
+        self::assertNotNull($result);
+        self::assertSame($region, $result->getRegion());
+
+        $json = json_decode(json_encode($result, JSON_THROW_ON_ERROR), true);
+
+        self::assertSame(1, $json['id']);
+        self::assertSame($region, $json['region']);
+    }
+
+    /**
      * @param array<int, array<string, mixed>> $shipments The shipments in the response.
      */
     private function createService(array $shipments): ShipmentQueryService

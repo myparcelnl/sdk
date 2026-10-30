@@ -75,6 +75,18 @@ final class ShipmentTrackTraceServiceTest extends TestCase
         self::assertSame('NL', $result[99]->getRecipient()->cc);
     }
 
+    public function testATrackTraceEncodesToJsonWithTheApiNames(): void
+    {
+        $result = $this->createService([['shipment_id' => 7, 'link_tracktrace' => 'https://track.test/7', 'code' => 'DELIVERED']])
+            ->fetchTrackTraceData([7]);
+
+        $json = json_decode(json_encode($result[7], JSON_THROW_ON_ERROR), true);
+
+        self::assertSame(7, $json['shipment_id']);
+        self::assertSame('DELIVERED', $json['code']);
+        self::assertSame('https://track.test/7', $json['link_tracktrace']);
+    }
+
     public function testATrackTraceWithoutShipmentIdIsSkipped(): void
     {
         $result = $this->createService([['code' => 'DELIVERED'], ['shipment_id' => 7, 'code' => 'DELIVERED']])
