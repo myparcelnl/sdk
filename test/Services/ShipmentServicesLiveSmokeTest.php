@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrierReturns;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
@@ -190,7 +190,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             $returnService = new ReturnShipmentService($this->liveApiKey, host: $this->liveHost);
             $result = $returnService->createRelated([[
                 'parent'               => $parentShipmentId,
-                'carrier'              => RefTypesCarrierReturns::NUMBER_1,
+                'carrier'              => RefTypesCarrierReturns::Value1->value,
                 'email'                => 'smoke@myparcel.nl',
                 'name'                 => 'Smoke Return',
                 'reference_identifier' => 'smoke-related-return-' . uniqid('', true),
@@ -213,7 +213,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         try {
             $returnService = new ReturnShipmentService($this->liveApiKey, host: $this->liveHost);
             $result = $returnService->createUnrelated([[
-                'carrier'              => RefTypesCarrierReturns::NUMBER_1,
+                'carrier'              => RefTypesCarrierReturns::Value1->value,
                 'email'                => 'smoke@myparcel.nl',
                 'name'                 => 'Smoke Unrelated Return',
                 'reference_identifier' => 'smoke-unrelated-return-' . uniqid('', true),
