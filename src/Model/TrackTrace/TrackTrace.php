@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\TrackTrace;
 
+use JsonSerializable;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentShipmentOptions;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsDeliveryMomentPropertiesTimeFrame;
@@ -13,14 +14,16 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentSende
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTrace;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTraceStatus;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackingLocation;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 
 /**
  * A track and trace result that `ShipmentTrackTraceService` returns, with the getters of v11.
  *
  * A getter returns null for a field that the API did not send. `ReadModelGettersTest` fails when
- * the Jane model `ShipmentDefsTrackTrace` gets a property without a getter here.
+ * the Jane model `ShipmentDefsTrackTrace` gets a property without a getter here. `json_encode()`
+ * gives the fields with their API names, as in v11.
  */
-final class TrackTrace
+final class TrackTrace implements JsonSerializable
 {
     public function __construct(private readonly ShipmentDefsTrackTrace $trackTrace)
     {
@@ -32,6 +35,14 @@ final class TrackTrace
     public function toApiModel(): ShipmentDefsTrackTrace
     {
         return $this->trackTrace;
+    }
+
+    /**
+     * @return array<string, mixed> The fields that the API sent, with their API names.
+     */
+    public function jsonSerialize(): array
+    {
+        return CoreApiModels::toArray($this->trackTrace);
     }
 
     public function getShipmentId(): ?int
