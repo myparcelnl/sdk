@@ -58,9 +58,12 @@ final class ShipmentOptionMapper
     private static ?array $v2Properties = null;
 
     /**
-     * Return the generated PHP property for a legacy option name or a v2 JSON/property name.
+     * Return the snake_case v2 name for a legacy option name or a v2 JSON/property name.
      * For example, both signature and requiresSignature resolve to requires_signature.
      * Unknown and unsupported names return null.
+     *
+     * The snake_case name is the property name of the openapi-generator models of v11. The PDK reads
+     * it, so it stays the same with Jane, which names the property requiresSignature.
      *
      * @param  string $name
      *
