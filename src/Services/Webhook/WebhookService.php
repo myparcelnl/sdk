@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Webhook;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefWebhookWebhookV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefWebhookWebhookV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookV11;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
 
 /**
- * Service for managing webhook subscriptions via the generated WebhookApi.
+ * Service for managing webhook subscriptions via the Jane Core API client.
  *
  * Replaces the legacy AbstractWebhookWebService and its 5 concrete subclasses.
+ *
+ * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
+ * subscribe() and unsubscribe() keeps working.
+ *
+ * getAll() and getById() return the Jane models, without v11 getters: the v11 guide, the PDK and the
+ * Magento module call only subscribe() and unsubscribe(). An own class with getters can only come
+ * in a major release, because it changes the return type.
  */
 final class WebhookService
 {
@@ -27,9 +36,9 @@ final class WebhookService
     public const HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED = 'shop_carrier_accessibility_updated';
     public const HOOK_SHOP_UPDATED                       = 'shop_updated';
 
-    private WebhookApi $api;
+    private Client $api;
 
-    public function __construct(string $apiKey, ?WebhookApi $api = null, ?string $host = null)
+    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
     {
         $this->api = $api ?? WebhookApiFactory::make($apiKey, $host);
     }
@@ -44,31 +53,28 @@ final class WebhookService
      */
     public function subscribe(string $hook, string $url): int
     {
-        $webhook = new RefWebhookWebhookV11([
-            'hook' => $hook,
-            'url'  => $url,
-        ]);
+        $webhook       = new RefWebhookWebhookV11();
+        $webhook->hook = $hook;
+        $webhook->url  = $url;
 
-        $data = new WebhooksPostWebhookSubscriptionsRequestV11Data([
-            'webhook_subscriptions' => [$webhook],
-        ]);
+        $data                       = new WebhooksPostWebhookSubscriptionsRequestV11Data();
+        $data->webhookSubscriptions = [$webhook];
 
-        $request = new WebhooksPostWebhookSubscriptionsRequestV11([
-            'data' => $data,
-        ]);
+        $request       = new WebhooksPostWebhookSubscriptionsRequestV11();
+        $request->data = $data;
 
         $response = $this->api->postWebhookSubscriptions(
             $request,
-            $this->getUserAgentHeader()
+            ['User-Agent' => $this->getUserAgentHeader()]
         );
 
-        $data = $response->getData();
+        $ids = $response instanceof WebhooksResponsesPostWebhookSubscriptions ? ($response->data->ids ?? []) : [];
 
-        if (null === $data || empty($data->getIds())) {
+        if (empty($ids)) {
             throw new \RuntimeException('Unexpected response: no subscription IDs returned.');
         }
 
-        return $data->getIds()[0]->getId();
+        return $ids[0]->id;
     }
 
     /**
@@ -84,7 +90,7 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $this->api->deleteWebhookSubscriptions($ids, $this->getUserAgentHeader());
+        $this->api->deleteWebhookSubscriptions($ids, ['User-Agent' => $this->getUserAgentHeader()]);
     }
 
     /**
@@ -97,13 +103,11 @@ final class WebhookService
     public function getAll(?string $hook = null): array
     {
         $response = $this->api->getWebhookSubscriptions(
-            $hook,
-            $this->getUserAgentHeader()
+            null !== $hook ? ['hook' => $hook] : [],
+            ['User-Agent' => $this->getUserAgentHeader()]
         );
 
-        $data = $response->getData();
-
-        return null !== $data ? ($data->getWebhookSubscriptions() ?? []) : [];
+        return self::subscriptions($response);
     }
 
     /**
@@ -123,11 +127,19 @@ final class WebhookService
 
         $response = $this->api->getWebhookSubscriptionsById(
             $ids,
-            $this->getUserAgentHeader()
+            ['User-Agent' => $this->getUserAgentHeader()]
         );
 
-        $data = $response->getData();
+        return self::subscriptions($response);
+    }
 
-        return null !== $data ? ($data->getWebhookSubscriptions() ?? []) : [];
+    /**
+     * @return WebhooksResponsesWebhookV11[]
+     */
+    private static function subscriptions(mixed $response): array
+    {
+        return $response instanceof WebhooksResponsesWebhookSubscriptionsV11
+            ? ($response->data->webhookSubscriptions ?? [])
+            : [];
     }
 }
