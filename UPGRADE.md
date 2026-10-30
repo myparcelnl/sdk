@@ -91,22 +91,24 @@ The generated client checks a shipment against the API specification before it s
 ### Generated OpenAPI models
 
 > [!IMPORTANT]
-> The changes below are changes in the generated OpenAPI models in `MyParcelNL\Sdk\Client\Generated`. v12 generates them with openapi-generator 7.26.0 instead of 7.12.0. They reach you through the services, or directly when you use the generated API clients and models.
+> v12 removes the OpenAPI Generator clients and models of the Core API, the private Core API, the IAM API and the Order API: `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi` in `MyParcelNL\Sdk\Client\Generated`. Use the services, or the Jane clients and models in `MyParcelNL\Sdk\Client\Generated\Jane`. The Jane models use public properties instead of getters and setters, and PHP enums instead of class constants.
 
-#### Through the services
+Most Jane models have the same name as the old model, such as `ShipmentDefsShipmentSender`. The old client gave some inline schemas a shorter name. Jane uses the full name of the schema:
 
-| Service | Class with the change | v11 | v12 |
-|---------|-----------------------|-----|-----|
-| `ReturnShipmentService` and the other services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| v11 | v12 |
+|-----|-----|
+| `CoreApi\Model\ShipmentRequest` | `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`. The `Shipment` model of the SDK builds it with `toApiModel()` |
+| `CoreApi\Model\CapabilitiesRecipientV2`, `CapabilitiesSenderV2`, `CapabilitiesOptionsV2` and `CapabilitiesPhysicalPropertiesV2` | `Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient`, `...Sender`, `...Options` and `...PhysicalProperties` |
+| `CoreApi\Model\RefTypesCarrierV2` | `Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2` |
 
-#### Direct use of `MyParcelNL\Sdk\Client\Generated`
+#### The legacy e-commerce client
 
-The rows above also apply when you use these classes directly. In addition:
+The e-commerce client in `MyParcelNL\Sdk\Client\Generated\EcommerceApi` still comes from OpenAPI Generator. v12 generates it with openapi-generator 7.26.0 instead of 7.12.0:
 
 | Class with the change | v11 | v12 |
 |-----------------------|-----|-----|
-| Every generated `Api` class, such as `CoreApi\Api\ShipmentApi` and `IamApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
-| Every generated `Api` class | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
+| `EcommerceApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| `EcommerceApi\Api\DefaultApi` | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
 | `EcommerceApi\Model\PhysicalProperties` | `getHeight()`, `getLength()` and `getWidth()` return `PhysicalPropertiesHeight`, `PhysicalPropertiesLength` and `PhysicalPropertiesWidth` | They return `Dimension`, and the three classes are removed. Use the `UNIT_MM`, `UNIT_CM` and `UNIT_M` constants on `Dimension`. |
 
 ## Upgrading to v11.2

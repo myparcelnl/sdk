@@ -6,8 +6,8 @@ namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
 use DateTime;
 use Faker\Factory;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
@@ -93,14 +93,14 @@ class OrderCollectionTest extends TestCase
         // 3 orders
         for ($i = 0; $i < 3; $i++) {
             $deliveryTypes = [
-                RefTypesDeliveryTypeV2::MORNING,
-                RefTypesDeliveryTypeV2::STANDARD,
-                RefTypesDeliveryTypeV2::EVENING,
+                RefTypesDeliveryTypeV2::Morning->value,
+                RefTypesDeliveryTypeV2::Standard->value,
+                RefTypesDeliveryTypeV2::Evening->value,
             ];
             $shipmentOptions = (new ShipmentOptions())
                 ->setDeliveryDate((new \DateTime())->format('Y-m-d H:i:s'))
                 ->setDeliveryType($deliveryTypes[$i])
-                ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+                ->setPackageType(RefShipmentPackageTypeV2::Package);
 
             $order      = $this->generateOrder($shipmentOptions);
             $order->setCarrierId(1);
@@ -179,8 +179,8 @@ class OrderCollectionTest extends TestCase
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
         $shipmentOptions = (new ShipmentOptions())
-            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+            ->setDeliveryType(RefTypesDeliveryTypeV2::Standard)
+            ->setPackageType(RefShipmentPackageTypeV2::Package);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();
@@ -278,8 +278,8 @@ class OrderCollectionTest extends TestCase
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
         $shipmentOptions = (new ShipmentOptions())
-            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+            ->setDeliveryType(RefTypesDeliveryTypeV2::Standard)
+            ->setPackageType(RefShipmentPackageTypeV2::Package);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();

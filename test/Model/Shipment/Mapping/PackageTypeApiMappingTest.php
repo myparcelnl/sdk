@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Shipment\Mapping;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Model\Shipment\Mapping\PackageTypeApiMapping;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionClass;
 
 /**
  * Preserves the public conversion, validation and exception contracts of PackageTypeApiMapping.
@@ -26,15 +25,15 @@ class PackageTypeApiMappingTest extends TestCase
 
     public function testEnumToIdReturnsCorrectId(): void
     {
-        $this->assertSame(RefShipmentPackageType::PACKAGE, $this->mapping->enumToId(RefShipmentPackageTypeV2::PACKAGE));
-        $this->assertSame(RefShipmentPackageType::UNFRANKED, $this->mapping->enumToId(RefShipmentPackageTypeV2::UNFRANKED));
-        $this->assertSame(RefShipmentPackageType::SMALL_PACKAGE, $this->mapping->enumToId(RefShipmentPackageTypeV2::SMALL_PACKAGE));
+        $this->assertSame(RefShipmentPackageType::Package->value, $this->mapping->enumToId(RefShipmentPackageTypeV2::Package->value));
+        $this->assertSame(RefShipmentPackageType::Unfranked->value, $this->mapping->enumToId(RefShipmentPackageTypeV2::Unfranked->value));
+        $this->assertSame(RefShipmentPackageType::SmallPackage->value, $this->mapping->enumToId(RefShipmentPackageTypeV2::SmallPackage->value));
     }
 
     public function testIdToEnumReturnsCorrectEnum(): void
     {
-        $this->assertSame(RefShipmentPackageTypeV2::PACKAGE, $this->mapping->idToEnum(RefShipmentPackageType::PACKAGE));
-        $this->assertSame(RefShipmentPackageTypeV2::ENVELOPE, $this->mapping->idToEnum(RefShipmentPackageType::ENVELOPE));
+        $this->assertSame(RefShipmentPackageTypeV2::Package->value, $this->mapping->idToEnum(RefShipmentPackageType::Package->value));
+        $this->assertSame(RefShipmentPackageTypeV2::Envelope->value, $this->mapping->idToEnum(RefShipmentPackageType::Envelope->value));
     }
 
     public function testRoundTripHoldsForEveryPackageType(): void
@@ -63,8 +62,8 @@ class PackageTypeApiMappingTest extends TestCase
     {
         $this->assertCount(
             count(array_intersect_key(
-                (new ReflectionClass(RefShipmentPackageType::class))->getConstants(),
-                (new ReflectionClass(RefShipmentPackageTypeV2::class))->getConstants()
+                array_flip(array_column(RefShipmentPackageType::cases(), 'name')),
+                array_flip(array_column(RefShipmentPackageTypeV2::cases(), 'name'))
             )),
             $this->mapping->all()
         );
@@ -74,13 +73,13 @@ class PackageTypeApiMappingTest extends TestCase
     {
         $all = $this->mapping->all();
 
-        $this->assertArrayHasKey(RefShipmentPackageTypeV2::MAILBOX, $all);
-        $this->assertSame(RefShipmentPackageType::MAILBOX, $all[RefShipmentPackageTypeV2::MAILBOX]);
+        $this->assertArrayHasKey(RefShipmentPackageTypeV2::Mailbox->value, $all);
+        $this->assertSame(RefShipmentPackageType::Mailbox->value, $all[RefShipmentPackageTypeV2::Mailbox->value]);
     }
 
     public function testIsValidReturnsTrueForKnownValue(): void
     {
-        $this->assertTrue($this->mapping->isValid(RefShipmentPackageTypeV2::DIGITAL_STAMP));
+        $this->assertTrue($this->mapping->isValid(RefShipmentPackageTypeV2::DigitalStamp->value));
     }
 
     public function testIsValidReturnsFalseForUnknownValue(): void

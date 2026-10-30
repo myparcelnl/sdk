@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Shipment\Mapping;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Model\Shipment\Mapping\DeliveryTypeApiMapping;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionClass;
 
 class DeliveryTypeApiMappingTest extends TestCase
 {
@@ -23,13 +22,13 @@ class DeliveryTypeApiMappingTest extends TestCase
 
     public function testEnumToIdReturnsCorrectId(): void
     {
-        $this->assertSame(RefTypesDeliveryType::MORNING, $this->mapping->enumToId(RefTypesDeliveryTypeV2::MORNING));
-        $this->assertSame(RefTypesDeliveryType::STANDARD, $this->mapping->enumToId(RefTypesDeliveryTypeV2::STANDARD));
-        $this->assertSame(RefTypesDeliveryType::EVENING, $this->mapping->enumToId(RefTypesDeliveryTypeV2::EVENING));
-        $this->assertSame(RefTypesDeliveryType::PICKUP, $this->mapping->enumToId(RefTypesDeliveryTypeV2::PICKUP));
-        $this->assertSame(RefTypesDeliveryType::SAME_DAY, $this->mapping->enumToId(RefTypesDeliveryTypeV2::SAME_DAY));
-        $this->assertSame(RefTypesDeliveryType::EXPRESS, $this->mapping->enumToId(RefTypesDeliveryTypeV2::EXPRESS));
-        $this->assertSame(RefTypesDeliveryType::EARLY_MORNING, $this->mapping->enumToId(RefTypesDeliveryTypeV2::EARLY_MORNING));
+        $this->assertSame(RefTypesDeliveryType::Morning->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::Morning->value));
+        $this->assertSame(RefTypesDeliveryType::Standard->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::Standard->value));
+        $this->assertSame(RefTypesDeliveryType::Evening->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::Evening->value));
+        $this->assertSame(RefTypesDeliveryType::Pickup->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::Pickup->value));
+        $this->assertSame(RefTypesDeliveryType::SameDay->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::SameDay->value));
+        $this->assertSame(RefTypesDeliveryType::Express->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::Express->value));
+        $this->assertSame(RefTypesDeliveryType::EarlyMorning->value, $this->mapping->enumToId(RefTypesDeliveryTypeV2::EarlyMorning->value));
     }
 
     public function testEnumToIdThrowsForUnknownValue(): void
@@ -40,9 +39,9 @@ class DeliveryTypeApiMappingTest extends TestCase
 
     public function testIdToEnumReturnsCorrectEnum(): void
     {
-        $this->assertSame(RefTypesDeliveryTypeV2::MORNING, $this->mapping->idToEnum(RefTypesDeliveryType::MORNING));
-        $this->assertSame(RefTypesDeliveryTypeV2::STANDARD, $this->mapping->idToEnum(RefTypesDeliveryType::STANDARD));
-        $this->assertSame(RefTypesDeliveryTypeV2::PICKUP, $this->mapping->idToEnum(RefTypesDeliveryType::PICKUP));
+        $this->assertSame(RefTypesDeliveryTypeV2::Morning->value, $this->mapping->idToEnum(RefTypesDeliveryType::Morning->value));
+        $this->assertSame(RefTypesDeliveryTypeV2::Standard->value, $this->mapping->idToEnum(RefTypesDeliveryType::Standard->value));
+        $this->assertSame(RefTypesDeliveryTypeV2::Pickup->value, $this->mapping->idToEnum(RefTypesDeliveryType::Pickup->value));
     }
 
     public function testIdToEnumThrowsForUnknownId(): void
@@ -57,18 +56,18 @@ class DeliveryTypeApiMappingTest extends TestCase
 
         $this->assertCount(
             count(array_intersect_key(
-                (new ReflectionClass(RefTypesDeliveryType::class))->getConstants(),
-                (new ReflectionClass(RefTypesDeliveryTypeV2::class))->getConstants()
+                array_flip(array_column(RefTypesDeliveryType::cases(), 'name')),
+                array_flip(array_column(RefTypesDeliveryTypeV2::cases(), 'name'))
             )),
             $all
         );
-        $this->assertArrayHasKey(RefTypesDeliveryTypeV2::MORNING, $all);
-        $this->assertArrayHasKey(RefTypesDeliveryTypeV2::EARLY_MORNING, $all);
+        $this->assertArrayHasKey(RefTypesDeliveryTypeV2::Morning->value, $all);
+        $this->assertArrayHasKey(RefTypesDeliveryTypeV2::EarlyMorning->value, $all);
     }
 
     public function testIsValidReturnsTrueForKnownValue(): void
     {
-        $this->assertTrue($this->mapping->isValid(RefTypesDeliveryTypeV2::STANDARD));
+        $this->assertTrue($this->mapping->isValid(RefTypesDeliveryTypeV2::Standard->value));
     }
 
     public function testIsValidReturnsFalseForUnknownValue(): void
@@ -102,7 +101,7 @@ class DeliveryTypeApiMappingTest extends TestCase
     {
         $all = $this->mapping->all();
 
-        $this->assertSame(RefTypesDeliveryType::EVENING, $all[RefTypesDeliveryTypeV2::EVENING]);
+        $this->assertSame(RefTypesDeliveryType::Evening->value, $all[RefTypesDeliveryTypeV2::Evening->value]);
     }
 
     /**
