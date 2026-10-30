@@ -54,13 +54,13 @@ final class JaneClientFactory
         ?HttpClientInterface $httpClient = null
     ): CoreApiClient {
         return CoreApiClient::create(
-            httpClient: new ProblemJsonAcceptHttpClient(self::createHttpClient(
+            httpClient: self::createHttpClient(
                 $host ?: self::CORE_API_HOST,
                 new CoreApiAuthentication(base64_encode($apiKey)),
                 $userAgent,
                 $headers,
                 $httpClient
-            )),
+            ),
             applyServerPlugins: false
         );
     }
