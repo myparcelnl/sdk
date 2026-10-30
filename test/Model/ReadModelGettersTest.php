@@ -10,6 +10,7 @@ use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
 use MyParcelNL\Sdk\Model\TrackTrace\TrackTrace;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -28,6 +29,32 @@ final class ReadModelGettersTest extends TestCase
         $missing = $this->missingGetters($readModel, $janeModel);
 
         self::assertSame([], $missing, sprintf('Add these getters to %s: %s', $readModel, implode(', ', $missing)));
+    }
+
+    /**
+     * @dataProvider provideReadModels
+     *
+     * @param class-string $readModel
+     * @param class-string $janeModel
+     */
+    public function testEveryGetterReturnsItsPropertyOfTheJaneModel(string $readModel, string $janeModel): void
+    {
+        $model    = new $janeModel();
+        $expected = [];
+
+        foreach ((new ReflectionClass($janeModel))->getProperties(ReflectionProperty::IS_PUBLIC) as $seed => $property) {
+            $getter = 'get' . ucfirst($property->getName());
+            $value  = AccessorValues::acceptedByBoth($property->getType(), (new ReflectionMethod($readModel, $getter))->getReturnType(), $seed);
+
+            $model->{$property->getName()} = $value;
+            $expected[$getter]             = $value;
+        }
+
+        $read = new $readModel($model);
+
+        foreach ($expected as $getter => $value) {
+            self::assertSame($value, $read->{$getter}(), "{$readModel}::{$getter}()");
+        }
     }
 
     /**
