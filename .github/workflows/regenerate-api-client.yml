@@ -39,7 +39,7 @@ jobs:
         run: |
           docker compose --profile openapi run --rm generate-api
 
-      # Generate the Jane clients with the Jane version from composer.lock (PHP 8.3)
+      # Generate the Jane clients with the Jane version that composer.json requires (PHP 8.3)
       - name: Generate Jane clients (PHP 8.3)
         run: |
           docker run --rm -t \
@@ -93,7 +93,7 @@ jobs:
           body: |
             Automated update of OpenAPI-based clients in the SDK based on changes in the MyParcel OpenAPI schemas.
 
-            - Generated the Jane clients via `vendor/bin/jane-openapi generate`, with `.jane-openapi` and `.jane-openapi-core` (Jane version from `composer.lock`)
+            - Generated the Jane clients via `vendor/bin/jane-openapi generate`, with `.jane-openapi` and `.jane-openapi-core` (the Jane version that `composer.json` requires)
             - Generated the legacy e-commerce client via `docker compose --profile openapi run --rm generate-api` (openapi-generator version from `docker-compose.yml`)
           labels: |
             automated
