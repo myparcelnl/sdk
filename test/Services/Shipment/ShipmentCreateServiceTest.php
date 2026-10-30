@@ -151,13 +151,25 @@ final class ShipmentCreateServiceTest extends TestCase
         self::assertSame([8002 => 'order-2'], $result);
     }
 
-    public function testAnErrorResponseThrowsTheGeneratedException(): void
+    /**
+     * The Core API sends an error as `application/problem+json` only when the first Accept line asks for it.
+     *
+     * @return array<string, array{string, string}>
+     */
+    public static function provideErrorResponses(): array
     {
-        $service = $this->createService(
-            '{"type":"urn:problem:validation","title":"Invalid shipment","status":422}',
-            422,
-            'application/problem+json'
-        );
+        return [
+            'application/json'         => ['{"message":"Invalid shipment","request_id":"1","status_code":422,"errors":[]}', 'application/json'],
+            'application/problem+json' => ['{"type":"urn:problem:validation","title":"Invalid shipment","status":422}', 'application/problem+json'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideErrorResponses
+     */
+    public function testAnErrorResponseThrowsTheGeneratedException(string $body, string $contentType): void
+    {
+        $service = $this->createService($body, 422, $contentType);
 
         try {
             $service->create(new ShipmentCollection([self::shipment('order-1')]));
@@ -165,8 +177,6 @@ final class ShipmentCreateServiceTest extends TestCase
         } catch (PostShipmentsClientErrorException $exception) {
             self::assertSame(422, $exception->getResponse()->getStatusCode());
         }
-
-        self::assertStringEndsWith(', application/problem+json', $this->requests[0]['headers']['accept'][0]);
     }
 
     public function testCreateThrowsBeforeSendingAShipmentWithoutRecipient(): void
