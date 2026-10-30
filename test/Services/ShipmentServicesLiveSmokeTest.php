@@ -321,16 +321,16 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             // 2. Get by ID (new capability, not in old services)
             $found = $service->getById($createdId);
             self::assertCount(1, $found);
-            self::assertSame($createdId, $found[0]->getId());
-            self::assertSame($hook, $found[0]->getHook());
-            self::assertSame($url, $found[0]->getUrl());
+            self::assertSame($createdId, $found[0]->id);
+            self::assertSame($hook, $found[0]->hook);
+            self::assertSame($url, $found[0]->url);
 
             // 3. List all filtered by hook (new capability)
             $all = $service->getAll($hook);
             self::assertNotEmpty($all, "Expected at least 1 subscription for hook '{$hook}'.");
 
             $matchingIds = array_map(
-                static function ($sub) { return $sub->getId(); },
+                static function ($sub) { return $sub->id; },
                 $all
             );
             self::assertContains($createdId, $matchingIds, "Created subscription should appear in filtered list.");

@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\CoreApi;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\HandlerStack;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
+use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 
 /**
- * Factory for creating the generated WebhookApi client.
+ * Factory for creating the Jane Core API client that WebhookService uses.
  */
 final class WebhookApiFactory
 {
     /**
      * Default HTTP client timeout in seconds.
      *
-     * Shared across all webhook services to ensure consistent behaviour.
-     * The MyParcel API typically responds within 2-3 seconds; 10 seconds
-     * provides headroom for webhook CRUD operations.
+     * Shared with generated-client based services to ensure consistent behaviour.
      */
-    public const DEFAULT_HTTP_TIMEOUT = 10;
+    public const DEFAULT_HTTP_TIMEOUT = JaneClientFactory::DEFAULT_HTTP_TIMEOUT;
 
     /**
-     * Create a configured WebhookApi client.
+     * Create a configured Core API client.
      *
      * @param string|null $apiKey Optional API key.
      * @param string|null $host Optional API host override.
@@ -34,46 +31,14 @@ final class WebhookApiFactory
         ?string $apiKey = null,
         ?string $host = null,
         ?string $userAgent = null
-    ): WebhookApi {
+    ): Client {
         $resolvedKey = self::resolveApiKey($apiKey);
 
         if ('' === $resolvedKey) {
-            throw new \InvalidArgumentException('API key cannot be empty');
+            throw new InvalidArgumentException('API key cannot be empty');
         }
 
-        $encoded = base64_encode($resolvedKey);
-
-        $config = new Configuration();
-        $config->setAccessToken($encoded);
-
-        if ($host) {
-            $config->setHost($host);
-        }
-
-        if ($userAgent) {
-            $config->setUserAgent($userAgent);
-        }
-
-        $stack = self::createHandlerStack();
-
-        $httpOptions = [
-            'timeout' => self::DEFAULT_HTTP_TIMEOUT,
-            'handler' => $stack,
-            'debug'   => false,
-        ];
-
-        if ($host) {
-            $httpOptions['base_uri'] = $host;
-        }
-
-        $http = new GuzzleClient($httpOptions);
-
-        return new WebhookApi($http, $config);
-    }
-
-    private static function createHandlerStack(): HandlerStack
-    {
-        return HandlerStack::create();
+        return JaneClientFactory::coreApi($resolvedKey, $host, $userAgent);
     }
 
     /**
