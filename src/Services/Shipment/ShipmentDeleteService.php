@@ -8,6 +8,12 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
+/**
+ * Deletes shipments through the Jane Core API client.
+ *
+ * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
+ * it keeps working.
+ */
 final class ShipmentDeleteService
 {
     use HasUserAgent;
