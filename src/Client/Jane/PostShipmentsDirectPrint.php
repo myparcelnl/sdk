@@ -30,8 +30,7 @@ final class PostShipmentsDirectPrint extends PostShipments
      */
     public function __construct(ShipmentPostShipmentsRequestV11 $requestBody, string $printerGroupId, array $headerParameters = [])
     {
-        // The second Accept value makes the API send an error as application/problem+json,
-        // see ProblemJsonAcceptHttpClient.
+        // As in the generated endpoint, the second Accept value lists the error format of the spec.
         parent::__construct($requestBody, [], $headerParameters, [
             'Accept' => [sprintf(self::ACCEPT, $printerGroupId), 'application/problem+json'],
         ]);

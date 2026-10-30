@@ -40,7 +40,7 @@ final class ShipmentPrintServiceTest extends TestCase
         self::assertSame('https://api.myparcel.nl/shipments', $this->requests[0]['url']);
         self::assertSame(
             [
-                'application/vnd.shipment_label+json+print;printer-group-id=printer-group-1, application/problem+json',
+                'application/vnd.shipment_label+json+print;printer-group-id=printer-group-1',
                 'application/problem+json',
             ],
             $this->requests[0]['accept']
@@ -69,9 +69,25 @@ final class ShipmentPrintServiceTest extends TestCase
         $service->print(new ShipmentCollection([self::shipment('order-1')]), 'printer-group-1');
     }
 
-    public function testAnErrorResponseThrowsTheGeneratedException(): void
+    /**
+     * The Core API reads only the first Accept line, so it sends a direct print error as `application/json`.
+     *
+     * @return array<string, array{string, string}>
+     */
+    public static function provideErrorResponses(): array
     {
-        $service = $this->createService('{"type":"urn:problem:not-found","title":"Printer group not found","status":404}', 404, 'application/problem+json');
+        return [
+            'application/json'         => ['{"message":"Printer group not found","request_id":"1","status_code":404,"errors":[]}', 'application/json'],
+            'application/problem+json' => ['{"type":"urn:problem:not-found","title":"Printer group not found","status":404}', 'application/problem+json'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideErrorResponses
+     */
+    public function testAnErrorResponseThrowsTheGeneratedException(string $body, string $contentType): void
+    {
+        $service = $this->createService($body, 404, $contentType);
 
         try {
             $service->print(new ShipmentCollection([self::shipment('order-1')]), 'printer-group-1');
