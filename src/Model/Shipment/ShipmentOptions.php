@@ -17,6 +17,8 @@ use ReflectionProperty;
 /**
  * The options of a shipment, with the getters and setters of v11.
  *
+ * The class wraps the Jane model and does not extend it, for the same reason as `Shipment`.
+ *
  * A package type or delivery type can be an id, a v2 name such as `PACKAGE`, or an enum case. The
  * options store the id that the API expects.
  *

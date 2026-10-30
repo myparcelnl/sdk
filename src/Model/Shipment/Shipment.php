@@ -33,6 +33,9 @@ use ReflectionProperty;
  * setters, so this class keeps the v11 methods for integrators. When a regeneration changes the
  * Jane model, only this class must change, not the code of an integrator.
  *
+ * The class does not extend the Jane model. The Jane normalizer accepts only the exact model
+ * class, so it would not send a subclass.
+ *
  * A setter of a nested object, such as setRecipient(), takes an array with the API field names or
  * the Jane model. A carrier can be an id, a v2 name such as `POSTNL`, or an enum case.
  * `WriteModelAccessorsTest` fails when the Jane model gets a property without a getter and a setter here.
