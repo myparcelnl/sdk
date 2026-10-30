@@ -28,6 +28,9 @@ use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 /**
  * A shipment that `ShipmentQueryService` returns, with the getters of v11.
  *
+ * A Jane model has public properties and no getters. This class keeps the getters, so v11 code
+ * that reads a found shipment keeps working.
+ *
  * A getter returns null for a field that the API did not send. `ReadModelGettersTest` fails when
  * the Jane model `ShipmentDefsShipment` gets a property without a getter here. `json_encode()`
  * gives the fields with their API names, as in v11.
