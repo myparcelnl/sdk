@@ -11,6 +11,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
@@ -30,6 +31,7 @@ use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\Model\Fulfilment\Product;
 use MyParcelNL\Sdk\Model\Recipient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * @group live
@@ -154,7 +156,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         self::assertArrayHasKey($shipmentId, $result, 'Expected tracktrace for created shipment was not returned.');
 
         $trace = $result[$shipmentId];
-        self::assertSame($shipmentId, (int) $trace->getShipmentId());
+        self::assertSame($shipmentId, $trace->getShipmentId());
 
         // Assert data completeness: the hybrid approach should preserve all fields.
         self::assertNotNull($trace->getCode(), 'Expected tracktrace code to be present.');
@@ -181,19 +183,19 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         self::assertNotNull($foundById, 'Expected created shipment to be returned by find().');
-        self::assertSame($shipmentId, (int) $foundById->getId());
+        self::assertSame($shipmentId, $foundById->getId());
 
         // Assert data completeness: the hybrid approach should preserve recipient/street.
         $recipient = $foundById->getRecipient();
         self::assertNotNull($recipient, 'Expected recipient to be present on queried shipment.');
-        self::assertNotNull($recipient->getStreet(), 'Expected street to be present on recipient.');
-        self::assertSame('NL', $recipient->getCc());
+        self::assertNotNull($recipient->street ?? null, 'Expected street to be present on recipient.');
+        self::assertSame('NL', $recipient->cc);
 
         self::assertNotEmpty($foundByReference, 'Expected shipments to be returned by findByReferenceId().');
-        self::assertSame($shipmentId, (int) $foundByReference[0]->getId());
+        self::assertSame($shipmentId, $foundByReference[0]->getId());
 
         self::assertCount(1, $foundMany);
-        self::assertSame($shipmentId, (int) $foundMany[0]->getId());
+        self::assertSame($shipmentId, $foundMany[0]->getId());
     }
 
     public function testDeleteServiceDeletesCreatedShipmentConcept(): void
@@ -545,13 +547,19 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             return;
         }
 
-        if ($e instanceof ConnectException) {
+        if ($e instanceof ConnectException || $e instanceof TransportExceptionInterface) {
             $this->markTestSkipped('Skipping live smoke: connection error: ' . $message);
             return;
         }
 
-        if ($e instanceof RequestException && $e->getResponse()) {
-            $code = $e->getResponse()->getStatusCode();
+        $response = match (true) {
+            $e instanceof RequestException => $e->getResponse(),
+            $e instanceof WithResponseInterface => $e->getResponse(),
+            default => null,
+        };
+
+        if ($response) {
+            $code = $response->getStatusCode();
             if ($code >= 500 || 429 === $code) {
                 $this->markTestSkipped(sprintf(
                     'Skipping live smoke: transient API error HTTP %d: %s',

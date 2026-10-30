@@ -4,43 +4,33 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\FixedShipmentRecipient;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipmentsData;
-use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionMethod;
-use ReflectionParameter;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ShipmentQueryServiceTest extends TestCase
 {
+    /**
+     * @var array<int, array{method: string, url: string, headers: string[]}>
+     */
+    private array $requests = [];
+
     public function testFindManyReturnsEmptyArrayForEmptyInput(): void
     {
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::never())->method('getShipmentsById');
-
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-
-        self::assertSame([], $service->findMany([]));
+        self::assertSame([], $this->createService([])->findMany([]));
+        self::assertSame([], $this->requests);
     }
 
     public function testFindManyBuildsRequestAndParsesResponse(): void
     {
-        $shipment1 = new ShipmentDefsShipment(['id' => 10]);
-        $shipment2 = new ShipmentDefsShipment(['id' => 20]);
+        $result = $this->createService([['id' => 10], ['id' => 20]])->findMany([10, 20]);
 
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::once())
-            ->method('getShipmentsById')
-            ->with(self::identicalTo('10;20'), self::isNull(), self::isType('string'))
-            ->willReturn($this->buildShipmentsResponse([$shipment1, $shipment2]));
-
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-        $result = $service->findMany([10, 20]);
-
+        self::assertSame('GET', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/shipments/10%3B20', $this->requests[0]['url']);
         self::assertCount(2, $result);
         self::assertSame(10, $result[0]->getId());
         self::assertSame(20, $result[1]->getId());
@@ -48,151 +38,169 @@ final class ShipmentQueryServiceTest extends TestCase
 
     public function testFindReturnsFirstShipmentOrNull(): void
     {
-        $shipment = new ShipmentDefsShipment(['id' => 42]);
+        $result = $this->createService([['id' => 42]])->find(42);
 
-        $api = $this->createMock(ShipmentApi::class);
-        $api->method('getShipmentsById')
-            ->willReturn($this->buildShipmentsResponse([$shipment]));
-
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-
-        $result = $service->find(42);
-        self::assertInstanceOf(ShipmentDefsShipment::class, $result);
+        self::assertInstanceOf(FoundShipment::class, $result);
         self::assertSame(42, $result->getId());
     }
 
     public function testFindReturnsNullWhenNoShipmentExists(): void
     {
-        $api = $this->createMock(ShipmentApi::class);
-        $api->method('getShipmentsById')
-            ->willReturn($this->buildShipmentsResponse([]));
-
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-
-        self::assertNull($service->find(999));
+        self::assertNull($this->createService([])->find(999));
     }
 
-    public function testQueryPassesFiltersToGeneratedMethod(): void
+    public function testQueryPassesFiltersAndTheDefaultPageSize(): void
     {
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::once())
-            ->method('getShipments')
-            ->willReturnCallback(function (...$args) {
-                $args = $this->getShipmentsArguments($args);
-
-                self::assertSame('3SMYPA1234567', $args['barcode']);
-                self::assertSame(2, $args['page']);
-                self::assertSame('order-100', $args['reference_identifier']);
-                self::assertSame(300, $args['size']);
-                self::assertSame('desc', $args['sort']);
-                self::assertSame(1, $args['status']);
-                self::assertIsString($args['user_agent']);
-
-                return $this->buildShipmentsResponse([new ShipmentDefsShipment(['id' => 123])]);
-            });
-
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-        $result = $service->query([
-            'barcode' => '3SMYPA1234567',
+        $result = $this->createService([['id' => 123]])->query([
+            'barcode'              => '3SMYPA1234567',
             'reference_identifier' => 'order-100',
-            'page' => 2,
-            'sort' => 'desc',
-            'status' => 1,
+            'page'                 => 2,
+            'sort'                 => 'desc',
+            'status'               => 1,
         ]);
 
+        self::assertSame(
+            [
+                'barcode'              => '3SMYPA1234567',
+                'page'                 => '2',
+                'reference_identifier' => 'order-100',
+                'size'                 => '300',
+                'sort'                 => 'desc',
+                'status'               => '1',
+            ],
+            $this->queryOfRequest(0)
+        );
         self::assertCount(1, $result);
+    }
+
+    public function testQueryKeepsAPageSizeThatTheCallerSets(): void
+    {
+        $this->createService([])->query(['size' => 50]);
+
+        self::assertSame(['size' => '50'], $this->queryOfRequest(0));
     }
 
     public function testQueryThrowsOnUnknownParameter(): void
     {
-        $service = new ShipmentQueryService($this->getApiKey(), $this->createMock(ShipmentApi::class));
+        $service = $this->createService([]);
 
-        $this->expectException(InvalidArgumentException::class);
+        try {
+            $service->query(['barcod' => '3SMYPA1234567']);
+            self::fail('An unknown query parameter must throw.');
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('barcod', $exception->getMessage());
+        }
 
-        $service->query(['barcod' => '3SMYPA1234567']);
+        self::assertSame([], $this->requests);
     }
 
-    public function testFindByReferenceIdReturnsAllMatches(): void
+    public function testFindByReferenceIdLeavesThePageSizeToTheApi(): void
     {
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::once())
-            ->method('getShipments')
-            ->willReturnCallback(function (...$args) {
-                $args = $this->getShipmentsArguments($args);
+        $result = $this->createService([['id' => 1001], ['id' => 1002], ['id' => 1003]])->findByReferenceId('ref-a');
 
-                self::assertSame('ref-a', $args['reference_identifier']);
-                self::assertNull($args['size']);
-                self::assertIsString($args['user_agent']);
-
-                return $this->buildShipmentsResponse([
-                    new ShipmentDefsShipment(['id' => 1001]),
-                    new ShipmentDefsShipment(['id' => 1002]),
-                    new ShipmentDefsShipment(['id' => 1003]),
-                ]);
-            });
-
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-        $result = $service->findByReferenceId('ref-a');
-
-        self::assertCount(3, $result);
-        $ids = array_map(static fn (ShipmentDefsShipment $s) => $s->getId(), $result);
-        self::assertSame([1001, 1002, 1003], $ids);
+        self::assertSame(['reference_identifier' => 'ref-a'], $this->queryOfRequest(0));
+        self::assertSame([1001, 1002, 1003], array_map(static fn (FoundShipment $shipment) => $shipment->getId(), $result));
     }
 
-    public function testRecipientIsDeserializedAsFixedShipmentRecipient(): void
+    public function testSendsTheUserAgentThatIsSetAfterTheConstructor(): void
     {
-        $recipient = new FixedShipmentRecipient([
-            'cc' => 'NL',
-            'street' => 'Antareslaan',
-            'number' => '31',
-            'postal_code' => '2132JE',
-            'city' => 'Hoofddorp',
-            'person' => 'Test Person',
-        ]);
-        $shipment = new ShipmentDefsShipment(['id' => 1, 'recipient' => $recipient]);
+        $service = $this->createService([]);
+        $service->setUserAgentForProposition('Magento', '2.4.7');
 
-        $api = $this->createMock(ShipmentApi::class);
-        $api->method('getShipmentsById')
-            ->willReturn($this->buildShipmentsResponse([$shipment]));
+        $service->find(1);
+        $service->query();
 
-        $service = new ShipmentQueryService($this->getApiKey(), $api);
-        $result = $service->find(1);
+        foreach ($this->requests as $request) {
+            $userAgents = preg_grep('/^User-Agent: /i', $request['headers']);
+
+            self::assertCount(1, $userAgents);
+            self::assertStringStartsWith('User-Agent: Magento/2.4.7 MyParcelNL-SDK/', reset($userAgents));
+        }
+    }
+
+    public function testRecipientIsRead(): void
+    {
+        $result = $this->createService([[
+            'id'        => 1,
+            'recipient' => [
+                'cc'          => 'NL',
+                'street'      => 'Antareslaan',
+                'number'      => '31',
+                'postal_code' => '2132JE',
+                'city'        => 'Hoofddorp',
+                'person'      => 'Test Person',
+            ],
+        ]])->find(1);
 
         self::assertNotNull($result);
-        $resultRecipient = $result->getRecipient();
-        self::assertInstanceOf(FixedShipmentRecipient::class, $resultRecipient);
-        self::assertSame('Antareslaan', $resultRecipient->getStreet());
-        self::assertSame('NL', $resultRecipient->getCc());
-        self::assertSame('31', $resultRecipient->getNumber());
-        self::assertSame('2132JE', $resultRecipient->getPostalCode());
-        self::assertSame('Hoofddorp', $resultRecipient->getCity());
-        self::assertSame('Test Person', $resultRecipient->getPerson());
+        self::assertSame('Antareslaan', $result->getRecipient()->street);
+        self::assertSame('NL', $result->getRecipient()->cc);
+        self::assertSame('31', $result->getRecipient()->number);
+        self::assertSame('2132JE', $result->getRecipient()->postalCode);
+        self::assertSame('Hoofddorp', $result->getRecipient()->city);
+        self::assertSame('Test Person', $result->getRecipient()->person);
     }
 
-    private function buildShipmentsResponse(array $shipments): ShipmentResponsesShipments
+    public function testAGetterReturnsNullForAFieldThatTheApiDidNotSend(): void
     {
-        $data = new ShipmentResponsesShipmentsData();
-        $data->setShipments($shipments);
+        $result = $this->createService([['id' => 1]])->find(1);
 
-        $response = new ShipmentResponsesShipments();
-        $response->setData($data);
-
-        return $response;
+        self::assertNotNull($result);
+        self::assertNull($result->getBarcode());
+        self::assertNull($result->getRecipient());
+        self::assertFalse($result->getDelayed());
     }
 
     /**
-     * Key the arguments the mock received by the parameter names of the generated getShipments().
+     * The spec allows a region of two upper-case letters or `Wereld`.
      *
-     * @param  array<int, mixed> $args
-     * @return array<string, mixed>
+     * @return array<string, array{string}>
      */
-    private function getShipmentsArguments(array $args): array
+    public function provideRegions(): array
     {
-        $names = array_map(
-            static fn (ReflectionParameter $parameter) => $parameter->getName(),
-            (new ReflectionMethod(ShipmentApi::class, 'getShipments'))->getParameters()
-        );
+        return ['EU' => ['EU'], 'NL' => ['NL'], 'BE' => ['BE'], 'Wereld' => ['Wereld']];
+    }
 
-        return array_combine(array_slice($names, 0, count($args)), $args);
+    /**
+     * @dataProvider provideRegions
+     */
+    public function testAFoundShipmentEncodesToJsonWithEveryRegion(string $region): void
+    {
+        $result = $this->createService([['id' => 1, 'region' => $region]])->find(1);
+
+        self::assertNotNull($result);
+        self::assertSame($region, $result->getRegion());
+
+        $json = json_decode(json_encode($result, JSON_THROW_ON_ERROR), true);
+
+        self::assertSame(1, $json['id']);
+        self::assertSame($region, $json['region']);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $shipments The shipments in the response.
+     */
+    private function createService(array $shipments): ShipmentQueryService
+    {
+        $body = json_encode(['data' => ['shipments' => $shipments, 'results' => count($shipments)]], JSON_THROW_ON_ERROR);
+
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body): MockResponse {
+            $this->requests[] = ['method' => $method, 'url' => $url, 'headers' => $options['headers']];
+
+            return new MockResponse($body, ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
+        });
+
+        return new ShipmentQueryService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+    }
+
+    /**
+     * @return array<string, string> The query parameters of a request, sorted by name.
+     */
+    private function queryOfRequest(int $index): array
+    {
+        parse_str((string) parse_url($this->requests[$index]['url'], PHP_URL_QUERY), $query);
+        ksort($query);
+
+        return $query;
     }
 }

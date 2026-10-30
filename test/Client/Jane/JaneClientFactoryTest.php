@@ -6,8 +6,10 @@ namespace MyParcelNL\Sdk\Test\Client\Jane;
 
 use Jane\Component\OpenApiRuntime\Client\Plugin\ServerUrlHttpClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteShipmentsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
@@ -117,6 +119,45 @@ final class JaneClientFactoryTest extends TestCase
         self::assertSame([], $this->requests);
     }
 
+    public function testAProblemJsonErrorThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"type":"urn:problem:permission-denied","title":"Permission denied","status":401,"request_id":"1"}',
+            401,
+            'application/problem+json'
+        ));
+
+        try {
+            $client->deleteShipments('1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            self::assertSame(401, $exception->getResponse()->getStatusCode());
+            self::assertSame('Permission denied', $exception->getCommonResponsesProblem()->title);
+        }
+    }
+
+    /**
+     * The Core API sends an error as `application/json` when the first Accept line is not
+     * `application/problem+json`. Jane sends each Accept value as its own line.
+     */
+    public function testAJsonErrorOfAProblemJsonOperationThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"message":"Permission denied","request_id":"1","status_code":401,"errors":[]}',
+            401
+        ));
+
+        try {
+            $client->deleteShipments('1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            $error = $exception->getCommonResponsesProblem();
+
+            self::assertInstanceOf(CommonResponsesUserError::class, $error);
+            self::assertSame('Permission denied', $error->message);
+        }
+    }
+
     /**
      * JaneClientFactory builds the same parts as the generated Client::create(). When a regeneration
      * adds or removes a part there, this test fails, so the factory can follow.
@@ -175,12 +216,12 @@ final class JaneClientFactoryTest extends TestCase
         return $client->getShipments()->data->shipments[0];
     }
 
-    private function mockHttpClient(string $body): MockHttpClient
+    private function mockHttpClient(string $body, int $status = 200, string $contentType = 'application/json'): MockHttpClient
     {
-        return new MockHttpClient(function (string $method, string $url, array $options) use ($body): MockResponse {
+        return new MockHttpClient(function (string $method, string $url, array $options) use ($body, $status, $contentType): MockResponse {
             $this->requests[] = ['method' => $method, 'url' => $url, 'options' => $options];
 
-            return new MockResponse($body, ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
+            return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
         });
     }
 
