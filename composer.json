@@ -35,6 +35,7 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6",
         "jane-php/open-api-runtime": "^8.0",
+        "symfony/http-client": "^7.0 || ^8.0",
         "symfony/serializer": "^7.0 || ^8.0",
         "symfony/validator": "^7.0 || ^8.0",
         "gapple/structured-fields": "^2.3",
