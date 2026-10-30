@@ -19,6 +19,9 @@ use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
  *
  * Replaces the legacy AbstractWebhookWebService and its 5 concrete subclasses.
  *
+ * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
+ * subscribe() and unsubscribe() keeps working.
+ *
  * getAll() and getById() return the Jane models, without v11 getters: the v11 guide, the PDK and the
  * Magento module call only subscribe() and unsubscribe(). An own class with getters can only come
  * in a major release, because it changes the return type.
