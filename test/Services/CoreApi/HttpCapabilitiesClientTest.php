@@ -111,6 +111,6 @@ final class HttpCapabilitiesClientTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new HttpCapabilitiesClient(ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $httpClient));
+        return new HttpCapabilitiesClient(ShipmentApiFactory::make('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $httpClient));
     }
 }
