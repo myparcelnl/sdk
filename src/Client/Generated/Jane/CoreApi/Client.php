@@ -242,7 +242,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
@@ -393,7 +393,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.

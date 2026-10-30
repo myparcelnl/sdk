@@ -13,7 +13,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
@@ -44,7 +44,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
     public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer): array
     {
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11) {
-            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], $this->body];
+            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
         }
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequest) {
             return [['Content-Type' => ['application/vnd.shipment+json']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];

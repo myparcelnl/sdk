@@ -6,6 +6,10 @@
 // INT-2034 merges this file with .jane-openapi.
 // The options below come from INT-2033. `Jane` stays in the namespace, so a client of another
 // generator can live next to it later.
+// composer.json pins jane-php/open-api-common and jane-php/open-api-3-1 to a commit on `next`, because
+// no Jane release contains janephp#1139 yet. composer.lock is not in the repository, so `next` without
+// a commit would give each regeneration the Jane code of that day.
+// @todo Require the first Jane release that contains janephp#1139, such as ^8.1.2.
 
 return [
     'mapping' => [
