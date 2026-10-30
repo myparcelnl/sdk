@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Shipment;
 
+use JsonSerializable;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\AccountDefsContact;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\BillingDefsCurrency;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentCustomsDeclaration;
@@ -22,14 +23,16 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentPicku
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentRecipient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentSender;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentStatus;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 
 /**
  * A shipment that `ShipmentQueryService` returns, with the getters of v11.
  *
  * A getter returns null for a field that the API did not send. `ReadModelGettersTest` fails when
- * the Jane model `ShipmentDefsShipment` gets a property without a getter here.
+ * the Jane model `ShipmentDefsShipment` gets a property without a getter here. `json_encode()`
+ * gives the fields with their API names, as in v11.
  */
-final class FoundShipment
+final class FoundShipment implements JsonSerializable
 {
     public function __construct(private readonly ShipmentDefsShipment $shipment)
     {
@@ -41,6 +44,14 @@ final class FoundShipment
     public function toApiModel(): ShipmentDefsShipment
     {
         return $this->shipment;
+    }
+
+    /**
+     * @return array<string, mixed> The fields that the API sent, with their API names.
+     */
+    public function jsonSerialize(): array
+    {
+        return CoreApiModels::toArray($this->shipment);
     }
 
     public function getId(): ?int
