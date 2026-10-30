@@ -10,6 +10,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Factory for creating the generated ShipmentApi client.
@@ -82,20 +83,24 @@ final class ShipmentApiFactory
      * Create the Jane Core API client, with the same API key handling as make().
      *
      * The shipment services move to Jane one at a time. Until the last one moves, make() returns
-     * the openapi-generator client. Then make() returns this client, and this method goes.
+     * the openapi-generator client.
+     *
+     * @todo INT-2033: remove this method when make() returns the Jane client.
      *
      * @internal Used by the services that run on Jane.
      *
-     * @param string|null           $apiKey    Optional API key.
-     * @param string|null           $host      Optional API host override.
-     * @param string|null           $userAgent Optional custom User-Agent.
-     * @param array<string, string> $headers   Sent on every request, such as `x-dmp-*` API feature flags.
+     * @param string|null              $apiKey     Optional API key.
+     * @param string|null              $host       Optional API host override.
+     * @param string|null              $userAgent  Optional custom User-Agent.
+     * @param array<string, string>    $headers    Sent on every request, such as `x-dmp-*` API feature flags.
+     * @param HttpClientInterface|null $httpClient Sends the requests. Tests pass a MockHttpClient.
      */
     public static function client(
         ?string $apiKey = null,
         ?string $host = null,
         ?string $userAgent = null,
-        array $headers = []
+        array $headers = [],
+        ?HttpClientInterface $httpClient = null
     ): CoreApiClient {
         $resolvedKey = self::resolveApiKey($apiKey);
 
@@ -103,7 +108,7 @@ final class ShipmentApiFactory
             throw new \InvalidArgumentException('API key cannot be empty');
         }
 
-        return JaneClientFactory::coreApi($resolvedKey, $host, $userAgent, $headers);
+        return JaneClientFactory::coreApi($resolvedKey, $host, $userAgent, $headers, $httpClient);
     }
 
     private static function createHandlerStack(): HandlerStack
