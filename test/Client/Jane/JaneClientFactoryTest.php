@@ -13,6 +13,9 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\FormEncoder as CoreApiFormEncoder;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer as IamApiNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder as IamApiFormEncoder;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
@@ -117,10 +120,19 @@ final class JaneClientFactoryTest extends TestCase
     /**
      * JaneClientFactory builds the same parts as the generated Client::create(). When a regeneration
      * adds or removes a part there, this test fails, so the factory can follow.
+     *
+     * @dataProvider provideGeneratedClients
+     *
+     * @param class-string $clientClass
+     * @param class-string $normalizerClass
+     * @param class-string $formEncoderClass
      */
-    public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(): void
-    {
-        $create = new ReflectionMethod(CoreApiClient::class, 'create');
+    public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(
+        string $clientClass,
+        string $normalizerClass,
+        string $formEncoderClass
+    ): void {
+        $create = new ReflectionMethod($clientClass, 'create');
         $lines  = file((string) $create->getFileName());
         $source = implode('', array_slice($lines, $create->getStartLine() - 1, $create->getEndLine() - $create->getStartLine() + 1));
 
@@ -130,16 +142,27 @@ final class JaneClientFactoryTest extends TestCase
             [
                 ServerUrlHttpClient::class,
                 ArrayDenormalizer::class,
-                CoreApiNormalizer::class,
+                $normalizerClass,
                 Serializer::class,
                 JsonEncoder::class,
                 JsonEncode::class,
                 JsonDecode::class,
-                CoreApiFormEncoder::class,
+                $formEncoderClass,
             ],
             $matches[1],
             'The generated Client::create() changed. Update JaneClientFactory to build the same parts.'
         );
+    }
+
+    /**
+     * @return array<string, array{class-string, class-string, class-string}>
+     */
+    public static function provideGeneratedClients(): array
+    {
+        return [
+            'Core API' => [CoreApiClient::class, CoreApiNormalizer::class, CoreApiFormEncoder::class],
+            'IAM API'  => [IamApiClient::class, IamApiNormalizer::class, IamApiFormEncoder::class],
+        ];
     }
 
     /**
