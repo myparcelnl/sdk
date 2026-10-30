@@ -1,0 +1,59 @@
+<?php
+
+// Jane config for the Core API, the private Core API, the IAM API and the Order API.
+// Jane applies the top-level options to every spec in 'mapping'. In a 'mapping' entry, Jane reads only
+// 'namespace', 'directory' and the endpoint options, such as 'whitelisted-paths'.
+// INT-2034 merges this file with .jane-openapi.
+// The options below come from INT-2033. `Jane` stays in the namespace, so a client of another
+// generator can live next to it later.
+
+return [
+    'mapping' => [
+        'https://api.myparcel.nl/openapi.min.json' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApi',
+        ],
+        // A local copy, because the private Core API spec is not hosted yet.
+        __DIR__ . '/openapi/specs/coreapi-private.yaml' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApiPrivate',
+        ],
+        'https://iam.api.myparcel.nl/openapi.json' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/IamApi',
+        ],
+        // The SDK uses only the models of the Order API. Jane always generates the client too.
+        'https://order.api.myparcel.nl/openapi.json' => [
+            'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\OrderApi',
+            'directory' => __DIR__ . '/src/Client/Generated/Jane/OrderApi',
+        ],
+    ],
+    // Generate validators, so the client checks a request against the spec before it sends it.
+    'validation' => true,
+    'strict' => true,
+    // Generate the enums of the spec as PHP enums.
+    'enums-as-objects' => true,
+    // Read an enum value that the SDK does not know as the raw string. A new value in the API, such
+    // as a new carrier, then does not break a read.
+    'enums-unknown-value' => 'scalar',
+    // Has no effect with 'include-null-value' => false.
+    'skip-null-values' => true,
+    // Send a required field only when it is set. A missing field then throws a ValidationException,
+    // not a PHP Error for a property that is not initialized.
+    'skip-required-fields' => true,
+    // Send an optional field when it is set, also when it is null. So a setter can send null for a
+    // field that the API accepts as null, such as `pickup`. A field that nobody set stays out.
+    'include-null-value' => false,
+    // A date property takes every DateTimeInterface, such as DateTimeImmutable.
+    'date-prefer-interface' => true,
+    // Jane refuses a remote `$ref` by default. Allow one only on myparcel.nl, without redirects.
+    'allow-external-refs' => true,
+    'external-ref-allowed-hosts' => ['myparcel.nl'],
+    'external-ref-follow-redirects' => false,
+    'use-fixer' => false, // @TODO INT-783
+    // Remove the files of a schema that the spec no longer has. SpecDriftTest relies on this.
+    'clean-generated' => true,
+    // A GET request goes out when the method is called, as in v11. With the Jane default, lazy, it
+    // goes out when the result is first read.
+    'default-fetch-mode' => 'eager',
+];
