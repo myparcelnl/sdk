@@ -51,6 +51,10 @@ final class CarrierContractDefinitionsService
      * Pass a carrier, such as `'POSTNL'` or `CapabilitiesPostContractDefinitionsRequestV2Carrier::Postnl`,
      * to filter the API request. Omit $carrier to fetch all contract definitions for the account.
      *
+     * The results are the Jane models. `carrier`, `packageTypes` and `deliveryTypes` hold an enum case,
+     * or the raw string for a value that the SDK does not know, so a new carrier in the API does not
+     * break the call. Compare with the enum case, because `->value` fails on a raw string.
+     *
      * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|string|null $carrier Optional carrier.
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\ApiException For an error response.
