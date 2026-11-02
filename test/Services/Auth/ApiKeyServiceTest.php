@@ -22,6 +22,7 @@ final class ApiKeyServiceTest extends TestCase
         'accountId' => '225196',
         'platform'  => 'MYPARCEL_NL',
         'id'        => '156402',
+        'mfaEnabled' => false,
         'role'      => 'SHOP_DEFAULT',
         'shopIds'   => ['156402'],
         'type'      => 'SHOP',
@@ -31,6 +32,7 @@ final class ApiKeyServiceTest extends TestCase
         'accountId' => '225196',
         'platform'  => 'MYPARCEL_NL',
         'id'        => '156403',
+        'mfaEnabled' => false,
         'role'      => 'CUSTOMER_MAIN',
         'shopIds'   => ['156402', '156404'],
         'type'      => 'USER',
@@ -69,6 +71,14 @@ final class ApiKeyServiceTest extends TestCase
         self::assertInstanceOf(PrincipalUser::class, $principal);
         self::assertSame(RoleUser::CustomerMain, $principal->role);
         self::assertSame(['156402', '156404'], $principal->shopIds);
+    }
+
+    public function testGetPrincipalKeepsARoleAndAPlatformThatTheSdkDoesNotKnow(): void
+    {
+        $principal = $this->createService(['role' => 'SHOP_NEW', 'platform' => 'MYPARCEL_DE'] + self::SHOP_PRINCIPAL)->getPrincipal();
+
+        self::assertSame('SHOP_NEW', $principal->role);
+        self::assertSame('MYPARCEL_DE', $principal->platform);
     }
 
     public function testGetPrincipalThrowsForAnUnknownType(): void
