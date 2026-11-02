@@ -14,6 +14,8 @@ return [
             'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApi',
         ],
         // A local copy, because the private Core API spec is not hosted yet.
+        // @todo Use the hosted URL when the private Core API spec is hosted, and remove
+        // openapi/specs/coreapi-private.yaml.
         __DIR__ . '/openapi/specs/coreapi-private.yaml' => [
             'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate',
             'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApiPrivate',
@@ -31,12 +33,15 @@ return [
         ],
     ],
     // Generate validators, so the client checks a request against the spec before it sends it.
+    // Jane also validates each response. A client must read with the skip_validation context, or a
+    // new field in a response throws a ValidationException.
     'validation' => true,
+    // A property accepts null only when the spec allows null. This is the Jane default.
     'strict' => true,
     // Generate the enums of the spec as PHP enums.
     'enums-as-objects' => true,
-    // Read an enum value that the SDK does not know as the raw string. A new value in the API, such
-    // as a new carrier, then does not break a read.
+    // Read an enum value that the SDK does not know as the raw value, a string or an int. A new
+    // value in the API, such as a new carrier, then does not break a read.
     'enums-unknown-value' => 'scalar',
     // Has no effect with 'include-null-value' => false.
     'skip-null-values' => true,
@@ -53,9 +58,10 @@ return [
     'external-ref-allowed-hosts' => ['myparcel.nl'],
     'external-ref-follow-redirects' => false,
     'use-fixer' => false, // @TODO INT-783
-    // Remove the files of a schema that the spec no longer has. SpecDriftTest relies on this.
+    // Remove the files of a schema that the spec no longer has, so a dropped class does not stay
+    // behind in the repository.
     'clean-generated' => true,
     // A GET request goes out when the method is called, as in v11. With the Jane default, lazy, it
-    // goes out when the result is first read.
+    // goes out when the result is first read, on PHP 8.4 and higher. On PHP 8.3, lazy is eager too.
     'default-fetch-mode' => 'eager',
 ];
