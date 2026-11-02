@@ -54,8 +54,9 @@ final class MultiColloShipmentService
      */
     private function resolveReferenceIdentifier($referenceIdentifier): string
     {
-        if (is_string($referenceIdentifier) && '' !== trim($referenceIdentifier)) {
-            return $referenceIdentifier;
+        // A reference identifier can be an int. Only an empty one gets a generated one.
+        if (null !== $referenceIdentifier && '' !== trim((string) $referenceIdentifier)) {
+            return (string) $referenceIdentifier;
         }
 
         return 'multi_collo_' . uniqid('', true);

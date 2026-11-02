@@ -55,7 +55,7 @@ final class ShipmentCollection extends Collection
     }
 
     /**
-     * Filter by reference identifier prefix.
+     * Filter by reference identifier prefix. A reference identifier can be an int, so the filter compares it as a string.
      */
     public function whereReferenceIdentifierPrefix(string $referencePrefix): self
     {
@@ -67,7 +67,7 @@ final class ShipmentCollection extends Collection
 
                 $referenceIdentifier = $shipment->getReferenceIdentifier();
 
-                return is_string($referenceIdentifier) && 0 === strpos($referenceIdentifier, $referencePrefix);
+                return null !== $referenceIdentifier && str_starts_with((string) $referenceIdentifier, $referencePrefix);
             })
             ->values();
     }

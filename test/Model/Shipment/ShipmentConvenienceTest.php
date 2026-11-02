@@ -12,6 +12,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as OptionsModel;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemPhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient;
 use MyParcelNL\Sdk\Model\Shipment\Carrier;
@@ -74,6 +75,22 @@ final class ShipmentConvenienceTest extends TestCase
 
         $this->assertInstanceOf(ShipmentOptions::class, $options);
         $this->assertSame(RefShipmentPackageType::Mailbox->value, $options->getPackageType());
+    }
+
+    public function testSetOptionsWrapsACopyOfAJaneOptionsModel(): void
+    {
+        $insurance           = new RefTypesPriceEuro();
+        $insurance->amount   = 500;
+        $insurance->currency = 'EUR';
+        $model               = new OptionsModel();
+        $model->signature    = 1.0;
+        $model->insurance    = $insurance;
+
+        $options          = (new Shipment())->setOptions($model)->getOptions();
+        $model->signature = 0.0;
+
+        $this->assertSame(1, $options->getSignature());
+        $this->assertSame(500, $options->getInsurance()->amount);
     }
 
     /**
@@ -163,15 +180,36 @@ final class ShipmentConvenienceTest extends TestCase
         );
     }
 
+    public function testToApiModelSendsANullForAFieldThatTheApiAcceptsAsNull(): void
+    {
+        $array = (new Shipment())->setRecipient(['cc' => 'NL'])->setPickup(null)->jsonSerialize();
+
+        $this->assertArrayHasKey('pickup', $array);
+        $this->assertNull($array['pickup']);
+    }
+
+    public function testToApiModelDoesNotChangeTheShipment(): void
+    {
+        $shipment = (new Shipment())->setRecipient(['cc' => 'NL']);
+
+        json_encode($shipment);
+
+        $this->assertNull($shipment->getRecipient()->email);
+    }
+
     public function testACloneDoesNotChangeTheOriginal(): void
     {
-        $shipment = (new Shipment())->setReferenceIdentifier('order-1')->withPackageType('PACKAGE');
+        $shipment = (new Shipment())->setReferenceIdentifier('order-1')->setRecipient(['cc' => 'NL'])->withPackageType('PACKAGE');
+        $shipment->getOptions()->setInsurance(['amount' => 500, 'currency' => 'EUR']);
 
         $clone = clone $shipment;
-        $clone->setReferenceIdentifier('order-2')->getOptions()->setPackageType('MAILBOX');
+        $clone->setReferenceIdentifier('order-2')->withRecipientCountryCode('BE')->getOptions()->setPackageType('MAILBOX');
+        $clone->getOptions()->getInsurance()->amount = 100;
 
         $this->assertSame('order-1', $shipment->getReferenceIdentifier());
+        $this->assertSame('NL', $shipment->getRecipient()->cc);
         $this->assertSame(RefShipmentPackageType::Package->value, $shipment->getOptions()->getPackageType());
+        $this->assertSame(500, $shipment->getOptions()->getInsurance()->amount);
     }
 
     public function testShipmentOptionsFromOrderResponseHydratesSharedOptionsContract(): void
@@ -214,6 +252,14 @@ final class ShipmentConvenienceTest extends TestCase
         $this->assertSame(500, $options->getInsurance()->amount);
     }
 
+    public function testShipmentOptionsFromOrderResponseTurnsANumericInsuranceIntoCents(): void
+    {
+        $insurance = ShipmentOptions::fromOrderResponse(['options' => ['insurance' => 5]])->getInsurance();
+
+        $this->assertSame(500, $insurance->amount);
+        $this->assertSame('EUR', $insurance->currency->value);
+    }
+
     public function testShipmentOptionsToArrayUsesTheApiNames(): void
     {
         $options = (new ShipmentOptions())
@@ -223,7 +269,7 @@ final class ShipmentConvenienceTest extends TestCase
 
         $this->assertSame(
             ['insurance' => ['currency' => 'EUR', 'amount' => 500], 'signature' => 1, 'package_type' => 1],
-            json_decode((string) json_encode($options->toArray()), true)
+            $options->toArray()
         );
     }
 

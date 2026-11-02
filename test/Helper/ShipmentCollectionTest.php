@@ -86,6 +86,13 @@ final class ShipmentCollectionTest extends TestCase
         self::assertSame([$shipmentOne, $shipmentThree], $matches->all());
     }
 
+    public function testWhereReferenceIdentifierPrefixFindsAnIntReferenceIdentifier(): void
+    {
+        $collection = new ShipmentCollection([(new Shipment())->setReferenceIdentifier(50), (new Shipment())->setReferenceIdentifier(60)]);
+
+        self::assertCount(1, $collection->whereReferenceIdentifierPrefix('5'));
+    }
+
     public function testWhereReferenceIdentifierPrefix(): void
     {
         $shipmentOne = (new Shipment())->setReferenceIdentifier('group-A-001');

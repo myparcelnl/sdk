@@ -54,11 +54,25 @@ class ShipmentOptions
     }
 
     /**
-     * The clone gets its own options. A change to the clone does not change the original.
+     * The clone gets its own options, also the insurance and the cash on delivery. A change to the
+     * clone does not change the original.
      */
     public function __clone()
     {
-        $this->options = clone $this->options;
+        $this->options = CoreApiModels::copy($this->options);
+    }
+
+    /**
+     * Wrap a copy of a Jane options model, such as the options of a found shipment.
+     *
+     * @internal Used by Shipment::setOptions().
+     */
+    public static function fromApiModel(OptionsModel $options): self
+    {
+        $self          = new self();
+        $self->options = CoreApiModels::copy($options);
+
+        return $self;
     }
 
     /**
@@ -87,10 +101,24 @@ class ShipmentOptions
             'return'            => self::intBooleanOrNull($options['return'] ?? null),
             'priority_delivery' => self::intBooleanOrNull($options['priority_delivery'] ?? null),
             'label_description' => $options['label_description'] ?? null,
-            'insurance'         => $options['insurance'] ?? null,
+            'insurance'         => self::insuranceOrNull($options['insurance'] ?? null),
         ], static function ($value): bool {
             return null !== $value;
         }));
+    }
+
+    /**
+     * Order v1 can send the insurance as a whole amount in euros. v11 turned it into cents.
+     *
+     * @return array<string, mixed>|object|null
+     */
+    private static function insuranceOrNull(mixed $insurance): array|object|null
+    {
+        if (is_numeric($insurance)) {
+            return ['amount' => (int) $insurance * 100, 'currency' => 'EUR'];
+        }
+
+        return is_array($insurance) || is_object($insurance) ? $insurance : null;
     }
 
     /**
@@ -100,15 +128,17 @@ class ShipmentOptions
      */
     public function toApiModel(): OptionsModel
     {
-        return clone $this->options;
+        return CoreApiModels::copy($this->options);
     }
 
     /**
-     * @return array<string, mixed> The options that are set, with their API names.
+     * @return array<string, mixed> The options that are set, with their API names. A flag is an int and
+     *                              a nested object, such as `insurance`, is an array, as in v11.
      */
     public function toArray(): array
     {
-        return CoreApiModels::toArray($this->options);
+        // The normalizer gives a flag as a float and a nested object as a JsonObject.
+        return json_decode(json_encode(CoreApiModels::toArray($this->options), JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
     }
 
     /**

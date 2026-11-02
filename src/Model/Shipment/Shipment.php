@@ -69,11 +69,12 @@ class Shipment implements JsonSerializable
     }
 
     /**
-     * The clone gets its own fields and options. A change to the clone does not change the original.
+     * The clone gets its own fields, nested models and options. A change to the clone does not change
+     * the original.
      */
     public function __clone()
     {
-        $this->shipment = clone $this->shipment;
+        $this->shipment = CoreApiModels::copy($this->shipment);
 
         if (null !== $this->options) {
             $this->options = clone $this->options;
@@ -92,12 +93,13 @@ class Shipment implements JsonSerializable
      * The Jane model that ShipmentCreateService and ShipmentPrintService send.
      *
      * The Jane client accepts only its own model class, not this class. The method returns a copy
-     * with the options in it, so a send does not change this shipment. The copy leaves out the
-     * fields without a type that nobody set, see CoreApiModels::withoutNullUntypedProperties().
+     * with the options in it, so a send does not change this shipment. The copy includes the nested
+     * models, because it leaves out the fields without a type that nobody set, also in the nested
+     * models, see CoreApiModels::withoutNullUntypedProperties().
      */
     public function toApiModel(): ShipmentModel
     {
-        $shipment = clone $this->shipment;
+        $shipment = CoreApiModels::copy($this->shipment);
 
         if (null !== $this->options) {
             $shipment->options = $this->options->toApiModel();
@@ -257,7 +259,7 @@ class Shipment implements JsonSerializable
     public function setOptions(array|ShipmentOptions|OptionsModel|null $options): self
     {
         if ($options instanceof OptionsModel) {
-            $options = CoreApiModels::toArray($options);
+            $options = ShipmentOptions::fromApiModel($options);
         }
 
         $this->options = is_array($options) ? new ShipmentOptions($options) : $options;

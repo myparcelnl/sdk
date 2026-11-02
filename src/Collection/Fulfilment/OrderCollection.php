@@ -173,11 +173,6 @@ class OrderCollection extends Collection
                 'amount'   => (int) ($insurance->amount ?? 0),
                 'currency' => ($insurance->currency ?? null) instanceof BackedEnum ? $insurance->currency->value : ($insurance->currency ?? 'EUR'),
             ];
-        } elseif (is_numeric($insurance)) {
-            $result['insurance'] = [
-                'amount'   => (int) $insurance * 100,
-                'currency' => 'EUR',
-            ];
         }
 
         return $result;
