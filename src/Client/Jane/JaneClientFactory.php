@@ -104,8 +104,17 @@ final class JaneClientFactory
                 $headers,
                 $httpClient
             ),
-            self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder())
+            self::iamSerializer()
         );
+    }
+
+    /**
+     * The serializer of the IAM client, for a service that reads a response that the client returns
+     * as decoded JSON, such as the whoami response.
+     */
+    public static function iamSerializer(): SkipValidationOnReadSerializer
+    {
+        return self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder());
     }
 
     /**

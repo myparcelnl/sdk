@@ -11,11 +11,10 @@ use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShopType;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUserType;
-use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Client\Jane\SkipValidationOnReadSerializer;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\IamApi\IamApiFactory;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Serializer;
 use UnexpectedValueException;
 
 /**
@@ -35,7 +34,7 @@ final class ApiKeyService
 
     private ?string $host;
 
-    private Serializer $serializer;
+    private SkipValidationOnReadSerializer $serializer;
 
     public function __construct(
         string $apiKey,
@@ -45,7 +44,7 @@ final class ApiKeyService
         $this->api        = $api;
         $this->apiKey     = $apiKey;
         $this->host       = $host;
-        $this->serializer = new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]);
+        $this->serializer = JaneClientFactory::iamSerializer();
     }
 
     /**
@@ -54,10 +53,12 @@ final class ApiKeyService
      * Only 401 responses are treated as an invalid key. Other API or transport
      * errors bubble up because they do not prove the key itself is invalid.
      *
-     * The status comes from the response, not from the exception code: the exceptions that Jane
-     * generates for a status in the spec have no code.
+     * The status comes from the response, not from the exception code. Today Jane throws a
+     * BadResponseException with the status as its code, because the spec declares only a 200. A status
+     * exception that a later spec adds has no code, so this method keeps working when the spec adds a 401.
      *
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status.
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
      * @throws \UnexpectedValueException When IAM returns a principal type that this SDK does not know.
      */
     public function isValid(): bool
@@ -82,18 +83,26 @@ final class ApiKeyService
      * generated client cannot choose a model for it, so getWhoami() returns the decoded JSON and
      * this method picks the model.
      *
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status.
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
      * @throws \UnexpectedValueException When IAM returns a principal type that this SDK does not know.
      */
     public function getPrincipal(): PrincipalShop|PrincipalUser
     {
-        // getWhoami() decodes JSON objects to stdClass. The normalizers read arrays.
-        $whoami = json_decode(json_encode($this->getApi()->getWhoami(), JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
+        // getWhoami() returns the decoded JSON. Encode it again, so the client serializer reads it
+        // like any other response, without validation.
+        $json   = json_encode($this->getApi()->getWhoami(), JSON_THROW_ON_ERROR);
+        $whoami = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
-        return $this->serializer->denormalize($whoami, $this->principalClass($whoami), 'json', ['skip_validation' => true]);
+        return $this->serializer->deserialize($json, $this->principalClass($whoami), 'json');
     }
 
     /**
+     * Pick the model that the discriminator on `type` in the spec describes.
+     *
+     * @todo Remove this method when Jane generates a model for the whoami response: the spec describes
+     *       it as a oneOf with a discriminator, and the generated GetWhoami endpoint has no target class.
+     *
      * @param  array<string, mixed> $whoami The decoded whoami response.
      * @return class-string<PrincipalShop|PrincipalUser>
      */
