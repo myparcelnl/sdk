@@ -27,6 +27,11 @@ Use `Order::STATUS_CANCELED` when the order is cancelled in the shop, and push t
 the same `source_id`. MyParcel sees the second push as an update of the order. See "Pushing orders"
 in `README.md`.
 
+The spec now also limits an order to 100 lines and a product to 50 children.
+`Order::setLines()` and `Product::setChildren()` throw an `InvalidArgumentException` above these
+limits. When you pass the lines or the children in the constructor array, nothing throws:
+`listInvalidProperties()` reports the error instead.
+
 ### Generated OpenAPI models
 
 > [!IMPORTANT]
