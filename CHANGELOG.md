@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.8](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.7...v12.0.0-beta.8) (2026-11-02)
+
+### :sparkles: New Features
+
+* **api:** add the required order status to the order push ([#717](https://github.com/myparcelnl/sdk/issues/717)) ([5073dfa](https://github.com/myparcelnl/sdk/commit/5073dfa40f34b9f92ed95678f2260e804764c414))
+
 ## [12.0.0-beta.7](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.6...v12.0.0-beta.7) (2026-10-26)
 
 ### :bug: Bug Fixes
