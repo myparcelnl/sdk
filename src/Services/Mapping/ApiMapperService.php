@@ -328,6 +328,9 @@ final class ApiMapperService
      * converted that name to the constant DHL_CHEAP_CARGO. The rows keep the constant names, so
      * allRows() and allDomains() return the same keys as before.
      *
+     * @todo Return the Jane case names in a major release that changes the keys of allRows() and
+     *       allDomains().
+     *
      * @internal Also used by the mapping tests, so they compare the same names.
      *
      * @param  class-string<\BackedEnum> $enumClass
