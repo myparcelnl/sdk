@@ -73,8 +73,10 @@ php -S 127.0.0.1:8080 -t dev/connect-poc dev/connect-poc/index.php
 - **Disconnect** drops the token and keeps the key pair, so **Reconnect** restores the same
   connection.
 - **Uninstall** removes everything, including the key pair. After this, MyParcel sees a new shop.
-- **Push order** sends one order with the product title, quantity, price, and customer reference
-  you filled in. Each push uses a new order id, so you can push repeatedly.
+- **Push new order** sends one order with the product title, quantity, price, customer reference
+  and status you filled in. Each push uses a new order id, so you can push repeatedly.
+- **Push update** sends the order id of the last accepted push again, with the status you pick.
+  MyParcel sees the second push as an update of that order.
 
 MyParcel answers an order push per item, with either an acceptance or a problem describing what was
 wrong. That answer carries no order id, so the page cannot link to the order it created. Look for

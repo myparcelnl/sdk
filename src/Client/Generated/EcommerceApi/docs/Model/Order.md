@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ordered_at** | **\DateTime** | An ISO 8601 formatted datetime string with timezone offset. |
 **source_id** | **string** | The order ID as defined in the source system. |
+**status** | **string** | The order status. |
 **billing_details** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\BillingDetails**](BillingDetails.md) | Billing details of the order. | [optional]
 **customer_reference** | **string** | The customer reference of the order. | [optional]
 **lines** | [**\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\OrderLine[]**](OrderLine.md) |  | [optional]

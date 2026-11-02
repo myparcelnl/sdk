@@ -59,6 +59,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'ordered_at' => '\DateTime',
         'source_id' => 'string',
+        'status' => 'string',
         'billing_details' => '\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\BillingDetails',
         'customer_reference' => 'string',
         'lines' => '\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\OrderLine[]',
@@ -75,6 +76,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'ordered_at' => 'date-time',
         'source_id' => null,
+        'status' => null,
         'billing_details' => null,
         'customer_reference' => null,
         'lines' => null,
@@ -89,6 +91,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'ordered_at' => false,
         'source_id' => false,
+        'status' => false,
         'billing_details' => false,
         'customer_reference' => false,
         'lines' => false,
@@ -183,6 +186,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'ordered_at' => 'orderedAt',
         'source_id' => 'sourceId',
+        'status' => 'status',
         'billing_details' => 'billingDetails',
         'customer_reference' => 'customerReference',
         'lines' => 'lines',
@@ -197,6 +201,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'ordered_at' => 'setOrderedAt',
         'source_id' => 'setSourceId',
+        'status' => 'setStatus',
         'billing_details' => 'setBillingDetails',
         'customer_reference' => 'setCustomerReference',
         'lines' => 'setLines',
@@ -211,6 +216,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'ordered_at' => 'getOrderedAt',
         'source_id' => 'getSourceId',
+        'status' => 'getStatus',
         'billing_details' => 'getBillingDetails',
         'customer_reference' => 'getCustomerReference',
         'lines' => 'getLines',
@@ -258,6 +264,21 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const STATUS_OPEN = 'OPEN';
+    public const STATUS_CANCELED = 'CANCELED';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_OPEN,
+            self::STATUS_CANCELED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -276,6 +297,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('ordered_at', $data ?? [], null);
         $this->setIfExists('source_id', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('billing_details', $data ?? [], null);
         $this->setIfExists('customer_reference', $data ?? [], null);
         $this->setIfExists('lines', $data ?? [], null);
@@ -323,12 +345,30 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'source_id', the character length must be bigger than or equal to 1.";
         }
 
+        if ($this->container['status'] === null) {
+            $invalidProperties[] = "'status' can't be null";
+        }
+        $allowedValues = $this->getStatusAllowableValues();
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if (!is_null($this->container['customer_reference']) && (mb_strlen($this->container['customer_reference']) > 100)) {
             $invalidProperties[] = "invalid value for 'customer_reference', the character length must be smaller than or equal to 100.";
         }
 
         if (!is_null($this->container['customer_reference']) && (mb_strlen($this->container['customer_reference']) < 1)) {
             $invalidProperties[] = "invalid value for 'customer_reference', the character length must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['lines']) && (count($this->container['lines']) > 100)) {
+            $invalidProperties[] = "invalid value for 'lines', number of items must be less than or equal to 100.";
         }
 
         if (!is_null($this->container['lines']) && (count($this->container['lines']) < 1)) {
@@ -407,6 +447,33 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         $this->container['source_id'] = $source_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string $status The order status.
+     *
+     * @return self
+     */
+    public function setStatus($status)
+    {
+        if (is_null($status)) {
+            throw new \InvalidArgumentException('non-nullable status cannot be null');
+        }
+        $this->container['status'] = $status;
 
         return $this;
     }
@@ -494,7 +561,9 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($lines)) {
             throw new \InvalidArgumentException('non-nullable lines cannot be null');
         }
-
+        if ((count($lines) > 100)) {
+            throw new \InvalidArgumentException('invalid value for $lines when calling Order., number of items must be less than or equal to 100.');
+        }
         if ((count($lines) < 1)) {
             throw new \InvalidArgumentException('invalid length for $lines when calling Order., number of items must be greater than or equal to 1.');
         }
