@@ -397,6 +397,10 @@ class Product implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'barcode', the character length must be bigger than or equal to 6.";
         }
 
+        if (!is_null($this->container['children']) && (count($this->container['children']) > 50)) {
+            $invalidProperties[] = "invalid value for 'children', number of items must be less than or equal to 50.";
+        }
+
         if (!is_null($this->container['children']) && (count($this->container['children']) < 1)) {
             $invalidProperties[] = "invalid value for 'children', number of items must be greater than or equal to 1.";
         }
@@ -597,7 +601,9 @@ class Product implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable children cannot be null');
         }
 
-
+        if ((count($children) > 50)) {
+            throw new \InvalidArgumentException('invalid value for $children when calling Product., number of items must be less than or equal to 50.');
+        }
         if ((count($children) < 1)) {
             throw new \InvalidArgumentException('invalid length for $children when calling Product., number of items must be greater than or equal to 1.');
         }

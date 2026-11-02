@@ -301,6 +301,9 @@ function receiveCallback(\MyParcelNL\Sdk\Services\Connect\ConnectService $connec
  * Building the order below is ordinary use of the generated models. The only thing worth copying is
  * the listInvalidProperties() check: the models carry the API's own rules, so you can catch a bad
  * field before you spend a request on it.
+ *
+ * Every order carries a status, Order::STATUS_OPEN or Order::STATUS_CANCELED. Push the same source
+ * id again to update an order, for example when the merchant cancels it in the shop.
  */
 function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): void
 {
@@ -309,6 +312,7 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
         'quantity'    => max(1, (int) ($_POST['quantity'] ?? 1)),
         'priceEuros'  => (string) ($_POST['priceEuros'] ?? '0'),
         'reference'   => trim((string) ($_POST['reference'] ?? '')),
+        'status'      => (string) ($_POST['status'] ?? \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order::STATUS_OPEN),
     ];
 
     // Kept so the form comes back filled in the way the tester left it.
@@ -317,11 +321,15 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
     // Your own id for this order. MyParcel stores it, so send the id the order has in your shop and
     // you can recognise it later. A random one here means every press is a new order.
     // In reality, this should be the order ID in your webshop, eg. the Woocommerce Order ID etc.
-    $sourceId = 'poc-' . bin2hex(random_bytes(4));
+    // The update button sends the id of the last push again, so MyParcel sees an update of that order.
+    $isUpdate = 'update' === ($_POST['mode'] ?? '') && isset($_SESSION['lastSourceId']);
+    $sourceId = $isUpdate ? $_SESSION['lastSourceId'] : 'poc-' . bin2hex(random_bytes(4));
 
     $order = new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order([
         'ordered_at'         => new \DateTime('now'),
         'source_id'          => $sourceId,
+        // Sent as the form gives it: listInvalidProperties() below refuses a value outside the enum.
+        'status'             => $form['status'],
         'customer_reference' => '' === $form['reference'] ? null : $form['reference'],
         'lines'              => [
             new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\OrderLine([
@@ -353,10 +361,17 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
     $results = \MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory::make($connect)
         ->webhookOrdersPost([$order]);
 
-    $ok = accepted($results);
+    $ok    = accepted($results);
+    $title = $isUpdate ? 'Order update' : 'Order';
 
-    flash($ok ? 'ok' : 'error', $ok ? 'Order accepted' : 'Order refused', [
+    // Only an accepted order can be updated.
+    if ($ok) {
+        $_SESSION['lastSourceId'] = $sourceId;
+    }
+
+    flash($ok ? 'ok' : 'error', $title . ($ok ? ' accepted' : ' refused'), [
         'sourceId'    => $sourceId,
+        'status'      => $form['status'],
         'sent'        => json_encode($order->jsonSerialize(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
         'per item'    => describeResults($results),
     ]);
@@ -469,7 +484,9 @@ function render(
         'quantity'    => 1,
         'priceEuros'  => '24.95',
         'reference'   => 'PoC order',
+        'status'      => \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order::STATUS_OPEN,
     ];
+    $lastSourceId = $_SESSION['lastSourceId'] ?? null;
 
     header('Content-Type: text/html; charset=utf-8');
 
@@ -536,10 +553,22 @@ function render(
     field('quantity', 'Quantity', (string) $form['quantity'], 'number');
     field('priceEuros', 'Price per item in euros', (string) $form['priceEuros'], 'text');
     field('reference', 'Customer reference', (string) $form['reference'], 'text');
-    echo '<button type="submit"' . ($connected ? '' : ' disabled') . '>Push order</button>';
+    echo '<label>Status<select name="status">';
+
+    // The values come from the generated model, so a new status appears after a regeneration.
+    foreach ((new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order())->getStatusAllowableValues() as $status) {
+        printf('<option%s>%s</option>', $status === ($form['status'] ?? null) ? ' selected' : '', e($status));
+    }
+
+    echo '</select></label>';
+    // The first button is the default, so Enter pushes a new order.
+    echo '<button type="submit" name="mode" value="new"' . ($connected ? '' : ' disabled') . '>Push new order</button> ';
+    echo '<button type="submit" name="mode" value="update"' . ($connected && null !== $lastSourceId ? '' : ' disabled') . '>'
+        . e(null === $lastSourceId ? 'Push update' : 'Push update of ' . $lastSourceId) . '</button>';
     echo '</form>';
 
-    echo '<p class="note">The order id is generated per push, so every press is a new order. MyParcel answers '
+    echo '<p class="note">Push new order generates a new order id. Push update sends the id of the last push '
+        . 'again with the status you pick, so MyParcel sees an update of that order. MyParcel answers '
         . 'per item with 202 or a problem, and that answer carries no order id, so there is no link to the '
         . 'order itself. ' . backofficeLink($settings) . '</p>';
     echo '</section>';
@@ -693,7 +722,7 @@ function styles(): void
         button.primary { background: var(--ok); border-color: var(--ok); color: #fff; }
         button:disabled { opacity: .45; cursor: not-allowed; }
         label { display: block; margin: .5em 0; }
-        input { display: block; width: 100%; box-sizing: border-box; font: inherit; padding: .4em .6em;
+        input, select { display: block; width: 100%; box-sizing: border-box; font: inherit; padding: .4em .6em;
                 border: 1px solid var(--line); border-radius: 6px; background: #8881; color: inherit; }
         .flash { border-left: 4px solid var(--line); padding: .8em 1em; border-radius: 6px; background: #8881; }
         .flash.ok { border-left-color: var(--ok); }
