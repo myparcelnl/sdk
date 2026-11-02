@@ -2,11 +2,9 @@
 
 # OpenAPI Generator configuration
 # The e-commerce service spec: the connect endpoints and the webhooks in one document. The copy
-# comes from docs/api/openapi.yaml in mypadev/oauth-connect-library, updated by hand. After each
-# update, change every `status: type: number` to `type: integer`: a number generates a PHP float,
-# and the strict enum check then refuses 400.0 against 400.
+# comes from docs/api/openapi.yaml in mypadev/oauth-connect-library, updated by hand.
 # @todo replace inputSpec once the OFF team decides how the spec is published (public URL or
-# internal repo), and drop the status fix once the spec uses integer.
+# internal repo).
 inputSpec: /local/openapi/specs/oauth-connect.yaml
 outputDir: src/Client/Generated/EcommerceApi
 typeMappings:
