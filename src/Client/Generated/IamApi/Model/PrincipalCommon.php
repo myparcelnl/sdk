@@ -58,6 +58,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'account_id' => 'string',
+        'mfa_enabled' => 'bool',
         'platform' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform',
         'features' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]',
         'fulfilment_platforms' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]',
@@ -73,6 +74,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'account_id' => null,
+        'mfa_enabled' => null,
         'platform' => null,
         'features' => null,
         'fulfilment_platforms' => null,
@@ -86,6 +88,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static array $openAPINullables = [
         'account_id' => false,
+        'mfa_enabled' => false,
         'platform' => false,
         'features' => false,
         'fulfilment_platforms' => false,
@@ -179,6 +182,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'account_id' => 'accountId',
+        'mfa_enabled' => 'mfaEnabled',
         'platform' => 'platform',
         'features' => 'features',
         'fulfilment_platforms' => 'fulfilmentPlatforms',
@@ -192,6 +196,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'account_id' => 'setAccountId',
+        'mfa_enabled' => 'setMfaEnabled',
         'platform' => 'setPlatform',
         'features' => 'setFeatures',
         'fulfilment_platforms' => 'setFulfilmentPlatforms',
@@ -205,6 +210,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'account_id' => 'getAccountId',
+        'mfa_enabled' => 'getMfaEnabled',
         'platform' => 'getPlatform',
         'features' => 'getFeatures',
         'fulfilment_platforms' => 'getFulfilmentPlatforms',
@@ -269,6 +275,7 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('mfa_enabled', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('features', $data ?? [], null);
         $this->setIfExists('fulfilment_platforms', $data ?? [], null);
@@ -313,6 +320,9 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'account_id', the character length must be bigger than or equal to 1.";
         }
 
+        if ($this->container['mfa_enabled'] === null) {
+            $invalidProperties[] = "'mfa_enabled' can't be null";
+        }
         if ($this->container['platform'] === null) {
             $invalidProperties[] = "'platform' can't be null";
         }
@@ -377,6 +387,33 @@ class PrincipalCommon implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         $this->container['account_id'] = $account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets mfa_enabled
+     *
+     * @return bool
+     */
+    public function getMfaEnabled()
+    {
+        return $this->container['mfa_enabled'];
+    }
+
+    /**
+     * Sets mfa_enabled
+     *
+     * @param bool $mfa_enabled Whether the account of the principal has MFA enabled.
+     *
+     * @return self
+     */
+    public function setMfaEnabled($mfa_enabled)
+    {
+        if (is_null($mfa_enabled)) {
+            throw new \InvalidArgumentException('non-nullable mfa_enabled cannot be null');
+        }
+        $this->container['mfa_enabled'] = $mfa_enabled;
 
         return $this;
     }

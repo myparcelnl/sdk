@@ -197,7 +197,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json;version=2.0`, `application/json`
+- **Accept**: `application/json;version=2.0`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -296,7 +296,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -305,7 +305,7 @@ try {
 ## `getPickupLocations()`
 
 ```php
-getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations
+getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $package_type, $weight, $saturday_delivery): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations
 ```
 
 Get Pickup Locations
@@ -351,9 +351,12 @@ $exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyP
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
 $latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
 $longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
+$package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType | Package type to get the delivery options for. When omitted a carrier-specific default is used.
+$weight = 56; // int | Weight in grams. Used to determine which package types and delivery options are available. Defaults to a carrier-specific weight when omitted.
+$saturday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Include Saturday delivery options. Only available for carriers that support it.
 
 try {
-    $result = $apiInstance->getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
+    $result = $apiInstance->getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $package_type, $weight, $saturday_delivery);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getPickupLocations: ', $e->getMessage(), PHP_EOL;
@@ -383,6 +386,9 @@ try {
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
 | **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
 | **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
+| **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType**](../Model/.md)| Package type to get the delivery options for. When omitted a carrier-specific default is used. | [optional] |
+| **weight** | **int**| Weight in grams. Used to determine which package types and delivery options are available. Defaults to a carrier-specific weight when omitted. | [optional] |
+| **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Include Saturday delivery options. Only available for carriers that support it. | [optional] |
 
 ### Return type
 
@@ -395,7 +401,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -404,7 +410,7 @@ try {
 ## `getShipments()`
 
 ```php
-getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $hidden, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
+getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $from, $hidden, $id, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $to, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
 ```
 
 Gets a list of Shipments, optionally filtered using parameters.
@@ -441,7 +447,9 @@ $delivered = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\
 $dropoff_today = True; // bool | Use this parameter to only show Shipments that need to be dropped off today.
 $external_identifier = 'external_identifier_example'; // string
 $filter_hidden_shops = True; // bool
+$from = 'from_example'; // string | Only return shipments created on or after this date.
 $hidden = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
+$id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | Only return shipments with these IDs. Separate multiple shipment IDs using `;`.
 $include_secondary_shipments = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean | Whether to include secondary (multicollo child) Shipments in the results. Pass `1` to include them; `0` (the default) excludes them.
 $link_consumer_portal = True; // bool
 $order = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter | Specify whether the results should be sorted in ascending or descending order.
@@ -455,11 +463,12 @@ $shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Cl
 $size = 56; // int | Specify the number of resources returned per page, used for paginated results.
 $sort = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment | Sort Shipment results by a particular resource field.
 $status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus | Filter by Shipment status. This filter will return only Shipments with the specified status.
+$to = 'to_example'; // string | Only return shipments created up to this date.
 $transaction_status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $hidden, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent);
+    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $from, $hidden, $id, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $to, $transaction_status, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getShipments: ', $e->getMessage(), PHP_EOL;
@@ -478,7 +487,9 @@ try {
 | **dropoff_today** | **bool**| Use this parameter to only show Shipments that need to be dropped off today. | [optional] |
 | **external_identifier** | **string**|  | [optional] |
 | **filter_hidden_shops** | **bool**|  | [optional] |
+| **from** | **string**| Only return shipments created on or after this date. | [optional] |
 | **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
+| **id** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| Only return shipments with these IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | [optional] |
 | **include_secondary_shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean**](../Model/.md)| Whether to include secondary (multicollo child) Shipments in the results. Pass &#x60;1&#x60; to include them; &#x60;0&#x60; (the default) excludes them. | [optional] |
 | **link_consumer_portal** | **bool**|  | [optional] |
 | **order** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter**](../Model/.md)| Specify whether the results should be sorted in ascending or descending order. | [optional] |
@@ -492,6 +503,7 @@ try {
 | **size** | **int**| Specify the number of resources returned per page, used for paginated results. | [optional] |
 | **sort** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment**](../Model/.md)| Sort Shipment results by a particular resource field. | [optional] |
 | **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus**](../Model/.md)| Filter by Shipment status. This filter will return only Shipments with the specified status. | [optional] |
+| **to** | **string**| Only return shipments created up to this date. | [optional] |
 | **transaction_status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus**](../Model/.md)|  | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
@@ -506,7 +518,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -575,7 +587,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -615,7 +627,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
 );
 $ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
 $format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
-$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
+$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`) or commas (`,`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
 $collect_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime
 $delivery_options_identifier = 'delivery_options_identifier_example'; // string
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
@@ -633,7 +645,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
 | **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
-| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
+| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;) or commas (&#x60;,&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
 | **collect_date** | **\DateTime**|  | [optional] |
 | **delivery_options_identifier** | **string**|  | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
@@ -649,7 +661,7 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/*`, `application/json`, `application/vnd.shipment_label_link+json`, `application/vnd.shipment_label_link+json+print`, `application/json+print`, `application/pdf+print`, `application/vnd.shipment_label+json+print`, `application/vnd.shipment_label+pdf+print`, `application/vnd.shipment_label+zpl+print`, `application/vnd.zpl+print`, `*/*`
+- **Accept**: `application/*`, `application/json`, `application/vnd.shipment_label_link+json`, `application/vnd.shipment_label_link+json+print`, `application/json+print`, `application/pdf+print`, `application/vnd.shipment_label+json+print`, `application/vnd.shipment_label+pdf+print`, `application/vnd.shipment_label+zpl+print`, `application/vnd.zpl+print`, `*/*`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -726,7 +738,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -797,7 +809,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -930,7 +942,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=2.0`, `application/json`
-- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -997,7 +1009,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=2.0`, `application/json`
-- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1064,7 +1076,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=2.0`, `application/json`
-- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/json`, `application/problem+json`, `application/*`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1073,7 +1085,7 @@ try {
 ## `postShipments()`
 
 ```php
-postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
+postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $send_return_mail, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
 ```
 
 Add Shipment
@@ -1104,13 +1116,14 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
 );
 $shipment_post_shipments_request_v11 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11 | Array of Shipment objects.
 $format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
-$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
+$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`) or commas (`,`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
 $collect_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime
 $delivery_options_identifier = 'delivery_options_identifier_example'; // string
+$send_return_mail = 56; // int | Whether to send the return email to the consumer when creating return shipments. Defaults to `1`.
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent);
+    $result = $apiInstance->postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $send_return_mail, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postShipments: ', $e->getMessage(), PHP_EOL;
@@ -1123,9 +1136,10 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **shipment_post_shipments_request_v11** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11**](../Model/ShipmentPostShipmentsRequestV11.md)| Array of Shipment objects. | |
 | **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
-| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
+| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;) or commas (&#x60;,&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
 | **collect_date** | **\DateTime**|  | [optional] |
 | **delivery_options_identifier** | **string**|  | [optional] |
+| **send_return_mail** | **int**| Whether to send the return email to the consumer when creating return shipments. Defaults to &#x60;1&#x60;. | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
@@ -1204,7 +1218,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

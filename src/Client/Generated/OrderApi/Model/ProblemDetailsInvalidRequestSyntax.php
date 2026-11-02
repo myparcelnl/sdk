@@ -63,7 +63,7 @@ class ProblemDetailsInvalidRequestSyntax implements ModelInterface, ArrayAccess,
         'detail' => 'string',
         'instance' => 'string',
         'cause' => 'mixed',
-        'errors' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[]'
+        'errors' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[]'
     ];
 
     /**
@@ -603,7 +603,7 @@ class ProblemDetailsInvalidRequestSyntax implements ModelInterface, ArrayAccess,
     /**
      * Gets errors
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[]
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[]
      */
     public function getErrors()
     {
@@ -613,7 +613,7 @@ class ProblemDetailsInvalidRequestSyntax implements ModelInterface, ArrayAccess,
     /**
      * Sets errors
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsClientAllOfErrors[] $errors Detailed information regarding the syntactic violations.
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseResultsInnerOneOf1ErrorsInner[] $errors Detailed information regarding the syntactic violations.
      *
      * @return self
      */
