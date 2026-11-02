@@ -1,3 +1,18 @@
+# Order status on the order push
+
+The e-commerce service now requires a status on every order that you push with
+`EcommerceApiFactory`. It refuses the whole request with HTTP 400 when one order has no status.
+Update the SDK to the release that adds `Order::setStatus()`, see `CHANGELOG.md`. Then set the
+status with `Order::setStatus()` or the `status` key of the constructor array:
+
+```php
+$order->setStatus(Order::STATUS_OPEN);
+```
+
+Use `Order::STATUS_CANCELED` when the order is cancelled in the shop, and push the order again with
+the same `source_id`. MyParcel sees the second push as an update of the order. See "Pushing orders"
+in `README.md`.
+
 # Upgrading to v11.2
 
 v11.2 renames generated models in the Ecommerce client. Code that uses them must change.
