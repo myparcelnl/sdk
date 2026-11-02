@@ -24,6 +24,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 final class JaneClientFactoryTest extends TestCase
 {
@@ -114,9 +117,41 @@ final class JaneClientFactoryTest extends TestCase
         self::assertSame([], $this->requests);
     }
 
+    public function testKeepsTheOptionsOfAnHttpClientThatTheCallerPasses(): void
+    {
+        $httpClient = new class implements HttpClientInterface {
+            /** @var array<string, mixed>|null The options of the last withOptions() call. */
+            public ?array $options = null;
+
+            public function request(string $method, string $url, array $options = []): ResponseInterface
+            {
+                throw new \LogicException('The test sends no request.');
+            }
+
+            public function stream(ResponseInterface|iterable $responses, ?float $timeout = null): ResponseStreamInterface
+            {
+                throw new \LogicException('The test sends no request.');
+            }
+
+            public function withOptions(array $options): static
+            {
+                $this->options = $options;
+
+                return $this;
+            }
+        };
+
+        JaneClientFactory::coreApi('my-api-key', null, null, ['x-dmp-example' => 'true'], $httpClient);
+
+        self::assertNotNull($httpClient->options);
+        self::assertArrayNotHasKey('timeout', $httpClient->options, 'The factory must not replace the timeout of a client that the caller passes.');
+        self::assertSame(['x-dmp-example' => 'true'], $httpClient->options['headers']);
+    }
+
     /**
      * JaneClientFactory builds the same parts as the generated Client::create(). When a regeneration
-     * adds or removes a part there, this test fails, so the factory can follow.
+     * adds or removes a part there, this test fails, so the factory can follow. The test also checks
+     * the server URL and the JSON decode options, which the factory copies.
      */
     public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(): void
     {
@@ -139,6 +174,19 @@ final class JaneClientFactoryTest extends TestCase
             ],
             $matches[1],
             'The generated Client::create() changed. Update JaneClientFactory to build the same parts.'
+        );
+
+        preg_match("/ServerUrlHttpClient\\('([^']+)'\\)/", $source, $serverUrl);
+
+        self::assertSame(
+            JaneClientFactory::CORE_API_HOST,
+            rtrim($serverUrl[1] ?? '', '/'),
+            'The generated Client::create() uses another server URL. Update JaneClientFactory::CORE_API_HOST.'
+        );
+        self::assertStringContainsString(
+            "JsonDecode(['json_decode_associative' => true])",
+            $source,
+            'The generated Client::create() decodes JSON with other options. Update JaneClientFactory::createSerializer().'
         );
     }
 
