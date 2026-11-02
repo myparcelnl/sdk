@@ -87,6 +87,36 @@ an API key.
 See [PHP SDK v11] on the developer portal for how to use it. `dev/connect-poc` in this repository is
 a page that runs the whole flow.
 
+### Pushing orders
+
+Every order needs a status: `Order::STATUS_OPEN` or `Order::STATUS_CANCELED`. The e-commerce service
+refuses the whole request with HTTP 400 when one order has no status.
+
+```php
+use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order;
+use MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory;
+
+$order = new Order([
+    'ordered_at' => new DateTime('now'),
+    'source_id'  => 'ORDER-2026-01042',
+    'status'     => Order::STATUS_OPEN,
+]);
+
+$api     = EcommerceApiFactory::make($connect);
+$results = $api->webhookOrdersPost([$order]);
+```
+
+To update an order, push it again with the same `source_id`. For example, when the merchant cancels
+the order in the shop:
+
+```php
+$order->setStatus(Order::STATUS_CANCELED);
+
+$results = $api->webhookOrdersPost([$order]);
+```
+
+MyParcel accepts the update, but does not act on it yet.
+
 ### When the connection expires
 
 Show the merchant a notice from about one month before the connection expires, so they reconnect in
