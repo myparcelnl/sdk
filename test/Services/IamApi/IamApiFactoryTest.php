@@ -9,7 +9,8 @@ use MyParcelNL\Sdk\Services\IamApi\IamApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 /**
- * JaneClientFactoryTest checks the host, the API key and the user agent of the client.
+ * JaneClientFactoryTest checks the host, the API key, the user agent and the headers that the IAM
+ * client sends.
  */
 final class IamApiFactoryTest extends TestCase
 {

@@ -78,6 +78,24 @@ final class JaneClientFactoryTest extends TestCase
         self::assertSame('https://api.acceptance.myparcel.nl/shipments', $this->requests[0]['url']);
     }
 
+    public function testSendsTheIamRequestsWithTheApiKeyTheUserAgentAndTheHostOverride(): void
+    {
+        $client = JaneClientFactory::iamApi(
+            'my-api-key',
+            'https://iam.acceptance.myparcel.nl',
+            'MyParcelNL-SDK/12.0.0',
+            ['x-dmp-test-feature' => 'enabled'],
+            $this->mockHttpClient('{"type":"SHOP"}')
+        );
+
+        $client->getWhoami();
+
+        self::assertSame('https://iam.acceptance.myparcel.nl/whoami', $this->requests[0]['url']);
+        self::assertSame('Bearer ' . base64_encode('my-api-key'), $this->header('authorization'));
+        self::assertSame('MyParcelNL-SDK/12.0.0', $this->header('user-agent'));
+        self::assertSame('enabled', $this->header('x-dmp-test-feature'));
+    }
+
     public function testReadsAResponseWithAFieldThatTheSpecDoesNotHave(): void
     {
         $shipment = $this->readShipment(['id' => 1, 'field_the_api_adds_later' => 'value']);
