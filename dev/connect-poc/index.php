@@ -555,10 +555,8 @@ function render(
     field('reference', 'Customer reference', (string) $form['reference'], 'text');
     echo '<label>Status<select name="status">';
 
-    foreach ([
-        \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order::STATUS_OPEN,
-        \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order::STATUS_CANCELED,
-    ] as $status) {
+    // The values come from the generated model, so a new status appears after a regeneration.
+    foreach ((new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order())->getStatusAllowableValues() as $status) {
         printf('<option%s>%s</option>', $status === ($form['status'] ?? null) ? ' selected' : '', e($status));
     }
 
