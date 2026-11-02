@@ -69,6 +69,10 @@ class OrderNormalizer implements DenormalizerInterface, NormalizerInterface, Den
             $object->sourceId = $data['sourceId'];
             unset($data['sourceId']);
         }
+        if (\array_key_exists('status', $data)) {
+            $object->status = is_string($data['status']) ? \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus::tryFrom($data['status']) ?? $data['status'] : $data['status'];
+            unset($data['status']);
+        }
         if (\array_key_exists('billingDetails', $data)) {
             $object->billingDetails = $this->denormalizer->denormalize($data['billingDetails'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderBillingDetails::class, 'json', $context);
             unset($data['billingDetails']);
@@ -103,6 +107,7 @@ class OrderNormalizer implements DenormalizerInterface, NormalizerInterface, Den
         $dataArray = [];
         $dataArray['orderedAt'] = $data->orderedAt->format('Y-m-d\TH:i:sP');
         $dataArray['sourceId'] = $data->sourceId;
+        $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus ? $data->status->value : $data->status;
         if (array_key_exists('billingDetails', get_object_vars($data)) && null !== ($data->billingDetails ?? null)) {
             $normalized = $this->normalizer->normalize($data->billingDetails, 'json', $context);
             $dataArray['billingDetails'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;

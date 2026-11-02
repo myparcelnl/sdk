@@ -24,6 +24,10 @@ class Order implements AdditionalPropertiesInterface
      * The order ID as defined in the source system.
      */
     public string $sourceId;
+    /**
+     * The order status.
+     */
+    public OrderStatus|string $status;
     public OrderBillingDetails $billingDetails;
     /**
      * The customer reference of the order.
@@ -37,6 +41,6 @@ class Order implements AdditionalPropertiesInterface
 
     public function definedProperties(): array
     {
-        return ['orderedAt' => 'orderedAt', 'sourceId' => 'sourceId', 'billingDetails' => 'billingDetails', 'customerReference' => 'customerReference', 'lines' => 'lines', 'shipping' => 'shipping'];
+        return ['orderedAt' => 'orderedAt', 'sourceId' => 'sourceId', 'status' => 'status', 'billingDetails' => 'billingDetails', 'customerReference' => 'customerReference', 'lines' => 'lines', 'shipping' => 'shipping'];
     }
 }
