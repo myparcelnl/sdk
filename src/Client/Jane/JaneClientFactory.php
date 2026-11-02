@@ -30,6 +30,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * change it later. So this factory builds the same parts as Client::create() itself, with
  * SkipValidationOnReadSerializer. JaneClientFactoryTest fails when a regeneration changes those parts.
  *
+ * @todo Call Client::create() again when Jane can generate validation for requests only.
+ *
  * @internal Use the API factories, such as ShipmentApiFactory.
  */
 final class JaneClientFactory
@@ -40,9 +42,8 @@ final class JaneClientFactory
     public const CORE_API_HOST = 'https://api.myparcel.nl';
 
     /**
-     * Default HTTP client timeout in seconds.
-     *
-     * Shared with generated-client based services to ensure consistent behaviour.
+     * Idle timeout in seconds of the HTTP client that this factory creates. A request stops when no
+     * data arrives for this time. In v11, the generated client stopped a request after this time in total.
      */
     public const DEFAULT_HTTP_TIMEOUT = 10;
 
@@ -53,7 +54,7 @@ final class JaneClientFactory
      * @param string|null              $host       Overrides the Core API host. An empty string uses the default.
      * @param string|null              $userAgent  Sent as the User-Agent on every request.
      * @param array<string, string>    $headers    Sent on every request, such as `x-dmp-*` API feature flags.
-     * @param HttpClientInterface|null $httpClient Sends the requests. Tests pass a MockHttpClient.
+     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout. Tests pass a MockHttpClient.
      */
     public static function coreApi(
         string $apiKey,
@@ -90,10 +91,10 @@ final class JaneClientFactory
             $headers['User-Agent'] = $userAgent;
         }
 
-        $httpClient = ($httpClient ?? HttpClient::create())->withOptions([
-            'timeout' => self::DEFAULT_HTTP_TIMEOUT,
-            'headers' => $headers,
-        ]);
+        // The timeout applies only to the client that this factory creates. A client that the caller
+        // passes keeps its own options.
+        $httpClient = ($httpClient ?? HttpClient::create(['timeout' => self::DEFAULT_HTTP_TIMEOUT]))
+            ->withOptions(['headers' => $headers]);
 
         // The same decorators as the generated Client::create(), in the same order. The
         // AuthenticationRegistry adds the API key only to operations that the spec secures.
