@@ -19,7 +19,10 @@ final class AccessorValues
     /**
      * A type that is missing or `mixed` accepts every value.
      *
-     * @param int $seed Makes a scalar value differ per property, so a getter that reads another property fails.
+     * An array stays empty: a setter can convert the rows to Jane models, so only an empty array
+     * comes back from the getter as it went in.
+     *
+     * @param int $seed Makes the value differ per property, so a getter that reads another property fails.
      *
      * @throws LogicException When the two types have no type in common.
      */
@@ -37,7 +40,7 @@ final class AccessorValues
                     'int'    => $seed,
                     'string' => "value-{$seed}",
                     'float'  => $seed + 0.5,
-                    'bool'   => true,
+                    'bool'   => 0 === $seed % 2,
                     'array'  => [],
                 };
             }

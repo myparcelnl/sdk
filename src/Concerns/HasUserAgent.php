@@ -20,9 +20,10 @@ trait HasUserAgent
     }
 
     /**
-     * The services that run on Jane send this header with each request, not once in the constructor.
-     * So a User-Agent that an integrator sets later, such as with setUserAgentForProposition(), also
-     * goes out.
+     * Build the User-Agent header from the registered user agents.
+     *
+     * A service that reads it per request, such as ShipmentQueryService, also sends a User-Agent that
+     * an integrator sets after the constructor, such as with setUserAgentForProposition().
      *
      * @return string
      */

@@ -82,7 +82,9 @@ final class ShipmentApiFactory
      * Create the Jane Core API client, with the same API key handling as make().
      *
      * The shipment services move to Jane one at a time. Until the last one moves, make() returns
-     * the openapi-generator client. Then make() returns this client, and this method goes.
+     * the openapi-generator client.
+     *
+     * @todo INT-2033: remove this method when make() returns the Jane client.
      *
      * @internal Used by the services that run on Jane.
      *

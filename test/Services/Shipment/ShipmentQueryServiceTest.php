@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
@@ -78,6 +79,20 @@ final class ShipmentQueryServiceTest extends TestCase
         $this->createService([])->query(['size' => 50]);
 
         self::assertSame(['size' => '50'], $this->queryOfRequest(0));
+    }
+
+    public function testQueryLeavesOutAFilterWithANullValue(): void
+    {
+        $this->createService([])->query(['barcode' => null, 'reference_identifier' => 'order-1', 'size' => null]);
+
+        self::assertSame(['reference_identifier' => 'order-1'], $this->queryOfRequest(0));
+    }
+
+    public function testQuerySendsTheValueOfAnEnumFilter(): void
+    {
+        $this->createService([])->query(['carrier_id' => RefTypesCarrier::Postnl]);
+
+        self::assertSame(['carrier_id' => '1', 'size' => '300'], $this->queryOfRequest(0));
     }
 
     public function testQueryThrowsOnUnknownParameter(): void

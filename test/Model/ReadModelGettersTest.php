@@ -14,7 +14,9 @@ use ReflectionMethod;
 use ReflectionProperty;
 
 /**
- * A regeneration can add a property to a Jane model. The read model then needs a getter for it.
+ * A read model, such as `FoundShipment` and `TrackTrace`, wraps a Jane model from a response and
+ * keeps the v11 getters. A regeneration can add a property to the Jane model. The read model then
+ * needs a getter for it.
  */
 final class ReadModelGettersTest extends TestCase
 {

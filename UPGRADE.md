@@ -13,6 +13,22 @@ The generated Jane clients send their requests with a Symfony HTTP client, with 
 
 A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`.
 
+### Getters of FoundShipment and TrackTrace
+
+`FoundShipment` and `TrackTrace` keep the getter names of v11, but some getters return another type, because they return what the Jane model holds:
+
+| Getter | v11 | v12 |
+|--------|-----|-----|
+| `getCarrierId()`, `getStatus()`, `getShipmentType()`, `getTransactionStatus()`, `getPaymentStatus()`, `getCurrency()` and `getExternalProvider()` of `FoundShipment`, and `getCarrier()` of `TrackTrace` | The raw value, such as `1` | The enum case, such as `RefTypesCarrier::Postnl`, or the raw value for a value that the SDK does not know. Compare with the case, or read `->value` |
+| `getHidden()` | `0` or `1` | `0.0` or `1.0` |
+| `getDelayed()` and `getDelivered()` of `FoundShipment` | `null` for a field that the API did not send | `false`: the Jane model has that default |
+| `getPickup()`, `getDropOffPoint()` and `getShippedItems()` | Decoded JSON | `ShipmentDefsShipmentPickup`, `ShipmentDefsShipmentDropOffPoint` and `ShipmentDefsShipmentShippedItem[]`, Jane models with public properties |
+| `getCustomsDeclaration()` | `ShipmentDefsShipmentCustomsDeclaration` | `RefShipmentCustomsDeclaration` |
+| `getCollectionContact()` | `ShipmentDefsShipmentCollectionContact` | `AccountDefsContact` |
+| `getOrigin()`, `getParentId()` and `getExternalProviderId()` | A wrapper model | `string`, `int` and `int` |
+| `getCreatedBy()` and `getModifiedBy()` | `int` | The value as the API sends it |
+| `getSignature()` of `TrackTrace` | `ShipmentDefsTrackTraceProofOfDelivery` | The decoded JSON |
+
 ### Services
 
 | Class                  | v11                                | v12                                                         |
