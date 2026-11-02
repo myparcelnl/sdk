@@ -11,7 +11,9 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 /**
  * Pins the public output of the mapping services. A change of API client generator must not change this output.
  *
- * Set UPDATE_SNAPSHOTS=1 to write the snapshot again after a deliberate change.
+ * Set UPDATE_SNAPSHOTS=1 to create the snapshot, or to write it again after a deliberate change.
+ * Without that variable, a missing snapshot fails the test, so CI cannot pass on a snapshot that
+ * a later change wrote by accident.
  */
 class MappingSnapshotTest extends TestCase
 {
@@ -59,7 +61,7 @@ class MappingSnapshotTest extends TestCase
             'shipment_option_mapper' => $this->buildShipmentOptionMapperSnapshot(),
         ];
 
-        if (getenv('UPDATE_SNAPSHOTS') || ! is_file(self::SNAPSHOT)) {
+        if (getenv('UPDATE_SNAPSHOTS')) {
             file_put_contents(
                 self::SNAPSHOT,
                 json_encode($actual, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n"
@@ -67,6 +69,8 @@ class MappingSnapshotTest extends TestCase
 
             self::markTestIncomplete('The test wrote the snapshot. Check the diff, then run the test again.');
         }
+
+        self::assertFileExists(self::SNAPSHOT, 'Run the test with UPDATE_SNAPSHOTS=1 to create the snapshot.');
 
         $expected = json_decode((string) file_get_contents(self::SNAPSHOT), true, 512, JSON_THROW_ON_ERROR);
 
