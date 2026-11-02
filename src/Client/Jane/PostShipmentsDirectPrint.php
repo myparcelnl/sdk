@@ -13,11 +13,11 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * Creates shipments and prints their labels on a printer group.
  *
- * The Core API spec does not document direct print. The API answers with the ids of the new
+ * The Core API spec does not document direct print on POST /shipments. The API answers with the ids of the new
  * shipments, so this endpoint reads a 200 response as `ShipmentResponsesShipmentIds`. The generated
  * `PostShipments` reads every other response, such as an error.
  *
- * @todo Remove this class when the spec documents the direct print Accept header and its response.
+ * @todo Remove this class when the spec documents the direct print Accept header of POST /shipments and its response.
  *
  * @internal
  */
