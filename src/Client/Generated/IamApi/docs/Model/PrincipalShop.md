@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **account_id** | **string** | The unique identifier of the account. |
+**mfa_enabled** | **bool** | Whether the account of the principal has MFA enabled. |
 **platform** | [**\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform**](Platform.md) |  |
 **features** | [**\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]**](Feature.md) |  | [optional]
 **fulfilment_platforms** | [**\MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]**](FulfilmentPlatform.md) |  | [optional]

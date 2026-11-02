@@ -249,7 +249,7 @@ No authorization required
 ## `createFromShippablePackagesPost()`
 
 ```php
-createFromShippablePackagesPost($create_order_from_shippable_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]
+createFromShippablePackagesPost($create_order_from_shippable_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]
 ```
 
 Create an order from shippable packages.
@@ -287,7 +287,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]**](../Model/CreatePost202ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]**](../Model/CreateFromShippablePackagesPost200ResponseInner.md)
 
 ### Authorization
 
@@ -305,7 +305,7 @@ No authorization required
 ## `createPost()`
 
 ```php
-createPost($order_to_create): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]
+createPost($order_to_create): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response
 ```
 
 Create orders.
@@ -343,7 +343,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]**](../Model/CreatePost202ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response**](../Model/CreatePost202Response.md)
 
 ### Authorization
 

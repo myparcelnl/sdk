@@ -81,7 +81,8 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType',
         'delivery_type' => 'int',
         'delivery_date' => 'string',
-        'label_description' => 'string'
+        'label_description' => 'string',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms'
     ];
 
     /**
@@ -115,7 +116,8 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         'package_type' => null,
         'delivery_type' => null,
         'delivery_date' => null,
-        'label_description' => null
+        'label_description' => null,
+        'incoterms' => null
     ];
 
     /**
@@ -147,7 +149,8 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         'package_type' => false,
         'delivery_type' => true,
         'delivery_date' => false,
-        'label_description' => false
+        'label_description' => false,
+        'incoterms' => false
     ];
 
     /**
@@ -259,7 +262,8 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         'package_type' => 'package_type',
         'delivery_type' => 'delivery_type',
         'delivery_date' => 'delivery_date',
-        'label_description' => 'label_description'
+        'label_description' => 'label_description',
+        'incoterms' => 'incoterms'
     ];
 
     /**
@@ -291,7 +295,8 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         'package_type' => 'setPackageType',
         'delivery_type' => 'setDeliveryType',
         'delivery_date' => 'setDeliveryDate',
-        'label_description' => 'setLabelDescription'
+        'label_description' => 'setLabelDescription',
+        'incoterms' => 'setIncoterms'
     ];
 
     /**
@@ -323,7 +328,8 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         'package_type' => 'getPackageType',
         'delivery_type' => 'getDeliveryType',
         'delivery_date' => 'getDeliveryDate',
-        'label_description' => 'getLabelDescription'
+        'label_description' => 'getLabelDescription',
+        'incoterms' => 'getIncoterms'
     ];
 
     /**
@@ -434,6 +440,7 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         $this->setIfExists('delivery_type', $data ?? [], null);
         $this->setIfExists('delivery_date', $data ?? [], null);
         $this->setIfExists('label_description', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
     }
 
     /**
@@ -1160,6 +1167,33 @@ class ShipmentDefsShipmentOptions implements ModelInterface, ArrayAccess, \JsonS
         }
 
         $this->container['label_description'] = $label_description;
+
+        return $this;
+    }
+
+    /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
 
         return $this;
     }
