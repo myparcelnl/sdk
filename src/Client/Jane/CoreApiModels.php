@@ -74,6 +74,38 @@ final class CoreApiModels
     }
 
     /**
+     * Copy a model with its nested models and lists, so a change to the copy does not change the
+     * original. `clone` copies only the top level of a Jane model.
+     *
+     * @template T of object
+     *
+     * @param T $model
+     *
+     * @return T
+     */
+    public static function copy(object $model): object
+    {
+        $copy = clone $model;
+
+        foreach ((new ReflectionObject($copy))->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            if ($property->isInitialized($copy)) {
+                $copy->{$property->getName()} = self::copyValue($copy->{$property->getName()});
+            }
+        }
+
+        return $copy;
+    }
+
+    private static function copyValue(mixed $value): mixed
+    {
+        if (is_array($value)) {
+            return array_map(static fn (mixed $item): mixed => self::copyValue($item), $value);
+        }
+
+        return is_object($value) && ! $value instanceof UnitEnum ? self::copy($value) : $value;
+    }
+
+    /**
      * Remove each property without a type that is null, in the model and in its nested models.
      *
      * Jane generates a property without a type for a field with more than one type, such as the

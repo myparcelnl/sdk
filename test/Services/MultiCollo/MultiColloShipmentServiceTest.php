@@ -45,6 +45,19 @@ final class MultiColloShipmentServiceTest extends TestCase
         self::assertSame(900, $shipment->getPhysicalProperties()->weight);
     }
 
+    public function testSplitShipmentKeepsAnIntReferenceIdentifier(): void
+    {
+        $shipment = (new Shipment())
+            ->setReferenceIdentifier(12345)
+            ->setCarrier(1)
+            ->setPhysicalProperties(['weight' => 600]);
+
+        $main = (new MultiColloShipmentService())->splitShipment($shipment, 2);
+
+        self::assertSame('12345', (string) $main->getReferenceIdentifier());
+        self::assertSame('12345', (string) $main->getSecondaryShipments()[0]->referenceIdentifier);
+    }
+
     public function testSplitShipmentGeneratesReferenceIdentifierWhenMissing(): void
     {
         $shipment = (new Shipment())
