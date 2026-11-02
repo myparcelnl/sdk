@@ -17,11 +17,14 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsExternalProvi
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentDropOffPoint;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentPartnerTracktracesItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentPaymentStatus;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentPhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentPickup;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentRecipient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentSecondaryShipmentsItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentSender;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentShippedItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentStatus;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 
@@ -31,7 +34,8 @@ use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
  * A Jane model has public properties and no getters. This class keeps the getters, so v11 code
  * that reads a found shipment keeps working.
  *
- * A getter returns null for a field that the API did not send. `ReadModelGettersTest` fails when
+ * A getter returns null for a field that the API did not send, except `getDelayed()` and
+ * `getDelivered()`: the Jane model gives them the default `false`. `ReadModelGettersTest` fails when
  * the Jane model `ShipmentDefsShipment` gets a property without a getter here. `json_encode()`
  * gives the fields with their API names, as in v11.
  */
@@ -50,7 +54,8 @@ final class FoundShipment implements JsonSerializable
     }
 
     /**
-     * @return array<string, mixed> The fields that the API sent, with their API names.
+     * @return array<string, mixed> The fields that the API sent, and the fields with a default in the
+     *                              Jane model, such as `delayed`, with their API names.
      */
     public function jsonSerialize(): array
     {
@@ -223,12 +228,12 @@ final class FoundShipment implements JsonSerializable
 
     public function getDelayed(): bool
     {
-        return $this->shipment->delayed ?? null;
+        return $this->shipment->delayed;
     }
 
     public function getDelivered(): bool
     {
-        return $this->shipment->delivered ?? null;
+        return $this->shipment->delivered;
     }
 
     public function getAmount(): ?int
