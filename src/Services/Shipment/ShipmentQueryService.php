@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
+use BackedEnum;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
@@ -33,6 +34,9 @@ final class ShipmentQueryService
 
     /**
      * Query shipments by available API filters.
+     *
+     * A key with a null value leaves the filter out, as in v11. An enum case, such as the value that
+     * FoundShipment::getCarrierId() returns, goes as its value.
      *
      * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
      *                                         parameters (barcode, carrier_id, created, status, etc.).
@@ -99,12 +103,15 @@ final class ShipmentQueryService
     {
         if (! array_key_exists('size', $parameters)) {
             $parameters['size'] = self::DEFAULT_QUERY_PAGE_SIZE;
-        } elseif (null === $parameters['size']) {
-            // The generated client accepts only an int. Without the key, the API uses its default.
-            unset($parameters['size']);
         }
 
-        return $parameters;
+        // A null value means "no filter", as in v11. The generated client would reject it. Without
+        // the size key, the API uses its default.
+        $parameters = array_filter($parameters, static fn (mixed $value): bool => null !== $value);
+
+        // The generated client sends a query value as it is, and refuses an object. An enum case, such
+        // as the value that FoundShipment::getCarrierId() returns, goes as its backing value.
+        return array_map(static fn (mixed $value): mixed => $value instanceof BackedEnum ? $value->value : $value, $parameters);
     }
 
     /**
