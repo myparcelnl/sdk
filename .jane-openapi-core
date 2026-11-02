@@ -22,7 +22,9 @@ return [
             'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi',
             'directory' => __DIR__ . '/src/Client/Generated/Jane/IamApi',
         ],
-        // The SDK uses only the models of the Order API. Jane always generates the client too.
+        // No SDK code uses the Order API. The PDK and the Magento plugin use some of its models.
+        // Jane always generates the client too.
+        // @todo INT-2179: remove the Order API when no plugin uses its models.
         'https://order.api.myparcel.nl/openapi.json' => [
             'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\OrderApi',
             'directory' => __DIR__ . '/src/Client/Generated/Jane/OrderApi',
