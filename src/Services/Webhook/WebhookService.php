@@ -66,8 +66,8 @@ final class WebhookService
         $request->data = $data;
 
         $response = $this->api->postWebhookSubscriptions(
-            $request,
-            ['User-Agent' => $this->getUserAgentHeader()]
+            requestBody: $request,
+            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
         );
 
         $ids = $response instanceof WebhooksResponsesPostWebhookSubscriptions ? ($response->data->ids ?? []) : [];
@@ -92,7 +92,7 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $this->api->deleteWebhookSubscriptions($ids, ['User-Agent' => $this->getUserAgentHeader()]);
+        $this->api->deleteWebhookSubscriptions(ids: $ids, headerParameters: ['User-Agent' => $this->getUserAgentHeader()]);
     }
 
     /**
@@ -107,8 +107,8 @@ final class WebhookService
     public function getAll(?string $hook = null): array
     {
         $response = $this->api->getWebhookSubscriptions(
-            null !== $hook ? ['hook' => $hook] : [],
-            ['User-Agent' => $this->getUserAgentHeader()]
+            queryParameters: null !== $hook ? ['hook' => $hook] : [],
+            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
         );
 
         return self::subscriptions($response);
@@ -132,8 +132,8 @@ final class WebhookService
         $ids = implode(';', $subscriptionIds);
 
         $response = $this->api->getWebhookSubscriptionsById(
-            $ids,
-            ['User-Agent' => $this->getUserAgentHeader()]
+            ids: $ids,
+            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
         );
 
         return self::subscriptions($response);
