@@ -43,7 +43,8 @@ final class TrackTrace implements JsonSerializable
     }
 
     /**
-     * @return array<string, mixed> The fields that the API sent, with their API names.
+     * @return array<string, mixed> The fields that the API sent, and the fields without a type in the
+     *                              Jane model, such as `signature`, which is `null`, with their API names.
      */
     public function jsonSerialize(): array
     {
