@@ -90,7 +90,7 @@ final class ReturnShipmentService
         $request->data = CoreApiModels::withoutNullUntypedProperties($data);
 
         return $this->mapCreatedShipments(
-            $this->api->postShipments($request, [], ['User-Agent' => $this->getUserAgentHeader()])
+            $this->api->postShipments(requestBody: $request, headerParameters: ['User-Agent' => $this->getUserAgentHeader()])
         );
     }
 
@@ -103,7 +103,8 @@ final class ReturnShipmentService
             throw new InvalidArgumentException('Unexpected response type returned while parsing return shipment response.');
         }
 
-        if (! isset($response->data)) {
+        // The generated normalizer turns `"data": null` into an empty data model, so check the shipments.
+        if (! isset($response->data->shipments)) {
             throw new InvalidArgumentException('The API returned a response without data while parsing return shipment response.');
         }
 

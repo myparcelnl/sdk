@@ -109,6 +109,26 @@ final class ReturnShipmentServiceTest extends TestCase
         }
     }
 
+    public function testCreateRelatedThrowsOnNullData(): void
+    {
+        $service = $this->createService('{"data":null}');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The API returned a response without data while parsing return shipment response.');
+
+        $service->createRelated([self::RELATED_ROW]);
+    }
+
+    public function testCreateUnrelatedThrowsOnNullData(): void
+    {
+        $service = $this->createService('{"data":null}');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The API returned a response without data while parsing return shipment response.');
+
+        $service->createUnrelated([['carrier' => 1, 'email' => 'test@example.com', 'name' => 'Jane Doe']]);
+    }
+
     public function testCreateUnrelatedThrowsOnEmptyInput(): void
     {
         $service = $this->createService('{}');
