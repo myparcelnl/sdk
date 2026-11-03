@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services;
 
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
@@ -506,13 +504,12 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             return;
         }
 
-        if ($e instanceof ConnectException || $e instanceof TransportExceptionInterface) {
+        if ($e instanceof TransportExceptionInterface) {
             $this->markTestSkipped('Skipping live smoke: connection error: ' . $message);
             return;
         }
 
         $response = match (true) {
-            $e instanceof RequestException => $e->getResponse(),
             $e instanceof WithResponseInterface => $e->getResponse(),
             default => null,
         };
