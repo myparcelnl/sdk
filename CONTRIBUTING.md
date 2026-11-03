@@ -91,8 +91,8 @@ When calling methods from these generated clients, always use named arguments. P
 
 ### Generated Files Location
  **DO NOT EDIT MANUALLY**
-- `src/Client/Generated/Jane/` — The clients that [Jane](https://github.com/janephp/janephp) generates. Each API gets its own namespace, such as `MyParcelNL\Sdk\Client\Generated\Jane\CoreApi`.
-- `src/Client/Generated/EcommerceApi/` — The legacy e-commerce client that OpenAPI Generator generates. INT-2034 replaces it with the Jane `EcommerceApi`.
+- `src/Client/Generated/Jane/`: the clients that [Jane](https://github.com/janephp/janephp) generates. Each API gets its own namespace, such as `MyParcelNL\Sdk\Client\Generated\Jane\CoreApi`.
+- `src/Client/Generated/EcommerceApi/`: the legacy e-commerce client that OpenAPI Generator generates. INT-2034 replaces it with the Jane `EcommerceApi`.
 
 Jane generates the following APIs:
 
@@ -104,9 +104,9 @@ Jane generates the following APIs:
 
 The configuration is in these files:
 
-- `.jane-openapi` — The Jane `EcommerceApi`.
-- `.jane-openapi-core` — The Jane `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi`.
-- `openapi/ecommerce.yaml`, `openapi/common.yaml`, `openapi/commonProperties.yaml` and `openapi/templates/` — The legacy e-commerce client.
+- `.jane-openapi`: the Jane `EcommerceApi`.
+- `.jane-openapi-core`: the Jane `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi`.
+- `openapi/ecommerce.yaml`, `openapi/common.yaml`, `openapi/commonProperties.yaml` and `openapi/templates/`: the legacy e-commerce client.
 
 ### Regenerating Code
 

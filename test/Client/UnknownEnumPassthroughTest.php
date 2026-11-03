@@ -40,6 +40,33 @@ class UnknownEnumPassthroughTest extends TestCase
         self::assertSame('POSTNL', $shipping->getCarrier());
     }
 
+    /**
+     * An inline enum, such as `packageType`, is typed as a string with constants. It behaves like a
+     * referenced enum: the raw value on read, strict on write.
+     */
+    public function testUnknownInlineEnumValuePassesThroughOnRead(): void
+    {
+        $shipping = ObjectSerializer::deserialize('{"packageType":"FOOTYPE"}', self::SHIPPING);
+
+        self::assertSame('FOOTYPE', $shipping->getPackageType());
+    }
+
+    public function testKnownInlineEnumValueStillReads(): void
+    {
+        $shipping = ObjectSerializer::deserialize('{"packageType":"PACKAGE"}', self::SHIPPING);
+
+        self::assertSame('PACKAGE', $shipping->getPackageType());
+    }
+
+    public function testUnknownInlineEnumValueThrowsWhenBuildingARequest(): void
+    {
+        $shipping = (new OrderShipping())->setPackageType('FOOTYPE');
+
+        $this->expectException(InvalidArgumentException::class);
+
+        ObjectSerializer::sanitizeForSerialization($shipping);
+    }
+
     public function testListenerObservesTheUnknownValue(): void
     {
         $seen = [];
