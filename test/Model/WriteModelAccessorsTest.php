@@ -57,7 +57,7 @@ final class WriteModelAccessorsTest extends TestCase
         foreach ((new ReflectionClass($janeModel))->getProperties(ReflectionProperty::IS_PUBLIC) as $seed => $property) {
             $name      = ucfirst($property->getName());
             $parameter = (new ReflectionMethod($sdkModel, "set{$name}"))->getParameters()[0]->getType();
-            $value     = AccessorValues::acceptedByBoth($parameter, (new ReflectionMethod($sdkModel, "get{$name}"))->getReturnType(), $seed);
+            $value     = AccessorValues::acceptedByBoth($parameter, (new ReflectionMethod($sdkModel, "get{$name}"))->getReturnType(), $seed, emptyArrays: true);
 
             $model->{"set{$name}"}($value);
             $expected["get{$name}"] = $value;
