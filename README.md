@@ -27,8 +27,9 @@ composer require myparcelnl/sdk
 
 ## Quick start
 
-Most v11 services take an API key in the constructor and wrap the generated API client. MyParcel
-Connect is the exception, see [MyParcel Connect](#myparcel-connect).
+Most services take an API key in the constructor and run on the Jane Core API client, see
+[Generated API clients](#generated-api-clients). MyParcel Connect is the exception, see
+[MyParcel Connect](#myparcel-connect).
 
 ```php
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
@@ -307,6 +308,31 @@ shipment. To translate an option name of the SDK, such as `signature`, use
 `ShipmentOptionMapper::v2PropertyFromName()`. It returns `null` for an option that a capabilities
 request cannot send, such as `tracked`.
 
+## Generated API clients
+
+[Jane](https://github.com/janephp/janephp) generates the clients of the Core API, the private Core API, the IAM API
+and the Order API from their OpenAPI specs into `src/Client/Generated/Jane/`. The configuration is in
+`.jane-openapi-core`, and `composer generate:api` generates them again. The legacy e-commerce client in
+`src/Client/Generated/EcommerceApi/` still comes from OpenAPI Generator until INT-2034.
+
+The services wrap these clients. To call the API yourself, build a client with a factory and call the generated
+method. A Jane model has public properties, and an enum of the spec is a PHP enum:
+
+```php
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+
+$client   = ShipmentApiFactory::make('your-api-key');
+$response = $client->getShipments(['reference_identifier' => 'order-1001']);
+
+foreach ($response->data->shipments as $shipment) {
+    $isPostNl = RefTypesCarrier::Postnl === $shipment->carrierId;
+}
+```
+
+`IamApiFactory::make()` and `WebhookApiFactory::make()` build the other clients. [UPGRADE.md](UPGRADE.md) lists the
+differences with the openapi-generator clients of v11.
+
 ## Legacy services
 
 The following are still available but will be replaced in a future release:
@@ -330,7 +356,8 @@ Use `CarrierContractDefinitionsService` for new account-level carrier contract d
 
 Tests use two mocking strategies:
 - **Legacy web services:** Mockery via `$this->mockCurl()` in `TestCase`
-- **v11 service wrappers:** Constructor injection of a mock API instance
+- **Services on the Jane clients:** pass a client from a factory with a Symfony `MockHttpClient` as its last
+  argument, and check the request that goes out
 
 Existing tests serve as examples for both patterns.
 

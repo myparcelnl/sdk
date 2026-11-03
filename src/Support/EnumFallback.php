@@ -19,7 +19,7 @@ namespace MyParcelNL\Sdk\Support;
  * value that was never supported.
  *
  * Only the openapi-generator e-commerce client calls this class. The Jane clients
- * return an unknown enum value as the raw string themselves.
+ * keep an unknown enum value as the raw value themselves, without a listener.
  *
  * @todo INT-2034: remove this class with the openapi-generator e-commerce client.
  */
