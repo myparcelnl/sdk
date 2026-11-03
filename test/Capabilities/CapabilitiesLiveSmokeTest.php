@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesServerErrorException;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
@@ -78,6 +79,14 @@ final class CapabilitiesLiveSmokeTest extends TestCase
             return $call();
         } catch (TransportExceptionInterface $e) {
             $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
+        } catch (BadResponseException $e) {
+            // A gateway error, such as a 502 with an HTML body, has no JSON content type, so the generated
+            // endpoint throws this exception instead of a status exception.
+            if (429 === $e->getCode() || $e->getCode() >= 500) {
+                $this->markTestSkipped('Skipping live smoke due to transient API error: ' . $e->getMessage());
+            }
+
+            throw $e;
         } catch (PostCapabilitiesServerErrorException $e) {
             $this->markTestSkipped('Skipping live smoke due to transient API error: ' . $e->getMessage());
         } catch (PostCapabilitiesClientErrorException $e) {

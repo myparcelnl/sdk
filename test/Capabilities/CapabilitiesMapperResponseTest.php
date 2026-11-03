@@ -54,6 +54,13 @@ final class CapabilitiesMapperResponseTest extends TestCase
         $this->assertSame(['FUTURE_PACKAGE'], $res->getPackageTypes());
     }
 
+    public function testMapFromCoreApiKeepsAnOptionTheSpecDoesNotKnow(): void
+    {
+        $res = self::map([['carrier' => 'POSTNL', 'options' => ['requiresSignature' => self::OPTION, 'futureOption' => self::OPTION]]]);
+
+        $this->assertSame(['requiresSignature', 'futureOption'], $res->getShipmentOptions());
+    }
+
     public function testMapFromCoreApiSetsCarrierNullWhenInconsistent(): void
     {
         $res = self::map([['carrier' => 'POSTNL'], ['carrier' => 'DHL_FOR_YOU']]);

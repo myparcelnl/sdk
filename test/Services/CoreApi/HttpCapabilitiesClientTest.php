@@ -20,7 +20,8 @@ final class HttpCapabilitiesClientTest extends TestCase
     private array $requests = [];
 
     /**
-     * v11 passed the User-Agent as the request body. This test checks the request that goes out.
+     * v11 passed the User-Agent as the request body. This test checks the request that goes out. The
+     * client that the caller passes keeps its own User-Agent.
      */
     public function testGetCapabilitiesSendsTheRequestAndReadsTheResponse(): void
     {
@@ -34,7 +35,7 @@ final class HttpCapabilitiesClientTest extends TestCase
         self::assertSame('POST', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/capabilities', $this->requests[0]['url']);
         self::assertSame(['application/json;version=2.0'], $this->requests[0]['content_type']);
-        self::assertStringStartsWith('User-Agent: MyParcelSDK/', $this->requests[0]['user_agent'][0]);
+        self::assertSame(['User-Agent: MyPlugin/1.0 Magento/2.4'], $this->requests[0]['user_agent']);
         self::assertJsonStringEqualsJsonString('{"recipient":{"countryCode":"NL"},"carrier":"POSTNL"}', $this->requests[0]['body']);
 
         self::assertSame('POSTNL', $response->getCarrier());
@@ -70,6 +71,6 @@ final class HttpCapabilitiesClientTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new HttpCapabilitiesClient(null, ShipmentApiFactory::client('my-api-key', null, null, [], $httpClient));
+        return new HttpCapabilitiesClient(null, ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $httpClient));
     }
 }
