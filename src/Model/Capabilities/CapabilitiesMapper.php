@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
 use BackedEnum;
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2 as CoreRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponseCapabilityV2 as CoreCapabilityV2;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Maps a CapabilitiesRequest to the Jane request model, and the Jane response model to a CapabilitiesResponse.
@@ -19,13 +23,14 @@ use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
  */
 class CapabilitiesMapper
 {
-    private const PHYSICAL_PROPERTIES = ['height', 'width', 'length', 'weight'];
-
     /**
      * Map SDK request to the Core API request model.
      *
-     * Note: we intentionally do not filter enum-like values (carrier, deliveryType, packageType, direction)
-     * to preserve forward compatibility when the API adds new allowable values.
+     * The mapper passes `carrier`, `deliveryType`, `packageType` and `direction` as they are. The generated
+     * client checks them against the spec before it sends the request, and throws a ValidationException
+     * for a value that the spec does not know.
+     *
+     * @throws InvalidArgumentException For a physical property that is not a whole number.
      */
     public function mapToCoreApi(CapabilitiesRequest $request): CoreRequestV2
     {
@@ -125,15 +130,8 @@ class CapabilitiesMapper
             return [];
         }
 
-        $names = [];
-
-        foreach ($result->options->definedProperties() as $property => $apiName) {
-            if (isset($result->options->{$property})) {
-                $names[] = $apiName;
-            }
-        }
-
-        return $names;
+        // toArray() gives the API names of the set options, also an option that the spec does not know yet.
+        return array_keys($result->options->toArray());
     }
 
     /**
@@ -204,11 +202,14 @@ class CapabilitiesMapper
     }
 
     /**
-     * Keep each dimension that has a value and a unit. The spec types the value as an integer.
+     * Keep each dimension that has a value and a unit. The spec types the value as an integer, so a
+     * value that is not whole throws, instead of the silent truncation of PHP.
      *
      * @param array<string, mixed>|null $physicalData
      *
      * @return array<string, array{value: mixed, unit: mixed}>|null
+     *
+     * @throws InvalidArgumentException For a value that is not a whole number, such as 10.5.
      */
     private function mapPhysicalProperties(?array $physicalData): ?array
     {
@@ -218,15 +219,35 @@ class CapabilitiesMapper
 
         $physical = [];
 
-        foreach (self::PHYSICAL_PROPERTIES as $name) {
+        foreach (self::physicalPropertyNames() as $name) {
             $dimension = $physicalData[$name] ?? null;
 
             if (is_array($dimension) && array_key_exists('value', $dimension) && array_key_exists('unit', $dimension)) {
+                if (is_float($dimension['value']) && floor($dimension['value']) !== $dimension['value']) {
+                    throw new InvalidArgumentException(sprintf('The %s of the physical properties must be a whole number, %s given.', $name, $dimension['value']));
+                }
+
                 $physical[$name] = ['value' => $dimension['value'], 'unit' => $dimension['unit']];
             }
         }
 
         return $physical;
+    }
+
+    /**
+     * The names of the physical properties, read from the Jane model, so a new dimension in the spec
+     * needs no change here.
+     *
+     * @return list<string>
+     */
+    private static function physicalPropertyNames(): array
+    {
+        $names = array_map(
+            static fn (ReflectionProperty $property): string => $property->getName(),
+            (new ReflectionClass(CapabilitiesPostCapabilitiesRequestV2PhysicalProperties::class))->getProperties(ReflectionProperty::IS_PUBLIC)
+        );
+
+        return array_values(array_diff($names, ['extraProperties']));
     }
 
     /**
