@@ -22,8 +22,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Creates return shipments, for existing shipments or without one.
  *
- * A row has the API field names, such as `parent` and `email`. The generated client checks the
- * request before it sends it, and picks the content type from the request body.
+ * Each return shipment in `$returnShipments` is an array with the API field names, such as `parent`
+ * and `email`. The generated client checks the request before it sends it, and picks the content
+ * type from the request body.
  */
 final class ReturnShipmentService
 {
@@ -100,6 +101,10 @@ final class ReturnShipmentService
     {
         if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
             throw new InvalidArgumentException('Unexpected response type returned while parsing return shipment response.');
+        }
+
+        if (! isset($response->data)) {
+            throw new InvalidArgumentException('The API returned a response without data while parsing return shipment response.');
         }
 
         $mapping = [];
