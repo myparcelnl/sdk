@@ -38,7 +38,7 @@ class ShipmentApiFactoryTest extends TestCase
             'MyApp/1.0',
             ['x-dmp-no-tracking' => 'true'],
             $this->mockHttpClient()
-        )->deleteShipments('1');
+        )->deleteShipments(ids: '1');
 
         $this->assertSame('https://api.example.com/shipments/1', $this->request['url']);
         $this->assertSame(['Bearer ' . base64_encode('test-key')], $this->request['headers']['authorization']);
@@ -48,7 +48,7 @@ class ShipmentApiFactoryTest extends TestCase
 
     public function testMakeWithoutHeadersSendsNoFeatureFlags(): void
     {
-        ShipmentApiFactory::make('test-key', null, null, [], $this->mockHttpClient())->deleteShipments('1');
+        ShipmentApiFactory::make('test-key', null, null, [], $this->mockHttpClient())->deleteShipments(ids: '1');
 
         $this->assertSame('https://api.myparcel.nl/shipments/1', $this->request['url']);
         $this->assertArrayNotHasKey('x-dmp-no-tracking', $this->request['headers']);
@@ -60,7 +60,7 @@ class ShipmentApiFactoryTest extends TestCase
         putenv('API_KEY=env-key');
 
         try {
-            ShipmentApiFactory::make(null, null, null, [], $this->mockHttpClient())->deleteShipments('1');
+            ShipmentApiFactory::make(null, null, null, [], $this->mockHttpClient())->deleteShipments(ids: '1');
         } finally {
             putenv(false === $previous ? 'API_KEY' : 'API_KEY=' . $previous);
         }
