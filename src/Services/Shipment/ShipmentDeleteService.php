@@ -38,6 +38,6 @@ final class ShipmentDeleteService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        $this->api->deleteShipments($ids, ['User-Agent' => $this->getUserAgentHeader()]);
+        $this->api->deleteShipments(ids: $ids, headerParameters: ['User-Agent' => $this->getUserAgentHeader()]);
     }
 }

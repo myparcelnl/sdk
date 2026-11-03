@@ -46,7 +46,7 @@ final class ShipmentQueryService
      */
     public function query(array $parameters = []): array
     {
-        return $this->extractShipments($this->api->getShipments($this->queryParameters($parameters), $this->headerParameters()));
+        return $this->extractShipments($this->api->getShipments(queryParameters: $this->queryParameters($parameters), headerParameters: $this->headerParameters()));
     }
 
     /**
@@ -75,7 +75,7 @@ final class ShipmentQueryService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        return $this->extractShipments($this->api->getShipmentsById($ids, [], $this->headerParameters()));
+        return $this->extractShipments($this->api->getShipmentsById(ids: $ids, headerParameters: $this->headerParameters()));
     }
 
     /**

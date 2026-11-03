@@ -190,7 +190,7 @@ final class JaneClientFactoryTest extends TestCase
         ));
 
         try {
-            $client->deleteShipments('1');
+            $client->deleteShipments(ids: '1');
             self::fail('A 401 response must throw.');
         } catch (DeleteShipmentsClientErrorException $exception) {
             self::assertSame(401, $exception->getResponse()->getStatusCode());
@@ -210,7 +210,7 @@ final class JaneClientFactoryTest extends TestCase
         ));
 
         try {
-            $client->deleteShipments('1');
+            $client->deleteShipments(ids: '1');
             self::fail('A 401 response must throw.');
         } catch (DeleteShipmentsClientErrorException $exception) {
             $error = $exception->getCommonResponsesProblem();
