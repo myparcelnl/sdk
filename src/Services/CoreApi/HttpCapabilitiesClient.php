@@ -48,9 +48,7 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
         $coreRes = $this->api->postCapabilities(requestBody: $this->mapper->mapToCoreApi($request));
 
         // The generated method declares the v1 and the v2 response. The request asks for v2, so this
-
         // check only narrows the type.
-
         if (! $coreRes instanceof CapabilitiesResponsesCapabilitiesV2) {
             throw new InvalidArgumentException('Unexpected response type returned by Client::postCapabilities().');
         }
