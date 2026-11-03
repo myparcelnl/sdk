@@ -13,6 +13,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookS
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookV11;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
+use UnexpectedValueException;
 
 /**
  * Service for managing webhook subscriptions via the Jane Core API client.
@@ -20,11 +21,12 @@ use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
  * Replaces the legacy AbstractWebhookWebService and its 5 concrete subclasses.
  *
  * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
- * subscribe() and unsubscribe() keeps working.
+ * `subscribe()` and `unsubscribe()` keeps working.
  *
- * getAll() and getById() return the Jane models, without v11 getters: the v11 guide, the PDK and the
- * Magento module call only subscribe() and unsubscribe(). An own class with getters can only come
- * in a major release, because it changes the return type.
+ * `getAll()` and `getById()` return the Jane models, without v11 getters. No known consumer reads these
+ * results: the v11 guide calls `getAll()` but does not use the result, and the PDK and the Magento
+ * module do not use this service. An own class with getters can only come in a major release,
+ * because it changes the return type.
  */
 final class WebhookService
 {
@@ -99,6 +101,8 @@ final class WebhookService
      * @param string|null $hook Filter by hook type (one of the HOOK_* constants).
      *
      * @return WebhooksResponsesWebhookV11[]
+     *
+     * @throws UnexpectedValueException When the generated client returns another model than the v1.1 subscriptions.
      */
     public function getAll(?string $hook = null): array
     {
@@ -116,6 +120,8 @@ final class WebhookService
      * @param int ...$subscriptionIds
      *
      * @return WebhooksResponsesWebhookV11[]
+     *
+     * @throws UnexpectedValueException When the generated client returns another model than the v1.1 subscriptions.
      */
     public function getById(int ...$subscriptionIds): array
     {
@@ -135,11 +141,16 @@ final class WebhookService
 
     /**
      * @return WebhooksResponsesWebhookV11[]
+     *
+     * @throws UnexpectedValueException When the generated client returns another model than the v1.1
+     *                                  subscriptions, so a caller does not take it for an empty list.
      */
     private static function subscriptions(mixed $response): array
     {
-        return $response instanceof WebhooksResponsesWebhookSubscriptionsV11
-            ? ($response->data->webhookSubscriptions ?? [])
-            : [];
+        if (! $response instanceof WebhooksResponsesWebhookSubscriptionsV11) {
+            throw new UnexpectedValueException('The webhook API returned an unexpected response type: ' . get_debug_type($response));
+        }
+
+        return $response->data->webhookSubscriptions ?? [];
     }
 }
