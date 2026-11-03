@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Webhook;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteWebhookSubscriptionsClientErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV10;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Webhook\WebhookService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Serializer;
+use UnexpectedValueException;
 
 final class WebhookServiceTest extends TestCase
 {
@@ -128,6 +132,21 @@ final class WebhookServiceTest extends TestCase
         self::assertSame('order_status_change', WebhookService::HOOK_ORDER_STATUS_CHANGE);
         self::assertSame('shop_carrier_accessibility_updated', WebhookService::HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED);
         self::assertSame('shop_updated', WebhookService::HOOK_SHOP_UPDATED);
+    }
+
+    public function testGetAllThrowsForAnotherResponseModel(): void
+    {
+        $api = new class(new MockHttpClient(), new Serializer()) extends Client {
+            public function getWebhookSubscriptions(array $queryParameters = [], array $headerParameters = [], array $accept = []): WebhooksResponsesWebhookSubscriptionsV10
+            {
+                return new WebhooksResponsesWebhookSubscriptionsV10();
+            }
+        };
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('The webhook API returned an unexpected response type: ' . WebhooksResponsesWebhookSubscriptionsV10::class);
+
+        (new WebhookService('key', $api))->getAll();
     }
 
     private function createService(string $body, int $status = 200): WebhookService
