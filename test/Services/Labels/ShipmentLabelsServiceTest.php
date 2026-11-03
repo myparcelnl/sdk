@@ -59,14 +59,28 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame('https://api.myparcel.nl/shipment_labels/' . implode('%3B', range(1, 26)) . '?format=A6', $this->requests[0]['url']);
     }
 
-    public function testSetLinkOfLabelsThrowsOnInvalidResponseBody(): void
+    /**
+     * @dataProvider provideInvalidLinkResponseBodies
+     */
+    public function testSetLinkOfLabelsThrowsOnInvalidResponseBody(string $body): void
     {
-        $service = $this->createService(json_encode(['data' => []]));
+        $service = $this->createService($body);
 
         $this->expectException(ApiException::class);
         $this->expectExceptionMessage('Did not receive expected label link response. Please contact MyParcel.');
 
         $service->setLinkOfLabels([101]);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function provideInvalidLinkResponseBodies(): array
+    {
+        return [
+            'not JSON'          => ['not-json'],
+            'JSON without link' => ['{"data":[]}'],
+        ];
     }
 
     public function testSetLinkOfLabelsThrowsOnAnErrorResponse(): void

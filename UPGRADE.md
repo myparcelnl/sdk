@@ -9,9 +9,9 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 
 ### HTTP client
 
-The generated Jane clients send their requests with a Symfony HTTP client, with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. An HTTP client that you pass to a factory keeps its own timeout.
+The generated Jane clients send their requests with a Symfony HTTP client, with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. A slow but steady download, such as a large label PDF, now completes. An HTTP client that you pass to a factory keeps its own timeout.
 
-A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`.
+A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`, and `ShipmentLabelsService`, `ShipmentPrintService` and `ReturnShipmentService` threw the PSR-18 `ClientExceptionInterface` of the HTTP client that sent the request.
 
 ### Found shipments and track & trace results
 
@@ -51,7 +51,7 @@ Some fields hold another type than the v11 getter returned:
 | `CapabilitiesService` and `CapabilitiesRequest` | `fromShipment()` takes a `Shipment` | It takes a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem` |
 | `Order` (fulfilment) | `getDeliveryOptions()` returns a `ShipmentOptions`, and `setDeliveryOptions()` takes one | They return and take a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions`. Fill one with `CoreApiModels::toModel(['package_type' => 1, 'delivery_type' => 2], ...Options::class)`. For an order from the API with `"insurance": 500`, `getDeliveryOptions()->insurance` is a `RefTypesPriceEuro` with `amount` `50000`, where `getInsurance()` returned `500` in v11 |
 | `ShipmentLabelsService` and `ReturnShipmentService` | The constructor takes a `CoreApi\Api\ShipmentApi` and a PSR-18 HTTP client | The constructor takes a `Jane\CoreApi\Client`. The third argument is a Symfony `HttpClientInterface` |
-| `ReturnShipmentService` | The API rejects a return shipment that does not match the spec | The generated client checks the request before it sends it. It throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, for example for a related return without `parent` |
+| `ReturnShipmentService` | The API rejects a return shipment that does not match the spec | The generated client checks the request before it sends it. It throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, for example for a related return without `parent`, `carrier`, `email` or `name`, which the spec requires |
 | `ReturnShipmentService` | It throws an `InvalidArgumentException` for an error response | It throws a `Jane\CoreApi\Exception\ApiException` |
 | `ApiKeyService`        | The constructor takes an `IamApi\Api\DefaultApi` | The constructor takes a `Jane\IamApi\Client`, such as the one that `IamApiFactory::make()` returns |
 | `ApiKeyService`        | `getPrincipal()` throws an `IamApi\ApiException` for every error, also for a network error. `isValid()` returns `false` for a 401 and throws the `ApiException` for every other error | `getPrincipal()` throws a `Jane\IamApi\Exception\ServerException` for a 500 with an `application/problem+json` body, a `Jane\IamApi\Exception\ClientException` for another error status or for a 200 without a JSON body, a Symfony `TransportExceptionInterface` for a network error or a timeout, and a `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` for a 200 with a body that is not valid JSON. `isValid()` returns `false` for a 401 and throws the others, also for a 200 without a JSON body, where v11 returned `true`. For a principal type that the SDK does not know, `getPrincipal()` throws an `UnexpectedValueException`, and `isValid()` returns `true`, because the 200 proves the key |
@@ -112,6 +112,12 @@ A property has the camelCase name of the API field, such as `postalCode`. A prop
 `CoreApiModels::toArray()` encodes a model as an array with the API field names, and `CoreApiModels::copy()` copies a model with its nested models, where `clone` copies only the top level. The v11 `Shipment` also had `__toString()` and `jsonSerialize()`: `(string) $shipment` and `json_encode($shipment)` gave the request JSON. Use `json_encode(CoreApiModels::toArray($shipment))`.
 
 The generated client checks a shipment against the spec before it sends it. A shipment that does not match, for example without a recipient, throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, and no request goes out. `getViolationList()` lists each field and the problem. The API still checks the shipment too. A shipment without a reference identifier gets one that starts with `sdk_`, as in v11. The services change nothing else on your models: they send copies.
+
+### Removed classes
+
+| Class | Replacement |
+|-------|-------------|
+| `MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType` | None. The generated client picks the content type of a shipment request from the request body |
 
 ### Order push
 
@@ -467,7 +473,7 @@ $service = new ReturnShipmentService('your-api-key');
 
 // Related return (linked to existing shipment):
 $returns = $service->createRelated([
-    ['parent' => 12345, 'carrier' => 1],
+    ['parent' => 12345, 'carrier' => 1, 'email' => 'john@example.com', 'name' => 'John Doe'],
 ], true);
 
 // Unrelated return (standalone):
