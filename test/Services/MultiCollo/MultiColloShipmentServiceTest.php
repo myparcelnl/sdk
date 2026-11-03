@@ -54,8 +54,8 @@ final class MultiColloShipmentServiceTest extends TestCase
 
         $main = (new MultiColloShipmentService())->splitShipment($shipment, 2);
 
-        self::assertSame('12345', (string) $main->getReferenceIdentifier());
-        self::assertSame('12345', (string) $main->getSecondaryShipments()[0]->referenceIdentifier);
+        self::assertSame('12345', $main->getReferenceIdentifier());
+        self::assertSame('12345', $main->getSecondaryShipments()[0]->referenceIdentifier);
     }
 
     public function testSplitShipmentGeneratesReferenceIdentifierWhenMissing(): void
