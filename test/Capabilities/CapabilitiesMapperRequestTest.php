@@ -93,6 +93,17 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->assertSame('{"weight":{"value":500,"unit":"g"}}', self::body($coreReq->physicalProperties));
     }
 
+    public function testMapToCoreApiThrowsForANumericStringThatIsNotWhole(): void
+    {
+        $req = CapabilitiesRequest::forCountry('NL')
+            ->withPhysicalProperties(['height' => ['value' => '10.5', 'unit' => 'cm']]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The height of the physical properties must be a whole number, 10.5 given.');
+
+        (new CapabilitiesMapper())->mapToCoreApi($req);
+    }
+
     public function testMapToCoreApiThrowsForAValueThatIsNotWhole(): void
     {
         $req = CapabilitiesRequest::forCountry('NL')
