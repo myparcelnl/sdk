@@ -87,6 +87,16 @@ final class ReturnShipmentServiceTest extends TestCase
         $service->createRelated([self::RELATED_ROW]);
     }
 
+    public function testCreateRelatedThrowsOnAResponseWithoutData(): void
+    {
+        $service = $this->createService('{}');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The API returned a response without data while parsing return shipment response.');
+
+        $service->createRelated([self::RELATED_ROW]);
+    }
+
     public function testAnErrorResponseThrowsTheGeneratedException(): void
     {
         $service = $this->createService('{"type":"urn:problem:not-found","title":"Parent not found","status":404}', 404, 'application/problem+json');

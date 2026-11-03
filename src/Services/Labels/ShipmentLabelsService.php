@@ -20,7 +20,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * ApiException of the SDK. The generated getShipmentsLabels() does not read a PDF response, so
  * the service sends the generated endpoint with executeRawEndpoint() and reads the response itself.
  *
- * @todo Use getShipmentsLabels() for the link when the spec documents the PDF response of the labels endpoint.
+ * @todo Use getShipmentsLabels() for the link in a major release, when the service may throw the Jane
+ *       exceptions, such as GetShipmentsLabelsNotFoundException, instead of the ApiException of the SDK.
+ *       The PDF needs executeRawEndpoint() until the spec documents the PDF response.
  */
 final class ShipmentLabelsService
 {
