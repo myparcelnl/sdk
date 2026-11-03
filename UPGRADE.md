@@ -48,6 +48,8 @@ A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\
 
 A getter of `FoundShipment` or `TrackTrace` returns `null` for a field that the API did not send. A `Jane` model does not initialize such a property, and reading it throws an `Error`. Use `??` or `isset()` on a nested object, such as `$shipment->getRecipient()->street ?? null`.
 
+`json_encode()` of a `FoundShipment` or a `TrackTrace` leaves out a field that the API sent as `null` when the spec gives the field a type, such as `parent_id` or `shipped_items`. In v11, the JSON had such a field with the value `null`. A getter returns `null` in both versions.
+
 ### Order push
 
 The e-commerce service now requires a status on every order that you push with
