@@ -45,9 +45,8 @@ final class ShipmentTrackTraceService
 
         /** @var ShipmentResponsesTracktraces|null $response */
         $response = $this->api->getTrackTracesByIds(
-            implode(';', $shipmentIds),
-            [],
-            ['User-Agent' => $this->getUserAgentHeader()]
+            ids: implode(';', $shipmentIds),
+            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
         );
 
         $result = [];

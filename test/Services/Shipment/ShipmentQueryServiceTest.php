@@ -7,11 +7,15 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 final class ShipmentQueryServiceTest extends TestCase
 {
@@ -154,6 +158,42 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame('2132JE', $result->getRecipient()->postalCode);
         self::assertSame('Hoofddorp', $result->getRecipient()->city);
         self::assertSame('Test Person', $result->getRecipient()->person);
+    }
+
+    public function testAFoundShipmentEncodesToJsonWhenTheApiSendsANullList(): void
+    {
+        $shipment = $this->createService([['id' => 1, 'shipped_items' => null]])->find(1);
+
+        self::assertNull($shipment->getShippedItems());
+        self::assertArrayNotHasKey('shipped_items', json_decode((string) json_encode($shipment), true));
+    }
+
+    /**
+     * CoreApiModels::withoutNullLists() exists because the generated normalizer iterates over a nullable
+     * list that is null. When this test fails, Jane skips such a list: remove that method.
+     */
+    public function testJaneStillIteratesOverANullList(): void
+    {
+        $model               = new ShipmentDefsShipment();
+        $model->shippedItems = null;
+        $warning = null;
+        set_error_handler(static function (int $level, string $message) use (&$warning): bool {
+            $warning = $message;
+
+            return true;
+        });
+
+        try {
+            (new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]))->normalize($model, 'json', ['skip_validation' => true]);
+        } finally {
+            restore_error_handler();
+        }
+
+        self::assertStringContainsString(
+            'foreach() argument must be of type array|object, null given',
+            (string) $warning,
+            'Jane now skips a null list. Remove CoreApiModels::withoutNullLists().'
+        );
     }
 
     public function testAGetterReturnsNullForAFieldThatTheApiDidNotSend(): void
