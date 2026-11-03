@@ -52,12 +52,12 @@ final class ShipmentCreateService
         $this->ensureReferenceIds($shipments);
 
         $response = $this->api->postShipments(
-            $this->buildCreateRequest($shipments),
-            array_filter(
+            requestBody: $this->buildCreateRequest($shipments),
+            queryParameters: array_filter(
                 ['format' => self::scalar($format), 'positions' => self::scalar($positions)],
                 static fn ($value): bool => null !== $value
             ),
-            ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
         );
 
         return $this->parseCreateResponse($shipments, $response);
@@ -101,7 +101,8 @@ final class ShipmentCreateService
             throw new InvalidArgumentException('Unexpected response type returned by postShipments()');
         }
 
-        if (! isset($response->data)) {
+        // The generated normalizer turns `"data": null` into an empty data model, so check the shipments.
+        if (! isset($response->data->shipments)) {
             throw new InvalidArgumentException('postShipments() returned a response without data.');
         }
 

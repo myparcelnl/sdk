@@ -130,6 +130,16 @@ final class ShipmentCreateServiceTest extends TestCase
         $service->create(new ShipmentCollection([self::shipment('order-1')]));
     }
 
+    public function testCreateThrowsWhenResponseDataIsNull(): void
+    {
+        $service = $this->createService('{"data":null}');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('postShipments() returned a response without data.');
+
+        $service->create(new ShipmentCollection([self::shipment('order-1')]));
+    }
+
     public function testCreateReturnsEmptyMappingWhenResponseHasNoShipments(): void
     {
         $result = $this->createService(self::createdResponse([]))
