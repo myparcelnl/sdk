@@ -9,9 +9,11 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoney;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentOptions as FoundOptionsModel;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as OptionsModel;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Model\Shipment\Mapping\DeliveryTypeApiMapping;
+use ReflectionObject;
 use ReflectionProperty;
 
 /**
@@ -63,14 +65,29 @@ class ShipmentOptions
     }
 
     /**
-     * Wrap a copy of a Jane options model, such as the options of a found shipment.
+     * Wrap a copy of a Jane options model: the request options, or the options of a found shipment.
      *
      * @internal Used by Shipment::setOptions().
      */
-    public static function fromApiModel(OptionsModel $options): self
+    public static function fromApiModel(OptionsModel|FoundOptionsModel $options): self
     {
-        $self          = new self();
-        $self->options = CoreApiModels::copy($options);
+        $self = new self();
+
+        if ($options instanceof OptionsModel) {
+            $self->options = CoreApiModels::copy($options);
+
+            return $self;
+        }
+
+        // The options of a found shipment have the same properties as the request options, so a copy
+        // per property turns the one model into the other.
+        $copy = CoreApiModels::copy($options);
+
+        foreach ((new ReflectionObject($copy))->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            if ($property->isInitialized($copy)) {
+                $self->options->{$property->getName()} = $copy->{$property->getName()};
+            }
+        }
 
         return $self;
     }

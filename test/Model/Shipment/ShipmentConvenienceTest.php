@@ -12,6 +12,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentOptions as FoundOptionsModel;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as OptionsModel;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemPhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient;
@@ -157,6 +158,37 @@ final class ShipmentConvenienceTest extends TestCase
         $this->expectExceptionMessage("Unknown shipment field 'recipent'");
 
         new Shipment(['recipent' => ['cc' => 'NL']]);
+    }
+
+    public function testSetOptionsTakesTheOptionsOfAFoundShipment(): void
+    {
+        $insurance           = new RefTypesPriceEuro();
+        $insurance->amount   = 500;
+        $insurance->currency = 'EUR';
+        $found               = new FoundOptionsModel();
+        $found->signature    = 1.0;
+        $found->insurance    = $insurance;
+
+        $options          = (new Shipment())->setOptions($found)->getOptions();
+        $found->signature = 0.0;
+
+        $this->assertSame(1, $options->getSignature());
+        $this->assertSame(500, $options->getInsurance()->amount);
+        $this->assertSame(['insurance' => ['currency' => 'EUR', 'amount' => 500], 'signature' => 1], $options->toArray());
+    }
+
+    /**
+     * ShipmentOptions::fromApiModel() copies the options of a found shipment property by property, so
+     * the two Jane models must have the same properties.
+     */
+    public function testTheOptionsOfAFoundShipmentHaveTheSamePropertiesAsTheRequestOptions(): void
+    {
+        $names = static fn (string $class): array => array_map(
+            static fn (\ReflectionProperty $property): string => $property->getName(),
+            (new \ReflectionClass($class))->getProperties(\ReflectionProperty::IS_PUBLIC)
+        );
+
+        $this->assertSame($names(OptionsModel::class), $names(FoundOptionsModel::class));
     }
 
     public function testToApiModelSendsTheFieldsThatAreSet(): void
