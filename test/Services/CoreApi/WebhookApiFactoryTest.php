@@ -8,6 +8,8 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 class WebhookApiFactoryTest extends TestCase
 {
@@ -18,18 +20,21 @@ class WebhookApiFactoryTest extends TestCase
         $this->assertInstanceOf(Client::class, $api);
     }
 
-    public function testMakeWithHostOverride(): void
+    public function testMakeSendsTheKeyHostUserAgentAndHeaders(): void
     {
-        $api = WebhookApiFactory::make('test-key', 'https://custom.host.nl');
+        $request = [];
+        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options) use (&$request): MockResponse {
+            $request = ['url' => $url, 'headers' => $options['normalized_headers']];
 
-        $this->assertInstanceOf(Client::class, $api);
-    }
+            return new MockResponse('{"data":{"webhook_subscriptions":[]}}', ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
+        });
 
-    public function testMakeWithUserAgent(): void
-    {
-        $api = WebhookApiFactory::make('test-key', null, 'MyApp/1.0');
+        WebhookApiFactory::make('test-key', 'https://api.example.com', 'MyApp/1.0', ['x-dmp-no-tracking' => 'true'], $httpClient)->getWebhookSubscriptions();
 
-        $this->assertInstanceOf(Client::class, $api);
+        $this->assertSame('https://api.example.com/webhook_subscriptions', $request['url']);
+        $this->assertSame(['Authorization: Bearer ' . base64_encode('test-key')], $request['headers']['authorization']);
+        $this->assertSame(['User-Agent: MyApp/1.0'], $request['headers']['user-agent']);
+        $this->assertSame(['x-dmp-no-tracking: true'], $request['headers']['x-dmp-no-tracking']);
     }
 
     public function testMakeThrowsWhenApiKeyIsEmpty(): void
