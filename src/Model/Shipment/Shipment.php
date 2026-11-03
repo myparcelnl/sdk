@@ -17,6 +17,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequ
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemDropOffPoint as DropOffPoint;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemGeneralSettings as GeneralSettings;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemHidden as Hidden;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentOptions as FoundOptionsModel;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as OptionsModel;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemPhysicalProperties as PhysicalProperties;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient as Recipient;
@@ -254,11 +255,14 @@ class Shipment implements JsonSerializable
     }
 
     /**
-     * @param array<string, mixed>|ShipmentOptions|OptionsModel|null $options
+     * @param array<string, mixed>|ShipmentOptions|OptionsModel|FoundOptionsModel|null $options The options as an array
+     *                                                                                     with the API names, the
+     *                                                                                     request model, or the options
+     *                                                                                     of a found shipment.
      */
-    public function setOptions(array|ShipmentOptions|OptionsModel|null $options): self
+    public function setOptions(array|ShipmentOptions|OptionsModel|FoundOptionsModel|null $options): self
     {
-        if ($options instanceof OptionsModel) {
+        if ($options instanceof OptionsModel || $options instanceof FoundOptionsModel) {
             $options = ShipmentOptions::fromApiModel($options);
         }
 
