@@ -11,15 +11,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Factory for creating the Jane Core API client that the shipment services use.
  *
- * It keeps the v11 entry point make(), and it reads the API key from `API_KEY`, `API_KEY_NL` or
- * `API_KEY_BE` when the caller passes none. JaneClientFactory builds the client. The factory does not
- * go: INT-2033 keeps one factory per API.
+ * It keeps the v11 entry point `make()`, and it reads the API key from `API_KEY`, `API_KEY_NL` or
+ * `API_KEY_BE` when the caller passes none. `JaneClientFactory` builds the client. The factory does
+ * not go: INT-2033 keeps one factory per API.
  */
 final class ShipmentApiFactory
 {
     /**
      * The idle timeout of the client in seconds. The constant stays for v11 code that reads it;
-     * JaneClientFactory::DEFAULT_HTTP_TIMEOUT sets the timeout.
+     * `JaneClientFactory::DEFAULT_HTTP_TIMEOUT` sets the timeout.
      */
     public const DEFAULT_HTTP_TIMEOUT = JaneClientFactory::DEFAULT_HTTP_TIMEOUT;
 
