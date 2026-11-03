@@ -169,7 +169,7 @@ A Jane model has the same name as the old model when the old model came from a n
 |-----|-----|
 | `CoreApi\Model\ShipmentRequest` | `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`. The `Shipment` model of the SDK builds it with `toApiModel()` |
 | `CoreApi\Model\CapabilitiesRecipientV2`, `CapabilitiesSenderV2`, `CapabilitiesOptionsV2` and `CapabilitiesPhysicalPropertiesV2` | `Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient`, `...Sender`, `...Options` and `...PhysicalProperties` |
-| `CoreApi\Model\RefTypesCarrierV2` | `Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2`. The `BOL` constant has no replacement: no Jane enum has that value |
+| `CoreApi\Model\RefTypesCarrierV2` | `Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2`. The `BOL` constant has no replacement: no `Jane\CoreApi` enum has that value |
 | `CoreApi\Model\SecondaryShipmentRequest` | `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem` |
 | `CoreApi\Model\PhysicalPropertiesHeightV2`, `PhysicalPropertiesLengthV2`, `PhysicalPropertiesWidthV2` and `PhysicalPropertiesWeightV2` | `Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight`, `...Length`, `...Width` and `...Weight` |
 | `CoreApi\Model\FixedShipment` and `FixedShipmentRecipient` | `Jane\CoreApi\Model\ShipmentDefsShipment` and `ShipmentDefsShipmentRecipient`. Jane reads every region and street that the spec allows, so the overrides are not needed |
