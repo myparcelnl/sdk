@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Direction;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLocationTypeV2;
@@ -90,6 +91,17 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $coreReq = (new CapabilitiesMapper())->mapToCoreApi($req);
 
         $this->assertSame('{"weight":{"value":500,"unit":"g"}}', self::body($coreReq->physicalProperties));
+    }
+
+    public function testMapToCoreApiThrowsForAValueThatIsNotWhole(): void
+    {
+        $req = CapabilitiesRequest::forCountry('NL')
+            ->withPhysicalProperties(['height' => ['value' => 10.5, 'unit' => 'cm']]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The height of the physical properties must be a whole number, 10.5 given.');
+
+        (new CapabilitiesMapper())->mapToCoreApi($req);
     }
 
     public function testMapToCoreApiCreatesSenderObjectEvenWhenNoKnownFieldsArePresent(): void

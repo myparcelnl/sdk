@@ -22,10 +22,9 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  *
  * Use CapabilitiesService for shipment-specific capability checks based on
  * address, weight and shipment options.
-
  *
  * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
- * it keeps working.
+ * it keeps working. It stays as long as the SDK keeps the v11 service API.
  */
 final class CarrierContractDefinitionsService
 {
@@ -55,7 +54,8 @@ final class CarrierContractDefinitionsService
      * Pass a carrier, such as `'POSTNL'` or `CapabilitiesPostContractDefinitionsRequestV2Carrier::Postnl`,
      * to filter the API request. Omit $carrier to fetch all contract definitions for the account.
      *
-     * The results are the Jane models. `carrier`, `packageTypes` and `deliveryTypes` hold an enum case,
+     * The results are the Jane models. `carrier`, `packageTypes`, `deliveryTypes` and `transactionTypes`
+     * hold an enum case,
      * or the raw string for a value that the SDK does not know, so a new carrier in the API does not
      * break the call. Compare with the enum case, because `->value` fails on a raw string.
      *
@@ -64,7 +64,7 @@ final class CarrierContractDefinitionsService
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\ApiException For an error response.
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException
      *                                  When the spec does not know $carrier. No request goes out.
-     * @throws InvalidArgumentException When the generated client returns a non-success model.
+     * @throws InvalidArgumentException When the generated client returns the v1 model, which the request does not ask for.
      */
     public function getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2Carrier|string|null $carrier = null): array
     {
@@ -78,6 +78,10 @@ final class CarrierContractDefinitionsService
             $request,
             ['User-Agent' => $this->getUserAgentHeader()]
         );
+
+        // The generated method declares the v1 and the v2 response. The request asks for v2, so this
+
+        // check only narrows the type.
 
         if (! $response instanceof CapabilitiesResponsesContractDefinitionsV2) {
             throw new InvalidArgumentException(
