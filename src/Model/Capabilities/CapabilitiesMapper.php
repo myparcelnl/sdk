@@ -223,7 +223,8 @@ class CapabilitiesMapper
             $dimension = $physicalData[$name] ?? null;
 
             if (is_array($dimension) && array_key_exists('value', $dimension) && array_key_exists('unit', $dimension)) {
-                if (is_float($dimension['value']) && floor($dimension['value']) !== $dimension['value']) {
+                // A numeric string, such as '10.5', would pass the generated normalizer too, which truncates it.
+                if (is_numeric($dimension['value']) && (float) $dimension['value'] !== floor((float) $dimension['value'])) {
                     throw new InvalidArgumentException(sprintf('The %s of the physical properties must be a whole number, %s given.', $name, $dimension['value']));
                 }
 

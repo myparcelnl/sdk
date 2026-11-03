@@ -45,7 +45,7 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
 
         $this->api ??= ShipmentApiFactory::client(null, null, $userAgent);
 
-        $coreRes = $this->api->postCapabilities($this->mapper->mapToCoreApi($request));
+        $coreRes = $this->api->postCapabilities(requestBody: $this->mapper->mapToCoreApi($request));
 
         // The generated method declares the v1 and the v2 response. The request asks for v2, so this
 
