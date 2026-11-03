@@ -55,9 +55,9 @@ final class CarrierContractDefinitionsService
      * to filter the API request. Omit $carrier to fetch all contract definitions for the account.
      *
      * The results are the Jane models. `carrier`, `packageTypes`, `deliveryTypes` and `transactionTypes`
-     * hold an enum case,
-     * or the raw string for a value that the SDK does not know, so a new carrier in the API does not
-     * break the call. Compare with the enum case, because `->value` fails on a raw string.
+     * hold an enum case, or the raw string for a value that the SDK does not know, so a new carrier in
+     * the API does not break the call. Compare with the enum case, because `->value` fails on a raw
+     * string.
      *
      * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|string|null $carrier Optional carrier.
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
@@ -80,9 +80,7 @@ final class CarrierContractDefinitionsService
         );
 
         // The generated method declares the v1 and the v2 response. The request asks for v2, so this
-
         // check only narrows the type.
-
         if (! $response instanceof CapabilitiesResponsesContractDefinitionsV2) {
             throw new InvalidArgumentException(
                 'Unexpected response type returned by Client::postCapabilitiesContractDefinitions().'
