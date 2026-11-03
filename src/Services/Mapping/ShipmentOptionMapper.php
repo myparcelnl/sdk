@@ -102,11 +102,11 @@ final class ShipmentOptionMapper
      * requires_signature. This mapper keeps returning it, because the PDK reads it. Jane names the
      * PHP property after the v2 JSON name, such as requiresSignature.
      *
-     * @todo Return the Jane property name in a major release, when the PDK no longer reads the v11
-     *       snake case name.
-     *
      * The method reads the properties with reflection, not with definedProperties(). Jane generates
      * definedProperties() for only 81 of the 415 Core API models, and not for this one.
+     *
+     * @todo Return the Jane property name in a major release, when the PDK no longer reads the v11
+     *       snake case name.
      *
      * @return array<string, string>
      */
