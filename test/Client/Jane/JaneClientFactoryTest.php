@@ -45,7 +45,7 @@ final class JaneClientFactoryTest extends TestCase
             $this->mockHttpClient(self::shipmentsResponse([]))
         );
 
-        $client->getShipments(['reference_identifier' => 'order-1']);
+        $client->getShipments(queryParameters: ['reference_identifier' => 'order-1']);
 
         self::assertCount(1, $this->requests);
         self::assertSame('GET', $this->requests[0]['method']);
@@ -108,7 +108,7 @@ final class JaneClientFactoryTest extends TestCase
         $request->recipient     = $recipient;
 
         try {
-            $client->postCapabilities($request);
+            $client->postCapabilities(requestBody: $request);
             self::fail('A lower-case country code must fail validation.');
         } catch (ValidationException $exception) {
             self::assertStringContainsString('countryCode', (string) $exception->getViolationList());

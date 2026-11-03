@@ -9,7 +9,7 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 
 ### HTTP timeout
 
-The generated Jane clients use a Symfony HTTP client with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. A slow but steady download, such as a large label PDF, now completes.
+The generated Jane clients use a Symfony HTTP client with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. A slow but steady download, such as a large label PDF, now completes. An HTTP client that you pass to a factory keeps its own timeout.
 
 ### Services
 
