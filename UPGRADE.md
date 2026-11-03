@@ -17,7 +17,7 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 | `ApiKeyService`        | `getPrincipal()` throws an `IamApi\ApiException` for every error, also for a network error. `isValid()` returns `false` for a 401 and throws the `ApiException` for every other error | `getPrincipal()` throws a `Jane\IamApi\Exception\ClientException` for an error status, a Symfony `TransportExceptionInterface` for a network error or a timeout, and a `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` for a body that is not valid JSON. `isValid()` returns `false` for a 401 and throws the others. For a principal type that the SDK does not know, both throw an `UnexpectedValueException` |
 | `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns the decoded JSON: use `ApiKeyService::getPrincipal()` for a model |
 
-The classes in the `Jane` namespace are in `MyParcelNL\Sdk\Client\Generated\Jane`. The others are in `MyParcelNL\Sdk\Client\Generated`.
+A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
 
 ### Order push
 
