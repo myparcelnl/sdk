@@ -1,0 +1,46 @@
+<?php
+
+namespace MyParcelNL\Sdk\Client\Generated\Jane\IamApi;
+
+class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\Client
+{
+    /**
+     * Who am I?
+     * @param array $accept Accept content header application/json|application/problem+json
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiUnauthorizedException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiInternalServerErrorException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\BadResponseException
+     *
+     * @return null
+     */
+    public function getWhoami(array $accept = [])
+    {
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Endpoint\GetWhoami($accept));
+    }
+    /**
+     * @param list<callable(\Symfony\Contracts\HttpClient\HttpClientInterface): \Symfony\Contracts\HttpClient\HttpClientInterface> $additionalPlugins HttpClientInterface decorator factories, applied left-to-right after the server URL decorator
+     * @param list<\Symfony\Component\Serializer\Normalizer\NormalizerInterface|\Symfony\Component\Serializer\Normalizer\DenormalizerInterface> $additionalNormalizers
+     */
+    public static function create(?\Symfony\Contracts\HttpClient\HttpClientInterface $httpClient = null, array $additionalPlugins = [], array $additionalNormalizers = [], bool $applyServerPlugins = true)
+    {
+        $plugins = [];
+        if (null === $httpClient) {
+            $httpClient = \Symfony\Component\HttpClient\HttpClient::create();
+        }
+        if ($applyServerPlugins) {
+            $plugins[] = new \Jane\Component\OpenApiRuntime\Client\Plugin\ServerUrlHttpClient('https://iam.api.myparcel.nl');
+        }
+        if (count($additionalPlugins) > 0) {
+            $plugins = array_merge($plugins, $additionalPlugins);
+        }
+        foreach ($plugins as $plugin) {
+            $httpClient = $plugin($httpClient);
+        }
+        $normalizers = [new \Symfony\Component\Serializer\Normalizer\ArrayDenormalizer(), new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer()];
+        if (count($additionalNormalizers) > 0) {
+            $normalizers = array_merge($normalizers, $additionalNormalizers);
+        }
+        $serializer = new \Symfony\Component\Serializer\Serializer($normalizers, [new \Symfony\Component\Serializer\Encoder\JsonEncoder(new \Symfony\Component\Serializer\Encoder\JsonEncode(), new \Symfony\Component\Serializer\Encoder\JsonDecode(['json_decode_associative' => true])), new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder()]);
+        return new static($httpClient, $serializer);
+    }
+}

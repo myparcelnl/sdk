@@ -23,6 +23,7 @@
         "generate:api": [
             "docker compose run --rm generate-api",
             "docker compose run --rm php vendor/bin/jane-openapi generate",
+            "docker compose run --rm php vendor/bin/jane-openapi generate --config-file=.jane-openapi-core",
             "composer dump-autoload -o"
         ]
     },
@@ -35,6 +36,7 @@
         "setasign/fpdi": "^2.6",
         "jane-php/open-api-runtime": "^8.0",
         "symfony/serializer": "^7.0 || ^8.0",
+        "symfony/validator": "^7.0 || ^8.0",
         "gapple/structured-fields": "^2.3",
         "firebase/php-jwt": "^7.2"
     },
@@ -47,9 +49,9 @@
         "phpunit/phpunit": "^9.6.22",
         "psr/container": "~2.0.2",
         "friendsofphp/php-cs-fixer": "^3.95",
-        "jane-php/open-api-3-1": "dev-next",
-        "jane-php/open-api-common": "dev-next",
-        "jane-php/json-schema": "dev-next"
+        "jane-php/open-api-3-1": "^8.1",
+        "jane-php/open-api-common": "^8.1",
+        "jane-php/json-schema": "^8.1"
     },
     "autoload": {
         "psr-4": {
