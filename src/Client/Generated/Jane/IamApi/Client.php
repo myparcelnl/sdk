@@ -5,13 +5,17 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\IamApi;
 class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\Client
 {
     /**
+     * Who am I?
+     * @param array $accept Accept content header application/json|application/problem+json
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiUnauthorizedException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiInternalServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\BadResponseException
      *
      * @return null
      */
-    public function getWhoami()
+    public function getWhoami(array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Endpoint\GetWhoami());
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Endpoint\GetWhoami($accept));
     }
     /**
      * @param list<callable(\Symfony\Contracts\HttpClient\HttpClientInterface): \Symfony\Contracts\HttpClient\HttpClientInterface> $additionalPlugins HttpClientInterface decorator factories, applied left-to-right after the server URL decorator

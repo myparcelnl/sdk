@@ -109,6 +109,12 @@ class ShipmentDefsShipment
      */
     public RefTypesCarrier|int $carrierId;
     /**
+     * Whether the carrier of the shipment is active for the shop the shipment was created with. Only present in paginated responses, i.e. those of `GET /shipments` and `GET /shipments/{ids}`.
+     *
+     * @var bool
+     */
+    public bool $carrierActive;
+    /**
      * @var int
      */
     public int $platformId;

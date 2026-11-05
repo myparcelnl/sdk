@@ -61,6 +61,7 @@ class PatchShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runti
      * {@inheritdoc}
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -76,6 +77,14 @@ class PatchShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runti
         }
         if ($contentType !== null && (415 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnsupportedMediaTypeException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+        }
+        if (422 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnprocessableEntityException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnprocessableEntityException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         if ($status >= 400 && $status <= 499) {
             if (stripos(strtolower((string) $contentType), 'application/json') !== false) {

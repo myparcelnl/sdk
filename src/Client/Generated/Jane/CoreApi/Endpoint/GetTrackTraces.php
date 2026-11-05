@@ -4,6 +4,7 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint;
 
 class GetTrackTraces extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\Endpoint
 {
+    protected $accept;
     /**
      * Get detailed Track & Trace information for one or more shipments.
      * @param array{
@@ -17,11 +18,13 @@ class GetTrackTraces extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runti
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      */
-    public function __construct(array $queryParameters = [], array $headerParameters = [])
+    public function __construct(array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
         $this->queryParameters = $queryParameters;
         $this->headerParameters = $headerParameters;
+        $this->accept = $accept;
     }
     use \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -38,7 +41,10 @@ class GetTrackTraces extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runti
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
@@ -79,14 +85,29 @@ class GetTrackTraces extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runti
         if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesTracktraces', 'json');
         }
-        if ($contentType !== null && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound', 'json'), $response);
+        if (404 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
-        if ($contentType !== null && ($status >= 400 && $status <= 499 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+        if ($status >= 400 && $status <= 499) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
-        if ($contentType !== null && ($status >= 500 && $status <= 599 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+        if ($status >= 500 && $status <= 599) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException($status, $body, $response);
     }

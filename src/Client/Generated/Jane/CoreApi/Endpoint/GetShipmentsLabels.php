@@ -25,7 +25,7 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
@@ -35,7 +35,7 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/*|application/json|application/vnd.shipment_label_link+json|application/vnd.shipment_label_link+json+print|application/json+print|application/pdf+print|application/vnd.shipment_label+json+print|application/vnd.shipment_label+pdf+print|application/vnd.shipment_label+zpl+print|application/vnd.zpl+print|*\/*
+     * @param array $accept Accept content header application/*|application/json|application/vnd.shipment_label_link+json|application/vnd.shipment_label_link+json+print|application/json+print|application/pdf+print|application/vnd.shipment_label+json+print|application/vnd.shipment_label+pdf+print|application/vnd.shipment_label+zpl+print|application/vnd.zpl+print|*\/*|application/problem+json
      */
     public function __construct($ids, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
@@ -60,7 +60,7 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
     public function getExtraHeaders(): array
     {
         if (empty($this->accept)) {
-            return ['Accept' => ['application/*', 'application/json', 'application/vnd.shipment_label_link+json', 'application/vnd.shipment_label_link+json+print', 'application/json+print', 'application/pdf+print', 'application/vnd.shipment_label+json+print', 'application/vnd.shipment_label+pdf+print', 'application/vnd.shipment_label+zpl+print', 'application/vnd.zpl+print', '*/*']];
+            return ['Accept' => ['application/*', 'application/json', 'application/vnd.shipment_label_link+json', 'application/vnd.shipment_label_link+json+print', 'application/json+print', 'application/pdf+print', 'application/vnd.shipment_label+json+print', 'application/vnd.shipment_label+pdf+print', 'application/vnd.shipment_label+zpl+print', 'application/vnd.zpl+print', '*/*', 'application/problem+json']];
         }
         return $this->accept;
     }
@@ -108,8 +108,13 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
         if ($contentType !== null && (402 === $status && stripos(strtolower($contentType), 'application/vnd.shipment_label_link+json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsPaymentRequiredException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesBulkShipmentLabelsPaymentRequired', 'json'), $response);
         }
-        if ($contentType !== null && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound', 'json'), $response);
+        if (404 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         if (406 === $status) {
         }
@@ -121,11 +126,21 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
                 return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink', 'json');
             }
         }
-        if ($contentType !== null && ($status >= 400 && $status <= 499 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+        if ($status >= 400 && $status <= 499) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
-        if ($contentType !== null && ($status >= 500 && $status <= 599 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+        if ($status >= 500 && $status <= 599) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException($status, $body, $response);
     }

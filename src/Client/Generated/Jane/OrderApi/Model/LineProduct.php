@@ -14,11 +14,31 @@ class LineProduct implements AdditionalPropertiesInterface
      */
     public string $name;
     /**
+     * @var string
+     */
+    public string $countryCodeOfOrigin;
+    /**
      * The EAN of the product.
      *
      * @var string
      */
     public string $ean;
+    /**
+     * Reference to the product in an external product catalog, like the zonos catalog id used for constructing a customs declaration.
+     *
+     * @var string
+     */
+    public string $externalReference;
+    /**
+     * @var PhysicalProperties
+     */
+    public PhysicalProperties $physicalProperties;
+    /**
+     * The HS code of the product.
+     *
+     * @var string
+     */
+    public string $hsCode;
     /**
      * The SKU of the product.
      *
@@ -33,6 +53,6 @@ class LineProduct implements AdditionalPropertiesInterface
     public string $id;
     public function definedProperties(): array
     {
-        return ['name' => 'name', 'ean' => 'ean', 'sku' => 'sku', 'id' => 'id'];
+        return ['name' => 'name', 'countryCodeOfOrigin' => 'countryCodeOfOrigin', 'ean' => 'ean', 'externalReference' => 'externalReference', 'physicalProperties' => 'physicalProperties', 'hsCode' => 'hsCode', 'sku' => 'sku', 'id' => 'id'];
     }
 }

@@ -8,7 +8,7 @@ class CommonResponsesProblem implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * URI reference identifying the problem type. Derived from the wrapping UserException constant name (e.g. `urn:problem:invalid-shipments`) or, when no matching constant exists, a status-based fallback URN.
+     * URI reference identifying the problem type. Derived from the error code (e.g. `urn:problem:invalid-shipments`) or, when no matching code exists, a status-based fallback URN.
      * 
      *
      * @var string
@@ -47,7 +47,7 @@ class CommonResponsesProblem implements AdditionalPropertiesInterface
      */
     public string $requestId;
     /**
-     * Sub-problem list. Each entry is itself an RFC 9457 problem-detail object describing one failing field. The sub-error `type`/`title` narrow past the wrapping problem when the underlying validator code maps to its own UserException constant (e.g. `urn:problem:invalid-address`, `urn:problem:invalid-physical-properties`).
+     * Sub-problem list. Each entry is itself an RFC 9457 problem-detail object describing one failing field. The sub-error `type`/`title` narrow past the wrapping problem when the underlying error code maps to a more specific type (e.g. `urn:problem:invalid-address`, `urn:problem:invalid-physical-properties`).
      * 
      *
      * @var list<CommonResponsesProblemErrorsItem>

@@ -4,6 +4,7 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint;
 
 class GetShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\Endpoint
 {
+    protected $accept;
     /**
      * This operation returns a list of Shipments available to this User.
      * @param array{
@@ -15,7 +16,9 @@ class GetShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime
      *    "dropoff_today"?: bool, //Use this parameter to only show Shipments that need to be dropped off today.
      *    "external_identifier"?: string,
      *    "filter_hidden_shops"?: bool,
+     *    "from"?: mixed, //Only return shipments created on or after this date.
      *    "hidden"?: bool,
+     *    "id"?: int, //Only return shipments with these IDs. Separate multiple shipment IDs using `;`.
      *    "include_secondary_shipments"?: mixed, //Whether to include secondary (multicollo child) Shipments in the results.
      *                                           //Pass `1` to include them; `0` (the default) excludes them.
      *    "link_consumer_portal"?: bool,
@@ -32,16 +35,19 @@ class GetShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime
      *    "size"?: int, //Specify the number of resources returned per page, used for paginated results.
      *    "sort"?: string, //Sort Shipment results by a particular resource field.
      *    "status"?: mixed, //Filter by Shipment status. This filter will return only Shipments with the specified status.
+     *    "to"?: mixed, //Only return shipments created up to this date.
      *    "transaction_status"?: string,
      * } $queryParameters
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      */
-    public function __construct(array $queryParameters = [], array $headerParameters = [])
+    public function __construct(array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
         $this->queryParameters = $queryParameters;
         $this->headerParameters = $headerParameters;
+        $this->accept = $accept;
     }
     use \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -58,12 +64,15 @@ class GetShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['barcode', 'carrier_id', 'created', 'delayed', 'delivered', 'dropoff_today', 'external_identifier', 'filter_hidden_shops', 'hidden', 'include_secondary_shipments', 'link_consumer_portal', 'order', 'package_type', 'page', 'q', 'reference_identifier', 'region', 'shipment_type', 'shop_id', 'size', 'sort', 'status', 'transaction_status']);
+        $optionsResolver->setDefined(['barcode', 'carrier_id', 'created', 'delayed', 'delivered', 'dropoff_today', 'external_identifier', 'filter_hidden_shops', 'from', 'hidden', 'id', 'include_secondary_shipments', 'link_consumer_portal', 'order', 'package_type', 'page', 'q', 'reference_identifier', 'region', 'shipment_type', 'shop_id', 'size', 'sort', 'status', 'to', 'transaction_status']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
         $optionsResolver->addAllowedTypes('barcode', ['string']);
@@ -73,6 +82,7 @@ class GetShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime
         $optionsResolver->addAllowedTypes('external_identifier', ['string', 'null']);
         $optionsResolver->addAllowedTypes('filter_hidden_shops', ['bool']);
         $optionsResolver->addAllowedTypes('hidden', ['bool', 'null']);
+        $optionsResolver->addAllowedTypes('id', ['int']);
         $optionsResolver->addAllowedTypes('link_consumer_portal', ['bool']);
         $optionsResolver->addAllowedTypes('page', ['int']);
         $optionsResolver->addAllowedTypes('q', ['string', 'null']);
@@ -108,11 +118,21 @@ class GetShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime
         if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments', 'json');
         }
-        if ($contentType !== null && ($status >= 400 && $status <= 499 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+        if ($status >= 400 && $status <= 499) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
-        if ($contentType !== null && ($status >= 500 && $status <= 599 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+        if ($status >= 500 && $status <= 599) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException($status, $body, $response);
     }
