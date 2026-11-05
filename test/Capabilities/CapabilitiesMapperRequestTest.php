@@ -8,10 +8,13 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Direction;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLocationTypeV2;
-use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * The tests read the request as the API gets it: with the camelCase field names of the v2 capabilities API.
@@ -250,10 +253,11 @@ final class CapabilitiesMapperRequestTest extends TestCase
     }
 
     /**
-     * The JSON that the client sends for the model.
+     * The JSON that the client sends for the model: the generated normalizer keeps an empty object as `{}`.
      */
     private static function body(object $model): string
     {
-        return json_encode(CoreApiModels::toArray($model), JSON_THROW_ON_ERROR);
+        return (new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()], [new JsonEncoder()]))
+            ->serialize($model, 'json', ['skip_validation' => true]);
     }
 }

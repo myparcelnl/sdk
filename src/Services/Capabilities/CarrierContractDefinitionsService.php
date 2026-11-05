@@ -76,7 +76,7 @@ final class CarrierContractDefinitionsService
 
         $response = $this->api->postCapabilitiesContractDefinitions(
             requestBody: $request,
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         );
 
         // The generated method declares the v1 and the v2 response. The request asks for v2, so this
