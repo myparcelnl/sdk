@@ -90,7 +90,7 @@ final class ShipmentApiFactory
      * @param string|null              $host       Optional API host override.
      * @param string|null              $userAgent  Optional custom User-Agent.
      * @param array<string, string>    $headers    Sent on every request, such as `x-dmp-*` API feature flags.
-     * @param HttpClientInterface|null $httpClient Sends the requests. Tests pass a MockHttpClient.
+     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as a timeout or a proxy.
      */
     public static function client(
         ?string $apiKey = null,

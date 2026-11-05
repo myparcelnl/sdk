@@ -6,96 +6,54 @@ namespace MyParcelNL\Sdk\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentIds;
 use MyParcelNL\Sdk\Client\Jane\PostShipmentsDirectPrint;
-use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
 /**
- * Direct print flow for shipments.
+ * Creates shipments and prints their labels on a printer group, through the Core API client.
  */
 final class ShipmentPrintService
 {
     use HasUserAgent;
-    use EnsuresShipmentReferenceIds;
+    use PreparesShipments;
 
     private Client $api;
 
-    /**
-     * The third argument has the place of the PSR-18 client of v11, so the host stays the fourth argument.
-     *
-     * @param HttpClientInterface|null $httpClient Sends the requests when the service builds the client.
-     */
     public function __construct(
         string $apiKey,
         ?Client $api = null,
-        ?HttpClientInterface $httpClient = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host, null, [], $httpClient);
+        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
     }
 
     /**
-     * Create shipments and send labels directly to the given printer group.
+     * Create shipments and send their labels to the printer group.
      *
-     * @return array<int, string|null> Mapping shipment id => reference identifier.
+     * A shipment without a reference identifier gets one that starts with `sdk_`. The generated
+     * client checks the shipments against the spec before it sends them.
+     *
+     * @param ShipmentItem[] $shipments The shipments. CoreApiModels::toModel() fills one from an array.
+     *
+     * @return array<int, string|null> Shipment id => reference identifier.
+     *
+     * @throws InvalidArgumentException For an empty list, or an item that is not a ShipmentItem.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a shipment that does not match the spec. No request goes out.
      */
-    public function print(ShipmentCollection $collection, string $printerGroupId): array
+    public function print(array $shipments, string $printerGroupId): array
     {
-        $shipments = $collection->values()->all();
+        $request = $this->createRequest($shipments, 'print');
 
-        $this->validateBeforePrint($shipments);
-        $this->ensureReferenceIds($shipments);
-
-        $response = $this->api->executeEndpoint(new PostShipmentsDirectPrint(
-            $this->buildCreateRequest($shipments),
-            $printerGroupId,
-            ['User-Agent' => $this->getUserAgentHeader()]
-        ));
+        $response = $this->api->executeEndpoint(new PostShipmentsDirectPrint($request, $printerGroupId, $this->headerParameters()));
 
         if (! $response instanceof ShipmentResponsesShipmentIds || ! isset($response->data)) {
             throw new InvalidArgumentException('Unexpected response type returned while parsing direct print response.');
         }
 
-        $mapping = [];
-
-        foreach ($response->data->ids ?? [] as $item) {
-            if (isset($item->id)) {
-                $mapping[$item->id] = isset($item->referenceIdentifier) ? (string) $item->referenceIdentifier : null;
-            }
-        }
-
-        return $mapping;
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function validateBeforePrint(array $shipments): void
-    {
-        if (empty($shipments)) {
-            throw new InvalidArgumentException('At least one shipment must be added before calling print().');
-        }
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function buildCreateRequest(array $shipments): ShipmentPostShipmentsRequestV11
-    {
-        $data            = new ShipmentPostShipmentsRequestV11Data();
-        $data->shipments = array_map(static fn (Shipment $shipment) => $shipment->toApiModel(), $shipments);
-        $data->userAgent = $this->getUserAgentHeader();
-
-        $request       = new ShipmentPostShipmentsRequestV11();
-        $request->data = $data;
-
-        return $request;
+        return $this->mapCreatedIds($request->data->shipments, $response->data->ids ?? []);
     }
 }

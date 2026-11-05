@@ -73,6 +73,18 @@ final class CoreApiModelsTest extends TestCase
         self::assertNull(CoreApiModels::toModel(null, ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class));
     }
 
+    public function testCopyGivesTheNestedModelsTheirOwnCopy(): void
+    {
+        $shipment = CoreApiModels::toModel(['recipient' => ['cc' => 'NL'], 'shipped_items' => [['quantity' => 1]]], ShipmentPostShipmentsRequestV11DataShipmentsItem::class);
+
+        $copy                          = CoreApiModels::copy($shipment);
+        $copy->recipient->cc           = 'BE';
+        $copy->shippedItems[0]->quantity = 2;
+
+        self::assertSame('NL', $shipment->recipient->cc);
+        self::assertSame(1, $shipment->shippedItems[0]->quantity);
+    }
+
     public function testToModelThrowsOnAnotherModel(): void
     {
         $this->expectException(InvalidArgumentException::class);

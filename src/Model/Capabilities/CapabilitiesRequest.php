@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Capabilities;
 
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 
 /**
@@ -304,25 +304,23 @@ class CapabilitiesRequest
     }
 
      /**
-     * Create a CapabilitiesRequest from a Shipment.
+     * Create a CapabilitiesRequest from a shipment.
      *
-     * Note: Only extracts country code (from recipient) and physical properties from the shipment.
-     * Other shipment properties (carrier, package type, options, etc.) are not automatically included.
-     * Use the `with*()` methods on the returned instance to add additional properties:
+     * The request takes only the country code of the recipient and the physical properties from
+     * the shipment. Add the other properties, such as the carrier and the package type, with the
+     * `with*()` methods:
      *
-     * Example:
-     * $request = CapabilitiesRequest::fromShipment($shipment)
-     *     ->withCarrier(\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2::POSTNL)
-     *     ->withPackageType(\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2::PACKAGE);
+     *     $request = CapabilitiesRequest::fromShipment($shipment)
+     *         ->withCarrier(RefCapabilitiesSharedCarrierV2::Postnl->value)
+     *         ->withPackageType(RefShipmentPackageTypeV2::Package->value);
      *
-     * @param  \MyParcelNL\Sdk\Model\Shipment\Shipment $shipment
+     * @param ShipmentItem $shipment The generated request model of a shipment.
      *
-     * @return self
-     * @throws \InvalidArgumentException When recipient country code is missing
+     * @throws \InvalidArgumentException When the recipient has no country code.
      */
-    public static function fromShipment(Shipment $shipment): self
+    public static function fromShipment(ShipmentItem $shipment): self
     {
-        $countryCode = $shipment->getRecipient()->cc ?? null;
+        $countryCode = $shipment->recipient->cc ?? null;
 
         if (! $countryCode) {
             throw new \InvalidArgumentException(
@@ -332,7 +330,8 @@ class CapabilitiesRequest
 
         $request = self::forCountry((string) $countryCode);
 
-        $physicalProperties = $shipment->getPhysicalProperties();
+        $physicalProperties = $shipment->physicalProperties ?? null;
+
         if (! $physicalProperties) {
             return $request;
         }
