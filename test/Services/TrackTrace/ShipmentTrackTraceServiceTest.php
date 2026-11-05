@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\TrackTrace;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTrace;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
-use MyParcelNL\Sdk\Model\TrackTrace\TrackTrace;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -47,14 +49,14 @@ final class ShipmentTrackTraceServiceTest extends TestCase
         self::assertSame('https://api.myparcel.nl/tracktraces/123%3B456', $this->requests[0]['url']);
         self::assertContains('User-Agent: ' . $service->getUserAgentHeader(), $this->requests[0]['headers']);
         self::assertSame([123, 456], array_keys($result));
-        self::assertInstanceOf(TrackTrace::class, $result[123]);
-        self::assertSame('https://track.test/123', $result[123]->getLinkTracktrace());
-        self::assertSame('https://track.test/456', $result[456]->getLinkTracktrace());
-        self::assertSame('DELIVERED', $result[123]->getCode());
-        self::assertSame('IN_TRANSIT', $result[456]->getCode());
+        self::assertInstanceOf(ShipmentDefsTrackTrace::class, $result[123]);
+        self::assertSame('https://track.test/123', $result[123]->linkTracktrace);
+        self::assertSame('https://track.test/456', $result[456]->linkTracktrace);
+        self::assertSame('DELIVERED', $result[123]->code);
+        self::assertSame('IN_TRANSIT', $result[456]->code);
     }
 
-    public function testRecipientIsRead(): void
+    public function testANestedObjectIsReadAsAModelWithCamelCaseProperties(): void
     {
         $result = $this->createService([[
             'shipment_id' => 99,
@@ -70,21 +72,33 @@ final class ShipmentTrackTraceServiceTest extends TestCase
             ],
         ]])->fetchTrackTraceData([99]);
 
-        self::assertSame('Package delivered', $result[99]->getDescription());
-        self::assertSame('Antareslaan', $result[99]->getRecipient()->street);
-        self::assertSame('NL', $result[99]->getRecipient()->cc);
+        self::assertSame('Package delivered', $result[99]->description);
+        self::assertSame('Antareslaan', $result[99]->recipient->street);
+        self::assertSame('2132JE', $result[99]->recipient->postalCode);
+        self::assertSame('NL', $result[99]->recipient->cc);
     }
 
-    public function testATrackTraceEncodesToJsonWithTheApiNames(): void
+    public function testTheCarrierHoldsTheCaseOrTheRawValueThatTheSdkDoesNotKnow(): void
+    {
+        $result = $this->createService([
+            ['shipment_id' => 1, 'carrier' => 1],
+            ['shipment_id' => 2, 'carrier' => 999],
+        ])->fetchTrackTraceData([1, 2]);
+
+        self::assertSame(RefTypesCarrier::Postnl, $result[1]->carrier);
+        self::assertSame(999, $result[2]->carrier);
+    }
+
+    public function testToArrayGivesTheApiFieldNames(): void
     {
         $result = $this->createService([['shipment_id' => 7, 'link_tracktrace' => 'https://track.test/7', 'code' => 'DELIVERED']])
             ->fetchTrackTraceData([7]);
 
-        $json = json_decode(json_encode($result[7], JSON_THROW_ON_ERROR), true);
+        $array = CoreApiModels::toArray($result[7]);
 
-        self::assertSame(7, $json['shipment_id']);
-        self::assertSame('DELIVERED', $json['code']);
-        self::assertSame('https://track.test/7', $json['link_tracktrace']);
+        self::assertSame(7, $array['shipment_id']);
+        self::assertSame('DELIVERED', $array['code']);
+        self::assertSame('https://track.test/7', $array['link_tracktrace']);
     }
 
     public function testATrackTraceWithoutShipmentIdIsSkipped(): void

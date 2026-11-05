@@ -22,9 +22,6 @@ trait HasUserAgent
     /**
      * Build the User-Agent header from the registered user agents.
      *
-     * A service that reads it per request, such as ShipmentQueryService, also sends a User-Agent that
-     * an integrator sets after the constructor, such as with setUserAgentForProposition().
-     *
      * @return string
      */
     public function getUserAgentHeader(): string
@@ -41,6 +38,18 @@ trait HasUserAgent
         }
 
         return implode(' ', $userAgentStrings);
+    }
+
+    /**
+     * Build the header parameters of a request to a generated endpoint.
+     *
+     * @return array<string, string>
+     */
+    protected function headerParameters(): array
+    {
+        // Read the User-Agent per request, so a call of setUserAgentForProposition() after the
+        // constructor also reaches the API.
+        return ['User-Agent' => $this->getUserAgentHeader()];
     }
 
     /**

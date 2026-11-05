@@ -13,21 +13,26 @@ The generated Jane clients send their requests with a Symfony HTTP client, with 
 
 A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`.
 
-### Getters of FoundShipment and TrackTrace
+### Found shipments and track & trace results
 
-`FoundShipment` and `TrackTrace` keep the getter names of v11, but some getters return another type, because they return what the Jane model holds:
+`ShipmentQueryService` returns the generated `Jane\CoreApi\Model\ShipmentDefsShipment`, and `ShipmentTrackTraceService` returns the generated `Jane\CoreApi\Model\ShipmentDefsTrackTrace`. A Jane model has public properties with camelCase names instead of getters: read `$shipment->barcode` instead of `$shipment->getBarcode()`, and `$shipment->recipient->postalCode` instead of `$shipment->getRecipient()->getPostalCode()`.
 
-| Getter | v11 | v12 |
-|--------|-----|-----|
-| `getCarrierId()`, `getStatus()`, `getShipmentType()`, `getTransactionStatus()`, `getPaymentStatus()`, `getCurrency()` and `getExternalProvider()` of `FoundShipment`, and `getCarrier()` of `TrackTrace` | The raw value, such as `1` | The enum case, such as `RefTypesCarrier::Postnl`, or the raw value for a value that the SDK does not know. Compare with the case, or read `->value` |
-| `getHidden()` | `0` or `1` | `0.0` or `1.0` |
-| `getDelayed()` and `getDelivered()` of `FoundShipment` | `null` for a field that the API did not send | `false`: the Jane model has that default |
-| `getPickup()`, `getDropOffPoint()` and `getShippedItems()` | Decoded JSON | `ShipmentDefsShipmentPickup`, `ShipmentDefsShipmentDropOffPoint` and `ShipmentDefsShipmentShippedItem[]`, Jane models with public properties |
-| `getCustomsDeclaration()` | `ShipmentDefsShipmentCustomsDeclaration` | `RefShipmentCustomsDeclaration` |
-| `getCollectionContact()` | `ShipmentDefsShipmentCollectionContact` | `AccountDefsContact` |
-| `getOrigin()`, `getParentId()` and `getExternalProviderId()` | A wrapper model | `string`, `int` and `int` |
-| `getCreatedBy()` and `getModifiedBy()` | `int` | The value as the API sends it |
-| `getSignature()` of `TrackTrace` | `ShipmentDefsTrackTraceProofOfDelivery` | The decoded JSON |
+A Jane model does not initialize a property for a field that the API did not send. Reading it throws an `Error`: use `isset()` or `??`, such as `$shipment->recipient->street ?? null`. In v11, a getter returned `null`.
+
+Some fields hold another type than the v11 getter returned:
+
+| Field | v11 | v12 |
+|-------|-----|-----|
+| `carrierId`, `status`, `shipmentType`, `transactionStatus`, `paymentStatus`, `currency` and `externalProvider` of a shipment, and `carrier` of a track & trace result | `getCarrierId()`, `getStatus()`, `getShipmentType()`, `getTransactionStatus()`, `getPaymentStatus()` and `getCarrier()` return the raw value, such as `1`. `getCurrency()` and `getExternalProvider()` return a wrapper model | The enum case, such as `RefTypesCarrier::Postnl`, or the raw value for a value that the SDK does not know. Compare with the case, or read `->value` |
+| `hidden` | `getHidden()` returns `0` or `1` | `0.0` or `1.0` |
+| `pickup`, `dropOffPoint`, `shippedItems` and `physicalProperties` | Decoded JSON with the API field names, such as `$pickup->postal_code` | `ShipmentDefsShipmentPickup`, `ShipmentDefsShipmentDropOffPoint`, `ShipmentDefsShipmentShippedItem[]` and `ShipmentDefsShipmentPhysicalProperties`: Jane models with camelCase properties, such as `$pickup->postalCode` |
+| `customsDeclaration` and `collectionContact` | `ShipmentDefsShipmentCustomsDeclaration` and `ShipmentDefsShipmentCollectionContact` | `RefShipmentCustomsDeclaration` and `AccountDefsContact` |
+| `origin`, `parentId`, `multiColloMainShipmentId` and `externalProviderId` | A wrapper model | `string`, `int`, `int` and `int` |
+| `referenceIdentifier` | `getReferenceIdentifier()` returns a string, also for `"reference_identifier": 123` | The value as the API sends it: the int `123` |
+| `createdBy` and `modifiedBy` | `int` | The value as the API sends it |
+| `signature` of a track & trace result | `ShipmentDefsTrackTraceProofOfDelivery` | The decoded JSON |
+
+`json_encode()` of a Jane model gives the camelCase property names. Use `CoreApiModels::toArray($shipment)` for an array with the API field names, such as `postal_code`. It leaves out a field that the API did not send, and a typed field that the API sent as `null`, such as `parent_id`. The v11 models also had setters such as `setBarcode()`, array access such as `$shipment['barcode']`, `__toString()`, `valid()` and `listInvalidProperties()`. A Jane model has none of these.
 
 ### Services
 
@@ -46,10 +51,6 @@ A connection error or a timeout throws a Symfony `TransportExceptionInterface`, 
 | `ShipmentOptionMapper` | `v2PropertyFromName()` returns the property name of the openapi-generator model, such as `requires_signature` | It returns the property name of the Jane model, such as `requiresSignature`. A snake_case name, such as `requires_signature`, is still accepted as input |
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
-
-A getter of `FoundShipment` or `TrackTrace` returns `null` for a field that the API did not send. A `Jane` model does not initialize such a property, and reading it throws an `Error`. Use `??` or `isset()` on a nested object, such as `$shipment->getRecipient()->street ?? null`.
-
-`json_encode()` of a `FoundShipment` or a `TrackTrace` leaves out a field that the API sent as `null` when the spec gives the field a type, such as `parent_id` or `shipped_items`. In v11, the JSON had such a field with the value `null`. A getter returns `null` in both versions.
 
 ### Order push
 
