@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Mapping;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
-use MyParcelNL\Sdk\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * Maps shipment option names to the v11 property names of the capabilities v2 options, such as
- * requires_signature.
+ * Maps shipment option names to the properties of the capabilities v2 options model, such as
+ * requiresSignature.
  *
  *     $mapper = new ShipmentOptionMapper();
- *     $mapper->v2PropertyFromName('signature'); // 'requires_signature'
+ *     $mapper->v2PropertyFromName('signature'); // 'requiresSignature'
  *     $mapper->v2PropertyFromName('tracked');   // null
  *
  * Options have no numeric IDs. This mapper only covers names accepted by
@@ -32,21 +31,21 @@ final class ShipmentOptionMapper
      * @var array<string, string>
      */
     private const LEGACY_TO_V2_PROPERTIES = [
-        'signature'                => 'requires_signature',
-        'only_recipient'           => 'recipient_only_delivery',
-        'age_check'                => 'requires_age_verification',
-        'receipt_code'             => 'requires_receipt_code',
-        'large_format'             => 'oversized_package',
-        'printerless_return'       => 'print_return_label_at_drop_off',
-        'collect'                  => 'scheduled_collection',
-        'return'                   => 'return_on_first_failed_delivery',
-        'cash_on_delivery'         => 'requires_cash_on_delivery',
-        'drop_off_at_postal_point' => 'deliver_at_postal_point',
-        'extra_assurance'          => 'additional_insurance',
+        'signature'                => 'requiresSignature',
+        'only_recipient'           => 'recipientOnlyDelivery',
+        'age_check'                => 'requiresAgeVerification',
+        'receipt_code'             => 'requiresReceiptCode',
+        'large_format'             => 'oversizedPackage',
+        'printerless_return'       => 'printReturnLabelAtDropOff',
+        'collect'                  => 'scheduledCollection',
+        'return'                   => 'returnOnFirstFailedDelivery',
+        'cash_on_delivery'         => 'requiresCashOnDelivery',
+        'drop_off_at_postal_point' => 'deliverAtPostalPoint',
+        'extra_assurance'          => 'additionalInsurance',
     ];
 
     /**
-     * The concrete v2 request has no tracked property. Its no_tracking property has the opposite
+     * The concrete v2 request has no tracked property. Its noTracking property has the opposite
      * meaning, and the option values are configuration objects that cannot be inverted as booleans.
      *
      * @var string[]
@@ -54,17 +53,14 @@ final class ShipmentOptionMapper
     private const UNSUPPORTED_OPTIONS = ['tracked'];
 
     /**
-     * @var null|array<string, string>
+     * @var null|list<string>
      */
     private static ?array $v2Properties = null;
 
     /**
-     * Return the snake_case v2 name for a legacy option name or a v2 JSON/property name.
-     * For example, both signature and requiresSignature resolve to requires_signature.
+     * Return the v2 property for a legacy option name, a v2 JSON name or a snake_case name.
+     * For example, signature, requiresSignature and requires_signature all resolve to requiresSignature.
      * Unknown and unsupported names return null.
-     *
-     * The snake_case name is the property name of the openapi-generator models of v11. The PDK reads
-     * it, so it stays the same with Jane, which names the property requiresSignature.
      *
      * @param  string $name
      *
@@ -77,17 +73,17 @@ final class ShipmentOptionMapper
         }
 
         $properties = self::v2Properties();
-        $property   = self::LEGACY_TO_V2_PROPERTIES[$name] ?? $properties[$name] ?? $name;
+        $property   = self::LEGACY_TO_V2_PROPERTIES[$name] ?? $name;
 
         if (in_array($property, $properties, true)) {
             return $property;
         }
 
-        // Existing calls also accept case variants and spaces, as PHP's method lookup did before.
+        // A snake_case name, a case variant or a name with spaces also resolves, as it did in v11.
         $normalised = strtolower(str_replace(['_', ' '], '', $property));
 
         foreach ($properties as $candidate) {
-            if (strtolower(str_replace('_', '', $candidate)) === $normalised) {
+            if (strtolower($candidate) === $normalised) {
                 return $candidate;
             }
         }
@@ -96,29 +92,19 @@ final class ShipmentOptionMapper
     }
 
     /**
-     * Return the options of the v2 capabilities request as v2 JSON name => snake_case name.
+     * Return the properties of the v2 options model.
      *
-     * The snake_case name is the PHP property that openapi-generator generated, such as
-     * requires_signature. This mapper keeps returning it, because the PDK reads it. Jane names the
-     * PHP property after the v2 JSON name, such as requiresSignature.
-     *
-     * The method reads the properties with reflection, not with definedProperties(). Jane generates
-     * definedProperties() for only 81 of the 415 Core API models, and not for this one.
-     *
-     * @todo Return the Jane property name in a major release, when the PDK no longer reads the v11
-     *       snake case name.
-     *
-     * @return array<string, string>
+     * @return list<string>
      */
     private static function v2Properties(): array
     {
         if (null === self::$v2Properties) {
-            self::$v2Properties = [];
-            $reflection         = new ReflectionClass(CapabilitiesPostCapabilitiesRequestV2Options::class);
-
-            foreach ($reflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-                self::$v2Properties[$property->getName()] = Str::snake($property->getName());
-            }
+            // Jane generates definedProperties() only for a model whose schema allows additional
+            // properties. This schema does not, so the names come from reflection.
+            self::$v2Properties = array_map(
+                static fn (ReflectionProperty $property): string => $property->getName(),
+                (new ReflectionClass(CapabilitiesPostCapabilitiesRequestV2Options::class))->getProperties(ReflectionProperty::IS_PUBLIC)
+            );
         }
 
         return self::$v2Properties;
