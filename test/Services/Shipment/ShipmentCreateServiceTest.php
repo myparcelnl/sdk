@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
@@ -184,7 +184,7 @@ final class ShipmentCreateServiceTest extends TestCase
         try {
             $service->create(new ShipmentCollection([self::shipment('order-1')]));
             self::fail('A 422 response must throw.');
-        } catch (PostShipmentsClientErrorException $exception) {
+        } catch (PostShipmentsUnprocessableEntityException $exception) {
             self::assertSame(422, $exception->getResponse()->getStatusCode());
         }
     }
