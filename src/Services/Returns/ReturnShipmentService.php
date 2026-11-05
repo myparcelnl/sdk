@@ -16,14 +16,14 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShip
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Creates return shipments, for existing shipments or without one.
+ * Creates return shipments through the Core API client, for existing shipments or without one.
  *
  * Each return shipment in `$returnShipments` is an array with the API field names, such as `parent`
  * and `email`. The generated client checks the request before it sends it, and picks the content
- * type from the request body.
+ * type from the request body. A null value throws a TypeError: leave the field out. A key that the
+ * API does not know goes to the API.
  */
 final class ReturnShipmentService
 {
@@ -32,24 +32,23 @@ final class ReturnShipmentService
     private Client $api;
 
     /**
-     * The third argument has the place of the PSR-18 client of v11, so the host stays the fourth argument.
-     *
-     * @param HttpClientInterface|null $httpClient Sends the requests when the service builds the client.
+     * Create the service with an API key, or with a client.
      */
-    public function __construct(
-        string $apiKey,
-        ?Client $api = null,
-        ?HttpClientInterface $httpClient = null,
-        ?string $host = null
-    ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host, null, [], $httpClient);
+    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
+    {
+        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
     }
 
     /**
-     * Create return shipments linked to existing parent shipment ids.
+     * Create return shipments for existing shipments.
      *
-     * @param array<int, array<string, mixed>> $returnShipments
-     * @return array<int, string|null> Mapping shipment id => reference identifier.
+     * @param array<int, array<string, mixed>> $returnShipments The rows, with the API field names such as `parent`, `carrier`, `email` and `name`.
+     * @param bool                             $sendMail        Whether the API sends the return email to the consumer.
+     *
+     * @return array<int, string|null> The reference identifier of each new shipment, by shipment id.
+     *
+     * @throws InvalidArgumentException For an empty list, or a response without shipments.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a row that does not match the spec. No request goes out.
      */
     public function createRelated(array $returnShipments, bool $sendMail = false): array
     {
@@ -67,15 +66,19 @@ final class ReturnShipmentService
         return $this->mapCreatedShipments($this->api->postShipments(
             requestBody: $request,
             queryParameters: ['send_return_mail' => $sendMail ? 1 : 0],
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         ));
     }
 
     /**
-     * Create unrelated return shipments.
+     * Create return shipments without an existing shipment.
      *
-     * @param array<int, array<string, mixed>> $returnShipments
-     * @return array<int, string|null> Mapping shipment id => reference identifier.
+     * @param array<int, array<string, mixed>> $returnShipments The rows, with the API field names such as `carrier`, `email` and `name`.
+     *
+     * @return array<int, string|null> The reference identifier of each new shipment, by shipment id.
+     *
+     * @throws InvalidArgumentException For an empty list, or a response without shipments.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a row that does not match the spec. No request goes out.
      */
     public function createUnrelated(array $returnShipments): array
     {
@@ -90,7 +93,7 @@ final class ReturnShipmentService
         $request->data = CoreApiModels::withoutNullUntypedProperties($data);
 
         return $this->mapCreatedShipments(
-            $this->api->postShipments(requestBody: $request, headerParameters: ['User-Agent' => $this->getUserAgentHeader()])
+            $this->api->postShipments(requestBody: $request, headerParameters: $this->headerParameters())
         );
     }
 
@@ -103,19 +106,22 @@ final class ReturnShipmentService
             throw new InvalidArgumentException('Unexpected response type returned while parsing return shipment response.');
         }
 
-        // The generated normalizer turns `"data": null` into an empty data model, so check the shipments.
+        // The generated normalizer turns `"data": null` into an empty data model, and the spec
+        // requires `shipments`.
         if (! isset($response->data->shipments)) {
-            throw new InvalidArgumentException('The API returned a response without data while parsing return shipment response.');
+            throw new InvalidArgumentException('The return shipment response has no shipments.');
         }
 
         $mapping = [];
 
-        foreach ($response->data->shipments ?? [] as $shipment) {
+        foreach ($response->data->shipments as $shipment) {
             if (! isset($shipment->id)) {
                 continue;
             }
 
-            $mapping[$shipment->id] = null === $shipment->referenceIdentifier ? null : (string) $shipment->referenceIdentifier;
+            $referenceIdentifier = $shipment->referenceIdentifier ?? null;
+
+            $mapping[$shipment->id] = null === $referenceIdentifier ? null : (string) $referenceIdentifier;
         }
 
         return $mapping;
