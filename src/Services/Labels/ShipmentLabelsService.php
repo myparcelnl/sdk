@@ -26,22 +26,28 @@ final class ShipmentLabelsService
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
-    // The spec documents the binary label as `application/*`. The API sends a PDF for this value, as in v11.
+    // The spec documents the binary label as `application/*`. The API sends a PDF for this value.
     private const PDF_ACCEPT_HEADER = 'application/pdf';
     private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
-    private Client $api;
+    private ?Client $api;
+
+    private string $apiKey;
+
+    private ?string $host;
 
     private string $labelLink = '';
 
     private string $labelPdf = '';
 
     /**
-     * Create the service with an API key, or with a client.
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
      */
     public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
     {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
+        $this->apiKey = $apiKey;
+        $this->api    = $api;
+        $this->host   = $host;
     }
 
     /**
@@ -153,10 +159,10 @@ final class ShipmentLabelsService
             $query['positions'] = $resolvedPositions;
         }
 
-        return $this->api->executeEndpoint(new GetShipmentsLabelsRaw(
+        return $this->api()->executeEndpoint(new GetShipmentsLabelsRaw(
             implode(';', array_map('strval', $shipmentIds)),
             $query,
-            $this->headerParameters(),
+            [],
             ['Accept' => [$accept]]
         ));
     }
@@ -165,7 +171,7 @@ final class ShipmentLabelsService
      * Turn the positions argument into the paper size and the `positions` parameter of the spec.
      *
      * A number is the first position on an A4 sheet: the labels take that position and the ones
-     * after it. A number that is not a position of the spec leaves the parameter out, as in v11.
+     * after it. A number that is not a position of the spec leaves the parameter out.
      *
      * @return array{0: string, 1: string|null}
      */
@@ -209,5 +215,14 @@ final class ShipmentLabelsService
         }
 
         return rtrim($base, '/') . '/' . ltrim($url, '/');
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }
