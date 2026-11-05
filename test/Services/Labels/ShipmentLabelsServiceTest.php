@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Labels;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsNotFoundException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsPaymentRequiredException;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
@@ -40,14 +43,24 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame($result, $service->getLinkOfLabels());
     }
 
-    public function testSetLinkOfLabelsKeepsLegacyEmptyPositionsForOutOfRangeNumericInput(): void
+    /**
+     * The spec has the positions 1 to 4. Another number leaves the parameter out, as in v11.
+     */
+    public function testSetLinkOfLabelsLeavesOutAPositionThatTheSpecDoesNotHave(): void
     {
         $service = $this->createService(json_encode(['data' => ['pdf' => ['url' => 'https://cdn.myparcel.nl/label.pdf']]]));
 
         $result = $service->setLinkOfLabels([101], 7);
 
-        self::assertSame('https://api.myparcel.nl/shipment_labels/101?format=A4&positions=', $this->requests[0]['url']);
+        self::assertSame('https://api.myparcel.nl/shipment_labels/101?format=A4', $this->requests[0]['url']);
         self::assertSame('https://cdn.myparcel.nl/label.pdf', $result);
+    }
+
+    public function testSetLinkOfLabelsSendsAListOfPositions(): void
+    {
+        $this->createService(json_encode(['data' => ['pdfs' => ['url' => '/pdfs/download/1']]]))->setLinkOfLabels([1], [1, 3]);
+
+        self::assertSame('https://api.myparcel.nl/shipment_labels/1?format=A4&positions=1%3B3', $this->requests[0]['url']);
     }
 
     public function testSetLinkOfLabelsAsksForA6WithoutPositions(): void
@@ -83,14 +96,16 @@ final class ShipmentLabelsServiceTest extends TestCase
         ];
     }
 
-    public function testSetLinkOfLabelsThrowsOnAnErrorResponse(): void
+    public function testAnErrorResponseThrowsTheGeneratedException(): void
     {
-        $service = $this->createService(json_encode(['errors' => [['code' => 3501, 'message' => 'Not found']]]), 404);
+        $service = $this->createService('{"message":"Not found","request_id":"1","status_code":404,"errors":[]}', 404);
 
-        $this->expectException(ApiException::class);
-        $this->expectExceptionMessage('Did not receive expected label link response. Please contact MyParcel.');
-
-        $service->setLinkOfLabels([101]);
+        try {
+            $service->setLinkOfLabels([101]);
+            self::fail('A 404 response must throw.');
+        } catch (GetShipmentsLabelsNotFoundException $exception) {
+            self::assertSame(404, $exception->getResponse()->getStatusCode());
+        }
     }
 
     public function testSetPdfOfLabelsSendsThePdfAcceptHeaderAndStoresThePdf(): void
@@ -104,12 +119,15 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame($result, $service->getLabelPdf());
     }
 
-    public function testSetPdfOfLabelsThrowsOnPaymentInstructions(): void
+    public function testAPaymentRequiredResponseThrowsTheGeneratedException(): void
     {
-        $service = $this->createService(json_encode(['data' => ['payment_instructions' => [['id' => 1]]]]), 402);
+        $service = $this->createService(
+            json_encode(['data' => ['payment_instructions' => ['payment_url' => 'https://pay.test/1'], 'shipments' => []]]),
+            402,
+            'application/vnd.shipment_label_link+json'
+        );
 
-        $this->expectException(ApiException::class);
-        $this->expectExceptionMessage('Received payment link instead of pdf. Check your MyParcel account status.');
+        $this->expectException(GetShipmentsLabelsPaymentRequiredException::class);
 
         $service->setPdfOfLabels([101]);
     }
@@ -147,6 +165,6 @@ final class ShipmentLabelsServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
         });
 
-        return new ShipmentLabelsService('my-api-key', null, $httpClient);
+        return new ShipmentLabelsService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
     }
 }

@@ -7,10 +7,13 @@ namespace MyParcelNL\Sdk\Test\Services\Returns;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Returns\ReturnShipmentService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use TypeError;
 
 final class ReturnShipmentServiceTest extends TestCase
 {
@@ -92,7 +95,7 @@ final class ReturnShipmentServiceTest extends TestCase
         $service = $this->createService('{}');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The API returned a response without data while parsing return shipment response.');
+        $this->expectExceptionMessage('The return shipment response has no shipments.');
 
         $service->createRelated([self::RELATED_ROW]);
     }
@@ -114,9 +117,56 @@ final class ReturnShipmentServiceTest extends TestCase
         $service = $this->createService('{"data":null}');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The API returned a response without data while parsing return shipment response.');
+        $this->expectExceptionMessage('The return shipment response has no shipments.');
 
         $service->createRelated([self::RELATED_ROW]);
+    }
+
+    /**
+     * The spec requires `shipments` in the response. In v11, this response gave an empty mapping.
+     */
+    public function testCreateRelatedThrowsOnDataWithoutShipments(): void
+    {
+        $service = $this->createService('{"data":{}}');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The return shipment response has no shipments.');
+
+        $service->createRelated([self::RELATED_ROW]);
+    }
+
+    /**
+     * The service reads the response without validation, so a value that the SDK does not know passes.
+     */
+    public function testCreateRelatedReadsAResponseWithAValueThatTheSdkDoesNotKnow(): void
+    {
+        $service = $this->createService(self::idsResponse([['id' => 9001, 'reference_identifier' => 'ret-9001', 'carrier_id' => 999, 'status' => 999]]));
+
+        self::assertSame([9001 => 'ret-9001'], $service->createRelated([self::RELATED_ROW]));
+    }
+
+    /**
+     * In v11, a null value left the field out of the request.
+     */
+    public function testANullValueInARowThrows(): void
+    {
+        $service = $this->createService(self::idsResponse([]));
+
+        $this->expectException(TypeError::class);
+
+        $service->createRelated([['email' => null] + self::RELATED_ROW]);
+    }
+
+    public function testARowWithInvalidUtf8ThrowsBeforeTheRequestGoesOut(): void
+    {
+        $service = $this->createService(self::idsResponse([]));
+
+        try {
+            $service->createRelated([['name' => "John \xB1 Doe"] + self::RELATED_ROW]);
+            self::fail('Invalid UTF-8 must throw.');
+        } catch (NotEncodableValueException) {
+            self::assertSame([], $this->requests);
+        }
     }
 
     public function testCreateUnrelatedThrowsOnNullData(): void
@@ -124,7 +174,7 @@ final class ReturnShipmentServiceTest extends TestCase
         $service = $this->createService('{"data":null}');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The API returned a response without data while parsing return shipment response.');
+        $this->expectExceptionMessage('The return shipment response has no shipments.');
 
         $service->createUnrelated([['carrier' => 1, 'email' => 'test@example.com', 'name' => 'Jane Doe']]);
     }
@@ -173,6 +223,6 @@ final class ReturnShipmentServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
         });
 
-        return new ReturnShipmentService('my-api-key', null, $httpClient);
+        return new ReturnShipmentService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
     }
 }
