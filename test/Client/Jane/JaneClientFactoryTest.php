@@ -327,10 +327,9 @@ final class JaneClientFactoryTest extends TestCase
     }
 
     /**
-     * The Core API sends an error as `application/json` when the first Accept line is not
-     * `application/problem+json`. Four operations, such as `deleteShipments`, describe both error
-     * content types, and their generated exception accepted only the `application/problem+json`
-     * model before janephp/janephp#1139.
+     * The spec describes both error content types for four operations, such as `deleteShipments`.
+     * The generated exception of such an operation accepted only the `application/problem+json`
+     * model before janephp/janephp#1139, so an `application/json` error threw a BadResponseException.
      */
     public function testAJsonErrorOfAProblemJsonOperationThrowsTheClientErrorException(): void
     {
