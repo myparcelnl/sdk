@@ -75,8 +75,8 @@ final class CoreApiModels
      * normalizer iterates over it without a null check, and PHP warns. The copy leaves such a property
      * unset, so the normalizer skips it.
      *
-     * @todo Remove this method when a Jane release normalizes a nullable list that is null, and the
-     *       client is generated again.
+     * @todo janephp/janephp#1148: remove this method when a Jane release normalizes a nullable list
+     *       that is null, and the client is generated again.
      *
      * @template T of object
      *
