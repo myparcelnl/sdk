@@ -6,8 +6,10 @@ namespace MyParcelNL\Sdk\Test\Client\Jane;
 
 use Jane\Component\OpenApiRuntime\Client\Plugin\ServerUrlHttpClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteShipmentsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
@@ -288,6 +290,113 @@ final class JaneClientFactoryTest extends TestCase
         $client->postShipments(requestBody: $request);
 
         self::assertMatchesRegularExpression('/"signature":1[,}]/', (string) $this->requests[0]['options']['body']);
+    }
+
+    /**
+     * A request body with a `+json` content type with parameters went out without JSON encoding
+     * before Jane 8.1.1 (janephp/janephp#1132).
+     */
+    public function testPostShipmentsSendsAJsonBodyWithTheVersionedContentType(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient('{"data":{"shipments":[]}}'));
+
+        $client->postShipments(requestBody: self::shipmentRequest('order-1'));
+
+        self::assertSame('application/vnd.shipment+json;version=1.1', $this->header('content-type'));
+        self::assertSame('order-1', json_decode((string) $this->requests[0]['options']['body'], true, 512, JSON_THROW_ON_ERROR)['data']['shipments'][0]['reference_identifier']);
+    }
+
+    /**
+     * The validators of the shipment requests referred to a constraint class without its namespace
+     * before Jane 8.1.1 (janephp/janephp#1134): each such request failed with "Class not found".
+     */
+    public function testValidatesAShipmentRequestBeforeItGoesOut(): void
+    {
+        $client  = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient('{}'));
+        $request = self::shipmentRequest('order-1');
+        unset($request->data->shipments[0]->recipient);
+
+        try {
+            $client->postShipments(requestBody: $request);
+            self::fail('A shipment without a recipient must fail validation.');
+        } catch (ValidationException $exception) {
+            self::assertStringContainsString('recipient', (string) $exception->getViolationList());
+        }
+
+        self::assertSame([], $this->requests);
+    }
+
+    /**
+     * The Core API sends an error as `application/json` when the first Accept line is not
+     * `application/problem+json`. Four operations, such as `deleteShipments`, describe both error
+     * content types, and their generated exception accepted only the `application/problem+json`
+     * model before janephp/janephp#1139.
+     */
+    public function testAJsonErrorOfAProblemJsonOperationThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"message":"Permission denied","request_id":"1","status_code":401,"errors":[]}',
+            401
+        ));
+
+        try {
+            $client->deleteShipments(ids: '1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            $error = $exception->getCommonResponsesProblem();
+
+            self::assertInstanceOf(CommonResponsesUserError::class, $error);
+            self::assertSame('Permission denied', $error->message);
+        }
+    }
+
+    public function testAProblemJsonErrorThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"type":"urn:problem:permission-denied","title":"Permission denied","status":401,"request_id":"1"}',
+            401,
+            'application/problem+json'
+        ));
+
+        try {
+            $client->deleteShipments(ids: '1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            self::assertSame(401, $exception->getResponse()->getStatusCode());
+            self::assertSame('Permission denied', $exception->getCommonResponsesProblem()->title);
+        }
+    }
+
+    /**
+     * A shipment request with the fields that the spec requires.
+     */
+    private static function shipmentRequest(string $referenceIdentifier): ShipmentPostShipmentsRequestV11
+    {
+        $recipient             = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+        $recipient->cc         = 'NL';
+        $recipient->postalCode = '2132JE';
+        $recipient->city       = 'Hoofddorp';
+        $recipient->street     = 'Antareslaan';
+        $recipient->number     = '31';
+        $recipient->person     = 'Test Person';
+        // Jane sends an unset field without a type as null (janephp/janephp#1141), and the validation rejects it.
+        unset($recipient->email);
+
+        $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
+        $options->packageType = 1;
+
+        $shipment                      = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
+        $shipment->referenceIdentifier = $referenceIdentifier;
+        $shipment->carrier             = 1;
+        $shipment->recipient           = $recipient;
+        $shipment->options             = $options;
+
+        $data            = new ShipmentPostShipmentsRequestV11Data();
+        $data->shipments = [$shipment];
+        $request         = new ShipmentPostShipmentsRequestV11();
+        $request->data   = $data;
+
+        return $request;
     }
 
     /**

@@ -5,10 +5,10 @@
 // 'namespace', 'directory' and the endpoint options, such as 'whitelisted-paths'.
 // `Jane` stays in the namespace, so a client of another generator can live next to it later.
 // @todo INT-2034: merge this file with .jane-openapi.
-// composer.json pins jane-php/open-api-common to a commit on `next`, because no Jane release contains
-// janephp/janephp#1139 yet. The fix is only in that package, so jane-php/open-api-3-1 stays on a release.
-// composer.lock is not in the repository, so `next` without a commit would give each regeneration the
-// Jane code of that day.
+// composer.json pins jane-php/open-api-common to a commit on `next` of janephp/open-api-common, because
+// no Jane release contains janephp/janephp#1139 yet. The fix is only in that package, so
+// jane-php/open-api-3-1 stays on a release. composer.lock is not in the repository, so `next` without a
+// commit would give each `composer install` the Jane code of that day.
 // @todo Require the first Jane release that contains janephp/janephp#1139, such as ^8.1.2.
 
 return [
