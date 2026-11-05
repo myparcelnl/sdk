@@ -28,13 +28,13 @@ final class ShipmentOptionMapperTest extends TestCase
     public function provideTestV2PropertyFromNameData(): array
     {
         return [
-            'legacy name'        => ['signature', 'requires_signature'],
-            'v2 JSON name'       => ['requiresSignature', 'requires_signature'],
-            'v2 PHP property'    => ['requires_signature', 'requires_signature'],
-            'shared name'        => ['same_day_delivery', 'same_day_delivery'],
-            'case variant'       => ['SAME_DAY_DELIVERY', 'same_day_delivery'],
-            'spaces'             => ['same day delivery', 'same_day_delivery'],
-            'no tracking'        => ['noTracking', 'no_tracking'],
+            'legacy name'        => ['signature', 'requiresSignature'],
+            'v2 JSON name'       => ['requiresSignature', 'requiresSignature'],
+            'v11 property name'  => ['requires_signature', 'requiresSignature'],
+            'shared name'        => ['same_day_delivery', 'sameDayDelivery'],
+            'case variant'       => ['SAME_DAY_DELIVERY', 'sameDayDelivery'],
+            'spaces'             => ['same day delivery', 'sameDayDelivery'],
+            'no tracking'        => ['noTracking', 'noTracking'],
             'unsupported option' => ['tracked', null],
             'unknown option'     => ['unknown_option', null],
             'empty name'         => ['', null],
