@@ -34,6 +34,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\ApiException For an error response.
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a value that the spec does not know, such as a carrier. No request goes out.
      * @throws \InvalidArgumentException For a physical property that is not a whole number.
+     * @throws \UnexpectedValueException For a v1 response, which the request does not ask for.
      */
     public function get(CapabilitiesRequest $request): CapabilitiesResponse
     {
