@@ -223,6 +223,6 @@ final class ReturnShipmentServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
         });
 
-        return new ReturnShipmentService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new ReturnShipmentService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 }
