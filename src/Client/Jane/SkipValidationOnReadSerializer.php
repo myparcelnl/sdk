@@ -24,6 +24,9 @@ final class SkipValidationOnReadSerializer implements SerializerInterface, Norma
 {
     private Serializer $serializer;
 
+    /**
+     * Wrap the serializer that the generated Client::create() builds.
+     */
     public function __construct(Serializer $serializer)
     {
         $this->serializer = $serializer;
@@ -39,29 +42,32 @@ final class SkipValidationOnReadSerializer implements SerializerInterface, Norma
 
     /**
      * Deserialize a response body without validation.
-     *
-     * A caller that sets `skip_validation` in the context keeps its own value, so a test can still
-     * read with validation.
      */
     public function deserialize(mixed $data, string $type, string $format, array $context = []): mixed
     {
-        return $this->serializer->deserialize($data, $type, $format, $context + ['skip_validation' => true]);
+        return $this->serializer->deserialize($data, $type, $format, ['skip_validation' => true] + $context);
     }
 
     /**
-     * The generated BaseEndpoint::normalizeBody() needs a NormalizerInterface for a form or a
-     * multipart body.
+     * Normalize a form or multipart request body.
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
+        // The generated BaseEndpoint::normalizeBody() needs a NormalizerInterface for such a body.
         return $this->serializer->normalize($data, $format, $context);
     }
 
+    /**
+     * Tell whether the wrapped serializer normalizes the data.
+     */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $this->serializer->supportsNormalization($data, $format, $context);
     }
 
+    /**
+     * Return the types that the wrapped serializer normalizes.
+     */
     public function getSupportedTypes(?string $format): array
     {
         return $this->serializer->getSupportedTypes($format);
