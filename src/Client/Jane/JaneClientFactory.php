@@ -100,7 +100,7 @@ final class JaneClientFactory
     /**
      * Build the serializer with the same normalizers and encoders as the generated Client::create().
      *
-     * @todo Call Client::create() when Jane can generate validation for requests only.
+     * @todo janephp/janephp#1147: call Client::create() when Jane generates validation for requests only.
      */
     private static function createSerializer(
         NormalizerInterface&DenormalizerInterface $normalizer,
