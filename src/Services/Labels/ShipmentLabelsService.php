@@ -22,7 +22,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @todo Use getShipmentsLabels() for the link in a major release, when the service may throw the Jane
  *       exceptions, such as GetShipmentsLabelsNotFoundException, instead of the ApiException of the SDK.
- *       The PDF needs executeRawEndpoint() until the spec documents the PDF response.
+ *       The PDF needs executeRawEndpoint() until the generated getShipmentsLabels() reads the binary
+ *       response that the spec documents as `application/*`.
  */
 final class ShipmentLabelsService
 {
