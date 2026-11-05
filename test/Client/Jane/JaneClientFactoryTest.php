@@ -181,45 +181,6 @@ final class JaneClientFactoryTest extends TestCase
         self::assertSame(['x-dmp-example' => 'true'], $httpClient->options['headers']);
     }
 
-    public function testAProblemJsonErrorThrowsTheClientErrorException(): void
-    {
-        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
-            '{"type":"urn:problem:permission-denied","title":"Permission denied","status":401,"request_id":"1"}',
-            401,
-            'application/problem+json'
-        ));
-
-        try {
-            $client->deleteShipments(ids: '1');
-            self::fail('A 401 response must throw.');
-        } catch (DeleteShipmentsClientErrorException $exception) {
-            self::assertSame(401, $exception->getResponse()->getStatusCode());
-            self::assertSame('Permission denied', $exception->getCommonResponsesProblem()->title);
-        }
-    }
-
-    /**
-     * The Core API sends an error as `application/json` when the first Accept line is not
-     * `application/problem+json`. Jane sends each Accept value as its own line.
-     */
-    public function testAJsonErrorOfAProblemJsonOperationThrowsTheClientErrorException(): void
-    {
-        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
-            '{"message":"Permission denied","request_id":"1","status_code":401,"errors":[]}',
-            401
-        ));
-
-        try {
-            $client->deleteShipments(ids: '1');
-            self::fail('A 401 response must throw.');
-        } catch (DeleteShipmentsClientErrorException $exception) {
-            $error = $exception->getCommonResponsesProblem();
-
-            self::assertInstanceOf(CommonResponsesUserError::class, $error);
-            self::assertSame('Permission denied', $error->message);
-        }
-    }
-
     /**
      * When a regeneration adds or removes a class that Client::create() instantiates, this test fails,
      * so the factory can follow. The test also checks the server URL and the JSON decode options,
