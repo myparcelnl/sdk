@@ -107,8 +107,17 @@ class ShipmentDefsShipmentPropertiesOptions implements AdditionalPropertiesInter
      * @var null|string
      */
     public ?string $labelDescription;
+    /**
+     * The Incoterms® that apply to the Shipment.
+     * 
+     * When omitted, the default rule of the carrier applies.
+     * 
+     *
+     * @var RefShipmentIncoterms
+     */
+    public RefShipmentIncoterms $incoterms;
     public function definedProperties(): array
     {
-        return ['insurance' => 'insurance', 'ageCheck' => 'age_check', 'cashOnDelivery' => 'cash_on_delivery', 'collect' => 'collect', 'cooledDelivery' => 'cooled_delivery', 'dropOffAtPostalPoint' => 'drop_off_at_postal_point', 'extraAssurance' => 'extra_assurance', 'freshFood' => 'fresh_food', 'frozen' => 'frozen', 'hideSender' => 'hide_sender', 'largeFormat' => 'large_format', 'noTracking' => 'no_tracking', 'onlyRecipient' => 'only_recipient', 'priorityDelivery' => 'priority_delivery', 'receiptCode' => 'receipt_code', 'return' => 'return', 'sameDayDelivery' => 'same_day_delivery', 'saturdayDelivery' => 'saturday_delivery', 'signature' => 'signature', 'tracked' => 'tracked', 'packageType' => 'package_type', 'deliveryType' => 'delivery_type', 'deliveryDate' => 'delivery_date', 'labelDescription' => 'label_description'];
+        return ['insurance' => 'insurance', 'ageCheck' => 'age_check', 'cashOnDelivery' => 'cash_on_delivery', 'collect' => 'collect', 'cooledDelivery' => 'cooled_delivery', 'dropOffAtPostalPoint' => 'drop_off_at_postal_point', 'extraAssurance' => 'extra_assurance', 'freshFood' => 'fresh_food', 'frozen' => 'frozen', 'hideSender' => 'hide_sender', 'largeFormat' => 'large_format', 'noTracking' => 'no_tracking', 'onlyRecipient' => 'only_recipient', 'priorityDelivery' => 'priority_delivery', 'receiptCode' => 'receipt_code', 'return' => 'return', 'sameDayDelivery' => 'same_day_delivery', 'saturdayDelivery' => 'saturday_delivery', 'signature' => 'signature', 'tracked' => 'tracked', 'packageType' => 'package_type', 'deliveryType' => 'delivery_type', 'deliveryDate' => 'delivery_date', 'labelDescription' => 'label_description', 'incoterms' => 'incoterms'];
     }
 }

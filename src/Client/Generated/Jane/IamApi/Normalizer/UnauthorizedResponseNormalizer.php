@@ -1,17 +1,17 @@
 <?php
 
-namespace MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer;
+namespace MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\Normalizer\CheckArray;
-use MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\Normalizer\ValidatorTrait;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Normalizer\CheckArray;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ProductToCreatePhysicalPropertiesWeightNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+class UnauthorizedResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
@@ -19,15 +19,15 @@ class ProductToCreatePhysicalPropertiesWeightNormalizer implements DenormalizerI
     use ValidatorTrait;
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeight::class;
+        return $type === \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponse::class;
     }
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeight::class;
+        return is_object($data) && get_class($data) === \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponse::class;
     }
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeight();
+        $object = new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponse();
         if (null === $data || false === \is_array($data)) {
             return $object;
         }
@@ -38,15 +38,11 @@ class ProductToCreatePhysicalPropertiesWeightNormalizer implements DenormalizerI
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ProductToCreatePhysicalPropertiesWeightConstraint());
+            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Validator\UnauthorizedResponseConstraint());
         }
-        if (\array_key_exists('unit', $data)) {
-            $object->unit = is_string($data['unit']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeightUnit::tryFrom($data['unit']) ?? $data['unit'] : $data['unit'];
-            unset($data['unit']);
-        }
-        if (\array_key_exists('value', $data)) {
-            $object->value = $data['value'];
-            unset($data['value']);
+        if (\array_key_exists('message', $data)) {
+            $object->message = $data['message'];
+            unset($data['message']);
         }
         foreach ($data as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
@@ -58,11 +54,8 @@ class ProductToCreatePhysicalPropertiesWeightNormalizer implements DenormalizerI
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (null !== ($data->unit ?? null)) {
-            $dataArray['unit'] = $data->unit instanceof \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeightUnit ? $data->unit->value : $data->unit;
-        }
-        if (null !== ($data->value ?? null)) {
-            $dataArray['value'] = $data->value;
+        if (null !== ($data->message ?? null)) {
+            $dataArray['message'] = $data->message;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
@@ -70,12 +63,12 @@ class ProductToCreatePhysicalPropertiesWeightNormalizer implements DenormalizerI
             }
         }
         if (!($context['skip_validation'] ?? false)) {
-            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ProductToCreatePhysicalPropertiesWeightConstraint());
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Validator\UnauthorizedResponseConstraint());
         }
         return $dataArray;
     }
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeight::class => false];
+        return [\MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponse::class => false];
     }
 }

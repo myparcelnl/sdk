@@ -75,8 +75,17 @@ class RefShipmentShipmentOptionsReturnsOptions implements AdditionalPropertiesIn
      * @var null|string
      */
     public ?string $labelDescription;
+    /**
+     * The Incoterms® that apply to the Shipment.
+     * 
+     * When omitted, the default rule of the carrier applies.
+     * 
+     *
+     * @var RefShipmentIncoterms
+     */
+    public RefShipmentIncoterms $incoterms;
     public function definedProperties(): array
     {
-        return ['contribution' => 'contribution', 'printerlessReturn' => 'printerless_return', 'packageType' => 'package_type', 'insurance' => 'insurance', 'ageCheck' => 'age_check', 'cooledDelivery' => 'cooled_delivery', 'dropOffAtPostalPoint' => 'drop_off_at_postal_point', 'extraAssurance' => 'extra_assurance', 'hideSender' => 'hide_sender', 'largeFormat' => 'large_format', 'onlyRecipient' => 'only_recipient', 'receiptCode' => 'receipt_code', 'return' => 'return', 'sameDayDelivery' => 'same_day_delivery', 'saturdayDelivery' => 'saturday_delivery', 'signature' => 'signature', 'labelDescription' => 'label_description'];
+        return ['contribution' => 'contribution', 'printerlessReturn' => 'printerless_return', 'packageType' => 'package_type', 'insurance' => 'insurance', 'ageCheck' => 'age_check', 'cooledDelivery' => 'cooled_delivery', 'dropOffAtPostalPoint' => 'drop_off_at_postal_point', 'extraAssurance' => 'extra_assurance', 'hideSender' => 'hide_sender', 'largeFormat' => 'large_format', 'onlyRecipient' => 'only_recipient', 'receiptCode' => 'receipt_code', 'return' => 'return', 'sameDayDelivery' => 'same_day_delivery', 'saturdayDelivery' => 'saturday_delivery', 'signature' => 'signature', 'labelDescription' => 'label_description', 'incoterms' => 'incoterms'];
     }
 }

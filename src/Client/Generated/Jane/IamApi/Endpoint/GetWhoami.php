@@ -4,6 +4,15 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Endpoint;
 
 class GetWhoami extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\Endpoint
 {
+    protected $accept;
+    /**
+     * Who am I?
+     * @param array $accept Accept content header application/json|application/problem+json
+     */
+    public function __construct(array $accept = [])
+    {
+        $this->accept = $accept;
+    }
     use \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
     {
@@ -19,11 +28,16 @@ class GetWhoami extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Cli
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     /**
      * {@inheritdoc}
      *
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiUnauthorizedException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiInternalServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\BadResponseException
      *
      * @return null
@@ -39,6 +53,12 @@ class GetWhoami extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Cli
             } catch (\JsonException $jsonException) {
                 throw new \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException('Malformed JSON response body.', 0, $jsonException);
             }
+        }
+        if ($contentType !== null && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiUnauthorizedException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponse', 'json'), $response);
+        }
+        if ($contentType !== null && (500 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
+            throw new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiInternalServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerError', 'json'), $response);
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\BadResponseException($status, $body, $response);
     }

@@ -70,6 +70,10 @@ class ProductToCreateNormalizer implements DenormalizerInterface, NormalizerInte
             $object->ean = $data['ean'];
             unset($data['ean']);
         }
+        if (\array_key_exists('externalReference', $data)) {
+            $object->externalReference = $data['externalReference'];
+            unset($data['externalReference']);
+        }
         if (\array_key_exists('fulfilment', $data)) {
             $object->fulfilment = $this->denormalizer->denormalize($data['fulfilment'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreateFulfilment::class, 'json', $context);
             unset($data['fulfilment']);
@@ -87,7 +91,7 @@ class ProductToCreateNormalizer implements DenormalizerInterface, NormalizerInte
             unset($data['name']);
         }
         if (\array_key_exists('physicalProperties', $data)) {
-            $object->physicalProperties = $this->denormalizer->denormalize($data['physicalProperties'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalProperties::class, 'json', $context);
+            $object->physicalProperties = $this->denormalizer->denormalize($data['physicalProperties'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\PhysicalProperties::class, 'json', $context);
             unset($data['physicalProperties']);
         }
         if (\array_key_exists('purchasePrice', $data)) {
@@ -131,6 +135,9 @@ class ProductToCreateNormalizer implements DenormalizerInterface, NormalizerInte
         }
         if (array_key_exists('ean', get_object_vars($data))) {
             $dataArray['ean'] = $data->ean;
+        }
+        if (array_key_exists('externalReference', get_object_vars($data))) {
+            $dataArray['externalReference'] = $data->externalReference;
         }
         if (array_key_exists('fulfilment', get_object_vars($data))) {
             $normalized_1 = $data->fulfilment === null ? null : $this->normalizer->normalize($data->fulfilment, 'json', $context);

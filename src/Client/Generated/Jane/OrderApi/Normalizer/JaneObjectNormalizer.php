@@ -184,16 +184,6 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
         
         \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreateFulfilment::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateFulfilmentNormalizer::class,
         
-        \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalProperties::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesNormalizer::class,
-        
-        \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesHeight::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesHeightNormalizer::class,
-        
-        \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesLength::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesLengthNormalizer::class,
-        
-        \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWeight::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesWeightNormalizer::class,
-        
-        \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreatePhysicalPropertiesWidth::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesWidthNormalizer::class,
-        
         \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProductToCreateSalesPrice::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateSalesPriceNormalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\OrderLineToCreate::class => \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\OrderLineToCreateNormalizer::class,
@@ -374,11 +364,6 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
             \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateDescriptionsItemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateDescriptionsItemNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateFulfilmentNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateFulfilmentNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesHeightNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesHeightNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesLengthNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesLengthNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesWeightNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesWeightNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesWidthNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreatePhysicalPropertiesWidthNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateSalesPriceNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\ProductToCreateSalesPriceNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\OrderLineToCreateNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\OrderLineToCreateNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\OrderToCreateNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Normalizer\OrderToCreateNormalizer(),

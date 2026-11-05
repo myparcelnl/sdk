@@ -8,14 +8,15 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetIndexServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\GetResponse200
      */
-    public function getIndex(array $headerParameters = [])
+    public function getIndex(array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetIndex($headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetIndex($headerParameters, $accept));
     }
     /**
      * Get the delivery options for a given location and carrier.
@@ -67,7 +68,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *    "shipment_id"?: int, //Identifier of an existing shipment to base the delivery options on.
      *                         //Used by carriers such as UPS and bol.com.
      * } $queryParameters
-     * @param array $accept Accept content header application/json;version=2.0|application/json
+     * @param array $accept Accept content header application/json;version=2.0|application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -102,15 +103,16 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDropOffPointsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDropOffPointsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDropOffPoints
      */
-    public function getDropOffPoints(array $queryParameters = [], array $headerParameters = [])
+    public function getDropOffPoints(array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetDropOffPoints($queryParameters, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetDropOffPoints($queryParameters, $headerParameters, $accept));
     }
     /**
      * @param array{
@@ -140,22 +142,30 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *    "exclude_parcel_lockers"?: mixed, //This option allows to filter out pickup locations that are parcel lockers.
      *    "latitude"?: int, //This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
      *    "longitude"?: int, //This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
+     *    "package_type"?: string, //Package type to get the delivery options for. When omitted a
+     *                             //carrier-specific default is used.
+     *    "weight"?: int, //Weight in grams. Used to determine which package types and delivery
+     *                    //options are available. Defaults to a carrier-specific weight when omitted.
+     *    "saturday_delivery"?: mixed, //Include Saturday delivery options. Only available for carriers that
+     *                                 //support it.
      * } $queryParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPickupLocations
      */
-    public function getPickupLocations(array $queryParameters = [])
+    public function getPickupLocations(array $queryParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetPickupLocations($queryParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetPickupLocations($queryParameters, $accept));
     }
     /**
      * This endpoint is often used by external parties to facilitate return shipments on a dedicated part of their website, mainly when offering reverse logistics e.g. repair services. It will allow the consumer to send packages to the merchant directly from the merchant's website.
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostUnrelatedReturnShipmentsNotFoundException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostUnrelatedReturnShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostUnrelatedReturnShipmentsServerErrorException
@@ -163,9 +173,9 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadUrl
      */
-    public function postUnrelatedReturnShipments(array $headerParameters = [])
+    public function postUnrelatedReturnShipments(array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\PostUnrelatedReturnShipments($headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\PostUnrelatedReturnShipments($headerParameters, $accept));
     }
     /**
      * This operation returns a list of Shipments available to this User.
@@ -178,7 +188,9 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *    "dropoff_today"?: bool, //Use this parameter to only show Shipments that need to be dropped off today.
      *    "external_identifier"?: string,
      *    "filter_hidden_shops"?: bool,
+     *    "from"?: mixed, //Only return shipments created on or after this date.
      *    "hidden"?: bool,
+     *    "id"?: int, //Only return shipments with these IDs. Separate multiple shipment IDs using `;`.
      *    "include_secondary_shipments"?: mixed, //Whether to include secondary (multicollo child) Shipments in the results.
      *                                           //Pass `1` to include them; `0` (the default) excludes them.
      *    "link_consumer_portal"?: bool,
@@ -195,20 +207,22 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *    "size"?: int, //Specify the number of resources returned per page, used for paginated results.
      *    "sort"?: string, //Sort Shipment results by a particular resource field.
      *    "status"?: mixed, //Filter by Shipment status. This filter will return only Shipments with the specified status.
+     *    "to"?: mixed, //Only return shipments created up to this date.
      *    "transaction_status"?: string,
      * } $queryParameters
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments
      */
-    public function getShipments(array $queryParameters = [], array $headerParameters = [])
+    public function getShipments(array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetShipments($queryParameters, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetShipments($queryParameters, $headerParameters, $accept));
     }
     /**
      * Partially update shipments. This operation can be used to update the
@@ -224,6 +238,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * } $headerParameters
      * @param array $accept Accept content header application/*|application/problem+json|application/json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PatchShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -242,18 +257,20 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
      *    "collect_date"?: string,
      *    "delivery_options_identifier"?: string,
+     *    "send_return_mail"?: int, //Whether to send the return email to the consumer when creating return shipments. Defaults to `1`.
      * } $queryParameters
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
      * @param array $accept Accept content header application/json;charset=utf-8;version=1.2|application/json|application/vnd.shipment_label+json|application/*|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -272,6 +289,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * } $headerParameters
      * @param array $accept Accept content header application/json;charset=utf-8;version=1.2|application/json|application/*|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -309,15 +327,16 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsByIdClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsByIdServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments
      */
-    public function getShipmentsById($ids, array $queryParameters = [], array $headerParameters = [])
+    public function getShipmentsById($ids, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetShipmentsById($ids, $queryParameters, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetShipmentsById($ids, $queryParameters, $headerParameters, $accept));
     }
     /**
      * **This endpoint is currently in beta and the API contract may change.**
@@ -327,7 +346,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=2.0|application/json;charset=utf-8|application/*|application/json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=2.0|application/json;charset=utf-8|application/*|application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -346,7 +365,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=2.0|application/json;charset=utf-8|application/*|application/json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=2.0|application/json;charset=utf-8|application/*|application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesContractDefinitionsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesContractDefinitionsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -363,7 +382,8 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=2.0|application/json;charset=utf-8|application/*|application/json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=2.0|application/json;charset=utf-8|application/json|application/problem+json|application/*
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostRatesBadRequestException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostRatesClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostRatesServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -393,7 +413,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
@@ -403,7 +423,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/*|application/json|application/vnd.shipment_label_link+json|application/vnd.shipment_label_link+json+print|application/json+print|application/pdf+print|application/vnd.shipment_label+json+print|application/vnd.shipment_label+pdf+print|application/vnd.shipment_label+zpl+print|application/vnd.zpl+print|*\/*
+     * @param array $accept Accept content header application/*|application/json|application/vnd.shipment_label_link+json|application/vnd.shipment_label_link+json+print|application/json+print|application/pdf+print|application/vnd.shipment_label+json+print|application/vnd.shipment_label+pdf+print|application/vnd.shipment_label+zpl+print|application/vnd.zpl+print|*\/*|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsPaymentRequiredException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsNotFoundException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsClientErrorException
@@ -429,6 +449,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesNotFoundException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesServerErrorException
@@ -436,9 +457,9 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesTracktraces
      */
-    public function getTrackTraces(array $queryParameters = [], array $headerParameters = [])
+    public function getTrackTraces(array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetTrackTraces($queryParameters, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetTrackTraces($queryParameters, $headerParameters, $accept));
     }
     /**
      * Get detailed Track & Trace information for one or more shipments.
@@ -450,15 +471,16 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesByIdsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetTrackTracesByIdsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesTracktraces
      */
-    public function getTrackTracesByIds($ids, array $queryParameters = [], array $headerParameters = [])
+    public function getTrackTracesByIds($ids, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetTrackTracesByIds($ids, $queryParameters, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetTrackTracesByIds($ids, $queryParameters, $headerParameters, $accept));
     }
     /**
      * Retrieve active webhook subscriptions for this account. Returns an array of Subscription objects.
@@ -468,7 +490,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=1.1|application/json;charset=utf-8|application/json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=1.1|application/json;charset=utf-8|application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetWebhookSubscriptionsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetWebhookSubscriptionsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -485,15 +507,17 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/*|application/problem+json
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostWebhookSubscriptionsUnsupportedMediaTypeException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostWebhookSubscriptionsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostWebhookSubscriptionsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions
      */
-    public function postWebhookSubscriptions($requestBody, array $headerParameters = [])
+    public function postWebhookSubscriptions($requestBody, array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\PostWebhookSubscriptions($requestBody, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\PostWebhookSubscriptions($requestBody, $headerParameters, $accept));
     }
     /**
      * Delete webhook subscriptions to stop receiving notifications about events.
@@ -501,32 +525,36 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteWebhookSubscriptionsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteWebhookSubscriptionsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return null
      */
-    public function deleteWebhookSubscriptions($ids, array $headerParameters = [])
+    public function deleteWebhookSubscriptions($ids, array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\DeleteWebhookSubscriptions($ids, $headerParameters));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\DeleteWebhookSubscriptions($ids, $headerParameters, $accept));
     }
     /**
      * Retrieve specific webhook subscriptions by id. You can specify multiple subscription ids by semicolon separating them on the URI. Returns an array of webhook subscriptions.
      * @param mixed $ids One or more webhook subscription IDs. Separate multiple IDs using `;`.
      * @param array{
+     *    "hook"?: string, //Filter by webhook event type.
+     * } $queryParameters
+     * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=1.1|application/json;charset=utf-8|application/json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=1.1|application/json;charset=utf-8|application/json|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetWebhookSubscriptionsByIdClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetWebhookSubscriptionsByIdServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
      * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV10
      */
-    public function getWebhookSubscriptionsById($ids, array $headerParameters = [], array $accept = [])
+    public function getWebhookSubscriptionsById($ids, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
-        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetWebhookSubscriptionsById($ids, $headerParameters, $accept));
+        return $this->executeEndpoint(new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint\GetWebhookSubscriptionsById($ids, $queryParameters, $headerParameters, $accept));
     }
     /**
      * @param list<callable(\Symfony\Contracts\HttpClient\HttpClientInterface): \Symfony\Contracts\HttpClient\HttpClientInterface> $additionalPlugins HttpClientInterface decorator factories, applied left-to-right after the server URL decorator

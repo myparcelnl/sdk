@@ -26,15 +26,25 @@ class PrincipalUser implements AdditionalPropertiesInterface
      */
     public Platform|string $platform;
     /**
+     * The principal identifier.
+     *
+     * @var string
+     */
+    public $principal;
+    /**
+     * A collection of features.
+     *
      * @var list<Feature|string>
      */
     public array $features;
     /**
+     * A collection of fulfilment platforms.
+     *
      * @var list<FulfilmentPlatform|string>
      */
     public array $fulfilmentPlatforms;
     /**
-     * A shop principal identifier.
+     * The principal identifier.
      *
      * @var string
      */
@@ -46,23 +56,25 @@ class PrincipalUser implements AdditionalPropertiesInterface
      */
     public string $id;
     /**
-     * The principal type.
-     *
-     * @var PrincipalUserType|string
-     */
-    public PrincipalUserType|string $type;
-    /**
      * The specific role assigned to a user.
      *
      * @var RoleUser|string
      */
     public RoleUser|string $role;
     /**
+     * A collection of shop IDs that a user is allowed to access.
+     *
      * @var list<string>
      */
     public array $shopIds;
+    /**
+     * The principal type.
+     *
+     * @var string
+     */
+    public string $type;
     public function definedProperties(): array
     {
-        return ['accountId' => 'accountId', 'mfaEnabled' => 'mfaEnabled', 'platform' => 'platform', 'features' => 'features', 'fulfilmentPlatforms' => 'fulfilmentPlatforms', 'impersonator' => 'impersonator', 'id' => 'id', 'type' => 'type', 'role' => 'role', 'shopIds' => 'shopIds'];
+        return ['accountId' => 'accountId', 'mfaEnabled' => 'mfaEnabled', 'platform' => 'platform', 'principal' => 'principal', 'features' => 'features', 'fulfilmentPlatforms' => 'fulfilmentPlatforms', 'impersonator' => 'impersonator', 'id' => 'id', 'role' => 'role', 'shopIds' => 'shopIds', 'type' => 'type'];
     }
 }

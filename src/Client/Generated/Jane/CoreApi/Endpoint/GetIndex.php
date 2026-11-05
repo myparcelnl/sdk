@@ -4,14 +4,17 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint;
 
 class GetIndex extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\Endpoint
 {
+    protected $accept;
     /**
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      */
-    public function __construct(array $headerParameters = [])
+    public function __construct(array $headerParameters = [], array $accept = [])
     {
         $this->headerParameters = $headerParameters;
+        $this->accept = $accept;
     }
     use \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -28,7 +31,10 @@ class GetIndex extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Cli
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
@@ -54,8 +60,13 @@ class GetIndex extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Cli
         if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\GetResponse200', 'json');
         }
-        if ($contentType !== null && ($status >= 500 && $status <= 599 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetIndexServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+        if ($status >= 500 && $status <= 599) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetIndexServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetIndexServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException($status, $body, $response);
     }

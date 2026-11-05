@@ -40,6 +40,9 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
         if (\array_key_exists('hidden', $data) && \is_int($data['hidden'])) {
             $data['hidden'] = (float) $data['hidden'];
         }
+        if (\array_key_exists('carrier_active', $data) && \is_int($data['carrier_active'])) {
+            $data['carrier_active'] = (bool) $data['carrier_active'];
+        }
         if (\array_key_exists('delayed', $data) && \is_int($data['delayed'])) {
             $data['delayed'] = (bool) $data['delayed'];
         }
@@ -182,6 +185,9 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
         }
         if (\array_key_exists('carrier_id', $data)) {
             $object->carrierId = is_int($data['carrier_id']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier::tryFrom($data['carrier_id']) ?? $data['carrier_id'] : $data['carrier_id'];
+        }
+        if (\array_key_exists('carrier_active', $data)) {
+            $object->carrierActive = $data['carrier_active'];
         }
         if (\array_key_exists('platform_id', $data)) {
             $object->platformId = $data['platform_id'];
@@ -501,6 +507,9 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
         }
         if (null !== ($data->carrierId ?? null)) {
             $dataArray['carrier_id'] = $data->carrierId instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier ? $data->carrierId->value : $data->carrierId;
+        }
+        if (array_key_exists('carrierActive', get_object_vars($data))) {
+            $dataArray['carrier_active'] = $data->carrierActive;
         }
         if (null !== ($data->platformId ?? null)) {
             $dataArray['platform_id'] = $data->platformId;

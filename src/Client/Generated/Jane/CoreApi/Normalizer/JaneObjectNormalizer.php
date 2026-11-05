@@ -26,6 +26,10 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
         
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonErrorUser::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonErrorUserNormalizer::class,
         
+        \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemNormalizer::class,
+        
+        \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblemErrorsItem::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemErrorsItemNormalizer::class,
+        
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPutShipmentsV12::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesPutShipmentsV12Normalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPutShipmentsV12Data::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesPutShipmentsV12DataNormalizer::class,
@@ -61,6 +65,10 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentOptionsDeliveryTypeDeliveryDate::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsDeliveryTypeDeliveryDateNormalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentOptionsLabelDescription::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsLabelDescriptionNormalizer::class,
+        
+        \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentOptionsIncoterms::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsIncotermsNormalizer::class,
+        
+        \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentIncoterms::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentIncotermsNormalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentGeneralSettings::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentGeneralSettingsNormalizer::class,
         
@@ -113,10 +121,6 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorBadRequest::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorBadRequestNormalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorBadRequestErrorsItem::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorBadRequestErrorsItemNormalizer::class,
-        
-        \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemNormalizer::class,
-        
-        \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblemErrorsItem::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemErrorsItemNormalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsV2::class => \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsV2Normalizer::class,
         
@@ -641,6 +645,8 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorNotFoundErrorsItemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorNotFoundErrorsItemNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonErrorUserNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonErrorUserNormalizer(),
+            \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemNormalizer(),
+            \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemErrorsItemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemErrorsItemNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesPutShipmentsV12Normalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesPutShipmentsV12Normalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesPutShipmentsV12DataNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesPutShipmentsV12DataNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentDefsShipmentNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentDefsShipmentNormalizer(),
@@ -659,6 +665,8 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsDeliveryTypeAllNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsDeliveryTypeAllNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsDeliveryTypeDeliveryDateNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsDeliveryTypeDeliveryDateNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsLabelDescriptionNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsLabelDescriptionNormalizer(),
+            \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsIncotermsNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentOptionsIncotermsNormalizer(),
+            \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentIncotermsNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentIncotermsNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentGeneralSettingsNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentGeneralSettingsNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentGeneralSettingsTracktraceNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\RefShipmentGeneralSettingsTracktraceNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentDefsShipmentPickupNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentDefsShipmentPickupNormalizer(),
@@ -685,8 +693,6 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonDefsPriceNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonDefsPriceNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorBadRequestNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorBadRequestNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorBadRequestErrorsItemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesUserErrorBadRequestErrorsItemNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemNormalizer(),
-            \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemErrorsItemNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\CommonResponsesProblemErrorsItemNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsV2Normalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsV2Normalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsV2DataNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsV2DataNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsDeliveryOptionV2Normalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\ShipmentResponsesDeliveryOptionsDeliveryOptionV2Normalizer(),
