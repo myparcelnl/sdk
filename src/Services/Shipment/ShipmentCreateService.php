@@ -21,14 +21,23 @@ final class ShipmentCreateService
     use HasUserAgent;
     use PreparesShipments;
 
-    private Client $api;
+    private ?Client $api;
 
+    private string $apiKey;
+
+    private ?string $host;
+
+    /**
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     */
     public function __construct(
         string $apiKey,
         ?Client $api = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
+        $this->apiKey = $apiKey;
+        $this->api    = $api;
+        $this->host   = $host;
     }
 
     /**
@@ -50,13 +59,12 @@ final class ShipmentCreateService
     {
         $request = $this->createRequest($shipments, 'create');
 
-        $response = $this->api->postShipments(
+        $response = $this->api()->postShipments(
             requestBody: $request,
             queryParameters: array_filter(
                 ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions],
                 static fn (mixed $value): bool => null !== $value
-            ),
-            headerParameters: $this->headerParameters()
+            )
         );
 
         if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
@@ -69,5 +77,14 @@ final class ShipmentCreateService
         }
 
         return $this->mapCreatedIds($request->data->shipments, $response->data->shipments);
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }

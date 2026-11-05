@@ -75,7 +75,7 @@ final class ShipmentCreateServiceTest extends TestCase
         self::assertSame('POST', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments?format=A4&positions=1%3B2', $this->requests[0]['url']);
         self::assertSame(['application/vnd.shipment+json;version=1.1'], $this->requests[0]['headers']['content-type']);
-        self::assertSame([$service->getUserAgentHeader()], $this->requests[0]['headers']['user-agent']);
+        self::assertSame(['MyPlugin/1.0'], $this->requests[0]['headers']['user-agent']);
         self::assertSame($service->getUserAgentHeader(), $this->requests[0]['body']['data']['user_agent']);
         self::assertSame(['order-1', 'order-2'], array_column($this->requests[0]['body']['data']['shipments'], 'reference_identifier'));
     }
@@ -249,7 +249,7 @@ final class ShipmentCreateServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
         });
 
-        return new ShipmentCreateService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new ShipmentCreateService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 
     /**
