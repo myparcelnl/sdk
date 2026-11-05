@@ -50,9 +50,12 @@ Some fields hold another type than the v11 getter returned:
 | `MultiColloShipmentService` | `splitShipment()` takes and returns a `Shipment`. The secondary shipments are `CoreApi\Model\SecondaryShipmentRequest` objects. A shipment with an int reference identifier, such as `42`, gets a new `multi_collo_` reference identifier | It takes and returns a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`. The secondary shipments are `ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem` models. An int reference identifier is kept as the string `'42'` |
 | `CapabilitiesService` and `CapabilitiesRequest` | `fromShipment()` takes a `Shipment` | It takes a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem` |
 | `Order` (fulfilment) | `getDeliveryOptions()` returns a `ShipmentOptions`, and `setDeliveryOptions()` takes one | They return and take a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions`. Fill one with `CoreApiModels::toModel(['package_type' => 1, 'delivery_type' => 2], ...Options::class)`. For an order from the API with `"insurance": 500`, `getDeliveryOptions()->insurance` is a `RefTypesPriceEuro` with `amount` `50000`, where `getInsurance()` returned `500` in v11 |
-| `ShipmentLabelsService` and `ReturnShipmentService` | The constructor takes a `CoreApi\Api\ShipmentApi` and a PSR-18 HTTP client | The constructor takes a `Jane\CoreApi\Client`. The third argument is a Symfony `HttpClientInterface` |
+| `ShipmentLabelsService` and `ReturnShipmentService` | The constructor takes a `CoreApi\Api\ShipmentApi` and a PSR-18 HTTP client as the third argument, and the host as the fourth | The constructor takes a `Jane\CoreApi\Client`, and the host as the third argument. To use your own HTTP client, pass a client that was built with it |
+| `ShipmentLabelsService` | `setLinkOfLabels()` and `setPdfOfLabels()` throw the SDK `MyParcelNL\Sdk\Exception\ApiException` for an error response, with the message `Did not receive expected label link response` or `Received payment link instead of pdf` | They throw the generated `Jane\CoreApi\Exception\ApiException` for an error response: `GetShipmentsLabelsNotFoundException` for a 404, `GetShipmentsLabelsPaymentRequiredException` for a 402 with payment instructions, and `GetShipmentsLabelsClientErrorException` or `GetShipmentsLabelsServerErrorException` for another error. A 2xx response without a link or a PDF still throws the SDK `ApiException` |
 | `ReturnShipmentService` | The API rejects a return shipment that does not match the spec | The generated client checks the request before it sends it. It throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, for example for a related return without `parent`, `carrier`, `email` or `name`, which the spec requires |
-| `ReturnShipmentService` | It throws an `InvalidArgumentException` for an error response | It throws a `Jane\CoreApi\Exception\ApiException` |
+| `ReturnShipmentService` | It throws an `InvalidArgumentException` for an error response, and a `JsonException` for a body that is not valid JSON | It throws a `Jane\CoreApi\Exception\ApiException` for an error response with a JSON body, such as `PostShipmentsClientErrorException`. A body that is not valid JSON throws a Symfony `NotEncodableValueException`, and so does a row with invalid UTF-8, before the request goes out |
+| `ReturnShipmentService` | A null value in a row leaves the field out of the request. A key that the API does not know is left out | A null value throws a `TypeError` before the request goes out: leave the field out. A key that the API does not know goes to the API in the request body |
+| `ReturnShipmentService` | A response with `data` but without `shipments` gives an empty array | It throws an `InvalidArgumentException`, because the spec requires `shipments` |
 | `ApiKeyService`        | The constructor takes an `IamApi\Api\DefaultApi` | The constructor takes a `Jane\IamApi\Client`, such as the one that `IamApiFactory::make()` returns |
 | `ApiKeyService`        | `getPrincipal()` throws an `IamApi\ApiException` for every error, also for a network error. `isValid()` returns `false` for a 401 and throws the `ApiException` for every other error | `getPrincipal()` throws a `Jane\IamApi\Exception\ServerException` for a 500 with an `application/problem+json` body, a `Jane\IamApi\Exception\ClientException` for another error status or for a 200 without a JSON body, a Symfony `TransportExceptionInterface` for a network error or a timeout, and a `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` for a 200 with a body that is not valid JSON. `isValid()` returns `false` for a 401 and throws the others, also for a 200 without a JSON body, where v11 returned `true`. For a principal type that the SDK does not know, `getPrincipal()` throws an `UnexpectedValueException`, and `isValid()` returns `true`, because the 200 proves the key |
 | `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns the decoded JSON: use `ApiKeyService::getPrincipal()` for a model |
@@ -147,7 +150,7 @@ limits. When you pass the lines or the children in the constructor array, nothin
 
 | Service | Class with the change | v11 | v12 |
 |---------|-----------------------|-----|-----|
-| `ReturnShipmentService` and the other services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| The services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
 
 #### Direct use of `MyParcelNL\Sdk\Client\Generated`
 
@@ -473,7 +476,7 @@ $service = new ReturnShipmentService('your-api-key');
 
 // Related return (linked to existing shipment):
 $returns = $service->createRelated([
-    ['parent' => 12345, 'carrier' => 1, 'email' => 'john@example.com', 'name' => 'John Doe'],
+    ['parent' => 12345, 'carrier' => 1],
 ], true);
 
 // Unrelated return (standalone):
