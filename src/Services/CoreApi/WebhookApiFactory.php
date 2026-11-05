@@ -10,15 +10,13 @@ use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Factory for creating the Jane Core API client that `WebhookService` uses.
- *
- * It builds the same client as `ShipmentApiFactory`. It stays next to it because v11 code calls
- * `WebhookApiFactory::make()`.
+ * Factory for creating the Jane Core API client that `WebhookService` uses. It builds the same client
+ * as `ShipmentApiFactory`.
  */
 final class WebhookApiFactory
 {
     /**
-     * The idle timeout of `JaneClientFactory` in seconds, kept here because v11 code reads this constant.
+     * The idle timeout of the client in seconds, the same value as `JaneClientFactory::DEFAULT_HTTP_TIMEOUT`.
      */
     public const DEFAULT_HTTP_TIMEOUT = JaneClientFactory::DEFAULT_HTTP_TIMEOUT;
 
@@ -29,7 +27,7 @@ final class WebhookApiFactory
      * @param string|null              $host       Optional API host override.
      * @param string|null              $userAgent  Optional custom User-Agent.
      * @param array<string, string>    $headers    Sent on every request, such as `x-dmp-*` API feature flags.
-     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout. Tests pass a MockHttpClient.
+     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout.
      */
     public static function make(
         ?string $apiKey = null,

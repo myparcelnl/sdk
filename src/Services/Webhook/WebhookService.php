@@ -30,11 +30,20 @@ final class WebhookService
     public const HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED = 'shop_carrier_accessibility_updated';
     public const HOOK_SHOP_UPDATED                       = 'shop_updated';
 
-    private Client $api;
+    private ?Client $api;
 
+    private string $apiKey;
+
+    private ?string $host;
+
+    /**
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     */
     public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
     {
-        $this->api = $api ?? WebhookApiFactory::make($apiKey, $host);
+        $this->apiKey = $apiKey;
+        $this->api    = $api;
+        $this->host   = $host;
     }
 
     /**
@@ -57,9 +66,8 @@ final class WebhookService
         $request       = new WebhooksPostWebhookSubscriptionsRequestV11();
         $request->data = $data;
 
-        $response = $this->api->postWebhookSubscriptions(
-            requestBody: $request,
-            headerParameters: $this->headerParameters()
+        $response = $this->api()->postWebhookSubscriptions(
+            requestBody: $request
         );
 
         $ids = $response instanceof WebhooksResponsesPostWebhookSubscriptions ? ($response->data->ids ?? []) : [];
@@ -84,7 +92,7 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $this->api->deleteWebhookSubscriptions(ids: $ids, headerParameters: $this->headerParameters());
+        $this->api()->deleteWebhookSubscriptions(ids: $ids);
     }
 
     /**
@@ -98,9 +106,8 @@ final class WebhookService
      */
     public function getAll(?string $hook = null): array
     {
-        $response = $this->api->getWebhookSubscriptions(
-            queryParameters: null !== $hook ? ['hook' => $hook] : [],
-            headerParameters: $this->headerParameters()
+        $response = $this->api()->getWebhookSubscriptions(
+            queryParameters: null !== $hook ? ['hook' => $hook] : []
         );
 
         return self::subscriptions($response);
@@ -123,9 +130,8 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $response = $this->api->getWebhookSubscriptionsById(
-            ids: $ids,
-            headerParameters: $this->headerParameters()
+        $response = $this->api()->getWebhookSubscriptionsById(
+            ids: $ids
         );
 
         return self::subscriptions($response);
@@ -144,5 +150,14 @@ final class WebhookService
         }
 
         return $response->data->webhookSubscriptions ?? [];
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= WebhookApiFactory::make($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }
