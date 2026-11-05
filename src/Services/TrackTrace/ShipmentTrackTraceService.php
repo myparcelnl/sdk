@@ -6,16 +6,13 @@ namespace MyParcelNL\Sdk\Services\TrackTrace;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTrace;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesTracktraces;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Model\TrackTrace\TrackTrace;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
- * Track & trace service for shipments using generated Core API endpoints.
- *
- * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
- * it keeps working.
+ * Fetches track & trace data through the Core API client.
  */
 final class ShipmentTrackTraceService
 {
@@ -32,10 +29,13 @@ final class ShipmentTrackTraceService
     }
 
     /**
-     * Retrieve track & trace information for the given shipment IDs.
+     * Retrieve the track & trace data of the given shipment IDs.
      *
      * @param int[] $shipmentIds
-     * @return array<int, TrackTrace> Keyed by shipment ID.
+     *
+     * @return array<int, ShipmentDefsTrackTrace> Keyed by shipment ID.
+     *
+     * @throws InvalidArgumentException For an empty list of IDs.
      */
     public function fetchTrackTraceData(array $shipmentIds): array
     {
@@ -46,14 +46,14 @@ final class ShipmentTrackTraceService
         /** @var ShipmentResponsesTracktraces|null $response */
         $response = $this->api->getTrackTracesByIds(
             ids: implode(';', $shipmentIds),
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         );
 
         $result = [];
 
         foreach ($response?->data->tracktraces ?? [] as $tracktrace) {
             if (isset($tracktrace->shipmentId)) {
-                $result[$tracktrace->shipmentId] = new TrackTrace($tracktrace);
+                $result[$tracktrace->shipmentId] = $tracktrace;
             }
         }
 
