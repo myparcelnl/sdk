@@ -7,19 +7,19 @@ namespace MyParcelNL\Sdk\Services\Shipment;
 use BackedEnum;
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
-use MyParcelNL\Sdk\Collection\ShipmentCollection;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
+use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
+/**
+ * Creates shipments through the Core API client.
+ */
 final class ShipmentCreateService
 {
     use HasUserAgent;
-    use EnsuresShipmentReferenceIds;
+    use PreparesShipments;
 
     private Client $api;
 
@@ -32,71 +32,33 @@ final class ShipmentCreateService
     }
 
     /**
-     * Create shipments through the generated Core API client.
+     * Create shipments.
      *
-     * Builds the generated request model, applies SDK defaults such as reference identifiers,
-     * and maps the typed generated success response back to the SDK's
-     * id => reference_identifier return shape.
+     * A shipment without a reference identifier gets one that starts with `sdk_`. The generated
+     * client checks the shipments against the spec before it sends them.
      *
-     * @param ShipmentCollection     $collection Collection of shipments to create.
-     * @param string|BackedEnum|null $format     Label format, such as "A4" or "A6".
-     * @param mixed                  $positions  Label position(s) for A4, such as "1;2;3;4".
+     * @param ShipmentItem[]         $shipments The shipments. CoreApiModels::toModel() fills one from an array.
+     * @param string|BackedEnum|null $format    The label format, such as `A4` or `A6`.
+     * @param int|string|null        $positions The label positions on an A4 sheet, such as `1;2;3;4`.
      *
-     * @return array<int, string|null> Mapping shipment id => reference identifier.
+     * @return array<int, string|null> Shipment id => reference identifier.
+     *
+     * @throws InvalidArgumentException For an empty list, or an item that is not a ShipmentItem.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a shipment that does not match the spec. No request goes out.
      */
-    public function create(ShipmentCollection $collection, $format = null, $positions = null): array
+    public function create(array $shipments, string|BackedEnum|null $format = null, int|string|null $positions = null): array
     {
-        $shipments = $collection->values()->all();
-
-        $this->validateBeforeCreate($shipments);
-        $this->ensureReferenceIds($shipments);
+        $request = $this->createRequest($shipments, 'create');
 
         $response = $this->api->postShipments(
-            requestBody: $this->buildCreateRequest($shipments),
+            requestBody: $request,
             queryParameters: array_filter(
-                ['format' => self::scalar($format), 'positions' => self::scalar($positions)],
-                static fn ($value): bool => null !== $value
+                ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions],
+                static fn (mixed $value): bool => null !== $value
             ),
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         );
 
-        return $this->parseCreateResponse($shipments, $response);
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function validateBeforeCreate(array $shipments): void
-    {
-        if (empty($shipments)) {
-            throw new InvalidArgumentException('At least one shipment must be added before calling create().');
-        }
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function buildCreateRequest(array $shipments): ShipmentPostShipmentsRequestV11
-    {
-        $data            = new ShipmentPostShipmentsRequestV11Data();
-        $data->shipments = array_map(static fn (Shipment $shipment) => $shipment->toApiModel(), $shipments);
-        $data->userAgent = $this->getUserAgentHeader();
-
-        $request       = new ShipmentPostShipmentsRequestV11();
-        $request->data = $data;
-
-        return $request;
-    }
-
-    /**
-     * Read only the current generated success model and translate it to the SDK convenience shape.
-     *
-     * @param Shipment[] $shipments
-     *
-     * @return array<int, string|null>
-     */
-    private function parseCreateResponse(array $shipments, mixed $response): array
-    {
         if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
             throw new InvalidArgumentException('Unexpected response type returned by postShipments()');
         }
@@ -106,30 +68,6 @@ final class ShipmentCreateService
             throw new InvalidArgumentException('postShipments() returned a response without data.');
         }
 
-        $requestReferences = array_values(array_map(
-            static fn (Shipment $shipment) => $shipment->getReferenceIdentifier(),
-            $shipments
-        ));
-
-        $mapping = [];
-        foreach ($response->data->shipments ?? [] as $index => $createdShipment) {
-            if (! isset($createdShipment->id)) {
-                continue;
-            }
-
-            $referenceIdentifier = $createdShipment->referenceIdentifier ?? $requestReferences[$index] ?? null;
-
-            $mapping[$createdShipment->id] = null === $referenceIdentifier ? null : (string) $referenceIdentifier;
-        }
-
-        return $mapping;
-    }
-
-    /**
-     * The query string needs the value of an enum case, such as a label format.
-     */
-    private static function scalar(mixed $value): mixed
-    {
-        return $value instanceof BackedEnum ? $value->value : $value;
+        return $this->mapCreatedIds($request->data->shipments, $response->data->shipments);
     }
 }

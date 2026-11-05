@@ -6,12 +6,12 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
-use MyParcelNL\Sdk\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -31,20 +31,30 @@ final class ShipmentCreateServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one shipment must be added before calling create().');
 
-        $service->create(new ShipmentCollection());
+        $service->create([]);
+    }
+
+    public function testCreateThrowsForAnItemThatIsNotTheGeneratedModel(): void
+    {
+        $service = $this->createService(self::createdResponse([]));
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Each shipment must be a ' . ShipmentItem::class . ', got array.');
+
+        $service->create([['carrier' => 1]]);
     }
 
     public function testCreateThrowsBeforeSendingMoreThanHundredShipments(): void
     {
-        $service    = $this->createService(self::createdResponse([]));
-        $collection = new ShipmentCollection();
+        $service   = $this->createService(self::createdResponse([]));
+        $shipments = [];
 
         for ($i = 0; $i < 101; $i++) {
-            $collection->push(self::shipment("order-{$i}"));
+            $shipments[] = self::shipment("order-{$i}");
         }
 
         try {
-            $service->create($collection);
+            $service->create($shipments);
             self::fail('More than 100 shipments must throw.');
         } catch (ValidationException) {
             self::assertSame([], $this->requests);
@@ -59,14 +69,7 @@ final class ShipmentCreateServiceTest extends TestCase
         ]));
         $service->setUserAgentForProposition('Magento', '2.4.7');
 
-        $result = $service->create(
-            new ShipmentCollection([
-                self::shipment('order-1'),
-                self::shipment('order-2'),
-            ]),
-            'A4',
-            '1;2'
-        );
+        $result = $service->create([self::shipment('order-1'), self::shipment('order-2')], 'A4', '1;2');
 
         self::assertSame([1001 => 'order-1', 1002 => 'order-2'], $result);
         self::assertSame('POST', $this->requests[0]['method']);
@@ -77,24 +80,27 @@ final class ShipmentCreateServiceTest extends TestCase
         self::assertSame(['order-1', 'order-2'], array_column($this->requests[0]['body']['data']['shipments'], 'reference_identifier'));
     }
 
-    public function testCreateSendsTheCarrierAndThePackageTypeAsIds(): void
+    public function testCreateSendsAnEnumCaseAsItsValue(): void
     {
-        $shipment = self::shipment('order-enum')
-            ->setCarrier(RefCapabilitiesSharedCarrierV2::Postnl)
-            ->withPackageType(RefShipmentPackageTypeV2::Package);
+        $shipment                       = self::shipment('order-enum');
+        $shipment->carrier              = RefTypesCarrier::Postnl;
+        $shipment->options->packageType = RefShipmentPackageType::Package;
 
         $result = $this->createService(self::createdResponse([['id' => 3001, 'reference_identifier' => 'order-enum']]))
-            ->create(new ShipmentCollection([$shipment]));
+            ->create([$shipment]);
 
         self::assertSame([3001 => 'order-enum'], $result);
         self::assertSame(1, $this->requests[0]['body']['data']['shipments'][0]['carrier']);
         self::assertSame(['package_type' => 1], $this->requests[0]['body']['data']['shipments'][0]['options']);
     }
 
+    /**
+     * Jane sends an unset field without a type, such as the email, as null. The service leaves it out.
+     */
     public function testCreateSendsARecipientWithoutEmail(): void
     {
         $this->createService(self::createdResponse([['id' => 1, 'reference_identifier' => 'order-1']]))
-            ->create(new ShipmentCollection([self::shipment('order-1')]));
+            ->create([self::shipment('order-1')]);
 
         self::assertArrayNotHasKey('email', $this->requests[0]['body']['data']['shipments'][0]['recipient']);
         self::assertSame('Hoofddorp', $this->requests[0]['body']['data']['shipments'][0]['recipient']['city']);
@@ -104,18 +110,26 @@ final class ShipmentCreateServiceTest extends TestCase
     {
         $shipment = self::shipment();
 
-        $result = $this->createService(self::createdResponse([['id' => 2001]]))
-            ->create(new ShipmentCollection([$shipment]));
+        $result = $this->createService(self::createdResponse([['id' => 2001]]))->create([$shipment]);
 
-        self::assertStringStartsWith('sdk_', (string) $shipment->getReferenceIdentifier());
-        self::assertSame($shipment->getReferenceIdentifier(), $this->requests[0]['body']['data']['shipments'][0]['reference_identifier']);
-        self::assertSame([2001 => $shipment->getReferenceIdentifier()], $result);
+        self::assertStringStartsWith('sdk_', (string) $shipment->referenceIdentifier);
+        self::assertSame($shipment->referenceIdentifier, $this->requests[0]['body']['data']['shipments'][0]['reference_identifier']);
+        self::assertSame([2001 => $shipment->referenceIdentifier], $result);
+    }
+
+    public function testCreateChangesNothingElseOnTheShipment(): void
+    {
+        $shipment = self::shipment('order-1');
+
+        $this->createService(self::createdResponse([['id' => 1]]))->create([$shipment]);
+
+        self::assertNull($shipment->recipient->email);
+        self::assertSame('order-1', $shipment->referenceIdentifier);
     }
 
     public function testCreateFallsBackToRequestReferenceWhenResponseReferenceIdentifierIsMissing(): void
     {
-        $result = $this->createService(self::createdResponse([['id' => 7001]]))
-            ->create(new ShipmentCollection([self::shipment('order-wrapper-ref')]));
+        $result = $this->createService(self::createdResponse([['id' => 7001]]))->create([self::shipment('order-wrapper-ref')]);
 
         self::assertSame([7001 => 'order-wrapper-ref'], $result);
     }
@@ -127,7 +141,7 @@ final class ShipmentCreateServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('postShipments() returned a response without data.');
 
-        $service->create(new ShipmentCollection([self::shipment('order-1')]));
+        $service->create([self::shipment('order-1')]);
     }
 
     public function testCreateThrowsWhenResponseDataIsNull(): void
@@ -137,15 +151,12 @@ final class ShipmentCreateServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('postShipments() returned a response without data.');
 
-        $service->create(new ShipmentCollection([self::shipment('order-1')]));
+        $service->create([self::shipment('order-1')]);
     }
 
     public function testCreateReturnsEmptyMappingWhenResponseHasNoShipments(): void
     {
-        $result = $this->createService(self::createdResponse([]))
-            ->create(new ShipmentCollection([self::shipment('order-1')]));
-
-        self::assertSame([], $result);
+        self::assertSame([], $this->createService(self::createdResponse([]))->create([self::shipment('order-1')]));
     }
 
     public function testCreateSkipsShipmentsWithoutIdInResponse(): void
@@ -153,16 +164,13 @@ final class ShipmentCreateServiceTest extends TestCase
         $result = $this->createService(self::createdResponse([
             ['reference_identifier' => 'order-1'],
             ['id' => 8002, 'reference_identifier' => 'order-2'],
-        ]))->create(new ShipmentCollection([
-            self::shipment('order-1'),
-            self::shipment('order-2'),
-        ]));
+        ]))->create([self::shipment('order-1'), self::shipment('order-2')]);
 
         self::assertSame([8002 => 'order-2'], $result);
     }
 
     /**
-     * The Core API sends an error as `application/problem+json` only when the first Accept line asks for it.
+     * The spec documents both error formats for `POST /shipments`. The generated exception reads both.
      *
      * @return array<string, array{string, string}>
      */
@@ -182,7 +190,7 @@ final class ShipmentCreateServiceTest extends TestCase
         $service = $this->createService($body, 422, $contentType);
 
         try {
-            $service->create(new ShipmentCollection([self::shipment('order-1')]));
+            $service->create([self::shipment('order-1')]);
             self::fail('A 422 response must throw.');
         } catch (PostShipmentsUnprocessableEntityException $exception) {
             self::assertSame(422, $exception->getResponse()->getStatusCode());
@@ -191,10 +199,12 @@ final class ShipmentCreateServiceTest extends TestCase
 
     public function testCreateThrowsBeforeSendingAShipmentWithoutRecipient(): void
     {
-        $service = $this->createService(self::createdResponse([]));
+        $service  = $this->createService(self::createdResponse([]));
+        $shipment = self::shipment('order-1');
+        unset($shipment->recipient);
 
         try {
-            $service->create(new ShipmentCollection([self::shipment('order-1')->setRecipient(null)]));
+            $service->create([$shipment]);
             self::fail('A shipment without recipient must throw.');
         } catch (ValidationException) {
             self::assertSame([], $this->requests);
@@ -204,20 +214,21 @@ final class ShipmentCreateServiceTest extends TestCase
     /**
      * A shipment with the fields that the spec requires.
      */
-    private static function shipment(?string $referenceIdentifier = null): Shipment
+    private static function shipment(?string $referenceIdentifier = null): ShipmentItem
     {
-        return (new Shipment())
-            ->setReferenceIdentifier($referenceIdentifier)
-            ->setCarrier('POSTNL')
-            ->withPackageType('PACKAGE')
-            ->setRecipient([
+        return CoreApiModels::toModel(array_filter([
+            'reference_identifier' => $referenceIdentifier,
+            'carrier'              => 1,
+            'options'              => ['package_type' => 1],
+            'recipient'            => [
                 'cc'          => 'NL',
                 'postal_code' => '2132JE',
                 'city'        => 'Hoofddorp',
                 'street'      => 'Antareslaan',
                 'number'      => '31',
                 'person'      => 'Test Person',
-            ]);
+            ],
+        ], static fn (mixed $value): bool => null !== $value), ShipmentItem::class);
     }
 
     private function createService(string $body, int $status = 200, string $contentType = 'application/json;charset=utf-8;version=1.2'): ShipmentCreateService

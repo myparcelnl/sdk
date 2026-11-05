@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\Services\Capabilities;
 
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 
 /**
  * Check carrier capabilities (delivery types, package types, options) for a given
@@ -20,8 +20,8 @@ interface CapabilitiesServiceInterface
     public function get(CapabilitiesRequest $request): CapabilitiesResponse;
 
     /**
-     * Convenience: derive a capabilities request from a Shipment and query.
+     * Derive a capabilities request from a shipment and query it.
      * Uses the shipment's recipient country, carrier, and physical properties.
      */
-    public function fromShipment(Shipment $shipment): CapabilitiesResponse;
+    public function fromShipment(ShipmentItem $shipment): CapabilitiesResponse;
 }
