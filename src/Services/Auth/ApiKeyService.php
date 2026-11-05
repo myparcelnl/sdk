@@ -8,9 +8,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
-use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShopType;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
-use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUserType;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Client\Jane\SkipValidationOnReadSerializer;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
@@ -48,17 +46,16 @@ final class ApiKeyService
     }
 
     /**
-     * Check whether the API key is accepted by IAM.
+     * Check whether IAM accepts the API key.
      *
-     * Only 401 responses are treated as an invalid key. Other API or transport
-     * errors bubble up because they do not prove the key itself is invalid.
+     * Only a 401 means that the key is invalid. Another error says nothing about the key, so this
+     * method throws it. The status comes from the response: a 401 with a body that is not JSON throws
+     * a `BadResponseException` instead of a `GetWhoamiUnauthorizedException`.
      *
-     * The status comes from the response, not from the exception code. Today Jane throws a
-     * BadResponseException with the status as its code, because the spec declares only a 200. A status
-     * exception that a later spec adds has no code, so this method keeps working when the spec adds a 401.
-     *
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException For a 500 with an `application/problem+json` body.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status other than 401 that the spec does not declare.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
+     * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a body that is not valid JSON.
      * @throws \UnexpectedValueException When IAM returns a principal type that this SDK does not know.
      */
     public function isValid(): bool
@@ -83,8 +80,10 @@ final class ApiKeyService
      * generated client cannot choose a model for it, so getWhoami() returns the decoded JSON and
      * this method picks the model.
      *
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException For a 500 with an `application/problem+json` body.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For a 401, or for an error status that the spec does not declare.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
+     * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a body that is not valid JSON.
      * @throws \UnexpectedValueException When IAM returns a principal type that this SDK does not know.
      */
     public function getPrincipal(): PrincipalShop|PrincipalUser
@@ -110,9 +109,10 @@ final class ApiKeyService
     {
         $type = $whoami['type'] ?? null;
 
+        // Jane generates `type` as a plain string, not as an enum, so the values are literal here.
         return match ($type) {
-            PrincipalShopType::Shop->value => PrincipalShop::class,
-            PrincipalUserType::User->value => PrincipalUser::class,
+            'SHOP' => PrincipalShop::class,
+            'USER' => PrincipalUser::class,
             default => throw new UnexpectedValueException('IAM returned an unknown principal type: ' . json_encode($type)),
         };
     }

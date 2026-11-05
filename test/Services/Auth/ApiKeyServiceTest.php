@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Auth;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\RoleShop;
@@ -101,9 +102,18 @@ final class ApiKeyServiceTest extends TestCase
         self::assertFalse($this->createService(['message' => 'Unauthorized'], 401)->isValid());
     }
 
-    public function testIsValidRethrowsNonAuthorizationErrors(): void
+    public function testIsValidThrowsForAServerError(): void
     {
-        $service = $this->createService(['message' => 'Server error'], 500);
+        $service = $this->createService(['title' => 'Server error'], 500, 'application/problem+json');
+
+        $this->expectException(ServerException::class);
+
+        $service->isValid();
+    }
+
+    public function testIsValidThrowsForAnErrorStatusThatTheSpecDoesNotDeclare(): void
+    {
+        $service = $this->createService(['message' => 'Forbidden'], 403);
 
         $this->expectException(ClientException::class);
 
@@ -113,14 +123,14 @@ final class ApiKeyServiceTest extends TestCase
     /**
      * @param array<string, mixed> $response
      */
-    private function createService(array $response, int $status = 200): ApiKeyService
+    private function createService(array $response, int $status = 200, string $contentType = 'application/json'): ApiKeyService
     {
-        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($response, $status): MockResponse {
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($response, $status, $contentType): MockResponse {
             $this->requests[] = ['method' => $method, 'url' => $url, 'options' => $options];
 
             return new MockResponse(
                 json_encode($response, JSON_THROW_ON_ERROR),
-                ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]
+                ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]
             );
         });
 
