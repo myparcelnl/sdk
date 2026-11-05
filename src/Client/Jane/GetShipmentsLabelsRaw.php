@@ -16,7 +16,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * ShipmentLabelsService reads the body itself. An error response throws the generated exceptions,
  * such as GetShipmentsLabelsNotFoundException.
  *
- * @todo Remove this class when the generated endpoint reads the binary response.
+ * @todo janephp/janephp#1149: remove this class when the generated endpoint returns the binary response.
  *
  * @internal
  */
