@@ -16,17 +16,9 @@ use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
 use UnexpectedValueException;
 
 /**
- * Service for managing webhook subscriptions via the Jane Core API client.
+ * Manages webhook subscriptions through the Core API client.
  *
- * Replaces the legacy AbstractWebhookWebService and its 5 concrete subclasses.
- *
- * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
- * `subscribe()` and `unsubscribe()` keeps working.
- *
- * `getAll()` and `getById()` return the Jane models, without v11 getters. No known consumer reads these
- * results: the v11 guide calls `getAll()` but does not use the result, and the PDK and the Magento
- * module do not use this service. An own class with getters can only come in a major release,
- * because it changes the return type.
+ * `getAll()` and `getById()` return the generated models, with public properties such as `hook` and `url`.
  */
 final class WebhookService
 {
@@ -67,7 +59,7 @@ final class WebhookService
 
         $response = $this->api->postWebhookSubscriptions(
             requestBody: $request,
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         );
 
         $ids = $response instanceof WebhooksResponsesPostWebhookSubscriptions ? ($response->data->ids ?? []) : [];
@@ -92,7 +84,7 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $this->api->deleteWebhookSubscriptions(ids: $ids, headerParameters: ['User-Agent' => $this->getUserAgentHeader()]);
+        $this->api->deleteWebhookSubscriptions(ids: $ids, headerParameters: $this->headerParameters());
     }
 
     /**
@@ -108,7 +100,7 @@ final class WebhookService
     {
         $response = $this->api->getWebhookSubscriptions(
             queryParameters: null !== $hook ? ['hook' => $hook] : [],
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         );
 
         return self::subscriptions($response);
@@ -133,7 +125,7 @@ final class WebhookService
 
         $response = $this->api->getWebhookSubscriptionsById(
             ids: $ids,
-            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+            headerParameters: $this->headerParameters()
         );
 
         return self::subscriptions($response);
