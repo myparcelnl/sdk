@@ -26,12 +26,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Builds the generated Jane clients with the API key, the user agent and extra headers.
  *
- * The generated Client::create() builds a serializer that validates responses, and a client cannot
- * change it later. So this factory builds the same parts as Client::create() itself, with
- * SkipValidationOnReadSerializer. JaneClientFactoryTest fails when a regeneration changes those parts.
- *
- * @todo Call Client::create() again when Jane can generate validation for requests only.
- *
  * @internal Use the API factories, such as ShipmentApiFactory.
  */
 final class JaneClientFactory
@@ -42,8 +36,8 @@ final class JaneClientFactory
     public const CORE_API_HOST = 'https://api.myparcel.nl';
 
     /**
-     * Idle timeout in seconds of the HTTP client that this factory creates. A request stops when no
-     * data arrives for this time. In v11, the generated client stopped a request after this time in total.
+     * Idle timeout in seconds of the HTTP client that this factory creates: a request stops when no
+     * data arrives for this time.
      */
     public const DEFAULT_HTTP_TIMEOUT = 10;
 
@@ -54,7 +48,7 @@ final class JaneClientFactory
      * @param string|null              $host       Overrides the Core API host. An empty string uses the default.
      * @param string|null              $userAgent  Sent as the User-Agent on every request.
      * @param array<string, string>    $headers    Sent on every request, such as `x-dmp-*` API feature flags.
-     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout. Tests pass a MockHttpClient.
+     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout.
      */
     public static function coreApi(
         string $apiKey,
@@ -96,25 +90,30 @@ final class JaneClientFactory
         $httpClient = ($httpClient ?? HttpClient::create(['timeout' => self::DEFAULT_HTTP_TIMEOUT]))
             ->withOptions(['headers' => $headers]);
 
-        // The same decorators as the generated Client::create(), in the same order. The
-        // AuthenticationRegistry adds the API key only to operations that the spec secures.
+        // The same order as the generated Client::create() with the AuthenticationRegistry in
+        // `$additionalPlugins`. The registry adds the API key only to operations that the spec secures.
         $httpClient = (new ServerUrlHttpClient($host))($httpClient);
 
         return (new AuthenticationRegistry([$authentication]))($httpClient);
     }
 
     /**
-     * Build the serializer with the same normalizers and encoders as the generated Client::create(),
-     * and wrap it in SkipValidationOnReadSerializer.
+     * Build the serializer with the same normalizers and encoders as the generated Client::create().
+     *
+     * @todo Call Client::create() when Jane can generate validation for requests only.
      */
     private static function createSerializer(
         NormalizerInterface&DenormalizerInterface $normalizer,
         EncoderInterface&DecoderInterface $formEncoder
     ): SkipValidationOnReadSerializer {
+        // Client::create() builds a serializer that validates responses, and a client cannot change
+        // it later. So this factory builds the same parts, wrapped in SkipValidationOnReadSerializer.
+        // Without JSON_PRESERVE_ZERO_FRACTION, a float with a zero fraction, such as the flag 1.0 of a
+        // shipment option, goes out as the integer 1.
         return new SkipValidationOnReadSerializer(
             new Serializer(
                 [new ArrayDenormalizer(), $normalizer],
-                [new JsonEncoder(new JsonEncode(), new JsonDecode(['json_decode_associative' => true])), $formEncoder]
+                [new JsonEncoder(new JsonEncode([JsonEncode::OPTIONS => 0]), new JsonDecode([JsonDecode::ASSOCIATIVE => true])), $formEncoder]
             )
         );
     }

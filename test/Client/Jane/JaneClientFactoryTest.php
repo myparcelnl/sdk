@@ -10,6 +10,11 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilit
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\FormEncoder as CoreApiFormEncoder;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
@@ -83,6 +88,15 @@ final class JaneClientFactoryTest extends TestCase
         self::assertSame(999, $this->readShipment(['carrier_id' => 999])->carrierId);
     }
 
+    /**
+     * The generated validator has a Choice constraint with the known values of `payment_status`. The
+     * client reads without validation, so a value that the SDK does not know comes back as it is.
+     */
+    public function testReadsAnEnumValueThatTheSpecDoesNotHave(): void
+    {
+        self::assertSame('refunded', $this->readShipment(['payment_status' => 'refunded'])->paymentStatus);
+    }
+
     public function testReadsTheRegionWereld(): void
     {
         self::assertSame('Wereld', $this->readShipment(['region' => 'Wereld'])->region);
@@ -117,7 +131,7 @@ final class JaneClientFactoryTest extends TestCase
         self::assertSame([], $this->requests);
     }
 
-    public function testKeepsTheOptionsOfAnHttpClientThatTheCallerPasses(): void
+    public function testAddsNoTimeoutToAnHttpClientThatTheCallerPasses(): void
     {
         $httpClient = new class implements HttpClientInterface {
             /** @var array<string, mixed>|null The options of the last withOptions() call. */
@@ -149,9 +163,9 @@ final class JaneClientFactoryTest extends TestCase
     }
 
     /**
-     * JaneClientFactory builds the same parts as the generated Client::create(). When a regeneration
-     * adds or removes a part there, this test fails, so the factory can follow. The test also checks
-     * the server URL and the JSON decode options, which the factory copies.
+     * When a regeneration adds or removes a class that Client::create() instantiates, this test fails,
+     * so the factory can follow. The test also checks the server URL and the JSON decode options,
+     * which the factory copies.
      */
     public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(): void
     {
@@ -188,6 +202,44 @@ final class JaneClientFactoryTest extends TestCase
             $source,
             'The generated Client::create() decodes JSON with other options. Update JaneClientFactory::createSerializer().'
         );
+    }
+
+    /**
+     * The spec types a shipment option flag as a number, so the model holds a float. The API expects
+     * the integers 0 and 1.
+     */
+    public function testSendsAFloatWithAZeroFractionAsAnInteger(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient('{"data":{"shipments":[]}}'));
+
+        $recipient             = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+        $recipient->cc         = 'NL';
+        $recipient->postalCode = '2132JE';
+        $recipient->city       = 'Hoofddorp';
+        $recipient->street     = 'Antareslaan';
+        $recipient->number     = '31';
+        $recipient->person     = 'Test Person';
+        // Jane sends an unset field without a type as null (janephp/janephp#1141), and the validation rejects it.
+        unset($recipient->email);
+
+        $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
+        $options->packageType = 1;
+        $options->signature   = 1.0;
+
+        $shipment                      = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
+        $shipment->referenceIdentifier = 'order-1';
+        $shipment->carrier             = 1;
+        $shipment->recipient           = $recipient;
+        $shipment->options             = $options;
+
+        $data            = new ShipmentPostShipmentsRequestV11Data();
+        $data->shipments = [$shipment];
+        $request         = new ShipmentPostShipmentsRequestV11();
+        $request->data   = $data;
+
+        $client->postShipments(requestBody: $request);
+
+        self::assertMatchesRegularExpression('/"signature":1[,}]/', (string) $this->requests[0]['options']['body']);
     }
 
     /**
