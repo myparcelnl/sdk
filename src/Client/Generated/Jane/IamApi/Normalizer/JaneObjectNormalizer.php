@@ -18,11 +18,13 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
     use ValidatorTrait;
     protected $normalizers = [
         
-        \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalCommon::class => \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalCommonNormalizer::class,
-        
         \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop::class => \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalShopNormalizer::class,
         
         \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser::class => \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalUserNormalizer::class,
+        
+        \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerError::class => \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\ProblemDetailsInternalServerErrorNormalizer::class,
+        
+        \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponse::class => \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\UnauthorizedResponseNormalizer::class,
         
         \Jane\Component\JsonSchemaRuntime\Reference::class => \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Normalizer\ReferenceNormalizer::class,
     ], $normalizersCache = [];
@@ -53,9 +55,10 @@ class JaneObjectNormalizer implements DenormalizerInterface, NormalizerInterface
     private function initNormalizer(string $normalizerClass)
     {
         $normalizer = match ($normalizerClass) {
-            \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalCommonNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalCommonNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalShopNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalShopNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalUserNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\PrincipalUserNormalizer(),
+            \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\ProblemDetailsInternalServerErrorNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\ProblemDetailsInternalServerErrorNormalizer(),
+            \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\UnauthorizedResponseNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\UnauthorizedResponseNormalizer(),
             \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Normalizer\ReferenceNormalizer::class => new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Normalizer\ReferenceNormalizer(),
             default => throw new \InvalidArgumentException('Unknown normalizer class: ' . $normalizerClass),
         };

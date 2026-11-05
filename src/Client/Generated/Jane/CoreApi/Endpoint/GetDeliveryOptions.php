@@ -55,7 +55,7 @@ class GetDeliveryOptions extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
      *    "shipment_id"?: int, //Identifier of an existing shipment to base the delivery options on.
      *                         //Used by carriers such as UPS and bol.com.
      * } $queryParameters
-     * @param array $accept Accept content header application/json;version=2.0|application/json
+     * @param array $accept Accept content header application/json;version=2.0|application/json|application/problem+json
      */
     public function __construct(array $queryParameters = [], array $accept = [])
     {
@@ -78,7 +78,7 @@ class GetDeliveryOptions extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
     public function getExtraHeaders(): array
     {
         if (empty($this->accept)) {
-            return ['Accept' => ['application/json;version=2.0', 'application/json']];
+            return ['Accept' => ['application/json;version=2.0', 'application/json', 'application/problem+json']];
         }
         return $this->accept;
     }
@@ -132,11 +132,21 @@ class GetDeliveryOptions extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
                 return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsV1', 'json');
             }
         }
-        if ($contentType !== null && ($status >= 400 && $status <= 499 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+        if ($status >= 400 && $status <= 499) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
-        if ($contentType !== null && ($status >= 500 && $status <= 599 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+        if ($status >= 500 && $status <= 599) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetDeliveryOptionsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException($status, $body, $response);
     }

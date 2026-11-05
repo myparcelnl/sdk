@@ -32,6 +32,12 @@ class ProductToCreate implements AdditionalPropertiesInterface
      */
     public string $ean;
     /**
+     * Reference to the product in an external product catalog, like the zonos catalog id used for constructing a customs declaration.
+     *
+     * @var string
+     */
+    public string $externalReference;
+    /**
      * @var ProductToCreateFulfilment
      */
     public ProductToCreateFulfilment $fulfilment;
@@ -50,11 +56,9 @@ class ProductToCreate implements AdditionalPropertiesInterface
      */
     public string $name;
     /**
-     * The physical dimensions.
-     *
-     * @var ProductToCreatePhysicalProperties
+     * @var PhysicalProperties
      */
-    public ProductToCreatePhysicalProperties $physicalProperties;
+    public PhysicalProperties $physicalProperties;
     /**
      * A monetary value represented by split integral and fractional parts to avoid floating point errors.
      *
@@ -73,6 +77,6 @@ class ProductToCreate implements AdditionalPropertiesInterface
     public string $sku;
     public function definedProperties(): array
     {
-        return ['barcode' => 'barcode', 'containsDangerousSubstances' => 'containsDangerousSubstances', 'countryCodeOfOrigin' => 'countryCodeOfOrigin', 'descriptions' => 'descriptions', 'ean' => 'ean', 'fulfilment' => 'fulfilment', 'hasUnlimitedShelfLife' => 'hasUnlimitedShelfLife', 'hsCode' => 'hsCode', 'name' => 'name', 'physicalProperties' => 'physicalProperties', 'purchasePrice' => 'purchasePrice', 'salesPrice' => 'salesPrice', 'sku' => 'sku'];
+        return ['barcode' => 'barcode', 'containsDangerousSubstances' => 'containsDangerousSubstances', 'countryCodeOfOrigin' => 'countryCodeOfOrigin', 'descriptions' => 'descriptions', 'ean' => 'ean', 'externalReference' => 'externalReference', 'fulfilment' => 'fulfilment', 'hasUnlimitedShelfLife' => 'hasUnlimitedShelfLife', 'hsCode' => 'hsCode', 'name' => 'name', 'physicalProperties' => 'physicalProperties', 'purchasePrice' => 'purchasePrice', 'salesPrice' => 'salesPrice', 'sku' => 'sku'];
     }
 }

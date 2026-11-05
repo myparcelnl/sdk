@@ -4,6 +4,7 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Endpoint;
 
 class GetPickupLocations extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\Endpoint
 {
+    protected $accept;
     /**
      * @param array{
      *    "cc"?: string, //The country code for which to fetch the delivery options.
@@ -32,11 +33,19 @@ class GetPickupLocations extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
      *    "exclude_parcel_lockers"?: mixed, //This option allows to filter out pickup locations that are parcel lockers.
      *    "latitude"?: int, //This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
      *    "longitude"?: int, //This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
+     *    "package_type"?: string, //Package type to get the delivery options for. When omitted a
+     *                             //carrier-specific default is used.
+     *    "weight"?: int, //Weight in grams. Used to determine which package types and delivery
+     *                    //options are available. Defaults to a carrier-specific weight when omitted.
+     *    "saturday_delivery"?: mixed, //Include Saturday delivery options. Only available for carriers that
+     *                                 //support it.
      * } $queryParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      */
-    public function __construct(array $queryParameters = [])
+    public function __construct(array $queryParameters = [], array $accept = [])
     {
         $this->queryParameters = $queryParameters;
+        $this->accept = $accept;
     }
     use \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -53,12 +62,15 @@ class GetPickupLocations extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['cc', 'postal_code', 'number', 'city', 'street', 'platform', 'shop_id', 'carrier', 'delivery_date', 'delivery_time', 'cutoff_time', 'dropoff_days', 'monday_delivery', 'dropoff_delay', 'deliverydays_window', 'exclude_delivery_type', 'exclude_parcel_lockers', 'latitude', 'longitude']);
+        $optionsResolver->setDefined(['cc', 'postal_code', 'number', 'city', 'street', 'platform', 'shop_id', 'carrier', 'delivery_date', 'delivery_time', 'cutoff_time', 'dropoff_days', 'monday_delivery', 'dropoff_delay', 'deliverydays_window', 'exclude_delivery_type', 'exclude_parcel_lockers', 'latitude', 'longitude', 'package_type', 'weight', 'saturday_delivery']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
         $optionsResolver->addAllowedTypes('cc', ['string', 'null']);
@@ -77,6 +89,8 @@ class GetPickupLocations extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
         $optionsResolver->addAllowedTypes('exclude_delivery_type', ['string']);
         $optionsResolver->addAllowedTypes('latitude', ['int', 'null']);
         $optionsResolver->addAllowedTypes('longitude', ['int', 'null']);
+        $optionsResolver->addAllowedTypes('package_type', ['string']);
+        $optionsResolver->addAllowedTypes('weight', ['int', 'null']);
         return $optionsResolver;
     }
     /**
@@ -95,11 +109,21 @@ class GetPickupLocations extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
         if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPickupLocations', 'json');
         }
-        if ($contentType !== null && ($status >= 400 && $status <= 499 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+        if ($status >= 400 && $status <= 499) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsClientErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
-        if ($contentType !== null && ($status >= 500 && $status <= 599 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+        if ($status >= 500 && $status <= 599) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesSystemError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetPickupLocationsServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException($status, $body, $response);
     }

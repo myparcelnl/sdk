@@ -157,6 +157,10 @@ class RefShipmentShipmentOptionsReturnsOptionsNormalizer implements Denormalizer
             $object->labelDescription = null;
             unset($data['label_description']);
         }
+        if (\array_key_exists('incoterms', $data)) {
+            $object->incoterms = $this->denormalizer->denormalize($data['incoterms'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentIncoterms::class, 'json', $context);
+            unset($data['incoterms']);
+        }
         foreach ($data as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
                 $object[$key] = $value_1;
@@ -225,6 +229,10 @@ class RefShipmentShipmentOptionsReturnsOptionsNormalizer implements Denormalizer
                 $value = $data->labelDescription;
             }
             $dataArray['label_description'] = $value;
+        }
+        if (array_key_exists('incoterms', get_object_vars($data))) {
+            $normalized_2 = $data->incoterms === null ? null : $this->normalizer->normalize($data->incoterms, 'json', $context);
+            $dataArray['incoterms'] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_2) : $normalized_2;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {

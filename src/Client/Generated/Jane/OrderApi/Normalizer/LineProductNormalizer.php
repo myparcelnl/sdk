@@ -44,9 +44,25 @@ class LineProductNormalizer implements DenormalizerInterface, NormalizerInterfac
             $object->name = $data['name'];
             unset($data['name']);
         }
+        if (\array_key_exists('countryCodeOfOrigin', $data)) {
+            $object->countryCodeOfOrigin = $data['countryCodeOfOrigin'];
+            unset($data['countryCodeOfOrigin']);
+        }
         if (\array_key_exists('ean', $data)) {
             $object->ean = $data['ean'];
             unset($data['ean']);
+        }
+        if (\array_key_exists('externalReference', $data)) {
+            $object->externalReference = $data['externalReference'];
+            unset($data['externalReference']);
+        }
+        if (\array_key_exists('physicalProperties', $data)) {
+            $object->physicalProperties = $this->denormalizer->denormalize($data['physicalProperties'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\PhysicalProperties::class, 'json', $context);
+            unset($data['physicalProperties']);
+        }
+        if (\array_key_exists('hsCode', $data)) {
+            $object->hsCode = $data['hsCode'];
+            unset($data['hsCode']);
         }
         if (\array_key_exists('sku', $data)) {
             $object->sku = $data['sku'];
@@ -69,8 +85,21 @@ class LineProductNormalizer implements DenormalizerInterface, NormalizerInterfac
         if (null !== ($data->name ?? null)) {
             $dataArray['name'] = $data->name;
         }
+        if (array_key_exists('countryCodeOfOrigin', get_object_vars($data))) {
+            $dataArray['countryCodeOfOrigin'] = $data->countryCodeOfOrigin;
+        }
         if (array_key_exists('ean', get_object_vars($data))) {
             $dataArray['ean'] = $data->ean;
+        }
+        if (array_key_exists('externalReference', get_object_vars($data))) {
+            $dataArray['externalReference'] = $data->externalReference;
+        }
+        if (array_key_exists('physicalProperties', get_object_vars($data))) {
+            $normalized = $data->physicalProperties === null ? null : $this->normalizer->normalize($data->physicalProperties, 'json', $context);
+            $dataArray['physicalProperties'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized) : $normalized;
+        }
+        if (array_key_exists('hsCode', get_object_vars($data))) {
+            $dataArray['hsCode'] = $data->hsCode;
         }
         if (array_key_exists('sku', get_object_vars($data))) {
             $dataArray['sku'] = $data->sku;

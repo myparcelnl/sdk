@@ -7,9 +7,9 @@ class RatesPostRatesRequestV1DataRatesItemPhysicalPropertiesWeight
     /**
      * The weight value
      *
-     * @var float
+     * @var int
      */
-    public float $value;
+    public int $value;
     /**
      * The unit of measurement in SI units (e.g., g, kg)
      *

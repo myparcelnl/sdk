@@ -13,12 +13,13 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
      *                      //can specify the label positions. When requesting the label for a shipment that contains a custom form, you can
      *                      //only request an A4 format.
      *    "positions"?: mixed, //The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify
-     *                         //up to four positions separated by semicolons (`;`).
+     *                         //up to four positions separated by semicolons (`;`) or commas (`,`).
      *                         //
      *                         //__Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page
      *                         //when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
      *    "collect_date"?: string,
      *    "delivery_options_identifier"?: string,
+     *    "send_return_mail"?: int, //Whether to send the return email to the consumer when creating return shipments. Defaults to `1`.
      * } $queryParameters
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
@@ -44,7 +45,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
     public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer): array
     {
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11) {
-            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], $this->body];
+            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
         }
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequest) {
             return [['Content-Type' => ['application/vnd.shipment+json']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
@@ -67,11 +68,12 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['format', 'positions', 'collect_date', 'delivery_options_identifier']);
+        $optionsResolver->setDefined(['format', 'positions', 'collect_date', 'delivery_options_identifier', 'send_return_mail']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
         $optionsResolver->addAllowedTypes('collect_date', ['string', 'null']);
         $optionsResolver->addAllowedTypes('delivery_options_identifier', ['string', 'null']);
+        $optionsResolver->addAllowedTypes('send_return_mail', ['int']);
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
@@ -87,6 +89,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
      * {@inheritdoc}
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -115,6 +118,14 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
         }
         if ($contentType !== null && (415 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnsupportedMediaTypeException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+        }
+        if (422 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         if ($status >= 400 && $status <= 499) {
             if (stripos(strtolower((string) $contentType), 'application/json') !== false) {

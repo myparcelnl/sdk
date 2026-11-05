@@ -6,9 +6,9 @@ class GetShipmentsLabelsNotFoundException extends NotFoundException
 {
     public function __construct(
         /**
-         * @var \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound
+         * @var \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem
          */
-        private readonly \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound $commonResponsesUserErrorNotFound,
+        private readonly \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem $commonResponsesProblem,
         /**
          * @var \Symfony\Contracts\HttpClient\ResponseInterface
          */
@@ -19,9 +19,9 @@ class GetShipmentsLabelsNotFoundException extends NotFoundException
 disclosed. This may be temporary or permanent.
 ');
     }
-    public function getCommonResponsesUserErrorNotFound(): \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserErrorNotFound
+    public function getCommonResponsesProblem(): \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem
     {
-        return $this->commonResponsesUserErrorNotFound;
+        return $this->commonResponsesProblem;
     }
     public function getResponse(): \Symfony\Contracts\HttpClient\ResponseInterface
     {

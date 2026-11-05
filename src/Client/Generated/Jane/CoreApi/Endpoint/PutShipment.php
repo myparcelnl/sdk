@@ -31,7 +31,7 @@ class PutShipment extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\
     public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer): array
     {
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequestV11) {
-            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], $this->body];
+            return [['Content-Type' => ['application/vnd.shipment+json;version=1.1']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
         }
         if ($this->body instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequest) {
             return [['Content-Type' => ['application/vnd.shipment+json']], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
@@ -58,6 +58,7 @@ class PutShipment extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\
      * {@inheritdoc}
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
@@ -81,6 +82,14 @@ class PutShipment extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\
         }
         if ($contentType !== null && (415 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnsupportedMediaTypeException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+        }
+        if (422 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnprocessableEntityException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PutShipmentUnprocessableEntityException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesProblem', 'json'), $response);
+            }
         }
         if ($status >= 400 && $status <= 499) {
             if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
