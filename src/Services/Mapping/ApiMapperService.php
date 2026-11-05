@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDelivery
  *     $mapper->idFromLegacyName('dhlforyou'); // 9
  *     $mapper->v2NameFromId(9);              // 'DHL_FOR_YOU'
  *
- * Unknown values return null. Explicit exceptions take priority over matching constant names.
+ * Unknown values return null. Explicit exceptions take priority over matching case names.
  * Name-to-name conversions may also change case if the result exists in the target definition.
  * Shipment options use model properties and have no IDs; their mapping is maintained alongside
  * this service in ShipmentOptionMapper.
@@ -43,12 +43,12 @@ final class ApiMapperService
     /**
      * Each domain is a category of values: carriers, delivery types or package types.
      * Its profile selects the generated classes for legacy names, v1 IDs and v2 names.
-     * Constants with the same name in these classes refer to the same value.
+     * Cases with the same name in these enums refer to the same value.
      *
      * To add a category, define its profile, optional exceptions and a public factory method.
      * Domain keys also identify categories in allDomains(); keep existing keys stable.
      *
-     * @var array<string, array<string, class-string>>
+     * @var array<string, array<string, class-string<\BackedEnum>>>
      */
     private const PROFILES = [
         self::DOMAIN_CARRIER       => [
@@ -69,14 +69,14 @@ final class ApiMapperService
     ];
 
     /**
-     * Exceptions to shared-constant matching, keyed by domain, constant name and column.
+     * Exceptions to shared-case matching, keyed by domain, case name and column.
      *
      * A value replaces the generated value; null marks it as unsupported.
      * An alias is another accepted spelling of the same input. For example, unfranked is
      * accepted as well as letter, but conversions back to a legacy name always return letter.
      * An entry with only aliases keeps old input spellings working after a definition changes.
      *
-     * UNFRANKED uses the domain name letter; review that convention separately from spec changes.
+     * Unfranked uses the domain name letter; review that convention separately from spec changes.
      *
      * @var array<string, array<string, array<string, array{
      *     value?: int|string|null,
@@ -87,23 +87,23 @@ final class ApiMapperService
         self::DOMAIN_CARRIER       => [],
         self::DOMAIN_DELIVERY_TYPE => [
             // Not present in ShipmentDefsDeliveryOptionsDeliveryNameV2 at all.
-            'PICKUP' => [
+            'Pickup' => [
                 self::COLUMN_LEGACY_NAME => ['value' => 'pickup'],
             ],
         ],
         self::DOMAIN_PACKAGE_TYPE  => [
-            'UNFRANKED'     => [
+            'Unfranked'    => [
                 self::COLUMN_LEGACY_NAME => [
                     'value'   => 'letter',
                     'aliases' => ['unfranked'],
                 ],
             ],
             // Not present in ShipmentResponsesDeliveryOptionsPackageTypeV2: delivery options never return it.
-            'ENVELOPE'      => [
+            'Envelope'     => [
                 self::COLUMN_LEGACY_NAME => ['value' => 'envelope'],
             ],
             // The generated enum supplies package_small; keep accepting the old spec spelling.
-            'SMALL_PACKAGE' => [
+            'SmallPackage' => [
                 self::COLUMN_LEGACY_NAME => [
                     'aliases' => ['small_package'],
                 ],
@@ -247,10 +247,11 @@ final class ApiMapperService
     }
 
     /**
-     * Return the three-way table keyed by constant name, with null for missing cells.
+     * Return the three-way table keyed by the case name of the generated enums, such as DhlForYou,
+     * with null for missing cells.
      *
-     * Keys identify concepts, not API values: PICKUP has the v2 value PICKUP_DELIVERY.
-     * Input aliases are excluded. Rows are sorted by constant name.
+     * A key identifies a concept, not an API value: Pickup has the v2 value PICKUP_DELIVERY.
+     * Input aliases are excluded. Rows are sorted by case name.
      *
      * @return array<string, array<string, int|string|null>>
      */
@@ -322,32 +323,6 @@ final class ApiMapperService
     }
 
     /**
-     * Return the cases of a generated enum as constant name => value, such as 'DHL_CHEAP_CARGO' => 6.
-     *
-     * Jane names a case as the spec's x-enum-varnames does, such as DhlCheapCargo. openapi-generator
-     * converted that name to the constant DHL_CHEAP_CARGO. The rows keep the constant names, so
-     * allRows() and allDomains() return the same keys as before.
-     *
-     * @todo Return the Jane case names in a major release that changes the keys of allRows() and
-     *       allDomains().
-     *
-     * @internal Also used by the mapping tests, so they compare the same names.
-     *
-     * @param  class-string<\BackedEnum> $enumClass
-     *
-     * @return array<string, int|string>
-     */
-    public static function constants(string $enumClass): array
-    {
-        $constants = [];
-        $cases     = $enumClass::cases();
-        foreach ($cases as $case) {
-            $constants[strtoupper(self::snakeCase($case->name))] = $case->value;
-        }
-        return $constants;
-    }
-
-    /**
      * @param  int|string $value
      * @param  string     $from
      * @param  string     $to
@@ -356,24 +331,24 @@ final class ApiMapperService
      */
     private function resolve($value, string $from, string $to)
     {
-        foreach ($this->mappingOverrides as $constantName => $overrides) {
+        foreach ($this->mappingOverrides as $caseName => $overrides) {
             $source = $overrides[$from] ?? [];
 
             if (
                 in_array($value, $source['aliases'] ?? [], true)
                 || (array_key_exists('value', $source) && $value === $source['value'])
             ) {
-                return $this->rows[$constantName][$to];
+                return $this->rows[$caseName][$to];
             }
         }
 
-        foreach ($this->rows as $constantName => $row) {
+        foreach ($this->rows as $caseName => $row) {
             if ($value !== $row[$from]) {
                 continue;
             }
 
             // A missing generated target may use name conversion. An explicit null may not.
-            if (null !== $row[$to] || array_key_exists('value', $this->mappingOverrides[$constantName][$to] ?? [])) {
+            if (null !== $row[$to] || array_key_exists('value', $this->mappingOverrides[$caseName][$to] ?? [])) {
                 return $row[$to];
             }
 
@@ -426,9 +401,10 @@ final class ApiMapperService
     }
 
     /**
-     * Join source constants and apply exceptions. Start with IDs to keep the existing map order.
+     * Join the enum cases on their names and apply the exceptions. Start with the IDs, so
+     * v2ToIdMap() keeps the declaration order of the ID enum.
      *
-     * @param  array<string, class-string> $profile
+     * @param  array<string, class-string<\BackedEnum>> $profile
      * @param  array<string, mixed>        $overrides
      *
      * @return array<string, array<string, int|string|null>>
@@ -439,16 +415,16 @@ final class ApiMapperService
         $profile = [self::COLUMN_ID => $profile[self::COLUMN_ID]] + $profile;
 
         foreach ($profile as $column => $enumClass) {
-            foreach (self::constants($enumClass) as $constantName => $value) {
-                $rows[$constantName]          = $rows[$constantName] ?? self::EMPTY_ROW;
-                $rows[$constantName][$column] = $value;
+            foreach ($enumClass::cases() as $case) {
+                $rows[$case->name]          = $rows[$case->name] ?? self::EMPTY_ROW;
+                $rows[$case->name][$column] = $case->value;
             }
         }
 
-        foreach ($overrides as $constantName => $columns) {
+        foreach ($overrides as $caseName => $columns) {
             foreach ($columns as $column => $override) {
                 if (array_key_exists('value', $override)) {
-                    $rows[$constantName][$column] = $override['value'];
+                    $rows[$caseName][$column] = $override['value'];
                 }
             }
         }
