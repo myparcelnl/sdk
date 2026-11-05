@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Model\Shipment;
 
 use BackedEnum;
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentIncoterms;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoney;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro;
@@ -179,6 +180,19 @@ class ShipmentOptions
     public function setInsurance(array|RefTypesPriceEuro|null $insurance): static
     {
         return $this->set('insurance', CoreApiModels::toModel($insurance, RefTypesPriceEuro::class));
+    }
+
+    public function getIncoterms(): ?RefShipmentIncoterms
+    {
+        return $this->options->incoterms ?? null;
+    }
+
+    /**
+     * @param array<string, mixed>|RefShipmentIncoterms|null $incoterms An array with the API field name `rule`, or the Jane model.
+     */
+    public function setIncoterms(array|RefShipmentIncoterms|null $incoterms): static
+    {
+        return $this->set('incoterms', CoreApiModels::toModel($incoterms, RefShipmentIncoterms::class));
     }
 
     public function getCashOnDelivery(): ?RefTypesMoney
