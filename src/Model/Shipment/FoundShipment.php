@@ -188,6 +188,11 @@ final class FoundShipment implements JsonSerializable
         return $this->shipment->carrierId ?? null;
     }
 
+    public function getCarrierActive(): ?bool
+    {
+        return $this->shipment->carrierActive ?? null;
+    }
+
     public function getPlatformId(): ?int
     {
         return $this->shipment->platformId ?? null;
