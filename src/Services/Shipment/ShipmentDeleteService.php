@@ -9,10 +9,7 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
- * Deletes shipments through the Jane Core API client.
- *
- * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
- * it keeps working.
+ * Deletes shipments through the Core API client.
  */
 final class ShipmentDeleteService
 {
@@ -38,6 +35,6 @@ final class ShipmentDeleteService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        $this->api->deleteShipments(ids: $ids, headerParameters: ['User-Agent' => $this->getUserAgentHeader()]);
+        $this->api->deleteShipments(ids: $ids, headerParameters: $this->headerParameters());
     }
 }

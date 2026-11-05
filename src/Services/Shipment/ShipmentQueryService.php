@@ -10,11 +10,10 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
- * Query/fetch service for shipments using generated Core API endpoints.
+ * Queries shipments through the Core API client.
  */
 final class ShipmentQueryService
 {
@@ -33,16 +32,18 @@ final class ShipmentQueryService
     }
 
     /**
-     * Query shipments by available API filters.
+     * Query shipments by the query parameters of `GET /shipments`.
      *
-     * A key with a null value leaves the filter out, as in v11. An enum case, such as the value that
-     * FoundShipment::getCarrierId() returns, goes as its value.
+     * A key with a null value or an empty string leaves the filter out. An enum case, such as
+     * `RefTypesCarrier::Postnl`, goes as its value. An array, such as two statuses, goes as a
+     * `;`-separated string. Every other value goes as it is: `false` goes as `0`.
      *
-     * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
-     *                                         parameters (barcode, carrier_id, created, status, etc.).
-     * @return FoundShipment[]
-     * @throws InvalidArgumentException When a key is not a getShipments query parameter, or a value
-     *                                  has the wrong type.
+     * @param array<string, mixed> $parameters The query parameters, such as `barcode`, `carrier_id`, `created` and `status`.
+     *
+     * @return ShipmentDefsShipment[]
+     *
+     * @throws InvalidArgumentException When a key is not a query parameter of `GET /shipments`, or a
+     *                                  value has a type that the spec does not allow, such as `'page' => '2'`.
      */
     public function query(array $parameters = []): array
     {
@@ -52,9 +53,9 @@ final class ShipmentQueryService
     /**
      * Find a single shipment by its ID.
      *
-     * @return FoundShipment|null The shipment, or null if not found.
+     * @return ShipmentDefsShipment|null The shipment, or null if not found.
      */
-    public function find(int $shipmentId): ?FoundShipment
+    public function find(int $shipmentId): ?ShipmentDefsShipment
     {
         $shipments = $this->findMany([$shipmentId]);
 
@@ -65,7 +66,7 @@ final class ShipmentQueryService
      * Find multiple shipments by their IDs in a single API call.
      *
      * @param int[] $shipmentIds
-     * @return FoundShipment[]
+     * @return ShipmentDefsShipment[]
      */
     public function findMany(array $shipmentIds): array
     {
@@ -81,7 +82,7 @@ final class ShipmentQueryService
     /**
      * Find all shipments that match a single reference identifier.
      *
-     * @return FoundShipment[]
+     * @return ShipmentDefsShipment[]
      */
     public function findByReferenceId(string $referenceIdentifier): array
     {
@@ -91,10 +92,10 @@ final class ShipmentQueryService
     }
 
     /**
-     * Add the page size to the query parameters.
+     * Convert the query parameters to the values that the generated client sends.
      *
-     * The generated client checks the keys and the types. An unknown key or a wrong type throws an
-     * InvalidArgumentException.
+     * The generated client rejects a key that the spec does not have, and a wrong type for a key
+     * that the spec types, such as `page`.
      *
      * @param  array<string, mixed> $parameters
      * @return array<string, mixed>
@@ -105,36 +106,38 @@ final class ShipmentQueryService
             $parameters['size'] = self::DEFAULT_QUERY_PAGE_SIZE;
         }
 
-        // A null value means "no filter", as in v11. The generated client would reject it. Without
-        // the size key, the API uses its default.
-        $parameters = array_filter($parameters, static fn (mixed $value): bool => null !== $value);
+        // A null value or an empty string means "no filter", as in v11. Without this filter, the
+        // generated client sends an empty value, such as `q=`, for a key that allows null, and throws
+        // for the other keys. The spec does not document the page size that the API uses without `size`.
+        $parameters = array_filter($parameters, static fn (mixed $value): bool => null !== $value && '' !== $value);
 
-        // The generated client sends a query value as it is, and refuses an object. An enum case, such
-        // as the value that FoundShipment::getCarrierId() returns, goes as its backing value.
-        return array_map(static fn (mixed $value): mixed => $value instanceof BackedEnum ? $value->value : $value, $parameters);
+        return array_map([self::class, 'queryValue'], $parameters);
     }
 
     /**
-     * Read the User-Agent per call: an integrator can call setUserAgentForProposition() after the
-     * constructor.
-     *
-     * @return array<string, string>
+     * The generated client sends a scalar as it is and refuses an object. An enum case goes as its
+     * value, and an array as the `;`-separated string that the spec documents for `carrier_id` and `status`.
      */
-    private function headerParameters(): array
+    private static function queryValue(mixed $value): mixed
     {
-        return ['User-Agent' => $this->getUserAgentHeader()];
+        if ($value instanceof BackedEnum) {
+            return $value->value;
+        }
+
+        if (is_array($value)) {
+            return implode(';', array_map([self::class, 'queryValue'], $value));
+        }
+
+        return $value;
     }
 
     /**
-     * Extract the shipments array from the generated response model.
+     * Extract the shipments from the generated response model.
      *
-     * @return FoundShipment[]
+     * @return ShipmentDefsShipment[]
      */
     private function extractShipments(?ShipmentResponsesShipments $response): array
     {
-        return array_map(
-            static fn (ShipmentDefsShipment $shipment): FoundShipment => new FoundShipment($shipment),
-            $response?->data->shipments ?? []
-        );
+        return $response?->data->shipments ?? [];
     }
 }

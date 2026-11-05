@@ -6,16 +6,14 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Model\Shipment\FoundShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 final class ShipmentQueryServiceTest extends TestCase
 {
@@ -37,16 +35,16 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame('GET', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/10%3B20', $this->requests[0]['url']);
         self::assertCount(2, $result);
-        self::assertSame(10, $result[0]->getId());
-        self::assertSame(20, $result[1]->getId());
+        self::assertSame(10, $result[0]->id);
+        self::assertSame(20, $result[1]->id);
     }
 
-    public function testFindReturnsFirstShipmentOrNull(): void
+    public function testFindReturnsTheFirstShipment(): void
     {
         $result = $this->createService([['id' => 42]])->find(42);
 
-        self::assertInstanceOf(FoundShipment::class, $result);
-        self::assertSame(42, $result->getId());
+        self::assertInstanceOf(ShipmentDefsShipment::class, $result);
+        self::assertSame(42, $result->id);
     }
 
     public function testFindReturnsNullWhenNoShipmentExists(): void
@@ -85,9 +83,9 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame(['size' => '50'], $this->queryOfRequest(0));
     }
 
-    public function testQueryLeavesOutAFilterWithANullValue(): void
+    public function testQueryLeavesOutAFilterWithANullValueOrAnEmptyString(): void
     {
-        $this->createService([])->query(['barcode' => null, 'reference_identifier' => 'order-1', 'size' => null]);
+        $this->createService([])->query(['barcode' => null, 'q' => '', 'reference_identifier' => 'order-1', 'size' => null]);
 
         self::assertSame(['reference_identifier' => 'order-1'], $this->queryOfRequest(0));
     }
@@ -97,6 +95,26 @@ final class ShipmentQueryServiceTest extends TestCase
         $this->createService([])->query(['carrier_id' => RefTypesCarrier::Postnl]);
 
         self::assertSame(['carrier_id' => '1', 'size' => '300'], $this->queryOfRequest(0));
+    }
+
+    /**
+     * The spec documents a `;`-separated string for `carrier_id` and `status`.
+     */
+    public function testQuerySendsAnArrayFilterAsASemicolonSeparatedString(): void
+    {
+        $this->createService([])->query(['carrier_id' => [RefTypesCarrier::Postnl, RefTypesCarrier::Dpd], 'status' => [1, 2]]);
+
+        self::assertSame(['carrier_id' => '1;4', 'size' => '300', 'status' => '1;2'], $this->queryOfRequest(0));
+    }
+
+    /**
+     * In v11, `false` left the filter out. Now the API gets the filter.
+     */
+    public function testQuerySendsFalseAsZero(): void
+    {
+        $this->createService([])->query(['delivered' => false]);
+
+        self::assertSame(['delivered' => '0', 'size' => '300'], $this->queryOfRequest(0));
     }
 
     public function testQueryThrowsOnUnknownParameter(): void
@@ -113,12 +131,26 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame([], $this->requests);
     }
 
+    public function testQueryThrowsForAValueWithATypeThatTheSpecDoesNotAllow(): void
+    {
+        $service = $this->createService([]);
+
+        try {
+            $service->query(['page' => '2']);
+            self::fail('A string for an integer parameter must throw.');
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('page', $exception->getMessage());
+        }
+
+        self::assertSame([], $this->requests);
+    }
+
     public function testFindByReferenceIdLeavesThePageSizeToTheApi(): void
     {
         $result = $this->createService([['id' => 1001], ['id' => 1002], ['id' => 1003]])->findByReferenceId('ref-a');
 
         self::assertSame(['reference_identifier' => 'ref-a'], $this->queryOfRequest(0));
-        self::assertSame([1001, 1002, 1003], array_map(static fn (FoundShipment $shipment) => $shipment->getId(), $result));
+        self::assertSame([1001, 1002, 1003], array_map(static fn (ShipmentDefsShipment $shipment): int => $shipment->id, $result));
     }
 
     public function testSendsTheUserAgentThatIsSetAfterTheConstructor(): void
@@ -137,7 +169,7 @@ final class ShipmentQueryServiceTest extends TestCase
         }
     }
 
-    public function testRecipientIsRead(): void
+    public function testANestedObjectIsReadAsAModelWithCamelCaseProperties(): void
     {
         $result = $this->createService([[
             'id'        => 1,
@@ -152,62 +184,47 @@ final class ShipmentQueryServiceTest extends TestCase
         ]])->find(1);
 
         self::assertNotNull($result);
-        self::assertSame('Antareslaan', $result->getRecipient()->street);
-        self::assertSame('NL', $result->getRecipient()->cc);
-        self::assertSame('31', $result->getRecipient()->number);
-        self::assertSame('2132JE', $result->getRecipient()->postalCode);
-        self::assertSame('Hoofddorp', $result->getRecipient()->city);
-        self::assertSame('Test Person', $result->getRecipient()->person);
+        self::assertSame('Antareslaan', $result->recipient->street);
+        self::assertSame('NL', $result->recipient->cc);
+        self::assertSame('31', $result->recipient->number);
+        self::assertSame('2132JE', $result->recipient->postalCode);
+        self::assertSame('Hoofddorp', $result->recipient->city);
+        self::assertSame('Test Person', $result->recipient->person);
     }
 
-    public function testAFoundShipmentEncodesToJsonWhenTheApiSendsANullList(): void
+    public function testAnEnumFieldHoldsTheCaseOrTheRawValueThatTheSdkDoesNotKnow(): void
     {
-        $shipment = $this->createService([['id' => 1, 'shipped_items' => null]])->find(1);
+        $service = $this->createService([['id' => 1, 'carrier_id' => 1, 'status' => 2], ['id' => 2, 'carrier_id' => 999, 'status' => 999]]);
 
-        self::assertNull($shipment->getShippedItems());
-        self::assertArrayNotHasKey('shipped_items', json_decode((string) json_encode($shipment), true));
+        [$known, $unknown] = $service->findMany([1, 2]);
+
+        self::assertSame(RefTypesCarrier::Postnl, $known->carrierId);
+        self::assertSame(2, $known->status->value);
+        self::assertSame(999, $unknown->carrierId);
+        self::assertSame(999, $unknown->status);
     }
 
-    /**
-     * CoreApiModels::withoutNullLists() exists because the generated normalizer iterates over a nullable
-     * list that is null. When this test fails, Jane skips such a list: remove that method.
-     */
-    public function testJaneStillIteratesOverANullList(): void
-    {
-        $model               = new ShipmentDefsShipment();
-        $model->shippedItems = null;
-        $warning = null;
-        set_error_handler(static function (int $level, string $message) use (&$warning): bool {
-            $warning = $message;
-
-            return true;
-        });
-
-        try {
-            (new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]))->normalize($model, 'json', ['skip_validation' => true]);
-        } finally {
-            restore_error_handler();
-        }
-
-        self::assertStringContainsString(
-            'foreach() argument must be of type array|object, null given',
-            (string) $warning,
-            'Jane now skips a null list. Remove CoreApiModels::withoutNullLists().'
-        );
-    }
-
-    public function testAGetterReturnsNullForAFieldThatTheApiDidNotSend(): void
+    public function testAFieldThatTheApiDidNotSendIsNotInitialized(): void
     {
         $result = $this->createService([['id' => 1]])->find(1);
 
         self::assertNotNull($result);
-        self::assertNull($result->getBarcode());
-        self::assertNull($result->getRecipient());
-        self::assertFalse($result->getDelayed());
+        self::assertFalse(isset($result->barcode));
+        self::assertFalse(isset($result->recipient));
+        self::assertFalse($result->delayed);
+    }
+
+    public function testFindThrowsForABodyThatIsNotJson(): void
+    {
+        $service = $this->createService([], 'not json');
+
+        $this->expectException(NotEncodableValueException::class);
+
+        $service->find(1);
     }
 
     /**
-     * The spec allows a region of two upper-case letters or `Wereld`.
+     * A sample of the regions that the spec allows: two upper-case letters or `Wereld`.
      *
      * @return array<string, array{string}>
      */
@@ -219,25 +236,22 @@ final class ShipmentQueryServiceTest extends TestCase
     /**
      * @dataProvider provideRegions
      */
-    public function testAFoundShipmentEncodesToJsonWithEveryRegion(string $region): void
+    public function testAShipmentIsReadWithEachRegionOfTheSample(string $region): void
     {
         $result = $this->createService([['id' => 1, 'region' => $region]])->find(1);
 
         self::assertNotNull($result);
-        self::assertSame($region, $result->getRegion());
-
-        $json = json_decode(json_encode($result, JSON_THROW_ON_ERROR), true);
-
-        self::assertSame(1, $json['id']);
-        self::assertSame($region, $json['region']);
+        self::assertSame($region, $result->region);
+        self::assertSame($region, CoreApiModels::toArray($result)['region']);
     }
 
     /**
      * @param array<int, array<string, mixed>> $shipments The shipments in the response.
+     * @param string|null                      $body      A body that replaces the encoded shipments.
      */
-    private function createService(array $shipments): ShipmentQueryService
+    private function createService(array $shipments, ?string $body = null): ShipmentQueryService
     {
-        $body = json_encode(['data' => ['shipments' => $shipments, 'results' => count($shipments)]], JSON_THROW_ON_ERROR);
+        $body ??= json_encode(['data' => ['shipments' => $shipments, 'results' => count($shipments)]], JSON_THROW_ON_ERROR);
 
         $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body): MockResponse {
             $this->requests[] = ['method' => $method, 'url' => $url, 'headers' => $options['headers']];
