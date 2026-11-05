@@ -14,7 +14,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedRetu
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
-use MyParcelNL\Sdk\Client\Jane\PostReturnShipments;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -64,11 +63,12 @@ final class ReturnShipmentService
         $request       = new ShipmentPostReturnShipmentsRequest();
         $request->data = CoreApiModels::withoutNullUntypedProperties($data);
 
-        return $this->mapCreatedShipments($this->api->executeEndpoint(new PostReturnShipments(
-            $request,
-            $sendMail,
-            ['User-Agent' => $this->getUserAgentHeader()]
-        )));
+        // The spec types `send_return_mail` as an integer, 0 or 1.
+        return $this->mapCreatedShipments($this->api->postShipments(
+            requestBody: $request,
+            queryParameters: ['send_return_mail' => $sendMail ? 1 : 0],
+            headerParameters: ['User-Agent' => $this->getUserAgentHeader()]
+        ));
     }
 
     /**
