@@ -36,7 +36,7 @@ final class WebhookServiceTest extends TestCase
         self::assertSame('POST', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/webhook_subscriptions', $this->requests[0]['url']);
         self::assertSame(['application/json;version=1.1'], $this->requests[0]['content_type']);
-        self::assertSame(['User-Agent: ' . $service->getUserAgentHeader()], $this->requests[0]['user_agent']);
+        self::assertSame(['User-Agent: MyPlugin/1.0'], $this->requests[0]['user_agent']);
         self::assertJsonStringEqualsJsonString(
             '{"data":{"webhook_subscriptions":[{"hook":"shipment_status_change","url":"https://example.com/webhook"}]}}',
             $this->requests[0]['body']
@@ -163,6 +163,6 @@ final class WebhookServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new WebhookService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new WebhookService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 }
