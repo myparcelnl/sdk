@@ -38,7 +38,7 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame('GET', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipment_labels/101%3B102?format=A4&positions=2%3B3%3B4', $this->requests[0]['url']);
         self::assertSame(['application/vnd.shipment_label_link+json'], $this->requests[0]['accept']);
-        self::assertNotEmpty($this->requests[0]['user_agent']);
+        self::assertSame(['User-Agent: MyPlugin/1.0'], $this->requests[0]['user_agent']);
         self::assertSame('https://api.myparcel.nl/pdfs/download/101;102', $result);
         self::assertSame($result, $service->getLinkOfLabels());
     }
@@ -165,6 +165,6 @@ final class ShipmentLabelsServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
         });
 
-        return new ShipmentLabelsService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new ShipmentLabelsService('my-api-key', JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 }
