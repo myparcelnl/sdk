@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\Services\Capabilities;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 
@@ -38,7 +38,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
         return $this->client->getCapabilities($request);
     }
 
-    public function fromShipment(Shipment $shipment): CapabilitiesResponse
+    public function fromShipment(ShipmentItem $shipment): CapabilitiesResponse
     {
         return $this->get(CapabilitiesRequest::fromShipment($shipment));
     }

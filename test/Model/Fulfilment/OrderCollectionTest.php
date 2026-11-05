@@ -6,8 +6,10 @@ namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
 use DateTime;
 use Faker\Factory;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
@@ -15,7 +17,6 @@ use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\Model\Fulfilment\Product;
 use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\Model\Recipient;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -93,14 +94,15 @@ class OrderCollectionTest extends TestCase
         // 3 orders
         for ($i = 0; $i < 3; $i++) {
             $deliveryTypes = [
-                RefTypesDeliveryTypeV2::MORNING,
-                RefTypesDeliveryTypeV2::STANDARD,
-                RefTypesDeliveryTypeV2::EVENING,
+                RefTypesDeliveryType::Morning,
+                RefTypesDeliveryType::Standard,
+                RefTypesDeliveryType::Evening,
             ];
-            $shipmentOptions = (new ShipmentOptions())
-                ->setDeliveryDate((new \DateTime())->format('Y-m-d H:i:s'))
-                ->setDeliveryType($deliveryTypes[$i])
-                ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+            $shipmentOptions = CoreApiModels::toModel([
+                'delivery_date' => (new \DateTime())->format('Y-m-d H:i:s'),
+                'delivery_type' => $deliveryTypes[$i]->value,
+                'package_type'  => RefShipmentPackageType::Package->value,
+            ], ShipmentOptionsModel::class);
 
             $order      = $this->generateOrder($shipmentOptions);
             $order->setCarrierId(1);
@@ -178,9 +180,10 @@ class OrderCollectionTest extends TestCase
     {
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
-        $shipmentOptions = (new ShipmentOptions())
-            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type' => RefTypesDeliveryType::Standard->value,
+            'package_type'  => RefShipmentPackageType::Package->value,
+        ], ShipmentOptionsModel::class);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();
@@ -252,7 +255,7 @@ class OrderCollectionTest extends TestCase
     public function testToArrayContainsTheCustomsDeclaration(): void
     {
         $this->faker = Factory::create('nl_NL');
-        $order       = $this->generateOrder(new ShipmentOptions())
+        $order       = $this->generateOrder(new ShipmentOptionsModel())
             ->setCarrierId(1)
             ->setOrderLines($this->generateOrderLines())
             ->setCustomsDeclaration($this->generateCustomsDeclaration('catalog_item_abc123def456g'));
@@ -277,9 +280,10 @@ class OrderCollectionTest extends TestCase
     {
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
-        $shipmentOptions = (new ShipmentOptions())
-            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type' => RefTypesDeliveryType::Standard->value,
+            'package_type'  => RefShipmentPackageType::Package->value,
+        ], ShipmentOptionsModel::class);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();
@@ -328,12 +332,9 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
-     *
-     * @return \MyParcelNL\Sdk\Model\Fulfilment\Order
      * @throws \Exception
      */
-    protected function generateOrder(ShipmentOptions $deliveryOptions): Order
+    protected function generateOrder(ShipmentOptionsModel $deliveryOptions): Order
     {
         return (new Order())
             ->setStatus($this->faker->randomElement(['open', 'processing', 'completed']))

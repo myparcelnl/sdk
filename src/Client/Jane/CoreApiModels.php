@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Client\Jane;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject;
 use ReflectionObject;
 use ReflectionProperty;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -13,27 +14,40 @@ use Symfony\Component\Serializer\Serializer;
 use UnitEnum;
 
 /**
- * Converts an array with the API field names, such as `postal_code`, to a Jane Core API model and back.
+ * Converts the models of the generated Core API client.
  *
- * The SDK models accept an array, as in v11. The generated client validates the request when it
- * goes out, so the conversion here skips the validation.
- *
- * @internal
+ * A generated model has public properties with camelCase names, such as `postalCode`. toModel()
+ * fills a model from an array with the API field names, such as `postal_code`, and toArray()
+ * encodes a model as such an array. copy() copies a model with its nested models.
  */
 final class CoreApiModels
 {
+    /**
+     * The generated normalizer validates a model against the spec in both directions. This context
+     * skips that. The generated client validates a request when it goes out, and a model that comes
+     * from the API can hold a value that the SDK does not know, such as a new enum value.
+     */
     private const CONTEXT = ['skip_validation' => true];
-    private const MODEL_NAMESPACE = 'MyParcelNL\\Sdk\\Client\\Generated\\Jane\\CoreApi\\Model\\';
+
+    private static ?JaneObjectNormalizer $normalizer = null;
 
     private static ?Serializer $serializer = null;
 
     /**
+     * Fill a model from an array with the API field names, such as `['cc' => 'NL', 'postal_code' => '2132JE']`.
+     *
+     * A nested object is an array too, such as `['recipient' => ['cc' => 'NL']]`. A model that comes
+     * in is returned as it is. The values are not checked here: the generated client checks the
+     * request when it goes out.
+     *
      * @template T of object
      *
      * @param array<string, mixed>|T|null $value
      * @param class-string<T>             $class
      *
      * @return T|null
+     *
+     * @throws InvalidArgumentException For an object of another class.
      */
     public static function toModel(array|object|null $value, string $class): ?object
     {
@@ -49,6 +63,8 @@ final class CoreApiModels
     }
 
     /**
+     * Fill a list of models, see toModel().
+     *
      * @template T of object
      *
      * @param array<array<string, mixed>|T>|null $values
@@ -66,17 +82,20 @@ final class CoreApiModels
     }
 
     /**
-     * @return array<string, mixed> The fields that are set, with the API field names. A field that the
-     *                              API sent as null is null.
+     * Encode a model as an array with the API field names, such as `postal_code`.
+     *
+     * @return array<string, mixed> The fields that hold a value, with a nested model as an array. A
+     *                              field that nobody set is left out. A field that the API sent as
+     *                              null is null.
      */
     public static function toArray(object $model): array
     {
-        return (array) self::serializer()->normalize($model, 'json', self::CONTEXT);
+        return (array) self::arrays(self::serializer()->normalize($model, 'json', self::CONTEXT));
     }
 
     /**
      * Copy a model with its nested models and lists, so a change to the copy does not change the
-     * original. `clone` copies only the top level of a Jane model.
+     * original. `clone` copies only the top level of a model.
      *
      * @template T of object
      *
@@ -97,24 +116,15 @@ final class CoreApiModels
         return $copy;
     }
 
-    private static function copyValue(mixed $value): mixed
-    {
-        if (is_array($value)) {
-            return array_map(static fn (mixed $item): mixed => self::copyValue($item), $value);
-        }
-
-        return is_object($value) && ! $value instanceof UnitEnum ? self::copy($value) : $value;
-    }
-
     /**
      * Remove each property without a type that is null, in the model and in its nested models.
      *
-     * Jane generates a property without a type for a field with more than one type, such as the
-     * `email` of a recipient. PHP sets such a property to null, so the normalizer sends the field as
-     * null, also when nobody set it. The validation then rejects the request.
+     * Jane generates a property without a type for a field with `anyOf` or more than one type, such
+     * as the `email` of a recipient. PHP sets such a property to null, so the normalizer sends the
+     * field as null, also when nobody set it. The validation then rejects the request.
      *
-     * @todo Remove this method when a Jane release contains janephp#1141 and the client is generated
-     *       again. `CoreApiModelsTest::testJaneStillSendsAnUnsetRecipientEmailAsNull` then fails.
+     * @todo Remove this method when a Jane release contains janephp/janephp#1141 and the client is
+     *       generated again.
      *
      * @template T of object
      *
@@ -138,7 +148,7 @@ final class CoreApiModels
             }
 
             foreach (is_array($value) ? $value : [$value] as $item) {
-                if (is_object($item) && str_starts_with($item::class, self::MODEL_NAMESPACE) && ! $item instanceof UnitEnum) {
+                if (self::isModel($item)) {
                     self::withoutNullUntypedProperties($item);
                 }
             }
@@ -147,13 +157,43 @@ final class CoreApiModels
         return $model;
     }
 
-    private static function serializer(): Serializer
+    private static function copyValue(mixed $value): mixed
     {
-        return self::$serializer ??= new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]);
+        if (is_array($value)) {
+            return array_map(static fn (mixed $item): mixed => self::copyValue($item), $value);
+        }
+
+        return is_object($value) && ! $value instanceof UnitEnum ? self::copy($value) : $value;
     }
 
+    private static function serializer(): Serializer
+    {
+        return self::$serializer ??= new Serializer([new ArrayDenormalizer(), self::normalizer()]);
+    }
+
+    private static function normalizer(): JaneObjectNormalizer
+    {
+        return self::$normalizer ??= new JaneObjectNormalizer();
+    }
+
+    /**
+     * The generated normalizer returns a model as a JsonObject. Convert it and the nested models to
+     * arrays.
+     */
+    private static function arrays(mixed $value): mixed
+    {
+        if ($value instanceof JsonObject) {
+            $value = $value->toArray();
+        }
+
+        return is_array($value) ? array_map([self::class, 'arrays'], $value) : $value;
+    }
+
+    /**
+     * A generated model is an object that the generated normalizer knows. An enum is not.
+     */
     private static function isModel(mixed $value): bool
     {
-        return is_object($value) && str_starts_with($value::class, self::MODEL_NAMESPACE) && ! $value instanceof UnitEnum;
+        return self::normalizer()->supportsNormalization($value);
     }
 }

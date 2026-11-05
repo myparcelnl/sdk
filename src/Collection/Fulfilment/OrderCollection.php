@@ -9,10 +9,10 @@ use DateTime;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuroCurrency;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Support\Arr;
@@ -137,41 +137,42 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $options
+     * Build the `shipment.options` of the Order v1 request from the generated model.
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws \Exception
      */
-    private function getShipmentOptions(ShipmentOptions $options): array
+    private function getShipmentOptions(ShipmentOptionsModel $options): array
     {
-        $deliveryDate = $options->getDeliveryDate();
+        $deliveryDate = $options->deliveryDate ?? null;
 
         if ($deliveryDate) {
-            $date         = new DateTime($deliveryDate);
-            $deliveryDate = $date->format(AbstractOrder::DATE_FORMAT_FULL);
+            $deliveryDate = (new DateTime($deliveryDate))->format(AbstractOrder::DATE_FORMAT_FULL);
         }
 
+        $packageType = $options->packageType ?? null;
+
         $result = [
-            'package_type'      => $options->getPackageType(),
-            'delivery_type'     => $options->getDeliveryType(),
+            'package_type'      => $packageType instanceof BackedEnum ? $packageType->value : $packageType,
+            'delivery_type'     => $options->deliveryType ?? null,
             'delivery_date'     => $deliveryDate ?: null,
-            'signature'         => (int) $options->getSignature(),
-            'collect'           => (int) $options->getCollect(),
-            'receipt_code'      => (int) $options->getReceiptCode(),
-            'only_recipient'    => (int) $options->getOnlyRecipient(),
-            'age_check'         => (int) $options->getAgeCheck(),
-            'large_format'      => (int) $options->getLargeFormat(),
-            'return'            => (int) $options->getReturn(),
-            'priority_delivery' => (int) $options->getPriorityDelivery(),
-            'label_description' => (string) $options->getLabelDescription(),
+            'signature'         => (int) ($options->signature ?? 0),
+            'collect'           => (int) ($options->collect ?? 0),
+            'receipt_code'      => (int) ($options->receiptCode ?? 0),
+            'only_recipient'    => (int) ($options->onlyRecipient ?? 0),
+            'age_check'         => (int) ($options->ageCheck ?? 0),
+            'large_format'      => (int) ($options->largeFormat ?? 0),
+            'return'            => (int) ($options->return ?? 0),
+            'priority_delivery' => (int) ($options->priorityDelivery ?? 0),
+            'label_description' => (string) ($options->labelDescription ?? ''),
         ];
 
-        $insurance = $options->getInsurance();
+        if (isset($options->insurance)) {
+            $currency = $options->insurance->currency ?? RefTypesPriceEuroCurrency::Eur;
 
-        if ($insurance instanceof RefTypesPriceEuro) {
             $result['insurance'] = [
-                'amount'   => (int) ($insurance->amount ?? 0),
-                'currency' => ($insurance->currency ?? null) instanceof BackedEnum ? $insurance->currency->value : ($insurance->currency ?? 'EUR'),
+                'amount'   => (int) ($options->insurance->amount ?? 0),
+                'currency' => $currency instanceof BackedEnum ? $currency->value : $currency,
             ];
         }
 

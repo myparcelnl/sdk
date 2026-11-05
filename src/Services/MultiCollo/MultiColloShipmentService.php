@@ -4,55 +4,64 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\MultiCollo;
 
-use InvalidArgumentException;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem as SecondaryShipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemPhysicalProperties as SecondaryPhysicalProperties;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 
+/**
+ * Splits a shipment into a multi-collo shipment.
+ */
 final class MultiColloShipmentService
 {
     /**
-     * Split a shipment into a multi-collo shipment with secondary shipments.
+     * Split a shipment into a main shipment with secondary shipments.
      *
-     * Clones the input shipment, reuses (or generates) a shared reference identifier
-     * across all colli, and distributes weight evenly across the main and secondary
-     * shipments. The returned shipment has secondary_shipments populated and is ready
-     * for ShipmentCreateService::create().
+     * The method returns a copy of the shipment, so the shipment itself does not change. The copy
+     * and its secondary shipments share one reference identifier: the one of the shipment, or a
+     * new one that starts with `multi_collo_`. The weight is divided over the main and the
+     * secondary shipments. The copy is ready for ShipmentCreateService::create().
      *
-     * @param int $amount Total number of collo pieces (including the main shipment).
+     * @param int $amount The number of colli, including the main shipment.
      */
-    public function splitShipment(Shipment $shipment, int $amount): Shipment
+    public function splitShipment(ShipmentItem $shipment, int $amount): ShipmentItem
     {
-
-        $main = clone $shipment;
-        $referenceId = $this->resolveReferenceIdentifier($main->getReferenceIdentifier());
-        $main->setReferenceIdentifier($referenceId);
-        $carrier = $main->getCarrier();
-
-        $weightPerCollo = $this->resolveWeightPerCollo($main, $amount);
-        if (null !== $weightPerCollo) {
-            $main->setPhysicalProperties(['weight' => $weightPerCollo]);
-        }
-
-        $secondary = ['reference_identifier' => $referenceId];
-
-        if (null !== $carrier) {
-            $secondary['carrier'] = $carrier;
-        }
+        $main                      = CoreApiModels::copy($shipment);
+        $referenceId               = $this->resolveReferenceIdentifier($main->referenceIdentifier ?? null);
+        $main->referenceIdentifier = $referenceId;
+        $weightPerCollo            = $this->resolveWeightPerCollo($main, $amount);
 
         if (null !== $weightPerCollo) {
-            $secondary['physical_properties'] = ['weight' => $weightPerCollo];
+            $main->physicalProperties->weight = $weightPerCollo;
         }
 
-        $secondaryShipments = array_fill(0, max(0, $amount - 1), $secondary);
+        $main->secondaryShipments = [];
 
-        $main->setSecondaryShipments($secondaryShipments);
+        for ($i = 1; $i < $amount; $i++) {
+            $main->secondaryShipments[] = $this->secondaryShipment($main, $referenceId, $weightPerCollo);
+        }
 
         return $main;
     }
 
-    /**
-     * @param mixed $referenceIdentifier
-     */
-    private function resolveReferenceIdentifier($referenceIdentifier): string
+    private function secondaryShipment(ShipmentItem $main, string $referenceId, ?int $weightPerCollo): SecondaryShipment
+    {
+        $secondary                      = new SecondaryShipment();
+        $secondary->referenceIdentifier = $referenceId;
+
+        if (isset($main->carrier)) {
+            $secondary->carrier = $main->carrier;
+        }
+
+        if (null !== $weightPerCollo) {
+            $secondary->physicalProperties         = new SecondaryPhysicalProperties();
+            $secondary->physicalProperties->weight = $weightPerCollo;
+        }
+
+        return $secondary;
+    }
+
+    private function resolveReferenceIdentifier(mixed $referenceIdentifier): string
     {
         // A reference identifier can be an int. Only an empty one gets a generated one.
         if (null !== $referenceIdentifier && '' !== trim((string) $referenceIdentifier)) {
@@ -62,14 +71,10 @@ final class MultiColloShipmentService
         return 'multi_collo_' . uniqid('', true);
     }
 
-    private function resolveWeightPerCollo(Shipment $shipment, int $amount): ?int
+    private function resolveWeightPerCollo(ShipmentItem $shipment, int $amount): ?int
     {
-        $physicalProperties = $shipment->getPhysicalProperties();
-        if (null === $physicalProperties) {
-            return null;
-        }
+        $totalWeight = $shipment->physicalProperties->weight ?? 0;
 
-        $totalWeight = $physicalProperties->weight ?? 0;
         if ($totalWeight <= 0) {
             return null;
         }

@@ -30,7 +30,8 @@ final class PostShipmentsDirectPrint extends PostShipments
      */
     public function __construct(ShipmentPostShipmentsRequestV11 $requestBody, string $printerGroupId, array $headerParameters = [])
     {
-        // As in the generated endpoint, the second Accept value lists the error format of the spec.
+        // The second Accept value is the one of the generated endpoint, so an error can come as
+        // `application/problem+json`. The spec does not say which Accept value the API uses for an error.
         parent::__construct($requestBody, [], $headerParameters, [
             'Accept' => [sprintf(self::ACCEPT, $printerGroupId), 'application/problem+json'],
         ]);
