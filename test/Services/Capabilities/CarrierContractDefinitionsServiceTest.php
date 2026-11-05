@@ -32,7 +32,7 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         self::assertSame('POST', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/capabilities/contract-definitions', $this->requests[0]['url']);
         self::assertSame(['application/json;version=2.0'], $this->requests[0]['content_type']);
-        self::assertSame(['User-Agent: ' . $service->getUserAgentHeader()], $this->requests[0]['user_agent']);
+        self::assertSame(['User-Agent: MyPlugin/1.0'], $this->requests[0]['user_agent']);
         self::assertSame([], $this->requests[0]['body']);
         self::assertSame(
             [RefCapabilitiesSharedCarrierV2::Postnl, RefCapabilitiesSharedCarrierV2::Inpost],
@@ -61,6 +61,18 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         } catch (ValidationException) {
             self::assertSame([], $this->requests);
         }
+    }
+
+    /**
+     * INT-2033 asks that an unknown enum value in a response gives no exception. The client reads a
+     * response without validation, so the raw string comes back.
+     */
+    public function testGetContractDefinitionsKeepsAValueThatTheSdkDoesNotKnow(): void
+    {
+        $definitions = $this->createService('{"items":[{"carrier":"FUTURE_CARRIER","packageTypes":["FUTURE_PACKAGE"]}]}')->getContractDefinitions();
+
+        self::assertSame('FUTURE_CARRIER', $definitions[0]->carrier);
+        self::assertSame(['FUTURE_PACKAGE'], $definitions[0]->packageTypes);
     }
 
     public function testGetContractDefinitionsReturnsAnEmptyListWithoutItems(): void
@@ -106,7 +118,7 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         return new CarrierContractDefinitionsService(
             'my-api-key',
             null,
-            ShipmentApiFactory::client('my-api-key', null, null, [], $httpClient)
+            ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0', [], $httpClient)
         );
     }
 }

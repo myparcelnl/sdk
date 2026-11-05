@@ -12,6 +12,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapa
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponseCapabilityV2 as CoreCapabilityV2;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
+use MyParcelNL\Sdk\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -19,7 +20,9 @@ use ReflectionProperty;
  * Maps a CapabilitiesRequest to the Jane request model, and the Jane response model to a CapabilitiesResponse.
  *
  * The v2 capabilities API uses camelCase field names, such as `physicalProperties`. A
- * CapabilitiesRequest takes snake_case keys, such as `is_business`, as in v11.
+ * CapabilitiesRequest takes the keys of the SDK, such as `is_business` or `isBusiness`. The mapper
+ * converts each key of `sender`, `physical_properties` and `pickup` to the camelCase name, so the Jane
+ * model owns the field list.
  */
 class CapabilitiesMapper
 {
@@ -135,6 +138,8 @@ class CapabilitiesMapper
     }
 
     /**
+     * Convert the keys of the sender to the camelCase names of the Jane model, such as `postalCode`.
+     *
      * @param array<string, mixed>|null $senderData
      *
      * @return array<string, mixed>|null
@@ -145,17 +150,7 @@ class CapabilitiesMapper
             return null;
         }
 
-        $sender = [];
-
-        if (array_key_exists('country_code', $senderData)) {
-            $sender['countryCode'] = $senderData['country_code'];
-        }
-
-        if (array_key_exists('is_business', $senderData)) {
-            $sender['isBusiness'] = $senderData['is_business'];
-        }
-
-        return $sender;
+        return self::camelKeys($senderData);
     }
 
     /**
@@ -202,8 +197,9 @@ class CapabilitiesMapper
     }
 
     /**
-     * Keep each dimension that has a value and a unit. The spec types the value as an integer, so a
-     * value that is not whole throws, instead of the silent truncation of PHP.
+     * Keep each dimension that has a value and a unit. The spec types the value as an integer: the
+     * generated normalizer assigns the value to an `int` property, and PHP truncates a float or a
+     * numeric string such as `10.5`. So a value that is not whole throws here.
      *
      * @param array<string, mixed>|null $physicalData
      *
@@ -223,7 +219,7 @@ class CapabilitiesMapper
             $dimension = $physicalData[$name] ?? null;
 
             if (is_array($dimension) && array_key_exists('value', $dimension) && array_key_exists('unit', $dimension)) {
-                // A numeric string, such as '10.5', would pass the generated normalizer too, which truncates it.
+                // A numeric string passes is_numeric() too, and PHP truncates it in the same way.
                 if (is_numeric($dimension['value']) && (float) $dimension['value'] !== floor((float) $dimension['value'])) {
                     throw new InvalidArgumentException(sprintf('The %s of the physical properties must be a whole number, %s given.', $name, $dimension['value']));
                 }
@@ -243,15 +239,15 @@ class CapabilitiesMapper
      */
     private static function physicalPropertyNames(): array
     {
-        $names = array_map(
+        return array_map(
             static fn (ReflectionProperty $property): string => $property->getName(),
             (new ReflectionClass(CapabilitiesPostCapabilitiesRequestV2PhysicalProperties::class))->getProperties(ReflectionProperty::IS_PUBLIC)
         );
-
-        return array_values(array_diff($names, ['extraProperties']));
     }
 
     /**
+     * Convert the keys of the pickup to the camelCase names of the Jane model, in `location` too.
+     *
      * @param array<string, mixed>|null $pickupData
      *
      * @return array<string, mixed>|null
@@ -262,15 +258,25 @@ class CapabilitiesMapper
             return null;
         }
 
-        $pickup = [];
+        return self::camelKeys($pickupData);
+    }
 
-        if (isset($pickupData['location']) && is_array($pickupData['location'])) {
-            $pickup['location'] = array_key_exists('type', $pickupData['location'])
-                ? ['type' => $pickupData['location']['type']]
-                : [];
+    /**
+     * Convert each key to camelCase, in the nested arrays too. A camelCase key stays as it is.
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private static function camelKeys(array $data): array
+    {
+        $result = [];
+
+        foreach ($data as $key => $value) {
+            $result[is_string($key) ? Str::camel($key) : $key] = is_array($value) ? self::camelKeys($value) : $value;
         }
 
-        return $pickup;
+        return $result;
     }
 
     /**
