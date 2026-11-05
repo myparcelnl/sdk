@@ -41,13 +41,12 @@ final class ShipmentTrackTraceServiceTest extends TestCase
             ['shipment_id' => 123, 'link_tracktrace' => 'https://track.test/123', 'code' => 'DELIVERED'],
             ['shipment_id' => 456, 'link_tracktrace' => 'https://track.test/456', 'code' => 'IN_TRANSIT'],
         ]);
-        $service->setUserAgentForProposition('Magento', '2.4.7');
 
         $result = $service->fetchTrackTraceData([123, 456]);
 
         self::assertSame('GET', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/tracktraces/123%3B456', $this->requests[0]['url']);
-        self::assertContains('User-Agent: ' . $service->getUserAgentHeader(), $this->requests[0]['headers']);
+        self::assertContains('User-Agent: MyPlugin/1.0', $this->requests[0]['headers']);
         self::assertSame([123, 456], array_keys($result));
         self::assertInstanceOf(ShipmentDefsTrackTrace::class, $result[123]);
         self::assertSame('https://track.test/123', $result[123]->linkTracktrace);
@@ -127,6 +126,6 @@ final class ShipmentTrackTraceServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new ShipmentTrackTraceService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new ShipmentTrackTraceService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 }

@@ -18,14 +18,23 @@ final class ShipmentTrackTraceService
 {
     use HasUserAgent;
 
-    private Client $api;
+    private ?Client $api;
 
+    private string $apiKey;
+
+    private ?string $host;
+
+    /**
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     */
     public function __construct(
         string $apiKey,
         ?Client $api = null,
         ?string $baseUri = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $baseUri);
+        $this->apiKey = $apiKey;
+        $this->api    = $api;
+        $this->host   = $baseUri;
     }
 
     /**
@@ -44,10 +53,7 @@ final class ShipmentTrackTraceService
         }
 
         /** @var ShipmentResponsesTracktraces|null $response */
-        $response = $this->api->getTrackTracesByIds(
-            ids: implode(';', $shipmentIds),
-            headerParameters: $this->headerParameters()
-        );
+        $response = $this->api()->getTrackTracesByIds(ids: implode(';', $shipmentIds));
 
         $result = [];
 
@@ -58,5 +64,14 @@ final class ShipmentTrackTraceService
         }
 
         return $result;
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }

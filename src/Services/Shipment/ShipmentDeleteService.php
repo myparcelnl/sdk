@@ -15,11 +15,23 @@ final class ShipmentDeleteService
 {
     use HasUserAgent;
 
-    private Client $api;
+    private ?Client $api;
 
-    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
-    {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
+    private string $apiKey;
+
+    private ?string $host;
+
+    /**
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     */
+    public function __construct(
+        string $apiKey,
+        ?Client $api = null,
+        ?string $host = null
+    ) {
+        $this->apiKey = $apiKey;
+        $this->api    = $api;
+        $this->host   = $host;
     }
 
     /**
@@ -35,6 +47,15 @@ final class ShipmentDeleteService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        $this->api->deleteShipments(ids: $ids, headerParameters: $this->headerParameters());
+        $this->api()->deleteShipments(ids: $ids);
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }

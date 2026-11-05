@@ -27,14 +27,13 @@ final class ShipmentDeleteServiceTest extends TestCase
     public function testDeleteManySendsOneRequestWithAllIds(): void
     {
         $service = $this->createService();
-        $service->setUserAgentForProposition('Magento', '2.4.7');
 
         $service->deleteMany([10, 20]);
 
         self::assertCount(1, $this->requests);
         self::assertSame('DELETE', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/10%3B20', $this->requests[0]['url']);
-        self::assertContains('User-Agent: ' . $service->getUserAgentHeader(), $this->requests[0]['headers']);
+        self::assertContains('User-Agent: MyPlugin/1.0', $this->requests[0]['headers']);
     }
 
     private function createService(): ShipmentDeleteService
@@ -45,6 +44,6 @@ final class ShipmentDeleteServiceTest extends TestCase
             return new MockResponse('', ['http_code' => 204]);
         });
 
-        return new ShipmentDeleteService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new ShipmentDeleteService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 }
