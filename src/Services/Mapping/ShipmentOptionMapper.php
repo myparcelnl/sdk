@@ -79,7 +79,7 @@ final class ShipmentOptionMapper
             return $property;
         }
 
-        // A snake_case name, a case variant or a name with spaces also resolves, as it did in v11.
+        // A snake_case name, a case variant or a name with spaces also resolves.
         $normalised = strtolower(str_replace(['_', ' '], '', $property));
 
         foreach ($properties as $candidate) {
