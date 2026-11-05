@@ -81,13 +81,13 @@ final class JaneClientFactory
     /**
      * Create an IAM API client.
      *
-     * The IAM spec calls the bearer scheme `jwt`. It accepts the same encoded API key as the Core API.
+     * IAM accepts the base64-encoded API key as the bearer token of its `jwt` scheme.
      *
      * @param string                   $apiKey     The API key as the Backoffice shows it. This method encodes it.
      * @param string|null              $host       Overrides the IAM API host. An empty string uses the default.
      * @param string|null              $userAgent  Sent as the User-Agent on every request.
      * @param array<string, string>    $headers    Sent on every request.
-     * @param HttpClientInterface|null $httpClient Sends the requests. Tests pass a MockHttpClient.
+     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout.
      */
     public static function iamApi(
         string $apiKey,
@@ -109,8 +109,8 @@ final class JaneClientFactory
     }
 
     /**
-     * The serializer of the IAM client, for a service that reads a response that the client returns
-     * as decoded JSON, such as the whoami response.
+     * Get the serializer of the IAM client, to read a response that the client returns as decoded
+     * JSON, such as the whoami response.
      *
      * @todo Make this method private when Jane generates a model for the whoami response and
      *       ApiKeyService::principalClass() goes.

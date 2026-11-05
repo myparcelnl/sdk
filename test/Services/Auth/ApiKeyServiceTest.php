@@ -92,6 +92,14 @@ final class ApiKeyServiceTest extends TestCase
         $service->getPrincipal();
     }
 
+    /**
+     * A 200 proves the key. Only getPrincipal() needs a type that the SDK knows.
+     */
+    public function testIsValidReturnsTrueForAPrincipalTypeThatTheSdkDoesNotKnow(): void
+    {
+        self::assertTrue($this->createService(['type' => 'SERVICE'] + self::SHOP_PRINCIPAL)->isValid());
+    }
+
     public function testIsValidReturnsTrueWhenWhoamiSucceeds(): void
     {
         self::assertTrue($this->createService(self::SHOP_PRINCIPAL)->isValid());
