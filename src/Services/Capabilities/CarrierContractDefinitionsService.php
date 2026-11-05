@@ -23,29 +23,36 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  * Use CapabilitiesService for shipment-specific capability checks based on
  * address, weight and shipment options.
  *
- * The service adds little to the Jane client, but it keeps the API of v11. So v11 code that calls
- * it keeps working. It stays as long as the SDK keeps the v11 service API.
+ * The client that the service or ShipmentApiFactory creates reads a response without validation, so
+ * a new carrier in the API does not break the call. A client from the generated `Client::create()`
+ * validates the response, and throws for a carrier that the SDK does not know.
  */
 final class CarrierContractDefinitionsService
 {
     use HasUserAgent;
 
-    private Client $api;
+    private ?Client $api;
+
+    private string $apiKey;
+
+    private ?string $host;
 
     /**
-     * @param string      $apiKey API key used when creating the default generated client.
-     *                            Ignored when a preconfigured $api is passed.
-     * @param string|null $host   Optional host override used when creating the default generated client.
-     *                            Ignored when a preconfigured $api is passed.
-     * @param Client|null $api    Optional preconfigured generated client, primarily for tests or custom transports.
-     *                            When provided, it is used as-is.
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     *
+     * @param string      $apiKey The API key of the client that the service creates.
+     * @param string|null $host   The host of the client that the service creates.
+     * @param Client|null $api    A client with its own API key, host, headers or User-Agent, such as one
+     *                            from ShipmentApiFactory. With a client, `$apiKey` and `$host` are not used.
      */
     public function __construct(
         string $apiKey,
         ?string $host = null,
         ?Client $api = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host, $this->getUserAgentHeader());
+        $this->apiKey = $apiKey;
+        $this->host   = $host;
+        $this->api    = $api;
     }
 
     /**
@@ -55,9 +62,9 @@ final class CarrierContractDefinitionsService
      * to filter the API request. Omit $carrier to fetch all contract definitions for the account.
      *
      * The results are the Jane models. `carrier`, `packageTypes`, `deliveryTypes` and `transactionTypes`
-     * hold an enum case, or the raw string for a value that the SDK does not know, so a new carrier in
-     * the API does not break the call. Compare with the enum case, because `->value` fails on a raw
-     * string.
+     * hold an enum case, or the raw string for a value that the SDK does not know, with the client that
+     * the service or ShipmentApiFactory creates. So a new carrier in the API does not break the call.
+     * Compare with the enum case, because `->value` fails on a raw string.
      *
      * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|string|null $carrier Optional carrier.
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
@@ -74,10 +81,7 @@ final class CarrierContractDefinitionsService
             $request->carrier = $carrier;
         }
 
-        $response = $this->api->postCapabilitiesContractDefinitions(
-            requestBody: $request,
-            headerParameters: $this->headerParameters()
-        );
+        $response = $this->api()->postCapabilitiesContractDefinitions(requestBody: $request);
 
         // The generated method declares the v1 and the v2 response. The request asks for v2, so this
         // check only narrows the type.
@@ -88,5 +92,14 @@ final class CarrierContractDefinitionsService
         }
 
         return $response->items ?? [];
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }

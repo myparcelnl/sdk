@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\CoreApi;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
@@ -20,8 +21,7 @@ final class HttpCapabilitiesClientTest extends TestCase
     private array $requests = [];
 
     /**
-     * v11 passed the User-Agent as the request body. This test checks the request that goes out. The
-     * client that the caller passes keeps its own User-Agent.
+     * The request goes out as the body, and the client that the caller passes keeps its own User-Agent.
      */
     public function testGetCapabilitiesSendsTheRequestAndReadsTheResponse(): void
     {
@@ -43,6 +43,35 @@ final class HttpCapabilitiesClientTest extends TestCase
         self::assertSame(['STANDARD_DELIVERY'], $response->getDeliveryTypes());
         self::assertSame(['B2C'], $response->getTransactionTypes());
         self::assertSame(5, $response->getColloMax());
+    }
+
+    /**
+     * INT-2033 asks that an unknown enum value in a response gives no exception. The client reads a
+     * response without validation, so the raw strings come back.
+     */
+    public function testGetCapabilitiesKeepsValuesThatTheSdkDoesNotKnow(): void
+    {
+        $client = $this->createClient(
+            '{"results":[{"carrier":"FUTURE_CARRIER","packageTypes":["FUTURE_PACKAGE"],"options":{"requiresSignature":{},"futureOption":{}}}]}'
+        );
+
+        $response = $client->getCapabilities(CapabilitiesRequest::forCountry('NL'));
+
+        self::assertSame('FUTURE_CARRIER', $response->getCarrier());
+        self::assertSame(['FUTURE_PACKAGE'], $response->getPackageTypes());
+        self::assertSame(['requiresSignature', 'futureOption'], $response->getShipmentOptions());
+    }
+
+    public function testGetCapabilitiesRejectsACarrierThatTheSpecDoesNotKnowBeforeSending(): void
+    {
+        $client = $this->createClient('{"results":[]}');
+
+        try {
+            $client->getCapabilities(CapabilitiesRequest::forCountry('NL')->withCarrier('FUTURE_CARRIER'));
+            self::fail('An unknown carrier must throw.');
+        } catch (ValidationException) {
+            self::assertSame([], $this->requests);
+        }
     }
 
     public function testAnErrorResponseThrowsTheGeneratedException(): void
