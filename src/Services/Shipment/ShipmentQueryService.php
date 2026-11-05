@@ -21,14 +21,23 @@ final class ShipmentQueryService
 
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
 
-    private Client $api;
+    private ?Client $api;
 
+    private string $apiKey;
+
+    private ?string $host;
+
+    /**
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     */
     public function __construct(
         string $apiKey,
         ?Client $api = null,
         ?string $host = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::client($apiKey, $host);
+        $this->apiKey = $apiKey;
+        $this->api    = $api;
+        $this->host   = $host;
     }
 
     /**
@@ -47,7 +56,7 @@ final class ShipmentQueryService
      */
     public function query(array $parameters = []): array
     {
-        return $this->extractShipments($this->api->getShipments(queryParameters: $this->queryParameters($parameters), headerParameters: $this->headerParameters()));
+        return $this->extractShipments($this->api()->getShipments(queryParameters: $this->queryParameters($parameters)));
     }
 
     /**
@@ -76,7 +85,7 @@ final class ShipmentQueryService
 
         $ids = implode(';', array_map('intval', $shipmentIds));
 
-        return $this->extractShipments($this->api->getShipmentsById(ids: $ids, headerParameters: $this->headerParameters()));
+        return $this->extractShipments($this->api()->getShipmentsById(ids: $ids));
     }
 
     /**
@@ -106,7 +115,7 @@ final class ShipmentQueryService
             $parameters['size'] = self::DEFAULT_QUERY_PAGE_SIZE;
         }
 
-        // A null value or an empty string means "no filter", as in v11. Without this filter, the
+        // A null value or an empty string means "no filter". Without this filter, the
         // generated client sends an empty value, such as `q=`, for a key that allows null, and throws
         // for the other keys. The spec does not document the page size that the API uses without `size`.
         $parameters = array_filter($parameters, static fn (mixed $value): bool => null !== $value && '' !== $value);
@@ -129,6 +138,15 @@ final class ShipmentQueryService
         }
 
         return $value;
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 
     /**

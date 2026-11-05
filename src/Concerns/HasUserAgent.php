@@ -41,18 +41,6 @@ trait HasUserAgent
     }
 
     /**
-     * Build the header parameters of a request to a generated endpoint.
-     *
-     * @return array<string, string>
-     */
-    protected function headerParameters(): array
-    {
-        // Read the User-Agent per request, so a call of setUserAgentForProposition() after the
-        // constructor also reaches the API.
-        return ['User-Agent' => $this->getUserAgentHeader()];
-    }
-
-    /**
      * @param  string      $platform
      * @param  string|null $version
      *

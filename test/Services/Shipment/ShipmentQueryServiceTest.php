@@ -153,7 +153,10 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame([1001, 1002, 1003], array_map(static fn (ShipmentDefsShipment $shipment): int => $shipment->id, $result));
     }
 
-    public function testSendsTheUserAgentThatIsSetAfterTheConstructor(): void
+    /**
+     * A client that the caller passes keeps its own User-Agent, also after setUserAgentForProposition().
+     */
+    public function testKeepsTheUserAgentOfTheClient(): void
     {
         $service = $this->createService([]);
         $service->setUserAgentForProposition('Magento', '2.4.7');
@@ -162,10 +165,7 @@ final class ShipmentQueryServiceTest extends TestCase
         $service->query();
 
         foreach ($this->requests as $request) {
-            $userAgents = preg_grep('/^User-Agent: /i', $request['headers']);
-
-            self::assertCount(1, $userAgents);
-            self::assertStringStartsWith('User-Agent: Magento/2.4.7 MyParcelNL-SDK/', reset($userAgents));
+            self::assertSame(['User-Agent: MyPlugin/1.0'], array_values(preg_grep('/^User-Agent: /i', $request['headers'])));
         }
     }
 
@@ -259,7 +259,7 @@ final class ShipmentQueryServiceTest extends TestCase
             return new MockResponse($body, ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new ShipmentQueryService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, null, [], $httpClient));
+        return new ShipmentQueryService($this->getApiKey(), JaneClientFactory::coreApi('my-api-key', null, 'MyPlugin/1.0', [], $httpClient));
     }
 
     /**
