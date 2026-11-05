@@ -25,14 +25,11 @@ final class PostShipmentsDirectPrint extends PostShipments
 {
     private const ACCEPT = 'application/vnd.shipment_label+json+print;printer-group-id=%s';
 
-    /**
-     * @param array<string, string> $headerParameters
-     */
-    public function __construct(ShipmentPostShipmentsRequestV11 $requestBody, string $printerGroupId, array $headerParameters = [])
+    public function __construct(ShipmentPostShipmentsRequestV11 $requestBody, string $printerGroupId)
     {
         // The second Accept value is the one of the generated endpoint, so an error can come as
         // `application/problem+json`. The spec does not say which Accept value the API uses for an error.
-        parent::__construct($requestBody, [], $headerParameters, [
+        parent::__construct($requestBody, [], [], [
             'Accept' => [sprintf(self::ACCEPT, $printerGroupId), 'application/problem+json'],
         ]);
     }
