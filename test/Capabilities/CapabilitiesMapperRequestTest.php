@@ -64,7 +64,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
     public function testMapToCoreApiMapsSenderAndPhysicalProperties(): void
     {
         $req = CapabilitiesRequest::forCountry('DE')
-            ->withSender(['country_code' => 'DE', 'is_business' => true])
+            ->withSender(['country_code' => 'DE', 'postal_code' => '10115', 'is_business' => true])
             ->withPhysicalProperties([
                 'height' => ['value' => 10, 'unit' => 'cm'],
                 'length' => ['value' => 20, 'unit' => 'cm'],
@@ -75,7 +75,7 @@ final class CapabilitiesMapperRequestTest extends TestCase
 
         $coreReq = (new CapabilitiesMapper())->mapToCoreApi($req);
 
-        $this->assertJsonStringEqualsJsonString('{"countryCode":"DE","isBusiness":true}', self::body($coreReq->sender));
+        $this->assertJsonStringEqualsJsonString('{"countryCode":"DE","postalCode":"10115","isBusiness":true}', self::body($coreReq->sender));
         $this->assertJsonStringEqualsJsonString(
             '{"height":{"value":10,"unit":"cm"},"length":{"value":20,"unit":"cm"},'
             . '"weight":{"value":250,"unit":"g"},"width":{"value":15,"unit":"cm"}}',
@@ -116,6 +116,25 @@ final class CapabilitiesMapperRequestTest extends TestCase
         $this->expectExceptionMessage('The height of the physical properties must be a whole number, 10.5 given.');
 
         (new CapabilitiesMapper())->mapToCoreApi($req);
+    }
+
+    public function testMapToCoreApiAcceptsTheCamelCaseKeysOfTheSender(): void
+    {
+        $req = CapabilitiesRequest::forCountry('DE')->withSender(['countryCode' => 'DE', 'postalCode' => '10115']);
+
+        $coreReq = (new CapabilitiesMapper())->mapToCoreApi($req);
+
+        $this->assertJsonStringEqualsJsonString('{"countryCode":"DE","postalCode":"10115"}', self::body($coreReq->sender));
+    }
+
+    public function testMapToCoreApiSendsANumericStringAsAnInteger(): void
+    {
+        $req = CapabilitiesRequest::forCountry('NL')
+            ->withPhysicalProperties(['weight' => ['value' => '1000', 'unit' => 'g']]);
+
+        $coreReq = (new CapabilitiesMapper())->mapToCoreApi($req);
+
+        $this->assertSame('{"weight":{"value":1000,"unit":"g"}}', self::body($coreReq->physicalProperties));
     }
 
     public function testMapToCoreApiCreatesSenderObjectEvenWhenNoKnownFieldsArePresent(): void
