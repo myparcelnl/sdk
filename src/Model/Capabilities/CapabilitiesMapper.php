@@ -50,7 +50,7 @@ class CapabilitiesMapper
             'pickup'             => $this->mapPickup($request->getPickup()),
         ], static fn($value): bool => null !== $value);
 
-        return CoreApiModels::withoutNullUntypedProperties(CoreApiModels::toModel($data, CoreRequestV2::class));
+        return CoreApiModels::toModel($data, CoreRequestV2::class);
     }
 
     /**
