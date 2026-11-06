@@ -98,21 +98,25 @@ final class JaneClientFactory
     }
 
     /**
-     * Build the serializer with the same normalizers and encoders as the generated Client::create().
-     *
-     * @todo janephp/janephp#1147: call Client::create() when Jane generates validation for requests only.
+     * Build the serializer of the generated Client::create() with two differences, both workarounds.
      */
     private static function createSerializer(
         NormalizerInterface&DenormalizerInterface $normalizer,
         EncoderInterface&DecoderInterface $formEncoder
     ): SkipValidationOnReadSerializer {
-        // Client::create() builds a serializer that validates responses, and a client cannot change
-        // it later. So this factory builds the same parts, wrapped in SkipValidationOnReadSerializer.
-        // Without JSON_PRESERVE_ZERO_FRACTION, a float with a zero fraction, such as the flag 1.0 of a
-        // shipment option, goes out as the integer 1. The spec types the flag as a number, so Jane
-        // makes it a float.
-        // @todo CLOUD-2372: use the default JsonEncode options when the spec types the flags as
-        //       integer, and the client is generated again.
+        // Workaround 1, validation on requests only. Client::create() builds a serializer that also
+        // validates responses, and a client cannot change it later. So this factory builds the same
+        // parts, wrapped in SkipValidationOnReadSerializer.
+        // @todo janephp/janephp#1147: call Client::create() when a Jane release contains
+        //       janephp/janephp#1151, and the config sets 'validation' => ValidationOption::NormalizeOnly.
+        //
+        // Workaround 2, the option flags. The spec types a flag such as `signature` as a number, so
+        // Jane makes it a float, and the API expects the integers 0 and 1. Client::create() keeps
+        // JSON_PRESERVE_ZERO_FRACTION on, so the flag goes out as 1.0. This encoder turns it off:
+        // every float with a zero fraction goes out as an integer. No request body of the Core API
+        // or the IAM API has a number that is a real float, so nothing else changes.
+        // @todo CLOUD-2372: use the JsonEncode options of Client::create() when the spec types the
+        //       flags as integer (mypadev/core-api#5263), and the client is generated again.
         return new SkipValidationOnReadSerializer(
             new Serializer(
                 [new ArrayDenormalizer(), $normalizer],

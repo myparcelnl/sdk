@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  * of the Symfony Serializer does not reach the generated normalizers, so this class adds
  * `skip_validation` to each deserialize() call.
  *
- * @todo janephp/janephp#1147: remove this class when Jane generates validation for requests only.
+ * @todo janephp/janephp#1147: remove this class when a Jane release contains janephp/janephp#1151,
+ *       validation for requests only.
  *
  * @internal Built by JaneClientFactory.
  */
@@ -25,7 +26,7 @@ final class SkipValidationOnReadSerializer implements SerializerInterface, Norma
     private Serializer $serializer;
 
     /**
-     * Wrap the serializer that the generated Client::create() builds.
+     * Wrap the serializer that JaneClientFactory builds.
      */
     public function __construct(Serializer $serializer)
     {
