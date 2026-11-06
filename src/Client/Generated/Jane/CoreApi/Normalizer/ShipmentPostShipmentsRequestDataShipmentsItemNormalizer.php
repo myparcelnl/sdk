@@ -37,9 +37,6 @@ class ShipmentPostShipmentsRequestDataShipmentsItemNormalizer implements Denorma
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostShipmentsRequestDataShipmentsItemConstraint());
-        }
         if (\array_key_exists('account_id', $data)) {
             $object->accountId = $data['account_id'];
         }
@@ -118,7 +115,7 @@ class ShipmentPostShipmentsRequestDataShipmentsItemNormalizer implements Denorma
         if (array_key_exists('shopId', get_object_vars($data))) {
             $dataArray['shop_id'] = $data->shopId;
         }
-        if (array_key_exists('referenceIdentifier', get_object_vars($data))) {
+        if (array_key_exists('referenceIdentifier', get_object_vars($data)) && null !== ($data->referenceIdentifier ?? null)) {
             $value = $data->referenceIdentifier;
             if (is_int($data->referenceIdentifier)) {
                 $value = $data->referenceIdentifier;
@@ -136,9 +133,12 @@ class ShipmentPostShipmentsRequestDataShipmentsItemNormalizer implements Denorma
             $dataArray['sender'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
         if (array_key_exists('recipients', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->recipients as $value_1) {
-                $values[] = $value_1;
+            $values = null;
+            if (null !== $data->recipients) {
+                $values = [];
+                foreach ($data->recipients as $value_1) {
+                    $values[] = $value_1;
+                }
             }
             $dataArray['recipients'] = $values;
         }

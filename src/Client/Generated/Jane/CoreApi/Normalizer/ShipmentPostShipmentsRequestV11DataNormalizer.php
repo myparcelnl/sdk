@@ -37,9 +37,6 @@ class ShipmentPostShipmentsRequestV11DataNormalizer implements DenormalizerInter
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostShipmentsRequestV11DataConstraint());
-        }
         if (\array_key_exists('user_agent', $data)) {
             $object->userAgent = $data['user_agent'];
         }

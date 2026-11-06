@@ -37,9 +37,6 @@ class RatesPostRatesRequestV1Normalizer implements DenormalizerInterface, Normal
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1Constraint());
-        }
         if (\array_key_exists('data', $data)) {
             $object->data = $this->denormalizer->denormalize($data['data'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1Data::class, 'json', $context);
         }

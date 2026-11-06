@@ -43,9 +43,6 @@ class LabelWithBarcodeNormalizer implements DenormalizerInterface, NormalizerInt
         if (\array_key_exists('delayed', $data) && \is_int($data['delayed'])) {
             $data['delayed'] = (bool) $data['delayed'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\LabelWithBarcodeConstraint());
-        }
         if (\array_key_exists('credited', $data)) {
             $object->credited = $data['credited'];
             unset($data['credited']);
@@ -95,7 +92,7 @@ class LabelWithBarcodeNormalizer implements DenormalizerInterface, NormalizerInt
         if (null !== ($data->credited ?? null)) {
             $dataArray['credited'] = $data->credited;
         }
-        if (array_key_exists('createdBy', get_object_vars($data))) {
+        if (array_key_exists('createdBy', get_object_vars($data)) && null !== ($data->createdBy ?? null)) {
             $dataArray['createdBy'] = $data->createdBy;
         }
         if (array_key_exists('paymentStatus', get_object_vars($data))) {
@@ -108,16 +105,22 @@ class LabelWithBarcodeNormalizer implements DenormalizerInterface, NormalizerInt
             $dataArray['delayed'] = $data->delayed;
         }
         if (array_key_exists('additionalIdentifiers', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->additionalIdentifiers as $value) {
-                $values[] = $value;
+            $values = null;
+            if (null !== $data->additionalIdentifiers) {
+                $values = [];
+                foreach ($data->additionalIdentifiers as $value) {
+                    $values[] = $value;
+                }
             }
             $dataArray['additionalIdentifiers'] = $values;
         }
         if (array_key_exists('partnerBarcodes', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->partnerBarcodes as $value_1) {
-                $values_1[] = $value_1;
+            $values_1 = null;
+            if (null !== $data->partnerBarcodes) {
+                $values_1 = [];
+                foreach ($data->partnerBarcodes as $value_1) {
+                    $values_1[] = $value_1;
+                }
             }
             $dataArray['partnerBarcodes'] = $values_1;
         }

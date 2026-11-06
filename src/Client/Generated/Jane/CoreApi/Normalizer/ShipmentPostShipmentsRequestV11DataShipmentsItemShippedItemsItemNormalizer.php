@@ -37,9 +37,6 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItemShippedItemsItemNormalizer
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostShipmentsRequestV11DataShipmentsItemShippedItemsItemConstraint());
-        }
         if (\array_key_exists('order_line_identifier', $data)) {
             $object->orderLineIdentifier = $data['order_line_identifier'];
             unset($data['order_line_identifier']);

@@ -37,9 +37,6 @@ class ShipmentResponsesDeliveryOptionsV2DataNormalizer implements DenormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDeliveryOptionsV2DataConstraint());
-        }
         if (\array_key_exists('deliveries', $data)) {
             $values = [];
             foreach ($data['deliveries'] as $value) {

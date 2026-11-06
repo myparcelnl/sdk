@@ -74,10 +74,13 @@ class OrderShipmentsShipmentNormalizer implements DenormalizerInterface, Normali
     {
         $dataArray = [];
         $dataArray['shipmentId'] = $data->shipmentId;
-        $values = [];
-        foreach ($data->orderLines as $value) {
-            $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-            $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+        $values = null;
+        if (null !== $data->orderLines) {
+            $values = [];
+            foreach ($data->orderLines as $value) {
+                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+            }
         }
         $dataArray['orderLines'] = $values;
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {

@@ -37,9 +37,6 @@ class ShippingRecipientNormalizer implements DenormalizerInterface, NormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShippingRecipientConstraint());
-        }
         if (\array_key_exists('address', $data)) {
             $object->address = $this->denormalizer->denormalize($data['address'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\Address::class, 'json', $context);
             unset($data['address']);
@@ -68,7 +65,7 @@ class ShippingRecipientNormalizer implements DenormalizerInterface, NormalizerIn
             $normalized = $data->address === null ? null : $this->normalizer->normalize($data->address, 'json', $context);
             $dataArray['address'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('contact', get_object_vars($data))) {
+        if (array_key_exists('contact', get_object_vars($data)) && null !== ($data->contact ?? null)) {
             $value = $data->contact;
             if (is_object($data->contact)) {
                 $normalized_1 = $this->normalizer->normalize($data->contact, 'json', $context);

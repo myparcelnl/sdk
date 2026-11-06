@@ -37,9 +37,6 @@ class OrderToCreateShippingOptionsInsuranceNormalizer implements DenormalizerInt
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrderToCreateShippingOptionsInsuranceConstraint());
-        }
         if (\array_key_exists('amount', $data)) {
             $object->amount = $this->denormalizer->denormalize($data['amount'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\OrderToCreateShippingOptionsInsuranceAmount::class, 'json', $context);
             unset($data['amount']);

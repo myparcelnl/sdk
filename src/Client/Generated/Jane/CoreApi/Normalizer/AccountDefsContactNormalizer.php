@@ -37,9 +37,6 @@ class AccountDefsContactNormalizer implements DenormalizerInterface, NormalizerI
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\AccountDefsContactConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $value = $data['id'];
             if (is_int($data['id'])) {

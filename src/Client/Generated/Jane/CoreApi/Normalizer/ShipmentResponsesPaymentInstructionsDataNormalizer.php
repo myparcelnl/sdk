@@ -37,9 +37,6 @@ class ShipmentResponsesPaymentInstructionsDataNormalizer implements Denormalizer
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesPaymentInstructionsDataConstraint());
-        }
         if (\array_key_exists('payment_instructions', $data)) {
             $values = [];
             foreach ($data['payment_instructions'] as $value) {

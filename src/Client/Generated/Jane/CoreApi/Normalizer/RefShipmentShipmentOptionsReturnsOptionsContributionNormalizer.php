@@ -37,9 +37,6 @@ class RefShipmentShipmentOptionsReturnsOptionsContributionNormalizer implements 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentShipmentOptionsReturnsOptionsContributionConstraint());
-        }
         if (\array_key_exists('amount', $data)) {
             $value = $data['amount'];
             if (is_int($data['amount'])) {

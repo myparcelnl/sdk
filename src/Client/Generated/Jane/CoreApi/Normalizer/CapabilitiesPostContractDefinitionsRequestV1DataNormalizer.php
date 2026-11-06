@@ -37,9 +37,6 @@ class CapabilitiesPostContractDefinitionsRequestV1DataNormalizer implements Deno
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesPostContractDefinitionsRequestV1DataConstraint());
-        }
         if (\array_key_exists('carrier_id', $data)) {
             $object->carrierId = is_int($data['carrier_id']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV1DataCarrierId::tryFrom($data['carrier_id']) ?? $data['carrier_id'] : $data['carrier_id'];
         }
