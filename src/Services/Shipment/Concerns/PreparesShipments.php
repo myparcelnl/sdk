@@ -46,7 +46,7 @@ trait PreparesShipments
 
         $data            = new ShipmentPostShipmentsRequestV11Data();
         $data->shipments = array_map(
-            static fn (ShipmentItem $shipment): ShipmentItem => CoreApiModels::withoutNullUntypedProperties(CoreApiModels::copy($shipment)),
+            static fn (ShipmentItem $shipment): ShipmentItem => CoreApiModels::copy($shipment),
             array_values($shipments)
         );
         $data->userAgent = $this->getUserAgentHeader();
