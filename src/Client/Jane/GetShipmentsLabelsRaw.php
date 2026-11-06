@@ -17,6 +17,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * such as GetShipmentsLabelsNotFoundException.
  *
  * @todo janephp/janephp#1149: remove this class when the generated endpoint returns the binary response.
+ *       janephp/janephp#1144 returns the body for the content types that the spec names, but it reads
+ *       `application/*` as a literal, so `application/pdf` still falls through. janephp/janephp#1152
+ *       adds the wildcards.
  *
  * @internal
  */
