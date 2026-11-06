@@ -16,8 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  * of the Symfony Serializer does not reach the generated normalizers, so this class adds
  * `skip_validation` to each deserialize() call.
  *
- * @todo janephp/janephp#1147: remove this class when a Jane release contains janephp/janephp#1151,
- *       validation for requests only.
+ * @todo janephp/janephp#1147: #707 pins a Jane commit with janephp/janephp#1151, validation for
+ *       requests only, and removes this class.
  *
  * @internal Built by JaneClientFactory.
  */

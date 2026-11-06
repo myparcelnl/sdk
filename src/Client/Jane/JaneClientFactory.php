@@ -107,8 +107,8 @@ final class JaneClientFactory
         // Workaround 1, validation on requests only. Client::create() builds a serializer that also
         // validates responses, and a client cannot change it later. So this factory builds the same
         // parts, wrapped in SkipValidationOnReadSerializer.
-        // @todo janephp/janephp#1147: call Client::create() when a Jane release contains
-        //       janephp/janephp#1151, and the config sets 'validation' => ValidationOption::NormalizeOnly.
+        // @todo janephp/janephp#1147: #707 pins a Jane commit with janephp/janephp#1151, sets
+        //       'validation' => ValidationOption::NormalizeOnly, and removes the wrapper.
         //
         // Workaround 2, the option flags. The spec types a flag such as `signature` as a number, so
         // Jane makes it a float, and the API expects the integers 0 and 1. Client::create() keeps
