@@ -116,47 +116,6 @@ final class CoreApiModels
         return $copy;
     }
 
-    /**
-     * Remove each property without a type that is null, in the model and in its nested models.
-     *
-     * Jane generates a property without a type for a field with `anyOf` or more than one type, such
-     * as the `email` of a recipient. PHP sets such a property to null, so the normalizer sends the
-     * field as null, also when nobody set it. The validation then rejects the request.
-     *
-     * @todo Remove this method when a Jane release contains janephp/janephp#1141 and the client is
-     *       generated again.
-     *
-     * @template T of object
-     *
-     * @param T $model
-     *
-     * @return T
-     */
-    public static function withoutNullUntypedProperties(object $model): object
-    {
-        foreach ((new ReflectionObject($model))->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            if (! $property->isInitialized($model)) {
-                continue;
-            }
-
-            $value = $model->{$property->getName()};
-
-            if (null === $value && null === $property->getType()) {
-                unset($model->{$property->getName()});
-
-                continue;
-            }
-
-            foreach (is_array($value) ? $value : [$value] as $item) {
-                if (self::isModel($item)) {
-                    self::withoutNullUntypedProperties($item);
-                }
-            }
-        }
-
-        return $model;
-    }
-
     private static function copyValue(mixed $value): mixed
     {
         if (is_array($value)) {
