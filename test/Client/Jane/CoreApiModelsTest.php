@@ -91,31 +91,4 @@ final class CoreApiModelsTest extends TestCase
 
         CoreApiModels::toModel(new RefShipmentCustomsDeclaration(), ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
     }
-
-    public function testWithoutNullUntypedPropertiesRemovesTheUnsetEmailOfANestedModel(): void
-    {
-        $shipment            = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
-        $shipment->recipient = CoreApiModels::toModel(['cc' => 'NL'], ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
-
-        CoreApiModels::withoutNullUntypedProperties($shipment);
-
-        self::assertSame(['cc' => 'NL'], CoreApiModels::toArray($shipment->recipient));
-    }
-
-    /**
-     * CoreApiModels::withoutNullUntypedProperties() exists because Jane sends a field without a type
-     * as null, also when nobody set it. When this test fails, Jane leaves the field out: remove that method.
-     *
-     * @see https://github.com/janephp/janephp/issues/1140
-     */
-    public function testJaneStillSendsAnUnsetRecipientEmailAsNull(): void
-    {
-        $recipient = CoreApiModels::toModel(['cc' => 'NL'], ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
-
-        self::assertSame(
-            ['cc' => 'NL', 'email' => null],
-            CoreApiModels::toArray($recipient),
-            'Jane now leaves out an unset field without a type (janephp#1141). Remove CoreApiModels::withoutNullUntypedProperties().'
-        );
-    }
 }

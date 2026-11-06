@@ -95,7 +95,7 @@ final class ShipmentCreateServiceTest extends TestCase
     }
 
     /**
-     * Jane sends an unset field without a type, such as the email, as null. The service leaves it out.
+     * An unset field without a type, such as the email, stays out of the request.
      */
     public function testCreateSendsARecipientWithoutEmail(): void
     {
