@@ -7,11 +7,23 @@ PHP 8.2 and lower are already no longer officially supported by PHP itself.
 
 The PHP upgrade brings along some additional breaking changes to the SDK itself. Those will be documented below.
 
+### HTTP client
+
+The generated Jane clients send their requests with a Symfony HTTP client, with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. An HTTP client that you pass to a factory keeps its own timeout.
+
+A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`.
+
 ### Services
 
 | Class                  | v11                                | v12                                                         |
 |------------------------|------------------------------------|-------------------------------------------------------------|
 | `ShipmentQueryService` | `query()` ignores a key it does not know | `query()` throws an `InvalidArgumentException` for a key it does not know |
+| `ApiKeyService`        | `getPrincipal()` returns an `IamApi\Model\Principal` with getters, such as `getShopIds()` | `getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser` with public properties, such as `$principal->shopIds`. `type` is the string `SHOP` or `USER`. `role` and `platform` are enums, or the raw string for a value that the SDK does not know. `features` and `fulfilmentPlatforms` hold `Jane\IamApi\Model\Feature` and `FulfilmentPlatform` enum cases, or the raw string for a value that the SDK does not know: compare with `Feature::OrderManagement`, or read `->value`. They are optional: read them with `$principal->features ?? []`, because a Jane model does not initialize a field that IAM leaves out |
+| `ApiKeyService`        | The constructor takes an `IamApi\Api\DefaultApi` | The constructor takes a `Jane\IamApi\Client`, such as the one that `IamApiFactory::make()` returns |
+| `ApiKeyService`        | `getPrincipal()` throws an `IamApi\ApiException` for every error, also for a network error. `isValid()` returns `false` for a 401 and throws the `ApiException` for every other error | `getPrincipal()` throws a `Jane\IamApi\Exception\ServerException` for a 500 with an `application/problem+json` body, a `Jane\IamApi\Exception\ClientException` for another error status or for a 200 without a JSON body, a Symfony `TransportExceptionInterface` for a network error or a timeout, and a `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` for a 200 with a body that is not valid JSON. `isValid()` returns `false` for a 401 and throws the others, also for a 200 without a JSON body, where v11 returned `true`. For a principal type that the SDK does not know, `getPrincipal()` throws an `UnexpectedValueException`, and `isValid()` returns `true`, because the 200 proves the key |
+| `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns the decoded JSON: use `ApiKeyService::getPrincipal()` for a model |
+
+A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
 
 ### Order push
 

@@ -11,6 +11,10 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Authentication\BearerAuthentica
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\FormEncoder as CoreApiFormEncoder;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Authentication\JwtAuthentication as IamApiAuthentication;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer as IamApiNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder as IamApiFormEncoder;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
@@ -34,6 +38,11 @@ final class JaneClientFactory
      * The Core API host from the spec.
      */
     public const CORE_API_HOST = 'https://api.myparcel.nl';
+
+    /**
+     * The IAM API host from the spec.
+     */
+    public const IAM_API_HOST = 'https://iam.api.myparcel.nl';
 
     /**
      * Idle timeout in seconds of the HTTP client that this factory creates: a request stops when no
@@ -67,6 +76,48 @@ final class JaneClientFactory
             ),
             self::createSerializer(new CoreApiNormalizer(), new CoreApiFormEncoder())
         );
+    }
+
+    /**
+     * Create an IAM API client.
+     *
+     * IAM accepts the base64-encoded API key as the bearer token of its `jwt` scheme.
+     *
+     * @param string                   $apiKey     The API key as the Backoffice shows it. This method encodes it.
+     * @param string|null              $host       Overrides the IAM API host. An empty string uses the default.
+     * @param string|null              $userAgent  Sent as the User-Agent on every request.
+     * @param array<string, string>    $headers    Sent on every request.
+     * @param HttpClientInterface|null $httpClient Sends the requests, with its own options such as the timeout.
+     */
+    public static function iamApi(
+        string $apiKey,
+        ?string $host = null,
+        ?string $userAgent = null,
+        array $headers = [],
+        ?HttpClientInterface $httpClient = null
+    ): IamApiClient {
+        return new IamApiClient(
+            self::createHttpClient(
+                $host ?: self::IAM_API_HOST,
+                new IamApiAuthentication(base64_encode($apiKey)),
+                $userAgent,
+                $headers,
+                $httpClient
+            ),
+            self::iamSerializer()
+        );
+    }
+
+    /**
+     * Get the serializer of the IAM client, to read a response that the client returns as decoded
+     * JSON, such as the whoami response.
+     *
+     * @todo janephp/janephp#1156: make this method private when Jane generates a model for the whoami
+     *       response, and ApiKeyService::principalClass() goes.
+     */
+    public static function iamSerializer(): SkipValidationOnReadSerializer
+    {
+        return self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder());
     }
 
     /**
