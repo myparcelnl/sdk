@@ -37,9 +37,6 @@ class ExternalReferenceEcommercePlatformNormalizer implements DenormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ExternalReferenceEcommercePlatformConstraint());
-        }
         if (\array_key_exists('name', $data)) {
             $object->name = is_string($data['name']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ExternalReferenceEcommercePlatformName::tryFrom($data['name']) ?? $data['name'] : $data['name'];
             unset($data['name']);

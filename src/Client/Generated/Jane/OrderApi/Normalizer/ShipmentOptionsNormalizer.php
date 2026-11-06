@@ -37,9 +37,6 @@ class ShipmentOptionsNormalizer implements DenormalizerInterface, NormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShipmentOptionsConstraint());
-        }
         if (\array_key_exists('additionalInsurance', $data)) {
             $object->additionalInsurance = $data['additionalInsurance'];
             unset($data['additionalInsurance']);
@@ -134,66 +131,66 @@ class ShipmentOptionsNormalizer implements DenormalizerInterface, NormalizerInte
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('additionalInsurance', get_object_vars($data))) {
+        if (array_key_exists('additionalInsurance', get_object_vars($data)) && null !== ($data->additionalInsurance ?? null)) {
             $dataArray['additionalInsurance'] = $data->additionalInsurance;
         }
-        if (array_key_exists('deliverAtPostalPoint', get_object_vars($data))) {
+        if (array_key_exists('deliverAtPostalPoint', get_object_vars($data)) && null !== ($data->deliverAtPostalPoint ?? null)) {
             $dataArray['deliverAtPostalPoint'] = $data->deliverAtPostalPoint;
         }
-        if (array_key_exists('freshFood', get_object_vars($data))) {
+        if (array_key_exists('freshFood', get_object_vars($data)) && null !== ($data->freshFood ?? null)) {
             $dataArray['freshFood'] = $data->freshFood;
         }
-        if (array_key_exists('frozen', get_object_vars($data))) {
+        if (array_key_exists('frozen', get_object_vars($data)) && null !== ($data->frozen ?? null)) {
             $dataArray['frozen'] = $data->frozen;
         }
-        if (array_key_exists('hideSender', get_object_vars($data))) {
+        if (array_key_exists('hideSender', get_object_vars($data)) && null !== ($data->hideSender ?? null)) {
             $dataArray['hideSender'] = $data->hideSender;
         }
         if (array_key_exists('insurance', get_object_vars($data))) {
             $normalized = $data->insurance === null ? null : $this->normalizer->normalize($data->insurance, 'json', $context);
             $dataArray['insurance'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('noTracking', get_object_vars($data))) {
+        if (array_key_exists('noTracking', get_object_vars($data)) && null !== ($data->noTracking ?? null)) {
             $dataArray['noTracking'] = $data->noTracking;
         }
-        if (array_key_exists('oversizedPackage', get_object_vars($data))) {
+        if (array_key_exists('oversizedPackage', get_object_vars($data)) && null !== ($data->oversizedPackage ?? null)) {
             $dataArray['oversizedPackage'] = $data->oversizedPackage;
         }
-        if (array_key_exists('printReturnLabelAtDropOff', get_object_vars($data))) {
+        if (array_key_exists('printReturnLabelAtDropOff', get_object_vars($data)) && null !== ($data->printReturnLabelAtDropOff ?? null)) {
             $dataArray['printReturnLabelAtDropOff'] = $data->printReturnLabelAtDropOff;
         }
-        if (array_key_exists('priorityDelivery', get_object_vars($data))) {
+        if (array_key_exists('priorityDelivery', get_object_vars($data)) && null !== ($data->priorityDelivery ?? null)) {
             $dataArray['priorityDelivery'] = $data->priorityDelivery;
         }
-        if (array_key_exists('recipientOnlyDelivery', get_object_vars($data))) {
+        if (array_key_exists('recipientOnlyDelivery', get_object_vars($data)) && null !== ($data->recipientOnlyDelivery ?? null)) {
             $dataArray['recipientOnlyDelivery'] = $data->recipientOnlyDelivery;
         }
-        if (array_key_exists('requiresAgeVerification', get_object_vars($data))) {
+        if (array_key_exists('requiresAgeVerification', get_object_vars($data)) && null !== ($data->requiresAgeVerification ?? null)) {
             $dataArray['requiresAgeVerification'] = $data->requiresAgeVerification;
         }
-        if (array_key_exists('requiresCashOnDelivery', get_object_vars($data))) {
+        if (array_key_exists('requiresCashOnDelivery', get_object_vars($data)) && null !== ($data->requiresCashOnDelivery ?? null)) {
             $dataArray['requiresCashOnDelivery'] = $data->requiresCashOnDelivery;
         }
-        if (array_key_exists('requiresReceiptCode', get_object_vars($data))) {
+        if (array_key_exists('requiresReceiptCode', get_object_vars($data)) && null !== ($data->requiresReceiptCode ?? null)) {
             $dataArray['requiresReceiptCode'] = $data->requiresReceiptCode;
         }
-        if (array_key_exists('requiresSignature', get_object_vars($data))) {
+        if (array_key_exists('requiresSignature', get_object_vars($data)) && null !== ($data->requiresSignature ?? null)) {
             $dataArray['requiresSignature'] = $data->requiresSignature;
         }
         if (array_key_exists('returnContributionFee', get_object_vars($data))) {
             $normalized_1 = $data->returnContributionFee === null ? null : $this->normalizer->normalize($data->returnContributionFee, 'json', $context);
             $dataArray['returnContributionFee'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
-        if (array_key_exists('returnOnFirstFailedDelivery', get_object_vars($data))) {
+        if (array_key_exists('returnOnFirstFailedDelivery', get_object_vars($data)) && null !== ($data->returnOnFirstFailedDelivery ?? null)) {
             $dataArray['returnOnFirstFailedDelivery'] = $data->returnOnFirstFailedDelivery;
         }
-        if (array_key_exists('sameDayDelivery', get_object_vars($data))) {
+        if (array_key_exists('sameDayDelivery', get_object_vars($data)) && null !== ($data->sameDayDelivery ?? null)) {
             $dataArray['sameDayDelivery'] = $data->sameDayDelivery;
         }
-        if (array_key_exists('saturdayDelivery', get_object_vars($data))) {
+        if (array_key_exists('saturdayDelivery', get_object_vars($data)) && null !== ($data->saturdayDelivery ?? null)) {
             $dataArray['saturdayDelivery'] = $data->saturdayDelivery;
         }
-        if (array_key_exists('scheduledCollection', get_object_vars($data))) {
+        if (array_key_exists('scheduledCollection', get_object_vars($data)) && null !== ($data->scheduledCollection ?? null)) {
             $dataArray['scheduledCollection'] = $data->scheduledCollection;
         }
         if (array_key_exists('customLabelText', get_object_vars($data))) {

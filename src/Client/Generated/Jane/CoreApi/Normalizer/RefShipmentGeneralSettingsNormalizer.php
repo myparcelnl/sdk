@@ -46,9 +46,6 @@ class RefShipmentGeneralSettingsNormalizer implements DenormalizerInterface, Nor
         if (\array_key_exists('disable_auto_detect_pickup', $data) && \is_int($data['disable_auto_detect_pickup'])) {
             $data['disable_auto_detect_pickup'] = (float) $data['disable_auto_detect_pickup'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentGeneralSettingsConstraint());
-        }
         if (\array_key_exists('save_recipient_address', $data)) {
             $object->saveRecipientAddress = $data['save_recipient_address'];
         }
@@ -83,9 +80,12 @@ class RefShipmentGeneralSettingsNormalizer implements DenormalizerInterface, Nor
             $dataArray['delivery_notification'] = $data->deliveryNotification;
         }
         if (array_key_exists('deliveryNotificationEmail', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->deliveryNotificationEmail as $value) {
-                $values[] = $value;
+            $values = null;
+            if (null !== $data->deliveryNotificationEmail) {
+                $values = [];
+                foreach ($data->deliveryNotificationEmail as $value) {
+                    $values[] = $value;
+                }
             }
             $dataArray['delivery_notification_email'] = $values;
         }

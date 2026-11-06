@@ -37,9 +37,6 @@ class LineProductNormalizer implements DenormalizerInterface, NormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\LineProductConstraint());
-        }
         if (\array_key_exists('name', $data)) {
             $object->name = $data['name'];
             unset($data['name']);

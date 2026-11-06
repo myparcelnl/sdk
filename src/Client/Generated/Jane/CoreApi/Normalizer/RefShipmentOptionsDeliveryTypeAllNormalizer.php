@@ -37,9 +37,6 @@ class RefShipmentOptionsDeliveryTypeAllNormalizer implements DenormalizerInterfa
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentOptionsDeliveryTypeAllConstraint());
-        }
         if (\array_key_exists('delivery_type', $data) && $data['delivery_type'] !== null) {
             $value = $data['delivery_type'];
             if (is_int($data['delivery_type'])) {

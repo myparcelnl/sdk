@@ -37,9 +37,6 @@ class ContactPrivateNormalizer implements DenormalizerInterface, NormalizerInter
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ContactPrivateConstraint());
-        }
         if (\array_key_exists('emailAddress', $data)) {
             $object->emailAddress = $data['emailAddress'];
             unset($data['emailAddress']);
@@ -73,7 +70,7 @@ class ContactPrivateNormalizer implements DenormalizerInterface, NormalizerInter
         if (array_key_exists('emailAddress', get_object_vars($data))) {
             $dataArray['emailAddress'] = $data->emailAddress;
         }
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
         if (array_key_exists('phoneNumber', get_object_vars($data))) {

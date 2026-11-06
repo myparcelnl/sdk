@@ -37,9 +37,6 @@ class BillingDefsShipmentDataItemNormalizer implements DenormalizerInterface, No
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\BillingDefsShipmentDataItemConstraint());
-        }
         if (\array_key_exists('shipment_id', $data)) {
             $object->shipmentId = $data['shipment_id'];
         }

@@ -37,9 +37,6 @@ class RefShipmentOptionsDeliveryTypeDeliveryDateNormalizer implements Denormaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\RefShipmentOptionsDeliveryTypeDeliveryDateConstraint());
-        }
         if (\array_key_exists('delivery_date', $data) && $data['delivery_date'] !== null) {
             $value = $data['delivery_date'];
             if (is_string($data['delivery_date'])) {

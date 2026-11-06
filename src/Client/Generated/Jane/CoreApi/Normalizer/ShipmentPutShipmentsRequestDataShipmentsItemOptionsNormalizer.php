@@ -91,9 +91,6 @@ class ShipmentPutShipmentsRequestDataShipmentsItemOptionsNormalizer implements D
         if (\array_key_exists('tracked', $data) && \is_int($data['tracked'])) {
             $data['tracked'] = (float) $data['tracked'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestDataShipmentsItemOptionsConstraint());
-        }
         if (\array_key_exists('insurance', $data)) {
             $object->insurance = $this->denormalizer->denormalize($data['insurance'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuro::class, 'json', $context);
             unset($data['insurance']);

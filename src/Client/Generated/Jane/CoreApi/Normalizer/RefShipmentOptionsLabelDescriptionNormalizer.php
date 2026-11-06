@@ -37,9 +37,6 @@ class RefShipmentOptionsLabelDescriptionNormalizer implements DenormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentOptionsLabelDescriptionConstraint());
-        }
         if (\array_key_exists('label_description', $data) && $data['label_description'] !== null) {
             $value = $data['label_description'];
             if (is_null($data['label_description'])) {

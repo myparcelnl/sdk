@@ -37,9 +37,6 @@ class OrderLineToCreateNormalizer implements DenormalizerInterface, NormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrderLineToCreateConstraint());
-        }
         if (\array_key_exists('price', $data)) {
             $object->price = $this->denormalizer->denormalize($data['price'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\Money::class, 'json', $context);
             unset($data['price']);

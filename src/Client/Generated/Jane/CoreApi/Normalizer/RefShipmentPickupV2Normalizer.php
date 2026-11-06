@@ -37,9 +37,6 @@ class RefShipmentPickupV2Normalizer implements DenormalizerInterface, Normalizer
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentPickupV2Constraint());
-        }
         if (\array_key_exists('address', $data)) {
             $object->address = $this->denormalizer->denormalize($data['address'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentAddressV2::class, 'json', $context);
         }

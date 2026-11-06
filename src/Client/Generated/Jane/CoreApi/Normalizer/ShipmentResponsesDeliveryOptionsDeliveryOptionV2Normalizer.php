@@ -37,9 +37,6 @@ class ShipmentResponsesDeliveryOptionsDeliveryOptionV2Normalizer implements Deno
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDeliveryOptionsDeliveryOptionV2Constraint());
-        }
         if (\array_key_exists('date', $data)) {
             $object->date = $this->denormalizer->denormalize($data['date'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsDateTime::class, 'json', $context);
         }

@@ -37,9 +37,6 @@ class ShipmentResponsesDeliveryOptionsV1Normalizer implements DenormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDeliveryOptionsV1Constraint());
-        }
         if (\array_key_exists('data', $data)) {
             $object->data = $this->denormalizer->denormalize($data['data'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsV1Data::class, 'json', $context);
         }
@@ -66,17 +63,20 @@ class ShipmentResponsesDeliveryOptionsV1Normalizer implements DenormalizerInterf
             $dataArray['data'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
         }
         if (array_key_exists('errors', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->errors as $value) {
-                $value_1 = $value;
-                if (is_object($value)) {
-                    $normalized_1 = $this->normalizer->normalize($value, 'json', $context);
-                    $value_1 = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_1) : $normalized_1;
-                } elseif (is_object($value)) {
-                    $normalized_2 = $this->normalizer->normalize($value, 'json', $context);
-                    $value_1 = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_2) : $normalized_2;
+            $values = null;
+            if (null !== $data->errors) {
+                $values = [];
+                foreach ($data->errors as $value) {
+                    $value_1 = $value;
+                    if (is_object($value)) {
+                        $normalized_1 = $this->normalizer->normalize($value, 'json', $context);
+                        $value_1 = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+                    } elseif (is_object($value)) {
+                        $normalized_2 = $this->normalizer->normalize($value, 'json', $context);
+                        $value_1 = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_2) : $normalized_2;
+                    }
+                    $values[] = $value_1;
                 }
-                $values[] = $value_1;
             }
             $dataArray['errors'] = $values;
         }

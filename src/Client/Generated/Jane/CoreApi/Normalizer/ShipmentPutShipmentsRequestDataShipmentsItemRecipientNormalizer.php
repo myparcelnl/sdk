@@ -37,9 +37,6 @@ class ShipmentPutShipmentsRequestDataShipmentsItemRecipientNormalizer implements
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestDataShipmentsItemRecipientConstraint());
-        }
         if (\array_key_exists('cc', $data)) {
             $object->cc = $data['cc'];
         }
@@ -160,13 +157,16 @@ class ShipmentPutShipmentsRequestDataShipmentsItemRecipientNormalizer implements
         if (array_key_exists('company', get_object_vars($data))) {
             $dataArray['company'] = $data->company;
         }
-        if (array_key_exists('email', get_object_vars($data))) {
+        if (array_key_exists('email', get_object_vars($data)) && null !== ($data->email ?? null)) {
             $dataArray['email'] = $data->email;
         }
         if (array_key_exists('secondaryEmails', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->secondaryEmails as $value_2) {
-                $values[] = $value_2;
+            $values = null;
+            if (null !== $data->secondaryEmails) {
+                $values = [];
+                foreach ($data->secondaryEmails as $value_2) {
+                    $values[] = $value_2;
+                }
             }
             $dataArray['secondary_emails'] = $values;
         }

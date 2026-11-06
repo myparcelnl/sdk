@@ -37,9 +37,6 @@ class OrdersGetResponse200AggregationsNormalizer implements DenormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrdersGetResponse200AggregationsConstraint());
-        }
         if (\array_key_exists('status', $data)) {
             $values = [];
             foreach ($data['status'] as $value) {
@@ -59,10 +56,13 @@ class OrdersGetResponse200AggregationsNormalizer implements DenormalizerInterfac
     {
         $dataArray = [];
         if (array_key_exists('status', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->status as $value) {
-                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->status) {
+                $values = [];
+                foreach ($data->status as $value) {
+                    $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['status'] = $values;
         }

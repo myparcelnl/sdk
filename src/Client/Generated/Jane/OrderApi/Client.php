@@ -166,7 +166,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\Clie
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Exception\GetPackingSlipBadRequestException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Exception\BadResponseException
      *
-     * @return null
+     * @return string|null
      */
     public function getPackingSlip(array $queryParameters, array $headerParameters, array $accept = [])
     {
@@ -184,7 +184,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\Clie
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Exception\GetPicklistBadRequestException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Exception\BadResponseException
      *
-     * @return null
+     * @return string|null
      */
     public function getPicklist(array $queryParameters, array $headerParameters, array $accept = [])
     {

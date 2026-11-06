@@ -5,11 +5,13 @@
 // 'namespace', 'directory' and the endpoint options, such as 'whitelisted-paths'.
 // `Jane` stays in the namespace, so a client of another generator can live next to it later.
 // @todo INT-2034: merge this file with .jane-openapi.
-// composer.json pins jane-php/open-api-common to a commit on `next` of janephp/open-api-common, because
-// no Jane release contains janephp/janephp#1139 yet. The fix is only in that package, so
-// jane-php/open-api-3-1 stays on a release. composer.lock is not in the repository, so `next` without a
-// commit would give each `composer install` the Jane code of that day.
-// @todo Require the first Jane release that contains janephp/janephp#1139, such as ^8.1.2.
+// composer.json pins jane-php/json-schema, jane-php/open-api-3-1 and jane-php/open-api-common to
+// commits on `next` of their janephp repositories, because no Jane release contains these fixes yet:
+// janephp/janephp#1139, #1141, #1144, #1150, #1151, #1153 and #1155. The pins stop before
+// janephp/janephp#1154, which assigns an enum to the string `type` of an allOf parent
+// (janephp/janephp#1157). composer.lock is not in the repository, so `next` without a commit would
+// give each `composer install` the Jane code of that day.
+// @todo Require the first Jane release that contains these fixes.
 
 return [
     'mapping' => [
@@ -37,15 +39,15 @@ return [
         ],
     ],
     // Generate validators, so the client checks a request against the spec before it sends it.
-    // Jane also validates each response: a new field in a schema with `additionalProperties: false`,
-    // or a new enum value, throws a ValidationException. So a client must read with the
-    // skip_validation context.
-    'validation' => true,
+    // NormalizeOnly validates a model only when it goes out. A response is read without validation,
+    // so a new field in a schema with `additionalProperties: false`, or a new enum value, does not
+    // throw a ValidationException.
+    'validation' => \Jane\Component\JsonSchema\Generator\ValidationOption::NormalizeOnly,
     // Generate the enums of the spec as PHP enums.
     'enums-as-objects' => true,
     // Read an enum value that the SDK does not know as the raw value, a string or an int, so a new
-    // value in the API, such as a new carrier, does not break a read. This works only when the read
-    // skips the validation: the generated validators have a Choice constraint with the known values.
+    // value in the API, such as a new carrier, does not break a read. A read does not validate, so
+    // the Choice constraint of the generated validators does not reject the value.
     'enums-unknown-value' => 'scalar',
     // Send a required field only when it is set. A missing field then throws a ValidationException,
     // not a PHP Error for a property that is not initialized.

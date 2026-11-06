@@ -37,9 +37,6 @@ class ShipmentResponsesPickupLocationsDefinitionsLocationNormalizer implements D
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesPickupLocationsDefinitionsLocationConstraint());
-        }
         if (\array_key_exists('location_name', $data)) {
             $object->locationName = $data['location_name'];
         }

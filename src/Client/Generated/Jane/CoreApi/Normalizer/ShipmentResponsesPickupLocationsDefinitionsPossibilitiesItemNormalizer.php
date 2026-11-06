@@ -37,9 +37,6 @@ class ShipmentResponsesPickupLocationsDefinitionsPossibilitiesItemNormalizer imp
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesPickupLocationsDefinitionsPossibilitiesItemConstraint());
-        }
         if (\array_key_exists('delivery_type_id', $data)) {
             $object->deliveryTypeId = $data['delivery_type_id'];
         }

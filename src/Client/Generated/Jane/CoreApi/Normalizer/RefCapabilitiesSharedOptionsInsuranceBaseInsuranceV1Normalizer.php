@@ -37,9 +37,6 @@ class RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1Normalizer implements 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1Constraint());
-        }
         if (\array_key_exists('insured_amount', $data)) {
             $object->insuredAmount = $this->denormalizer->denormalize($data['insured_amount'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV1InsuredAmount::class, 'json', $context);
             unset($data['insured_amount']);

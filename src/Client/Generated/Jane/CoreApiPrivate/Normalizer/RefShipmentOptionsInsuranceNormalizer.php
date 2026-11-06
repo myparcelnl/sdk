@@ -37,9 +37,6 @@ class RefShipmentOptionsInsuranceNormalizer implements DenormalizerInterface, No
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\RefShipmentOptionsInsuranceConstraint());
-        }
         if (\array_key_exists('insurance', $data)) {
             $object->insurance = $this->denormalizer->denormalize($data['insurance'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Model\RefTypesPriceEuro::class, 'json', $context);
             unset($data['insurance']);

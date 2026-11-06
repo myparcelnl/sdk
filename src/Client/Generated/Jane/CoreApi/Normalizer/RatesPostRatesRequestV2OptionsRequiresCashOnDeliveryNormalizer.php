@@ -37,9 +37,6 @@ class RatesPostRatesRequestV2OptionsRequiresCashOnDeliveryNormalizer implements 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV2OptionsRequiresCashOnDeliveryConstraint());
-        }
         if (\array_key_exists('dueAmount', $data)) {
             $object->dueAmount = $this->denormalizer->denormalize($data['dueAmount'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoney::class, 'json', $context);
         }

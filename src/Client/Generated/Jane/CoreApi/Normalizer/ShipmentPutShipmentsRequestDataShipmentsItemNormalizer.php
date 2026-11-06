@@ -37,9 +37,6 @@ class ShipmentPutShipmentsRequestDataShipmentsItemNormalizer implements Denormal
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestDataShipmentsItemConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
         }
@@ -111,7 +108,7 @@ class ShipmentPutShipmentsRequestDataShipmentsItemNormalizer implements Denormal
         if (array_key_exists('shopId', get_object_vars($data))) {
             $dataArray['shop_id'] = $data->shopId;
         }
-        if (array_key_exists('referenceIdentifier', get_object_vars($data))) {
+        if (array_key_exists('referenceIdentifier', get_object_vars($data)) && null !== ($data->referenceIdentifier ?? null)) {
             $value = $data->referenceIdentifier;
             if (is_int($data->referenceIdentifier)) {
                 $value = $data->referenceIdentifier;

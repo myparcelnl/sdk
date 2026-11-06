@@ -37,9 +37,6 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPhysicalPropertie
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPhysicalPropertiesConstraint());
-        }
         if (\array_key_exists('height', $data)) {
             $object->height = $this->denormalizer->denormalize($data['height'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPhysicalPropertiesHeight::class, 'json', $context);
         }

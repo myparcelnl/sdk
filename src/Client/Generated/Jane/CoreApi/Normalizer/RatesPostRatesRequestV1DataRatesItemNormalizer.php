@@ -43,9 +43,6 @@ class RatesPostRatesRequestV1DataRatesItemNormalizer implements DenormalizerInte
         if (\array_key_exists('shipment_type', $data) && \is_int($data['shipment_type'])) {
             $data['shipment_type'] = (float) $data['shipment_type'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1DataRatesItemConstraint());
-        }
         if (\array_key_exists('shop_id', $data)) {
             $object->shopId = $data['shop_id'];
         }

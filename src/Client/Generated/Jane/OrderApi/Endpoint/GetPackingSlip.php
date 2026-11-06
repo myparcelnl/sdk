@@ -73,13 +73,14 @@ class GetPackingSlip extends \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runt
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Exception\GetPackingSlipBadRequestException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Exception\BadResponseException
      *
-     * @return null
+     * @return string|null
      */
     protected function transformResponseBody(\Symfony\Contracts\HttpClient\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = $response->getContent(false);
-        if (200 === $status) {
+        if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/pdf') !== false)) {
+            return $body;
         }
         if (204 === $status) {
             return null;

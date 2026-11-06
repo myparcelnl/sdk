@@ -37,9 +37,6 @@ class RefShipmentCustomsDeclarationNormalizer implements DenormalizerInterface, 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentCustomsDeclarationConstraint());
-        }
         if (\array_key_exists('contents', $data)) {
             $object->contents = is_int($data['contents']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsCustomsShipmentType::tryFrom($data['contents']) ?? $data['contents'] : $data['contents'];
         }

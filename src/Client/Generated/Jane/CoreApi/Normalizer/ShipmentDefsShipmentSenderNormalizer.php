@@ -40,9 +40,6 @@ class ShipmentDefsShipmentSenderNormalizer implements DenormalizerInterface, Nor
         if (\array_key_exists('invalid', $data) && \is_int($data['invalid'])) {
             $data['invalid'] = (bool) $data['invalid'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsShipmentSenderConstraint());
-        }
         if (\array_key_exists('account_id', $data)) {
             $object->accountId = $data['account_id'];
         }
@@ -314,15 +311,18 @@ class ShipmentDefsShipmentSenderNormalizer implements DenormalizerInterface, Nor
             $dataArray['billing_email'] = $value_7;
         }
         if (array_key_exists('secondaryEmails', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->secondaryEmails as $value_8) {
-                $value_9 = $value_8;
-                if (is_null($value_8)) {
+            $values = null;
+            if (null !== $data->secondaryEmails) {
+                $values = [];
+                foreach ($data->secondaryEmails as $value_8) {
                     $value_9 = $value_8;
-                } elseif (is_string($value_8)) {
-                    $value_9 = $value_8;
+                    if (is_null($value_8)) {
+                        $value_9 = $value_8;
+                    } elseif (is_string($value_8)) {
+                        $value_9 = $value_8;
+                    }
+                    $values[] = $value_9;
                 }
-                $values[] = $value_9;
             }
             $dataArray['secondary_emails'] = $values;
         }

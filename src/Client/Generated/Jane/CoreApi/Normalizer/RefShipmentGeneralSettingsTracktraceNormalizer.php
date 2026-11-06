@@ -58,9 +58,6 @@ class RefShipmentGeneralSettingsTracktraceNormalizer implements DenormalizerInte
         if (\array_key_exists('send_track_trace_emails', $data) && \is_int($data['send_track_trace_emails'])) {
             $data['send_track_trace_emails'] = (float) $data['send_track_trace_emails'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentGeneralSettingsTracktraceConstraint());
-        }
         if (\array_key_exists('bcc', $data)) {
             $object->bcc = $data['bcc'];
             unset($data['bcc']);
@@ -152,9 +149,12 @@ class RefShipmentGeneralSettingsTracktraceNormalizer implements DenormalizerInte
             $dataArray['delivery_notification'] = $data->deliveryNotification;
         }
         if (array_key_exists('deliveryNotificationEmail', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->deliveryNotificationEmail as $value_1) {
-                $values[] = $value_1;
+            $values = null;
+            if (null !== $data->deliveryNotificationEmail) {
+                $values = [];
+                foreach ($data->deliveryNotificationEmail as $value_1) {
+                    $values[] = $value_1;
+                }
             }
             $dataArray['delivery_notification_email'] = $values;
         }

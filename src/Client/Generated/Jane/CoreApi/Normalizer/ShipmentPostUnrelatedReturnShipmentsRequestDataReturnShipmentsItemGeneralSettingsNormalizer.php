@@ -37,9 +37,6 @@ class ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItemGeneralS
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItemGeneralSettingsConstraint());
-        }
         if (\array_key_exists('save_recipient_address', $data)) {
             $object->saveRecipientAddress = is_int($data['save_recipient_address']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItemGeneralSettingsSaveRecipientAddress::tryFrom($data['save_recipient_address']) ?? $data['save_recipient_address'] : $data['save_recipient_address'];
             unset($data['save_recipient_address']);

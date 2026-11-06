@@ -37,9 +37,6 @@ class AssignToUserPostBodyItemNormalizer implements DenormalizerInterface, Norma
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\AssignToUserPostBodyItemConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
             unset($data['id']);

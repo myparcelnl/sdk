@@ -37,9 +37,6 @@ class ShipmentDefsDeliveryOptionsPickupNormalizer implements DenormalizerInterfa
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsDeliveryOptionsPickupConstraint());
-        }
         if (\array_key_exists('date', $data) && $data['date'] !== null) {
             $value = $data['date'];
             if (is_string($data['date']) and false !== \DateTime::createFromFormat('Y-m-d', $data['date'])) {
@@ -178,10 +175,13 @@ class ShipmentDefsDeliveryOptionsPickupNormalizer implements DenormalizerInterfa
             $dataArray['date'] = $value;
         }
         if (array_key_exists('time', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->time as $value_1) {
-                $normalized = $value_1 === null ? null : $this->normalizer->normalize($value_1, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->time) {
+                $values = [];
+                foreach ($data->time as $value_1) {
+                    $normalized = $value_1 === null ? null : $this->normalizer->normalize($value_1, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['time'] = $values;
         }
@@ -240,7 +240,7 @@ class ShipmentDefsDeliveryOptionsPickupNormalizer implements DenormalizerInterfa
         if (array_key_exists('distance', get_object_vars($data))) {
             $dataArray['distance'] = $data->distance;
         }
-        if (array_key_exists('latitude', get_object_vars($data))) {
+        if (array_key_exists('latitude', get_object_vars($data)) && null !== ($data->latitude ?? null)) {
             $value_4 = $data->latitude;
             if (is_float($data->latitude)) {
                 $value_4 = $data->latitude;
@@ -249,7 +249,7 @@ class ShipmentDefsDeliveryOptionsPickupNormalizer implements DenormalizerInterfa
             }
             $dataArray['latitude'] = $value_4;
         }
-        if (array_key_exists('longitude', get_object_vars($data))) {
+        if (array_key_exists('longitude', get_object_vars($data)) && null !== ($data->longitude ?? null)) {
             $value_5 = $data->longitude;
             if (is_float($data->longitude)) {
                 $value_5 = $data->longitude;
@@ -270,7 +270,7 @@ class ShipmentDefsDeliveryOptionsPickupNormalizer implements DenormalizerInterfa
             }
             $dataArray['retail_network_id'] = $value_6;
         }
-        if (array_key_exists('holiday', get_object_vars($data))) {
+        if (array_key_exists('holiday', get_object_vars($data)) && null !== ($data->holiday ?? null)) {
             $dataArray['holiday'] = $data->holiday;
         }
         if (!($context['skip_validation'] ?? false)) {

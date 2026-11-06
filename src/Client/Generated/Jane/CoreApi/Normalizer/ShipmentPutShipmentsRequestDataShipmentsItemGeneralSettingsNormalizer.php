@@ -37,9 +37,6 @@ class ShipmentPutShipmentsRequestDataShipmentsItemGeneralSettingsNormalizer impl
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestDataShipmentsItemGeneralSettingsConstraint());
-        }
         if (\array_key_exists('save_recipient_address', $data)) {
             $object->saveRecipientAddress = is_int($data['save_recipient_address']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequestDataShipmentsItemGeneralSettingsSaveRecipientAddress::tryFrom($data['save_recipient_address']) ?? $data['save_recipient_address'] : $data['save_recipient_address'];
         }
@@ -71,9 +68,12 @@ class ShipmentPutShipmentsRequestDataShipmentsItemGeneralSettingsNormalizer impl
             $dataArray['delivery_notification'] = $data->deliveryNotification instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequestDataShipmentsItemGeneralSettingsDeliveryNotification ? $data->deliveryNotification->value : $data->deliveryNotification;
         }
         if (array_key_exists('deliveryNotificationEmail', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->deliveryNotificationEmail as $value) {
-                $values[] = $value;
+            $values = null;
+            if (null !== $data->deliveryNotificationEmail) {
+                $values = [];
+                foreach ($data->deliveryNotificationEmail as $value) {
+                    $values[] = $value;
+                }
             }
             $dataArray['delivery_notification_email'] = $values;
         }
