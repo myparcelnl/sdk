@@ -115,7 +115,7 @@ final class JaneClientFactory
      * @todo janephp/janephp#1156: make this method private when Jane generates a model for the whoami
      *       response, and ApiKeyService::principalClass() goes.
      */
-    public static function iamSerializer(): SkipValidationOnReadSerializer
+    public static function iamSerializer(): Serializer
     {
         return self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder());
     }
@@ -154,26 +154,20 @@ final class JaneClientFactory
     private static function createSerializer(
         NormalizerInterface&DenormalizerInterface $normalizer,
         EncoderInterface&DecoderInterface $formEncoder
-    ): SkipValidationOnReadSerializer {
-        // Workaround 1, validation on requests only. Client::create() builds a serializer that also
-        // validates responses, and a client cannot change it later. So this factory builds the same
-        // parts, wrapped in SkipValidationOnReadSerializer.
-        // @todo janephp/janephp#1147: #707 pins a Jane commit with janephp/janephp#1151, sets
-        //       'validation' => ValidationOption::NormalizeOnly, and removes the wrapper.
-        //
-        // Workaround 2, the option flags. The spec types a flag such as `signature` as a number, so
-        // Jane makes it a float, and the API expects the integers 0 and 1. Client::create() keeps
-        // JSON_PRESERVE_ZERO_FRACTION on, so the flag goes out as 1.0. This encoder turns it off:
-        // every float with a zero fraction goes out as an integer. Other `number` fields of the
-        // request bodies, such as `packageType` of the capabilities request and the `recipients`
-        // list, also hold integers. No request body has a number that is a real float.
-        // @todo CLOUD-2372: use the JsonEncode options of Client::create() when the spec types the
-        //       flags as integer (mypadev/core-api#5263), and the client is generated again.
-        return new SkipValidationOnReadSerializer(
-            new Serializer(
-                [new ArrayDenormalizer(), $normalizer],
-                [new JsonEncoder(new JsonEncode([JsonEncode::OPTIONS => 0]), new JsonDecode([JsonDecode::ASSOCIATIVE => true])), $formEncoder]
-            )
+    ): Serializer {
+        // Client::create() builds its serializer with the default JsonEncode options, and a client
+        // cannot change it later. So this factory builds the same parts with other options.
+        // The spec types an option flag such as `signature` as a number, so Jane makes it a float,
+        // and the API expects the integers 0 and 1. Client::create() keeps JSON_PRESERVE_ZERO_FRACTION
+        // on, so the flag goes out as 1.0. This encoder turns it off: every float with a zero
+        // fraction goes out as an integer. Other `number` fields of the request bodies, such as
+        // `packageType` of the capabilities request and the `recipients` list, also hold integers.
+        // No request body has a number that is a real float.
+        // @todo CLOUD-2372: call Client::create() when the spec types the flags as integer
+        //       (mypadev/core-api#5263), and the client is generated again.
+        return new Serializer(
+            [new ArrayDenormalizer(), $normalizer],
+            [new JsonEncoder(new JsonEncode([JsonEncode::OPTIONS => 0]), new JsonDecode([JsonDecode::ASSOCIATIVE => true])), $formEncoder]
         );
     }
 }
