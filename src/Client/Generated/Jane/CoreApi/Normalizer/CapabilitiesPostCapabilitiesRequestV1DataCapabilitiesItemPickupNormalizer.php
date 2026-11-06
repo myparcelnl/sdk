@@ -37,9 +37,6 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPickupNormalizer 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPickupConstraint());
-        }
         if (\array_key_exists('location_type', $data)) {
             $object->locationType = is_string($data['location_type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLocationType::tryFrom($data['location_type']) ?? $data['location_type'] : $data['location_type'];
         }

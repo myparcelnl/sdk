@@ -37,9 +37,6 @@ class CommonResponsesUserErrorInvalidContentTypeErrorsItemNormalizer implements 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CommonResponsesUserErrorInvalidContentTypeErrorsItemConstraint());
-        }
         if (\array_key_exists('status', $data)) {
             $object->status = is_int($data['status']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonHttpStatusCode4xxClientError415UnsupportedMediaType::tryFrom($data['status']) ?? $data['status'] : $data['status'];
             unset($data['status']);
@@ -61,7 +58,7 @@ class CommonResponsesUserErrorInvalidContentTypeErrorsItemNormalizer implements 
         if (array_key_exists('status', get_object_vars($data))) {
             $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonHttpStatusCode4xxClientError415UnsupportedMediaType ? $data->status->value : $data->status;
         }
-        if (array_key_exists('code', get_object_vars($data))) {
+        if (array_key_exists('code', get_object_vars($data)) && null !== ($data->code ?? null)) {
             $dataArray['code'] = $data->code;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

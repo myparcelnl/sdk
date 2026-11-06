@@ -37,9 +37,6 @@ class RefShipmentCustomsDeclarationItemNormalizer implements DenormalizerInterfa
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentCustomsDeclarationItemConstraint());
-        }
         if (\array_key_exists('description', $data)) {
             $object->description = $data['description'];
         }
@@ -97,7 +94,7 @@ class RefShipmentCustomsDeclarationItemNormalizer implements DenormalizerInterfa
         if (null !== ($data->classification ?? null)) {
             $dataArray['classification'] = $data->classification;
         }
-        if (array_key_exists('country', get_object_vars($data))) {
+        if (array_key_exists('country', get_object_vars($data)) && null !== ($data->country ?? null)) {
             $value = $data->country;
             if (!is_null($data->country)) {
                 $value = $data->country;

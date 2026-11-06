@@ -40,9 +40,6 @@ class ShipmentNormalizer implements DenormalizerInterface, NormalizerInterface, 
         if (\array_key_exists('hidden', $data) && \is_int($data['hidden'])) {
             $data['hidden'] = (bool) $data['hidden'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShipmentConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
             unset($data['id']);
@@ -164,7 +161,7 @@ class ShipmentNormalizer implements DenormalizerInterface, NormalizerInterface, 
             $normalized_3 = $data->dropOff === null ? null : $this->normalizer->normalize($data->dropOff, 'json', $context);
             $dataArray['dropOff'] = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_3) : $normalized_3;
         }
-        if (array_key_exists('label', get_object_vars($data))) {
+        if (array_key_exists('label', get_object_vars($data)) && null !== ($data->label ?? null)) {
             $value = $data->label;
             if (is_object($data->label)) {
                 $normalized_4 = $this->normalizer->normalize($data->label, 'json', $context);
@@ -183,7 +180,7 @@ class ShipmentNormalizer implements DenormalizerInterface, NormalizerInterface, 
             $normalized_7 = $data->options === null ? null : $this->normalizer->normalize($data->options, 'json', $context);
             $dataArray['options'] = \is_iterable($normalized_7) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_7) : $normalized_7;
         }
-        if (array_key_exists('pickup', get_object_vars($data))) {
+        if (array_key_exists('pickup', get_object_vars($data)) && null !== ($data->pickup ?? null)) {
             $dataArray['pickup'] = $data->pickup;
         }
         if (array_key_exists('price', get_object_vars($data))) {

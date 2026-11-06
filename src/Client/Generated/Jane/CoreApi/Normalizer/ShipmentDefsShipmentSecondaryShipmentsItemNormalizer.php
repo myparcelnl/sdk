@@ -46,9 +46,6 @@ class ShipmentDefsShipmentSecondaryShipmentsItemNormalizer implements Denormaliz
         if (\array_key_exists('delivered', $data) && \is_int($data['delivered'])) {
             $data['delivered'] = (bool) $data['delivered'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsShipmentSecondaryShipmentsItemConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
         }
@@ -510,9 +507,12 @@ class ShipmentDefsShipmentSecondaryShipmentsItemNormalizer implements Denormaliz
             $dataArray['user_agent'] = $value_7;
         }
         if (array_key_exists('secondaryShipments', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->secondaryShipments as $value_8) {
-                $values[] = $value_8;
+            $values = null;
+            if (null !== $data->secondaryShipments) {
+                $values = [];
+                foreach ($data->secondaryShipments as $value_8) {
+                    $values[] = $value_8;
+                }
             }
             $dataArray['secondary_shipments'] = $values;
         }
@@ -587,9 +587,12 @@ class ShipmentDefsShipmentSecondaryShipmentsItemNormalizer implements Denormaliz
             $dataArray['link_consumer_portal'] = $value_15;
         }
         if (array_key_exists('partnerTracktraces', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->partnerTracktraces as $value_16) {
-                $values_1[] = $value_16;
+            $values_1 = null;
+            if (null !== $data->partnerTracktraces) {
+                $values_1 = [];
+                foreach ($data->partnerTracktraces as $value_16) {
+                    $values_1[] = $value_16;
+                }
             }
             $dataArray['partner_tracktraces'] = $values_1;
         }
@@ -612,10 +615,13 @@ class ShipmentDefsShipmentSecondaryShipmentsItemNormalizer implements Denormaliz
             $dataArray['order_shipment_identifier'] = $value_18;
         }
         if (array_key_exists('shippedItems', get_object_vars($data))) {
-            $values_2 = [];
-            foreach ($data->shippedItems as $value_19) {
-                $normalized_5 = $value_19 === null ? null : $this->normalizer->normalize($value_19, 'json', $context);
-                $values_2[] = \is_iterable($normalized_5) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_5) : $normalized_5;
+            $values_2 = null;
+            if (null !== $data->shippedItems) {
+                $values_2 = [];
+                foreach ($data->shippedItems as $value_19) {
+                    $normalized_5 = $value_19 === null ? null : $this->normalizer->normalize($value_19, 'json', $context);
+                    $values_2[] = \is_iterable($normalized_5) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_5) : $normalized_5;
+                }
             }
             $dataArray['shipped_items'] = $values_2;
         }

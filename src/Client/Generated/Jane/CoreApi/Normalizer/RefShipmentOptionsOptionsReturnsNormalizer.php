@@ -73,9 +73,6 @@ class RefShipmentOptionsOptionsReturnsNormalizer implements DenormalizerInterfac
         if (\array_key_exists('signature', $data) && \is_int($data['signature'])) {
             $data['signature'] = (float) $data['signature'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentOptionsOptionsReturnsConstraint());
-        }
         if (\array_key_exists('age_check', $data)) {
             $object->ageCheck = $data['age_check'];
             unset($data['age_check']);

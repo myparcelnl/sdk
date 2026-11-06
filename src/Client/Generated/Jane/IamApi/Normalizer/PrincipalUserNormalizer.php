@@ -40,9 +40,6 @@ class PrincipalUserNormalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('mfaEnabled', $data) && \is_int($data['mfaEnabled'])) {
             $data['mfaEnabled'] = (bool) $data['mfaEnabled'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Validator\PrincipalUserConstraint());
-        }
         if (\array_key_exists('accountId', $data)) {
             $object->accountId = $data['accountId'];
             unset($data['accountId']);
@@ -140,20 +137,26 @@ class PrincipalUserNormalizer implements DenormalizerInterface, NormalizerInterf
             $dataArray['principal'] = $value;
         }
         if (array_key_exists('features', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->features as $value_1) {
-                $values[] = $value_1 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\Feature ? $value_1->value : $value_1;
+            $values = null;
+            if (null !== $data->features) {
+                $values = [];
+                foreach ($data->features as $value_1) {
+                    $values[] = $value_1 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\Feature ? $value_1->value : $value_1;
+                }
             }
             $dataArray['features'] = $values;
         }
         if (array_key_exists('fulfilmentPlatforms', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->fulfilmentPlatforms as $value_2) {
-                $values_1[] = $value_2 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\FulfilmentPlatform ? $value_2->value : $value_2;
+            $values_1 = null;
+            if (null !== $data->fulfilmentPlatforms) {
+                $values_1 = [];
+                foreach ($data->fulfilmentPlatforms as $value_2) {
+                    $values_1[] = $value_2 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\FulfilmentPlatform ? $value_2->value : $value_2;
+                }
             }
             $dataArray['fulfilmentPlatforms'] = $values_1;
         }
-        if (array_key_exists('impersonator', get_object_vars($data))) {
+        if (array_key_exists('impersonator', get_object_vars($data)) && null !== ($data->impersonator ?? null)) {
             $value_3 = $data->impersonator;
             if (is_string($data->impersonator)) {
                 $value_3 = $data->impersonator;

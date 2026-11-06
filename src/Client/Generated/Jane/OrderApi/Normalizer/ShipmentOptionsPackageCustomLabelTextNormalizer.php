@@ -37,9 +37,6 @@ class ShipmentOptionsPackageCustomLabelTextNormalizer implements DenormalizerInt
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShipmentOptionsPackageCustomLabelTextConstraint());
-        }
         if (\array_key_exists('text', $data)) {
             $object->text = $data['text'];
             unset($data['text']);

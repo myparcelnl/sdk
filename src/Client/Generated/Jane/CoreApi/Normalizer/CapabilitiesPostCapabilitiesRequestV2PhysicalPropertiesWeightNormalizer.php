@@ -37,9 +37,6 @@ class CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeightNormalizer im
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeightConstraint());
-        }
         if (\array_key_exists('value', $data)) {
             $object->value = $data['value'];
         }

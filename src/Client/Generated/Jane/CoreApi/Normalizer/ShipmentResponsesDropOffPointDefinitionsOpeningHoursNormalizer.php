@@ -37,9 +37,6 @@ class ShipmentResponsesDropOffPointDefinitionsOpeningHoursNormalizer implements 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDropOffPointDefinitionsOpeningHoursConstraint());
-        }
         if (\array_key_exists('monday', $data)) {
             $values = [];
             foreach ($data['monday'] as $value) {
@@ -95,58 +92,79 @@ class ShipmentResponsesDropOffPointDefinitionsOpeningHoursNormalizer implements 
     {
         $dataArray = [];
         if (array_key_exists('monday', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->monday as $value) {
-                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->monday) {
+                $values = [];
+                foreach ($data->monday as $value) {
+                    $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['monday'] = $values;
         }
         if (array_key_exists('tuesday', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->tuesday as $value_1) {
-                $normalized_1 = $value_1 === null ? null : $this->normalizer->normalize($value_1, 'json', $context);
-                $values_1[] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+            $values_1 = null;
+            if (null !== $data->tuesday) {
+                $values_1 = [];
+                foreach ($data->tuesday as $value_1) {
+                    $normalized_1 = $value_1 === null ? null : $this->normalizer->normalize($value_1, 'json', $context);
+                    $values_1[] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+                }
             }
             $dataArray['tuesday'] = $values_1;
         }
         if (array_key_exists('wednesday', get_object_vars($data))) {
-            $values_2 = [];
-            foreach ($data->wednesday as $value_2) {
-                $normalized_2 = $value_2 === null ? null : $this->normalizer->normalize($value_2, 'json', $context);
-                $values_2[] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_2) : $normalized_2;
+            $values_2 = null;
+            if (null !== $data->wednesday) {
+                $values_2 = [];
+                foreach ($data->wednesday as $value_2) {
+                    $normalized_2 = $value_2 === null ? null : $this->normalizer->normalize($value_2, 'json', $context);
+                    $values_2[] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_2) : $normalized_2;
+                }
             }
             $dataArray['wednesday'] = $values_2;
         }
         if (array_key_exists('thursday', get_object_vars($data))) {
-            $values_3 = [];
-            foreach ($data->thursday as $value_3) {
-                $normalized_3 = $value_3 === null ? null : $this->normalizer->normalize($value_3, 'json', $context);
-                $values_3[] = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_3) : $normalized_3;
+            $values_3 = null;
+            if (null !== $data->thursday) {
+                $values_3 = [];
+                foreach ($data->thursday as $value_3) {
+                    $normalized_3 = $value_3 === null ? null : $this->normalizer->normalize($value_3, 'json', $context);
+                    $values_3[] = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_3) : $normalized_3;
+                }
             }
             $dataArray['thursday'] = $values_3;
         }
         if (array_key_exists('friday', get_object_vars($data))) {
-            $values_4 = [];
-            foreach ($data->friday as $value_4) {
-                $normalized_4 = $value_4 === null ? null : $this->normalizer->normalize($value_4, 'json', $context);
-                $values_4[] = \is_iterable($normalized_4) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_4) : $normalized_4;
+            $values_4 = null;
+            if (null !== $data->friday) {
+                $values_4 = [];
+                foreach ($data->friday as $value_4) {
+                    $normalized_4 = $value_4 === null ? null : $this->normalizer->normalize($value_4, 'json', $context);
+                    $values_4[] = \is_iterable($normalized_4) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_4) : $normalized_4;
+                }
             }
             $dataArray['friday'] = $values_4;
         }
         if (array_key_exists('saturday', get_object_vars($data))) {
-            $values_5 = [];
-            foreach ($data->saturday as $value_5) {
-                $normalized_5 = $value_5 === null ? null : $this->normalizer->normalize($value_5, 'json', $context);
-                $values_5[] = \is_iterable($normalized_5) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_5) : $normalized_5;
+            $values_5 = null;
+            if (null !== $data->saturday) {
+                $values_5 = [];
+                foreach ($data->saturday as $value_5) {
+                    $normalized_5 = $value_5 === null ? null : $this->normalizer->normalize($value_5, 'json', $context);
+                    $values_5[] = \is_iterable($normalized_5) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_5) : $normalized_5;
+                }
             }
             $dataArray['saturday'] = $values_5;
         }
         if (array_key_exists('sunday', get_object_vars($data))) {
-            $values_6 = [];
-            foreach ($data->sunday as $value_6) {
-                $normalized_6 = $value_6 === null ? null : $this->normalizer->normalize($value_6, 'json', $context);
-                $values_6[] = \is_iterable($normalized_6) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_6) : $normalized_6;
+            $values_6 = null;
+            if (null !== $data->sunday) {
+                $values_6 = [];
+                foreach ($data->sunday as $value_6) {
+                    $normalized_6 = $value_6 === null ? null : $this->normalizer->normalize($value_6, 'json', $context);
+                    $values_6[] = \is_iterable($normalized_6) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_6) : $normalized_6;
+                }
             }
             $dataArray['sunday'] = $values_6;
         }

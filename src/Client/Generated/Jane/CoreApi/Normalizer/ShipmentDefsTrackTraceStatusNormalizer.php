@@ -40,9 +40,6 @@ class ShipmentDefsTrackTraceStatusNormalizer implements DenormalizerInterface, N
         if (\array_key_exists('final', $data) && \is_int($data['final'])) {
             $data['final'] = (bool) $data['final'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsTrackTraceStatusConstraint());
-        }
         if (\array_key_exists('current', $data)) {
             $object->current = is_int($data['current']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentStatus::tryFrom($data['current']) ?? $data['current'] : $data['current'];
         }

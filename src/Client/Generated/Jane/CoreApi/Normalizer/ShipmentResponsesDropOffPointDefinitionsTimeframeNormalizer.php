@@ -37,9 +37,6 @@ class ShipmentResponsesDropOffPointDefinitionsTimeframeNormalizer implements Den
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDropOffPointDefinitionsTimeframeConstraint());
-        }
         if (\array_key_exists('start', $data) && $data['start'] !== null) {
             $value = $data['start'];
             if (is_array($data['start']) and \array_key_exists('date', $data['start']) and \array_key_exists('timezone', $data['start']) and (\array_key_exists('timezone_type', $data['start']) and ($data['start']['timezone_type'] == '0' or $data['start']['timezone_type'] == '1' or $data['start']['timezone_type'] == '2' or $data['start']['timezone_type'] == '3'))) {

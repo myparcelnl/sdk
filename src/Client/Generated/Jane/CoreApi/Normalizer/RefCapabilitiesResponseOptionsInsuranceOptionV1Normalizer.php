@@ -43,9 +43,6 @@ class RefCapabilitiesResponseOptionsInsuranceOptionV1Normalizer implements Denor
         if (\array_key_exists('is_required', $data) && \is_int($data['is_required'])) {
             $data['is_required'] = (bool) $data['is_required'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesResponseOptionsInsuranceOptionV1Constraint());
-        }
         if (\array_key_exists('is_selected_by_default', $data)) {
             $object->isSelectedByDefault = $data['is_selected_by_default'];
             unset($data['is_selected_by_default']);

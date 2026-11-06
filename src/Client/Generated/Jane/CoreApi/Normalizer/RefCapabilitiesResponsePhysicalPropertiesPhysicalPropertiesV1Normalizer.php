@@ -37,9 +37,6 @@ class RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV1Normalizer im
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV1Constraint());
-        }
         if (\array_key_exists('weight', $data)) {
             $object->weight = $this->denormalizer->denormalize($data['weight'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponsePhysicalPropertiesPhysicalProperty::class, 'json', $context);
             unset($data['weight']);
