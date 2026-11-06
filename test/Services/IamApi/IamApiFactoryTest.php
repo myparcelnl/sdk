@@ -6,16 +6,12 @@ namespace MyParcelNL\Sdk\Test\Services\IamApi;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client;
 use MyParcelNL\Sdk\Services\IamApi\IamApiFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class IamApiFactoryTest extends TestCase
 {
-    /**
-     * @var array<int, array{method: string, url: string, options: array<string, mixed>}>
-     */
-    private array $requests = [];
+    use MocksHttpClient;
 
     public function testMakeCreatesTheGeneratedIamClient(): void
     {
@@ -41,21 +37,5 @@ final class IamApiFactoryTest extends TestCase
         $this->expectExceptionMessage('API key cannot be empty');
 
         IamApiFactory::make('');
-    }
-
-    private function mockHttpClient(): MockHttpClient
-    {
-        return new MockHttpClient(function (string $method, string $url, array $options): MockResponse {
-            $this->requests[] = ['method' => $method, 'url' => $url, 'options' => $options];
-
-            return new MockResponse('{"type":"SHOP","id":"1"}', ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
-        });
-    }
-
-    private function header(string $name): ?string
-    {
-        $line = $this->requests[0]['options']['normalized_headers'][$name][0] ?? null;
-
-        return null === $line ? null : substr($line, strlen($name) + 2);
     }
 }

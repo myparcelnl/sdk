@@ -112,8 +112,8 @@ final class JaneClientFactory
      * Get the serializer of the IAM client, to read a response that the client returns as decoded
      * JSON, such as the whoami response.
      *
-     * @todo Make this method private when Jane generates a model for the whoami response and
-     *       ApiKeyService::principalClass() goes.
+     * @todo janephp/janephp#1156: make this method private when Jane generates a model for the whoami
+     *       response, and ApiKeyService::principalClass() goes.
      */
     public static function iamSerializer(): SkipValidationOnReadSerializer
     {

@@ -12,13 +12,14 @@ use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\RoleShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\RoleUser;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Auth\ApiKeyService;
+use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use UnexpectedValueException;
 
 final class ApiKeyServiceTest extends TestCase
 {
+    use MocksHttpClient;
+
     private const SHOP_PRINCIPAL = [
         'accountId' => '225196',
         'platform'  => 'MYPARCEL_NL',
@@ -39,21 +40,13 @@ final class ApiKeyServiceTest extends TestCase
         'type'      => 'USER',
     ];
 
-    /**
-     * @var array<int, array{method: string, url: string, options: array<string, mixed>}>
-     */
-    private array $requests = [];
-
     public function testGetPrincipalAsksIamWithTheApiKey(): void
     {
         $this->createService(self::SHOP_PRINCIPAL)->getPrincipal();
 
         self::assertSame('GET', $this->requests[0]['method']);
         self::assertSame('https://iam.api.myparcel.nl/whoami', $this->requests[0]['url']);
-        self::assertSame(
-            'Authorization: Bearer ' . base64_encode('plain_api_key'),
-            $this->requests[0]['options']['normalized_headers']['authorization'][0]
-        );
+        self::assertSame('Bearer ' . base64_encode('plain_api_key'), $this->header('authorization'));
     }
 
     public function testGetPrincipalReturnsAShopPrincipal(): void
@@ -119,6 +112,19 @@ final class ApiKeyServiceTest extends TestCase
         $service->isValid();
     }
 
+    /**
+     * The generated endpoint reads a 200 only with a JSON content type. Another 200 is not an answer
+     * of IAM, so it does not prove the key.
+     */
+    public function testIsValidThrowsForA200WithoutAJsonBody(): void
+    {
+        $service = $this->createService(self::SHOP_PRINCIPAL, 200, 'text/plain');
+
+        $this->expectException(ClientException::class);
+
+        $service->isValid();
+    }
+
     public function testIsValidThrowsForAnErrorStatusThatTheSpecDoesNotDeclare(): void
     {
         $service = $this->createService(['message' => 'Forbidden'], 403);
@@ -133,14 +139,7 @@ final class ApiKeyServiceTest extends TestCase
      */
     private function createService(array $response, int $status = 200, string $contentType = 'application/json'): ApiKeyService
     {
-        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($response, $status, $contentType): MockResponse {
-            $this->requests[] = ['method' => $method, 'url' => $url, 'options' => $options];
-
-            return new MockResponse(
-                json_encode($response, JSON_THROW_ON_ERROR),
-                ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]
-            );
-        });
+        $httpClient = $this->mockHttpClient(json_encode($response, JSON_THROW_ON_ERROR), $status, $contentType);
 
         return new ApiKeyService('plain_api_key', JaneClientFactory::iamApi('plain_api_key', null, null, [], $httpClient));
     }
