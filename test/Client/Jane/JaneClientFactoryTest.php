@@ -165,7 +165,7 @@ final class JaneClientFactoryTest extends TestCase
     /**
      * When a regeneration adds or removes a class that Client::create() instantiates, this test fails,
      * so the factory can follow. The test also checks the server URL and the JSON decode options,
-     * which the factory copies.
+     * which the factory copies, and the JSON encode options, which the factory replaces on purpose.
      */
     public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(): void
     {
@@ -201,6 +201,12 @@ final class JaneClientFactoryTest extends TestCase
             "JsonDecode(['json_decode_associative' => true])",
             $source,
             'The generated Client::create() decodes JSON with other options. Update JaneClientFactory::createSerializer().'
+        );
+
+        self::assertStringContainsString(
+            'JsonEncode()',
+            $source,
+            'The generated Client::create() encodes JSON with options. Merge them into the JsonEncode options of JaneClientFactory::createSerializer().'
         );
     }
 
