@@ -66,7 +66,7 @@ final class ReturnShipmentService
         $data->returnShipments = CoreApiModels::toModels($returnShipments, ShipmentPostReturnShipmentsRequestDataReturnShipmentsItem::class);
 
         $request       = new ShipmentPostReturnShipmentsRequest();
-        $request->data = CoreApiModels::withoutNullUntypedProperties($data);
+        $request->data = $data;
 
         // The spec types `send_return_mail` as an integer, 0 or 1.
         return $this->mapCreatedShipments($this->api()->postShipments(
@@ -95,7 +95,7 @@ final class ReturnShipmentService
         $data->returnShipments = CoreApiModels::toModels($returnShipments, ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItem::class);
 
         $request       = new ShipmentPostUnrelatedReturnShipmentsRequest();
-        $request->data = CoreApiModels::withoutNullUntypedProperties($data);
+        $request->data = $data;
 
         return $this->mapCreatedShipments($this->api()->postShipments(requestBody: $request));
     }
