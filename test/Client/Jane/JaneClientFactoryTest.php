@@ -22,11 +22,10 @@ use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer as IamApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder as IamApiFormEncoder;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -38,10 +37,7 @@ use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 final class JaneClientFactoryTest extends TestCase
 {
-    /**
-     * @var array<int, array{method: string, url: string, options: array<string, mixed>}>
-     */
-    private array $requests = [];
+    use MocksHttpClient;
 
     public function testSendsTheApiKeyTheUserAgentAndTheHeaders(): void
     {
@@ -302,22 +298,6 @@ final class JaneClientFactoryTest extends TestCase
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(self::shipmentsResponse([$shipment])));
 
         return $client->getShipments()->data->shipments[0];
-    }
-
-    private function mockHttpClient(string $body): MockHttpClient
-    {
-        return new MockHttpClient(function (string $method, string $url, array $options) use ($body): MockResponse {
-            $this->requests[] = ['method' => $method, 'url' => $url, 'options' => $options];
-
-            return new MockResponse($body, ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
-        });
-    }
-
-    private function header(string $name): ?string
-    {
-        $line = $this->requests[0]['options']['normalized_headers'][$name][0] ?? null;
-
-        return null === $line ? null : substr($line, strlen($name) + 2);
     }
 
     /**

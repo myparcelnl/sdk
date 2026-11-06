@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Services\Auth;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException;
-use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
@@ -16,7 +15,10 @@ use MyParcelNL\Sdk\Services\IamApi\IamApiFactory;
 use UnexpectedValueException;
 
 /**
- * Checks an API key with IAM, and tells a shop key from a user key.
+ * Checks an API key with IAM and reads its principal.
+ *
+ * An API key belongs to a shop, so IAM answers with a `PrincipalShop`. The spec also describes a
+ * `PrincipalUser`, the answer for a user token, and this service reads that one too.
  */
 final class ApiKeyService
 {
@@ -45,10 +47,11 @@ final class ApiKeyService
      * Check whether IAM accepts the API key.
      *
      * Only a 401 means that the key is invalid. Another error says nothing about the key, so this
-     * method throws it. A 200 proves the key, also for a principal type that the SDK does not know.
+     * method throws it. A 200 with a JSON body proves the key, also for a principal type that the
+     * SDK does not know.
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException For a 500 with an `application/problem+json` body.
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status other than 401 that the spec does not declare.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status other than 401 that the spec does not declare, or for a 200 without a JSON body.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
      * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a body that is not valid JSON.
      */
@@ -59,9 +62,8 @@ final class ApiKeyService
 
             return true;
         } catch (ClientException $exception) {
-            // Read the status from the response, because a status exception that Jane generates from
-            // the spec has no code.
-            if ($exception instanceof WithResponseInterface && 401 === $exception->getResponse()?->getStatusCode()) {
+            // Every exception that Jane generates carries the HTTP status as its code.
+            if (401 === $exception->getCode()) {
                 return false;
             }
 
@@ -73,7 +75,7 @@ final class ApiKeyService
      * Fetch the IAM principal for the configured API key.
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException For a 500 with an `application/problem+json` body.
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For a 401, or for an error status that the spec does not declare.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For a 401, for an error status that the spec does not declare, or for a 200 without a JSON body.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
      * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a body that is not valid JSON.
      * @throws \UnexpectedValueException When IAM returns a principal type that this SDK does not know.
@@ -81,9 +83,9 @@ final class ApiKeyService
     public function getPrincipal(): PrincipalShop|PrincipalUser
     {
         // The spec describes the response as a oneOf of PrincipalShop and PrincipalUser with a
-        // discriminator on `type`. Jane generates no model for it, so getWhoami() returns the decoded
-        // JSON. This method picks the model and reads the JSON with the serializer of the client,
-        // which skips the validation on read, as it does for every response.
+        // discriminator on `type`. Jane generates no model for it (janephp/janephp#1156), so
+        // getWhoami() returns the decoded JSON. This method picks the model and reads the JSON with
+        // the serializer of the client, which skips the validation on read, as it does for every response.
         $whoami = $this->getApi()->getWhoami();
 
         return $this->serializer->deserialize(json_encode($whoami, JSON_THROW_ON_ERROR), $this->principalClass($whoami->type ?? null), 'json');
@@ -92,8 +94,8 @@ final class ApiKeyService
     /**
      * Pick the model that the discriminator on `type` in the spec describes.
      *
-     * @todo Remove this method when Jane generates a model for a oneOf with a discriminator, such as
-     *       the whoami response.
+     * @todo janephp/janephp#1156: remove this method when Jane generates a model for a oneOf response
+     *       with a discriminator, such as the whoami response.
      *
      * @return class-string<PrincipalShop|PrincipalUser>
      */
