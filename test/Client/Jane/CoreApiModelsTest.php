@@ -31,40 +31,13 @@ final class CoreApiModelsTest extends TestCase
         self::assertArrayNotHasKey('barcode', CoreApiModels::toArray($this->shipment(['id' => 1])));
     }
 
-    public function testToArrayLeavesOutAListThatTheApiSentAsNull(): void
+    public function testToArrayKeepsAListThatTheApiSentAsNull(): void
     {
         $shipment = $this->shipment(['id' => 1, 'shipped_items' => null]);
 
         self::assertNull($shipment->shippedItems);
-        self::assertArrayNotHasKey('shipped_items', CoreApiModels::toArray($shipment));
-    }
-
-    /**
-     * CoreApiModels::withoutNullLists() exists because the generated normalizer iterates over a nullable
-     * list that is null. When this test fails, Jane skips such a list: remove that method.
-     */
-    public function testJaneStillIteratesOverANullList(): void
-    {
-        $model               = new ShipmentDefsShipment();
-        $model->shippedItems = null;
-        $warning             = null;
-        set_error_handler(static function (int $level, string $message) use (&$warning): bool {
-            $warning = $message;
-
-            return true;
-        });
-
-        try {
-            $this->serializer()->normalize($model, 'json', ['skip_validation' => true]);
-        } finally {
-            restore_error_handler();
-        }
-
-        self::assertStringContainsString(
-            'foreach() argument must be of type array|object, null given',
-            (string) $warning,
-            'Jane now skips a null list. Remove CoreApiModels::withoutNullLists().'
-        );
+        self::assertArrayHasKey('shipped_items', CoreApiModels::toArray($shipment));
+        self::assertNull(CoreApiModels::toArray($shipment)['shipped_items']);
     }
 
     /**
