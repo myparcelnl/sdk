@@ -207,6 +207,9 @@ final class JaneClientFactoryTest extends TestCase
     /**
      * The spec types a shipment option flag as a number, so the model holds a float. The API expects
      * the integers 0 and 1.
+     *
+     * @todo CLOUD-2372: remove this test when the spec types the flags as integer, and the client
+     *       is generated again. The flag is then an int, and the encoder options can go.
      */
     public function testSendsAFloatWithAZeroFractionAsAnInteger(): void
     {

@@ -109,7 +109,10 @@ final class JaneClientFactory
         // Client::create() builds a serializer that validates responses, and a client cannot change
         // it later. So this factory builds the same parts, wrapped in SkipValidationOnReadSerializer.
         // Without JSON_PRESERVE_ZERO_FRACTION, a float with a zero fraction, such as the flag 1.0 of a
-        // shipment option, goes out as the integer 1.
+        // shipment option, goes out as the integer 1. The spec types the flag as a number, so Jane
+        // makes it a float.
+        // @todo CLOUD-2372: use the default JsonEncode options when the spec types the flags as
+        //       integer, and the client is generated again.
         return new SkipValidationOnReadSerializer(
             new Serializer(
                 [new ArrayDenormalizer(), $normalizer],
