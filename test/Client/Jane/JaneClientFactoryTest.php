@@ -269,8 +269,6 @@ final class JaneClientFactoryTest extends TestCase
         $recipient->street     = 'Antareslaan';
         $recipient->number     = '31';
         $recipient->person     = 'Test Person';
-        // Jane sends an unset field without a type as null (janephp/janephp#1141), and the validation rejects it.
-        unset($recipient->email);
 
         $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
         $options->packageType = 1;
@@ -378,8 +376,6 @@ final class JaneClientFactoryTest extends TestCase
         $recipient->street     = 'Antareslaan';
         $recipient->number     = '31';
         $recipient->person     = 'Test Person';
-        // Jane sends an unset field without a type as null (janephp/janephp#1141), and the validation rejects it.
-        unset($recipient->email);
 
         $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
         $options->packageType = 1;
@@ -406,6 +402,37 @@ final class JaneClientFactoryTest extends TestCase
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(self::shipmentsResponse([$shipment])));
 
         return $client->getShipments()->data->shipments[0];
+    }
+
+    /**
+     * Before janephp/janephp#1141, the normalizer sent a property without a type, such as the email of
+     * a recipient, as null when nobody set it, and the validation rejected the request.
+     */
+    public function testLeavesOutAPropertyWithoutATypeThatNobodySet(): void
+    {
+        $recipient     = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+        $recipient->cc = 'NL';
+
+        self::assertSame(['cc' => 'NL'], self::coreApiSerializer()->normalize($recipient, 'json', ['skip_validation' => true]));
+    }
+
+    /**
+     * Before janephp/janephp#1150, the normalizer iterated over a nullable list that the API sent as
+     * null, and PHP warned.
+     */
+    public function testNormalizesANullableListThatTheApiSentAsNull(): void
+    {
+        $shipment = self::coreApiSerializer()->denormalize(['id' => 1, 'shipped_items' => null], ShipmentDefsShipment::class, 'json');
+        $array    = json_decode(json_encode(self::coreApiSerializer()->normalize($shipment, 'json', ['skip_validation' => true])), true);
+
+        self::assertNull($shipment->shippedItems);
+        self::assertArrayHasKey('shipped_items', $array);
+        self::assertNull($array['shipped_items']);
+    }
+
+    private static function coreApiSerializer(): Serializer
+    {
+        return new Serializer([new ArrayDenormalizer(), new CoreApiNormalizer()]);
     }
 
     /**
