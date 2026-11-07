@@ -56,6 +56,6 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
      */
     private function api(): Client
     {
-        return $this->api ??= ShipmentApiFactory::client(null, null, $this->getUserAgentHeader());
+        return $this->api ??= ShipmentApiFactory::make(null, null, $this->getUserAgentHeader());
     }
 }

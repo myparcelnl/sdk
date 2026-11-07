@@ -73,6 +73,7 @@ Some fields hold another type than the v11 getter returned:
 | `WebhookService` | The constructor takes a `CoreApi\Api\WebhookApi`. `getAll()` and `getById()` return `CoreApi\Model\WebhooksResponsesWebhookV11` objects with getters, such as `getHook()` | The constructor takes a `Jane\CoreApi\Client`. `getAll()` and `getById()` return `Jane` models with public properties, such as `$subscription->hook` and `$subscription->id`. `payload` is not initialized when the API does not send it: read it with `$subscription->payload ?? null` |
 | `WebhookService` | It throws a `CoreApi\ApiException` for an error response and for a network error | It throws a `Jane\CoreApi\Exception\ApiException` for an error response. A network error, such as a timeout, throws a Symfony `TransportExceptionInterface` |
 | `WebhookApiFactory` | `make()` returns a `CoreApi\Api\WebhookApi` | `make()` returns a `Jane\CoreApi\Client`. New fourth and fifth arguments take headers to send on every request and a Symfony `HttpClientInterface` |
+| `ShipmentApiFactory` | `make()` returns a `CoreApi\Api\ShipmentApi` | `make()` returns a `Jane\CoreApi\Client`. A new fifth argument takes a Symfony `HttpClientInterface` that sends the requests |
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
 

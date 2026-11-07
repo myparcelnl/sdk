@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Services\MultiCollo\MultiColloShipmentService;
 use MyParcelNL\Sdk\Services\Returns\ReturnShipmentService;
@@ -37,6 +33,8 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 {
     private string $liveApiKey;
 
+    private ?string $liveHost;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,6 +46,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         $this->liveApiKey = $key;
+        $this->liveHost   = self::liveApiHost();
     }
 
     public function testSetLinkOfLabelsForCreatedShipment(): void
@@ -55,11 +54,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $shipments = [$this->createMinimalNlShipment('smoke-label-' . uniqid('', true))];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
 
-            $labels = new ShipmentLabelsService($this->liveApiKey);
+            $labels = new ShipmentLabelsService($this->liveApiKey, host: $this->liveHost);
             $link = $labels->setLinkOfLabels($shipmentIds, false);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
@@ -67,7 +66,10 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         self::assertNotEmpty($link);
-        self::assertStringContainsString((new Configuration())->getHost(), $link);
+        self::assertStringContainsString(
+            (string) parse_url($this->liveHost ?? JaneClientFactory::CORE_API_HOST, PHP_URL_HOST),
+            $link
+        );
         self::assertSame($link, $labels->getLinkOfLabels());
     }
 
@@ -76,11 +78,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $shipments = [$this->createMinimalNlShipment('smoke-label-pdf-' . uniqid('', true))];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
 
-            $labels = new ShipmentLabelsService($this->liveApiKey);
+            $labels = new ShipmentLabelsService($this->liveApiKey, host: $this->liveHost);
             $pdf = $labels->setPdfOfLabels($shipmentIds, false);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
@@ -92,53 +94,17 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         self::assertSame($pdf, $labels->getLabelPdf());
     }
 
-    public function testGeneratedLabelsRequestWithExplicitAcceptReturnsBody(): void
-    {
-        $shipments = [$this->createMinimalNlShipment('smoke-generated-label-body-' . uniqid('', true))];
-
-        try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($shipments);
-            $shipmentIds = array_keys($created);
-
-            $api = ShipmentApiFactory::make($this->liveApiKey);
-            $request = $api->getShipmentsLabelsRequest(
-                implode(';', $shipmentIds),
-                'A6',
-                null,
-                null,
-                null,
-                'SDK-LiveSmoke/labels-body-check'
-            )->withHeader('Accept', 'application/vnd.shipment_label_link+json');
-
-            $response = (new GuzzleClient(['timeout' => 10]))->send($request);
-            $body = (string) $response->getBody();
-        } catch (\Throwable $e) {
-            $this->handleLiveException($e);
-            return;
-        }
-
-        self::assertNotEmpty($body, 'Expected non-empty response body for label link request.');
-
-        $decoded = json_decode($body, true);
-        self::assertIsArray($decoded, 'Expected JSON body for label link response.');
-
-        $link = $decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null;
-        self::assertIsString($link, 'Expected label URL in response body.');
-        self::assertNotSame('', $link, 'Expected non-empty label URL in response body.');
-    }
-
     public function testFetchTrackTraceDataForCreatedShipment(): void
     {
         $shipments = [$this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true))];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
             $shipmentId = (int) $shipmentIds[0];
 
-            $trackTrace = new ShipmentTrackTraceService($this->liveApiKey);
+            $trackTrace = new ShipmentTrackTraceService($this->liveApiKey, baseUri: $this->liveHost);
             $result = $this->fetchTrackTraceWithRetry($trackTrace, $shipmentIds, $shipmentId);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
@@ -161,11 +127,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $shipments = [$this->createMinimalNlShipment($referenceIdentifier)];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
             $shipmentId = (int) array_keys($created)[0];
 
-            $queryService = new ShipmentQueryService($this->liveApiKey);
+            $queryService = new ShipmentQueryService($this->liveApiKey, host: $this->liveHost);
             $foundById = $queryService->find($shipmentId);
             $foundByReference = $queryService->findByReferenceId($referenceIdentifier);
             $foundMany = $queryService->findMany([$shipmentId]);
@@ -195,12 +161,12 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $shipments = [$this->createMinimalNlShipment('smoke-delete-' . uniqid('', true))];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
             $shipmentId = (int) array_keys($created)[0];
 
-            $deleteService = new ShipmentDeleteService($this->liveApiKey);
-            $queryService = new ShipmentQueryService($this->liveApiKey);
+            $deleteService = new ShipmentDeleteService($this->liveApiKey, host: $this->liveHost);
+            $queryService = new ShipmentQueryService($this->liveApiKey, host: $this->liveHost);
 
             $deleteService->deleteMany([$shipmentId]);
             $deleted = $this->waitUntilShipmentDeleted($queryService, $shipmentId);
@@ -217,11 +183,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $shipments = [$this->createMinimalNlShipment('smoke-related-return-parent-' . uniqid('', true))];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
             $parentShipmentId = (int) array_keys($created)[0];
 
-            $returnService = new ReturnShipmentService($this->liveApiKey);
+            $returnService = new ReturnShipmentService($this->liveApiKey, host: $this->liveHost);
             $result = $returnService->createRelated([[
                 'parent'               => $parentShipmentId,
                 'carrier'              => RefTypesCarrierReturns::NUMBER_1,
@@ -245,7 +211,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     public function testCreateUnrelatedReturnShipment(): void
     {
         try {
-            $returnService = new ReturnShipmentService($this->liveApiKey);
+            $returnService = new ReturnShipmentService($this->liveApiKey, host: $this->liveHost);
             $result = $returnService->createUnrelated([[
                 'carrier'              => RefTypesCarrierReturns::NUMBER_1,
                 'email'                => 'smoke@myparcel.nl',
@@ -276,7 +242,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $shipments = [$multiColloShipment];
 
         try {
-            $createService = new ShipmentCreateService($this->liveApiKey);
+            $createService = new ShipmentCreateService($this->liveApiKey, host: $this->liveHost);
             $created = $createService->create($shipments);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
@@ -299,7 +265,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $createdId = null;
 
         try {
-            $service = new WebhookService($this->liveApiKey);
+            $service = new WebhookService($this->liveApiKey, host: $this->liveHost);
             $url     = 'https://example.com/smoke-webhook-' . $hook . '-' . uniqid('', true);
 
             // 1. Subscribe (replaces old $webhookWebService->subscribe($url))
@@ -338,7 +304,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             // Cleanup on failure
             if (null !== $createdId) {
                 try {
-                    (new WebhookService($this->liveApiKey))->unsubscribe($createdId);
+                    (new WebhookService($this->liveApiKey, host: $this->liveHost))->unsubscribe($createdId);
                 } catch (\Throwable $ignored) {
                 }
             }
@@ -355,7 +321,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $createdIds = [];
 
         try {
-            $service = new WebhookService($this->liveApiKey);
+            $service = new WebhookService($this->liveApiKey, host: $this->liveHost);
 
             // Subscribe two different hooks
             $createdIds[] = $service->subscribe(
@@ -377,7 +343,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             // Cleanup on failure
             foreach ($createdIds as $id) {
                 try {
-                    (new WebhookService($this->liveApiKey))->unsubscribe($id);
+                    (new WebhookService($this->liveApiKey, host: $this->liveHost))->unsubscribe($id);
                 } catch (\Throwable $ignored) {
                 }
             }
@@ -538,13 +504,12 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             return;
         }
 
-        if ($e instanceof ConnectException || $e instanceof TransportExceptionInterface) {
+        if ($e instanceof TransportExceptionInterface) {
             $this->markTestSkipped('Skipping live smoke: connection error: ' . $message);
             return;
         }
 
         $response = match (true) {
-            $e instanceof RequestException => $e->getResponse(),
             $e instanceof WithResponseInterface => $e->getResponse(),
             default => null,
         };

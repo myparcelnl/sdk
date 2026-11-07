@@ -98,6 +98,6 @@ final class CarrierContractDefinitionsService
      */
     private function api(): Client
     {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
+        return $this->api ??= ShipmentApiFactory::make($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }
