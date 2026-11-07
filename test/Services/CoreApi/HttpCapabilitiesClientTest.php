@@ -6,7 +6,8 @@ namespace MyParcelNL\Sdk\Test\Services\CoreApi;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -30,7 +31,7 @@ final class HttpCapabilitiesClientTest extends TestCase
             . '"transactionTypes":["B2C"],"collo":{"max":5}}]}'
         );
 
-        $response = $client->getCapabilities(CapabilitiesRequest::forCountry('NL')->withCarrier('POSTNL'));
+        $response = $client->getCapabilities(self::request(['recipient' => ['countryCode' => 'NL'], 'carrier' => 'POSTNL']));
 
         self::assertSame('POST', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/capabilities', $this->requests[0]['url']);
@@ -55,7 +56,7 @@ final class HttpCapabilitiesClientTest extends TestCase
             '{"results":[{"carrier":"FUTURE_CARRIER","packageTypes":["FUTURE_PACKAGE"],"options":{"requiresSignature":{},"futureOption":{}}}]}'
         );
 
-        $response = $client->getCapabilities(CapabilitiesRequest::forCountry('NL'));
+        $response = $client->getCapabilities(self::request(['recipient' => ['countryCode' => 'NL']]));
 
         self::assertSame('FUTURE_CARRIER', $response->getCarrier());
         self::assertSame(['FUTURE_PACKAGE'], $response->getPackageTypes());
@@ -67,7 +68,7 @@ final class HttpCapabilitiesClientTest extends TestCase
         $client = $this->createClient('{"results":[]}');
 
         try {
-            $client->getCapabilities(CapabilitiesRequest::forCountry('NL')->withCarrier('FUTURE_CARRIER'));
+            $client->getCapabilities(self::request(['recipient' => ['countryCode' => 'NL'], 'carrier' => 'FUTURE_CARRIER']));
             self::fail('An unknown carrier must throw.');
         } catch (ValidationException) {
             self::assertSame([], $this->requests);
@@ -79,11 +80,19 @@ final class HttpCapabilitiesClientTest extends TestCase
         $client = $this->createClient('{"message":"Invalid country code"}', 422);
 
         try {
-            $client->getCapabilities(CapabilitiesRequest::forCountry('XX'));
+            $client->getCapabilities(self::request(['recipient' => ['countryCode' => 'XX']]));
             self::fail('A 422 response must throw.');
         } catch (PostCapabilitiesClientErrorException $exception) {
             self::assertSame(422, $exception->getResponse()->getStatusCode());
         }
+    }
+
+    /**
+     * @param array<string, mixed> $data The request with the API field names.
+     */
+    private static function request(array $data): CapabilitiesPostCapabilitiesRequestV2
+    {
+        return CoreApiModels::toModel($data, CapabilitiesPostCapabilitiesRequestV2::class);
     }
 
     private function createClient(string $body, int $status = 200): HttpCapabilitiesClient
