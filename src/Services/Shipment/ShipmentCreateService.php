@@ -9,8 +9,8 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
 /**
@@ -18,27 +18,9 @@ use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
  */
 final class ShipmentCreateService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
     use PreparesShipments;
-
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
-
-    /**
-     * Create the service with an API key, or with a client that keeps its own User-Agent.
-     */
-    public function __construct(
-        string $apiKey,
-        ?Client $api = null,
-        ?string $host = null
-    ) {
-        $this->apiKey = $apiKey;
-        $this->api    = $api;
-        $this->host   = $host;
-    }
 
     /**
      * Create shipments.
@@ -86,12 +68,4 @@ final class ShipmentCreateService
         return $this->mapCreatedIds($request->data->shipments, $response->data->shipments);
     }
 
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
-    }
 }
