@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Model\Recipient;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuroCurrency;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Support\Collection;
 
 class Order extends AbstractOrder
@@ -42,6 +46,68 @@ class Order extends AbstractOrder
         $this->recipient        = new Recipient($shipment['recipient'] ?? []);
         $this->invoice_address  = new Recipient($data['invoice_address'] ?? []);
         $this->order_lines      = (new Collection($data['order_lines'] ?? []))->mapInto(OrderLine::class);
-        $this->delivery_options = ShipmentOptions::fromOrderResponse($shipment);
+        $this->delivery_options = self::deliveryOptionsFromApi($shipment);
     }
+
+    /**
+     * Read the shipment options of an Order v1 response into the generated model.
+     *
+     * Order v1 nests the options under `shipment_options`, uses `date` for `delivery_date`, and can
+     * send the insurance as a whole amount in euros, where the model holds cents.
+     *
+     * @param array<string, mixed> $shipment The `shipment` of the response.
+     */
+    private static function deliveryOptionsFromApi(array $shipment): ShipmentOptionsModel
+    {
+        $options = $shipment['shipment_options'] ?? $shipment['options'] ?? [];
+        $flag    = static fn (mixed $value): ?int => null === $value ? null : (int) (bool) $value;
+
+        $insurance = $options['insurance'] ?? null;
+
+        if (is_numeric($insurance)) {
+            $insurance = ['amount' => (int) round((float) $insurance * 100), 'currency' => RefTypesPriceEuroCurrency::Eur->value];
+        }
+
+        return CoreApiModels::toModel(array_filter([
+            'delivery_date'     => $options['delivery_date'] ?? $options['date'] ?? null,
+            'delivery_type'     => self::typeId($options['delivery_type'] ?? null, ApiMapperService::forDeliveryType()),
+            'package_type'      => self::typeId($options['package_type'] ?? null, ApiMapperService::forPackageType()),
+            'signature'         => $flag($options['signature'] ?? null),
+            'collect'           => $flag($options['collect'] ?? null),
+            'receipt_code'      => $flag($options['receipt_code'] ?? null),
+            'only_recipient'    => $flag($options['only_recipient'] ?? null),
+            'age_check'         => $flag($options['age_check'] ?? null),
+            'large_format'      => $flag($options['large_format'] ?? null),
+            'return'            => $flag($options['return'] ?? null),
+            'priority_delivery' => $flag($options['priority_delivery'] ?? null),
+            'label_description' => $options['label_description'] ?? null,
+            'insurance'         => is_array($insurance) || is_object($insurance) ? $insurance : null,
+        ], static fn (mixed $value): bool => null !== $value), ShipmentOptionsModel::class);
+    }
+
+    /**
+     * Turn a delivery type or package type of an order into the id that the model holds.
+     *
+     * The Order API can send the id, such as `1`, or the v2 name, such as `'PACKAGE'` or `'STANDARD'`.
+     *
+     * @param mixed            $value  The value of the order, or null when the order has none.
+     * @param ApiMapperService $mapper The mapper of the domain, such as ApiMapperService::forPackageType().
+     *
+     * @throws InvalidArgumentException For a name that the mapper does not know.
+     */
+    private static function typeId(mixed $value, ApiMapperService $mapper): ?int
+    {
+        if (null === $value || is_int($value)) {
+            return $value;
+        }
+
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        // A name that the mapper does not know has no id. The model takes only an id, so say which value it is.
+        return $mapper->idFromV2Name((string) $value)
+            ?? throw new InvalidArgumentException(sprintf('The order has an unknown type name: %s.', json_encode($value)));
+    }
+
 }
