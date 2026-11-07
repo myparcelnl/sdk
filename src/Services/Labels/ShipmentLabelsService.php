@@ -179,15 +179,11 @@ final class ShipmentLabelsService
     {
         if (is_numeric($positions)) {
             $first = RefShipmentLabelPrintingPosition::tryFrom((int) $positions);
-
-            $fromFirst = null === $first ? [] : array_filter(
-                RefShipmentLabelPrintingPosition::cases(),
-                static fn (RefShipmentLabelPrintingPosition $position): bool => $position->value >= $first->value
-            );
+            $last  = max(array_column(RefShipmentLabelPrintingPosition::cases(), 'value'));
 
             return [
                 ShipmentParametersPaperSize::A4->value,
-                [] === $fromFirst ? null : implode(';', array_map(static fn (RefShipmentLabelPrintingPosition $position): int => $position->value, $fromFirst)),
+                null === $first ? null : implode(';', range($first->value, $last)),
             ];
         }
 

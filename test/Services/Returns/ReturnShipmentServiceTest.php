@@ -73,7 +73,7 @@ final class ReturnShipmentServiceTest extends TestCase
         }
     }
 
-    public function testCreateRelatedReturnsEmptyMappingWhenResponseHasNoShipments(): void
+    public function testCreateRelatedReturnsEmptyMappingForAnEmptyShipmentList(): void
     {
         $service = $this->createService(self::idsResponse([]));
 
@@ -123,7 +123,7 @@ final class ReturnShipmentServiceTest extends TestCase
     }
 
     /**
-     * The spec requires `shipments` in the response. In v11, this response gave an empty mapping.
+     * The spec requires `shipments` in the response.
      */
     public function testCreateRelatedThrowsOnDataWithoutShipments(): void
     {
@@ -146,7 +146,7 @@ final class ReturnShipmentServiceTest extends TestCase
     }
 
     /**
-     * In v11, a null value left the field out of the request.
+     * A null in a scalar field throws before the request goes out.
      */
     public function testANullValueInARowThrows(): void
     {
@@ -155,6 +155,13 @@ final class ReturnShipmentServiceTest extends TestCase
         $this->expectException(TypeError::class);
 
         $service->createRelated([['email' => null] + self::RELATED_ROW]);
+    }
+
+    public function testAKeyThatTheApiDoesNotKnowGoesToTheApi(): void
+    {
+        $this->createService(self::idsResponse([]))->createRelated([['foo' => 'bar'] + self::RELATED_ROW]);
+
+        self::assertSame('bar', $this->requests[0]['body']['data']['return_shipments'][0]['foo'] ?? null);
     }
 
     public function testARowWithInvalidUtf8ThrowsBeforeTheRequestGoesOut(): void
