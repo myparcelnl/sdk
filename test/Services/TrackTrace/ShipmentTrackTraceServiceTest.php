@@ -13,6 +13,7 @@ use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use TypeError;
 
 final class ShipmentTrackTraceServiceTest extends TestCase
 {
@@ -106,6 +107,18 @@ final class ShipmentTrackTraceServiceTest extends TestCase
             ->fetchTrackTraceData([7]);
 
         self::assertSame([7], array_keys($result));
+    }
+
+    /**
+     * The spec does not allow null for `code`. A TypeError is not an Exception.
+     */
+    public function testANullThatTheSpecDoesNotAllowThrowsATypeError(): void
+    {
+        $service = $this->createService([['shipment_id' => 1, 'code' => null]]);
+
+        $this->expectException(TypeError::class);
+
+        $service->fetchTrackTraceData([1]);
     }
 
     public function testEmptyTrackTracesResponseReturnsEmptyArray(): void
