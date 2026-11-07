@@ -22,8 +22,8 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  *
  * Each return shipment in `$returnShipments` is an array with the API field names, such as `parent`
  * and `email`. The generated client checks the request before it sends it, and picks the content
- * type from the request body. A null value throws a TypeError: leave the field out. A key that the
- * API does not know goes to the API.
+ * type from the request body. Leave a field out instead of setting it to null. A key that the API
+ * does not know goes to the API.
  */
 final class ReturnShipmentService
 {
