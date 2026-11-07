@@ -60,20 +60,20 @@ class SpecDriftTest extends TestCase
      */
     public function testDisplacedPackageTypeSpecValuesAreUnchanged(): void
     {
-        $constants = self::cases(ShipmentResponsesDeliveryOptionsPackageTypeV2::class);
+        $cases = self::cases(ShipmentResponsesDeliveryOptionsPackageTypeV2::class);
 
-        $this->assertSame('package_small', $constants['SmallPackage'] ?? null);
-        $this->assertArrayNotHasKey('Unfranked', $constants);
-        $this->assertArrayNotHasKey('Envelope', $constants);
+        $this->assertSame('package_small', $cases['SmallPackage'] ?? null);
+        $this->assertArrayNotHasKey('Unfranked', $cases);
+        $this->assertArrayNotHasKey('Envelope', $cases);
     }
 
     public function testPickupIsStillAbsentFromTheDeliveryOptionsEnum(): void
     {
-        $constants = self::cases(ShipmentDefsDeliveryOptionsDeliveryNameV2::class);
+        $cases = self::cases(ShipmentDefsDeliveryOptionsDeliveryNameV2::class);
 
         $this->assertArrayNotHasKey(
             'Pickup',
-            $constants,
+            $cases,
             'The delivery-options enum now names Pickup. Drop the Pickup override so the value '
             . 'comes from the generated enum instead.'
         );
@@ -126,7 +126,7 @@ class SpecDriftTest extends TestCase
     /**
      * Check the override keys against the source cases, so a misspelling cannot create an extra row.
      */
-    public function testEveryOverrideStillPointsAtAKnownConstant(): void
+    public function testEveryOverrideStillPointsAtAKnownCase(): void
     {
         foreach (ApiMapperService::overrides() as $domain => $overrides) {
             $known = [];
@@ -229,7 +229,7 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * A value present in only one source can indicate different constant names across versions.
+     * A value present in only one source can indicate different case names across versions.
      * Review such changes before accepting them as an incomplete mapping.
      */
     public function testNoConceptIsNamedByOnlyOneSource(): void
@@ -249,7 +249,7 @@ class SpecDriftTest extends TestCase
                     sprintf(
                         '%s.%s is named by only one of its three source enums (%s). Usually this '
                         . 'means two enums spell the same concept differently, so it compiled into '
-                        . 'two half rows instead of one. Check for a near-identical constant name '
+                        . 'two half rows instead of one. Check for a near-identical case name '
                         . 'in the same domain; if the spelling really did change, add an override.',
                         $domain,
                         $caseName,
