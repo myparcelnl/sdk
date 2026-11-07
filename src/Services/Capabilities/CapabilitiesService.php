@@ -6,15 +6,17 @@ namespace MyParcelNL\Sdk\Services\Capabilities;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
 use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 
 /**
  * Gets the capabilities of the API for a request or a shipment.
+ *
+ * The response is the generated model: one result per carrier contract in `$response->results`, with
+ * its package types, delivery types, options, physical limits and the maximum number of colli.
  *
  * Build the request with the generated model, or fill one with the API field names:
  *
@@ -31,7 +33,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
 
     public function __construct(?CapabilitiesClientInterface $client = null)
     {
-        $this->client = $client ?? new HttpCapabilitiesClient(new CapabilitiesMapper());
+        $this->client = $client ?? new HttpCapabilitiesClient();
     }
 
     /**
@@ -41,7 +43,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a value that the spec does not know, such as a carrier. No request goes out.
      * @throws \UnexpectedValueException For a v1 response, which the request does not ask for.
      */
-    public function get(CapabilitiesPostCapabilitiesRequestV2 $request): CapabilitiesResponse
+    public function get(CapabilitiesPostCapabilitiesRequestV2 $request): CapabilitiesResponsesCapabilitiesV2
     {
         return $this->client->getCapabilities($request);
     }
@@ -52,7 +54,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
      *
      * @throws InvalidArgumentException When the recipient has no country code.
      */
-    public function fromShipment(ShipmentItem $shipment): CapabilitiesResponse
+    public function fromShipment(ShipmentItem $shipment): CapabilitiesResponsesCapabilitiesV2
     {
         $countryCode = $shipment->recipient->cc ?? null;
 
