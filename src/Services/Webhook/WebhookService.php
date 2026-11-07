@@ -11,6 +11,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscr
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookV11;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
 use UnexpectedValueException;
@@ -22,6 +23,7 @@ use UnexpectedValueException;
  */
 final class WebhookService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
 
     public const HOOK_SHIPMENT_STATUS_CHANGE             = 'shipment_status_change';
@@ -29,22 +31,6 @@ final class WebhookService
     public const HOOK_ORDER_STATUS_CHANGE                = 'order_status_change';
     public const HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED = 'shop_carrier_accessibility_updated';
     public const HOOK_SHOP_UPDATED                       = 'shop_updated';
-
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
-
-    /**
-     * Create the service with an API key, or with a client that keeps its own User-Agent.
-     */
-    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
-    {
-        $this->apiKey = $apiKey;
-        $this->api    = $api;
-        $this->host   = $host;
-    }
 
     /**
      * Subscribe to a webhook event.
