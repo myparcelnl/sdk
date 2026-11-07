@@ -37,9 +37,6 @@ class CommonResponsesUserErrorPermissionDeniedNormalizer implements Denormalizer
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CommonResponsesUserErrorPermissionDeniedConstraint());
-        }
         if (\array_key_exists('message', $data)) {
             $object->message = $data['message'];
             unset($data['message']);
@@ -80,10 +77,13 @@ class CommonResponsesUserErrorPermissionDeniedNormalizer implements Denormalizer
             $dataArray['status_code'] = $data->statusCode instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonHttpStatusCode4xxClientError401Unauthorized ? $data->statusCode->value : $data->statusCode;
         }
         if (array_key_exists('errors', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->errors as $value) {
-                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->errors) {
+                $values = [];
+                foreach ($data->errors as $value) {
+                    $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['errors'] = $values;
         }

@@ -9,9 +9,9 @@ use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
-use MyParcelNL\Sdk\Client\Jane\SkipValidationOnReadSerializer;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\IamApi\IamApiFactory;
+use Symfony\Component\Serializer\Serializer;
 use UnexpectedValueException;
 
 /**
@@ -30,7 +30,7 @@ final class ApiKeyService
 
     private ?string $host;
 
-    private SkipValidationOnReadSerializer $serializer;
+    private Serializer $serializer;
 
     public function __construct(
         string $apiKey,
@@ -85,7 +85,7 @@ final class ApiKeyService
         // The spec describes the response as a oneOf of PrincipalShop and PrincipalUser with a
         // discriminator on `type`. Jane generates no model for it (janephp/janephp#1156), so
         // getWhoami() returns the decoded JSON. This method picks the model and reads the JSON with
-        // the serializer of the client, which skips the validation on read, as it does for every response.
+        // the serializer of the client, which validates a model only when it goes out.
         $whoami = $this->getApi()->getWhoami();
 
         return $this->serializer->deserialize(json_encode($whoami, JSON_THROW_ON_ERROR), $this->principalClass($whoami->type ?? null), 'json');

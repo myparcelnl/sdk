@@ -37,9 +37,6 @@ class RefShipmentOptionsInsuranceMaxInsuranceNormalizer implements DenormalizerI
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentOptionsInsuranceMaxInsuranceConstraint());
-        }
         if (\array_key_exists('amount', $data)) {
             $object->amount = $data['amount'];
             unset($data['amount']);
@@ -54,7 +51,7 @@ class RefShipmentOptionsInsuranceMaxInsuranceNormalizer implements DenormalizerI
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('amount', get_object_vars($data))) {
+        if (array_key_exists('amount', get_object_vars($data)) && null !== ($data->amount ?? null)) {
             $dataArray['amount'] = $data->amount;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

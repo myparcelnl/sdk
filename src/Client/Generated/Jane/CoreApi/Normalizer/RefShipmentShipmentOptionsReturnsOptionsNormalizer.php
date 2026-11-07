@@ -76,9 +76,6 @@ class RefShipmentShipmentOptionsReturnsOptionsNormalizer implements Denormalizer
         if (\array_key_exists('signature', $data) && \is_int($data['signature'])) {
             $data['signature'] = (float) $data['signature'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentShipmentOptionsReturnsOptionsConstraint());
-        }
         if (\array_key_exists('contribution', $data)) {
             $object->contribution = $this->denormalizer->denormalize($data['contribution'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentShipmentOptionsReturnsOptionsContribution::class, 'json', $context);
             unset($data['contribution']);

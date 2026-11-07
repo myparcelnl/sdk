@@ -6,8 +6,10 @@ namespace MyParcelNL\Sdk\Test\Client\Jane;
 
 use Jane\Component\OpenApiRuntime\Client\Plugin\ServerUrlHttpClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteShipmentsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
@@ -267,8 +269,6 @@ final class JaneClientFactoryTest extends TestCase
         $recipient->street     = 'Antareslaan';
         $recipient->number     = '31';
         $recipient->person     = 'Test Person';
-        // Jane sends an unset field without a type as null (janephp/janephp#1141), and the validation rejects it.
-        unset($recipient->email);
 
         $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
         $options->packageType = 1;
@@ -291,6 +291,110 @@ final class JaneClientFactoryTest extends TestCase
     }
 
     /**
+     * A request body with a `+json` content type with parameters went out without JSON encoding
+     * before Jane 8.1.1 (janephp/janephp#1132).
+     */
+    public function testPostShipmentsSendsAJsonBodyWithTheVersionedContentType(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient('{"data":{"shipments":[]}}'));
+
+        $client->postShipments(requestBody: self::shipmentRequest('order-1'));
+
+        self::assertSame('application/vnd.shipment+json;version=1.1', $this->header('content-type'));
+        self::assertSame('order-1', json_decode((string) $this->requests[0]['options']['body'], true, 512, JSON_THROW_ON_ERROR)['data']['shipments'][0]['reference_identifier']);
+    }
+
+    /**
+     * The validators of the shipment requests referred to a constraint class without its namespace
+     * before Jane 8.1.1 (janephp/janephp#1134): each such request failed with "Class not found".
+     */
+    public function testValidatesAShipmentRequestBeforeItGoesOut(): void
+    {
+        $client  = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient('{}'));
+        $request = self::shipmentRequest('order-1');
+        unset($request->data->shipments[0]->recipient);
+
+        try {
+            $client->postShipments(requestBody: $request);
+            self::fail('A shipment without a recipient must fail validation.');
+        } catch (ValidationException $exception) {
+            self::assertStringContainsString('recipient', (string) $exception->getViolationList());
+        }
+
+        self::assertSame([], $this->requests);
+    }
+
+    /**
+     * The spec describes both error content types for four operations, such as `deleteShipments`.
+     * The generated exception of such an operation accepted only the `application/problem+json`
+     * model before janephp/janephp#1139, so an `application/json` error threw a BadResponseException.
+     */
+    public function testAJsonErrorOfAProblemJsonOperationThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"message":"Permission denied","request_id":"1","status_code":401,"errors":[]}',
+            401
+        ));
+
+        try {
+            $client->deleteShipments(ids: '1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            $error = $exception->getCommonResponsesProblem();
+
+            self::assertInstanceOf(CommonResponsesUserError::class, $error);
+            self::assertSame('Permission denied', $error->message);
+        }
+    }
+
+    public function testAProblemJsonErrorThrowsTheClientErrorException(): void
+    {
+        $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(
+            '{"type":"urn:problem:permission-denied","title":"Permission denied","status":401,"request_id":"1"}',
+            401,
+            'application/problem+json'
+        ));
+
+        try {
+            $client->deleteShipments(ids: '1');
+            self::fail('A 401 response must throw.');
+        } catch (DeleteShipmentsClientErrorException $exception) {
+            self::assertSame(401, $exception->getResponse()->getStatusCode());
+            self::assertSame('Permission denied', $exception->getCommonResponsesProblem()->title);
+        }
+    }
+
+    /**
+     * A shipment request with the fields that the spec requires.
+     */
+    private static function shipmentRequest(string $referenceIdentifier): ShipmentPostShipmentsRequestV11
+    {
+        $recipient             = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+        $recipient->cc         = 'NL';
+        $recipient->postalCode = '2132JE';
+        $recipient->city       = 'Hoofddorp';
+        $recipient->street     = 'Antareslaan';
+        $recipient->number     = '31';
+        $recipient->person     = 'Test Person';
+
+        $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
+        $options->packageType = 1;
+
+        $shipment                      = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
+        $shipment->referenceIdentifier = $referenceIdentifier;
+        $shipment->carrier             = 1;
+        $shipment->recipient           = $recipient;
+        $shipment->options             = $options;
+
+        $data            = new ShipmentPostShipmentsRequestV11Data();
+        $data->shipments = [$shipment];
+        $request         = new ShipmentPostShipmentsRequestV11();
+        $request->data   = $data;
+
+        return $request;
+    }
+
+    /**
      * @param array<string, mixed> $shipment
      */
     private function readShipment(array $shipment): ShipmentDefsShipment
@@ -298,6 +402,37 @@ final class JaneClientFactoryTest extends TestCase
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(self::shipmentsResponse([$shipment])));
 
         return $client->getShipments()->data->shipments[0];
+    }
+
+    /**
+     * Before janephp/janephp#1141, the normalizer sent a property without a type, such as the email of
+     * a recipient, as null when nobody set it, and the validation rejected the request.
+     */
+    public function testLeavesOutAPropertyWithoutATypeThatNobodySet(): void
+    {
+        $recipient     = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+        $recipient->cc = 'NL';
+
+        self::assertSame(['cc' => 'NL'], self::coreApiSerializer()->normalize($recipient, 'json', ['skip_validation' => true]));
+    }
+
+    /**
+     * Before janephp/janephp#1150, the normalizer iterated over a nullable list that the API sent as
+     * null, and PHP warned.
+     */
+    public function testNormalizesANullableListThatTheApiSentAsNull(): void
+    {
+        $shipment = self::coreApiSerializer()->denormalize(['id' => 1, 'shipped_items' => null], ShipmentDefsShipment::class, 'json');
+        $array    = json_decode(json_encode(self::coreApiSerializer()->normalize($shipment, 'json', ['skip_validation' => true])), true);
+
+        self::assertNull($shipment->shippedItems);
+        self::assertArrayHasKey('shipped_items', $array);
+        self::assertNull($array['shipped_items']);
+    }
+
+    private static function coreApiSerializer(): Serializer
+    {
+        return new Serializer([new ArrayDenormalizer(), new CoreApiNormalizer()]);
     }
 
     /**

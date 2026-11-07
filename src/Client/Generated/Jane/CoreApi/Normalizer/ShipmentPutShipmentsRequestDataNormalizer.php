@@ -37,9 +37,6 @@ class ShipmentPutShipmentsRequestDataNormalizer implements DenormalizerInterface
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestDataConstraint());
-        }
         if (\array_key_exists('shipments', $data)) {
             $values = [];
             foreach ($data['shipments'] as $value) {
@@ -53,10 +50,13 @@ class ShipmentPutShipmentsRequestDataNormalizer implements DenormalizerInterface
     {
         $dataArray = [];
         if (array_key_exists('shipments', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->shipments as $value) {
-                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->shipments) {
+                $values = [];
+                foreach ($data->shipments as $value) {
+                    $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['shipments'] = $values;
         }

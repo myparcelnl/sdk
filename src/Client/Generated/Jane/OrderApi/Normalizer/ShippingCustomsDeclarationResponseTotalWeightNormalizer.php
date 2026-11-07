@@ -37,9 +37,6 @@ class ShippingCustomsDeclarationResponseTotalWeightNormalizer implements Denorma
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShippingCustomsDeclarationResponseTotalWeightConstraint());
-        }
         if (\array_key_exists('unit', $data)) {
             $object->unit = is_string($data['unit']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ShippingCustomsDeclarationResponseTotalWeightUnit::tryFrom($data['unit']) ?? $data['unit'] : $data['unit'];
             unset($data['unit']);

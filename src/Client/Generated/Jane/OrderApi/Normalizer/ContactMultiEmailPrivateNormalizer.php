@@ -37,9 +37,6 @@ class ContactMultiEmailPrivateNormalizer implements DenormalizerInterface, Norma
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ContactMultiEmailPrivateConstraint());
-        }
         if (\array_key_exists('locale', $data)) {
             $object->locale = $data['locale'];
             unset($data['locale']);
@@ -74,7 +71,7 @@ class ContactMultiEmailPrivateNormalizer implements DenormalizerInterface, Norma
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
         if (array_key_exists('phoneNumber', get_object_vars($data))) {
@@ -87,9 +84,12 @@ class ContactMultiEmailPrivateNormalizer implements DenormalizerInterface, Norma
             $dataArray['name'] = $data->name;
         }
         if (array_key_exists('emailAddresses', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->emailAddresses as $value) {
-                $values[] = $value;
+            $values = null;
+            if (null !== $data->emailAddresses) {
+                $values = [];
+                foreach ($data->emailAddresses as $value) {
+                    $values[] = $value;
+                }
             }
             $dataArray['emailAddresses'] = $values;
         }

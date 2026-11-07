@@ -430,7 +430,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
-     * @return null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink
+     * @return null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink|string
      */
     public function getShipmentsLabels($ids, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {

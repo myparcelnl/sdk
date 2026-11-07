@@ -37,9 +37,6 @@ class RefTypesMoneyNormalizer implements DenormalizerInterface, NormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefTypesMoneyConstraint());
-        }
         if (\array_key_exists('currency', $data)) {
             $object->currency = is_string($data['currency']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoneyCurrency::tryFrom($data['currency']) ?? $data['currency'] : $data['currency'];
         }

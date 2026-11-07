@@ -40,9 +40,6 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
         if (\array_key_exists('status', $data) && \is_int($data['status'])) {
             $data['status'] = (float) $data['status'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ProblemDetailsInternalServerErrorConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProblemDetailsInternalServerErrorType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
@@ -92,7 +89,7 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
         if (null !== ($data->instance ?? null)) {
             $dataArray['instance'] = $data->instance;
         }
-        if (array_key_exists('cause', get_object_vars($data))) {
+        if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

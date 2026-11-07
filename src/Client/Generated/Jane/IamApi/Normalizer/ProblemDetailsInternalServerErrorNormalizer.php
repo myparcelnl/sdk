@@ -37,9 +37,6 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Validator\ProblemDetailsInternalServerErrorConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = $data['type'];
             unset($data['type']);
@@ -89,7 +86,7 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
         if (null !== ($data->instance ?? null)) {
             $dataArray['instance'] = $data->instance;
         }
-        if (array_key_exists('cause', get_object_vars($data))) {
+        if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

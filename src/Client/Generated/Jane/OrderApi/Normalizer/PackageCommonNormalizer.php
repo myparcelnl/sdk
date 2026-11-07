@@ -37,9 +37,6 @@ class PackageCommonNormalizer implements DenormalizerInterface, NormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\PackageCommonConstraint());
-        }
         if (\array_key_exists('customsDeclaration', $data)) {
             $object->customsDeclaration = $this->denormalizer->denormalize($data['customsDeclaration'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\CustomsDeclaration::class, 'json', $context);
             unset($data['customsDeclaration']);

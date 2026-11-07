@@ -37,9 +37,6 @@ class NoteFromImportedNormalizer implements DenormalizerInterface, NormalizerInt
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\NoteFromImportedConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\NoteFromImportedType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
@@ -100,10 +97,10 @@ class NoteFromImportedNormalizer implements DenormalizerInterface, NormalizerInt
         if (array_key_exists('author', get_object_vars($data))) {
             $dataArray['author'] = $data->author;
         }
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
-        if (array_key_exists('updatedAt', get_object_vars($data))) {
+        if (array_key_exists('updatedAt', get_object_vars($data)) && null !== ($data->updatedAt ?? null)) {
             $dataArray['updatedAt'] = $data->updatedAt;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
