@@ -7,7 +7,8 @@ namespace MyParcelNL\Sdk\Test\Capabilities;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesServerErrorException;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -44,7 +45,7 @@ final class CapabilitiesLiveSmokeTest extends TestCase
      */
     public function testFetchCapabilitiesNlMinimal(): void
     {
-        $request = CapabilitiesRequest::forCountry('NL')->withShopId(18);
+        $request = CoreApiModels::toModel(['recipient' => ['countryCode' => 'NL'], 'shopId' => 18], CapabilitiesPostCapabilitiesRequestV2::class);
 
         $response = $this->fetch(fn(): CapabilitiesResponse => $this->service->get($request));
 

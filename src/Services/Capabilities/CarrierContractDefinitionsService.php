@@ -58,22 +58,20 @@ final class CarrierContractDefinitionsService
     /**
      * Fetch contract definitions available for the configured API key.
      *
-     * Pass a carrier, such as `'POSTNL'` or `CapabilitiesPostContractDefinitionsRequestV2Carrier::Postnl`,
-     * to filter the API request. Omit $carrier to fetch all contract definitions for the account.
+     * Pass a carrier, such as `CapabilitiesPostContractDefinitionsRequestV2Carrier::Postnl`, to filter the
+     * API request. Omit $carrier to fetch all contract definitions for the account.
      *
      * The results are the Jane models. `carrier`, `packageTypes`, `deliveryTypes` and `transactionTypes`
      * hold an enum case, or the raw string for a value that the SDK does not know, with the client that
      * the service or ShipmentApiFactory creates. So a new carrier in the API does not break the call.
      * Compare with the enum case, because `->value` fails on a raw string.
      *
-     * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|string|null $carrier Optional carrier.
+     * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|null $carrier Optional carrier.
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\ApiException For an error response.
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException
-     *                                  When the spec does not know $carrier. No request goes out.
      * @throws InvalidArgumentException When the generated client returns the v1 model, which the request does not ask for.
      */
-    public function getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2Carrier|string|null $carrier = null): array
+    public function getContractDefinitions(?CapabilitiesPostContractDefinitionsRequestV2Carrier $carrier = null): array
     {
         $request = new CapabilitiesPostContractDefinitionsRequestV2();
 
