@@ -172,7 +172,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * The legacy MyParcelRequest also reads MYPARCEL_API_BASE_URL. So one variable sends all live
      * requests to the same host, such as https://api.acceptance.myparcel.nl.
      *
-     * Without the variable, the smoke tests keep the production host, as in v11. With only an API key
+     * Without the variable, the smoke tests use the production host. With only an API key
      * set, they create concept shipments, multi-collo shipments and return shipments in that account,
      * request their labels, subscribe to webhooks, and save a fulfilment order.
      *
