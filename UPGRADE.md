@@ -571,6 +571,7 @@ The following classes and namespaces have been fully removed:
 - `MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory`
 - `MyParcelNL\Sdk\Exception\InvalidConsignmentException`, `NoConsignmentFoundException`
 - `MyParcelNL\Sdk\Concerns\HasDebugLabels`, `HasInstance`
+- `MyParcelNL\Sdk\Model\Shipment\Carrier` and `PackageType`: use `ApiMapperService::forCarrier()->idFromV2Name()` and `ApiMapperService::forPackageType()->idFromV2Name()`, see [Enum mapping between API versions](#enum-mapping-between-api-versions)
 
 ### Enum mapping between API versions
 

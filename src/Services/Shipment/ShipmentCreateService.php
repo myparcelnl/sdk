@@ -49,20 +49,27 @@ final class ShipmentCreateService
      * @param ShipmentItem[]         $shipments The shipments. CoreApiModels::toModel() fills one from an array.
      * @param string|BackedEnum|null $format    The label format, such as `A4` or `A6`.
      * @param int|string|null        $positions The label positions on an A4 sheet, such as `1;2;3;4`.
+     * @param array<string, mixed>   $queryParameters Other query parameters of `POST /shipments`, such as
+     *                                                `send_return_mail`. The generated client rejects a
+     *                                                name or a type that the spec does not have.
      *
      * @return array<int, string|null> Shipment id => reference identifier.
      *
      * @throws InvalidArgumentException For an empty list, or an item that is not a ShipmentItem.
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a shipment that does not match the spec. No request goes out.
      */
-    public function create(array $shipments, string|BackedEnum|null $format = null, int|string|null $positions = null): array
-    {
+    public function create(
+        array $shipments,
+        string|BackedEnum|null $format = null,
+        int|string|null $positions = null,
+        array $queryParameters = []
+    ): array {
         $request = $this->createRequest($shipments, 'create');
 
         $response = $this->api()->postShipments(
             requestBody: $request,
             queryParameters: array_filter(
-                ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions],
+                ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions] + $queryParameters,
                 static fn (mixed $value): bool => null !== $value
             )
         );

@@ -21,7 +21,7 @@ interface CapabilitiesServiceInterface
 
     /**
      * Derive a capabilities request from a shipment and query it.
-     * Uses the shipment's recipient country, carrier, and physical properties.
+     * Uses the shipment's recipient country and physical properties.
      */
     public function fromShipment(ShipmentItem $shipment): CapabilitiesResponse;
 }

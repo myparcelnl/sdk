@@ -564,9 +564,8 @@ class ApiMapperServiceTest extends TestCase
     }
 
     /**
-     * Tier 3 is narrow by design: with an id on either side it does not fire at all. This is what
-     * keeps the deprecated facades behaving exactly as they did — every path through them has an
-     * id on one side, which is why PackageType::isValid('package') stays false.
+     * Tier 3 is narrow by design: with an id on either side it does not fire at all, so a name in
+     * the wrong case, such as `package`, gives no id.
      */
     public function testWrongCaseDoesNotResolveWhenAnIdIsInvolved(): void
     {

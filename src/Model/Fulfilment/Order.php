@@ -63,7 +63,7 @@ class Order extends AbstractOrder
         $insurance = $options['insurance'] ?? null;
 
         if (is_numeric($insurance)) {
-            $insurance = ['amount' => (int) $insurance * 100, 'currency' => RefTypesPriceEuroCurrency::Eur->value];
+            $insurance = ['amount' => (int) round((float) $insurance * 100), 'currency' => RefTypesPriceEuroCurrency::Eur->value];
         }
 
         return CoreApiModels::toModel(array_filter([

@@ -17,6 +17,18 @@ use Symfony\Component\Serializer\Serializer;
 
 final class CoreApiModelsTest extends TestCase
 {
+    public function testToModelsFillsAListAndKeepsAModelAndNull(): void
+    {
+        $recipient = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+
+        $models = CoreApiModels::toModels([['cc' => 'NL'], $recipient], ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
+
+        self::assertCount(2, $models);
+        self::assertSame('NL', $models[0]->cc);
+        self::assertSame($recipient, $models[1]);
+        self::assertNull(CoreApiModels::toModels(null, ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class));
+    }
+
     public function testToArrayGivesTheApiFieldNames(): void
     {
         $shipment = $this->shipment(['id' => 1, 'recipient' => ['cc' => 'NL', 'postal_code' => '2132JE']]);
