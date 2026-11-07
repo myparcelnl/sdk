@@ -14,8 +14,8 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedRetu
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
  * Creates return shipments through the Core API client, for existing shipments or without one.
@@ -27,23 +27,8 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  */
 final class ReturnShipmentService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
-
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
-
-    /**
-     * Create the service with an API key, or with a client that keeps its own User-Agent.
-     */
-    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
-    {
-        $this->apiKey = $apiKey;
-        $this->api    = $api;
-        $this->host   = $host;
-    }
 
     /**
      * Create return shipments for existing shipments.
@@ -130,12 +115,4 @@ final class ReturnShipmentService
         return $mapping;
     }
 
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
-    }
 }
