@@ -4,47 +4,40 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
+use BackedEnum;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use ReflectionMethod;
-use ReflectionParameter;
 
 /**
- * Query/fetch service for shipments using generated Core API endpoints.
+ * Queries shipments through the Core API client.
  */
 final class ShipmentQueryService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
 
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
 
-    private ShipmentApi $api;
-
-    public function __construct(
-        string $apiKey,
-        ?ShipmentApi $api = null,
-        ?string $host = null
-    ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-    }
-
     /**
-     * Query shipments by available API filters.
+     * Query shipments by the query parameters of `GET /shipments`.
      *
-     * @param array<string, mixed> $parameters Supported keys match the generated getShipments query
-     *                                         parameters (barcode, carrier_id, created, status, etc.).
+     * A key with a null value or an empty string leaves the filter out. An enum case, such as
+     * `RefTypesCarrier::Postnl`, goes as its value. An array, such as two statuses, goes as a
+     * `;`-separated string. Every other value goes as it is: `false` goes as `0`.
+     *
+     * @param array<string, mixed> $parameters The query parameters, such as `barcode`, `carrier_id`, `created` and `status`.
+     *
      * @return ShipmentDefsShipment[]
-     * @throws InvalidArgumentException When a key is not a getShipments query parameter.
+     *
+     * @throws InvalidArgumentException When a key is not a query parameter of `GET /shipments`, or a
+     *                                  value has a type that the spec does not allow, such as `'page' => '2'`.
      */
     public function query(array $parameters = []): array
     {
-        $response = $this->buildGetShipmentsQuery($parameters);
-
-        return $this->extractShipments($response);
+        return $this->extractShipments($this->api()->getShipments(queryParameters: $this->queryParameters($parameters)));
     }
 
     /**
@@ -71,12 +64,9 @@ final class ShipmentQueryService
             return [];
         }
 
-        $ids = implode(';', array_map('intval', $shipmentIds));
+        $ids = self::idList($shipmentIds);
 
-        /** @var ShipmentResponsesShipments $response */
-        $response = $this->api->getShipmentsById($ids, null, $this->getUserAgentHeader());
-
-        return $this->extractShipments($response);
+        return $this->extractShipments($this->api()->getShipmentsById(ids: $ids));
     }
 
     /**
@@ -86,54 +76,58 @@ final class ShipmentQueryService
      */
     public function findByReferenceId(string $referenceIdentifier): array
     {
-
         // Explicitly pass size=null to use the API default; the API returns 0 results
         // when size >= 200 is combined with reference_identifier.
         return $this->query(['reference_identifier' => $referenceIdentifier, 'size' => null]);
     }
 
     /**
-     * Build and execute the getShipments query from a parameter array.
+     * Convert the query parameters to the values that the generated client sends.
+     *
+     * The generated client rejects a key that the spec does not have, and a wrong type for a key
+     * that the spec types, such as `page`.
+     *
+     * @param  array<string, mixed> $parameters
+     * @return array<string, mixed>
      */
-    private function buildGetShipmentsQuery(array $parameters): ShipmentResponsesShipments
+    private function queryParameters(array $parameters): array
     {
-        $size = array_key_exists('size', $parameters)
-            ? $parameters['size']
-            : self::DEFAULT_QUERY_PAGE_SIZE;
-
-        // Unset parameters which we override, so they are not passed twice.
-        unset($parameters['size'], $parameters['user_agent']);
-
-        $known   = array_map(
-            static fn (ReflectionParameter $parameter): string => $parameter->getName(),
-            (new ReflectionMethod($this->api, 'getShipments'))->getParameters()
-        );
-        $unknown = array_diff(array_keys($parameters), $known);
-
-        if ($unknown) {
-            throw new InvalidArgumentException('Unknown query parameter(s): ' . implode(', ', $unknown));
+        if (! array_key_exists('size', $parameters)) {
+            $parameters['size'] = self::DEFAULT_QUERY_PAGE_SIZE;
         }
 
-        return $this->api->getShipments(
-            ...$parameters,
-            size: $size,
-            user_agent: $this->getUserAgentHeader()
-        );
+        // A null value or an empty string means "no filter". Without this filter, the
+        // generated client sends an empty value, such as `q=`, for a key that allows null, and throws
+        // for the other keys. The spec does not document the page size that the API uses without `size`.
+        $parameters = array_filter($parameters, static fn (mixed $value): bool => null !== $value && '' !== $value);
+
+        return array_map([self::class, 'queryValue'], $parameters);
     }
 
     /**
-     * Extract the shipments array from the generated response model.
+     * The generated client sends a scalar as it is and refuses an object. An enum case goes as its
+     * value, and an array as the `;`-separated string that the spec documents for `carrier_id` and `status`.
+     */
+    private static function queryValue(mixed $value): mixed
+    {
+        if ($value instanceof BackedEnum) {
+            return $value->value;
+        }
+
+        if (is_array($value)) {
+            return implode(';', array_map([self::class, 'queryValue'], $value));
+        }
+
+        return $value;
+    }
+
+    /**
+     * Extract the shipments from the generated response model.
      *
      * @return ShipmentDefsShipment[]
      */
-    private function extractShipments(ShipmentResponsesShipments $response): array
+    private function extractShipments(?ShipmentResponsesShipments $response): array
     {
-        $data = $response->getData();
-
-        if (null === $data) {
-            return [];
-        }
-
-        return $data->getShipments() ?? [];
+        return $response?->data->shipments ?? [];
     }
 }

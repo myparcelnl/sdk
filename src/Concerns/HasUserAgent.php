@@ -20,6 +20,8 @@ trait HasUserAgent
     }
 
     /**
+     * Build the User-Agent header from the registered user agents.
+     *
      * @return string
      */
     public function getUserAgentHeader(): string
