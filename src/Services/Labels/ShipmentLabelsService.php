@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Labels;
 
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLabelPrintingPosition;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentParametersPaperSize;
 use MyParcelNL\Sdk\Client\Jane\GetShipmentsLabelsRaw;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
  * Fetches the labels of shipments as a download link or as a PDF, through the Core API client.
@@ -21,6 +20,7 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  */
 final class ShipmentLabelsService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
@@ -29,25 +29,9 @@ final class ShipmentLabelsService
     private const PDF_ACCEPT_HEADER = 'application/pdf';
     private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
 
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
-
     private string $labelLink = '';
 
     private string $labelPdf = '';
-
-    /**
-     * Create the service with an API key, or with a client that keeps its own User-Agent.
-     */
-    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
-    {
-        $this->apiKey = $apiKey;
-        $this->api    = $api;
-        $this->host   = $host;
-    }
 
     /**
      * Fetch and store the download link of the labels of the given shipments.
@@ -166,16 +150,6 @@ final class ShipmentLabelsService
     }
 
     /**
-     * Join the shipment IDs as the `;`-separated list of the path.
-     *
-     * @param int[] $shipmentIds
-     */
-    private static function idList(array $shipmentIds): string
-    {
-        return implode(';', array_map('strval', $shipmentIds));
-    }
-
-    /**
      * Turn the positions argument into the paper size and the `positions` parameter of the spec.
      *
      * A number is the first position on an A4 sheet: the labels take that position and the ones
@@ -221,12 +195,4 @@ final class ShipmentLabelsService
         return rtrim($base, '/') . '/' . ltrim($url, '/');
     }
 
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
-    }
 }
