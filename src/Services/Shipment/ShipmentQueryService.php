@@ -6,39 +6,20 @@ namespace MyParcelNL\Sdk\Services\Shipment;
 
 use BackedEnum;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
  * Queries shipments through the Core API client.
  */
 final class ShipmentQueryService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
 
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
-
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
-
-    /**
-     * Create the service with an API key, or with a client that keeps its own User-Agent.
-     */
-    public function __construct(
-        string $apiKey,
-        ?Client $api = null,
-        ?string $host = null
-    ) {
-        $this->apiKey = $apiKey;
-        $this->api    = $api;
-        $this->host   = $host;
-    }
 
     /**
      * Query shipments by the query parameters of `GET /shipments`.
@@ -83,7 +64,7 @@ final class ShipmentQueryService
             return [];
         }
 
-        $ids = implode(';', array_map('intval', $shipmentIds));
+        $ids = self::idList($shipmentIds);
 
         return $this->extractShipments($this->api()->getShipmentsById(ids: $ids));
     }
@@ -138,15 +119,6 @@ final class ShipmentQueryService
         }
 
         return $value;
-    }
-
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 
     /**
