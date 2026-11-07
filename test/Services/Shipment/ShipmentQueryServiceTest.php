@@ -14,6 +14,7 @@ use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use TypeError;
 
 final class ShipmentQueryServiceTest extends TestCase
 {
@@ -212,6 +213,35 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertFalse(isset($result->barcode));
         self::assertFalse(isset($result->recipient));
         self::assertFalse($result->delayed);
+    }
+
+    /**
+     * The spec does not allow null for these fields. A TypeError is not an Exception.
+     *
+     * @return array<string, array{array<string, mixed>}>
+     */
+    public static function provideNullsThatTheSpecDoesNotAllow(): array
+    {
+        return [
+            'barcode'                 => [['id' => 1, 'barcode' => null]],
+            'created'                 => [['id' => 1, 'created' => null]],
+            'street of the recipient' => [['id' => 1, 'recipient' => ['cc' => 'NL', 'street' => null]]],
+            'package type'            => [['id' => 1, 'options' => ['package_type' => null]]],
+        ];
+    }
+
+    /**
+     * @dataProvider provideNullsThatTheSpecDoesNotAllow
+     *
+     * @param array<string, mixed> $shipment
+     */
+    public function testANullThatTheSpecDoesNotAllowThrowsATypeError(array $shipment): void
+    {
+        $service = $this->createService([$shipment]);
+
+        $this->expectException(TypeError::class);
+
+        $service->find(1);
     }
 
     public function testFindThrowsForABodyThatIsNotJson(): void
