@@ -12,7 +12,6 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Fetches the labels of shipments as a download link or as a PDF, through the Core API client.
@@ -61,7 +60,12 @@ final class ShipmentLabelsService
      */
     public function setLinkOfLabels(array $shipmentIds, mixed $positions = 1): string
     {
-        $response = $this->fetchLabels($shipmentIds, $positions, self::LABEL_LINK_ACCEPT_HEADER);
+        $response = $this->api()->executeEndpoint(new GetShipmentsLabelsRaw(
+            self::idList($shipmentIds),
+            $this->labelsQuery($positions),
+            [],
+            ['Accept' => [self::LABEL_LINK_ACCEPT_HEADER]]
+        ));
         $decoded  = json_decode($response->getContent(false), true);
         $url      = is_array($decoded) ? ($decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null) : null;
 
@@ -93,9 +97,14 @@ final class ShipmentLabelsService
      */
     public function setPdfOfLabels(array $shipmentIds, mixed $positions = 1): string
     {
-        $result = $this->fetchLabels($shipmentIds, $positions, self::PDF_ACCEPT_HEADER)->getContent(false);
+        $result = $this->api()->getShipmentsLabels(
+            self::idList($shipmentIds),
+            $this->labelsQuery($positions),
+            [],
+            ['Accept' => [self::PDF_ACCEPT_HEADER]]
+        );
 
-        if (! preg_match('/^%PDF-\d/', $result)) {
+        if (! is_string($result) || ! preg_match('/^%PDF-\d/', $result)) {
             throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
         }
 
@@ -145,26 +154,25 @@ final class ShipmentLabelsService
     }
 
     /**
-     * Send the labels request with the given Accept header, and return the 2xx response as it is.
+     * Build the query parameters of the labels request.
      *
-     * @param int[] $shipmentIds
+     * @return array{format: string, positions?: string}
      */
-    private function fetchLabels(array $shipmentIds, mixed $positions, string $accept): ResponseInterface
+    private function labelsQuery(mixed $positions): array
     {
         [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
 
-        $query = ['format' => $format];
+        return null === $resolvedPositions ? ['format' => $format] : ['format' => $format, 'positions' => $resolvedPositions];
+    }
 
-        if (null !== $resolvedPositions) {
-            $query['positions'] = $resolvedPositions;
-        }
-
-        return $this->api()->executeEndpoint(new GetShipmentsLabelsRaw(
-            implode(';', array_map('strval', $shipmentIds)),
-            $query,
-            [],
-            ['Accept' => [$accept]]
-        ));
+    /**
+     * Join the shipment IDs as the `;`-separated list of the path.
+     *
+     * @param int[] $shipmentIds
+     */
+    private static function idList(array $shipmentIds): string
+    {
+        return implode(';', array_map('strval', $shipmentIds));
     }
 
     /**
