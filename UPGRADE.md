@@ -9,9 +9,9 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 
 ### HTTP client
 
-The generated Jane clients send their requests with a Symfony HTTP client, with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. An HTTP client that you pass to a factory keeps its own timeout.
+The generated Jane clients send their requests with a Symfony HTTP client, with an idle timeout of 10 seconds: a request stops when no data arrives for 10 seconds. In v11, the generated client stopped a request after 10 seconds in total. A slow but steady download, such as a large label PDF, now completes. An HTTP client that you pass to a factory keeps its own timeout.
 
-A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`.
+A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`, and `ShipmentLabelsService`, `ShipmentPrintService` and `ReturnShipmentService` threw the PSR-18 `ClientExceptionInterface` of the HTTP client that sent the request.
 
 ### Found shipments and track & trace results
 
@@ -57,6 +57,12 @@ Some fields hold another type than the v11 getter returned:
 | `MultiColloShipmentService` | `splitShipment()` takes and returns a `Shipment`. The secondary shipments are `CoreApi\Model\SecondaryShipmentRequest` objects. A shipment with an int reference identifier, such as `42`, gets a new `multi_collo_` reference identifier | It takes and returns a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`. The secondary shipments are `ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem` models. An int reference identifier is kept as the string `'42'` |
 | `CapabilitiesService` and `CapabilitiesRequest` | `fromShipment()` takes a `Shipment` | It takes a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem` |
 | `Order` (fulfilment) | `getDeliveryOptions()` returns a `ShipmentOptions`, and `setDeliveryOptions()` takes one | They return and take a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions`. Fill one with `CoreApiModels::toModel(['package_type' => 1, 'delivery_type' => 2], ...Options::class)`. For an order from the API with `"insurance": 500`, `getDeliveryOptions()->insurance` is a `RefTypesPriceEuro` with `amount` `50000`, where `getInsurance()` returned `500` in v11. A package type or delivery type that the order gives as a v2 name, such as `PACKAGE` or `STANDARD_DELIVERY`, becomes the id, and an unknown name throws an `InvalidArgumentException` |
+| `ShipmentLabelsService` and `ReturnShipmentService` | The constructor takes a `CoreApi\Api\ShipmentApi` and a PSR-18 HTTP client as the third argument, and the host as the fourth | The constructor takes a `Jane\CoreApi\Client`, and the host as the third argument. PHP ignores a fourth argument, so a v11 call with the host as the fourth argument sends to the default host without an error: move the host to the third argument. To use your own HTTP client, pass a client that was built with it |
+| `ShipmentLabelsService` | `setLinkOfLabels()` and `setPdfOfLabels()` throw the SDK `MyParcelNL\Sdk\Exception\ApiException` for an error response, with the message `Did not receive expected label link response`, `Received payment link instead of pdf`, or `Did not receive expected pdf response` for another error of `setPdfOfLabels()` | They throw a generated `Jane\CoreApi\Exception\ApiException` for an error response, picked by the status and the content type: `GetShipmentsLabelsNotFoundException` for a 404, `GetShipmentsLabelsPaymentRequiredException` for a 402 with the content type `application/vnd.shipment_label_link+json`, and `GetShipmentsLabelsClientErrorException` or `GetShipmentsLabelsServerErrorException` for another error with a JSON body, such as a 402 with `application/json`. An error response that is not JSON, such as a 502 with an HTML page from a proxy, throws `BadResponseException`. A 2xx response without a link or a PDF still throws the SDK `ApiException` |
+| `ReturnShipmentService` | The API rejects a return shipment that does not match the spec | The generated client checks the request before it sends it. It throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, for example for a related return without `parent`, `carrier`, `email` or `name`, which the spec requires |
+| `ReturnShipmentService` | It throws an `InvalidArgumentException` for an error response, and a `JsonException` for a body that is not valid JSON | It throws a `Jane\CoreApi\Exception\ApiException` for an error response with a JSON body, such as `PostShipmentsClientErrorException`. A body that is not valid JSON throws a Symfony `NotEncodableValueException`, and so does a row with invalid UTF-8, before the request goes out |
+| `ReturnShipmentService` | A null value in a row leaves the field out of the request. A key that the API does not know is left out | Leave a field out instead of setting it to null: what a null does depends on the field, such as a `TypeError`, a `ValidationException` or an empty object in the request. A key that the API does not know goes to the API in the request body |
+| `ReturnShipmentService` | A response with `data` but without `shipments` gives an empty array | It throws an `InvalidArgumentException`, because the spec requires `shipments` |
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
 
@@ -112,6 +118,12 @@ A property has the camelCase name of the API field, such as `postalCode`. A prop
 
 The generated client checks a shipment against the spec before it sends it. A shipment that does not match, for example without a recipient, throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, and no request goes out. `getViolationList()` lists each field and the problem. The API still checks the shipment too. A shipment without a reference identifier gets one that starts with `sdk_`, as in v11. The services change nothing else on your models: they send copies.
 
+### Removed classes
+
+| Class | Replacement |
+|-------|-------------|
+| `MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType` | None. The generated client picks the content type of a shipment request from the request body |
+
 ### Order push
 
 The e-commerce service now requires a status on every order that you push with
@@ -140,7 +152,7 @@ limits. When you pass the lines or the children in the constructor array, nothin
 
 | Service | Class with the change | v11 | v12 |
 |---------|-----------------------|-----|-----|
-| `ReturnShipmentService` and the other services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| The services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
 
 #### Direct use of `MyParcelNL\Sdk\Client\Generated`
 
