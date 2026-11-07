@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
+use InvalidArgumentException;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -26,6 +27,33 @@ final class OrderDeliveryOptionsTest extends TestCase
         self::assertEquals(1, $options->signature);
         self::assertEquals(0, $options->onlyRecipient);
         self::assertSame(250, $options->insurance->amount);
+    }
+
+    /**
+     * The Order API can send the v2 name of a package type and a delivery type.
+     */
+    public function testReadsAV2NameAsTheId(): void
+    {
+        $options = (new Order(['shipment' => ['shipment_options' => ['package_type' => 'PACKAGE', 'delivery_type' => 'STANDARD_DELIVERY']]]))->getDeliveryOptions();
+
+        self::assertSame(1, $options->packageType->value);
+        self::assertSame(2, $options->deliveryType);
+    }
+
+    public function testReadsANumericStringAsTheId(): void
+    {
+        $options = (new Order(['shipment' => ['shipment_options' => ['package_type' => '2', 'delivery_type' => '4']]]))->getDeliveryOptions();
+
+        self::assertSame(2, $options->packageType->value);
+        self::assertSame(4, $options->deliveryType);
+    }
+
+    public function testThrowsForATypeNameThatTheMapperDoesNotKnow(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('"NOPE"');
+
+        new Order(['shipment' => ['shipment_options' => ['package_type' => 'NOPE']]]);
     }
 
     public function testReadsTheOptionsKeyToo(): void
