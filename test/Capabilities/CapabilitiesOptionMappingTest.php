@@ -7,7 +7,6 @@ namespace MyParcelNL\Sdk\Test\Capabilities;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemOptions;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 use MyParcelNL\Sdk\Support\Str;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -47,44 +46,6 @@ class CapabilitiesOptionMappingTest extends TestCase
             . "Source key => attempted target property: "
             . json_encode($unaccounted)
         );
-    }
-
-    public function testEveryMappableV1OptionPassesThroughTheRealRequestMapper(): void
-    {
-        $input = [];
-
-        foreach (array_diff($this->specOptionKeys(), ShipmentOptionMapper::unmappableOptions()) as $key) {
-            $input[$key] = (object) ['source' => $key];
-        }
-
-        $request = CapabilitiesRequest::forCountry('NL')->withOptions($input);
-        $options = (new CapabilitiesMapper())->mapToCoreApi($request)->options;
-
-        foreach ($input as $source => $marker) {
-            $target = $this->resolvedTargetProperty($source);
-            $this->assertNotNull($target, $source);
-
-            $this->assertSame($marker, $options->{$target}, sprintf('%s must map to %s.', $source, $target));
-        }
-    }
-
-    public function testEveryGeneratedV2JsonNameRemainsAcceptedAsInput(): void
-    {
-        $input   = [];
-        $markers = [];
-
-        // The v2 JSON names are camelCase, the same as the Jane properties.
-        foreach ($this->v2Properties() as $jsonName) {
-            $input[$jsonName]   = (object) ['source' => $jsonName];
-            $markers[$jsonName] = $input[$jsonName];
-        }
-
-        $request = CapabilitiesRequest::forCountry('NL')->withOptions($input);
-        $options = (new CapabilitiesMapper())->mapToCoreApi($request)->options;
-
-        foreach ($markers as $property => $marker) {
-            $this->assertSame($marker, $options->{$property}, sprintf('%s JSON input must remain accepted.', $property));
-        }
     }
 
     /**

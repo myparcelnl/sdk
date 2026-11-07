@@ -278,22 +278,29 @@ Shipment option names are handled by `Services\Mapping\ShipmentOptionMapper`. It
 or `null`. For example, `signature`, `requires_signature` and `requiresSignature` all map to
 `requiresSignature`.
 
-## Unsupported capabilities options
+## Capabilities
 
-Capabilities requests omit unknown or unsupported option names. Check the request before sending
-it so your application can report these options or change the request.
+`CapabilitiesService::get()` takes the generated request model. Fill it with the camelCase field
+names of the v2 capabilities API:
 
 ```php
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 
-$request = CapabilitiesRequest::forCountry('NL')
-    ->withOptions(['signature' => null, 'tracked' => null]);
+$request = CoreApiModels::toModel([
+    'recipient' => ['countryCode' => 'NL'],
+    'carrier'   => 'POSTNL',
+    'options'   => ['requiresSignature' => new stdClass()],
+], CapabilitiesPostCapabilitiesRequestV2::class);
 
-$request->getUnsupportedOptions(); // ['tracked']
+$capabilities = (new CapabilitiesService())->get($request);
 ```
 
-This check validates option names accepted by the request model. It does not validate option
-values or determine which options a carrier offers.
+`fromShipment()` builds the request from the recipient country and the physical properties of a
+shipment. To translate an option name of the SDK, such as `signature`, use
+`ShipmentOptionMapper::v2PropertyFromName()`. It returns `null` for an option that a capabilities
+request cannot send, such as `tracked`.
 
 ## Legacy services
 
