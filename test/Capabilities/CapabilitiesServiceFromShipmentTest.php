@@ -6,7 +6,7 @@ namespace MyParcelNL\Sdk\Test\Capabilities;
 
 use Mockery;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
@@ -22,14 +22,7 @@ final class CapabilitiesServiceFromShipmentTest extends TestCase
             'physical_properties' => ['weight' => 500],
         ], ShipmentItem::class);
 
-        $expected = new CapabilitiesResponse(
-            ['PACKAGE', 'MAILBOX'],
-            ['STANDARD_DELIVERY'],
-            ['signature'],
-            null,
-            ['B2C'],
-            1
-        );
+        $expected = new CapabilitiesResponsesCapabilitiesV2();
 
         $client = Mockery::mock(CapabilitiesClientInterface::class);
         $client->shouldReceive('getCapabilities')

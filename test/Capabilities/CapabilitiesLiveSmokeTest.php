@@ -9,7 +9,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClien
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesServerErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -47,11 +47,11 @@ final class CapabilitiesLiveSmokeTest extends TestCase
     {
         $request = CoreApiModels::toModel(['recipient' => ['countryCode' => 'NL'], 'shopId' => 18], CapabilitiesPostCapabilitiesRequestV2::class);
 
-        $response = $this->fetch(fn(): CapabilitiesResponse => $this->service->get($request));
+        $response = $this->fetch(fn(): CapabilitiesResponsesCapabilitiesV2 => $this->service->get($request));
 
         // Minimal but real check
         $this->assertBasicShape($response);
-        $this->assertNotEmpty($response->getPackageTypes(), 'Expected at least one package type for NL.');
+        $this->assertNotEmpty($response->results[0]->packageTypes ?? [], 'Expected at least one package type for NL.');
     }
 
     /**
@@ -64,18 +64,18 @@ final class CapabilitiesLiveSmokeTest extends TestCase
             ShipmentPostShipmentsRequestV11DataShipmentsItem::class
         );
 
-        $response = $this->fetch(fn(): CapabilitiesResponse => $this->service->fromShipment($shipment));
+        $response = $this->fetch(fn(): CapabilitiesResponsesCapabilitiesV2 => $this->service->fromShipment($shipment));
 
         $this->assertBasicShape($response);
-        $this->assertIsArray($response->getPackageTypes());
+        $this->assertIsArray($response->results);
     }
 
     /**
      * Skip the test for a network error, a server error or rate limiting. Another error fails the test.
      *
-     * @param callable(): CapabilitiesResponse $call
+     * @param callable(): CapabilitiesResponsesCapabilitiesV2 $call
      */
-    private function fetch(callable $call): CapabilitiesResponse
+    private function fetch(callable $call): CapabilitiesResponsesCapabilitiesV2
     {
         try {
             return $call();
@@ -103,23 +103,17 @@ final class CapabilitiesLiveSmokeTest extends TestCase
     /**
      * Minimal shape validation.
      */
-    private function assertBasicShape(CapabilitiesResponse $response): void
+    private function assertBasicShape(CapabilitiesResponsesCapabilitiesV2 $response): void
     {
-        $this->assertIsArray($response->getPackageTypes());
-        $this->assertIsArray($response->getDeliveryTypes());
-        $this->assertIsArray($response->getTransactionTypes());
+        $this->assertIsArray($response->results);
 
-        // v11 returned the internal property names of the generated model, such as "\0*\0container".
-        foreach ($response->getShipmentOptions() as $option) {
-            $this->assertMatchesRegularExpression('/^[a-z][A-Za-z_]*$/', $option);
-        }
+        foreach ($response->results as $result) {
+            $this->assertIsArray($result->packageTypes ?? []);
+            $this->assertIsArray($result->deliveryTypes ?? []);
 
-        if (null !== $response->getCarrier()) {
-            $this->assertIsString($response->getCarrier());
-        }
-
-        if (null !== $response->getColloMax()) {
-            $this->assertIsInt($response->getColloMax());
+            foreach (array_keys(isset($result->options) ? CoreApiModels::toArray($result->options) : []) as $option) {
+                $this->assertMatchesRegularExpression('/^[a-z][A-Za-z_]*$/', $option);
+            }
         }
     }
 }

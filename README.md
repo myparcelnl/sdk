@@ -294,10 +294,19 @@ $request = CoreApiModels::toModel([
     'options'   => ['requiresSignature' => new stdClass()],
 ], CapabilitiesPostCapabilitiesRequestV2::class);
 
-$capabilities = (new CapabilitiesService())->get($request);
+$response = (new CapabilitiesService())->get($request);
+
+foreach ($response->results as $result) {
+    $result->carrier;          // RefCapabilitiesSharedCarrierV2::Postnl, or the raw string
+    $result->packageTypes;     // [RefShipmentPackageTypeV2::Package, ...]
+    $result->deliveryTypes;
+    $result->options;          // per option: isRequired, isSelectedByDefault, requires, excludes
+    $result->physicalProperties;
+}
 ```
 
-`fromShipment()` builds the request from the recipient country and the physical properties of a
+The response has one result per carrier contract, so a package type and a delivery type in one
+result belong together. `fromShipment()` builds the request from the recipient country and the physical properties of a
 shipment. To translate an option name of the SDK, such as `signature`, use
 `ShipmentOptionMapper::v2PropertyFromName()`. It returns `null` for an option that a capabilities
 request cannot send, such as `tracked`.
