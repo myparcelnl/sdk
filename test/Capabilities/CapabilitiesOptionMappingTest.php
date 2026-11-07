@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
+use MyParcelNL\Sdk\Support\Str;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Verifies that all generated v1 options are mapped or explicitly unsupported in v2 requests.
@@ -38,56 +39,12 @@ class CapabilitiesOptionMappingTest extends TestCase
         $this->assertSame(
             [],
             $unaccounted,
-            "These concrete v1 request options resolve to no property on CapabilitiesOptionsV2, so "
+            "These concrete v1 request options resolve to no property on the v2 capabilities options, so "
             . "mapOptions() would skip them. For each: add an alias to LEGACY_TO_V2_PROPERTIES if v2 "
             . "renamed the concept, or add it to UNSUPPORTED_OPTIONS with a request-specific reason. "
             . "Source key => attempted target property: "
             . json_encode($unaccounted)
         );
-    }
-
-    public function testEveryMappableV1OptionPassesThroughTheRealRequestMapper(): void
-    {
-        $input = [];
-
-        foreach (array_diff($this->specOptionKeys(), ShipmentOptionMapper::unmappableOptions()) as $key) {
-            $input[$key] = (object) ['source' => $key];
-        }
-
-        $request = CapabilitiesRequest::forCountry('NL')->withOptions($input);
-        $options = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
-
-        $this->assertNotNull($options);
-
-        foreach ($input as $source => $marker) {
-            $target = $this->resolvedTargetProperty($source);
-            $this->assertNotNull($target, $source);
-            $getter = CapabilitiesOptionsV2::getters()[$this->v2Properties()[$target]];
-
-            $this->assertSame($marker, $options->{$getter}(), sprintf('%s must map to %s.', $source, $target));
-        }
-    }
-
-    public function testEveryGeneratedV2JsonNameRemainsAcceptedAsInput(): void
-    {
-        $input   = [];
-        $markers = [];
-
-        foreach (CapabilitiesOptionsV2::attributeMap() as $property => $jsonName) {
-            $input[$jsonName] = (object) ['source' => $jsonName];
-            $markers[$property] = $input[$jsonName];
-        }
-
-        $request = CapabilitiesRequest::forCountry('NL')->withOptions($input);
-        $options = (new CapabilitiesMapper())->mapToCoreApi($request)->getOptions();
-
-        $this->assertNotNull($options);
-
-        foreach ($markers as $property => $marker) {
-            $getter = CapabilitiesOptionsV2::getters()[$property];
-
-            $this->assertSame($marker, $options->{$getter}(), sprintf('%s JSON input must remain accepted.', $property));
-        }
     }
 
     /**
@@ -105,7 +62,7 @@ class CapabilitiesOptionMappingTest extends TestCase
                 $sourceKeys,
                 sprintf('Alias source %s is not on the concrete v1 capabilities request.', $source)
             );
-            $this->assertArrayHasKey(
+            $this->assertContains(
                 $target,
                 $targetProperties,
                 sprintf('Alias target %s for %s is not on the concrete v2 capabilities request.', $target, $source)
@@ -128,11 +85,11 @@ class CapabilitiesOptionMappingTest extends TestCase
             $this->assertNotSame(
                 $source,
                 $target,
-                sprintf('The alias for %s is redundant — v2 already uses the same property name.', $source)
+                sprintf('The alias for %s is redundant: v2 already uses the same property name.', $source)
             );
-            $this->assertArrayNotHasKey(
-                $source,
-                CapabilitiesOptionsV2::setters(),
+            $this->assertNotContains(
+                Str::camel($source),
+                $this->v2Properties(),
                 sprintf('V2 now exposes %s directly. Review whether its alias to %s is still needed.', $source, $target)
             );
         }
@@ -140,7 +97,7 @@ class CapabilitiesOptionMappingTest extends TestCase
 
     public function testUnmappableOptionsAreRealSpecOptionsUnsupportedByTheConcreteV2Request(): void
     {
-        $targetSetters = CapabilitiesOptionsV2::setters();
+        $targetProperties = $this->v2Properties();
 
         foreach (ShipmentOptionMapper::unmappableOptions() as $key) {
             $this->assertContains(
@@ -149,9 +106,9 @@ class CapabilitiesOptionMappingTest extends TestCase
                 sprintf('%s is declared unmappable but is not a v1 option at all.', $key)
             );
 
-            $this->assertArrayNotHasKey(
-                $key,
-                $targetSetters,
+            $this->assertNotContains(
+                Str::camel($key),
+                $targetProperties,
                 sprintf('%s is declared unmappable, but the concrete v2 request now supports it.', $key)
             );
 
@@ -219,23 +176,11 @@ class CapabilitiesOptionMappingTest extends TestCase
     }
 
     /**
-     * The generated v2 property CapabilitiesMapper would actually target, or null if it would be
-     * skipped.
+     * The property of the v2 options model that ShipmentOptionMapper gives for a name, or null.
      */
     private function resolvedTargetProperty(string $key): ?string
     {
         return (new ShipmentOptionMapper())->v2PropertyFromName($key);
-    }
-
-    /**
-     * The v2 options that CapabilitiesMapper can set: the JSON name that ShipmentOptionMapper
-     * returns => the generated property.
-     *
-     * @return array<string, string>
-     */
-    private function v2Properties(): array
-    {
-        return array_flip(CapabilitiesOptionsV2::attributeMap());
     }
 
     /**
@@ -245,6 +190,34 @@ class CapabilitiesOptionMappingTest extends TestCase
      */
     private function specOptionKeys(): array
     {
-        return array_values(CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions::attributeMap());
+        // The v1 JSON names are snake_case. Jane names the properties in camelCase.
+        return array_map(
+            static fn (string $property): string => Str::snake($property),
+            self::properties(CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemOptions::class)
+        );
+    }
+
+    /**
+     * The v2 options of the capabilities request: the Jane properties, which ShipmentOptionMapper
+     * returns. The v2 JSON names are camelCase, the same as the properties.
+     *
+     * @return list<string>
+     */
+    private function v2Properties(): array
+    {
+        return self::properties(CapabilitiesPostCapabilitiesRequestV2Options::class);
+    }
+
+    /**
+     * @param class-string $class
+     *
+     * @return list<string> The public properties of a Jane model.
+     */
+    private static function properties(string $class): array
+    {
+        return array_map(
+            static fn (ReflectionProperty $property): string => $property->getName(),
+            (new ReflectionClass($class))->getProperties(ReflectionProperty::IS_PUBLIC)
+        );
     }
 }

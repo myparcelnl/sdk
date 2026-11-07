@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesServerErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * @group live
@@ -25,9 +30,9 @@ final class CapabilitiesLiveSmokeTest extends TestCase
         parent::setUp();
 
         // Skip if no API key is present
-        $hasAnyKey = getenv('API_KEY_NL') || getenv('API_KEY_BE');
+        $hasAnyKey = getenv('API_KEY') || getenv('API_KEY_NL') || getenv('API_KEY_BE');
         if (! $hasAnyKey) {
-            $this->markTestSkipped('Skipping live smoke tests: no API key found in env (API_KEY_NL / API_KEY_BE).');
+            $this->markTestSkipped('Skipping live smoke tests: no API key found in env (API_KEY / API_KEY_NL / API_KEY_BE).');
         }
 
         $this->service = new CapabilitiesService();
@@ -40,58 +45,13 @@ final class CapabilitiesLiveSmokeTest extends TestCase
      */
     public function testFetchCapabilitiesNlMinimal(): void
     {
-        $request = CapabilitiesRequest::forCountry('NL')->withShopId(18);
+        $request = CoreApiModels::toModel(['recipient' => ['countryCode' => 'NL'], 'shopId' => 18], CapabilitiesPostCapabilitiesRequestV2::class);
 
-        try {
-            $response = $this->service->get($request);
-        } catch (\MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException $e) {
-            if (
-                strpos($e->getMessage(), 'Could not resolve host') !== false ||
-                strpos($e->getMessage(), 'cURL error 6') !== false
-            ) {
-                $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
-                return;
-            }
-            throw $e;
-        } catch (\InvalidArgumentException $e) {
-            // Handle known issue: OpenAPI spec vs API response mismatch for units like 'dm3'
-            if (
-                strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'cm3' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'l' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false
-            ) {
-                $this->markTestSkipped(
-                    'Skipping live smoke test: OpenAPI spec/API response mismatch for volume units. ' .
-                        'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
-                        'Original error: ' . $e->getMessage()
-                );
-                return;
-            }
-            throw $e;
-        } catch (\GuzzleHttp\Exception\ConnectException $e) {
-            $this->markTestSkipped('Skipping live smoke: connection error: ' . $e->getMessage());
-            return;
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $code = $e->getResponse() ? $e->getResponse()->getStatusCode() : 0;
-
-            // Skip with 5xx or rate limiting
-            if ($code >= 500 || $code === 429) {
-                $this->markTestSkipped(sprintf(
-                    'Skipping live smoke due to transient API error: HTTP %s: %s',
-                    $code,
-                    $e->getMessage()
-                ));
-                return;
-            }
-
-            // 4xx: let it fail the test
-            throw $e;
-        }
+        $response = $this->fetch(fn(): CapabilitiesResponsesCapabilitiesV2 => $this->service->get($request));
 
         // Minimal but real check
         $this->assertBasicShape($response);
-        $this->assertNotEmpty($response->getPackageTypes(), 'Expected at least one package type for NL.');
+        $this->assertNotEmpty($response->results[0]->packageTypes ?? [], 'Expected at least one package type for NL.');
     }
 
     /**
@@ -103,70 +63,56 @@ final class CapabilitiesLiveSmokeTest extends TestCase
             ->setRecipient(['cc' => 'NL'])
             ->setPhysicalProperties(['weight' => 500]);
 
-        try {
-            $response = $this->service->fromShipment($shipment);
-        } catch (\MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException $e) {
-            if (
-                strpos($e->getMessage(), 'Could not resolve host') !== false ||
-                strpos($e->getMessage(), 'cURL error 6') !== false
-            ) {
-                $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
-                return;
-            }
-            throw $e;
-        } catch (\InvalidArgumentException $e) {
-            if (
-                strpos($e->getMessage(), "Invalid value 'dm3' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'cm3' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'l' for 'unit'") !== false ||
-                strpos($e->getMessage(), "Invalid value 'ml' for 'unit'") !== false
-            ) {
-                $this->markTestSkipped(
-                    'Skipping live smoke test: OpenAPI spec/API response mismatch for volume units. ' .
-                        'API returns volume units (dm3, cm3, l, ml) not defined in OpenAPI spec. ' .
-                        'Original error: ' . $e->getMessage()
-                );
-                return;
-            }
-            throw $e;
-        } catch (\GuzzleHttp\Exception\ConnectException $e) {
-            $this->markTestSkipped('Skipping live smoke: connection error: ' . $e->getMessage());
-            return;
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $code = $e->getResponse() ? $e->getResponse()->getStatusCode() : 0;
+        $response = $this->fetch(fn(): CapabilitiesResponsesCapabilitiesV2 => $this->service->fromShipment($shipment));
 
-            if ($code >= 500 || $code === 429) {
-                $this->markTestSkipped(sprintf(
-                    'Skipping live smoke due to transient API error: HTTP %s: %s',
-                    $code,
-                    $e->getMessage()
-                ));
-                return;
+        $this->assertBasicShape($response);
+        $this->assertIsArray($response->results);
+    }
+
+    /**
+     * Skip the test for a network error, a server error or rate limiting. Another error fails the test.
+     *
+     * @param callable(): CapabilitiesResponsesCapabilitiesV2 $call
+     */
+    private function fetch(callable $call): CapabilitiesResponsesCapabilitiesV2
+    {
+        try {
+            return $call();
+        } catch (TransportExceptionInterface $e) {
+            $this->markTestSkipped('Skipping live smoke: network unavailable: ' . $e->getMessage());
+        } catch (BadResponseException $e) {
+            // A gateway error, such as a 502 with an HTML body, has no JSON content type, so the generated
+            // endpoint throws this exception instead of a status exception.
+            if (429 === $e->getCode() || $e->getCode() >= 500) {
+                $this->markTestSkipped('Skipping live smoke due to transient API error: ' . $e->getMessage());
+            }
+
+            throw $e;
+        } catch (PostCapabilitiesServerErrorException $e) {
+            $this->markTestSkipped('Skipping live smoke due to transient API error: ' . $e->getMessage());
+        } catch (PostCapabilitiesClientErrorException $e) {
+            if (429 === $e->getResponse()->getStatusCode()) {
+                $this->markTestSkipped('Skipping live smoke due to rate limiting: ' . $e->getMessage());
             }
 
             throw $e;
         }
-
-        $this->assertBasicShape($response);
-        $this->assertIsArray($response->getPackageTypes());
     }
 
     /**
      * Minimal shape validation.
      */
-    private function assertBasicShape(CapabilitiesResponse $response): void
+    private function assertBasicShape(CapabilitiesResponsesCapabilitiesV2 $response): void
     {
-        $this->assertIsArray($response->getPackageTypes());
-        $this->assertIsArray($response->getDeliveryTypes());
-        $this->assertIsArray($response->getShipmentOptions());
-        $this->assertIsArray($response->getTransactionTypes());
+        $this->assertIsArray($response->results);
 
-        if (null !== $response->getCarrier()) {
-            $this->assertIsString($response->getCarrier());
-        }
+        foreach ($response->results as $result) {
+            $this->assertIsArray($result->packageTypes ?? []);
+            $this->assertIsArray($result->deliveryTypes ?? []);
 
-        if (null !== $response->getColloMax()) {
-            $this->assertIsInt($response->getColloMax());
+            foreach (array_keys(isset($result->options) ? CoreApiModels::toArray($result->options) : []) as $option) {
+                $this->assertMatchesRegularExpression('/^[a-z][A-Za-z_]*$/', $option);
+            }
         }
     }
 }

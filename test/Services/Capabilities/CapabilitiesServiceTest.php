@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Capabilities;
 
 use Mockery;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -19,15 +20,8 @@ final class CapabilitiesServiceTest extends TestCase
     public function testGetPassesThroughToClient(): void
     {
         // Arrange
-        $request = CapabilitiesRequest::forCountry('NL');
-        $expectedResponse = new CapabilitiesResponse(
-            ['PACKAGE'], 
-            ['STANDARD_DELIVERY'], 
-            ['signature'], 
-            'POSTNL', 
-            ['B2C'], 
-            1
-        );
+        $request = CoreApiModels::toModel(['recipient' => ['countryCode' => 'NL']], CapabilitiesPostCapabilitiesRequestV2::class);
+        $expectedResponse = new CapabilitiesResponsesCapabilitiesV2();
 
         $clientMock = Mockery::mock(CapabilitiesClientInterface::class);
         $clientMock

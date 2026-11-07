@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Capabilities;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2Carrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
- * Fetch account-level carrier contract definitions through the generated ShipmentApi client.
+ * Fetch account-level carrier contract definitions through the Jane Core API client.
  *
  * Use this service when integrations need to build carrier settings or discover the
  * carriers/contracts available for an account. The generated client models remain
@@ -21,61 +22,82 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  *
  * Use CapabilitiesService for shipment-specific capability checks based on
  * address, weight and shipment options.
+ *
+ * The client that the service or ShipmentApiFactory creates reads a response without validation, so
+ * a new carrier in the API does not break the call. A client from the generated `Client::create()`
+ * validates the response, and throws for a carrier that the SDK does not know.
  */
 final class CarrierContractDefinitionsService
 {
     use HasUserAgent;
 
-    private ShipmentApi $api;
+    private ?Client $api;
+
+    private string $apiKey;
+
+    private ?string $host;
 
     /**
-     * @param string           $apiKey API key used when creating the default generated client.
-     *                                Ignored when a preconfigured $api is passed.
-     * @param string|null      $host   Optional host override used when creating the default generated client.
-     *                                Ignored when a preconfigured $api is passed.
-     * @param ShipmentApi|null $api    Optional preconfigured generated client, primarily for tests or custom transports.
-     *                                When provided, it is used as-is.
+     * Create the service with an API key, or with a client that keeps its own User-Agent.
+     *
+     * @param string      $apiKey The API key of the client that the service creates.
+     * @param string|null $host   The host of the client that the service creates.
+     * @param Client|null $api    A client with its own API key, host, headers or User-Agent, such as one
+     *                            from ShipmentApiFactory. With a client, `$apiKey` and `$host` are not used.
      */
     public function __construct(
         string $apiKey,
         ?string $host = null,
-        ?ShipmentApi $api = null
+        ?Client $api = null
     ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host, $this->getUserAgentHeader());
+        $this->apiKey = $apiKey;
+        $this->host   = $host;
+        $this->api    = $api;
     }
 
     /**
      * Fetch contract definitions available for the configured API key.
      *
-     * Pass a generated CapabilitiesPostContractDefinitionsRequestV2::CARRIER_* value
-     * to let the generated request model validate and filter the API request.
-     * Omit $carrier to fetch all contract definitions for the account.
+     * Pass a carrier, such as `CapabilitiesPostContractDefinitionsRequestV2Carrier::Postnl`, to filter the
+     * API request. Omit $carrier to fetch all contract definitions for the account.
      *
-     * @param string|null $carrier Optional generated carrier enum value.
+     * The results are the Jane models. `carrier`, `packageTypes`, `deliveryTypes` and `transactionTypes`
+     * hold an enum case, or the raw string for a value that the SDK does not know, with the client that
+     * the service or ShipmentApiFactory creates. So a new carrier in the API does not break the call.
+     * Compare with the enum case, because `->value` fails on a raw string.
+     *
+     * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|null $carrier Optional carrier.
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
-     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException
-     * @throws InvalidArgumentException When the generated request rejects $carrier,
-     *                                  or when the generated client returns a non-success model.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\ApiException For an error response.
+     * @throws InvalidArgumentException When the generated client returns the v1 model, which the request does not ask for.
      */
-    public function getContractDefinitions(?string $carrier = null): array
+    public function getContractDefinitions(?CapabilitiesPostContractDefinitionsRequestV2Carrier $carrier = null): array
     {
         $request = new CapabilitiesPostContractDefinitionsRequestV2();
 
         if (null !== $carrier) {
-            $request->setCarrier($carrier);
+            $request->carrier = $carrier;
         }
 
-        $response = $this->api->postCapabilitiesContractDefinitions(
-            $request,
-            $this->getUserAgentHeader()
-        );
+        $response = $this->api()->postCapabilitiesContractDefinitions(requestBody: $request);
 
+        // The generated method declares the v1 and the v2 response. The request asks for v2, so this
+        // check only narrows the type.
         if (! $response instanceof CapabilitiesResponsesContractDefinitionsV2) {
             throw new InvalidArgumentException(
-                'Unexpected response type returned by ShipmentApi::postCapabilitiesContractDefinitions().'
+                'Unexpected response type returned by Client::postCapabilitiesContractDefinitions().'
             );
         }
 
-        return $response->getItems() ?? [];
+        return $response->items ?? [];
+    }
+
+    /**
+     * The first request creates the client with the User-Agent of the service, so a proposition that
+     * is set after the constructor reaches the API.
+     */
+    private function api(): Client
+    {
+        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }
