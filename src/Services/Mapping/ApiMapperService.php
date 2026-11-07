@@ -302,7 +302,7 @@ final class ApiMapperService
     /**
      * @internal Used to verify that the source enums still exist.
      *
-     * @return array<string, array<string, class-string>>
+     * @return array<string, array<string, class-string<\BackedEnum>>>
      */
     public static function profiles(): array
     {
