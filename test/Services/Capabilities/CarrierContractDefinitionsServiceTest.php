@@ -8,7 +8,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesContractDefinitionsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2Carrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Services\Capabilities\CarrierContractDefinitionsService;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -44,23 +43,9 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
     {
         $service = $this->createService('{"items":[{"carrier":"INPOST"}]}');
 
-        $service->getContractDefinitions('INPOST');
         $service->getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2Carrier::Inpost);
 
         self::assertSame(['carrier' => 'INPOST'], $this->requests[0]['body']);
-        self::assertSame(['carrier' => 'INPOST'], $this->requests[1]['body']);
-    }
-
-    public function testGetContractDefinitionsRejectsUnknownCarrierBeforeSending(): void
-    {
-        $service = $this->createService('{"items":[]}');
-
-        try {
-            $service->getContractDefinitions('inpost');
-            self::fail('An unknown carrier must throw.');
-        } catch (ValidationException) {
-            self::assertSame([], $this->requests);
-        }
     }
 
     /**

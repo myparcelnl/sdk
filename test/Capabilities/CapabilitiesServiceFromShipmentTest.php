@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
 use Mockery;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
@@ -34,11 +34,12 @@ final class CapabilitiesServiceFromShipmentTest extends TestCase
         $client = Mockery::mock(CapabilitiesClientInterface::class);
         $client->shouldReceive('getCapabilities')
             ->once()
-            ->withArgs(function (CapabilitiesRequest $req) {
-                $this->assertSame('NL', $req->getCountryCode());
-                $this->assertSame([
-                    'weight' => ['value' => 500.0, 'unit' => 'g'],
-                ], $req->getPhysicalProperties());
+            ->withArgs(function (CapabilitiesPostCapabilitiesRequestV2 $req) {
+                $this->assertSame('NL', $req->recipient->countryCode);
+                $this->assertSame(500, $req->physicalProperties->weight->value);
+                $this->assertSame('g', $req->physicalProperties->weight->unit->value);
+                $this->assertFalse(isset($req->carrier));
+
                 return true;
             })
             ->andReturn($expected);
@@ -48,5 +49,13 @@ final class CapabilitiesServiceFromShipmentTest extends TestCase
 
         $this->assertSame($expected, $response);
     }
-}
 
+    public function testFromShipmentThrowsWithoutACountryCode(): void
+    {
+        $shipment = CoreApiModels::toModel(['physical_properties' => ['weight' => 500]], ShipmentItem::class);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        (new CapabilitiesService(Mockery::mock(CapabilitiesClientInterface::class)))->fromShipment($shipment);
+    }
+}
