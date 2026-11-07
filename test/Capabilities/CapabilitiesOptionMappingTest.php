@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Test\Capabilities;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemOptions;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesMapper;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 use MyParcelNL\Sdk\Support\Str;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -177,8 +176,7 @@ class CapabilitiesOptionMappingTest extends TestCase
     }
 
     /**
-     * The generated v2 property CapabilitiesMapper would actually target, or null if it would be
-     * skipped.
+     * The property of the v2 options model that ShipmentOptionMapper gives for a name, or null.
      */
     private function resolvedTargetProperty(string $key): ?string
     {
@@ -200,7 +198,7 @@ class CapabilitiesOptionMappingTest extends TestCase
     }
 
     /**
-     * The v2 options that CapabilitiesMapper can set: the Jane properties, which ShipmentOptionMapper
+     * The v2 options of the capabilities request: the Jane properties, which ShipmentOptionMapper
      * returns. The v2 JSON names are camelCase, the same as the properties.
      *
      * @return list<string>

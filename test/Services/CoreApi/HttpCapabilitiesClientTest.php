@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\Test\Services\CoreApi;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
@@ -39,11 +40,12 @@ final class HttpCapabilitiesClientTest extends TestCase
         self::assertSame(['User-Agent: MyPlugin/1.0 Magento/2.4'], $this->requests[0]['user_agent']);
         self::assertJsonStringEqualsJsonString('{"recipient":{"countryCode":"NL"},"carrier":"POSTNL"}', $this->requests[0]['body']);
 
-        self::assertSame('POSTNL', $response->getCarrier());
-        self::assertSame(['PACKAGE'], $response->getPackageTypes());
-        self::assertSame(['STANDARD_DELIVERY'], $response->getDeliveryTypes());
-        self::assertSame(['B2C'], $response->getTransactionTypes());
-        self::assertSame(5, $response->getColloMax());
+        $result = $response->results[0];
+        self::assertSame(RefCapabilitiesSharedCarrierV2::Postnl, $result->carrier);
+        self::assertSame(['PACKAGE'], array_map(static fn ($type) => $type->value, $result->packageTypes));
+        self::assertSame(['STANDARD_DELIVERY'], array_map(static fn ($type) => $type->value, $result->deliveryTypes));
+        self::assertSame(['B2C'], array_map(static fn ($type) => $type->value, $result->transactionTypes));
+        self::assertSame(5, $result->collo->max);
     }
 
     /**
@@ -58,9 +60,9 @@ final class HttpCapabilitiesClientTest extends TestCase
 
         $response = $client->getCapabilities(self::request(['recipient' => ['countryCode' => 'NL']]));
 
-        self::assertSame('FUTURE_CARRIER', $response->getCarrier());
-        self::assertSame(['FUTURE_PACKAGE'], $response->getPackageTypes());
-        self::assertSame(['requiresSignature', 'futureOption'], $response->getShipmentOptions());
+        self::assertSame('FUTURE_CARRIER', $response->results[0]->carrier);
+        self::assertSame(['FUTURE_PACKAGE'], $response->results[0]->packageTypes);
+        self::assertSame(['requiresSignature', 'futureOption'], array_keys(CoreApiModels::toArray($response->results[0]->options)));
     }
 
     public function testGetCapabilitiesRejectsACarrierThatTheSpecDoesNotKnowBeforeSending(): void
@@ -109,6 +111,6 @@ final class HttpCapabilitiesClientTest extends TestCase
             return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => 'application/json']]);
         });
 
-        return new HttpCapabilitiesClient(null, ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $httpClient));
+        return new HttpCapabilitiesClient(ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $httpClient));
     }
 }
