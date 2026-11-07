@@ -22,9 +22,9 @@ use UnitEnum;
 final class CoreApiModels
 {
     /**
-     * The generated normalizer validates a model against the spec in both directions. This context
-     * skips that. The generated client validates a request when it goes out, and a model that comes
-     * from the API can hold a value that the SDK does not know, such as a new enum value.
+     * The generated normalizer validates a model when it encodes it, as the client does for a request.
+     * This context skips that: toArray() encodes a model that can be incomplete, or that came from
+     * the API with a value that the SDK does not know, such as a new enum value.
      */
     private const CONTEXT = ['skip_validation' => true];
 
@@ -37,7 +37,8 @@ final class CoreApiModels
      *
      * A nested object is an array too, such as `['recipient' => ['cc' => 'NL']]`. A model that comes
      * in is returned as it is. The values are not checked here: the generated client checks the
-     * request when it goes out.
+     * request when it goes out. A key that is not an API field name is dropped without an error, also
+     * the camelCase property name, such as `postalCode`: use `postal_code`.
      *
      * @template T of object
      *

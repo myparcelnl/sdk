@@ -16,6 +16,7 @@ use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 
 final class ShipmentCreateServiceTest extends TestCase
 {
@@ -78,6 +79,26 @@ final class ShipmentCreateServiceTest extends TestCase
         self::assertSame(['MyPlugin/1.0'], $this->requests[0]['headers']['user-agent']);
         self::assertSame($service->getUserAgentHeader(), $this->requests[0]['body']['data']['user_agent']);
         self::assertSame(['order-1', 'order-2'], array_column($this->requests[0]['body']['data']['shipments'], 'reference_identifier'));
+    }
+
+    public function testCreateSendsTheOtherQueryParametersOfTheSpec(): void
+    {
+        $this->createService(self::createdResponse([['id' => 1, 'reference_identifier' => 'order-1']]))
+            ->create([self::shipment('order-1')], 'A4', null, ['send_return_mail' => 0]);
+
+        self::assertSame('https://api.myparcel.nl/shipments?format=A4&send_return_mail=0', $this->requests[0]['url']);
+    }
+
+    public function testCreateRejectsAQueryParameterThatTheSpecDoesNotHave(): void
+    {
+        $service = $this->createService(self::createdResponse([]));
+
+        try {
+            $service->create([self::shipment('order-1')], null, null, ['send_mail' => 0]);
+            self::fail('An unknown query parameter must throw.');
+        } catch (UndefinedOptionsException) {
+            self::assertSame([], $this->requests);
+        }
     }
 
     public function testCreateSendsAnEnumCaseAsItsValue(): void
