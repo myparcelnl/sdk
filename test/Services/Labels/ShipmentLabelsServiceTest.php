@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Labels;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsNotFoundException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsPaymentRequiredException;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
@@ -44,7 +46,7 @@ final class ShipmentLabelsServiceTest extends TestCase
     }
 
     /**
-     * The spec has the positions 1 to 4. Another number leaves the parameter out, as in v11.
+     * The spec has the positions 1 to 4. Another number leaves the parameter out.
      */
     public function testSetLinkOfLabelsLeavesOutAPositionThatTheSpecDoesNotHave(): void
     {
@@ -119,6 +121,9 @@ final class ShipmentLabelsServiceTest extends TestCase
         self::assertSame($result, $service->getLabelPdf());
     }
 
+    /**
+     * The generated endpoint reads a 402 as payment instructions only with the content type of the link.
+     */
     public function testAPaymentRequiredResponseThrowsTheGeneratedException(): void
     {
         $service = $this->createService(
@@ -128,6 +133,27 @@ final class ShipmentLabelsServiceTest extends TestCase
         );
 
         $this->expectException(GetShipmentsLabelsPaymentRequiredException::class);
+
+        $service->setLinkOfLabels([101]);
+    }
+
+    /**
+     * A 402 with a plain JSON body, for example on a PDF request, throws the client error exception.
+     */
+    public function testAPaymentRequiredResponseWithAJsonBodyThrowsTheClientErrorException(): void
+    {
+        $service = $this->createService('{"message":"Payment required","request_id":"1","status_code":402,"errors":[]}', 402);
+
+        $this->expectException(GetShipmentsLabelsClientErrorException::class);
+
+        $service->setPdfOfLabels([101]);
+    }
+
+    public function testAnErrorResponseThatIsNotJsonThrowsTheBadResponseException(): void
+    {
+        $service = $this->createService('<html>Bad gateway</html>', 502, 'text/html');
+
+        $this->expectException(BadResponseException::class);
 
         $service->setPdfOfLabels([101]);
     }
