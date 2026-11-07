@@ -109,7 +109,7 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * In v11, `false` left the filter out. Now the API gets the filter.
+     * A filter with the value `false` goes out as `0`, so the API applies it.
      */
     public function testQuerySendsFalseAsZero(): void
     {
