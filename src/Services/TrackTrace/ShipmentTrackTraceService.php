@@ -8,24 +8,21 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTrace;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesTracktraces;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
  * Fetches track & trace data through the Core API client.
  */
 final class ShipmentTrackTraceService
 {
+    use CreatesCoreApiClient;
     use HasUserAgent;
-
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
 
     /**
      * Create the service with an API key, or with a client that keeps its own User-Agent.
+     *
+     * The service keeps its own constructor, because a caller can pass the host as the named argument `baseUri`.
      */
     public function __construct(
         string $apiKey,
@@ -53,7 +50,7 @@ final class ShipmentTrackTraceService
         }
 
         /** @var ShipmentResponsesTracktraces|null $response */
-        $response = $this->api()->getTrackTracesByIds(ids: implode(';', $shipmentIds));
+        $response = $this->api()->getTrackTracesByIds(ids: self::idList($shipmentIds));
 
         $result = [];
 
@@ -64,14 +61,5 @@ final class ShipmentTrackTraceService
         }
 
         return $result;
-    }
-
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }
