@@ -74,6 +74,7 @@ Some fields hold another type than the v11 getter returned:
 | `WebhookService` | It throws a `CoreApi\ApiException` for an error response and for a network error | It throws a `Jane\CoreApi\Exception\ApiException` for an error response. A network error, such as a timeout, throws a Symfony `TransportExceptionInterface` |
 | `WebhookApiFactory` | `make()` returns a `CoreApi\Api\WebhookApi` | `make()` returns a `Jane\CoreApi\Client`. New fourth and fifth arguments take headers to send on every request and a Symfony `HttpClientInterface` |
 | `ShipmentApiFactory` | `make()` returns a `CoreApi\Api\ShipmentApi` | `make()` returns a `Jane\CoreApi\Client`. A new fifth argument takes a Symfony `HttpClientInterface` that sends the requests |
+| The services that send a request body, such as `ShipmentCreateService` and `ReturnShipmentService` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a name, throws a `JsonException` | It throws a Symfony `NotEncodableValueException`, and no request goes out |
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
 
@@ -133,6 +134,8 @@ The generated client checks a shipment against the spec before it sends it. A sh
 
 | Class | Replacement |
 |-------|-------------|
+| `MyParcelNL\Sdk\Model\Shipment\Shipment` and `ShipmentOptions` | The generated `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem` and `ShipmentPostShipmentsRequestV11DataShipmentsItemOptions`, see [Creating shipments](#creating-shipments) |
+| `MyParcelNL\Sdk\Collection\ShipmentCollection` | An array of the generated shipment models |
 | `MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType` | None. The generated client picks the content type of a shipment request from the request body |
 
 ### Order push
@@ -157,23 +160,31 @@ limits. When you pass the lines or the children in the constructor array, nothin
 ### Generated OpenAPI models
 
 > [!IMPORTANT]
-> The changes below are changes in the generated OpenAPI models in `MyParcelNL\Sdk\Client\Generated`. v12 generates them with openapi-generator 7.26.0 instead of 7.12.0. They reach you through the services, or directly when you use the generated API clients and models.
+> v12 removes the OpenAPI Generator clients and models of the Core API, the private Core API, the IAM API and the Order API: `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi` in `MyParcelNL\Sdk\Client\Generated`. Use the services, or the Jane clients and models in `MyParcelNL\Sdk\Client\Generated\Jane`. The Jane models use public properties instead of getters and setters, and PHP enums instead of class constants.
 
-#### Through the services
+A Jane model has the same name as the old model when the old model came from a named schema, such as `ShipmentDefsShipmentSender`. Three groups differ. An item of an array ends in `Inner` in the old client and in `Item` in Jane, such as `CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItem`. The `oneOf`, `anyOf` and `allOf` wrappers of the old client, such as `ShipmentDefsShipmentPropertiesRegion` and `CommonResponsesDownloadLinkDataOneOf`, have no Jane class: Jane types the property itself, or leaves the type open. The old client gave some inline schemas a shorter name, and Jane uses the full name of the schema:
 
-| Service | Class with the change | v11 | v12 |
-|---------|-----------------------|-----|-----|
-| The services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| v11 | v12 |
+|-----|-----|
+| `CoreApi\Model\ShipmentRequest` | `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`, which `ShipmentCreateService::create()` takes, see [Creating shipments](#creating-shipments) |
+| `CoreApi\Model\CapabilitiesRecipientV2`, `CapabilitiesSenderV2`, `CapabilitiesOptionsV2` and `CapabilitiesPhysicalPropertiesV2` | `Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient`, `...Sender`, `...Options` and `...PhysicalProperties` |
+| `CoreApi\Model\RefTypesCarrierV2` | `Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2`. The `BOL` constant has no replacement: no `Jane\CoreApi` enum has that value |
+| `CoreApi\Model\SecondaryShipmentRequest` | `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem` |
+| `CoreApi\Model\PhysicalPropertiesHeightV2`, `PhysicalPropertiesLengthV2`, `PhysicalPropertiesWidthV2` and `PhysicalPropertiesWeightV2` | `Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeight`, `...Length`, `...Width` and `...Weight` |
+| `CoreApi\Model\FixedShipment` and `FixedShipmentRecipient` | `Jane\CoreApi\Model\ShipmentDefsShipment` and `ShipmentDefsShipmentRecipient`. Jane reads every region and street that the spec allows, so the overrides are not needed |
+| `IamApi\Model\FixedPrincipal` | `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser`, which `ApiKeyService::getPrincipal()` returns |
 
-#### Direct use of `MyParcelNL\Sdk\Client\Generated`
+#### The legacy e-commerce client
 
-The rows above also apply when you use these classes directly. In addition:
+The e-commerce client in `MyParcelNL\Sdk\Client\Generated\EcommerceApi` still comes from OpenAPI Generator. v12 generates it with openapi-generator 7.26.0 instead of 7.12.0:
 
 | Class with the change | v11 | v12 |
 |-----------------------|-----|-----|
-| Every generated `Api` class, such as `CoreApi\Api\ShipmentApi` and `IamApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
-| Every generated `Api` class | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
+| `EcommerceApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
+| `EcommerceApi\Api\DefaultApi` | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
 | `EcommerceApi\Model\PhysicalProperties` | `getHeight()`, `getLength()` and `getWidth()` return `PhysicalPropertiesHeight`, `PhysicalPropertiesLength` and `PhysicalPropertiesWidth` | They return `Dimension`, and the three classes are removed. Use the `UNIT_MM`, `UNIT_CM` and `UNIT_M` constants on `Dimension`. |
+
+`EnumFallback::setListener()` now gets only an unknown enum value of this client. The Jane clients keep an unknown value as the raw value, without a listener.
 
 ## Upgrading to v11.2
 
@@ -187,7 +198,7 @@ v11.2 renames generated models in the Ecommerce client. Code that uses them must
 
 `EcommerceApi\Model\Product` still exists, but is now the body of `/webhook/products`. Code that builds order lines with it breaks. `unit` on height, length and width is now a plain string with these constants. The new `Dimension` model is generated, but `PhysicalProperties` does not use it.
 
-v12 replaces the three `PhysicalProperties*` classes with `Dimension`. See "Direct use of `MyParcelNL\Sdk\Client\Generated`" under "Upgrading to v12".
+v12 replaces the three `PhysicalProperties*` classes with `Dimension`. See "The legacy e-commerce client" under "Upgrading to v12".
 
 ## Upgrading to v11
 

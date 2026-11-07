@@ -17,6 +17,11 @@ namespace MyParcelNL\Sdk\Support;
  * This only affects the read path. Request serialization stays strict: sending
  * an unknown enum value still throws, because that can only happen through a
  * value that was never supported.
+ *
+ * Only the openapi-generator e-commerce client calls this class. The Jane clients
+ * keep an unknown enum value as the raw value themselves, without a listener.
+ *
+ * @todo INT-2034: remove this class with the openapi-generator e-commerce client.
  */
 final class EnumFallback
 {
