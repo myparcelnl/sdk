@@ -132,7 +132,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\IamApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal
+     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal|\MyParcelNL\Sdk\Client\Generated\IamApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\IamApi\Model\ProblemDetailsInternalServerError
      */
     public function whoamiGet(string $contentType = self::contentTypes['whoamiGet'][0])
     {
@@ -150,7 +150,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\IamApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal|\MyParcelNL\Sdk\Client\Generated\IamApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\IamApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function whoamiGetWithHttpInfo(string $contentType = self::contentTypes['whoamiGet'][0])
     {
@@ -207,6 +207,60 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\IamApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -256,6 +310,22 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -375,7 +445,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );

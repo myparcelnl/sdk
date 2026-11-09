@@ -35,7 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\IamApi\ObjectSerializer;
  * PrincipalType Class Doc Comment
  *
  * @category Class
- * @description A shop principal identifier.
+ * @description The principal identifier.
  * @package  MyParcelNL\Sdk\Client\Generated\IamApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

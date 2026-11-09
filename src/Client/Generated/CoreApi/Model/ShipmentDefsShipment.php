@@ -82,6 +82,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProviderId',
         'payment_status' => 'string',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier',
+        'carrier_active' => 'bool',
         'platform_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId',
         'origin' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOrigin',
         'user_agent' => 'string',
@@ -138,6 +139,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => null,
         'payment_status' => null,
         'carrier_id' => null,
+        'carrier_active' => null,
         'platform_id' => null,
         'origin' => null,
         'user_agent' => null,
@@ -192,6 +194,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => false,
         'payment_status' => false,
         'carrier_id' => false,
+        'carrier_active' => false,
         'platform_id' => false,
         'origin' => false,
         'user_agent' => true,
@@ -326,6 +329,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => 'external_provider_id',
         'payment_status' => 'payment_status',
         'carrier_id' => 'carrier_id',
+        'carrier_active' => 'carrier_active',
         'platform_id' => 'platform_id',
         'origin' => 'origin',
         'user_agent' => 'user_agent',
@@ -380,6 +384,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => 'setExternalProviderId',
         'payment_status' => 'setPaymentStatus',
         'carrier_id' => 'setCarrierId',
+        'carrier_active' => 'setCarrierActive',
         'platform_id' => 'setPlatformId',
         'origin' => 'setOrigin',
         'user_agent' => 'setUserAgent',
@@ -434,6 +439,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         'external_provider_id' => 'getExternalProviderId',
         'payment_status' => 'getPaymentStatus',
         'carrier_id' => 'getCarrierId',
+        'carrier_active' => 'getCarrierActive',
         'platform_id' => 'getPlatformId',
         'origin' => 'getOrigin',
         'user_agent' => 'getUserAgent',
@@ -539,6 +545,7 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
         $this->setIfExists('external_provider_id', $data ?? [], null);
         $this->setIfExists('payment_status', $data ?? [], null);
         $this->setIfExists('carrier_id', $data ?? [], null);
+        $this->setIfExists('carrier_active', $data ?? [], null);
         $this->setIfExists('platform_id', $data ?? [], null);
         $this->setIfExists('origin', $data ?? [], null);
         $this->setIfExists('user_agent', $data ?? [], null);
@@ -1394,6 +1401,33 @@ class ShipmentDefsShipment implements ModelInterface, ArrayAccess, \JsonSerializ
             throw new \InvalidArgumentException('non-nullable carrier_id cannot be null');
         }
         $this->container['carrier_id'] = $carrier_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets carrier_active
+     *
+     * @return bool|null
+     */
+    public function getCarrierActive()
+    {
+        return $this->container['carrier_active'];
+    }
+
+    /**
+     * Sets carrier_active
+     *
+     * @param bool|null $carrier_active Whether the carrier of the shipment is active for the shop the shipment was created with. Only present in paginated responses, i.e. those of `GET /shipments` and `GET /shipments/{ids}`.
+     *
+     * @return self
+     */
+    public function setCarrierActive($carrier_active)
+    {
+        if (is_null($carrier_active)) {
+            throw new \InvalidArgumentException('non-nullable carrier_active cannot be null');
+        }
+        $this->container['carrier_active'] = $carrier_active;
 
         return $this;
     }

@@ -59,7 +59,7 @@ class RatesPostRatesRequestV2PhysicalPropertiesHeight implements ModelInterface,
       * @var string[]
       */
     protected static $openAPITypes = [
-        'value' => 'float',
+        'value' => 'int',
         'unit' => 'string'
     ];
 
@@ -337,7 +337,7 @@ class RatesPostRatesRequestV2PhysicalPropertiesHeight implements ModelInterface,
     /**
      * Gets value
      *
-     * @return float
+     * @return int
      */
     public function getValue()
     {
@@ -347,7 +347,7 @@ class RatesPostRatesRequestV2PhysicalPropertiesHeight implements ModelInterface,
     /**
      * Sets value
      *
-     * @param float $value The height value
+     * @param int $value The height value
      *
      * @return self
      */

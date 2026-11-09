@@ -74,7 +74,8 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         'same_day_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'saturday_delivery' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
         'signature' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean',
-        'label_description' => 'string'
+        'label_description' => 'string',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms'
     ];
 
     /**
@@ -101,7 +102,8 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         'same_day_delivery' => null,
         'saturday_delivery' => null,
         'signature' => null,
-        'label_description' => null
+        'label_description' => null,
+        'incoterms' => null
     ];
 
     /**
@@ -126,7 +128,8 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         'same_day_delivery' => false,
         'saturday_delivery' => false,
         'signature' => false,
-        'label_description' => false
+        'label_description' => false,
+        'incoterms' => false
     ];
 
     /**
@@ -231,7 +234,8 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         'same_day_delivery' => 'same_day_delivery',
         'saturday_delivery' => 'saturday_delivery',
         'signature' => 'signature',
-        'label_description' => 'label_description'
+        'label_description' => 'label_description',
+        'incoterms' => 'incoterms'
     ];
 
     /**
@@ -256,7 +260,8 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         'same_day_delivery' => 'setSameDayDelivery',
         'saturday_delivery' => 'setSaturdayDelivery',
         'signature' => 'setSignature',
-        'label_description' => 'setLabelDescription'
+        'label_description' => 'setLabelDescription',
+        'incoterms' => 'setIncoterms'
     ];
 
     /**
@@ -281,7 +286,8 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         'same_day_delivery' => 'getSameDayDelivery',
         'saturday_delivery' => 'getSaturdayDelivery',
         'signature' => 'getSignature',
-        'label_description' => 'getLabelDescription'
+        'label_description' => 'getLabelDescription',
+        'incoterms' => 'getIncoterms'
     ];
 
     /**
@@ -358,6 +364,7 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         $this->setIfExists('saturday_delivery', $data ?? [], null);
         $this->setIfExists('signature', $data ?? [], null);
         $this->setIfExists('label_description', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
     }
 
     /**
@@ -865,6 +872,33 @@ class RefShipmentShipmentOptionsReturnsOptions implements ModelInterface, ArrayA
         }
 
         $this->container['label_description'] = $label_description;
+
+        return $this;
+    }
+
+    /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
 
         return $this;
     }

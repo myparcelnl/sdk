@@ -70,7 +70,7 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -137,7 +137,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json;charset=utf-8;version=1.1`, `application/json;charset=utf-8`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=1.1`, `application/json;charset=utf-8`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -146,7 +146,7 @@ try {
 ## `getWebhookSubscriptionsById()`
 
 ```php
-getWebhookSubscriptionsById($ids, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11
+getWebhookSubscriptionsById($ids, $hook, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11
 ```
 
 Get webhook subscriptions by id.
@@ -176,10 +176,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi(
     $config
 );
 $ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more webhook subscription IDs. Separate multiple IDs using `;`.
+$hook = 'hook_example'; // string | Filter by webhook event type.
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getWebhookSubscriptionsById($ids, $user_agent);
+    $result = $apiInstance->getWebhookSubscriptionsById($ids, $hook, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WebhookApi->getWebhookSubscriptionsById: ', $e->getMessage(), PHP_EOL;
@@ -191,6 +192,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. | |
+| **hook** | **string**| Filter by webhook event type. | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
@@ -204,7 +206,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json;charset=utf-8;version=1.1`, `application/json;charset=utf-8`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=1.1`, `application/json;charset=utf-8`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -271,7 +273,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=1.1`, `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/*`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

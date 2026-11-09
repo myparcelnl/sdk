@@ -1630,7 +1630,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
      */
     public function createFromShippablePackagesPost($create_order_from_shippable_packages, string $contentType = self::contentTypes['createFromShippablePackagesPost'][0])
     {
@@ -1649,7 +1649,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
      */
     public function createFromShippablePackagesPostWithHttpInfo($create_order_from_shippable_packages, string $contentType = self::contentTypes['createFromShippablePackagesPost'][0])
     {
@@ -1680,11 +1680,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -1702,7 +1702,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -1748,7 +1748,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -1781,7 +1781,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1835,7 +1835,7 @@ class DefaultApi
      */
     public function createFromShippablePackagesPostAsyncWithHttpInfo($create_order_from_shippable_packages, string $contentType = self::contentTypes['createFromShippablePackagesPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreateFromShippablePackagesPost200ResponseInner[]';
         $request = $this->createFromShippablePackagesPostRequest($create_order_from_shippable_packages, $contentType);
 
         return $this->client
@@ -1995,7 +1995,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
      */
     public function createPost($order_to_create, string $contentType = self::contentTypes['createPost'][0])
     {
@@ -2014,7 +2014,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
      */
     public function createPostWithHttpInfo($order_to_create, string $contentType = self::contentTypes['createPost'][0])
     {
@@ -2045,11 +2045,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 202:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -2067,7 +2067,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -2113,7 +2113,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -2146,7 +2146,7 @@ class DefaultApi
                 case 202:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2200,7 +2200,7 @@ class DefaultApi
      */
     public function createPostAsyncWithHttpInfo($order_to_create, string $contentType = self::contentTypes['createPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response';
         $request = $this->createPostRequest($order_to_create, $contentType);
 
         return $this->client
