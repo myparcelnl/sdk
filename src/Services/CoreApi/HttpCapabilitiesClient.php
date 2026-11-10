@@ -7,7 +7,7 @@ namespace MyParcelNL\Sdk\Services\CoreApi;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use UnexpectedValueException;
 
 /**
@@ -15,19 +15,22 @@ use UnexpectedValueException;
  */
 final class HttpCapabilitiesClient implements CapabilitiesClientInterface
 {
-    use HasUserAgent;
-
-    private ?Client $api;
+    use CreatesCoreApiClient;
 
     /**
-     * Create the client with a Jane client that has its own API key, host, headers
-     * or User-Agent. Without a Jane client, the first request creates one with the API key that
-     * ShipmentApiFactory reads from `API_KEY`, `API_KEY_NL` or `API_KEY_BE`, and with the User-Agent
-     * of this client, see HasUserAgent.
+     * Create the client with a Jane client that keeps its own User-Agent, or with an API key.
+     *
+     * @param Client|null $api    A client with its own API key, host, headers or User-Agent, such as one
+     *                            from ShipmentApiFactory. With a client, `$apiKey` and `$host` are not used.
+     * @param string|null $apiKey The API key of the client that the first request creates. Without one,
+     *                            ShipmentApiFactory reads `API_KEY`, `API_KEY_NL` or `API_KEY_BE`.
+     * @param string|null $host   The host of the client that the first request creates.
      */
-    public function __construct(?Client $api = null)
+    public function __construct(?Client $api = null, ?string $apiKey = null, ?string $host = null)
     {
-        $this->api = $api;
+        $this->api    = $api;
+        $this->apiKey = $apiKey;
+        $this->host   = $host;
     }
 
     /**
@@ -48,14 +51,5 @@ final class HttpCapabilitiesClient implements CapabilitiesClientInterface
         }
 
         return $coreRes;
-    }
-
-    /**
-     * The first request creates the client with the User-Agent of this client, so a proposition that
-     * is set after the constructor reaches the API. The environment is read then, once.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client(null, null, $this->getUserAgentHeader());
     }
 }
