@@ -47,13 +47,13 @@ final class ApiKeyService
      * Check whether IAM accepts the API key.
      *
      * Only a 401 means that the key is invalid. Another error says nothing about the key, so this
-     * method throws it. A 200 with a JSON body proves the key, also for a principal type that the
-     * SDK does not know.
+     * method throws it. A 200 with a JSON content type proves the key, also for a principal type that
+     * the SDK does not know.
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException For a 500 with an `application/problem+json` body.
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status other than 401 that the spec does not declare, or for a 200 without a JSON body.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For an error status other than 401 that the spec does not declare, or for a 200 without a JSON content type.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
-     * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a body that is not valid JSON.
+     * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a JSON content type and a body that is not valid JSON, such as an empty body.
      */
     public function isValid(): bool
     {
@@ -75,9 +75,9 @@ final class ApiKeyService
      * Fetch the IAM principal for the configured API key.
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException For a 500 with an `application/problem+json` body.
-     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For a 401, for an error status that the spec does not declare, or for a 200 without a JSON body.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException For a 401, for an error status that the spec does not declare, or for a 200 without a JSON content type.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface For a network error or a timeout.
-     * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a body that is not valid JSON.
+     * @throws \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException For a 200 with a JSON content type and a body that is not valid JSON, such as an empty body.
      * @throws \UnexpectedValueException When IAM returns a principal type that this SDK does not know.
      */
     public function getPrincipal(): PrincipalShop|PrincipalUser
