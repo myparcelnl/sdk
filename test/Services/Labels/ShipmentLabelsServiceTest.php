@@ -122,7 +122,8 @@ final class ShipmentLabelsServiceTest extends TestCase
     }
 
     /**
-     * The generated endpoint reads a 402 as payment instructions only with the content type of the link.
+     * The generated endpoint reads a 402 as payment instructions only with the content type
+     * `application/vnd.shipment_label_link+json`.
      */
     public function testAPaymentRequiredResponseThrowsTheGeneratedException(): void
     {
@@ -138,11 +139,15 @@ final class ShipmentLabelsServiceTest extends TestCase
     }
 
     /**
-     * A 402 with a plain JSON body, for example on a PDF request, throws the client error exception.
+     * A PDF request gets the payment instructions of a 402 as `application/json`. The generated
+     * endpoint reads that content type as a client error, not as payment instructions.
      */
     public function testAPaymentRequiredResponseWithAJsonBodyThrowsTheClientErrorException(): void
     {
-        $service = $this->createService('{"message":"Payment required","request_id":"1","status_code":402,"errors":[]}', 402);
+        $service = $this->createService(
+            json_encode(['data' => ['payment_instructions' => ['payment_url' => 'https://pay.test/1'], 'shipments' => []]]),
+            402
+        );
 
         $this->expectException(GetShipmentsLabelsClientErrorException::class);
 
