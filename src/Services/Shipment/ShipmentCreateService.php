@@ -33,7 +33,9 @@ final class ShipmentCreateService
      * @param int|string|null        $positions The label positions on an A4 sheet, such as `1;2;3;4`.
      * @param array<string, mixed>   $queryParameters Other query parameters of `POST /shipments`, such as
      *                                                `send_return_mail`. The generated client rejects a
-     *                                                name or a type that the spec does not have.
+     *                                                name or a type that the spec does not have. A
+     *                                                `format` or `positions` key is used only when the
+     *                                                argument of that name is null.
      *
      * @return array<int, string|null> Shipment id => reference identifier.
      *
@@ -51,9 +53,9 @@ final class ShipmentCreateService
         $response = $this->api()->postShipments(
             requestBody: $request,
             queryParameters: array_filter(
-                ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions] + $queryParameters,
+                ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions],
                 static fn (mixed $value): bool => null !== $value
-            )
+            ) + array_filter($queryParameters, static fn (mixed $value): bool => null !== $value)
         );
 
         if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
