@@ -15,7 +15,7 @@ return [
             'directory' => __DIR__ . '/src/Client/Generated/Jane/CoreApi',
         ],
         // A local copy, because the private Core API spec is not hosted yet.
-        // @todo Use the hosted URL when the private Core API spec is hosted, and remove
+        // @todo INT-2234: use the hosted URL when the private Core API spec is hosted, and remove
         // openapi/specs/coreapi-private.yaml.
         __DIR__ . '/openapi/specs/coreapi-private.yaml' => [
             'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate',
