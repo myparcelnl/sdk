@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
-use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -49,12 +48,17 @@ final class OrderDeliveryOptionsTest extends TestCase
         self::assertSame(4, $options->deliveryType);
     }
 
-    public function testThrowsForATypeNameThatTheMapperDoesNotKnow(): void
+    /**
+     * The API can add a type before the SDK knows its name. Such an order must not stop the read of
+     * the other orders, so the type stays unset.
+     */
+    public function testLeavesATypeNameThatTheMapperDoesNotKnowUnset(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('"NOPE"');
+        $options = (new Order(['shipment' => ['shipment_options' => ['package_type' => 'NOPE', 'delivery_type' => 'NOPE', 'signature' => 1]]]))->getDeliveryOptions();
 
-        new Order(['shipment' => ['shipment_options' => ['package_type' => 'NOPE']]]);
+        self::assertFalse(isset($options->packageType));
+        self::assertFalse(isset($options->deliveryType));
+        self::assertSame(RefTypesIntBoolean::True, $options->signature);
     }
 
     public function testReadsTheOptionsKeyToo(): void
