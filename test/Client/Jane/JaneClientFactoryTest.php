@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Client\Jane;
 
-use Jane\Component\OpenApiRuntime\Client\Plugin\ServerUrlHttpClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\DeleteShipmentsClientErrorException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesUserError;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
@@ -18,19 +18,13 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequ
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\FormEncoder as CoreApiFormEncoder;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
-use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer as IamApiNormalizer;
-use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder as IamApiFormEncoder;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
-use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -182,43 +176,19 @@ final class JaneClientFactoryTest extends TestCase
     }
 
     /**
-     * When a regeneration adds or removes a class that Client::create() instantiates, this test fails,
-     * so the factory can follow. The test also checks the server URL and the JSON decode options,
-     * which the factory copies, and the JSON encode options, which the factory replaces on purpose.
+     * The factory gives each client the host of its constant, so the constant must be the server URL
+     * that the spec gives and that the generated Client::create() uses.
      *
      * @dataProvider provideGeneratedClients
      *
      * @param class-string $clientClass
-     * @param class-string $normalizerClass
-     * @param class-string $formEncoderClass
-     * @param string       $host             The host constant of the factory for this client
+     * @param string       $host        The host constant of the factory for this client
      */
-    public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(
-        string $clientClass,
-        string $normalizerClass,
-        string $formEncoderClass,
-        string $host
-    ): void {
+    public function testTheHostConstantIsTheServerUrlOfTheGeneratedClient(string $clientClass, string $host): void
+    {
         $create = new ReflectionMethod($clientClass, 'create');
         $lines  = file((string) $create->getFileName());
         $source = implode('', array_slice($lines, $create->getStartLine() - 1, $create->getEndLine() - $create->getStartLine() + 1));
-
-        preg_match_all('/new \\\\([\w\\\\]+)\(/', $source, $matches);
-
-        self::assertSame(
-            [
-                ServerUrlHttpClient::class,
-                ArrayDenormalizer::class,
-                $normalizerClass,
-                Serializer::class,
-                JsonEncoder::class,
-                JsonEncode::class,
-                JsonDecode::class,
-                $formEncoderClass,
-            ],
-            $matches[1],
-            'The generated Client::create() changed. Update JaneClientFactory to build the same parts.'
-        );
 
         preg_match("/ServerUrlHttpClient\\('([^']+)'\\)/", $source, $serverUrl);
 
@@ -227,38 +197,23 @@ final class JaneClientFactoryTest extends TestCase
             rtrim($serverUrl[1] ?? '', '/'),
             'The generated Client::create() uses another server URL. Update the host constant of JaneClientFactory.'
         );
-        self::assertStringContainsString(
-            "JsonDecode(['json_decode_associative' => true])",
-            $source,
-            'The generated Client::create() decodes JSON with other options. Update JaneClientFactory::createSerializer().'
-        );
-
-        self::assertStringContainsString(
-            'JsonEncode()',
-            $source,
-            'The generated Client::create() encodes JSON with options. Merge them into the JsonEncode options of JaneClientFactory::createSerializer().'
-        );
     }
 
     /**
-     * @return array<string, array{class-string, class-string, class-string, string}>
+     * @return array<string, array{class-string, string}>
      */
     public static function provideGeneratedClients(): array
     {
         return [
-            'Core API' => [CoreApiClient::class, CoreApiNormalizer::class, CoreApiFormEncoder::class, JaneClientFactory::CORE_API_HOST],
-            'IAM API'  => [IamApiClient::class, IamApiNormalizer::class, IamApiFormEncoder::class, JaneClientFactory::IAM_API_HOST],
+            'Core API' => [CoreApiClient::class, JaneClientFactory::CORE_API_HOST],
+            'IAM API'  => [IamApiClient::class, JaneClientFactory::IAM_API_HOST],
         ];
     }
 
     /**
-     * The spec types a shipment option flag as a number, so the model holds a float. The API expects
-     * the integers 0 and 1.
-     *
-     * @todo CLOUD-2372: remove this test when the spec types the flags as integer, and the client
-     *       is generated again. The flag is then an int, and the encoder options can go.
+     * The API expects a shipment option flag as the integer 0 or 1.
      */
-    public function testSendsAFloatWithAZeroFractionAsAnInteger(): void
+    public function testSendsAFlagAsAnInteger(): void
     {
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient('{"data":{"shipments":[]}}'));
 
@@ -272,7 +227,7 @@ final class JaneClientFactoryTest extends TestCase
 
         $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
         $options->packageType = 1;
-        $options->signature   = 1.0;
+        $options->signature   = RefTypesIntBoolean::True;
 
         $shipment                      = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
         $shipment->referenceIdentifier = 'order-1';

@@ -37,9 +37,6 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('hidden', $data) && \is_int($data['hidden'])) {
-            $data['hidden'] = (float) $data['hidden'];
-        }
         if (\array_key_exists('carrier_active', $data) && \is_int($data['carrier_active'])) {
             $data['carrier_active'] = (bool) $data['carrier_active'];
         }
@@ -136,7 +133,7 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
             $object->dropOffPoint = $this->denormalizer->denormalize($data['drop_off_point'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentDropOffPoint::class, 'json', $context);
         }
         if (\array_key_exists('hidden', $data)) {
-            $object->hidden = $data['hidden'];
+            $object->hidden = is_int($data['hidden']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['hidden']) ?? $data['hidden'] : $data['hidden'];
         }
         if (\array_key_exists('price', $data)) {
             $object->price = $this->denormalizer->denormalize($data['price'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoneyNullableAmount::class, 'json', $context);
@@ -463,7 +460,7 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
             $dataArray['drop_off_point'] = \is_iterable($normalized_7) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_7) : $normalized_7;
         }
         if (null !== ($data->hidden ?? null)) {
-            $dataArray['hidden'] = $data->hidden;
+            $dataArray['hidden'] = $data->hidden instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->hidden->value : $data->hidden;
         }
         if (null !== ($data->price ?? null)) {
             $normalized_8 = $this->normalizer->normalize($data->price, 'json', $context);

@@ -21,7 +21,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem
      */
     public ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemRecipient $recipient;
     /**
-     * @var list<float>
+     * @var list<int>
      */
     public array $recipients;
     /**
