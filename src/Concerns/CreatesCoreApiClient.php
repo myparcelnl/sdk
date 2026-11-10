@@ -16,7 +16,10 @@ trait CreatesCoreApiClient
 
     private ?Client $api;
 
-    private string $apiKey;
+    /**
+     * Null makes ShipmentApiFactory read the API key from the environment.
+     */
+    private ?string $apiKey;
 
     private ?string $host;
 
