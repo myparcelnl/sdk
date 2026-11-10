@@ -104,20 +104,8 @@ final class JaneClientFactory
                 $headers,
                 $httpClient
             ),
-            self::iamSerializer()
+            self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder())
         );
-    }
-
-    /**
-     * Get the serializer of the IAM client, to read a response that the client returns as decoded
-     * JSON, such as the whoami response.
-     *
-     * @todo janephp/janephp#1156: make this method private when Jane generates a model for the whoami
-     *       response, and ApiKeyService::principalClass() goes.
-     */
-    public static function iamSerializer(): Serializer
-    {
-        return self::createSerializer(new IamApiNormalizer(), new IamApiFormEncoder());
     }
 
     /**

@@ -38,11 +38,11 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('type', $data)) {
-            $object->type = $data['type'];
+            $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
         }
         if (\array_key_exists('status', $data)) {
-            $object->status = $data['status'];
+            $object->status = is_int($data['status']) ? \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorStatus::tryFrom($data['status']) ?? $data['status'] : $data['status'];
             unset($data['status']);
         }
         if (\array_key_exists('title', $data)) {
@@ -72,10 +72,10 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
     {
         $dataArray = [];
         if (null !== ($data->type ?? null)) {
-            $dataArray['type'] = $data->type;
+            $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorType ? $data->type->value : $data->type;
         }
         if (null !== ($data->status ?? null)) {
-            $dataArray['status'] = $data->status;
+            $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorStatus ? $data->status->value : $data->status;
         }
         if (null !== ($data->title ?? null)) {
             $dataArray['title'] = $data->title;
