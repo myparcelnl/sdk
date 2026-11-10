@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Fulfilment;
 
 use DateTime;
-use InvalidArgumentException;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Model\Recipient;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuroCurrency;
@@ -88,12 +87,14 @@ class Order extends AbstractOrder
     /**
      * Turn a delivery type or package type of an order into the id that the model holds.
      *
-     * The Order API can send the id, such as `1`, or the v2 name, such as `'PACKAGE'` or `'STANDARD'`.
+     * The Order API can send the id, such as `1`, or the v2 name, such as `'PACKAGE'` or `'STANDARD_DELIVERY'`.
      *
      * @param mixed            $value  The value of the order, or null when the order has none.
      * @param ApiMapperService $mapper The mapper of the domain, such as ApiMapperService::forPackageType().
      *
-     * @throws InvalidArgumentException For a name that the mapper does not know.
+     * @return int|null Null for a name that the mapper does not know, such as a type that the API added
+     *                  after this SDK version. The model takes only an id, so the property stays unset
+     *                  and the other orders of the response are still read.
      */
     private static function typeId(mixed $value, ApiMapperService $mapper): ?int
     {
@@ -105,9 +106,6 @@ class Order extends AbstractOrder
             return (int) $value;
         }
 
-        // A name that the mapper does not know has no id. The model takes only an id, so say which value it is.
-        return $mapper->idFromV2Name((string) $value)
-            ?? throw new InvalidArgumentException(sprintf('The order has an unknown type name: %s.', json_encode($value)));
+        return $mapper->idFromV2Name((string) $value);
     }
-
 }
