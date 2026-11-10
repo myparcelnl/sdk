@@ -45,10 +45,9 @@ final class ShipmentLabelsService
     public function setLinkOfLabels(array $shipmentIds, mixed $positions = 1): string
     {
         $response = $this->api()->executeEndpoint(new GetShipmentsLabelsRaw(
-            self::idList($shipmentIds),
-            $this->labelsQuery($positions),
-            [],
-            ['Accept' => [self::LABEL_LINK_ACCEPT_HEADER]]
+            ids: self::idList($shipmentIds),
+            queryParameters: $this->labelsQuery($positions),
+            accept: ['Accept' => [self::LABEL_LINK_ACCEPT_HEADER]]
         ));
         $decoded  = json_decode($response->getContent(false), true);
         $url      = is_array($decoded) ? ($decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null) : null;
@@ -82,10 +81,9 @@ final class ShipmentLabelsService
     public function setPdfOfLabels(array $shipmentIds, mixed $positions = 1): string
     {
         $result = $this->api()->getShipmentsLabels(
-            self::idList($shipmentIds),
-            $this->labelsQuery($positions),
-            [],
-            ['Accept' => [self::PDF_ACCEPT_HEADER]]
+            ids: self::idList($shipmentIds),
+            queryParameters: $this->labelsQuery($positions),
+            accept: ['Accept' => [self::PDF_ACCEPT_HEADER]]
         );
 
         if (! is_string($result) || ! preg_match('/^%PDF-\d/', $result)) {
