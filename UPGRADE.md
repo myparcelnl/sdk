@@ -17,9 +17,9 @@ A connection error or a timeout throws a Symfony `TransportExceptionInterface`, 
 
 `ShipmentQueryService` returns the generated `Jane\CoreApi\Model\ShipmentDefsShipment`, and `ShipmentTrackTraceService` returns the generated `Jane\CoreApi\Model\ShipmentDefsTrackTrace`. A Jane model has public properties with camelCase names instead of getters: read `$shipment->barcode` instead of `$shipment->getBarcode()`, and `$shipment->recipient->postalCode` instead of `$shipment->getRecipient()->getPostalCode()`.
 
-A Jane model does not initialize most properties for a field that the API did not send. Reading such a property throws an `Error`: use `isset()` or `??`, such as `$shipment->recipient->street ?? null`. A few properties have a default, such as `false` or `null`. In v11, a getter returned `null`.
+A Jane model does not initialize most properties for a field that the API did not send. Reading such a property throws an `Error`: use `isset()` or `??`, such as `$shipment->recipient->street ?? null`. A few properties have a default, such as `delayed`, which is `false`. In v11, a getter returned `null`.
 
-When the API sends `null` for a field that the spec does not allow as `null`, such as `barcode` or the `street` of a recipient, the read throws a PHP `TypeError`. A `TypeError` is an `Error`, not an `Exception`, so `catch (\Exception $e)` does not catch it: catch `\Throwable`. In v11, the getter returned `null`.
+When the API sends `null` for a field that the spec does not allow as `null`, such as `barcode` or the `street` of a recipient, `find()`, `findMany()`, `findByReferenceId()`, `query()` and `fetchTrackTraceData()` throw a PHP `TypeError`, and return no results. A `TypeError` is an `Error`, not an `Exception`, so `catch (\Exception $e)` does not catch it: catch `\Throwable`. In v11, the getter returned `null`.
 
 Some fields hold another type than the v11 getter returned:
 
