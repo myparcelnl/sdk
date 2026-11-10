@@ -9,7 +9,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
-use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Services\MultiCollo\MultiColloShipmentService;
 use MyParcelNL\Sdk\Services\Returns\ReturnShipmentService;
@@ -28,16 +27,25 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * @group live
+ *
+ * Runs the services against a real API, in the account of the API key. The tests create concept
+ * shipments, multi-collo shipments and return shipments, request the labels of concept shipments,
+ * subscribe to webhooks and unsubscribe again, and save a fulfilment order.
+ *
+ * They run only on request, and never on the production host, see TestCase::liveApiHost() and
+ * "Testing" in `README.md`.
  */
 final class ShipmentServicesLiveSmokeTest extends TestCase
 {
     private string $liveApiKey;
 
-    private ?string $liveHost;
+    private string $liveHost;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->liveHost = self::liveApiHost();
 
         $key = getenv('API_KEY') ?: getenv('API_KEY_NL') ?: getenv('API_KEY_BE');
 
@@ -46,7 +54,6 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         }
 
         $this->liveApiKey = $key;
-        $this->liveHost   = self::liveApiHost();
     }
 
     public function testSetLinkOfLabelsForCreatedShipment(): void
@@ -67,7 +74,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
         self::assertNotEmpty($link);
         self::assertStringContainsString(
-            (string) parse_url($this->liveHost ?? JaneClientFactory::CORE_API_HOST, PHP_URL_HOST),
+            (string) parse_url($this->liveHost, PHP_URL_HOST),
             $link
         );
         self::assertSame($link, $labels->getLinkOfLabels());

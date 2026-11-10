@@ -349,12 +349,28 @@ Use `CarrierContractDefinitionsService` for new account-level carrier contract d
 ## Testing
 
 ```bash
-# Run all tests
+# Run the tests. The live smoke tests are skipped.
 ./vendor/bin/phpunit
-
-# Run without live API tests
-./vendor/bin/phpunit --exclude-group=live
 ```
+
+### Live smoke tests
+
+The tests in the `live` group send requests to a real API, in the account of the API key. They
+create concept shipments, multi-collo shipments and return shipments, request labels, subscribe to
+webhooks and save a fulfilment order. So they run only when a developer asks for them, on a local
+machine:
+
+```bash
+MYPARCEL_LIVE_TESTS=1 \
+MYPARCEL_API_BASE_URL=https://api.acceptance.myparcel.nl \
+API_KEY=your-acceptance-api-key \
+./vendor/bin/phpunit --group live
+```
+
+- Without `MYPARCEL_LIVE_TESTS=1`, the tests are skipped, also when an API key is set.
+- `MYPARCEL_API_BASE_URL` is required. The tests are skipped for the production host
+  `https://api.myparcel.nl`.
+- The tests are skipped when `CI` is set, so they never run in a pipeline.
 
 Tests use two mocking strategies:
 - **Legacy web services:** Mockery via `$this->mockCurl()` in `TestCase`

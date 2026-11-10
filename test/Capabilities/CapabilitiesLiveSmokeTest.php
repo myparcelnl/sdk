@@ -23,6 +23,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * Minimal live smoke test to verify the Capabilities endpoint works
  * with a real API key. This test does not validate business logic,
  * only that the Core API responds with the expected data structure.
+ *
+ * It sends two capabilities requests and creates no data. It runs only on request, see
+ * TestCase::liveApiHost() and "Testing" in `README.md`.
  */
 final class CapabilitiesLiveSmokeTest extends TestCase
 {
@@ -32,6 +35,8 @@ final class CapabilitiesLiveSmokeTest extends TestCase
     {
         parent::setUp();
 
+        $host = self::liveApiHost();
+
         // Skip if no API key is present
         $hasAnyKey = getenv('API_KEY') || getenv('API_KEY_NL') || getenv('API_KEY_BE');
         if (! $hasAnyKey) {
@@ -39,7 +44,7 @@ final class CapabilitiesLiveSmokeTest extends TestCase
         }
 
         $this->service = new CapabilitiesService(
-            new HttpCapabilitiesClient(null, ShipmentApiFactory::make(null, self::liveApiHost()))
+            new HttpCapabilitiesClient(ShipmentApiFactory::make(null, $host))
         );
     }
 
