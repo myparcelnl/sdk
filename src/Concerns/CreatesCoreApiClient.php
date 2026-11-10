@@ -9,11 +9,11 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 /**
  * Gives a service the Core API client that it was given, or one that it creates on the first request.
- *
- * The service uses HasUserAgent too.
  */
 trait CreatesCoreApiClient
 {
+    use HasUserAgent;
+
     private ?Client $api;
 
     private string $apiKey;
@@ -29,8 +29,6 @@ trait CreatesCoreApiClient
         $this->api    = $api;
         $this->host   = $host;
     }
-
-    abstract public function getUserAgentHeader(): string;
 
     /**
      * The first request creates the client with the User-Agent of the service, so a proposition that

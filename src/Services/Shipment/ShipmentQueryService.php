@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipments;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 
 /**
  * Queries shipments through the Core API client.
@@ -17,7 +16,6 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 final class ShipmentQueryService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
 
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
 

@@ -9,7 +9,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsTrackTrace;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesTracktraces;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 
 /**
  * Fetches track & trace data through the Core API client.
@@ -17,7 +16,6 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 final class ShipmentTrackTraceService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
 
     /**
      * Create the service with an API key, or with a client that keeps its own User-Agent.

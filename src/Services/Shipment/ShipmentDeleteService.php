@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Shipment;
 
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 
 /**
  * Deletes shipments through the Core API client.
@@ -13,7 +12,6 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 final class ShipmentDeleteService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
 
     /**
      * Delete one or more shipments by id.
