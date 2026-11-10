@@ -46,7 +46,7 @@ jobs:
             -v "${{ github.workspace }}:/app" \
             -w /app \
             ghcr.io/myparcelnl/php-xd:8.3 \
-            sh -c 'vendor/bin/jane-openapi generate && vendor/bin/jane-openapi generate --config-file=.jane-openapi-core'
+            composer generate:jane
 
       # Optimize autoload in PHP 8.3 (so the generated code + SDK autoload is consistent)
       - name: Dump optimized autoload (PHP 8.3)
