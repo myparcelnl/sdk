@@ -10,16 +10,12 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractD
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Services\Capabilities\CarrierContractDefinitionsService;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class CarrierContractDefinitionsServiceTest extends TestCase
 {
-    /**
-     * @var array<int, array{method: string, url: string, content_type: string[], user_agent: string[], body: mixed}>
-     */
-    private array $requests = [];
+    use MocksHttpClient;
 
     public function testGetContractDefinitionsFetchesAllDefinitions(): void
     {
@@ -30,9 +26,9 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
 
         self::assertSame('POST', $this->requests[0]['method']);
         self::assertSame('https://api.myparcel.nl/shipments/capabilities/contract-definitions', $this->requests[0]['url']);
-        self::assertSame(['application/json;version=2.0'], $this->requests[0]['content_type']);
-        self::assertSame(['User-Agent: MyPlugin/1.0'], $this->requests[0]['user_agent']);
-        self::assertSame([], $this->requests[0]['body']);
+        self::assertSame('application/json;version=2.0', $this->header('content-type'));
+        self::assertSame('MyPlugin/1.0', $this->header('user-agent'));
+        self::assertSame('{}', $this->requests[0]['options']['body']);
         self::assertSame(
             [RefCapabilitiesSharedCarrierV2::Postnl, RefCapabilitiesSharedCarrierV2::Inpost],
             array_map(static fn(object $definition) => $definition->carrier, $definitions)
@@ -45,7 +41,7 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
 
         $service->getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2Carrier::Inpost);
 
-        self::assertSame(['carrier' => 'INPOST'], $this->requests[0]['body']);
+        self::assertSame('{"carrier":"INPOST"}', $this->requests[0]['options']['body']);
     }
 
     /**
@@ -88,22 +84,10 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
 
     private function createService(string $body, int $status = 200, string $contentType = 'application/json'): CarrierContractDefinitionsService
     {
-        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body, $status, $contentType): MockResponse {
-            $this->requests[] = [
-                'method'       => $method,
-                'url'          => $url,
-                'content_type' => array_map(static fn(string $line): string => substr($line, 14), $options['normalized_headers']['content-type'] ?? []),
-                'user_agent'   => $options['normalized_headers']['user-agent'] ?? [],
-                'body'         => json_decode((string) ($options['body'] ?? ''), true),
-            ];
-
-            return new MockResponse($body, ['http_code' => $status, 'response_headers' => ['content-type' => $contentType]]);
-        });
-
         return new CarrierContractDefinitionsService(
             'my-api-key',
             null,
-            ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0', [], $httpClient)
+            ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0', [], $this->mockHttpClient($body, $status, $contentType))
         );
     }
 }
