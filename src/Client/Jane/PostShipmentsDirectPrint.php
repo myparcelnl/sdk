@@ -13,12 +13,15 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * Creates shipments and prints their labels on a printer group.
  *
- * The Core API spec does not document direct print on POST /shipments. The API answers with the ids
- * of the new shipments, so this endpoint reads a 200 response as `ShipmentResponsesShipmentIds`. The
- * generated `PostShipments` reads every other response, such as an error.
+ * The Core API spec documents direct print on POST /shipments, but gives the print media type as the
+ * content type of the response. The API answers with `application/json` and the ids of the new
+ * shipments. The generated `PostShipments` reads an `application/json` 200 as
+ * `ShipmentResponsesPostShipmentsV12`, which has no ids. So this endpoint reads a 200 response as
+ * `ShipmentResponsesShipmentIds`. The generated `PostShipments` reads every other response, such as
+ * an error.
  *
- * @todo CLOUD-2376: remove this class when the spec documents direct print on POST /shipments
- *       (mypadev/core-api#5271), and the client is generated again.
+ * @todo CLOUD-2376: remove this class when the spec gives `application/json` as the content type of
+ *       the direct print response, and the generated PostShipments reads the ids.
  *
  * @internal
  */
