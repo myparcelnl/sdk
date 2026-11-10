@@ -5,12 +5,8 @@
 // 'namespace', 'directory' and the endpoint options, such as 'whitelisted-paths'.
 // `Jane` stays in the namespace, so a client of another generator can live next to it later.
 // @todo INT-2034: merge this file with .jane-openapi.
-// composer.json pins jane-php/json-schema, jane-php/open-api-3-1 and jane-php/open-api-common to
-// commits on `next` of their janephp repositories, because no Jane release contains these fixes yet:
-// janephp/janephp#1139, #1141, #1144, #1150, #1151, #1152, #1153, #1154, #1155, #1158 and #1159.
-// composer.lock is not in the repository, so `next` without a commit would give each
-// `composer install` the Jane code of that day.
-// @todo Require the first Jane release that contains these fixes.
+// Jane 8.1.2 is the first release with the fixes that these specs need, such as janephp/janephp#1154
+// and #1159. composer.json requires it.
 
 return [
     'mapping' => [

@@ -50,9 +50,9 @@
         "phpunit/phpunit": "^9.6.22",
         "psr/container": "~2.0.2",
         "friendsofphp/php-cs-fixer": "^3.95",
-        "jane-php/open-api-3-1": "dev-next#ffd31346432fb69628f987aa5afd5ab1e6953c3b",
-        "jane-php/open-api-common": "dev-next#6f53996176d1d3922908d7361deec8ae7d1d0bb7",
-        "jane-php/json-schema": "dev-next#88c43f631a0a8f9f1d3ee042d59b3ff23e290626"
+        "jane-php/open-api-3-1": "^8.1.2",
+        "jane-php/open-api-common": "^8.1.2",
+        "jane-php/json-schema": "^8.1.2"
     },
     "autoload": {
         "psr-4": {
