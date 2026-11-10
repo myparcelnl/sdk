@@ -62,7 +62,7 @@ final class ApiKeyService
 
             return true;
         } catch (ClientException $exception) {
-            // Every exception that Jane generates carries the HTTP status as its code.
+            // Every ClientException of the IAM client carries the HTTP status as its code.
             if (401 === $exception->getCode()) {
                 return false;
             }
