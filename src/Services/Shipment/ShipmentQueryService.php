@@ -25,8 +25,8 @@ final class ShipmentQueryService
      * Query shipments by the query parameters of `GET /shipments`.
      *
      * A key with a null value or an empty string leaves the filter out. An enum case, such as
-     * `RefTypesCarrier::Postnl`, goes as its value. An array, such as two statuses, goes as a
-     * `;`-separated string. Every other value goes as it is: `false` goes as `0`.
+     * `RefTypesCarrier::Postnl`, goes as its value. A list of integers, such as two statuses, goes as
+     * a `;`-separated string. Every other value goes as it is: `false` goes as `0`.
      *
      * @param array<string, mixed> $parameters The query parameters, such as `barcode`, `carrier_id`, `created` and `status`.
      *
@@ -106,7 +106,9 @@ final class ShipmentQueryService
 
     /**
      * The generated client sends a scalar as it is and refuses an object. An enum case goes as its
-     * value, and an array as the `;`-separated string that the spec documents for `carrier_id` and `status`.
+     * value. A list of integers goes as the `;`-separated string that the spec documents for a list
+     * of ids. Another array goes to the generated client as it is, which refuses it for a key that
+     * takes one value, such as `barcode`.
      */
     private static function queryValue(mixed $value): mixed
     {
@@ -115,7 +117,9 @@ final class ShipmentQueryService
         }
 
         if (is_array($value)) {
-            return implode(';', array_map([self::class, 'queryValue'], $value));
+            $values = array_map([self::class, 'queryValue'], $value);
+
+            return array_filter($values, 'is_int') === $values ? implode(';', $values) : $value;
         }
 
         return $value;
