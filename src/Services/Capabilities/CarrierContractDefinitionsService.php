@@ -10,8 +10,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractD
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2Carrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 
 /**
  * Fetch account-level carrier contract definitions through the Jane Core API client.
@@ -23,19 +22,12 @@ use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
  * Use CapabilitiesService for shipment-specific capability checks based on
  * address, weight and shipment options.
  *
- * The client that the service or ShipmentApiFactory creates reads a response without validation, so
- * a new carrier in the API does not break the call. A client from the generated `Client::create()`
- * validates the response, and throws for a carrier that the SDK does not know.
+ * The generated client reads a response without validation, so a new carrier in the API does not
+ * break the call.
  */
 final class CarrierContractDefinitionsService
 {
-    use HasUserAgent;
-
-    private ?Client $api;
-
-    private string $apiKey;
-
-    private ?string $host;
+    use CreatesCoreApiClient;
 
     /**
      * Create the service with an API key, or with a client that keeps its own User-Agent.
@@ -62,9 +54,9 @@ final class CarrierContractDefinitionsService
      * API request. Omit $carrier to fetch all contract definitions for the account.
      *
      * The results are the Jane models. `carrier`, `packageTypes`, `deliveryTypes` and `transactionTypes`
-     * hold an enum case, or the raw string for a value that the SDK does not know, with the client that
-     * the service or ShipmentApiFactory creates. So a new carrier in the API does not break the call.
-     * Compare with the enum case, because `->value` fails on a raw string.
+     * hold an enum case, or the raw string for a value that the SDK does not know. So a new carrier in
+     * the API does not break the call. Compare with the enum case, because `->value` fails on a raw
+     * string.
      *
      * @param CapabilitiesPostContractDefinitionsRequestV2Carrier|null $carrier Optional carrier.
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[]
@@ -90,14 +82,5 @@ final class CarrierContractDefinitionsService
         }
 
         return $response->items ?? [];
-    }
-
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= ShipmentApiFactory::client($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }
