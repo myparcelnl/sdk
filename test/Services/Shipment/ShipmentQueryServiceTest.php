@@ -6,6 +6,7 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
@@ -203,6 +204,18 @@ final class ShipmentQueryServiceTest extends TestCase
         self::assertSame(2, $known->status->value);
         self::assertSame(999, $unknown->carrierId);
         self::assertSame(999, $unknown->status);
+    }
+
+    /**
+     * A flag is an enum case. A case is an object, so the test compares it with the case.
+     */
+    public function testAFlagIsReadAsTheEnumCase(): void
+    {
+        $result = $this->createService([['id' => 1, 'hidden' => 0, 'options' => ['package_type' => 1, 'signature' => 1]]])->find(1);
+
+        self::assertNotNull($result);
+        self::assertSame(RefTypesIntBoolean::False, $result->hidden);
+        self::assertSame(RefTypesIntBoolean::True, $result->options->signature);
     }
 
     public function testAFieldThatTheApiDidNotSendIsNotInitialized(): void
