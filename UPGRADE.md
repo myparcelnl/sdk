@@ -9,7 +9,7 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 
 ### The Jane clients
 
-v12 generates the clients of the Core API, the private Core API, the IAM API and the Order API with [Jane](https://github.com/janephp/janephp) instead of OpenAPI Generator. The rules in this table hold for every service, factory and model on a Jane client. The sections after it name only what differs from these rules.
+v12 generates the clients of the Core API, the private Core API, the IAM API and the Order API with [Jane](https://github.com/janephp/janephp) instead of OpenAPI Generator. The rules in this table hold for every service, factory and model on a Jane client. The sections after it name only what differs from these rules. These services run on a Jane client: `ApiKeyService`, `ShipmentQueryService`, `ShipmentDeleteService`, `ShipmentTrackTraceService`, `ShipmentCreateService`, `ShipmentPrintService`, `ShipmentLabelsService`, `ReturnShipmentService`, `CapabilitiesService`, `CarrierContractDefinitionsService` and `WebhookService`.
 
 In this file, a class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`. A name that starts with `CoreApi` or `IamApi` is the v11 class in `MyParcelNL\Sdk\Client\Generated`, which v12 removes.
 
