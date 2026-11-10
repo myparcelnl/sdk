@@ -100,9 +100,9 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * The spec documents a `;`-separated string for `carrier_id` and `status`.
+     * The spec documents a `;`-separated string for a list of ids.
      */
-    public function testQuerySendsAnArrayFilterAsASemicolonSeparatedString(): void
+    public function testQuerySendsAListOfIntegersAsASemicolonSeparatedString(): void
     {
         $this->createService([])->query(['carrier_id' => [RefTypesCarrier::Postnl, RefTypesCarrier::Dpd], 'status' => [1, 2]]);
 
@@ -142,6 +142,24 @@ final class ShipmentQueryServiceTest extends TestCase
             self::fail('A string for an integer parameter must throw.');
         } catch (InvalidArgumentException $exception) {
             self::assertStringContainsString('page', $exception->getMessage());
+        }
+
+        self::assertSame([], $this->requests);
+    }
+
+    /**
+     * Only a list of ids goes as a `;`-separated string. A key that takes one string, such as
+     * `barcode`, refuses an array.
+     */
+    public function testQueryThrowsForAnArrayOfStrings(): void
+    {
+        $service = $this->createService([]);
+
+        try {
+            $service->query(['barcode' => ['3SMYPA1234567', '3SMYPA7654321']]);
+            self::fail('An array for a string parameter must throw.');
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('barcode', $exception->getMessage());
         }
 
         self::assertSame([], $this->requests);
