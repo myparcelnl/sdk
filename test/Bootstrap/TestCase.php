@@ -8,6 +8,7 @@ use DateTime;
 use Faker\Factory;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Arr;
@@ -19,6 +20,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected const ENV_CI            = 'CI';
     protected const ENV_TEST_ORDERS   = 'TEST_ORDERS';
     protected const ENV_LIVE_API_HOST = 'MYPARCEL_API_BASE_URL';
+    protected const ENV_LIVE_TESTS    = 'MYPARCEL_LIVE_TESTS';
 
     /**
      * @var \Faker\Factory
@@ -167,19 +169,31 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Return the API host for the live smoke tests.
+     * Return the API host for a live smoke test, or skip the test when no developer asked for it.
      *
-     * The legacy MyParcelRequest also reads MYPARCEL_API_BASE_URL. So one variable sends all live
-     * requests to the same host, such as https://api.acceptance.myparcel.nl.
-     *
-     * Without the variable, the smoke tests use the production host. With only an API key
-     * set, they create concept shipments, multi-collo shipments and return shipments in that account,
-     * request their labels, subscribe to webhooks, and save a fulfilment order.
-     *
-     * @return null|string Null when the variable is not set. The services then use the production host.
+     * @return string The value of `MYPARCEL_API_BASE_URL`.
      */
-    protected static function liveApiHost(): ?string
+    protected static function liveApiHost(): string
     {
-        return getenv(self::ENV_LIVE_API_HOST) ?: null;
+        if (getenv(self::ENV_CI)) {
+            self::markTestSkipped('Live smoke tests never run in a continuous integration environment.');
+        }
+
+        if ('1' !== getenv(self::ENV_LIVE_TESTS)) {
+            self::markTestSkipped('Live smoke tests run only on request: set ' . self::ENV_LIVE_TESTS . '=1.');
+        }
+
+        $host = (string) getenv(self::ENV_LIVE_API_HOST);
+
+        if ('' === $host) {
+            self::markTestSkipped('Set ' . self::ENV_LIVE_API_HOST . ' to the host for the live smoke tests, such as https://api.acceptance.myparcel.nl.');
+        }
+
+        // The smoke tests create data in the account of the API key, so they never use production.
+        if (parse_url($host, PHP_URL_HOST) === parse_url(JaneClientFactory::CORE_API_HOST, PHP_URL_HOST)) {
+            self::markTestSkipped('Live smoke tests do not run on the production host ' . JaneClientFactory::CORE_API_HOST . '.');
+        }
+
+        return $host;
     }
 }
