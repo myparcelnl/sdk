@@ -98,7 +98,7 @@ final class JaneClientFactory
     }
 
     /**
-     * Build the serializer of the generated Client::create() with two differences, both workarounds.
+     * Build the serializer of the generated Client::create(). The comments below describe each workaround.
      */
     private static function createSerializer(
         NormalizerInterface&DenormalizerInterface $normalizer,
