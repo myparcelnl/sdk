@@ -81,6 +81,22 @@ $mapping = $service->create([$shipment]);
 $mapping = $service->create([$shipment], ShipmentParametersPaperSize::A6, null, ['send_return_mail' => 1]);
 ```
 
+## Models from an array
+
+`CoreApiModels::toModel()` fills a generated Core API model from an array with the API field names,
+as `fill()` does in Laravel. The second argument is the class of the model. A nested array becomes
+the nested model.
+
+```php
+$shipment = CoreApiModels::toModel(['carrier' => 1, 'recipient' => ['cc' => 'NL']], Shipment::class);
+```
+
+Use it for input that is already an array, such as a database record or a form. `toModel()` does not
+check the array: it drops a key that is not an API field name, and keeps a wrong value until the
+generated client checks the request. When you write a request by hand, build it with the generated
+models and enums, as the examples in this file do. PHP then checks each type, and the enums list
+the values.
+
 ## Services
 
 | Service | Description |
@@ -280,19 +296,26 @@ or `null`. For example, `signature`, `requires_signature` and `requiresSignature
 
 ## Capabilities
 
-`CapabilitiesService::get()` takes the generated request model. Fill it with the camelCase field
-names of the v2 capabilities API:
+`CapabilitiesService::get()` takes the generated request model. Build it with the generated models
+and enums. The properties have the camelCase field names of the v2 capabilities API:
 
 ```php
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
-use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 
-$request = CoreApiModels::toModel([
-    'recipient' => ['countryCode' => 'NL'],
-    'carrier'   => 'POSTNL',
-    'options'   => ['requiresSignature' => new stdClass()],
-], CapabilitiesPostCapabilitiesRequestV2::class);
+$recipient              = new CapabilitiesPostCapabilitiesRequestV2Recipient();
+$recipient->countryCode = 'NL';
+
+$options                    = new CapabilitiesPostCapabilitiesRequestV2Options();
+$options->requiresSignature = new stdClass();
+
+$request            = new CapabilitiesPostCapabilitiesRequestV2();
+$request->recipient = $recipient;
+$request->carrier   = RefCapabilitiesSharedCarrierV2::Postnl;
+$request->options   = $options;
 
 $response = (new CapabilitiesService())->get($request);
 
