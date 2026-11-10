@@ -8,53 +8,53 @@ class RefShipmentOptionsOptionsReturns implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $ageCheck;
+    public RefTypesIntBoolean|int $ageCheck;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $cooledDelivery;
+    public RefTypesIntBoolean|int $cooledDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $dropOffAtPostalPoint;
+    public RefTypesIntBoolean|int $dropOffAtPostalPoint;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $extraAssurance;
+    public RefTypesIntBoolean|int $extraAssurance;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $hideSender;
+    public RefTypesIntBoolean|int $hideSender;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $largeFormat;
+    public RefTypesIntBoolean|int $largeFormat;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $onlyRecipient;
+    public RefTypesIntBoolean|int $onlyRecipient;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $receiptCode;
+    public RefTypesIntBoolean|int $receiptCode;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $return;
+    public RefTypesIntBoolean|int $return;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $sameDayDelivery;
+    public RefTypesIntBoolean|int $sameDayDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $saturdayDelivery;
+    public RefTypesIntBoolean|int $saturdayDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $signature;
+    public RefTypesIntBoolean|int $signature;
     public function definedProperties(): array
     {
         return ['ageCheck' => 'age_check', 'cooledDelivery' => 'cooled_delivery', 'dropOffAtPostalPoint' => 'drop_off_at_postal_point', 'extraAssurance' => 'extra_assurance', 'hideSender' => 'hide_sender', 'largeFormat' => 'large_format', 'onlyRecipient' => 'only_recipient', 'receiptCode' => 'receipt_code', 'return' => 'return', 'sameDayDelivery' => 'same_day_delivery', 'saturdayDelivery' => 'saturday_delivery', 'signature' => 'signature'];

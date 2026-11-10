@@ -37,9 +37,6 @@ class ShipmentDefsShipmentSecondaryShipmentsItemNormalizer implements Denormaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('hidden', $data) && \is_int($data['hidden'])) {
-            $data['hidden'] = (float) $data['hidden'];
-        }
         if (\array_key_exists('delayed', $data) && \is_int($data['delayed'])) {
             $data['delayed'] = (bool) $data['delayed'];
         }

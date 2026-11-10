@@ -73,9 +73,9 @@ class ShipmentDefsShipmentSecondaryShipmentsItem
      */
     public ShipmentDefsShipmentPickup $dropOffPoint;
     /**
-     * @var float
+     * @var int
      */
-    public float $hidden;
+    public int $hidden;
     /**
      * Money amount with currency, where the amount may be null. The amount is null when the requester lacks permission to read price amounts (Permissions::BILLING_READ_PRICE_AMOUNTS).
      *
