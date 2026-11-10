@@ -89,6 +89,20 @@ final class ShipmentCreateServiceTest extends TestCase
         self::assertSame('https://api.myparcel.nl/shipments?format=A4&send_return_mail=0', $this->requests[0]['url']);
     }
 
+    /**
+     * The `format` argument wins over a `format` key. Without the argument, the key is sent.
+     */
+    public function testCreateUsesAFormatKeyOnlyWithoutTheFormatArgument(): void
+    {
+        $service = $this->createService(self::createdResponse([['id' => 1, 'reference_identifier' => 'order-1']]));
+
+        $service->create([self::shipment('order-1')], null, null, ['format' => 'A6', 'positions' => '2']);
+        $service->create([self::shipment('order-1')], 'A4', '1', ['format' => 'A6', 'positions' => '2']);
+
+        self::assertSame('https://api.myparcel.nl/shipments?format=A6&positions=2', $this->requests[0]['url']);
+        self::assertSame('https://api.myparcel.nl/shipments?format=A4&positions=1', $this->requests[1]['url']);
+    }
+
     public function testCreateRejectsAQueryParameterThatTheSpecDoesNotHave(): void
     {
         $service = $this->createService(self::createdResponse([]));

@@ -75,6 +75,9 @@ $shipment = CoreApiModels::toModel([
 $service = new ShipmentCreateService('your-api-key');
 $mapping = $service->create([$shipment]);
 // $mapping = [shipmentId => referenceIdentifier, ...]
+
+// With a label format and another query parameter of `POST /shipments`
+$mapping = $service->create([$shipment], 'A6', null, ['send_return_mail' => 1]);
 ```
 
 ## Services
