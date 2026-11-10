@@ -96,7 +96,7 @@ When calling methods from these generated clients, always use named arguments. P
 
 Jane generates the following APIs:
 
-- CoreApi: The main API for interacting with shipments, capabilities, and notifications.
+- CoreApi: The main API for interacting with shipments, capabilities, and webhooks.
 - CoreApiPrivate: Temporary API for private endpoints, not intended for public use or not yet documented in our public open api spec.
 - EcommerceApi: Also called "Order v2". Manage e-commerce orders, and connect via oauth MyParcel Connect.
 - IamApi: Identify and access management via the iam microservice.
