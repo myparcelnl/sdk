@@ -40,7 +40,7 @@ class CapabilitiesOptionMappingTest extends TestCase
             [],
             $unaccounted,
             "These concrete v1 request options resolve to no property on the v2 capabilities options, so "
-            . "mapOptions() would skip them. For each: add an alias to LEGACY_TO_V2_PROPERTIES if v2 "
+            . "ShipmentOptionMapper::v2PropertyFromName() returns null for them. For each: add an alias to LEGACY_TO_V2_PROPERTIES if v2 "
             . "renamed the concept, or add it to UNSUPPORTED_OPTIONS with a request-specific reason. "
             . "Source key => attempted target property: "
             . json_encode($unaccounted)
