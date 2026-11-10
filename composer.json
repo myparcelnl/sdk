@@ -22,9 +22,12 @@
         ],
         "generate:api": [
             "docker compose run --rm generate-api",
-            "docker compose run --rm php vendor/bin/jane-openapi generate",
-            "docker compose run --rm php vendor/bin/jane-openapi generate --config-file=.jane-openapi-core",
+            "docker compose run --rm php composer generate:jane",
             "composer dump-autoload -o"
+        ],
+        "generate:jane": [
+            "vendor/bin/jane-openapi generate",
+            "vendor/bin/jane-openapi generate --config-file=.jane-openapi-core"
         ]
     },
     "require": {
