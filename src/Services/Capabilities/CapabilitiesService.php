@@ -6,6 +6,10 @@ namespace MyParcelNL\Sdk\Services\Capabilities;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesHeightUnit as HeightUnit;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesLengthUnit as LengthUnit;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWeightUnit as WeightUnit;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PhysicalPropertiesWidthUnit as WidthUnit;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
@@ -25,9 +29,14 @@ use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
 final class CapabilitiesService implements CapabilitiesServiceInterface
 {
     /**
-     * The unit of each physical property of a shipment.
+     * The unit of each physical property of a shipment. The shipment model has no unit.
      */
-    private const PHYSICAL_PROPERTY_UNITS = ['weight' => 'g', 'height' => 'cm', 'length' => 'cm', 'width' => 'cm'];
+    private const PHYSICAL_PROPERTY_UNITS = [
+        'weight' => WeightUnit::G,
+        'height' => HeightUnit::Cm,
+        'length' => LengthUnit::Cm,
+        'width'  => WidthUnit::Cm,
+    ];
 
     private CapabilitiesClientInterface $client;
 
@@ -66,7 +75,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
 
         foreach (self::PHYSICAL_PROPERTY_UNITS as $name => $unit) {
             if (isset($shipment->physicalProperties->{$name})) {
-                $physicalProperties[$name] = ['value' => $shipment->physicalProperties->{$name}, 'unit' => $unit];
+                $physicalProperties[$name] = ['value' => $shipment->physicalProperties->{$name}, 'unit' => $unit->value];
             }
         }
 
