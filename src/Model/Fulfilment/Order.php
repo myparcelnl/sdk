@@ -52,7 +52,7 @@ class Order extends AbstractOrder
      * Read the shipment options of an Order v1 response into the generated model.
      *
      * Order v1 nests the options under `shipment_options`, uses `date` for `delivery_date`, and can
-     * send the insurance as a whole amount in euros, where the model holds cents.
+     * send the insurance as an amount in euros, such as `2.5`, where the model holds cents.
      *
      * @param array<string, mixed> $shipment The `shipment` of the response.
      */

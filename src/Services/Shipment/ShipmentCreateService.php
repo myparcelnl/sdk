@@ -6,11 +6,9 @@ namespace MyParcelNL\Sdk\Services\Shipment;
 
 use BackedEnum;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
 /**
@@ -19,7 +17,6 @@ use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 final class ShipmentCreateService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
     use PreparesShipments;
 
     /**
@@ -69,5 +66,4 @@ final class ShipmentCreateService
 
         return $this->mapCreatedIds($request->data->shipments, $response->data->shipments);
     }
-
 }

@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Shipment;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentIds;
 use MyParcelNL\Sdk\Client\Jane\PostShipmentsDirectPrint;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
 /**
@@ -19,7 +17,6 @@ use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 final class ShipmentPrintService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
     use PreparesShipments;
 
     /**
@@ -47,5 +44,4 @@ final class ShipmentPrintService
 
         return $this->mapCreatedIds($request->data->shipments, $response->data->ids ?? []);
     }
-
 }
