@@ -30,11 +30,12 @@ trait MocksHttpClient
     }
 
     /**
-     * Read a header of a recorded request, without its name, or null when the request did not send it.
+     * Read a header of the first recorded request, by its lowercase name. The value comes without
+     * the name, or null when the request did not send the header.
      */
-    protected function header(string $name, int $request = 0): ?string
+    protected function header(string $name): ?string
     {
-        $line = $this->requests[$request]['options']['normalized_headers'][strtolower($name)][0] ?? null;
+        $line = $this->requests[0]['options']['normalized_headers'][$name][0] ?? null;
 
         return null === $line ? null : substr($line, strlen($name) + 2);
     }
