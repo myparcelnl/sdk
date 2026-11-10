@@ -341,7 +341,8 @@ request cannot send, such as `tracked`.
 [Jane](https://github.com/janephp/janephp) generates the clients of the Core API, the private Core API, the IAM API
 and the Order API from their OpenAPI specs into `src/Client/Generated/Jane/`. The configuration is in
 `.jane-openapi-core`, and `composer generate:api` generates them again. The legacy e-commerce client in
-`src/Client/Generated/EcommerceApi/` still comes from OpenAPI Generator until INT-2034.
+`src/Client/Generated/EcommerceApi/` still comes from OpenAPI Generator, until the e-commerce client also
+runs on Jane.
 
 The services wrap these clients. To call the API yourself, build a client with a factory and call the generated
 method. A Jane model has public properties, and an enum of the spec is a PHP enum:
@@ -351,7 +352,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 
 $client   = ShipmentApiFactory::make('your-api-key');
-$response = $client->getShipments(['reference_identifier' => 'order-1001']);
+$response = $client->getShipments(queryParameters: ['reference_identifier' => 'order-1001']);
 
 foreach ($response->data->shipments as $shipment) {
     $isPostNl = RefTypesCarrier::Postnl === $shipment->carrierId;
