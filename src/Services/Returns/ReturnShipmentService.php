@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Returns;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostReturnShipmentsRequest;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostReturnShipmentsRequestData;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsItem;
@@ -15,7 +14,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedRetu
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 
 /**
  * Creates return shipments through the Core API client, for existing shipments or without one.
@@ -28,7 +26,6 @@ use MyParcelNL\Sdk\Concerns\HasUserAgent;
 final class ReturnShipmentService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
 
     /**
      * Create return shipments for existing shipments.
@@ -114,5 +111,4 @@ final class ReturnShipmentService
 
         return $mapping;
     }
-
 }

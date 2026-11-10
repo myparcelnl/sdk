@@ -8,7 +8,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLabelPrintingP
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentParametersPaperSize;
 use MyParcelNL\Sdk\Client\Jane\GetShipmentsLabelsRaw;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
 
@@ -21,7 +20,6 @@ use MyParcelNL\Sdk\Exception\MissingFieldException;
 final class ShipmentLabelsService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
