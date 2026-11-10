@@ -87,8 +87,9 @@ final class CoreApiModels
      * Encode a model as an array with the API field names, such as `postal_code`.
      *
      * @return array<string, mixed> The fields that hold a value, with a nested model as an array. A
-     *                              field that nobody set is left out. A field that the API sent as
-     *                              null is null.
+     *                              field that nobody set is left out, and so are most fields that
+     *                              the API sent as null. A field with a default, such as `delayed`,
+     *                              is in the array.
      */
     public static function toArray(object $model): array
     {
