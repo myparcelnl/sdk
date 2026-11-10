@@ -13,6 +13,12 @@
       <directory>test</directory>
     </testsuite>
   </testsuites>
+  <!-- The live smoke tests create data in an account. They run only on request, see "Testing" in README.md. -->
+  <groups>
+    <exclude>
+      <group>live</group>
+    </exclude>
+  </groups>
   <php>
     <env name="TEST" value="true"/>
   </php>
