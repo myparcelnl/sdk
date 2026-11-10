@@ -349,7 +349,7 @@ Use `CarrierContractDefinitionsService` for new account-level carrier contract d
 ## Testing
 
 ```bash
-# Run the tests. The live smoke tests are skipped.
+# Run the tests. The live smoke tests are not part of this run.
 ./vendor/bin/phpunit
 ```
 
@@ -367,6 +367,7 @@ API_KEY=your-acceptance-api-key \
 ./vendor/bin/phpunit --group live
 ```
 
+- `phpunit.xml` leaves the `live` group out of a run without `--group live`.
 - Without `MYPARCEL_LIVE_TESTS=1`, the tests are skipped, also when an API key is set.
 - `MYPARCEL_API_BASE_URL` is required. The tests are skipped for the production host
   `https://api.myparcel.nl`.
