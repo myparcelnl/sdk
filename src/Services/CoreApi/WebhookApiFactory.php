@@ -4,22 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\CoreApi;
 
-use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
-use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Factory for creating the Jane Core API client that `WebhookService` uses. It builds the same client
- * as `ShipmentApiFactory`.
+ * Factory for creating the Jane Core API client for the webhook endpoints. It returns the client
+ * of `ShipmentApiFactory`, with the same API key rules.
  */
 final class WebhookApiFactory
 {
-    /**
-     * The idle timeout of the client in seconds, the same value as `JaneClientFactory::DEFAULT_HTTP_TIMEOUT`.
-     */
-    public const DEFAULT_HTTP_TIMEOUT = JaneClientFactory::DEFAULT_HTTP_TIMEOUT;
-
     /**
      * Create a configured Core API client.
      *
@@ -36,39 +29,6 @@ final class WebhookApiFactory
         array $headers = [],
         ?HttpClientInterface $httpClient = null
     ): Client {
-        $resolvedKey = self::resolveApiKey($apiKey);
-
-        if ('' === $resolvedKey) {
-            throw new InvalidArgumentException('API key cannot be empty');
-        }
-
-        return JaneClientFactory::coreApi($resolvedKey, $host, $userAgent, $headers, $httpClient);
-    }
-
-    /**
-     * Resolve the API key from arguments or environment variables.
-     *
-     * Resolution order:
-     * 1. Explicit argument
-     * 2. Unified API_KEY
-     * 3. Legacy API_KEY_NL / API_KEY_BE (backward compatibility)
-     */
-    private static function resolveApiKey(?string $apiKey): string
-    {
-        if (null !== $apiKey && '' !== $apiKey) {
-            return $apiKey;
-        }
-
-        $unifiedKey = getenv('API_KEY');
-        if ($unifiedKey && '' !== $unifiedKey) {
-            return $unifiedKey;
-        }
-
-        $legacyKey = getenv('API_KEY_NL') ?: getenv('API_KEY_BE');
-        if ($legacyKey && '' !== $legacyKey) {
-            return $legacyKey;
-        }
-
-        return '';
+        return ShipmentApiFactory::client($apiKey, $host, $userAgent, $headers, $httpClient);
     }
 }

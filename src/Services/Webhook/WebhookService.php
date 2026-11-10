@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Webhook;
 
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefWebhookWebhookV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookV11;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
 use UnexpectedValueException;
 
 /**
@@ -24,7 +20,6 @@ use UnexpectedValueException;
 final class WebhookService
 {
     use CreatesCoreApiClient;
-    use HasUserAgent;
 
     public const HOOK_SHIPMENT_STATUS_CHANGE             = 'shipment_status_change';
     public const HOOK_SHIPMENT_LABEL_CREATED             = 'shipment_label_created';
@@ -56,7 +51,7 @@ final class WebhookService
             requestBody: $request
         );
 
-        $ids = $response instanceof WebhooksResponsesPostWebhookSubscriptions ? ($response->data->ids ?? []) : [];
+        $ids = $response->data->ids ?? [];
 
         if (empty($ids)) {
             throw new \RuntimeException('Unexpected response: no subscription IDs returned.');
@@ -84,7 +79,7 @@ final class WebhookService
     /**
      * List all webhook subscriptions, optionally filtered by hook type.
      *
-     * @param string|null $hook Filter by hook type (one of the HOOK_* constants).
+     * @param string|null $hook Filter by hook type (one of the HOOK_* constants). Null or an empty string gives all subscriptions.
      *
      * @return WebhooksResponsesWebhookV11[]
      *
@@ -93,10 +88,10 @@ final class WebhookService
     public function getAll(?string $hook = null): array
     {
         $response = $this->api()->getWebhookSubscriptions(
-            queryParameters: null !== $hook ? ['hook' => $hook] : []
+            queryParameters: null !== $hook && '' !== $hook ? ['hook' => $hook] : []
         );
 
-        return self::subscriptions($response);
+        return self::extractSubscriptions($response);
     }
 
     /**
@@ -120,7 +115,7 @@ final class WebhookService
             ids: $ids
         );
 
-        return self::subscriptions($response);
+        return self::extractSubscriptions($response);
     }
 
     /**
@@ -129,21 +124,12 @@ final class WebhookService
      * @throws UnexpectedValueException When the generated client returns another model than the v1.1
      *                                  subscriptions, so a caller does not take it for an empty list.
      */
-    private static function subscriptions(mixed $response): array
+    private static function extractSubscriptions(mixed $response): array
     {
         if (! $response instanceof WebhooksResponsesWebhookSubscriptionsV11) {
             throw new UnexpectedValueException('The webhook API returned an unexpected response type: ' . get_debug_type($response));
         }
 
         return $response->data->webhookSubscriptions ?? [];
-    }
-
-    /**
-     * The first request creates the client with the User-Agent of the service, so a proposition that
-     * is set after the constructor reaches the API.
-     */
-    private function api(): Client
-    {
-        return $this->api ??= WebhookApiFactory::make($this->apiKey, $this->host, $this->getUserAgentHeader());
     }
 }

@@ -43,9 +43,4 @@ class WebhookApiFactoryTest extends TestCase
 
         WebhookApiFactory::make('');
     }
-
-    public function testDefaultHttpTimeoutConstant(): void
-    {
-        $this->assertSame(10, WebhookApiFactory::DEFAULT_HTTP_TIMEOUT);
-    }
 }
