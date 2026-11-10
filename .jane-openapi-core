@@ -7,10 +7,9 @@
 // @todo INT-2034: merge this file with .jane-openapi.
 // composer.json pins jane-php/json-schema, jane-php/open-api-3-1 and jane-php/open-api-common to
 // commits on `next` of their janephp repositories, because no Jane release contains these fixes yet:
-// janephp/janephp#1139, #1141, #1144, #1150, #1151, #1152, #1153 and #1155. The pins stop before
-// janephp/janephp#1154, which assigns an enum to the string `type` of an allOf parent
-// (janephp/janephp#1157). composer.lock is not in the repository, so `next` without a commit would
-// give each `composer install` the Jane code of that day.
+// janephp/janephp#1139, #1141, #1144, #1150, #1151, #1152, #1153, #1154, #1155, #1158 and #1159.
+// composer.lock is not in the repository, so `next` without a commit would give each
+// `composer install` the Jane code of that day.
 // @todo Require the first Jane release that contains these fixes.
 
 return [

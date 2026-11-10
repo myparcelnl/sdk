@@ -38,7 +38,7 @@ class UnauthorizedResponseNormalizer implements DenormalizerInterface, Normalize
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('message', $data)) {
-            $object->message = $data['message'];
+            $object->message = is_string($data['message']) ? \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponseMessage::tryFrom($data['message']) ?? $data['message'] : $data['message'];
             unset($data['message']);
         }
         foreach ($data as $key => $value) {
@@ -52,7 +52,7 @@ class UnauthorizedResponseNormalizer implements DenormalizerInterface, Normalize
     {
         $dataArray = [];
         if (null !== ($data->message ?? null)) {
-            $dataArray['message'] = $data->message;
+            $dataArray['message'] = $data->message instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\UnauthorizedResponseMessage ? $data->message->value : $data->message;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

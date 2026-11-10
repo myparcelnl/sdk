@@ -105,7 +105,7 @@ class PrincipalShopNormalizer implements DenormalizerInterface, NormalizerInterf
             unset($data['shopIds']);
         }
         if (\array_key_exists('type', $data)) {
-            $object->type = $data['type'];
+            $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShopType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
         }
         foreach ($data as $key => $value_5) {
@@ -179,7 +179,7 @@ class PrincipalShopNormalizer implements DenormalizerInterface, NormalizerInterf
             $dataArray['shopIds'] = $values_2;
         }
         if (null !== ($data->type ?? null)) {
-            $dataArray['type'] = $data->type;
+            $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShopType ? $data->type->value : $data->type;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_5) {
             if (preg_match('/.*/', (string) $key)) {
