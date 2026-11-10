@@ -26,7 +26,7 @@ Some fields hold another type than the v11 getter returned:
 | Field | v11 | v12 |
 |-------|-----|-----|
 | `carrierId`, `status`, `shipmentType`, `transactionStatus`, `paymentStatus`, `currency` and `externalProvider` of a shipment, and `carrier` of a track & trace result | `getCarrierId()`, `getStatus()`, `getShipmentType()`, `getTransactionStatus()`, `getPaymentStatus()` and `getCarrier()` return the raw value, such as `1`. `getCurrency()` and `getExternalProvider()` return a wrapper model | The enum case, such as `RefTypesCarrier::Postnl`, or the raw value for a value that the SDK does not know. Compare with the case, or read `->value` |
-| `hidden` | `getHidden()` returns `0` or `1` | `0.0` or `1.0` |
+| `hidden`, and the flags of `options`, such as `signature` | `getHidden()` and `getOptions()->getSignature()` return `0` or `1` | The enum case `RefTypesIntBoolean::False` or `RefTypesIntBoolean::True`, or the raw value for a value that the SDK does not know. A case is an object, so `if ($shipment->hidden)` is always true: compare with the case, or read `->value` |
 | `pickup`, `dropOffPoint`, `shippedItems` and `physicalProperties` | Decoded JSON with the API field names, such as `$pickup->postal_code` | `ShipmentDefsShipmentPickup`, `ShipmentDefsShipmentDropOffPoint`, `ShipmentDefsShipmentShippedItem[]` and `ShipmentDefsShipmentPhysicalProperties`: Jane models with camelCase properties, such as `$pickup->postalCode` |
 | `customsDeclaration` and `collectionContact` | `ShipmentDefsShipmentCustomsDeclaration` and `ShipmentDefsShipmentCollectionContact` | `RefShipmentCustomsDeclaration` and `AccountDefsContact` |
 | `origin`, `parentId`, `multiColloMainShipmentId` and `externalProviderId` | A wrapper model | `string`, `int`, `int` and `int` |
