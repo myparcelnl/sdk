@@ -359,7 +359,8 @@ foreach ($response->data->shipments as $shipment) {
 }
 ```
 
-`IamApiFactory::make()` and `WebhookApiFactory::make()` build the other clients. [UPGRADE.md](UPGRADE.md) lists the
+`IamApiFactory::make()` builds the IAM client. `WebhookApiFactory::make()` returns the same Core API client as
+`ShipmentApiFactory::make()`. The SDK has no factory for the private Core API client and the Order API client. [UPGRADE.md](UPGRADE.md) lists the
 differences with the openapi-generator clients of v11.
 
 ## Legacy services
