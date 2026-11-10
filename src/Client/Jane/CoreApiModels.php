@@ -6,7 +6,6 @@ namespace MyParcelNL\Sdk\Client\Jane;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -56,19 +55,11 @@ final class CoreApiModels
 
     private static function serializer(): Serializer
     {
-        return self::$serializer ??= new Serializer([new ArrayDenormalizer(), self::normalizer()]);
+        return self::$serializer ??= new Serializer([self::normalizer()]);
     }
 
     private static function normalizer(): JaneObjectNormalizer
     {
         return self::$normalizer ??= new JaneObjectNormalizer();
-    }
-
-    /**
-     * A generated model is an object that the generated normalizer knows. An enum is not.
-     */
-    private static function isModel(mixed $value): bool
-    {
-        return self::normalizer()->supportsNormalization($value);
     }
 }
