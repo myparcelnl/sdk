@@ -9,6 +9,7 @@ use DateTime;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuroCurrency;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
@@ -156,14 +157,14 @@ class OrderCollection extends Collection
             'package_type'      => $packageType instanceof BackedEnum ? $packageType->value : $packageType,
             'delivery_type'     => $options->deliveryType ?? null,
             'delivery_date'     => $deliveryDate ?: null,
-            'signature'         => (int) ($options->signature ?? 0),
-            'collect'           => (int) ($options->collect ?? 0),
-            'receipt_code'      => (int) ($options->receiptCode ?? 0),
-            'only_recipient'    => (int) ($options->onlyRecipient ?? 0),
-            'age_check'         => (int) ($options->ageCheck ?? 0),
-            'large_format'      => (int) ($options->largeFormat ?? 0),
-            'return'            => (int) ($options->return ?? 0),
-            'priority_delivery' => (int) ($options->priorityDelivery ?? 0),
+            'signature'         => self::flag($options->signature ?? 0),
+            'collect'           => self::flag($options->collect ?? 0),
+            'receipt_code'      => self::flag($options->receiptCode ?? 0),
+            'only_recipient'    => self::flag($options->onlyRecipient ?? 0),
+            'age_check'         => self::flag($options->ageCheck ?? 0),
+            'large_format'      => self::flag($options->largeFormat ?? 0),
+            'return'            => self::flag($options->return ?? 0),
+            'priority_delivery' => self::flag($options->priorityDelivery ?? 0),
             'label_description' => (string) ($options->labelDescription ?? ''),
         ];
 
@@ -177,6 +178,15 @@ class OrderCollection extends Collection
         }
 
         return $result;
+    }
+
+    /**
+     * Read a flag of the options model. A flag is an enum case, or the int for a value that the SDK
+     * does not know. A case is an object, so `(int)` would make every case `1`.
+     */
+    private static function flag(RefTypesIntBoolean|int $flag): int
+    {
+        return $flag instanceof RefTypesIntBoolean ? $flag->value : $flag;
     }
 
     /**

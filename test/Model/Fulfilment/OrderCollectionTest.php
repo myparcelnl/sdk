@@ -250,6 +250,26 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
+     * A flag of the options model is an enum case. The request sends its value, also for `False`.
+     *
+     * @throws \Exception
+     */
+    public function testSaveSendsTheValueOfAFlag(): void
+    {
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type'  => RefTypesDeliveryType::Standard->value,
+            'package_type'   => RefShipmentPackageType::Package->value,
+            'signature'      => 1,
+            'only_recipient' => 0,
+        ], ShipmentOptionsModel::class);
+
+        $options = $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration(null))['options'];
+
+        self::assertSame(1, $options['signature']);
+        self::assertSame(0, $options['only_recipient']);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testToArrayContainsTheCustomsDeclaration(): void
@@ -271,26 +291,37 @@ class OrderCollectionTest extends TestCase
     /**
      * Saves one order with a customs declaration and returns the customs declaration from the request body.
      *
+     * @throws \Exception
+     */
+    protected function saveAndCaptureCustomsDeclaration(?string $externalProductReference): array
+    {
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type' => RefTypesDeliveryType::Standard->value,
+            'package_type'  => RefShipmentPackageType::Package->value,
+        ], ShipmentOptionsModel::class);
+
+        return $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration($externalProductReference))['customs_declaration'];
+    }
+
+    /**
+     * Saves one order and returns the `shipment` of the order from the request body.
+     *
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
-    protected function saveAndCaptureCustomsDeclaration(?string $externalProductReference): array
+    protected function saveAndCaptureShipment(ShipmentOptionsModel $shipmentOptions, CustomsDeclaration $customsDeclaration): array
     {
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
-        $shipmentOptions = CoreApiModels::toModel([
-            'delivery_type' => RefTypesDeliveryType::Standard->value,
-            'package_type'  => RefShipmentPackageType::Package->value,
-        ], ShipmentOptionsModel::class);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();
         $order->setCarrierId(1);
         $order->setOrderLines($orderLines);
         $order->setWeight($orderLines->sum('weight'));
-        $order->setCustomsDeclaration($this->generateCustomsDeclaration($externalProductReference));
+        $order->setCustomsDeclaration($customsDeclaration);
         $orderCollection->push($order);
 
         $body     = [];
@@ -308,7 +339,7 @@ class OrderCollectionTest extends TestCase
 
         $orderCollection->save();
 
-        return $body['data']['orders'][0]['shipment']['customs_declaration'];
+        return $body['data']['orders'][0]['shipment'];
     }
 
     protected function generateCustomsDeclaration(?string $externalProductReference): CustomsDeclaration

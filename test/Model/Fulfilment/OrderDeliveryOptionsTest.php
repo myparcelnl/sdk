@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -24,8 +25,8 @@ final class OrderDeliveryOptionsTest extends TestCase
         self::assertSame('2026-11-10', $options->deliveryDate);
         self::assertSame(2, $options->deliveryType);
         self::assertSame(1, $options->packageType->value);
-        self::assertEquals(1, $options->signature);
-        self::assertEquals(0, $options->onlyRecipient);
+        self::assertSame(RefTypesIntBoolean::True, $options->signature);
+        self::assertSame(RefTypesIntBoolean::False, $options->onlyRecipient);
         self::assertSame(250, $options->insurance->amount);
     }
 
