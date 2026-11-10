@@ -110,6 +110,15 @@ A property has the camelCase name of the API field, such as `postalCode`. A prop
 
 `CoreApiModels::toArray()` encodes a model as an array with the API field names, and `CoreApiModels::copy()` copies a model with its nested models, where `clone` copies only the top level. The v11 `Shipment` also had `__toString()` and `jsonSerialize()`: `(string) $shipment` and `json_encode($shipment)` gave the request JSON. Use `json_encode(CoreApiModels::toArray($shipment))`.
 
+`MyParcelNL\Sdk\Model\Shipment\Carrier` and `PackageType` are removed. Use `ApiMapperService::forCarrier()` and `ApiMapperService::forPackageType()`, see [Value mapping](README.md#value-mapping):
+
+| v11 `Carrier` and `PackageType` | v12 `ApiMapperService` |
+|---------------------------------|------------------------|
+| `toId()` | `idFromV2Name()`. It returns `null` for a name that it does not know, where `toId()` threw an `InvalidArgumentException`: check for `null` |
+| `fromId()` | `v2NameFromId()`. It returns `null` for an id that it does not know, where `fromId()` threw an `InvalidArgumentException` |
+| `isValid()` | `null !== ...->idFromV2Name()` |
+| `all()` | `v2ToIdMap()` |
+
 The generated client checks a shipment against the spec before it sends it. A shipment that does not match, for example without a recipient, throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, and no request goes out. `getViolationList()` lists each field and the problem. The API still checks the shipment too. A shipment without a reference identifier gets one that starts with `sdk_`, as in v11. The services change nothing else on your models: they send copies.
 
 ### Order push
@@ -567,7 +576,6 @@ The following classes and namespaces have been fully removed:
 - `MyParcelNL\Sdk\Factory\DeliveryOptionsAdapterFactory`
 - `MyParcelNL\Sdk\Exception\InvalidConsignmentException`, `NoConsignmentFoundException`
 - `MyParcelNL\Sdk\Concerns\HasDebugLabels`, `HasInstance`
-- `MyParcelNL\Sdk\Model\Shipment\Carrier` and `PackageType`: use `ApiMapperService::forCarrier()->idFromV2Name()` and `ApiMapperService::forPackageType()->idFromV2Name()`, see [Enum mapping between API versions](#enum-mapping-between-api-versions)
 
 ### Enum mapping between API versions
 
