@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Collection\Fulfilment;
 
-use BackedEnum;
 use DateTime;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuroCurrency;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
@@ -151,42 +150,33 @@ class OrderCollection extends Collection
             $deliveryDate = (new DateTime($deliveryDate))->format(AbstractOrder::DATE_FORMAT_FULL);
         }
 
-        $packageType = $options->packageType ?? null;
+        // The generated normalizer gives the API field names, and the value of an enum case, such
+        // as `1` for `RefTypesIntBoolean::True`.
+        $fields = CoreApiModels::toArray($options);
 
         $result = [
-            'package_type'      => $packageType instanceof BackedEnum ? $packageType->value : $packageType,
+            'package_type'      => $fields['package_type'] ?? null,
             'delivery_type'     => $options->deliveryType ?? null,
             'delivery_date'     => $deliveryDate ?: null,
-            'signature'         => self::flag($options->signature ?? 0),
-            'collect'           => self::flag($options->collect ?? 0),
-            'receipt_code'      => self::flag($options->receiptCode ?? 0),
-            'only_recipient'    => self::flag($options->onlyRecipient ?? 0),
-            'age_check'         => self::flag($options->ageCheck ?? 0),
-            'large_format'      => self::flag($options->largeFormat ?? 0),
-            'return'            => self::flag($options->return ?? 0),
-            'priority_delivery' => self::flag($options->priorityDelivery ?? 0),
+            'signature'         => $fields['signature'] ?? 0,
+            'collect'           => $fields['collect'] ?? 0,
+            'receipt_code'      => $fields['receipt_code'] ?? 0,
+            'only_recipient'    => $fields['only_recipient'] ?? 0,
+            'age_check'         => $fields['age_check'] ?? 0,
+            'large_format'      => $fields['large_format'] ?? 0,
+            'return'            => $fields['return'] ?? 0,
+            'priority_delivery' => $fields['priority_delivery'] ?? 0,
             'label_description' => (string) ($options->labelDescription ?? ''),
         ];
 
-        if (isset($options->insurance)) {
-            $currency = $options->insurance->currency ?? RefTypesPriceEuroCurrency::Eur;
-
+        if (isset($fields['insurance'])) {
             $result['insurance'] = [
-                'amount'   => (int) ($options->insurance->amount ?? 0),
-                'currency' => $currency instanceof BackedEnum ? $currency->value : $currency,
+                'amount'   => (int) ($fields['insurance']['amount'] ?? 0),
+                'currency' => $fields['insurance']['currency'] ?? RefTypesPriceEuroCurrency::Eur->value,
             ];
         }
 
         return $result;
-    }
-
-    /**
-     * Read a flag of the options model. A flag is an enum case, or the int for a value that the SDK
-     * does not know. A case is an object, so `(int)` would make every case `1`.
-     */
-    private static function flag(RefTypesIntBoolean|int $flag): int
-    {
-        return $flag instanceof RefTypesIntBoolean ? $flag->value : $flag;
     }
 
     /**
