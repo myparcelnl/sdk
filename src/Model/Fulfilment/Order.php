@@ -92,9 +92,7 @@ class Order extends AbstractOrder
      * @param mixed            $value  The value of the order, or null when the order has none.
      * @param ApiMapperService $mapper The mapper of the domain, such as ApiMapperService::forPackageType().
      *
-     * @return int|null Null for a name that the mapper does not know, such as a type that the API added
-     *                  after this SDK version. The model takes only an id, so the property stays unset
-     *                  and the other orders of the response are still read.
+     * @return int|null Null for a name that the mapper does not know.
      */
     private static function typeId(mixed $value, ApiMapperService $mapper): ?int
     {
@@ -106,6 +104,8 @@ class Order extends AbstractOrder
             return (int) $value;
         }
 
+        // A type that the API added after this SDK version has no id. It must not stop the read of
+        // the other orders, so it gives null and not an exception.
         return $mapper->idFromV2Name((string) $value);
     }
 }
