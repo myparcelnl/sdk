@@ -116,6 +116,7 @@ final class ShipmentLabelsServiceTest extends TestCase
 
         $result = $service->setPdfOfLabels([101]);
 
+        self::assertSame('https://api.myparcel.nl/shipment_labels/101?format=A4&positions=1%3B2%3B3%3B4', $this->requests[0]['url']);
         self::assertSame(['application/pdf'], $this->requests[0]['accept']);
         self::assertSame('%PDF-1.4 label', $result);
         self::assertSame($result, $service->getLabelPdf());
@@ -139,8 +140,8 @@ final class ShipmentLabelsServiceTest extends TestCase
     }
 
     /**
-     * A PDF request gets the payment instructions of a 402 as `application/json`. The generated
-     * endpoint reads that content type as a client error, not as payment instructions.
+     * A 402 with another content type than the label link, such as `application/json`, throws the
+     * client error exception. The generated endpoint reads payment instructions only for the label link.
      */
     public function testAPaymentRequiredResponseWithAJsonBodyThrowsTheClientErrorException(): void
     {
