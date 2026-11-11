@@ -250,7 +250,8 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * A flag of the options model is an enum case. The request sends its value, also for `False`.
+     * A flag of the options model is an enum case or an int. The request sends the int, also for
+     * `False`.
      *
      * @throws \Exception
      */
