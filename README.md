@@ -88,14 +88,15 @@ as `fill()` does in Laravel. The second argument is the class of the model. A ne
 the nested model.
 
 ```php
-$shipment = CoreApiModels::toModel(['carrier' => 1, 'recipient' => ['cc' => 'NL']], Shipment::class);
+$shipment = CoreApiModels::toModel(['carrier' => RefTypesCarrier::Postnl->value, 'recipient' => ['cc' => 'NL']], Shipment::class);
 ```
 
 Use it for input that is already an array, such as a database record or a form. `toModel()` does not
-check the array: it drops a key that is not an API field name, and keeps a wrong value until the
-generated client checks the request. When you write a request by hand, build it with the generated
-models and enums, as the examples in this file do. PHP then checks each type, and the enums list
-the values.
+check the values. A model without additional properties drops a key that is not an API field name,
+and a model with additional properties, such as the shipment options, sends it. A value of the wrong
+PHP type throws a `TypeError`. The generated client checks the other values when the request goes
+out. When you write a request by hand, build it with the generated models and enums, as the examples
+in this file do. PHP then checks each type, and the enums list the values.
 
 ## Services
 

@@ -22,9 +22,8 @@ use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
  * The response is the generated model: one result per carrier contract in `$response->results`, with
  * its package types, delivery types, options, physical limits and the maximum number of colli.
  *
- * Build the request with the generated model, or fill one with the API field names:
- *
- *     $request = CoreApiModels::toModel(['recipient' => ['countryCode' => 'NL'], 'carrier' => 'POSTNL'], CapabilitiesPostCapabilitiesRequestV2::class);
+ * Build the request with the generated models and enums. CoreApiModels::toModel() fills one from
+ * input that is already an array.
  */
 final class CapabilitiesService implements CapabilitiesServiceInterface
 {
