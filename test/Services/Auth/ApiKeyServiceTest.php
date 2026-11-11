@@ -107,6 +107,15 @@ final class ApiKeyServiceTest extends TestCase
         self::assertFalse($this->createService(['message' => 'Unauthorized'], 401)->isValid());
     }
 
+    /**
+     * The spec gives the `message` of a 401 as the const `Unauthorized`, which Jane reads as an
+     * enum. Another message must not throw.
+     */
+    public function testIsValidReturnsFalseForAnUnauthorizedResponseWithAnotherMessage(): void
+    {
+        self::assertFalse($this->createService(['message' => 'Token expired'], 401)->isValid());
+    }
+
     public function testIsValidThrowsForAServerError(): void
     {
         $service = $this->createService(['title' => 'Server error'], 500, 'application/problem+json');
