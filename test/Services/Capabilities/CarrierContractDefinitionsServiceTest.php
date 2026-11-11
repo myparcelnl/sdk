@@ -12,6 +12,7 @@ use MyParcelNL\Sdk\Services\Capabilities\CarrierContractDefinitionsService;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use TypeError;
 
 final class CarrierContractDefinitionsServiceTest extends TestCase
 {
@@ -82,11 +83,21 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
         $service->getContractDefinitions();
     }
 
+    /**
+     * Every Core API service takes the API key, the client and the host in this order. In v11, this
+     * service took the host as the second argument.
+     */
+    public function testAHostAsTheSecondArgumentThrowsATypeError(): void
+    {
+        $this->expectException(TypeError::class);
+
+        new CarrierContractDefinitionsService('my-api-key', 'https://api.acceptance.myparcel.nl');
+    }
+
     private function createService(string $body, int $status = 200, string $contentType = 'application/json'): CarrierContractDefinitionsService
     {
         return new CarrierContractDefinitionsService(
             'my-api-key',
-            null,
             ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0', [], $this->mockHttpClient($body, $status, $contentType))
         );
     }

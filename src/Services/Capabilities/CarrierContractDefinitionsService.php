@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Capabilities;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2Carrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
@@ -28,24 +27,6 @@ use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 final class CarrierContractDefinitionsService
 {
     use CreatesCoreApiClient;
-
-    /**
-     * Create the service with an API key, or with a client that keeps its own User-Agent.
-     *
-     * @param string      $apiKey The API key of the client that the service creates.
-     * @param string|null $host   The host of the client that the service creates.
-     * @param Client|null $api    A client with its own API key, host, headers or User-Agent, such as one
-     *                            from ShipmentApiFactory. With a client, `$apiKey` and `$host` are not used.
-     */
-    public function __construct(
-        string $apiKey,
-        ?string $host = null,
-        ?Client $api = null
-    ) {
-        $this->apiKey = $apiKey;
-        $this->host   = $host;
-        $this->api    = $api;
-    }
 
     /**
      * Fetch contract definitions available for the configured API key.

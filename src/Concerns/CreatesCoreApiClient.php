@@ -16,17 +16,20 @@ trait CreatesCoreApiClient
 
     private ?Client $api;
 
-    /**
-     * Null makes ShipmentApiFactory read the API key from the environment.
-     */
     private ?string $apiKey;
 
     private ?string $host;
 
     /**
      * Create the service with an API key, or with a client that keeps its own User-Agent.
+     *
+     * @param string|null $apiKey The API key of the client that the first request creates. Without one,
+     *                            ShipmentApiFactory reads `API_KEY`, `API_KEY_NL` or `API_KEY_BE`.
+     * @param Client|null $api    A client with its own API key, host, headers or User-Agent, such as one
+     *                            from ShipmentApiFactory. With a client, `$apiKey` and `$host` are not used.
+     * @param string|null $host   The host of the client that the first request creates.
      */
-    public function __construct(string $apiKey, ?Client $api = null, ?string $host = null)
+    public function __construct(?string $apiKey = null, ?Client $api = null, ?string $host = null)
     {
         $this->apiKey = $apiKey;
         $this->api    = $api;
