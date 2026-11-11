@@ -13,7 +13,7 @@
       <directory>test</directory>
     </testsuite>
   </testsuites>
-  <!-- The live smoke tests create data in an account. They run only on request, see "Testing" in README.md. -->
+  <!-- The live smoke tests create data in an account. They run only on request, see "Live smoke tests" in CONTRIBUTING.md. -->
   <groups>
     <exclude>
       <group>live</group>
