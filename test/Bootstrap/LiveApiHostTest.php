@@ -8,7 +8,7 @@ use PHPUnit\Framework\SkippedTestError;
 
 /**
  * The live smoke tests create data in an account, so liveApiHost() must skip them unless a developer
- * asked for them, with a host that is not the production host. These tests send no request.
+ * asked for them, on a known test host. These tests send no request.
  */
 final class LiveApiHostTest extends TestCase
 {
