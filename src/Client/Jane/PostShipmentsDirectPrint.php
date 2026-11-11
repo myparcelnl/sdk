@@ -16,9 +16,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * The Core API spec documents direct print on POST /shipments, but gives the print media type as the
  * content type of the response. The API answers with `application/json` and the ids of the new
  * shipments. The generated `PostShipments` reads an `application/json` 200 as
- * `ShipmentResponsesPostShipmentsV12`, which has no ids. So this endpoint reads a 200 response as
- * `ShipmentResponsesShipmentIds`. The generated `PostShipments` reads every other response, such as
- * an error.
+ * `ShipmentResponsesPostShipmentsV12`, which reads `data.shipments`. The API sends the ids in
+ * `data.ids`, so this endpoint reads a 200 response as `ShipmentResponsesShipmentIds`. The
+ * generated `PostShipments` reads every other response, such as an error.
  *
  * @todo CLOUD-2376: remove this class when the spec gives `application/json` as the content type of
  *       the direct print response, and the generated PostShipments reads the ids.
