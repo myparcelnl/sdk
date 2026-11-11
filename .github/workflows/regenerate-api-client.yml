@@ -93,7 +93,7 @@ jobs:
           body: |
             Automated update of OpenAPI-based clients in the SDK based on changes in the MyParcel OpenAPI schemas.
 
-            - Generated the Jane clients via `vendor/bin/jane-openapi generate`, with `.jane-openapi` and `.jane-openapi-core` (the Jane version that `composer.json` requires)
+            - Generated the Jane clients via `composer generate:jane` (the Jane version that `composer.json` requires)
             - Generated the legacy e-commerce client via `docker compose --profile openapi run --rm generate-api` (openapi-generator version from `docker-compose.yml`)
           labels: |
             automated
