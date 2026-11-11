@@ -95,6 +95,6 @@ final class HttpCapabilitiesClientTest extends TestCase
 
     private function createClient(string $body, int $status = 200): HttpCapabilitiesClient
     {
-        return new HttpCapabilitiesClient(ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $this->mockHttpClient($body, $status)));
+        return new HttpCapabilitiesClient(api: ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0 Magento/2.4', [], $this->mockHttpClient($body, $status)));
     }
 }
