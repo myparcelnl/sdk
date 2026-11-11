@@ -261,12 +261,19 @@ class OrderCollectionTest extends TestCase
             'package_type'   => RefShipmentPackageType::Package->value,
             'signature'      => 1,
             'only_recipient' => 0,
+            'insurance'      => ['amount' => 5000, 'currency' => 'EUR'],
         ], ShipmentOptionsModel::class);
+        // toModel() turns 1 and 0 into the enum cases. A flag that an integrator sets is a plain int.
+        $shipmentOptions->collect = 1;
 
         $options = $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration(null))['options'];
 
         self::assertSame(1, $options['signature']);
         self::assertSame(0, $options['only_recipient']);
+        self::assertSame(1, $options['collect']);
+        self::assertSame(0, $options['age_check']);
+        self::assertSame(RefShipmentPackageType::Package->value, $options['package_type']);
+        self::assertSame(['amount' => 5000, 'currency' => 'EUR'], $options['insurance']);
     }
 
     /**
