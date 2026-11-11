@@ -8,7 +8,6 @@ use DateTime;
 use Faker\Factory;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Helper\MyParcelCurl;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Support\Arr;
@@ -21,6 +20,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected const ENV_TEST_ORDERS   = 'TEST_ORDERS';
     protected const ENV_LIVE_API_HOST = 'MYPARCEL_API_BASE_URL';
     protected const ENV_LIVE_TESTS    = 'MYPARCEL_LIVE_TESTS';
+
+    /**
+     * The hosts of the live smoke tests end with one of these suffixes.
+     */
+    private const LIVE_TEST_HOST_SUFFIXES = ['.acceptance.myparcel.nl', '.testing.myparcel.nl'];
 
     /**
      * @var \Faker\Factory
@@ -179,21 +183,39 @@ class TestCase extends \PHPUnit\Framework\TestCase
             self::markTestSkipped('Live smoke tests never run in a continuous integration environment.');
         }
 
-        if ('1' !== getenv(self::ENV_LIVE_TESTS)) {
-            self::markTestSkipped('Live smoke tests run only on request: set ' . self::ENV_LIVE_TESTS . '=1.');
+        self::skipUnlessEnabled(self::ENV_LIVE_TESTS, 'Live smoke tests run only on request.');
+
+        $url = (string) getenv(self::ENV_LIVE_API_HOST);
+
+        if (! self::isTestHost($url)) {
+            self::markTestSkipped(
+                'Live smoke tests run only on a test host. Set ' . self::ENV_LIVE_API_HOST
+                . ' to an https URL on ' . implode(' or ', self::LIVE_TEST_HOST_SUFFIXES)
+                . ', such as https://api.acceptance.myparcel.nl.'
+            );
         }
 
-        $host = (string) getenv(self::ENV_LIVE_API_HOST);
+        return $url;
+    }
 
-        if ('' === $host) {
-            self::markTestSkipped('Set ' . self::ENV_LIVE_API_HOST . ' to the host for the live smoke tests, such as https://api.acceptance.myparcel.nl.');
+    /**
+     * The smoke tests create data in the account of the API key. So they run only on a host that is
+     * known as a test host, and not on every host that is not the production host.
+     */
+    private static function isTestHost(string $url): bool
+    {
+        if ('https' !== strtolower((string) parse_url($url, PHP_URL_SCHEME))) {
+            return false;
         }
 
-        // The smoke tests create data in the account of the API key, so they never use production.
-        if (parse_url($host, PHP_URL_HOST) === parse_url(JaneClientFactory::CORE_API_HOST, PHP_URL_HOST)) {
-            self::markTestSkipped('Live smoke tests do not run on the production host ' . JaneClientFactory::CORE_API_HOST . '.');
+        $host = rtrim(strtolower((string) parse_url($url, PHP_URL_HOST)), '.');
+
+        foreach (self::LIVE_TEST_HOST_SUFFIXES as $suffix) {
+            if (str_ends_with($host, $suffix)) {
+                return true;
+            }
         }
 
-        return $host;
+        return false;
     }
 }

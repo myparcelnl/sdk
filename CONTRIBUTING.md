@@ -49,6 +49,27 @@ Enable XDebug:
 docker compose run --rm -it php php -dxdebug.mode=debug vendor/bin/phpunit
 ```
 
+### Live smoke tests
+
+The tests in the `live` group send requests to a real API, in the account of the API key. They
+create concept shipments, multi-collo shipments and return shipments, request labels, subscribe to
+webhooks and save a fulfilment order. So they run only when a developer asks for them, on a local
+machine and on a test host:
+
+```bash
+MYPARCEL_LIVE_TESTS=true \
+MYPARCEL_API_BASE_URL=https://api.acceptance.myparcel.nl \
+API_KEY=your-acceptance-api-key \
+./vendor/bin/phpunit --group live
+```
+
+- `phpunit.xml` leaves the `live` group out of a run without `--group live`.
+- Without `MYPARCEL_LIVE_TESTS`, the tests are skipped, also when an API key is set.
+- `MYPARCEL_API_BASE_URL` is required. The tests run only for an `https` URL on a host that ends
+  with `.acceptance.myparcel.nl` or `.testing.myparcel.nl`. Every other value skips them, such as
+  the production host or a host without a scheme.
+- The tests are skipped when `CI` is set, so they never run in a pipeline.
+
 ## 4. Commit
 
 We use [Conventional Commits] and [semantic-release] to automate release notes and changelogs, based on the rules of [@commitlint/config-conventional]. We squash a pull request into one commit by default. The PR title becomes the commit subject and the PR description the commit body, so write the title as a conventional commit. When each commit of a pull request needs its own changelog entry, we rebase it instead, and then every commit needs a valid conventional commit message.

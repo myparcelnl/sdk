@@ -12,7 +12,7 @@ use PHPUnit\Framework\SkippedTestError;
  */
 final class LiveApiHostTest extends TestCase
 {
-    private const VARIABLES = ['CI', 'MYPARCEL_LIVE_TESTS', 'MYPARCEL_API_BASE_URL'];
+    private const VARIABLES = [self::ENV_CI, self::ENV_LIVE_TESTS, self::ENV_LIVE_API_HOST];
 
     /**
      * @var array<string, string|false>
@@ -38,12 +38,27 @@ final class LiveApiHostTest extends TestCase
         parent::tearDown();
     }
 
-    public function testReturnsTheHostWhenADeveloperAsksForTheLiveTests(): void
+    /**
+     * @dataProvider provideTestHosts
+     */
+    public function testReturnsTheHostWhenADeveloperAsksForTheLiveTests(string $url): void
     {
-        putenv('MYPARCEL_LIVE_TESTS=1');
-        putenv('MYPARCEL_API_BASE_URL=https://api.acceptance.myparcel.nl');
+        putenv('MYPARCEL_LIVE_TESTS=true');
+        putenv('MYPARCEL_API_BASE_URL=' . $url);
 
-        self::assertSame('https://api.acceptance.myparcel.nl', self::liveApiHost());
+        self::assertSame($url, self::liveApiHost());
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function provideTestHosts(): array
+    {
+        return [
+            'acceptance'                   => ['https://api.acceptance.myparcel.nl'],
+            'testing'                      => ['https://api.testing.myparcel.nl'],
+            'upper case and a trailing dot' => ['https://API.Acceptance.MyParcel.nl.'],
+        ];
     }
 
     /**
@@ -76,10 +91,17 @@ final class LiveApiHostTest extends TestCase
         $acceptance = 'https://api.acceptance.myparcel.nl';
 
         return [
-            'only a host'             => [['MYPARCEL_API_BASE_URL' => $acceptance], 'only on request'],
-            'no host'                 => [['MYPARCEL_LIVE_TESTS' => '1'], 'Set MYPARCEL_API_BASE_URL'],
-            'the production host'     => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.myparcel.nl'], 'production host'],
-            'continuous integration'  => [['CI' => 'true', 'MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => $acceptance], 'continuous integration'],
+            'only a host'                        => [['MYPARCEL_API_BASE_URL' => $acceptance], 'only on request'],
+            'no host'                            => [['MYPARCEL_LIVE_TESTS' => '1'], 'test host'],
+            'the production host'                => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.myparcel.nl'], 'test host'],
+            'the production host in upper case'  => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://API.myparcel.nl'], 'test host'],
+            'the production host with a dot'     => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.myparcel.nl.'], 'test host'],
+            'another production host'            => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://backoffice.myparcel.nl'], 'test host'],
+            'a production host without a scheme' => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'api.myparcel.nl'], 'test host'],
+            'a test host without a scheme'       => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'api.acceptance.myparcel.nl'], 'test host'],
+            'a test host over plain http'        => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'http://api.acceptance.myparcel.nl'], 'test host'],
+            'a host that only contains the name' => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.acceptance.myparcel.nl.example.com'], 'test host'],
+            'continuous integration'             => [['CI' => 'true', 'MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => $acceptance], 'continuous integration'],
         ];
     }
 }
