@@ -173,7 +173,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Return the API host for a live smoke test, or skip the test when no developer asked for it.
+     * Return the API host for a live smoke test, or skip the test: in CI, without
+     * `MYPARCEL_LIVE_TESTS`, or for a URL that is not `https` on a test host.
      *
      * @return string The value of `MYPARCEL_API_BASE_URL`.
      */
