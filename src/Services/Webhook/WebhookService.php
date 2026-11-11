@@ -7,10 +7,8 @@ namespace MyParcelNL\Sdk\Services\Webhook;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefWebhookWebhookV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookV11;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
-use UnexpectedValueException;
 
 /**
  * Manages webhook subscriptions through the Core API client.
@@ -82,8 +80,6 @@ final class WebhookService
      * @param string|null $hook Filter by hook type (one of the HOOK_* constants). Null or an empty string gives all subscriptions.
      *
      * @return WebhooksResponsesWebhookV11[]
-     *
-     * @throws UnexpectedValueException When the generated client returns another model than the v1.1 subscriptions.
      */
     public function getAll(?string $hook = null): array
     {
@@ -91,7 +87,7 @@ final class WebhookService
             queryParameters: null !== $hook && '' !== $hook ? ['hook' => $hook] : []
         );
 
-        return self::extractSubscriptions($response);
+        return $response->data->webhookSubscriptions ?? [];
     }
 
     /**
@@ -100,8 +96,6 @@ final class WebhookService
      * @param int ...$subscriptionIds
      *
      * @return WebhooksResponsesWebhookV11[]
-     *
-     * @throws UnexpectedValueException When the generated client returns another model than the v1.1 subscriptions.
      */
     public function getById(int ...$subscriptionIds): array
     {
@@ -114,21 +108,6 @@ final class WebhookService
         $response = $this->api()->getWebhookSubscriptionsById(
             ids: $ids
         );
-
-        return self::extractSubscriptions($response);
-    }
-
-    /**
-     * @return WebhooksResponsesWebhookV11[]
-     *
-     * @throws UnexpectedValueException When the generated client returns another model than the v1.1
-     *                                  subscriptions, so a caller does not take it for an empty list.
-     */
-    private static function extractSubscriptions(mixed $response): array
-    {
-        if (! $response instanceof WebhooksResponsesWebhookSubscriptionsV11) {
-            throw new UnexpectedValueException('The webhook API returned an unexpected response type: ' . get_debug_type($response));
-        }
 
         return $response->data->webhookSubscriptions ?? [];
     }
