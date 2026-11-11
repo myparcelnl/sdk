@@ -37,8 +37,10 @@ final class CoreApiModels
      *
      * A nested object is an array too, such as `['recipient' => ['cc' => 'NL']]`. A model that comes
      * in is returned as it is. The values are not checked here: the generated client checks the
-     * request when it goes out. A key that is not an API field name is dropped without an error, also
-     * the camelCase property name, such as `postalCode`: use `postal_code`.
+     * request when it goes out. A model without additional properties drops a key that is not an API
+     * field name, also the camelCase property name, such as `postalCode`: use `postal_code`. A model
+     * with additional properties, such as the shipment options, keeps it. A value of the wrong PHP
+     * type throws a `TypeError`.
      *
      * @template T of object
      *
