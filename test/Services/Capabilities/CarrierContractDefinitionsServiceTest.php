@@ -84,8 +84,8 @@ final class CarrierContractDefinitionsServiceTest extends TestCase
     }
 
     /**
-     * Every Core API service takes the API key, the client and the host in this order. In v11, this
-     * service took the host as the second argument.
+     * The constructor of `CreatesCoreApiClient` takes the API key, the client and the host in this
+     * order. In v11, this service took the host as the second argument.
      */
     public function testAHostAsTheSecondArgumentThrowsATypeError(): void
     {

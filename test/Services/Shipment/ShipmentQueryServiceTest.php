@@ -219,9 +219,12 @@ final class ShipmentQueryServiceTest extends TestCase
 
     /**
      * A service creates its client on the first request. So an empty API key throws there, and not
-     * in the constructor.
+     * in the constructor. Without an API key, the service reads the environment.
+     *
+     * @testWith [""]
+     *           [null]
      */
-    public function testAnEmptyApiKeyThrowsAtTheFirstRequest(): void
+    public function testAnEmptyApiKeyThrowsAtTheFirstRequest(?string $apiKey): void
     {
         $previous = [];
 
@@ -231,7 +234,7 @@ final class ShipmentQueryServiceTest extends TestCase
         }
 
         try {
-            $service = new ShipmentQueryService('');
+            $service = new ShipmentQueryService($apiKey);
 
             $this->expectException(InvalidArgumentException::class);
             $this->expectExceptionMessage('API key cannot be empty');
