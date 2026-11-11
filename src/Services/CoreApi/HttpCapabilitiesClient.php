@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\CoreApi;
 
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
@@ -16,22 +15,6 @@ use UnexpectedValueException;
 final class HttpCapabilitiesClient implements CapabilitiesClientInterface
 {
     use CreatesCoreApiClient;
-
-    /**
-     * Create the client with a Jane client that keeps its own User-Agent, or with an API key.
-     *
-     * @param Client|null $api    A client with its own API key, host, headers or User-Agent, such as one
-     *                            from ShipmentApiFactory. With a client, `$apiKey` and `$host` are not used.
-     * @param string|null $apiKey The API key of the client that the first request creates. Without one,
-     *                            ShipmentApiFactory reads `API_KEY`, `API_KEY_NL` or `API_KEY_BE`.
-     * @param string|null $host   The host of the client that the first request creates.
-     */
-    public function __construct(?Client $api = null, ?string $apiKey = null, ?string $host = null)
-    {
-        $this->api    = $api;
-        $this->apiKey = $apiKey;
-        $this->host   = $host;
-    }
 
     /**
      * Get the capabilities for a request from the Core API.
