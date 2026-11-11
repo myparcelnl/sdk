@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
@@ -100,13 +101,78 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * The spec documents a `;`-separated string for a list of ids.
+     * The spec documents a `;`-separated string for a list of integers.
      */
     public function testQuerySendsAListOfIntegersAsASemicolonSeparatedString(): void
     {
         $this->createService([])->query(['carrier_id' => [RefTypesCarrier::Postnl, RefTypesCarrier::Dpd], 'status' => [1, 2]]);
 
         self::assertSame(['carrier_id' => '1;4', 'size' => '300', 'status' => '1;2'], $this->queryOfRequest(0));
+    }
+
+    /**
+     * The spec types the items of `carrier_id` as strings, so `['1', '2']` counts as a list of
+     * integers, also next to an enum case.
+     */
+    public function testQuerySendsAListOfNumericStringsAsASemicolonSeparatedString(): void
+    {
+        $this->createService([])->query(['carrier_id' => [RefTypesCarrier::Postnl, '4'], 'status' => ['1', '2']]);
+
+        self::assertSame(['carrier_id' => '1;4', 'size' => '300', 'status' => '1;2'], $this->queryOfRequest(0));
+    }
+
+    /**
+     * The spec documents the `;`-separated list for these five keys.
+     */
+    public function testQuerySendsAListForEachKeyThatTakesAList(): void
+    {
+        $this->createService([])->query(['carrier_id' => [1, 4], 'package_type' => [1, 2], 'shipment_type' => [1, 2], 'shop_id' => [10, 20], 'status' => [1, 2]]);
+
+        self::assertSame(
+            ['carrier_id' => '1;4', 'package_type' => '1;2', 'shipment_type' => '1;2', 'shop_id' => '10;20', 'size' => '300', 'status' => '1;2'],
+            $this->queryOfRequest(0)
+        );
+    }
+
+    public function testQueryLeavesOutAFilterWithAnEmptyList(): void
+    {
+        $this->createService([])->query(['status' => []]);
+
+        self::assertSame(['size' => '300'], $this->queryOfRequest(0));
+    }
+
+    /**
+     * @dataProvider provideArraysThatAreNotAListOfIntegers
+     *
+     * @param array<int, mixed> $value
+     */
+    public function testQueryThrowsForAnArrayThatIsNotAListOfIntegers(string $key, array $value): void
+    {
+        $service = $this->createService([]);
+
+        try {
+            $service->query([$key => $value]);
+            self::fail('An array that is not a list of integers must throw.');
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('"' . $key . '"', $exception->getMessage());
+        }
+
+        self::assertSame([], $this->requests);
+    }
+
+    /**
+     * @return array<string, array{string, array<int, mixed>}>
+     */
+    public static function provideArraysThatAreNotAListOfIntegers(): array
+    {
+        return [
+            'a key that takes one string'           => ['barcode', ['3SMYPA1234567', '3SMYPA7654321']],
+            'numeric strings for such a key'        => ['barcode', ['123456', '654321']],
+            'a key without a type'                  => ['order', ['ASC', 'DESC']],
+            'integers for a key that takes one id'  => ['id', [1, 2]],
+            'an enum case next to a string'         => ['carrier_id', [RefTypesCarrier::Postnl, 'dpd']],
+            'string-backed enum cases'              => ['carrier_id', [RefCapabilitiesSharedCarrierV2::Postnl]],
+        ];
     }
 
     /**
@@ -148,21 +214,30 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * Only a list of ids goes as a `;`-separated string. A key that takes one string, such as
-     * `barcode`, refuses an array.
+     * A service creates its client on the first request. So an empty API key throws there, and not
+     * in the constructor.
      */
-    public function testQueryThrowsForAnArrayOfStrings(): void
+    public function testAnEmptyApiKeyThrowsAtTheFirstRequest(): void
     {
-        $service = $this->createService([]);
+        $previous = [];
 
-        try {
-            $service->query(['barcode' => ['3SMYPA1234567', '3SMYPA7654321']]);
-            self::fail('An array for a string parameter must throw.');
-        } catch (InvalidArgumentException $exception) {
-            self::assertStringContainsString('barcode', $exception->getMessage());
+        foreach (['API_KEY', 'API_KEY_NL', 'API_KEY_BE'] as $name) {
+            $previous[$name] = getenv($name);
+            putenv($name);
         }
 
-        self::assertSame([], $this->requests);
+        try {
+            $service = new ShipmentQueryService('');
+
+            $this->expectException(InvalidArgumentException::class);
+            $this->expectExceptionMessage('API key cannot be empty');
+
+            $service->find(1);
+        } finally {
+            foreach ($previous as $name => $value) {
+                putenv(false === $value ? $name : $name . '=' . $value);
+            }
+        }
     }
 
     public function testFindByReferenceIdLeavesThePageSizeToTheApi(): void

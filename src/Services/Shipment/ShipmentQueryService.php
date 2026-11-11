@@ -20,18 +20,27 @@ final class ShipmentQueryService
     private const DEFAULT_QUERY_PAGE_SIZE = 300;
 
     /**
+     * The query parameters of `GET /shipments` that the spec documents as a `;`-separated list.
+     */
+    private const LIST_PARAMETERS = ['carrier_id', 'package_type', 'shipment_type', 'shop_id', 'status'];
+
+    /**
      * Query shipments by the query parameters of `GET /shipments`.
      *
-     * A key with a null value or an empty string leaves the filter out. An enum case, such as
-     * `RefTypesCarrier::Postnl`, goes as its value. A list of integers, such as two statuses, goes as
-     * a `;`-separated string. Every other value goes as it is: `false` goes as `0`.
+     * A key with a null value, an empty string or an empty list leaves the filter out. An enum case,
+     * such as `RefTypesCarrier::Postnl`, goes as its value. `carrier_id`, `package_type`,
+     * `shipment_type`, `shop_id` and `status` also take a list of integers, such as two statuses,
+     * which goes as a `;`-separated string. Every other value goes as it is: `false` goes as `0`.
+     * For a list of shipment ids, use findMany().
      *
      * @param array<string, mixed> $parameters The query parameters, such as `barcode`, `carrier_id`, `created` and `status`.
      *
      * @return ShipmentDefsShipment[]
      *
-     * @throws InvalidArgumentException When a key is not a query parameter of `GET /shipments`, or a
-     *                                  value has a type that the spec does not allow, such as `'page' => '2'`.
+     * @throws InvalidArgumentException When a key is not a query parameter of `GET /shipments`, a
+     *                                  value has a type that the spec does not allow, such as
+     *                                  `'page' => '2'`, or an array is not a list of integers for
+     *                                  a key that takes a list.
      */
     public function query(array $parameters = []): array
     {
@@ -94,33 +103,58 @@ final class ShipmentQueryService
             $parameters['size'] = self::DEFAULT_QUERY_PAGE_SIZE;
         }
 
-        // A null value or an empty string means "no filter". Without this filter, the
-        // generated client sends an empty value, such as `q=`, for a key that allows null, and throws
-        // for the other keys. The spec does not document the page size that the API uses without `size`.
-        $parameters = array_filter($parameters, static fn (mixed $value): bool => null !== $value && '' !== $value);
+        $query = [];
 
-        return array_map([self::class, 'queryValue'], $parameters);
+        foreach ($parameters as $name => $value) {
+            $value = self::queryValue((string) $name, $value);
+
+            // A null value, an empty string or an empty list means "no filter". Without this check,
+            // the generated client sends an empty value, such as `q=`, for a key that allows null, and
+            // throws for the other keys. The spec does not document the page size that the API uses
+            // without `size`.
+            if (null !== $value && '' !== $value) {
+                $query[$name] = $value;
+            }
+        }
+
+        return $query;
     }
 
     /**
-     * The generated client sends a scalar as it is and refuses an object. An enum case goes as its
-     * value. A list of integers goes as the `;`-separated string that the spec documents for a list
-     * of ids. Another array goes to the generated client as it is, which refuses it for a key that
-     * takes one value, such as `barcode`.
+     * Convert a value to what the generated client sends: an enum case to its value, and a list of
+     * integers to the `;`-separated string that the spec documents.
+     *
+     * @throws InvalidArgumentException For an array for a key that takes one value, and for a list
+     *                                  that holds another value than an integer.
      */
-    private static function queryValue(mixed $value): mixed
+    private static function queryValue(string $name, mixed $value): mixed
     {
         if ($value instanceof BackedEnum) {
             return $value->value;
         }
 
-        if (is_array($value)) {
-            $values = array_map([self::class, 'queryValue'], $value);
-
-            return array_filter($values, 'is_int') === $values ? implode(';', $values) : $value;
+        if (! is_array($value)) {
+            return $value;
         }
 
-        return $value;
+        if (! in_array($name, self::LIST_PARAMETERS, true)) {
+            throw new InvalidArgumentException(sprintf('The query parameter "%s" takes one value, got a list.', $name));
+        }
+
+        $items = array_map(static fn (mixed $item): mixed => $item instanceof BackedEnum ? $item->value : $item, $value);
+
+        foreach ($items as $item) {
+            // The spec types the items of `carrier_id` as strings, so `'1'` counts as an integer.
+            if (! is_int($item) && ! (is_string($item) && ctype_digit($item))) {
+                throw new InvalidArgumentException(sprintf(
+                    'The query parameter "%s" takes one value or a list of integers, got a list with %s.',
+                    $name,
+                    get_debug_type($item)
+                ));
+            }
+        }
+
+        return implode(';', $items);
     }
 
     /**
