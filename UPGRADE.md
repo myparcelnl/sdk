@@ -13,7 +13,7 @@ The generated Jane clients send their requests with a Symfony HTTP client, with 
 
 A connection error or a timeout throws a Symfony `TransportExceptionInterface`, in every service that runs on a Jane client. In v11, the generated client wrapped it in an `ApiException`.
 
-Every request of a Jane Core API client asks for problem details: it sends `application/problem+json` in `Accept`. The Core API then answers an error with `Content-Type: application/problem+json`, in every service that runs on a Jane client. The generated exception, such as `GetShipmentsClientErrorException`, holds a `Jane\CoreApi\Model\CommonResponsesProblem` in `getCommonResponsesProblem()`: read `->detail` and `->status`, not `->message` and `->statusCode`. In v11, most requests sent only `application/json`, and an error came as `{"message": …, "request_id": …, "errors": […]}`.
+The generated endpoints of the Jane Core API client ask for problem details: they send `application/problem+json` in `Accept`. An error then comes as problem details, and the generated exception, such as `GetShipmentsClientErrorException`, holds a `Jane\CoreApi\Model\CommonResponsesProblem` in `getCommonResponsesProblem()`: read `->detail` and `->status`. For an error that the API sends as `application/json`, it holds a `Jane\CoreApi\Model\CommonResponsesUserError`: read `->message` and `->statusCode`. Check which one you got with `instanceof`. In v11, most requests sent only `application/json`, and an error came as `{"message": …, "request_id": …, "errors": […]}`.
 
 ### Found shipments and track & trace results
 
@@ -48,7 +48,7 @@ Some fields hold another type than the v11 getter returned:
 | `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser`, or the decoded JSON for a principal type that the SDK does not know |
 | `ApiMapperService`     | `allRows()` and `allDomains()` key a row by the constant name of the openapi-generator enum, such as `DHL_FOR_YOU` | They key a row by the case name of the Jane enum, such as `DhlForYou`. The values of a row do not change |
 | `ShipmentOptionMapper` | `v2PropertyFromName()` returns the property name of the openapi-generator model, such as `requires_signature` | It returns the property name of the Jane model, such as `requiresSignature`. A snake_case name, such as `requires_signature`, is still accepted as input |
-| `ShipmentQueryService` | `query()` ignores a key it does not know, leaves out a filter with the value `false`, and sends an array as `status=1&status=2` | `query()` throws an `InvalidArgumentException` for a key it does not know, or for a type that the spec does not allow, such as `'hidden' => 1`: pass `true`. It sends `false` as `0`, and a list of integers as the `;`-separated string that the spec documents, such as `status=1;2`. An empty list leaves the filter out. Another array throws an `InvalidArgumentException`, such as a list of barcodes. For a list of shipment ids, use `findMany()` |
+| `ShipmentQueryService` | `query()` ignores a key it does not know, leaves out a filter with the value `false`, and sends an array as `status=1&status=2` | `query()` throws an `InvalidArgumentException` for a key it does not know, or for a type that the spec does not allow, such as `'hidden' => 1`: pass `true`. It sends `false` as `0`. `carrier_id`, `package_type`, `shipment_type`, `shop_id` and `status` take a list of integers, which goes as the `;`-separated string that the spec documents, such as `status=1;2`. An empty list leaves the filter out. Another array throws an `InvalidArgumentException`, such as a list of barcodes. For a list of shipment ids, use `findMany()` |
 | `ShipmentQueryService` | `find()`, `findMany()`, `findByReferenceId()` and `query()` return a `CoreApi\Model\ShipmentDefsShipment` with getters, such as `getBarcode()` | They return a `Jane\CoreApi\Model\ShipmentDefsShipment` with public properties, such as `$shipment->barcode` |
 | `ShipmentTrackTraceService` | `fetchTrackTraceData()` returns `CoreApi\Model\ShipmentDefsTrackTrace` objects with getters, such as `getLinkTracktrace()` | It returns `Jane\CoreApi\Model\ShipmentDefsTrackTrace` objects with public properties, such as `$trace->linkTracktrace` |
 | `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | The constructor takes a `CoreApi\Api\ShipmentApi` | The constructor takes a `Jane\CoreApi\Client` |
@@ -100,8 +100,8 @@ $shipment->options   = $options;
 
 // v12, from an array with the API field names: the generated client checks the values when the request goes out
 $shipment = CoreApiModels::toModel([
-    'carrier'   => 1,
-    'options'   => ['package_type' => 1],
+    'carrier'   => RefTypesCarrier::Postnl->value,
+    'options'   => ['package_type' => RefShipmentPackageType::Package->value],
     'recipient' => ['cc' => 'NL', 'postal_code' => '2132JE', 'city' => 'Hoofddorp', 'street' => 'Antareslaan', 'number' => '31', 'person' => 'John Doe'],
 ], Shipment::class);
 
