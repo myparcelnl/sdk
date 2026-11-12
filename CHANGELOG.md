@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.3.1](https://github.com/myparcelnl/sdk/compare/v11.3.0...v11.3.1) (2026-11-12)
+
 ## [11.3.0](https://github.com/myparcelnl/sdk/compare/v11.2.1...v11.3.0) (2026-11-02)
 
 ### :sparkles: New Features
