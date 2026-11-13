@@ -37,9 +37,6 @@ class ShipmentPutShipmentsRequestV11DataShipmentsItemNormalizer implements Denor
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestV11DataShipmentsItemConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
         }
@@ -152,7 +149,7 @@ class ShipmentPutShipmentsRequestV11DataShipmentsItemNormalizer implements Denor
         if (array_key_exists('contractId', get_object_vars($data))) {
             $dataArray['contract_id'] = $data->contractId;
         }
-        if (array_key_exists('referenceIdentifier', get_object_vars($data))) {
+        if (array_key_exists('referenceIdentifier', get_object_vars($data)) && null !== ($data->referenceIdentifier ?? null)) {
             $value = $data->referenceIdentifier;
             if (is_int($data->referenceIdentifier)) {
                 $value = $data->referenceIdentifier;
@@ -215,10 +212,13 @@ class ShipmentPutShipmentsRequestV11DataShipmentsItemNormalizer implements Denor
             $dataArray['multi_collo_main_shipment_id'] = $value_1;
         }
         if (array_key_exists('secondaryShipments', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->secondaryShipments as $value_2) {
-                $normalized_8 = $value_2 === null ? null : $this->normalizer->normalize($value_2, 'json', $context);
-                $values[] = \is_iterable($normalized_8) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_8) : $normalized_8;
+            $values = null;
+            if (null !== $data->secondaryShipments) {
+                $values = [];
+                foreach ($data->secondaryShipments as $value_2) {
+                    $normalized_8 = $value_2 === null ? null : $this->normalizer->normalize($value_2, 'json', $context);
+                    $values[] = \is_iterable($normalized_8) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_8) : $normalized_8;
+                }
             }
             $dataArray['secondary_shipments'] = $values;
         }
@@ -230,10 +230,13 @@ class ShipmentPutShipmentsRequestV11DataShipmentsItemNormalizer implements Denor
             $dataArray['hidden'] = $data->hidden instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPutShipmentsRequestV11DataShipmentsItemHidden ? $data->hidden->value : $data->hidden;
         }
         if (array_key_exists('shippedItems', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->shippedItems as $value_3) {
-                $normalized_10 = $value_3 === null ? null : $this->normalizer->normalize($value_3, 'json', $context);
-                $values_1[] = \is_iterable($normalized_10) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_10) : $normalized_10;
+            $values_1 = null;
+            if (null !== $data->shippedItems) {
+                $values_1 = [];
+                foreach ($data->shippedItems as $value_3) {
+                    $normalized_10 = $value_3 === null ? null : $this->normalizer->normalize($value_3, 'json', $context);
+                    $values_1[] = \is_iterable($normalized_10) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_10) : $normalized_10;
+                }
             }
             $dataArray['shipped_items'] = $values_1;
         }

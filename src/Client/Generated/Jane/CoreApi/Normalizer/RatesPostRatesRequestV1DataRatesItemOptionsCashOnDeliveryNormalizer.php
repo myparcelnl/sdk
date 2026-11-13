@@ -37,9 +37,6 @@ class RatesPostRatesRequestV1DataRatesItemOptionsCashOnDeliveryNormalizer implem
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1DataRatesItemOptionsCashOnDeliveryConstraint());
-        }
         if (\array_key_exists('due_amount', $data)) {
             $object->dueAmount = $this->denormalizer->denormalize($data['due_amount'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoney::class, 'json', $context);
         }

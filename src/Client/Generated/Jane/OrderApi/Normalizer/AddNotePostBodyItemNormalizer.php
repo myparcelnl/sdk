@@ -37,9 +37,6 @@ class AddNotePostBodyItemNormalizer implements DenormalizerInterface, Normalizer
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\AddNotePostBodyItemConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
             unset($data['id']);
@@ -68,7 +65,7 @@ class AddNotePostBodyItemNormalizer implements DenormalizerInterface, Normalizer
         if (null !== ($data->text ?? null)) {
             $dataArray['text'] = $data->text;
         }
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

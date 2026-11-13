@@ -40,9 +40,6 @@ class ProblemDetailsInvalidRequestSyntaxNormalizer implements DenormalizerInterf
         if (\array_key_exists('status', $data) && \is_int($data['status'])) {
             $data['status'] = (float) $data['status'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ProblemDetailsInvalidRequestSyntaxConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProblemDetailsInvalidRequestSyntaxType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
@@ -100,7 +97,7 @@ class ProblemDetailsInvalidRequestSyntaxNormalizer implements DenormalizerInterf
         if (null !== ($data->instance ?? null)) {
             $dataArray['instance'] = $data->instance;
         }
-        if (array_key_exists('cause', get_object_vars($data))) {
+        if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
         if (null !== ($data->errors ?? null)) {

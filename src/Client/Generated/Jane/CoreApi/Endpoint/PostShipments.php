@@ -24,7 +24,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=1.2|application/json|application/vnd.shipment_label+json|application/*|application/problem+json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=1.2|application/json|application/vnd.shipment_label+json|application/vnd.shipment_label+json+print|application/*|application/problem+json
      */
     public function __construct($requestBody, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
@@ -61,7 +61,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
     public function getExtraHeaders(): array
     {
         if (empty($this->accept)) {
-            return ['Accept' => ['application/json;charset=utf-8;version=1.2', 'application/json', 'application/vnd.shipment_label+json', 'application/*', 'application/problem+json']];
+            return ['Accept' => ['application/json;charset=utf-8;version=1.2', 'application/json', 'application/vnd.shipment_label+json', 'application/vnd.shipment_label+json+print', 'application/*', 'application/problem+json']];
         }
         return $this->accept;
     }
@@ -94,7 +94,7 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12|null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentLabels
+     * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12|null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentLabels|string
      */
     protected function transformResponseBody(\Symfony\Contracts\HttpClient\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -114,6 +114,9 @@ class PostShipments extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtim
             }
             if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label+json') !== false) {
                 return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentLabels', 'json');
+            }
+            if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label+json+print') !== false) {
+                return $body;
             }
         }
         if ($contentType !== null && (415 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {

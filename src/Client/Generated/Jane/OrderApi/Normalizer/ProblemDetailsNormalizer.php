@@ -37,9 +37,6 @@ class ProblemDetailsNormalizer implements DenormalizerInterface, NormalizerInter
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ProblemDetailsConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ProblemDetailsType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
@@ -89,7 +86,7 @@ class ProblemDetailsNormalizer implements DenormalizerInterface, NormalizerInter
         if (null !== ($data->instance ?? null)) {
             $dataArray['instance'] = $data->instance;
         }
-        if (array_key_exists('cause', get_object_vars($data))) {
+        if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

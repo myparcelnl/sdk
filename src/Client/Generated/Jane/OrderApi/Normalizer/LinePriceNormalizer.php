@@ -37,9 +37,6 @@ class LinePriceNormalizer implements DenormalizerInterface, NormalizerInterface,
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\LinePriceConstraint());
-        }
         if (\array_key_exists('currency', $data)) {
             $object->currency = $data['currency'];
             unset($data['currency']);

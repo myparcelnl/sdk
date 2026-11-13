@@ -37,23 +37,11 @@ class RefShipmentGeneralSettingsNormalizer implements DenormalizerInterface, Nor
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('save_recipient_address', $data) && \is_int($data['save_recipient_address'])) {
-            $data['save_recipient_address'] = (float) $data['save_recipient_address'];
-        }
-        if (\array_key_exists('delivery_notification', $data) && \is_int($data['delivery_notification'])) {
-            $data['delivery_notification'] = (float) $data['delivery_notification'];
-        }
-        if (\array_key_exists('disable_auto_detect_pickup', $data) && \is_int($data['disable_auto_detect_pickup'])) {
-            $data['disable_auto_detect_pickup'] = (float) $data['disable_auto_detect_pickup'];
-        }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentGeneralSettingsConstraint());
-        }
         if (\array_key_exists('save_recipient_address', $data)) {
-            $object->saveRecipientAddress = $data['save_recipient_address'];
+            $object->saveRecipientAddress = is_int($data['save_recipient_address']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['save_recipient_address']) ?? $data['save_recipient_address'] : $data['save_recipient_address'];
         }
         if (\array_key_exists('delivery_notification', $data)) {
-            $object->deliveryNotification = $data['delivery_notification'];
+            $object->deliveryNotification = is_int($data['delivery_notification']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['delivery_notification']) ?? $data['delivery_notification'] : $data['delivery_notification'];
         }
         if (\array_key_exists('delivery_notification_email', $data)) {
             $values = [];
@@ -63,7 +51,7 @@ class RefShipmentGeneralSettingsNormalizer implements DenormalizerInterface, Nor
             $object->deliveryNotificationEmail = $values;
         }
         if (\array_key_exists('disable_auto_detect_pickup', $data)) {
-            $object->disableAutoDetectPickup = $data['disable_auto_detect_pickup'];
+            $object->disableAutoDetectPickup = is_int($data['disable_auto_detect_pickup']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['disable_auto_detect_pickup']) ?? $data['disable_auto_detect_pickup'] : $data['disable_auto_detect_pickup'];
         }
         if (\array_key_exists('printer_identifier', $data)) {
             $object->printerIdentifier = $data['printer_identifier'];
@@ -77,20 +65,23 @@ class RefShipmentGeneralSettingsNormalizer implements DenormalizerInterface, Nor
     {
         $dataArray = [];
         if (array_key_exists('saveRecipientAddress', get_object_vars($data))) {
-            $dataArray['save_recipient_address'] = $data->saveRecipientAddress;
+            $dataArray['save_recipient_address'] = $data->saveRecipientAddress instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->saveRecipientAddress->value : $data->saveRecipientAddress;
         }
         if (array_key_exists('deliveryNotification', get_object_vars($data))) {
-            $dataArray['delivery_notification'] = $data->deliveryNotification;
+            $dataArray['delivery_notification'] = $data->deliveryNotification instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->deliveryNotification->value : $data->deliveryNotification;
         }
         if (array_key_exists('deliveryNotificationEmail', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->deliveryNotificationEmail as $value) {
-                $values[] = $value;
+            $values = null;
+            if (null !== $data->deliveryNotificationEmail) {
+                $values = [];
+                foreach ($data->deliveryNotificationEmail as $value) {
+                    $values[] = $value;
+                }
             }
             $dataArray['delivery_notification_email'] = $values;
         }
         if (array_key_exists('disableAutoDetectPickup', get_object_vars($data))) {
-            $dataArray['disable_auto_detect_pickup'] = $data->disableAutoDetectPickup;
+            $dataArray['disable_auto_detect_pickup'] = $data->disableAutoDetectPickup instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->disableAutoDetectPickup->value : $data->disableAutoDetectPickup;
         }
         if (array_key_exists('printerIdentifier', get_object_vars($data))) {
             $dataArray['printer_identifier'] = $data->printerIdentifier;

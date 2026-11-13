@@ -37,9 +37,6 @@ class ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItemNormaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItemConstraint());
-        }
         if (\array_key_exists('account_id', $data)) {
             $object->accountId = $data['account_id'];
             unset($data['account_id']);

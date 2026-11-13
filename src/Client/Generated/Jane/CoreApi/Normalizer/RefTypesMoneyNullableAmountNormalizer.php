@@ -37,9 +37,6 @@ class RefTypesMoneyNullableAmountNormalizer implements DenormalizerInterface, No
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefTypesMoneyNullableAmountConstraint());
-        }
         if (\array_key_exists('currency', $data)) {
             $object->currency = is_string($data['currency']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoneyPropertiesCurrency::tryFrom($data['currency']) ?? $data['currency'] : $data['currency'];
         }

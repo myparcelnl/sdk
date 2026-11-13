@@ -57,13 +57,13 @@ class RatesPostRatesRequestV1DataRatesItem
      */
     public RatesPostRatesRequestV1DataRatesItemOptions $options;
     /**
-     * @var float
+     * @var RatesPostRatesRequestV1DataRatesItemDeliveryType|int
      */
-    public float $deliveryType;
+    public RatesPostRatesRequestV1DataRatesItemDeliveryType|int $deliveryType;
     /**
-     * @var float
+     * @var RatesPostRatesRequestV1DataRatesItemShipmentType|int
      */
-    public float $shipmentType;
+    public RatesPostRatesRequestV1DataRatesItemShipmentType|int $shipmentType;
     /**
      * The shipment direction for which the rates are requested.
      *

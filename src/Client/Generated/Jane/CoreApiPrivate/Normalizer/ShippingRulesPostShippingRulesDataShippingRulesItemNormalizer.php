@@ -40,9 +40,6 @@ class ShippingRulesPostShippingRulesDataShippingRulesItemNormalizer implements D
         if (\array_key_exists('active', $data) && \is_int($data['active'])) {
             $data['active'] = (float) $data['active'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\ShippingRulesPostShippingRulesDataShippingRulesItemConstraint());
-        }
         if (\array_key_exists('account_id', $data)) {
             $object->accountId = $data['account_id'];
         }

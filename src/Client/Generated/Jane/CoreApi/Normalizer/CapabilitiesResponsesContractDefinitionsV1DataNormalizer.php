@@ -37,9 +37,6 @@ class CapabilitiesResponsesContractDefinitionsV1DataNormalizer implements Denorm
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesResponsesContractDefinitionsV1DataConstraint());
-        }
         if (\array_key_exists('contract_definitions', $data)) {
             $values = [];
             foreach ($data['contract_definitions'] as $value) {

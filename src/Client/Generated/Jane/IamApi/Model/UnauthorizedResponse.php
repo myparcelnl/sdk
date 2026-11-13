@@ -8,9 +8,9 @@ class UnauthorizedResponse implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * @var string
+     * @var UnauthorizedResponseMessage|string
      */
-    public string $message;
+    public UnauthorizedResponseMessage|string $message;
     public function definedProperties(): array
     {
         return ['message' => 'message'];

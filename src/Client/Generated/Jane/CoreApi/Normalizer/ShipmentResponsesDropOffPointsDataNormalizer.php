@@ -37,9 +37,6 @@ class ShipmentResponsesDropOffPointsDataNormalizer implements DenormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDropOffPointsDataConstraint());
-        }
         if (\array_key_exists('drop_off_points', $data)) {
             $values = [];
             foreach ($data['drop_off_points'] as $value) {

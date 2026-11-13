@@ -37,9 +37,6 @@ class PhysicalPropertiesNormalizer implements DenormalizerInterface, NormalizerI
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\PhysicalPropertiesConstraint());
-        }
         if (\array_key_exists('height', $data)) {
             $object->height = $this->denormalizer->denormalize($data['height'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\PhysicalPropertiesHeight::class, 'json', $context);
             unset($data['height']);

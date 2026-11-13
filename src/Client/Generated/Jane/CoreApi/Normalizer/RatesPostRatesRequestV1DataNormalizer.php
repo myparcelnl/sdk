@@ -37,9 +37,6 @@ class RatesPostRatesRequestV1DataNormalizer implements DenormalizerInterface, No
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1DataConstraint());
-        }
         if (\array_key_exists('rates', $data)) {
             $values = [];
             foreach ($data['rates'] as $value) {

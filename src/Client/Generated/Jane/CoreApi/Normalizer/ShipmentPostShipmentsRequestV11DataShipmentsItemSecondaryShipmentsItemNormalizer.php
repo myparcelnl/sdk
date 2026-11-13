@@ -37,9 +37,6 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemNorm
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemConstraint());
-        }
         if (\array_key_exists('account_id', $data)) {
             $object->accountId = $data['account_id'];
         }
@@ -122,7 +119,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemNorm
         if (array_key_exists('shopId', get_object_vars($data))) {
             $dataArray['shop_id'] = $data->shopId;
         }
-        if (array_key_exists('referenceIdentifier', get_object_vars($data))) {
+        if (array_key_exists('referenceIdentifier', get_object_vars($data)) && null !== ($data->referenceIdentifier ?? null)) {
             $value = $data->referenceIdentifier;
             if (is_int($data->referenceIdentifier)) {
                 $value = $data->referenceIdentifier;
@@ -136,9 +133,12 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemNorm
             $dataArray['recipient'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
         }
         if (array_key_exists('recipients', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->recipients as $value_1) {
-                $values[] = $value_1;
+            $values = null;
+            if (null !== $data->recipients) {
+                $values = [];
+                foreach ($data->recipients as $value_1) {
+                    $values[] = $value_1;
+                }
             }
             $dataArray['recipients'] = $values;
         }
@@ -182,10 +182,13 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemNorm
             $dataArray['hidden'] = $data->hidden instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemHidden ? $data->hidden->value : $data->hidden;
         }
         if (array_key_exists('shippedItems', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->shippedItems as $value_2) {
-                $normalized_7 = $value_2 === null ? null : $this->normalizer->normalize($value_2, 'json', $context);
-                $values_1[] = \is_iterable($normalized_7) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_7) : $normalized_7;
+            $values_1 = null;
+            if (null !== $data->shippedItems) {
+                $values_1 = [];
+                foreach ($data->shippedItems as $value_2) {
+                    $normalized_7 = $value_2 === null ? null : $this->normalizer->normalize($value_2, 'json', $context);
+                    $values_1[] = \is_iterable($normalized_7) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_7) : $normalized_7;
+                }
             }
             $dataArray['shipped_items'] = $values_1;
         }

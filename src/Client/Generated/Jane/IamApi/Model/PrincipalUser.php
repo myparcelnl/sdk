@@ -70,9 +70,9 @@ class PrincipalUser implements AdditionalPropertiesInterface
     /**
      * The principal type.
      *
-     * @var string
+     * @var PrincipalUserType|string
      */
-    public string $type;
+    public PrincipalUserType|string $type;
     public function definedProperties(): array
     {
         return ['accountId' => 'accountId', 'mfaEnabled' => 'mfaEnabled', 'platform' => 'platform', 'principal' => 'principal', 'features' => 'features', 'fulfilmentPlatforms' => 'fulfilmentPlatforms', 'impersonator' => 'impersonator', 'id' => 'id', 'role' => 'role', 'shopIds' => 'shopIds', 'type' => 'type'];

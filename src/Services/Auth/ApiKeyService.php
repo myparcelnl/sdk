@@ -8,8 +8,6 @@ use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
-use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
-use MyParcelNL\Sdk\Client\Jane\SkipValidationOnReadSerializer;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Services\IamApi\IamApiFactory;
 use UnexpectedValueException;
@@ -30,17 +28,14 @@ final class ApiKeyService
 
     private ?string $host;
 
-    private SkipValidationOnReadSerializer $serializer;
-
     public function __construct(
         string $apiKey,
         ?Client $api = null,
         ?string $host = null
     ) {
-        $this->api        = $api;
-        $this->apiKey     = $apiKey;
-        $this->host       = $host;
-        $this->serializer = JaneClientFactory::iamSerializer();
+        $this->api    = $api;
+        $this->apiKey = $apiKey;
+        $this->host   = $host;
     }
 
     /**
@@ -82,31 +77,15 @@ final class ApiKeyService
      */
     public function getPrincipal(): PrincipalShop|PrincipalUser
     {
-        // The spec describes the response as a oneOf of PrincipalShop and PrincipalUser with a
-        // discriminator on `type`. Jane generates no model for it (janephp/janephp#1156), so
-        // getWhoami() returns the decoded JSON. This method picks the model and reads the JSON with
-        // the serializer of the client, which skips the validation on read, as it does for every response.
-        $whoami = $this->getApi()->getWhoami();
+        // The generated endpoint picks the model by the discriminator on `type`. For a type that
+        // the spec does not name, it returns the decoded JSON.
+        $principal = $this->getApi()->getWhoami();
 
-        return $this->serializer->deserialize(json_encode($whoami, JSON_THROW_ON_ERROR), $this->principalClass($whoami->type ?? null), 'json');
-    }
+        if ($principal instanceof PrincipalShop || $principal instanceof PrincipalUser) {
+            return $principal;
+        }
 
-    /**
-     * Pick the model that the discriminator on `type` in the spec describes.
-     *
-     * @todo janephp/janephp#1156: remove this method when Jane generates a model for a oneOf response
-     *       with a discriminator, such as the whoami response.
-     *
-     * @return class-string<PrincipalShop|PrincipalUser>
-     */
-    private function principalClass(mixed $type): string
-    {
-        // Jane generates `type` as a plain string, not as an enum, so the values are literal here.
-        return match ($type) {
-            'SHOP' => PrincipalShop::class,
-            'USER' => PrincipalUser::class,
-            default => throw new UnexpectedValueException('IAM returned an unknown principal type: ' . json_encode($type)),
-        };
+        throw new UnexpectedValueException('IAM returned an unknown principal type: ' . json_encode($principal->type ?? null));
     }
 
     private function getApi(): Client

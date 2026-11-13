@@ -37,9 +37,6 @@ class PhysicalPropertiesWeightRequiredNormalizer implements DenormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\PhysicalPropertiesWeightRequiredConstraint());
-        }
         if (\array_key_exists('height', $data)) {
             $object->height = $this->denormalizer->denormalize($data['height'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\PhysicalPropertiesWeightRequiredHeight::class, 'json', $context);
             unset($data['height']);

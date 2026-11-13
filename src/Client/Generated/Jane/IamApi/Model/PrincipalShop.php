@@ -70,9 +70,9 @@ class PrincipalShop implements AdditionalPropertiesInterface
     /**
      * The principal type.
      *
-     * @var string
+     * @var PrincipalShopType|string
      */
-    public string $type;
+    public PrincipalShopType|string $type;
     public function definedProperties(): array
     {
         return ['accountId' => 'accountId', 'mfaEnabled' => 'mfaEnabled', 'platform' => 'platform', 'principal' => 'principal', 'features' => 'features', 'fulfilmentPlatforms' => 'fulfilmentPlatforms', 'impersonator' => 'impersonator', 'id' => 'id', 'role' => 'role', 'shopIds' => 'shopIds', 'type' => 'type'];

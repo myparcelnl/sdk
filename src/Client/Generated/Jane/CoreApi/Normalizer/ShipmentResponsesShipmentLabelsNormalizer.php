@@ -37,9 +37,6 @@ class ShipmentResponsesShipmentLabelsNormalizer implements DenormalizerInterface
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesShipmentLabelsConstraint());
-        }
         if (\array_key_exists('data', $data)) {
             $object->data = $data['data'];
         }

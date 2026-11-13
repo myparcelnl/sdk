@@ -37,9 +37,6 @@ class ExternalReferencesSalesChannelNormalizer implements DenormalizerInterface,
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ExternalReferencesSalesChannelConstraint());
-        }
         if (\array_key_exists('source', $data)) {
             $object->source = is_string($data['source']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\ExternalReferencesSalesChannelSource::tryFrom($data['source']) ?? $data['source'] : $data['source'];
             unset($data['source']);

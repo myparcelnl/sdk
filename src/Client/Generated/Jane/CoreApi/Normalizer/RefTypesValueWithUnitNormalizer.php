@@ -40,9 +40,6 @@ class RefTypesValueWithUnitNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('value', $data) && \is_int($data['value'])) {
             $data['value'] = (float) $data['value'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefTypesValueWithUnitConstraint());
-        }
         if (\array_key_exists('value', $data)) {
             $object->value = $data['value'];
         }

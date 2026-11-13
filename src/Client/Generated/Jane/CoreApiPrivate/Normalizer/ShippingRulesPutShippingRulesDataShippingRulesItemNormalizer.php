@@ -40,9 +40,6 @@ class ShippingRulesPutShippingRulesDataShippingRulesItemNormalizer implements De
         if (\array_key_exists('active', $data) && \is_int($data['active'])) {
             $data['active'] = (float) $data['active'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\ShippingRulesPutShippingRulesDataShippingRulesItemConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
         }

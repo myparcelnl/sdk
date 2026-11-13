@@ -40,9 +40,6 @@ class ShipmentDefsCarrierTrackTraceEventNormalizer implements DenormalizerInterf
         if (\array_key_exists('delayed', $data) && \is_int($data['delayed'])) {
             $data['delayed'] = (bool) $data['delayed'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsCarrierTrackTraceEventConstraint());
-        }
         if (\array_key_exists('code', $data)) {
             $object->code = $data['code'];
         }

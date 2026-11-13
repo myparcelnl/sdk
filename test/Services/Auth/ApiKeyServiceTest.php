@@ -7,7 +7,9 @@ namespace MyParcelNL\Sdk\Test\Services\Auth;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ClientException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\ServerException;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShopType;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUserType;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\RoleShop;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\RoleUser;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
@@ -54,6 +56,7 @@ final class ApiKeyServiceTest extends TestCase
         $principal = $this->createService(self::SHOP_PRINCIPAL)->getPrincipal();
 
         self::assertInstanceOf(PrincipalShop::class, $principal);
+        self::assertSame(PrincipalShopType::Shop, $principal->type);
         self::assertSame(RoleShop::ShopDefault, $principal->role);
         self::assertSame(['156402'], $principal->shopIds);
     }
@@ -63,6 +66,7 @@ final class ApiKeyServiceTest extends TestCase
         $principal = $this->createService(self::USER_PRINCIPAL)->getPrincipal();
 
         self::assertInstanceOf(PrincipalUser::class, $principal);
+        self::assertSame(PrincipalUserType::User, $principal->type);
         self::assertSame(RoleUser::CustomerMain, $principal->role);
         self::assertSame(['156402', '156404'], $principal->shopIds);
     }
@@ -101,6 +105,15 @@ final class ApiKeyServiceTest extends TestCase
     public function testIsValidReturnsFalseForUnauthorizedResponse(): void
     {
         self::assertFalse($this->createService(['message' => 'Unauthorized'], 401)->isValid());
+    }
+
+    /**
+     * The spec gives the `message` of a 401 as the const `Unauthorized`, which Jane reads as an
+     * enum. Another message must not throw.
+     */
+    public function testIsValidReturnsFalseForAnUnauthorizedResponseWithAnotherMessage(): void
+    {
+        self::assertFalse($this->createService(['message' => 'Token expired'], 401)->isValid());
     }
 
     public function testIsValidThrowsForAServerError(): void

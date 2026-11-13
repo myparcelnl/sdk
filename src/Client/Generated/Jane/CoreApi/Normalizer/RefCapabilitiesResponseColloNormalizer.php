@@ -37,9 +37,6 @@ class RefCapabilitiesResponseColloNormalizer implements DenormalizerInterface, N
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesResponseColloConstraint());
-        }
         if (\array_key_exists('max', $data)) {
             $object->max = $data['max'];
         }

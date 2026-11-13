@@ -40,9 +40,6 @@ class LabelWithoutBarcodeNormalizer implements DenormalizerInterface, Normalizer
         if (\array_key_exists('credited', $data) && \is_int($data['credited'])) {
             $data['credited'] = (bool) $data['credited'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\LabelWithoutBarcodeConstraint());
-        }
         if (\array_key_exists('credited', $data)) {
             $object->credited = $data['credited'];
             unset($data['credited']);
@@ -68,7 +65,7 @@ class LabelWithoutBarcodeNormalizer implements DenormalizerInterface, Normalizer
         if (null !== ($data->credited ?? null)) {
             $dataArray['credited'] = $data->credited;
         }
-        if (array_key_exists('createdBy', get_object_vars($data))) {
+        if (array_key_exists('createdBy', get_object_vars($data)) && null !== ($data->createdBy ?? null)) {
             $dataArray['createdBy'] = $data->createdBy;
         }
         if (array_key_exists('paymentStatus', get_object_vars($data))) {

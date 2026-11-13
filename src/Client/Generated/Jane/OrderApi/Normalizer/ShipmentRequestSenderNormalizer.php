@@ -37,9 +37,6 @@ class ShipmentRequestSenderNormalizer implements DenormalizerInterface, Normaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShipmentRequestSenderConstraint());
-        }
         if (\array_key_exists('address', $data)) {
             $object->address = $this->denormalizer->denormalize($data['address'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\Address::class, 'json', $context);
             unset($data['address']);

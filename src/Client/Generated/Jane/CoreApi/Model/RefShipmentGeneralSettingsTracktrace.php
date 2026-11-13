@@ -8,33 +8,33 @@ class RefShipmentGeneralSettingsTracktrace implements AdditionalPropertiesInterf
 {
     use AdditionalAndPatternProperties;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $bcc;
+    public RefTypesIntBoolean|int $bcc;
     /**
      * @var null|string
      */
     public ?string $bccEmail;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $carrierEmailBasicNotification;
+    public RefTypesIntBoolean|int $carrierEmailBasicNotification;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $deliveryNotification;
+    public RefTypesIntBoolean|int $deliveryNotification;
     /**
      * @var list<string>
      */
     public array $deliveryNotificationEmail;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $disableAutoDetectPickup;
+    public RefTypesIntBoolean|int $disableAutoDetectPickup;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $emailOnHandedToCourier;
+    public RefTypesIntBoolean|int $emailOnHandedToCourier;
     /**
      * @var string
      */
@@ -48,13 +48,13 @@ class RefShipmentGeneralSettingsTracktrace implements AdditionalPropertiesInterf
      */
     public string $printerIdentifier;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $saveRecipientAddress;
+    public RefTypesIntBoolean|int $saveRecipientAddress;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $sendTrackTraceEmails;
+    public RefTypesIntBoolean|int $sendTrackTraceEmails;
     public function definedProperties(): array
     {
         return ['bcc' => 'bcc', 'bccEmail' => 'bcc_email', 'carrierEmailBasicNotification' => 'carrier_email_basic_notification', 'deliveryNotification' => 'delivery_notification', 'deliveryNotificationEmail' => 'delivery_notification_email', 'disableAutoDetectPickup' => 'disable_auto_detect_pickup', 'emailOnHandedToCourier' => 'email_on_handed_to_courier', 'fromAddressCompany' => 'from_address_company', 'fromAddressEmail' => 'from_address_email', 'printerIdentifier' => 'printer_identifier', 'saveRecipientAddress' => 'save_recipient_address', 'sendTrackTraceEmails' => 'send_track_trace_emails'];
