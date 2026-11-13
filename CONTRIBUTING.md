@@ -63,6 +63,8 @@ API_KEY=your-acceptance-api-key \
 ./vendor/bin/phpunit --group live
 ```
 
+- This command runs on your machine, not in the `php` container, so it needs a local PHP 8.3 or
+  higher. The `php` service does not pass these variables into the container.
 - `phpunit.xml` leaves the `live` group out of a run without `--group live`.
 - Only `MYPARCEL_LIVE_TESTS=true` or `MYPARCEL_LIVE_TESTS=1` turns the tests on. Without it, or
   with another value such as `false`, the tests are skipped, also when an API key is set.
