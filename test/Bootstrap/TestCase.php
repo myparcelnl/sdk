@@ -189,6 +189,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
         $url = (string) getenv(self::ENV_LIVE_API_HOST);
 
+        // The smoke tests create data in the account of the API key, so they run only on a host
+        // that is known as a test host.
         if (! self::isTestHost($url)) {
             self::markTestSkipped(
                 'Live smoke tests run only on a test host. Set ' . self::ENV_LIVE_API_HOST
@@ -201,8 +203,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * The smoke tests create data in the account of the API key. So they run only on a host that is
-     * known as a test host, and not on every host that is not the production host.
+     * Check that the URL is `https` on a host that ends with one of `LIVE_TEST_HOST_SUFFIXES`.
      */
     private static function isTestHost(string $url): bool
     {
