@@ -4,65 +4,39 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Returns;
 
-use GuzzleHttp\Client as GuzzleClient;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipment;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequest;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestData;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequest;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestData;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType;
-use Psr\Http\Client\ClientInterface as PsrClientInterface;
-use Psr\Http\Message\RequestInterface;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostReturnShipmentsRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostReturnShipmentsRequestData;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostReturnShipmentsRequestDataReturnShipmentsItem;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestData;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItem;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 
 /**
- * Return shipment creation service.
+ * Creates return shipments through the Core API client, for existing shipments or without one.
  *
- * Uses generated request models and response models as source of truth.
- *
- * This service remains hybrid because the generated operation methods do not yet expose
- * the related return variants we need here, such as send_return_mail and unrelated returns.
- * Until those parameters are modeled directly on the generated operation signatures, we build
- * the request with the generated request builder and deserialize the response with the generated
- * response model ourselves.
- *
- * @todo switch to direct generated methods once send_return_mail and unrelated return contracts
- *       are fully represented by the generated operation signatures.
+ * Each return shipment in `$returnShipments` is an array with the API field names, such as `parent`
+ * and `email`. The generated client checks the request before it sends it, and picks the content
+ * type from the request body. Leave a field out instead of setting it to null. A key that the API
+ * does not know goes to the API.
  */
 final class ReturnShipmentService
 {
-    use HasUserAgent;
-    use ResolvesPostShipmentsContentType;
-
-    private ShipmentApi $api;
-
-    private PsrClientInterface $httpClient;
-
-    public function __construct(
-        string $apiKey,
-        ?ShipmentApi $api = null,
-        ?PsrClientInterface $httpClient = null,
-        ?string $host = null
-    ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
-    }
+    use CreatesCoreApiClient;
 
     /**
-     * Create return shipments linked to existing parent shipment ids.
+     * Create return shipments for existing shipments.
      *
-     * Hybrid note: we still use postShipmentsRequest() here so we can append the
-     * send_return_mail query parameter without hardcoding the rest of the request contract.
+     * @param array<int, array<string, mixed>> $returnShipments The rows, with the API field names such as `parent`, `carrier`, `email` and `name`.
+     * @param bool                             $sendMail        Whether the API sends the return email to the consumer.
      *
-     * @param array<int, array<string, mixed>> $returnShipments
-     * @return array<int, string|null>
+     * @return array<int, string|null> The reference identifier of each new shipment, by shipment id.
+     *
+     * @throws InvalidArgumentException For an empty list, or a response without shipments.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a row that does not match the spec. No request goes out.
      */
     public function createRelated(array $returnShipments, bool $sendMail = false): array
     {
@@ -70,39 +44,28 @@ final class ReturnShipmentService
             throw new InvalidArgumentException('At least one related return shipment is required');
         }
 
-        $items = array_map(function (array $row): ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner {
-            return new ShipmentPostReturnShipmentsRequestDataReturnShipmentsInner($row);
-        }, $returnShipments);
+        $data                  = new ShipmentPostReturnShipmentsRequestData();
+        $data->returnShipments = CoreApiModels::toModels($returnShipments, ShipmentPostReturnShipmentsRequestDataReturnShipmentsItem::class);
 
-        $data = new ShipmentPostReturnShipmentsRequestData();
-        $data->setReturnShipments($items);
+        $request       = new ShipmentPostReturnShipmentsRequest();
+        $request->data = $data;
 
-        $requestModel = new ShipmentPostReturnShipmentsRequest();
-        $requestModel->setData($data);
-
-        $request = $this->api->postShipmentsRequest(
-            $requestModel,
-            null,
-            null,
-            null,
-            null,
-            $this->getUserAgentHeader(),
-            $this->resolvePostShipmentsContentType('application/vnd.return_shipment+json')
-        );
-
-        $request = $this->withQueryParameter($request, 'send_return_mail', $sendMail ? '1' : '0');
-
-        return $this->sendAndParseIdsResponse($request);
+        // The spec types `send_return_mail` as an integer, 0 or 1.
+        return $this->mapCreatedShipments($this->api()->postShipments(
+            requestBody: $request,
+            queryParameters: ['send_return_mail' => $sendMail ? 1 : 0]
+        ));
     }
 
     /**
-     * Create unrelated return shipments.
+     * Create return shipments without an existing shipment.
      *
-     * Hybrid note: unrelated returns currently reuse the generated request builder because
-     * this variant is not yet exposed as a dedicated generated operation method.
+     * @param array<int, array<string, mixed>> $returnShipments The rows, with the API field names such as `carrier`, `email` and `name`.
      *
-     * @param array<int, array<string, mixed>> $returnShipments
-     * @return array<int, string|null>
+     * @return array<int, string|null> The reference identifier of each new shipment, by shipment id.
+     *
+     * @throws InvalidArgumentException For an empty list, or a response without shipments.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a row that does not match the spec. No request goes out.
      */
     public function createUnrelated(array $returnShipments): array
     {
@@ -110,85 +73,42 @@ final class ReturnShipmentService
             throw new InvalidArgumentException('At least one unrelated return shipment is required');
         }
 
-        $items = array_map(function (array $row): ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner {
-            return new ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsInner($row);
-        }, $returnShipments);
+        $data                  = new ShipmentPostUnrelatedReturnShipmentsRequestData();
+        $data->returnShipments = CoreApiModels::toModels($returnShipments, ShipmentPostUnrelatedReturnShipmentsRequestDataReturnShipmentsItem::class);
 
-        $data = new ShipmentPostUnrelatedReturnShipmentsRequestData();
-        $data->setReturnShipments($items);
+        $request       = new ShipmentPostUnrelatedReturnShipmentsRequest();
+        $request->data = $data;
 
-        $requestModel = new ShipmentPostUnrelatedReturnShipmentsRequest();
-        $requestModel->setData($data);
-
-        $request = $this->api->postShipmentsRequest(
-            $requestModel,
-            null,
-            null,
-            null,
-            null,
-            $this->getUserAgentHeader(),
-            $this->resolvePostShipmentsContentType('application/vnd.unrelated_return_shipment+json')
-        );
-
-        return $this->sendAndParseIdsResponse($request);
+        return $this->mapCreatedShipments($this->api()->postShipments(requestBody: $request));
     }
 
     /**
-     * Send the prepared hybrid request and deserialize it with the generated success model.
-     *
-     * We intentionally do not swallow parse or contract errors here; hybrid transport should
-     * still fail loudly when the generated client contract no longer matches the live response.
-     *
      * @return array<int, string|null>
      */
-    private function sendAndParseIdsResponse(RequestInterface $request): array
+    private function mapCreatedShipments(mixed $response): array
     {
-        $response = $this->httpClient->sendRequest($request);
-        $decoded = json_decode((string) $response->getBody(), false, 512, JSON_THROW_ON_ERROR);
-
-        $responseModel = ObjectSerializer::deserialize(
-            $decoded,
-            ShipmentResponsesPostShipmentsV12::class,
-            []
-        );
-
-        if (! $responseModel instanceof ShipmentResponsesPostShipmentsV12 || null === $responseModel->getData()) {
+        if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
             throw new InvalidArgumentException('Unexpected response type returned while parsing return shipment response.');
         }
 
-        return $this->mapCreatedShipments($responseModel->getData()->getShipments() ?? []);
-    }
+        // The generated normalizer turns `"data": null` into an empty data model, and the spec
+        // requires `shipments`.
+        if (! isset($response->data->shipments)) {
+            throw new InvalidArgumentException('The return shipment response has no shipments.');
+        }
 
-    /**
-     * @param ShipmentDefsShipment[] $shipments
-     *
-     * @return array<int, string|null>
-     */
-    private function mapCreatedShipments(array $shipments): array
-    {
         $mapping = [];
 
-        foreach ($shipments as $shipment) {
-            $shipmentId = $shipment->getId();
-            if (null === $shipmentId) {
+        foreach ($response->data->shipments as $shipment) {
+            if (! isset($shipment->id)) {
                 continue;
             }
 
-            $mapping[(int) $shipmentId] = $shipment->getReferenceIdentifier();
+            $referenceIdentifier = $shipment->referenceIdentifier ?? null;
+
+            $mapping[$shipment->id] = null === $referenceIdentifier ? null : (string) $referenceIdentifier;
         }
 
         return $mapping;
     }
-
-    private function withQueryParameter(RequestInterface $request, string $key, string $value): RequestInterface
-    {
-        $uri = $request->getUri();
-        $query = [];
-
-        parse_str($uri->getQuery(), $query);
-        $query[$key] = $value;
-
-        return $request->withUri($uri->withQuery(http_build_query($query)));
-    }
-
 }
