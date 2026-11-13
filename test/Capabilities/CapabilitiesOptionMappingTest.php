@@ -62,7 +62,7 @@ class CapabilitiesOptionMappingTest extends TestCase
         foreach ($input as $source => $marker) {
             $target = $this->resolvedTargetProperty($source);
             $this->assertNotNull($target, $source);
-            $getter = CapabilitiesOptionsV2::getters()[$target];
+            $getter = CapabilitiesOptionsV2::getters()[$this->v2Properties()[$target]];
 
             $this->assertSame($marker, $options->{$getter}(), sprintf('%s must map to %s.', $source, $target));
         }
@@ -96,8 +96,8 @@ class CapabilitiesOptionMappingTest extends TestCase
      */
     public function testEveryAliasHasARealSourceAndTargetProperty(): void
     {
-        $sourceKeys    = $this->specOptionKeys();
-        $targetSetters = CapabilitiesOptionsV2::setters();
+        $sourceKeys       = $this->specOptionKeys();
+        $targetProperties = $this->v2Properties();
 
         foreach (ShipmentOptionMapper::aliases() as $source => $target) {
             $this->assertContains(
@@ -107,7 +107,7 @@ class CapabilitiesOptionMappingTest extends TestCase
             );
             $this->assertArrayHasKey(
                 $target,
-                $targetSetters,
+                $targetProperties,
                 sprintf('Alias target %s for %s is not on the concrete v2 capabilities request.', $target, $source)
             );
             $this->assertNotContains(
@@ -169,9 +169,9 @@ class CapabilitiesOptionMappingTest extends TestCase
     public function testPreviouslyDroppedOptionsResolveToTheExpectedTargetProperties(): void
     {
         $expected = [
-            'cash_on_delivery'         => 'requires_cash_on_delivery',
-            'drop_off_at_postal_point' => 'deliver_at_postal_point',
-            'extra_assurance'          => 'additional_insurance',
+            'cash_on_delivery'         => 'requiresCashOnDelivery',
+            'drop_off_at_postal_point' => 'deliverAtPostalPoint',
+            'extra_assurance'          => 'additionalInsurance',
         ];
 
         $this->assertSame($expected, array_intersect_key(ShipmentOptionMapper::aliases(), $expected));
@@ -225,6 +225,17 @@ class CapabilitiesOptionMappingTest extends TestCase
     private function resolvedTargetProperty(string $key): ?string
     {
         return (new ShipmentOptionMapper())->v2PropertyFromName($key);
+    }
+
+    /**
+     * The v2 options that CapabilitiesMapper can set: the JSON name that ShipmentOptionMapper
+     * returns => the generated property.
+     *
+     * @return array<string, string>
+     */
+    private function v2Properties(): array
+    {
+        return array_flip(CapabilitiesOptionsV2::attributeMap());
     }
 
     /**
