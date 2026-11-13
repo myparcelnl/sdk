@@ -14,7 +14,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * Creates shipments and prints their labels on a printer group. It reads a 200 response as
  * `ShipmentResponsesShipmentIds`.
  *
- * @todo CLOUD-2376: remove this class when the spec gives `application/json` as the content type of
+ * @todo SB-3817: remove this class when the spec gives `application/json` as the content type of
  *       the direct print response, and the generated `PostShipments` reads the ids.
  *
  * @internal
