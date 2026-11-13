@@ -92,6 +92,7 @@ final class LiveApiHostTest extends TestCase
 
         return [
             'only a host'                        => [['MYPARCEL_API_BASE_URL' => $acceptance], 'only on request'],
+            'the opt-in with the value false'    => [['MYPARCEL_LIVE_TESTS' => 'false', 'MYPARCEL_API_BASE_URL' => $acceptance], 'only on request'],
             'no host'                            => [['MYPARCEL_LIVE_TESTS' => '1'], 'test host'],
             'the production host'                => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.myparcel.nl'], 'test host'],
             'the production host in upper case'  => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://API.myparcel.nl'], 'test host'],
