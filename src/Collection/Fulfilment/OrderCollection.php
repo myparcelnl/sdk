@@ -144,19 +144,18 @@ class OrderCollection extends Collection
      */
     private function getShipmentOptions(ShipmentOptionsModel $options): array
     {
-        $deliveryDate = $options->deliveryDate ?? null;
+        // The generated normalizer gives the API field names, and the value of an enum case, such
+        // as `1` for `RefTypesIntBoolean::True`.
+        $fields       = CoreApiModels::toArray($options);
+        $deliveryDate = $fields['delivery_date'] ?? null;
 
         if ($deliveryDate) {
             $deliveryDate = (new DateTime($deliveryDate))->format(AbstractOrder::DATE_FORMAT_FULL);
         }
 
-        // The generated normalizer gives the API field names, and the value of an enum case, such
-        // as `1` for `RefTypesIntBoolean::True`.
-        $fields = CoreApiModels::toArray($options);
-
         $result = [
             'package_type'      => $fields['package_type'] ?? null,
-            'delivery_type'     => $options->deliveryType ?? null,
+            'delivery_type'     => $fields['delivery_type'] ?? null,
             'delivery_date'     => $deliveryDate ?: null,
             'signature'         => $fields['signature'] ?? 0,
             'collect'           => $fields['collect'] ?? 0,
@@ -166,7 +165,7 @@ class OrderCollection extends Collection
             'large_format'      => $fields['large_format'] ?? 0,
             'return'            => $fields['return'] ?? 0,
             'priority_delivery' => $fields['priority_delivery'] ?? 0,
-            'label_description' => (string) ($options->labelDescription ?? ''),
+            'label_description' => (string) ($fields['label_description'] ?? ''),
         ];
 
         if (isset($fields['insurance'])) {
