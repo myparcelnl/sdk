@@ -90,7 +90,7 @@ class Order extends AbstractOrder
      * The Order API can send the id, such as `1`, or the v2 name, such as `'PACKAGE'` or `'STANDARD_DELIVERY'`.
      *
      * @param mixed            $value  The value of the order, or null when the order has none.
-     * @param ApiMapperService $mapper The mapper of the domain, such as ApiMapperService::forPackageType().
+     * @param ApiMapperService $mapper The mapper of the domain, such as `ApiMapperService::forPackageType()`.
      *
      * @return int|null Null for a name that the mapper does not know.
      */

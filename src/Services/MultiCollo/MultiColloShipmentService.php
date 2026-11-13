@@ -20,7 +20,7 @@ final class MultiColloShipmentService
      * The method returns a copy of the shipment, so the shipment itself does not change. The copy
      * and its secondary shipments share one reference identifier: the one of the shipment, or a
      * new one that starts with `multi_collo_`. The weight is divided over the main and the
-     * secondary shipments. The copy is ready for ShipmentCreateService::create().
+     * secondary shipments. The copy is ready for `ShipmentCreateService::create()`.
      *
      * @param int $amount The number of colli, including the main shipment.
      */

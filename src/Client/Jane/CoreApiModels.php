@@ -15,15 +15,15 @@ use UnitEnum;
 /**
  * Converts the models of the generated Core API client.
  *
- * A generated model has public properties with camelCase names, such as `postalCode`. toModel()
- * fills a model from an array with the API field names, such as `postal_code`, and toArray()
- * encodes a model as such an array. copy() copies a model with its nested models.
+ * A generated model has public properties with camelCase names, such as `postalCode`. `toModel()`
+ * fills a model from an array with the API field names, such as `postal_code`, and `toArray()`
+ * encodes a model as such an array. `copy()` copies a model with its nested models.
  */
 final class CoreApiModels
 {
     /**
      * The generated normalizer validates a model when it encodes it, as the client does for a request.
-     * This context skips that: toArray() encodes a model that can be incomplete, or that came from
+     * This context skips that: `toArray()` encodes a model that can be incomplete, or that came from
      * the API with a value that the SDK does not know, such as a new enum value.
      */
     private const CONTEXT = ['skip_validation' => true];
@@ -65,7 +65,7 @@ final class CoreApiModels
     }
 
     /**
-     * Fill a list of models, see toModel().
+     * Fill a list of models, see `toModel()`.
      *
      * @template T of object
      *
@@ -138,7 +138,7 @@ final class CoreApiModels
     }
 
     /**
-     * The generated normalizer returns a model as a JsonObject. Convert it and the nested models to
+     * The generated normalizer returns a model as a `JsonObject`. Convert it and the nested models to
      * arrays.
      */
     private static function arrays(mixed $value): mixed

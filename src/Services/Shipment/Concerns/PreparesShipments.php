@@ -11,7 +11,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequ
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 
 /**
- * Builds the request of `POST /shipments` for ShipmentCreateService and ShipmentPrintService.
+ * Builds the request of `POST /shipments` for `ShipmentCreateService` and `ShipmentPrintService`.
  */
 trait PreparesShipments
 {
