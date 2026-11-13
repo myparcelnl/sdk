@@ -315,7 +315,7 @@ class WebhookApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -658,7 +658,7 @@ class WebhookApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json;charset=utf-8;version=1.1', 'application/json;charset=utf-8', 'application/json', ],
+            ['application/json;charset=utf-8;version=1.1', 'application/json;charset=utf-8', 'application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -725,6 +725,7 @@ class WebhookApi
      * Get webhook subscriptions by id.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string|null $hook Filter by webhook event type. (optional)
      * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
@@ -733,9 +734,9 @@ class WebhookApi
      * @throws \JsonException
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
-    public function getWebhookSubscriptionsById($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
+    public function getWebhookSubscriptionsById($ids, $hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
     {
-        list($response) = $this->getWebhookSubscriptionsByIdWithHttpInfo($ids, $user_agent, $contentType);
+        list($response) = $this->getWebhookSubscriptionsByIdWithHttpInfo($ids, $hook, $user_agent, $contentType);
         return $response;
     }
 
@@ -745,6 +746,7 @@ class WebhookApi
      * Get webhook subscriptions by id.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string|null $hook Filter by webhook event type. (optional)
      * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
@@ -753,9 +755,9 @@ class WebhookApi
      * @throws \JsonException
      * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getWebhookSubscriptionsByIdWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
+    public function getWebhookSubscriptionsByIdWithHttpInfo($ids, $hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
     {
-        $request = $this->getWebhookSubscriptionsByIdRequest($ids, $user_agent, $contentType);
+        $request = $this->getWebhookSubscriptionsByIdRequest($ids, $hook, $user_agent, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -876,6 +878,7 @@ class WebhookApi
      * Get webhook subscriptions by id.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string|null $hook Filter by webhook event type. (optional)
      * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
@@ -883,9 +886,9 @@ class WebhookApi
      * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getWebhookSubscriptionsByIdAsync($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
+    public function getWebhookSubscriptionsByIdAsync($ids, $hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
     {
-        return $this->getWebhookSubscriptionsByIdAsyncWithHttpInfo($ids, $user_agent, $contentType)
+        return $this->getWebhookSubscriptionsByIdAsyncWithHttpInfo($ids, $hook, $user_agent, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -899,6 +902,7 @@ class WebhookApi
      * Get webhook subscriptions by id.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string|null $hook Filter by webhook event type. (optional)
      * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
@@ -906,10 +910,10 @@ class WebhookApi
      * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getWebhookSubscriptionsByIdAsyncWithHttpInfo($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
+    public function getWebhookSubscriptionsByIdAsyncWithHttpInfo($ids, $hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
     {
         $returnType = '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookSubscriptionsV11';
-        $request = $this->getWebhookSubscriptionsByIdRequest($ids, $user_agent, $contentType);
+        $request = $this->getWebhookSubscriptionsByIdRequest($ids, $hook, $user_agent, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -963,6 +967,7 @@ class WebhookApi
      * Create request for operation 'getWebhookSubscriptionsById'
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids $ids One or more webhook subscription IDs. Separate multiple IDs using &#x60;;&#x60;. (required)
+     * @param  string|null $hook Filter by webhook event type. (optional)
      * @param  string|null $user_agent To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhookSubscriptionsById'] to see the possible values for this operation
      *
@@ -970,7 +975,7 @@ class WebhookApi
      * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getWebhookSubscriptionsByIdRequest($ids, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
+    public function getWebhookSubscriptionsByIdRequest($ids, $hook = null, $user_agent = null, string $contentType = self::contentTypes['getWebhookSubscriptionsById'][0])
     {
 
         // verify the required parameter 'ids' is set
@@ -982,6 +987,7 @@ class WebhookApi
 
 
 
+
         $resourcePath = '/webhook_subscriptions/{ids}';
         $formParams = [];
         $queryParams = [];
@@ -989,6 +995,15 @@ class WebhookApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hook,
+            'hook', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
         // header params
         if ($user_agent !== null) {
@@ -1006,7 +1021,7 @@ class WebhookApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json;charset=utf-8;version=1.1', 'application/json;charset=utf-8', 'application/json', ],
+            ['application/json;charset=utf-8;version=1.1', 'application/json;charset=utf-8', 'application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -1079,7 +1094,7 @@ class WebhookApi
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError
      */
     public function postWebhookSubscriptions($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
     {
@@ -1099,7 +1114,7 @@ class WebhookApi
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserError|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesSystemError, HTTP status code, HTTP response headers (array of strings)
      */
     public function postWebhookSubscriptionsWithHttpInfo($webhooks_post_webhook_subscriptions_request_v11, $user_agent = null, string $contentType = self::contentTypes['postWebhookSubscriptions'][0])
     {
@@ -1156,6 +1171,33 @@ class WebhookApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 
                 
             }
@@ -1207,6 +1249,14 @@ class WebhookApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesPostWebhookSubscriptions',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesUserErrorInvalidContentType',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1346,7 +1396,7 @@ class WebhookApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/*', 'application/problem+json', ],
             $contentType,
             $multipart
         );

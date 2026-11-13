@@ -62,11 +62,12 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         'country_code_of_origin' => 'string',
         'descriptions' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreateDescriptionsInner[]',
         'ean' => 'string',
+        'external_reference' => 'string',
         'fulfilment' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreateFulfilment',
         'has_unlimited_shelf_life' => 'bool',
         'hs_code' => 'string',
         'name' => 'string',
-        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreatePhysicalProperties',
+        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties',
         'purchase_price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money',
         'sales_price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreateSalesPrice',
         'sku' => 'string'
@@ -85,6 +86,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         'country_code_of_origin' => null,
         'descriptions' => null,
         'ean' => null,
+        'external_reference' => null,
         'fulfilment' => null,
         'has_unlimited_shelf_life' => null,
         'hs_code' => null,
@@ -106,6 +108,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         'country_code_of_origin' => false,
         'descriptions' => false,
         'ean' => false,
+        'external_reference' => false,
         'fulfilment' => false,
         'has_unlimited_shelf_life' => false,
         'hs_code' => false,
@@ -207,6 +210,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         'country_code_of_origin' => 'countryCodeOfOrigin',
         'descriptions' => 'descriptions',
         'ean' => 'ean',
+        'external_reference' => 'externalReference',
         'fulfilment' => 'fulfilment',
         'has_unlimited_shelf_life' => 'hasUnlimitedShelfLife',
         'hs_code' => 'hsCode',
@@ -228,6 +232,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         'country_code_of_origin' => 'setCountryCodeOfOrigin',
         'descriptions' => 'setDescriptions',
         'ean' => 'setEan',
+        'external_reference' => 'setExternalReference',
         'fulfilment' => 'setFulfilment',
         'has_unlimited_shelf_life' => 'setHasUnlimitedShelfLife',
         'hs_code' => 'setHsCode',
@@ -249,6 +254,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         'country_code_of_origin' => 'getCountryCodeOfOrigin',
         'descriptions' => 'getDescriptions',
         'ean' => 'getEan',
+        'external_reference' => 'getExternalReference',
         'fulfilment' => 'getFulfilment',
         'has_unlimited_shelf_life' => 'getHasUnlimitedShelfLife',
         'hs_code' => 'getHsCode',
@@ -321,6 +327,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('country_code_of_origin', $data ?? [], null);
         $this->setIfExists('descriptions', $data ?? [], null);
         $this->setIfExists('ean', $data ?? [], null);
+        $this->setIfExists('external_reference', $data ?? [], null);
         $this->setIfExists('fulfilment', $data ?? [], null);
         $this->setIfExists('has_unlimited_shelf_life', $data ?? [], null);
         $this->setIfExists('hs_code', $data ?? [], null);
@@ -392,6 +399,14 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if (!is_null($this->container['ean']) && (mb_strlen($this->container['ean']) < 1)) {
             $invalidProperties[] = "invalid value for 'ean', the character length must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['external_reference']) && (mb_strlen($this->container['external_reference']) > 64)) {
+            $invalidProperties[] = "invalid value for 'external_reference', the character length must be smaller than or equal to 64.";
+        }
+
+        if (!is_null($this->container['external_reference']) && (mb_strlen($this->container['external_reference']) < 1)) {
+            $invalidProperties[] = "invalid value for 'external_reference', the character length must be bigger than or equal to 1.";
         }
 
         if (!is_null($this->container['hs_code']) && (mb_strlen($this->container['hs_code']) > 10)) {
@@ -587,6 +602,40 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Gets external_reference
+     *
+     * @return string|null
+     */
+    public function getExternalReference()
+    {
+        return $this->container['external_reference'];
+    }
+
+    /**
+     * Sets external_reference
+     *
+     * @param string|null $external_reference Reference to the product in an external product catalog, like the zonos catalog id used for constructing a customs declaration.
+     *
+     * @return self
+     */
+    public function setExternalReference($external_reference)
+    {
+        if (is_null($external_reference)) {
+            throw new \InvalidArgumentException('non-nullable external_reference cannot be null');
+        }
+        if ((mb_strlen($external_reference) > 64)) {
+            throw new \InvalidArgumentException('invalid length for $external_reference when calling ProductToCreate., must be smaller than or equal to 64.');
+        }
+        if ((mb_strlen($external_reference) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $external_reference when calling ProductToCreate., must be bigger than or equal to 1.');
+        }
+
+        $this->container['external_reference'] = $external_reference;
+
+        return $this;
+    }
+
+    /**
      * Gets fulfilment
      *
      * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreateFulfilment|null
@@ -704,7 +753,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets physical_properties
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreatePhysicalProperties|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties|null
      */
     public function getPhysicalProperties()
     {
@@ -714,7 +763,7 @@ class ProductToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets physical_properties
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProductToCreatePhysicalProperties|null $physical_properties physical_properties
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties|null $physical_properties physical_properties
      *
      * @return self
      */

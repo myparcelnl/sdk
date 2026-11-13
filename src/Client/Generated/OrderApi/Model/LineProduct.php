@@ -59,7 +59,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'name' => 'string',
+        'country_code_of_origin' => 'StringMixed',
         'ean' => 'string',
+        'external_reference' => 'string',
+        'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties',
+        'hs_code' => 'string',
         'sku' => 'string',
         'id' => 'string'
     ];
@@ -73,7 +77,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'name' => null,
+        'country_code_of_origin' => null,
         'ean' => null,
+        'external_reference' => null,
+        'physical_properties' => null,
+        'hs_code' => null,
         'sku' => null,
         'id' => 'uuid'
     ];
@@ -85,7 +93,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static array $openAPINullables = [
         'name' => false,
+        'country_code_of_origin' => false,
         'ean' => false,
+        'external_reference' => false,
+        'physical_properties' => false,
+        'hs_code' => false,
         'sku' => false,
         'id' => false
     ];
@@ -177,7 +189,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'name' => 'name',
+        'country_code_of_origin' => 'countryCodeOfOrigin',
         'ean' => 'ean',
+        'external_reference' => 'externalReference',
+        'physical_properties' => 'physicalProperties',
+        'hs_code' => 'hsCode',
         'sku' => 'sku',
         'id' => 'id'
     ];
@@ -189,7 +205,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'name' => 'setName',
+        'country_code_of_origin' => 'setCountryCodeOfOrigin',
         'ean' => 'setEan',
+        'external_reference' => 'setExternalReference',
+        'physical_properties' => 'setPhysicalProperties',
+        'hs_code' => 'setHsCode',
         'sku' => 'setSku',
         'id' => 'setId'
     ];
@@ -201,7 +221,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'name' => 'getName',
+        'country_code_of_origin' => 'getCountryCodeOfOrigin',
         'ean' => 'getEan',
+        'external_reference' => 'getExternalReference',
+        'physical_properties' => 'getPhysicalProperties',
+        'hs_code' => 'getHsCode',
         'sku' => 'getSku',
         'id' => 'getId'
     ];
@@ -264,7 +288,11 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('country_code_of_origin', $data ?? [], null);
         $this->setIfExists('ean', $data ?? [], null);
+        $this->setIfExists('external_reference', $data ?? [], null);
+        $this->setIfExists('physical_properties', $data ?? [], null);
+        $this->setIfExists('hs_code', $data ?? [], null);
         $this->setIfExists('sku', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
     }
@@ -313,6 +341,22 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if (!is_null($this->container['ean']) && (mb_strlen($this->container['ean']) < 1)) {
             $invalidProperties[] = "invalid value for 'ean', the character length must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['external_reference']) && (mb_strlen($this->container['external_reference']) > 64)) {
+            $invalidProperties[] = "invalid value for 'external_reference', the character length must be smaller than or equal to 64.";
+        }
+
+        if (!is_null($this->container['external_reference']) && (mb_strlen($this->container['external_reference']) < 1)) {
+            $invalidProperties[] = "invalid value for 'external_reference', the character length must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['hs_code']) && (mb_strlen($this->container['hs_code']) > 10)) {
+            $invalidProperties[] = "invalid value for 'hs_code', the character length must be smaller than or equal to 10.";
+        }
+
+        if (!is_null($this->container['hs_code']) && (mb_strlen($this->container['hs_code']) < 6)) {
+            $invalidProperties[] = "invalid value for 'hs_code', the character length must be bigger than or equal to 6.";
         }
 
         if (!is_null($this->container['sku']) && (mb_strlen($this->container['sku']) > 200)) {
@@ -373,6 +417,33 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Gets country_code_of_origin
+     *
+     * @return StringMixed|null
+     */
+    public function getCountryCodeOfOrigin()
+    {
+        return $this->container['country_code_of_origin'];
+    }
+
+    /**
+     * Sets country_code_of_origin
+     *
+     * @param StringMixed|null $country_code_of_origin country_code_of_origin
+     *
+     * @return self
+     */
+    public function setCountryCodeOfOrigin($country_code_of_origin)
+    {
+        if (is_null($country_code_of_origin)) {
+            throw new \InvalidArgumentException('non-nullable country_code_of_origin cannot be null');
+        }
+        $this->container['country_code_of_origin'] = $country_code_of_origin;
+
+        return $this;
+    }
+
+    /**
      * Gets ean
      *
      * @return string|null
@@ -402,6 +473,101 @@ class LineProduct implements ModelInterface, ArrayAccess, \JsonSerializable
         }
 
         $this->container['ean'] = $ean;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_reference
+     *
+     * @return string|null
+     */
+    public function getExternalReference()
+    {
+        return $this->container['external_reference'];
+    }
+
+    /**
+     * Sets external_reference
+     *
+     * @param string|null $external_reference Reference to the product in an external product catalog, like the zonos catalog id used for constructing a customs declaration.
+     *
+     * @return self
+     */
+    public function setExternalReference($external_reference)
+    {
+        if (is_null($external_reference)) {
+            throw new \InvalidArgumentException('non-nullable external_reference cannot be null');
+        }
+        if ((mb_strlen($external_reference) > 64)) {
+            throw new \InvalidArgumentException('invalid length for $external_reference when calling LineProduct., must be smaller than or equal to 64.');
+        }
+        if ((mb_strlen($external_reference) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $external_reference when calling LineProduct., must be bigger than or equal to 1.');
+        }
+
+        $this->container['external_reference'] = $external_reference;
+
+        return $this;
+    }
+
+    /**
+     * Gets physical_properties
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties|null
+     */
+    public function getPhysicalProperties()
+    {
+        return $this->container['physical_properties'];
+    }
+
+    /**
+     * Sets physical_properties
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties|null $physical_properties physical_properties
+     *
+     * @return self
+     */
+    public function setPhysicalProperties($physical_properties)
+    {
+        if (is_null($physical_properties)) {
+            throw new \InvalidArgumentException('non-nullable physical_properties cannot be null');
+        }
+        $this->container['physical_properties'] = $physical_properties;
+
+        return $this;
+    }
+
+    /**
+     * Gets hs_code
+     *
+     * @return string|null
+     */
+    public function getHsCode()
+    {
+        return $this->container['hs_code'];
+    }
+
+    /**
+     * Sets hs_code
+     *
+     * @param string|null $hs_code The HS code of the product.
+     *
+     * @return self
+     */
+    public function setHsCode($hs_code)
+    {
+        if (is_null($hs_code)) {
+            throw new \InvalidArgumentException('non-nullable hs_code cannot be null');
+        }
+        if ((mb_strlen($hs_code) > 10)) {
+            throw new \InvalidArgumentException('invalid length for $hs_code when calling LineProduct., must be smaller than or equal to 10.');
+        }
+        if ((mb_strlen($hs_code) < 6)) {
+            throw new \InvalidArgumentException('invalid length for $hs_code when calling LineProduct., must be bigger than or equal to 6.');
+        }
+
+        $this->container['hs_code'] = $hs_code;
 
         return $this;
     }

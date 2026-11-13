@@ -61,7 +61,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
         'additional_context' => 'string',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier',
         'custom_contract_id' => 'string',
-        'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse',
+        'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingCustomsDeclarationResponse',
         'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
         'direction' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection',
         'disable_auto_detect_pickup' => 'bool',
@@ -489,7 +489,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets customs_declaration
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingCustomsDeclarationResponse|null
      */
     public function getCustomsDeclaration()
     {
@@ -499,7 +499,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets customs_declaration
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse|null $customs_declaration customs_declaration
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingCustomsDeclarationResponse|null $customs_declaration customs_declaration
      *
      * @return self
      */

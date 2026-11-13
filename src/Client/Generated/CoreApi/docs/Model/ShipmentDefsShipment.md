@@ -28,6 +28,7 @@ Name | Type | Description | Notes
 **external_provider_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentExternalProviderId**](ShipmentDefsShipmentExternalProviderId.md) |  |
 **payment_status** | [**string**](ShipmentDefsShipmentPaymentStatus.md) |  |
 **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier**](RefTypesCarrier.md) |  |
+**carrier_active** | **bool** | Whether the carrier of the shipment is active for the shop the shipment was created with. Only present in paginated responses, i.e. those of &#x60;GET /shipments&#x60; and &#x60;GET /shipments/{ids}&#x60;. | [optional]
 **platform_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountDefsPlatformId**](AccountDefsPlatformId.md) |  |
 **origin** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOrigin**](ShipmentDefsShipmentOrigin.md) |  |
 **user_agent** | **string** |  |

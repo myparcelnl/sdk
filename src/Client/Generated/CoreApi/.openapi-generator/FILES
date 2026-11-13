@@ -161,12 +161,14 @@ Model/RefShipmentCustomsDeclaration.php
 Model/RefShipmentCustomsDeclarationItem.php
 Model/RefShipmentGeneralSettings.php
 Model/RefShipmentGeneralSettingsTracktrace.php
+Model/RefShipmentIncoterms.php
 Model/RefShipmentLabelPrintingPosition.php
 Model/RefShipmentLocationType.php
 Model/RefShipmentLocationTypeV2.php
 Model/RefShipmentLocationV2.php
 Model/RefShipmentOptionsDeliveryTypeAll.php
 Model/RefShipmentOptionsDeliveryTypeDeliveryDate.php
+Model/RefShipmentOptionsIncoterms.php
 Model/RefShipmentOptionsInsurance.php
 Model/RefShipmentOptionsInsuranceMax.php
 Model/RefShipmentOptionsLabelDescription.php
@@ -227,6 +229,7 @@ Model/ShipmentDefsDeliveryOptionsPickupStartTime.php
 Model/ShipmentDefsDeliveryOptionsPickupTime.php
 Model/ShipmentDefsExternalProviderPropertiesDisplayName.php
 Model/ShipmentDefsExternalTrackTraceLink.php
+Model/ShipmentDefsIncotermsRule.php
 Model/ShipmentDefsMainStatus.php
 Model/ShipmentDefsOccupancy.php
 Model/ShipmentDefsShipment.php
@@ -542,12 +545,14 @@ docs/Model/RefShipmentCustomsDeclaration.md
 docs/Model/RefShipmentCustomsDeclarationItem.md
 docs/Model/RefShipmentGeneralSettings.md
 docs/Model/RefShipmentGeneralSettingsTracktrace.md
+docs/Model/RefShipmentIncoterms.md
 docs/Model/RefShipmentLabelPrintingPosition.md
 docs/Model/RefShipmentLocationType.md
 docs/Model/RefShipmentLocationTypeV2.md
 docs/Model/RefShipmentLocationV2.md
 docs/Model/RefShipmentOptionsDeliveryTypeAll.md
 docs/Model/RefShipmentOptionsDeliveryTypeDeliveryDate.md
+docs/Model/RefShipmentOptionsIncoterms.md
 docs/Model/RefShipmentOptionsInsurance.md
 docs/Model/RefShipmentOptionsInsuranceMax.md
 docs/Model/RefShipmentOptionsLabelDescription.md
@@ -608,6 +613,7 @@ docs/Model/ShipmentDefsDeliveryOptionsPickupStartTime.md
 docs/Model/ShipmentDefsDeliveryOptionsPickupTime.md
 docs/Model/ShipmentDefsExternalProviderPropertiesDisplayName.md
 docs/Model/ShipmentDefsExternalTrackTraceLink.md
+docs/Model/ShipmentDefsIncotermsRule.md
 docs/Model/ShipmentDefsMainStatus.md
 docs/Model/ShipmentDefsOccupancy.md
 docs/Model/ShipmentDefsShipment.md
