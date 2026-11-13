@@ -33,7 +33,6 @@ Connect is the exception, see [MyParcel Connect](#myparcel-connect).
 ```php
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentParametersPaperSize;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as Shipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptions;
@@ -79,7 +78,7 @@ $mapping = $service->create([$shipment]);
 // $mapping = [shipmentId => referenceIdentifier, ...]
 
 // With a label format and another query parameter of `POST /shipments`
-$mapping = $service->create([$shipment], ShipmentParametersPaperSize::A6, null, ['send_return_mail' => RefTypesIntBoolean::True->value]);
+$mapping = $service->create([$shipment], ShipmentParametersPaperSize::A6, null, ['send_return_mail' => 1]);
 ```
 
 ## Services
