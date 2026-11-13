@@ -278,6 +278,50 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
+     * The request sends an option as the generated normalizer gives it, also for an int that no
+     * enum case has. An insurance without a currency gets the currency `EUR`.
+     *
+     * @dataProvider provideOptionsWithoutAnEnumCaseOrACurrency
+     *
+     * @param array<string, mixed> $fields   the options, with the API field names
+     * @param array<string, mixed> $expected the options of the request that must match
+     *
+     * @throws \Exception
+     */
+    public function testSaveSendsAnOptionThatHasNoEnumCaseOrNoCurrency(array $fields, array $expected): void
+    {
+        $shipmentOptions = CoreApiModels::toModel($fields, ShipmentOptionsModel::class);
+
+        $options = $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration(null))['options'];
+
+        foreach ($expected as $name => $value) {
+            self::assertSame($value, $options[$name]);
+        }
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>, array<string, mixed>}>
+     */
+    public static function provideOptionsWithoutAnEnumCaseOrACurrency(): array
+    {
+        return [
+            'an insurance without a currency'             => [['insurance' => ['amount' => 5000]], ['insurance' => ['amount' => 5000, 'currency' => 'EUR']]],
+            'a flag with an int that no case has'         => [['collect' => 2], ['collect' => 2]],
+            'a package type with an int that no case has' => [['package_type' => 99], ['package_type' => 99]],
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLeavesOutTheInsuranceOfOptionsWithoutAnInsurance(): void
+    {
+        $options = $this->saveAndCaptureShipment(new ShipmentOptionsModel(), $this->generateCustomsDeclaration(null))['options'];
+
+        self::assertArrayNotHasKey('insurance', $options);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testToArrayContainsTheCustomsDeclaration(): void
