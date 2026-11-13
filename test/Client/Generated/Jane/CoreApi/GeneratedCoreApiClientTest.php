@@ -19,6 +19,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequ
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\BuildsShipmentsResponse;
 use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionProperty;
@@ -33,6 +34,7 @@ use Symfony\Component\Serializer\Serializer;
  */
 final class GeneratedCoreApiClientTest extends TestCase
 {
+    use BuildsShipmentsResponse;
     use MocksHttpClient;
 
     /**
@@ -277,13 +279,5 @@ final class GeneratedCoreApiClientTest extends TestCase
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(self::shipmentsResponse([$shipment])));
 
         return $client->getShipments()->data->shipments[0];
-    }
-
-    /**
-     * @param array<int, array<string, mixed>> $shipments
-     */
-    private static function shipmentsResponse(array $shipments): string
-    {
-        return json_encode(['data' => ['shipments' => $shipments, 'results' => count($shipments)]], JSON_THROW_ON_ERROR);
     }
 }

@@ -7,6 +7,7 @@ namespace MyParcelNL\Sdk\Test\Client\Jane;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
 use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\BuildsShipmentsResponse;
 use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
@@ -16,6 +17,7 @@ use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 final class JaneClientFactoryTest extends TestCase
 {
+    use BuildsShipmentsResponse;
     use MocksHttpClient;
 
     public function testSendsTheApiKeyTheUserAgentAndTheHeaders(): void
@@ -135,13 +137,5 @@ final class JaneClientFactoryTest extends TestCase
             'Core API' => [CoreApiClient::class, JaneClientFactory::CORE_API_HOST],
             'IAM API'  => [IamApiClient::class, JaneClientFactory::IAM_API_HOST],
         ];
-    }
-
-    /**
-     * @param array<int, array<string, mixed>> $shipments
-     */
-    private static function shipmentsResponse(array $shipments): string
-    {
-        return json_encode(['data' => ['shipments' => $shipments, 'results' => count($shipments)]], JSON_THROW_ON_ERROR);
     }
 }
