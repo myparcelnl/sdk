@@ -25,7 +25,7 @@ final class ShipmentCreateService
      * A shipment without a reference identifier gets one that starts with `sdk_`. The generated
      * client checks the shipments against the spec before it sends them.
      *
-     * @param ShipmentItem[]         $shipments The shipments. CoreApiModels::toModel() fills one from an array.
+     * @param ShipmentItem[]         $shipments The shipments. `CoreApiModels::toModel()` fills one from an array.
      * @param string|BackedEnum|null $format    The label format, such as `A4` or `A6`.
      * @param int|string|null        $positions The label positions on an A4 sheet, such as `1;2;3;4`.
      * @param array<string, mixed>   $queryParameters Other query parameters of `POST /shipments`, such as

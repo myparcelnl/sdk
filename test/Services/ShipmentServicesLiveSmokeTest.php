@@ -400,7 +400,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     }
 
     /**
-     * Verifies that OrderCollection::query() reads the shipment options of each order into the
+     * Verifies that `OrderCollection::query()` reads the shipment options of each order into the
      * generated options model.
      */
     public function testFulfilmentOrderQueryReturnsOrders(): void

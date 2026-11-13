@@ -327,7 +327,7 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  ShipmentOptionsModel $deliveryOptions The generated model. CoreApiModels::toModel() fills one from an array.
+     * @param  ShipmentOptionsModel $deliveryOptions The generated model. `CoreApiModels::toModel()` fills one from an array.
      *
      * @return self
      */

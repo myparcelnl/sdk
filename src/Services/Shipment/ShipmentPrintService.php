@@ -25,7 +25,7 @@ final class ShipmentPrintService
      * A shipment without a reference identifier gets one that starts with `sdk_`. The generated
      * client checks the shipments against the spec before it sends them.
      *
-     * @param ShipmentItem[] $shipments The shipments. CoreApiModels::toModel() fills one from an array.
+     * @param ShipmentItem[] $shipments The shipments. `CoreApiModels::toModel()` fills one from an array.
      *
      * @return array<int, string|null> Shipment id => reference identifier.
      *
