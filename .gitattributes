@@ -15,3 +15,6 @@ phpunit.xml        export-ignore
 pnpm-lock.yaml     export-ignore
 release.config.js  export-ignore
 skills-lock.json   export-ignore
+
+# GitHub collapses these files in a pull request diff, and leaves them out of the language statistics.
+/src/Client/Generated/** linguist-generated=true
