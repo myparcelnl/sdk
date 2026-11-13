@@ -11,17 +11,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Creates shipments and prints their labels on a printer group.
- *
- * The Core API spec documents direct print on POST /shipments, but gives the print media type as the
- * content type of the response. The API answers with `application/json` and the ids of the new
- * shipments. The generated `PostShipments` reads an `application/json` 200 as
- * `ShipmentResponsesPostShipmentsV12`, which reads `data.shipments`. The API sends the ids in
- * `data.ids`, so this endpoint reads a 200 response as `ShipmentResponsesShipmentIds`. The
- * generated `PostShipments` reads every other response, such as an error.
+ * Creates shipments and prints their labels on a printer group. It reads a 200 response as
+ * `ShipmentResponsesShipmentIds`.
  *
  * @todo CLOUD-2376: remove this class when the spec gives `application/json` as the content type of
- *       the direct print response, and the generated PostShipments reads the ids.
+ *       the direct print response, and the generated `PostShipments` reads the ids.
  *
  * @internal
  */
@@ -40,6 +34,11 @@ final class PostShipmentsDirectPrint extends PostShipments
 
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
+        // The spec gives the print media type as the content type of the response, but the API
+        // answers with `application/json` and the ids of the new shipments in `data.ids`. The
+        // generated `PostShipments` reads an `application/json` 200 as
+        // `ShipmentResponsesPostShipmentsV12`, which has `data.shipments` and not `data.ids`.
+        // The generated `PostShipments` reads every other response, such as an error.
         if (200 === $response->getStatusCode()) {
             return $serializer->deserialize($response->getContent(false), ShipmentResponsesShipmentIds::class, 'json');
         }
