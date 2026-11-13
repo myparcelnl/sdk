@@ -55,9 +55,10 @@ final class LiveApiHostTest extends TestCase
     public static function provideTestHosts(): array
     {
         return [
-            'acceptance'                   => ['https://api.acceptance.myparcel.nl'],
-            'testing'                      => ['https://api.testing.myparcel.nl'],
+            'acceptance'                    => ['https://api.acceptance.myparcel.nl'],
+            'testing'                       => ['https://api.testing.myparcel.nl'],
             'upper case and a trailing dot' => ['https://API.Acceptance.MyParcel.nl.'],
+            'a test host with a port'       => ['https://api.acceptance.myparcel.nl:8443'],
         ];
     }
 
@@ -102,6 +103,9 @@ final class LiveApiHostTest extends TestCase
             'a test host without a scheme'       => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'api.acceptance.myparcel.nl'], 'test host'],
             'a test host over plain http'        => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'http://api.acceptance.myparcel.nl'], 'test host'],
             'a host that only contains the name' => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.acceptance.myparcel.nl.example.com'], 'test host'],
+            'a test host as the user of the URL' => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.acceptance.myparcel.nl@api.myparcel.nl'], 'test host'],
+            'the production host with a port'    => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://api.myparcel.nl:443'], 'test host'],
+            'the suffix without a subdomain'     => [['MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => 'https://acceptance.myparcel.nl'], 'test host'],
             'continuous integration'             => [['CI' => 'true', 'MYPARCEL_LIVE_TESTS' => '1', 'MYPARCEL_API_BASE_URL' => $acceptance], 'continuous integration'],
         ];
     }
