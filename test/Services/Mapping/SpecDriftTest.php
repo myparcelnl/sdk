@@ -37,7 +37,7 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * ShipmentOptionMapper reads the shipment option names from this model.
+     * `ShipmentOptionMapper` reads the shipment option names from this model.
      */
     public function testTheOptionModelIsStillGenerated(): void
     {
