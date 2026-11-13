@@ -106,7 +106,7 @@ final class JaneClientFactoryTest extends TestCase
 
     /**
      * The factory gives each client the host of its constant, so the constant must be the server URL
-     * that the spec gives and that the generated Client::create() uses.
+     * that the spec gives and that the generated `Client::create()` uses.
      *
      * @dataProvider provideGeneratedClients
      *

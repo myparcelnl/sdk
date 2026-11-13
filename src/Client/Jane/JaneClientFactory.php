@@ -97,7 +97,7 @@ final class JaneClientFactory
 
     /**
      * Add the timeout, the headers, the host and the authentication to the HTTP client. The client
-     * gets the host here, so Client::create() must not add the host of the spec.
+     * gets the host here, so `Client::create()` must not add the host of the spec.
      *
      * @param array<string, string> $headers
      */
