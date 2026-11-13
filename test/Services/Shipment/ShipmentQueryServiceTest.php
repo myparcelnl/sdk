@@ -12,6 +12,7 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
+use MyParcelNL\Sdk\Test\Bootstrap\BuildsShipmentsResponse;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -20,6 +21,8 @@ use TypeError;
 
 final class ShipmentQueryServiceTest extends TestCase
 {
+    use BuildsShipmentsResponse;
+
     /**
      * @var array<int, array{method: string, url: string, headers: string[]}>
      */
@@ -388,7 +391,7 @@ final class ShipmentQueryServiceTest extends TestCase
      */
     private function createService(array $shipments, ?string $body = null): ShipmentQueryService
     {
-        $body ??= json_encode(['data' => ['shipments' => $shipments, 'results' => count($shipments)]], JSON_THROW_ON_ERROR);
+        $body ??= self::shipmentsResponse($shipments);
 
         $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use ($body): MockResponse {
             $this->requests[] = ['method' => $method, 'url' => $url, 'headers' => $options['headers']];
