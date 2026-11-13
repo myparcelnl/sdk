@@ -264,7 +264,7 @@ class OrderCollectionTest extends TestCase
             'only_recipient' => 0,
             'insurance'      => ['amount' => 5000, 'currency' => 'EUR'],
         ], ShipmentOptionsModel::class);
-        // toModel() turns 1 and 0 into the enum cases. A flag that an integrator sets is a plain int.
+        // `toModel()` turns 1 and 0 into the enum cases. An integrator can also set a plain int, as here.
         $shipmentOptions->collect = 1;
 
         $options = $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration(null))['options'];
