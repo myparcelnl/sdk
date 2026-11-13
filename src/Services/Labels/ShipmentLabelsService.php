@@ -14,8 +14,8 @@ use MyParcelNL\Sdk\Exception\MissingFieldException;
 /**
  * Fetches the labels of shipments as a download link or as a PDF, through the Core API client.
  *
- * An error response throws the generated exceptions, such as GetShipmentsLabelsNotFoundException.
- * A 2xx response without a link or a PDF throws the ApiException of the SDK.
+ * An error response throws the generated exceptions, such as `GetShipmentsLabelsNotFoundException`.
+ * A 2xx response without a link or a PDF throws the `ApiException` of the SDK.
  */
 final class ShipmentLabelsService
 {
