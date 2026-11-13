@@ -56,19 +56,6 @@ final class CoreApiModelsTest extends TestCase
         self::assertNull(CoreApiModels::toArray($shipment)['shipped_items']);
     }
 
-    /**
-     * @param array<string, mixed> $data The shipment as the API sends it.
-     */
-    private function shipment(array $data): ShipmentDefsShipment
-    {
-        return $this->serializer()->denormalize($data, ShipmentDefsShipment::class, 'json', ['skip_validation' => true]);
-    }
-
-    private function serializer(): Serializer
-    {
-        return new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]);
-    }
-
     public function testToModelTurnsAnArrayWithApiNamesIntoTheModel(): void
     {
         $recipient = CoreApiModels::toModel(['cc' => 'NL', 'postal_code' => '2132JE'], ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
@@ -102,5 +89,18 @@ final class CoreApiModelsTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         CoreApiModels::toModel(new RefShipmentCustomsDeclaration(), ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient::class);
+    }
+
+    /**
+     * @param array<string, mixed> $data The shipment as the API sends it.
+     */
+    private function shipment(array $data): ShipmentDefsShipment
+    {
+        return $this->serializer()->denormalize($data, ShipmentDefsShipment::class, 'json', ['skip_validation' => true]);
+    }
+
+    private function serializer(): Serializer
+    {
+        return new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]);
     }
 }
