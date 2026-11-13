@@ -64,7 +64,8 @@ API_KEY=your-acceptance-api-key \
 ```
 
 - `phpunit.xml` leaves the `live` group out of a run without `--group live`.
-- Without `MYPARCEL_LIVE_TESTS`, the tests are skipped, also when an API key is set.
+- Only `MYPARCEL_LIVE_TESTS=true` or `MYPARCEL_LIVE_TESTS=1` turns the tests on. Without it, or
+  with another value such as `false`, the tests are skipped, also when an API key is set.
 - `MYPARCEL_API_BASE_URL` is required. The tests run only for an `https` URL on a host that ends
   with `.acceptance.myparcel.nl` or `.testing.myparcel.nl`. Every other value skips them, such as
   the production host or a host without a scheme.

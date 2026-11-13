@@ -165,7 +165,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected static function skipUnlessEnabled(string $env, string $reason): void
     {
-        if (getenv($env)) {
+        // Only `true` and `1` enable a test, so a value such as `false` does not.
+        if (in_array(getenv($env), ['true', '1'], true)) {
             return;
         }
 
