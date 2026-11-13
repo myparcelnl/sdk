@@ -7,7 +7,8 @@ namespace MyParcelNL\Sdk\Test\Capabilities;
 use Mockery;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
@@ -16,9 +17,10 @@ final class CapabilitiesServiceFromShipmentTest extends TestCase
 {
     public function testServiceCallsClientWithProjectedRequest(): void
     {
-        $shipment = (new Shipment())
-            ->setRecipient(['cc' => 'NL'])
-            ->setPhysicalProperties(['weight' => 500]);
+        $shipment = CoreApiModels::toModel([
+            'recipient'           => ['cc' => 'NL'],
+            'physical_properties' => ['weight' => 500],
+        ], ShipmentItem::class);
 
         $expected = new CapabilitiesResponse(
             ['PACKAGE', 'MAILBOX'],

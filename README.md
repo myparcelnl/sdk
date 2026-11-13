@@ -31,27 +31,54 @@ Most v11 services take an API key in the constructor and wrap the generated API 
 Connect is the exception, see [MyParcel Connect](#myparcel-connect).
 
 ```php
-use MyParcelNL\Sdk\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentParametersPaperSize;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient as Recipient;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
 
-// Build a shipment
-$shipment = (new Shipment())
-    ->setRecipient([
+// Build a shipment with the generated models. PHP checks each type.
+$recipient             = new Recipient();
+$recipient->cc         = 'NL';
+$recipient->street     = 'Antareslaan';
+$recipient->number     = '31';
+$recipient->person     = 'John Doe';
+$recipient->city       = 'Hoofddorp';
+$recipient->postalCode = '2132 JE';
+
+$options              = new ShipmentOptions();
+$options->packageType = RefShipmentPackageType::Package;
+
+$shipment            = new Shipment();
+$shipment->carrier   = RefTypesCarrier::Postnl;
+$shipment->recipient = $recipient;
+$shipment->options   = $options;
+
+// Or fill a model from an array with the API field names. The client checks the values when the
+// request goes out.
+$shipment = CoreApiModels::toModel([
+    'carrier'   => RefTypesCarrier::Postnl->value,
+    'options'   => ['package_type' => RefShipmentPackageType::Package->value],
+    'recipient' => [
         'cc'          => 'NL',
         'street'      => 'Antareslaan',
-        'number'      => 31,
+        'number'      => '31',
         'person'      => 'John Doe',
         'city'        => 'Hoofddorp',
         'postal_code' => '2132 JE',
-    ])
-    ->setCarrier(1)
-    ->withPackageType('PACKAGE');
+    ],
+], Shipment::class);
 
 // Create it
 $service = new ShipmentCreateService('your-api-key');
-$mapping = $service->create((new ShipmentCollection())->push($shipment));
+$mapping = $service->create([$shipment]);
 // $mapping = [shipmentId => referenceIdentifier, ...]
+
+// With a label format and another query parameter of `POST /shipments`
+$mapping = $service->create([$shipment], ShipmentParametersPaperSize::A6, null, ['send_return_mail' => 1]);
 ```
 
 ## Services
