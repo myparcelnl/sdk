@@ -10,9 +10,9 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
-use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentCreateService;
+use MyParcelNL\Sdk\Test\Bootstrap\BuildsShipmentItem;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -20,6 +20,8 @@ use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 
 final class ShipmentCreateServiceTest extends TestCase
 {
+    use BuildsShipmentItem;
+
     /**
      * @var array<int, array{method: string, url: string, headers: array<string, string[]>, body: array<string, mixed>}>
      */
@@ -244,26 +246,6 @@ final class ShipmentCreateServiceTest extends TestCase
         } catch (ValidationException) {
             self::assertSame([], $this->requests);
         }
-    }
-
-    /**
-     * A shipment with the fields that the spec requires.
-     */
-    private static function shipment(?string $referenceIdentifier = null): ShipmentItem
-    {
-        return CoreApiModels::toModel(array_filter([
-            'reference_identifier' => $referenceIdentifier,
-            'carrier'              => 1,
-            'options'              => ['package_type' => 1],
-            'recipient'            => [
-                'cc'          => 'NL',
-                'postal_code' => '2132JE',
-                'city'        => 'Hoofddorp',
-                'street'      => 'Antareslaan',
-                'number'      => '31',
-                'person'      => 'Test Person',
-            ],
-        ], static fn (mixed $value): bool => null !== $value), ShipmentItem::class);
     }
 
     private function createService(string $body, int $status = 200, string $contentType = 'application/json;charset=utf-8;version=1.2'): ShipmentCreateService
