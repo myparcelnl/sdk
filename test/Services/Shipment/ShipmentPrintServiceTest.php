@@ -6,16 +6,17 @@ namespace MyParcelNL\Sdk\Test\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
-use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentPrintService;
+use MyParcelNL\Sdk\Test\Bootstrap\BuildsShipmentItem;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ShipmentPrintServiceTest extends TestCase
 {
+    use BuildsShipmentItem;
+
     /**
      * @var array<int, array{method: string, url: string, accept: string[], body: array<string, mixed>}>
      */
@@ -95,26 +96,6 @@ final class ShipmentPrintServiceTest extends TestCase
         } catch (PostShipmentsClientErrorException $exception) {
             self::assertSame(404, $exception->getResponse()->getStatusCode());
         }
-    }
-
-    /**
-     * A shipment with the fields that the spec requires.
-     */
-    private static function shipment(?string $referenceIdentifier = null): ShipmentItem
-    {
-        return CoreApiModels::toModel(array_filter([
-            'reference_identifier' => $referenceIdentifier,
-            'carrier'              => 1,
-            'options'              => ['package_type' => 1],
-            'recipient'            => [
-                'cc'          => 'NL',
-                'postal_code' => '2132JE',
-                'city'        => 'Hoofddorp',
-                'street'      => 'Antareslaan',
-                'number'      => '31',
-                'person'      => 'Test Person',
-            ],
-        ], static fn (mixed $value): bool => null !== $value), ShipmentItem::class);
     }
 
     private function createService(string $body, int $status = 200, string $contentType = 'application/json'): ShipmentPrintService
