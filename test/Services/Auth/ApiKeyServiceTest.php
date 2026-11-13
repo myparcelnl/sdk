@@ -86,7 +86,7 @@ final class ApiKeyServiceTest extends TestCase
     }
 
     /**
-     * A 200 proves the key. Only getPrincipal() needs a type that the SDK knows.
+     * A 200 proves the key. Only `getPrincipal()` needs a type that the SDK knows.
      */
     public function testIsValidReturnsTrueForAPrincipalTypeThatTheSdkDoesNotKnow(): void
     {
