@@ -16,6 +16,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesLengthV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWidthV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PhysicalPropertiesWeightV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2 as CoreResponseV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ModelInterface;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 
 class CapabilitiesMapper
@@ -125,7 +126,7 @@ class CapabilitiesMapper
 
             $optionKeys = array_values(array_unique(array_merge(
                 $optionKeys,
-                array_keys((array) $res->getOptions())
+                $this->optionNames($res->getOptions())
             )));
 
             if (! $carrierInconsistent) {
@@ -157,6 +158,33 @@ class CapabilitiesMapper
             $transactionTypes,
             $colloMax
         );
+    }
+
+    /**
+     * Return the API names of the options that a result has, such as `requiresSignature`.
+     *
+     * The options of a result are a generated model. A cast of that model to an array gives its
+     * internal property names, so read the options through the getters of the model.
+     *
+     * @param mixed $options The options of a result.
+     *
+     * @return string[]
+     */
+    private function optionNames($options): array
+    {
+        if (! $options instanceof ModelInterface) {
+            return array_keys((array) $options);
+        }
+
+        $names = [];
+
+        foreach ($options::getters() as $property => $getter) {
+            if (null !== $options->{$getter}()) {
+                $names[] = $options::attributeMap()[$property];
+            }
+        }
+
+        return $names;
     }
 
     /**
