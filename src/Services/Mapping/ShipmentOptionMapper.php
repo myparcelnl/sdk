@@ -17,7 +17,7 @@ use ReflectionProperty;
  *     $mapper->v2PropertyFromName('tracked');   // null
  *
  * Options have no numeric IDs. This mapper only covers names accepted by
- * CapabilitiesPostCapabilitiesRequestV2Options: a name without a property, such as `tracked`, gives
+ * `CapabilitiesPostCapabilitiesRequestV2Options`: a name without a property, such as `tracked`, gives
  * null, so a caller can check option names before it fills the options of a capabilities request.
  *
  * @see \MyParcelNL\Sdk\Services\Mapping\ApiMapperService

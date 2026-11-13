@@ -176,7 +176,7 @@ class CapabilitiesOptionMappingTest extends TestCase
     }
 
     /**
-     * The property of the v2 options model that ShipmentOptionMapper gives for a name, or null.
+     * The property of the v2 options model that `ShipmentOptionMapper` gives for a name, or null.
      */
     private function resolvedTargetProperty(string $key): ?string
     {
@@ -198,7 +198,7 @@ class CapabilitiesOptionMappingTest extends TestCase
     }
 
     /**
-     * The v2 options of the capabilities request: the Jane properties, which ShipmentOptionMapper
+     * The v2 options of the capabilities request: the Jane properties, which `ShipmentOptionMapper`
      * returns. The v2 JSON names are camelCase, the same as the properties.
      *
      * @return list<string>

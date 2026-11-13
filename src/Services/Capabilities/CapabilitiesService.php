@@ -22,7 +22,7 @@ use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
  * The response is the generated model: one result per carrier contract in `$response->results`, with
  * its package types, delivery types, options, physical limits and the maximum number of colli.
  *
- * Build the request with the generated models and enums. CoreApiModels::toModel() fills one from
+ * Build the request with the generated models and enums. `CoreApiModels::toModel()` fills one from
  * input that is already an array.
  */
 final class CapabilitiesService implements CapabilitiesServiceInterface
@@ -58,7 +58,7 @@ final class CapabilitiesService implements CapabilitiesServiceInterface
 
     /**
      * Get the capabilities for a shipment, from the country code of its recipient and its physical
-     * properties. To filter on a carrier or a package type, build the request yourself and call get().
+     * properties. To filter on a carrier or a package type, build the request yourself and call `get()`.
      *
      * @throws InvalidArgumentException When the recipient has no country code.
      */
