@@ -134,7 +134,7 @@ final class JaneClientFactoryTest extends TestCase
     public function testAddsNoTimeoutToAnHttpClientThatTheCallerPasses(): void
     {
         $httpClient = new class implements HttpClientInterface {
-            /** @var array<string, mixed>|null The options of the last withOptions() call. */
+            /** @var array<string, mixed>|null The options of the last `withOptions()` call. */
             public ?array $options = null;
 
             public function request(string $method, string $url, array $options = []): ResponseInterface

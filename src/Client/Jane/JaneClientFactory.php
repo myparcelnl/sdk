@@ -90,7 +90,7 @@ final class JaneClientFactory
         $httpClient = ($httpClient ?? HttpClient::create(['timeout' => self::DEFAULT_HTTP_TIMEOUT]))
             ->withOptions(['headers' => $headers]);
 
-        // The same order as the generated Client::create() with the AuthenticationRegistry in
+        // The same order as the generated `Client::create()` with the `AuthenticationRegistry` in
         // `$additionalPlugins`. The registry adds the API key only to operations that the spec secures.
         $httpClient = (new ServerUrlHttpClient($host))($httpClient);
 
