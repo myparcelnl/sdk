@@ -4,7 +4,7 @@
   "repository": "github:myparcelnl/sdk",
   "license": "MIT",
   "devDependencies": {
-    "@myparcel-dev/semantic-release-config": "^7.0.2"
+    "@myparcel-dev/semantic-release-config": "^8.1.0"
   },
   "packageManager": "yarn@4.12.0",
   "volta": {
