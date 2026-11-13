@@ -25,22 +25,20 @@ final class ShipmentQueryService
     private const LIST_PARAMETERS = ['carrier_id', 'package_type', 'shipment_type', 'shop_id', 'status'];
 
     /**
-     * Query shipments by the query parameters of `GET /shipments`.
-     *
-     * A key with a null value, an empty string or an empty list leaves the filter out. An enum case,
-     * such as `RefTypesCarrier::Postnl`, goes as its value. `carrier_id`, `package_type`,
-     * `shipment_type`, `shop_id` and `status` also take a list of integers, such as two statuses,
-     * which goes as a `;`-separated string. Every other value goes as it is: `false` goes as `0`.
-     * For a list of shipment ids, use findMany().
+     * Query shipments by the query parameters of `GET /shipments`. For a list of shipment ids, use
+     * `findMany()`.
      *
      * @param array<string, mixed> $parameters The query parameters, such as `barcode`, `carrier_id`, `created` and `status`.
+     *                                         A null value or an empty string leaves the filter out. A key of
+     *                                         `LIST_PARAMETERS` also takes a list of integers, and an empty list
+     *                                         leaves that filter out.
      *
      * @return ShipmentDefsShipment[]
      *
      * @throws InvalidArgumentException When a key is not a query parameter of `GET /shipments`, a
      *                                  value has a type that the spec does not allow, such as
-     *                                  `'page' => '2'`, or an array is not a list of integers for
-     *                                  a key that takes a list.
+     *                                  `'page' => '2'`, a key that takes one value gets an array, or
+     *                                  a list holds another value than an integer.
      */
     public function query(array $parameters = []): array
     {
@@ -108,7 +106,8 @@ final class ShipmentQueryService
         foreach ($parameters as $name => $value) {
             $value = self::queryValue((string) $name, $value);
 
-            // A null value, an empty string or an empty list means "no filter". Without this check,
+            // A null value or an empty string means "no filter". So does an empty list for a key of
+            // `LIST_PARAMETERS`, which `queryValue()` returns as an empty string. Without this check,
             // the generated client sends an empty value, such as `q=`, for a key that allows null, and
             // throws for the other keys. The spec does not document the page size that the API uses
             // without `size`.

@@ -168,6 +168,7 @@ final class ShipmentQueryServiceTest extends TestCase
         return [
             'a key that takes one string'           => ['barcode', ['3SMYPA1234567', '3SMYPA7654321']],
             'numeric strings for such a key'        => ['barcode', ['123456', '654321']],
+            'an empty list for such a key'          => ['barcode', []],
             'a key without a type'                  => ['order', ['ASC', 'DESC']],
             'integers for a key that takes one id'  => ['id', [1, 2]],
             'an enum case next to a string'         => ['carrier_id', [RefTypesCarrier::Postnl, 'dpd']],
