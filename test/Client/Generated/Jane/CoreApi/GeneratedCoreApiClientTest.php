@@ -211,36 +211,6 @@ final class GeneratedCoreApiClientTest extends TestCase
     }
 
     /**
-     * A shipment request with the fields that the spec requires.
-     */
-    private static function shipmentRequest(string $referenceIdentifier): ShipmentPostShipmentsRequestV11
-    {
-        $recipient             = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
-        $recipient->cc         = 'NL';
-        $recipient->postalCode = '2132JE';
-        $recipient->city       = 'Hoofddorp';
-        $recipient->street     = 'Antareslaan';
-        $recipient->number     = '31';
-        $recipient->person     = 'Test Person';
-
-        $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
-        $options->packageType = 1;
-
-        $shipment                      = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
-        $shipment->referenceIdentifier = $referenceIdentifier;
-        $shipment->carrier             = 1;
-        $shipment->recipient           = $recipient;
-        $shipment->options             = $options;
-
-        $data            = new ShipmentPostShipmentsRequestV11Data();
-        $data->shipments = [$shipment];
-        $request         = new ShipmentPostShipmentsRequestV11();
-        $request->data   = $data;
-
-        return $request;
-    }
-
-    /**
      * A property without a type that nobody set, such as the email of a recipient, stays out of
      * the request (janephp/janephp#1141).
      */
@@ -279,5 +249,35 @@ final class GeneratedCoreApiClientTest extends TestCase
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(self::shipmentsResponse([$shipment])));
 
         return $client->getShipments()->data->shipments[0];
+    }
+
+    /**
+     * A shipment request with the fields that the spec requires.
+     */
+    private static function shipmentRequest(string $referenceIdentifier): ShipmentPostShipmentsRequestV11
+    {
+        $recipient             = new ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient();
+        $recipient->cc         = 'NL';
+        $recipient->postalCode = '2132JE';
+        $recipient->city       = 'Hoofddorp';
+        $recipient->street     = 'Antareslaan';
+        $recipient->number     = '31';
+        $recipient->person     = 'Test Person';
+
+        $options              = new ShipmentPostShipmentsRequestV11DataShipmentsItemOptions();
+        $options->packageType = 1;
+
+        $shipment                      = new ShipmentPostShipmentsRequestV11DataShipmentsItem();
+        $shipment->referenceIdentifier = $referenceIdentifier;
+        $shipment->carrier             = 1;
+        $shipment->recipient           = $recipient;
+        $shipment->options             = $options;
+
+        $data            = new ShipmentPostShipmentsRequestV11Data();
+        $data->shipments = [$shipment];
+        $request         = new ShipmentPostShipmentsRequestV11();
+        $request->data   = $data;
+
+        return $request;
     }
 }
