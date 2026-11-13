@@ -32,7 +32,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * shipments, multi-collo shipments and return shipments, request the labels of concept shipments,
  * subscribe to webhooks and unsubscribe again, and save a fulfilment order.
  *
- * They run only on request, and only on a test host, see TestCase::liveApiHost() and
+ * They run only on request, and only on a test host, see `TestCase::liveApiHost()` and
  * "Live smoke tests" in `CONTRIBUTING.md`.
  */
 final class ShipmentServicesLiveSmokeTest extends TestCase
