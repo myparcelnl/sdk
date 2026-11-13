@@ -253,7 +253,7 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * A client that the caller passes keeps its own User-Agent, also after setUserAgentForProposition().
+     * A client that the caller passes keeps its own User-Agent, also after `setUserAgentForProposition()`.
      */
     public function testKeepsTheUserAgentOfTheClient(): void
     {
@@ -326,7 +326,7 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * The spec does not allow null for these fields. A TypeError is not an Exception.
+     * The spec does not allow null for these fields. A `TypeError` is not an `Exception`.
      *
      * @return array<string, array{array<string, mixed>}>
      */

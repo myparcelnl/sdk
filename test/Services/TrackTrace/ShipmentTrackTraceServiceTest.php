@@ -110,7 +110,7 @@ final class ShipmentTrackTraceServiceTest extends TestCase
     }
 
     /**
-     * The spec does not allow null for `code`. A TypeError is not an Exception.
+     * The spec does not allow null for `code`. A `TypeError` is not an `Exception`.
      */
     public function testANullThatTheSpecDoesNotAllowThrowsATypeError(): void
     {
