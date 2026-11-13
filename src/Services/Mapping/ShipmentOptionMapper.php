@@ -99,7 +99,7 @@ final class ShipmentOptionMapper
     private static function v2Properties(): array
     {
         if (null === self::$v2Properties) {
-            // Jane generates definedProperties() only for a model whose schema allows additional
+            // Jane generates `definedProperties()` only for a model whose schema allows additional
             // properties. This schema does not, so the names come from reflection.
             self::$v2Properties = array_map(
                 static fn (ReflectionProperty $property): string => $property->getName(),

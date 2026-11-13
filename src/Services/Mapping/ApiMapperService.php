@@ -402,7 +402,7 @@ final class ApiMapperService
 
     /**
      * Join the enum cases on their names and apply the exceptions. Start with the IDs, so
-     * v2ToIdMap() keeps the declaration order of the ID enum.
+     * `v2ToIdMap()` keeps the declaration order of the ID enum.
      *
      * @param  array<string, class-string<\BackedEnum>> $profile
      * @param  array<string, mixed>        $overrides

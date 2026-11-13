@@ -61,7 +61,7 @@ class ApiMapperServiceTest extends TestCase
     }
 
     /**
-     * Pickup has no case in ShipmentDefsDeliveryOptionsDeliveryNameV2, so its legacy name
+     * Pickup has no case in `ShipmentDefsDeliveryOptionsDeliveryNameV2`, so its legacy name
      * comes from the override. Its id and v2 name still come from the generated enums.
      */
     public function testPickupGetsItsLegacyNameFromTheOverride(): void
