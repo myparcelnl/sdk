@@ -25,7 +25,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * only that the Core API responds with the expected data structure.
  *
  * It sends two capabilities requests and creates no data. It runs only on request, see
- * TestCase::liveApiHost() and "Live smoke tests" in `CONTRIBUTING.md`.
+ * `TestCase::liveApiHost()` and "Live smoke tests" in `CONTRIBUTING.md`.
  */
 final class CapabilitiesLiveSmokeTest extends TestCase
 {
