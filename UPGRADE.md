@@ -15,7 +15,7 @@ A connection error or a timeout throws a Symfony `TransportExceptionInterface`, 
 
 The generated endpoints of the Jane Core API client send `application/json` and `application/problem+json` in `Accept`. A generated exception holds the model of the content type that the API answers with. For `application/json`, `GetShipmentsClientErrorException::getCommonResponsesProblem()` returns a `Jane\CoreApi\Model\CommonResponsesUserError`, and `GetShipmentsServerErrorException::getCommonResponsesProblem()` returns a `Jane\CoreApi\Model\CommonResponsesSystemError`. Both models have `->message` and `->statusCode`. For `application/problem+json`, both methods return a `Jane\CoreApi\Model\CommonResponsesProblem` with `->detail` and `->status`. The models differ per exception: the PHP return type of the method names them. Check which one you got with `instanceof`. In v11, most requests sent only `application/json`, and an error came as `{"message": …, "request_id": …, "errors": […]}`.
 
-### Found shipments and track & trace results
+### Shipments and track & trace results that a service returns
 
 `ShipmentQueryService` returns the generated `Jane\CoreApi\Model\ShipmentDefsShipment`, and `ShipmentTrackTraceService` returns the generated `Jane\CoreApi\Model\ShipmentDefsTrackTrace`. A Jane model has public properties with camelCase names instead of getters: read `$shipment->barcode` instead of `$shipment->getBarcode()`, and `$shipment->recipient->postalCode` instead of `$shipment->getRecipient()->getPostalCode()`.
 
