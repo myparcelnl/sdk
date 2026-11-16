@@ -431,8 +431,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
         if ($this->container['time'] === null) {
             $invalidProperties[] = "'time' can't be null";
         }
-        if (!is_null($this->container['time']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['time'])) {
-            $invalidProperties[] = "invalid value for 'time', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
+        if (!is_null($this->container['time']) && !preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/", $this->container['time'])) {
+            $invalidProperties[] = "invalid value for 'time', must be conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/.";
         }
 
         if ($this->container['link_consumer_portal'] === null) {
@@ -614,8 +614,8 @@ class ShipmentDefsTrackTrace implements ModelInterface, ArrayAccess, \JsonSerial
             throw new \InvalidArgumentException('non-nullable time cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($time)))) {
-            throw new \InvalidArgumentException("invalid value for \$time when calling ShipmentDefsTrackTrace., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        if ((!preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/", ObjectSerializer::toString($time)))) {
+            throw new \InvalidArgumentException("invalid value for \$time when calling ShipmentDefsTrackTrace., must conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/.");
         }
 
         $this->container['time'] = $time;

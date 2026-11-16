@@ -285,8 +285,8 @@ class ShipmentResponsesDeliveryOptionsDeliveryOptionV1 implements ModelInterface
         if ($this->container['date'] === null) {
             $invalidProperties[] = "'date' can't be null";
         }
-        if (!is_null($this->container['date']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/", $this->container['date'])) {
-            $invalidProperties[] = "invalid value for 'date', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/.";
+        if (!is_null($this->container['date']) && !preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])$/", $this->container['date'])) {
+            $invalidProperties[] = "invalid value for 'date', must be conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])$/.";
         }
 
         if ($this->container['time'] === null) {
@@ -330,8 +330,8 @@ class ShipmentResponsesDeliveryOptionsDeliveryOptionV1 implements ModelInterface
             throw new \InvalidArgumentException('non-nullable date cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/", ObjectSerializer::toString($date)))) {
-            throw new \InvalidArgumentException("invalid value for \$date when calling ShipmentResponsesDeliveryOptionsDeliveryOptionV1., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])/.");
+        if ((!preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])$/", ObjectSerializer::toString($date)))) {
+            throw new \InvalidArgumentException("invalid value for \$date when calling ShipmentResponsesDeliveryOptionsDeliveryOptionV1., must conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1])$/.");
         }
 
         $this->container['date'] = $date;

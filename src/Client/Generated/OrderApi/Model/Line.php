@@ -62,7 +62,7 @@ class Line implements ModelInterface, ArrayAccess, \JsonSerializable
         'product' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LineProduct',
         'quantity' => 'int',
         'external_reference' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LineExternalReference',
-        'price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LinePrice'
+        'price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money'
     ];
 
     /**
@@ -306,12 +306,20 @@ class Line implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
+        if (!is_null($this->container['id']) && !preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", $this->container['id'])) {
+            $invalidProperties[] = "invalid value for 'id', must be conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.";
+        }
+
         if ($this->container['product'] === null) {
             $invalidProperties[] = "'product' can't be null";
         }
         if ($this->container['quantity'] === null) {
             $invalidProperties[] = "'quantity' can't be null";
         }
+        if (!is_null($this->container['quantity']) && ($this->container['quantity'] > 9007199254740991)) {
+            $invalidProperties[] = "invalid value for 'quantity', must be smaller than or equal to 9007199254740991.";
+        }
+
         if (!is_null($this->container['quantity']) && ($this->container['quantity'] < 1)) {
             $invalidProperties[] = "invalid value for 'quantity', must be bigger than or equal to 1.";
         }
@@ -353,6 +361,11 @@ class Line implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
+        if ((!preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", ObjectSerializer::toString($id)))) {
+            throw new \InvalidArgumentException("invalid value for \$id when calling Line., must conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.");
+        }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -408,6 +421,9 @@ class Line implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable quantity cannot be null');
         }
 
+        if (($quantity > 9007199254740991)) {
+            throw new \InvalidArgumentException('invalid value for $quantity when calling Line., must be smaller than or equal to 9007199254740991.');
+        }
         if (($quantity < 1)) {
             throw new \InvalidArgumentException('invalid value for $quantity when calling Line., must be bigger than or equal to 1.');
         }
@@ -447,7 +463,7 @@ class Line implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets price
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LinePrice|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money|null
      */
     public function getPrice()
     {
@@ -457,7 +473,7 @@ class Line implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\LinePrice|null $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money|null $price The price of the product of the order line.
      *
      * @return self
      */

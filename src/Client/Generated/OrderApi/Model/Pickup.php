@@ -35,6 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * Pickup Class Doc Comment
  *
  * @category Class
+ * @description The pickup details.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -351,7 +352,7 @@ class Pickup implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets address
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address address
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address The address of the pickup location.
      *
      * @return self
      */

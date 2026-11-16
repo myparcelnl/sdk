@@ -25,7 +25,7 @@ All URIs are relative to https://order.api.myparcel.nl, except if the operation 
 ## `addNotePost()`
 
 ```php
-addNotePost($add_note_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]
+addNotePost($add_note_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]
 ```
 
 Add a note to an order.
@@ -63,7 +63,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]**](../Model/AddNotePost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]**](../Model/CommandResponseAdditiveCollectionBodyInner.md)
 
 ### Authorization
 
@@ -72,7 +72,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -81,7 +81,7 @@ No authorization required
 ## `addPackagesPost()`
 
 ```php
-addPackagesPost($add_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]
+addPackagesPost($add_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]
 ```
 
 Add packages to orders
@@ -119,7 +119,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]**](../Model/AddNotePost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]**](../Model/CommandResponseAdditiveCollectionBodyInner.md)
 
 ### Authorization
 
@@ -128,7 +128,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -137,7 +137,7 @@ No authorization required
 ## `assignToUserPost()`
 
 ```php
-assignToUserPost($assign_to_user_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+assignToUserPost($assign_to_user_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 
@@ -175,7 +175,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -184,7 +184,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -193,7 +193,7 @@ No authorization required
 ## `cancelPost()`
 
 ```php
-cancelPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+cancelPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Cancel orders.
@@ -231,7 +231,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -240,7 +240,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -249,7 +249,7 @@ No authorization required
 ## `createFromShippablePackagesPost()`
 
 ```php
-createFromShippablePackagesPost($create_order_from_shippable_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]
+createFromShippablePackagesPost($create_order_from_shippable_packages): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]
 ```
 
 Create an order from shippable packages.
@@ -287,7 +287,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]**](../Model/CreatePost202ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]**](../Model/CommandResponseCreationalBodyInner.md)
 
 ### Authorization
 
@@ -296,7 +296,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -305,7 +305,7 @@ No authorization required
 ## `createPost()`
 
 ```php
-createPost($order_to_create): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]
+createPost($order_to_create): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response
 ```
 
 Create orders.
@@ -343,7 +343,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]**](../Model/CreatePost202ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response**](../Model/CreatePost202Response.md)
 
 ### Authorization
 
@@ -352,7 +352,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -361,7 +361,7 @@ No authorization required
 ## `editNotePost()`
 
 ```php
-editNotePost($edit_note_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+editNotePost($edit_note_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Edit a note of an order.
@@ -399,7 +399,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -408,7 +408,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -417,7 +417,7 @@ No authorization required
 ## `evaluateRulesPost()`
 
 ```php
-evaluateRulesPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+evaluateRulesPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Evaluate order rules.
@@ -455,7 +455,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -464,7 +464,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -473,7 +473,7 @@ No authorization required
 ## `importPost()`
 
 ```php
-importPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+importPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Import an order after it is discovered from a sales channel.
@@ -511,7 +511,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -520,7 +520,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -550,11 +550,11 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
     new GuzzleHttp\Client()
 );
 $aggregations = array(new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus()); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[] | The statuses to retrieve counts for.
-$filter = ["filter[assignedUserId]=me","filter[carrier]=POST_NL","filter[countryCode]=NL","filter[hasAssignedUser]=true","filter[hasNotes]=true","filter[orderId]=123e4567-e89b-12d3-a456-426614174000","filter[orderedAt]=gte 2024-02-04T00:00:00Z","filter[price]=lte 10","filter[salesChannelId]=123e4567-e89b-12d3-a456-426614174000","filter[shopId]=555","filter[status]=OPEN","filter[status]=OPEN&filter[status]=CANCELED","filter[countryCode]=NL&filter[status]=OPEN"]; // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter
+$filter = new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter(); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter | Filters on the orders. Examples: - `filter[assignedUserId]=me` - `filter[carrier]=POST_NL` - `filter[hasAssignedUser]=true` - `filter[hasNotes]=true` - `filter[orderedAt]=gte 2024-02-04T00:00:00Z` - `filter[price]=lte 10` - `filter[shopId]=555` - `filter[status]=OPEN&filter[status]=CANCELED`
 $limit = 50; // int | The maximum number of orders to retrieve.
 $page_token = 'page_token_example'; // string | The page token to retrieve the next page of orders.
-$query = 'query_example'; // string | The following operators are supported: '+ signifies AND operation' '| signifies OR operation' '- negates a single token' '\" wraps a number of tokens to signify a phrase for searching' '* at the end of a term signifies a prefix query' '( and ) signify precedence' '~N after a word signifies edit distance (fuzziness)' '~N after a phrase signifies slop amount' To use one of these characters literally, escape it with a preceding backslash (\\).
-$sort = ["sort[customerReference]=DESC","sort[orderedAt]=ASC","sort[price]=ASC","sort[sourceId]=DESC","sort[customerReference]=ASC&sort[orderedAt]=DESC&sort[price]=ASC&sort[status]=ASC&sort[sourceId]=DESC"]; // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter | When no `query` is provided the default sort is by `orderedAt` descending. When a `query` is provided the default sort is by relevance.
+$query = 'query_example'; // string | The following operators are supported: '+ signifies AND operation' '| signifies OR operation' '- negates a single token' '\" wraps a number of tokens to signify a phrase for searching' '* at the end of a term signifies a prefix query' '( and ) signify precedence' '~N after a word signifies edit distance (fuzziness)' '~N after a phrase signifies slop amount' To use one of these characters literally, escape it with a preceding backslash (\\\\).
+$sort = new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter(); // \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter | When no `query` is provided the default sort is by `orderedAt` descending. When a `query` is provided the default sort is by relevance. Examples: - `sort[orderedAt]=ASC` - `sort[customerReference]=ASC&sort[orderedAt]=DESC&sort[price]=ASC&sort[sourceId]=DESC`
 
 try {
     $result = $apiInstance->ordersGet($aggregations, $filter, $limit, $page_token, $query, $sort);
@@ -569,11 +569,11 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **aggregations** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]**](../Model/\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus.md)| The statuses to retrieve counts for. | [optional] |
-| **filter** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter**](../Model/.md)|  | [optional] |
+| **filter** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter**](../Model/.md)| Filters on the orders. Examples: - &#x60;filter[assignedUserId]&#x3D;me&#x60; - &#x60;filter[carrier]&#x3D;POST_NL&#x60; - &#x60;filter[hasAssignedUser]&#x3D;true&#x60; - &#x60;filter[hasNotes]&#x3D;true&#x60; - &#x60;filter[orderedAt]&#x3D;gte 2024-02-04T00:00:00Z&#x60; - &#x60;filter[price]&#x3D;lte 10&#x60; - &#x60;filter[shopId]&#x3D;555&#x60; - &#x60;filter[status]&#x3D;OPEN&amp;filter[status]&#x3D;CANCELED&#x60; | [optional] |
 | **limit** | **int**| The maximum number of orders to retrieve. | [optional] [default to 50] |
 | **page_token** | **string**| The page token to retrieve the next page of orders. | [optional] |
-| **query** | **string**| The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\). | [optional] |
-| **sort** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter**](../Model/.md)| When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. | [optional] |
+| **query** | **string**| The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\\\). | [optional] |
+| **sort** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter**](../Model/.md)| When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. Examples: - &#x60;sort[orderedAt]&#x3D;ASC&#x60; - &#x60;sort[customerReference]&#x3D;ASC&amp;sort[orderedAt]&#x3D;DESC&amp;sort[price]&#x3D;ASC&amp;sort[sourceId]&#x3D;DESC&#x60; | [optional] |
 
 ### Return type
 
@@ -586,7 +586,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -595,7 +595,7 @@ No authorization required
 ## `packingSlipsGet()`
 
 ```php
-packingSlipsGet($order_id, $accept, $shipment_labels_layout, $package_id): \SplFileObject
+packingSlipsGet($order_id, $shipment_labels_layout, $package_id, $accept): \SplFileObject
 ```
 
 Generate packing slips for 1 or more orders.
@@ -616,12 +616,12 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
     new GuzzleHttp\Client()
 );
 $order_id = array('order_id_example'); // string[] | The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed.
-$accept = 'accept_example'; // string | Use `application/pdf` to download the packing slip. Use `application/pdf+print; printer-group-id=<uuid>` to send the packing slip directly to a printer group.
 $shipment_labels_layout = 'shipment_labels_layout_example'; // string | How shipment labels are included alongside the packing slips in the resulting PDF. `INTERLEAVED` outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered.
 $package_id = array('package_id_example'); // string[] | The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included.
+$accept = 'accept_example'; // string | Use `application/pdf` to download the packing slip. Use `application/pdf+print; printer-group-id=<uuid>` to send the packing slip directly to a printer group. Without this header the packing slip is downloaded.
 
 try {
-    $result = $apiInstance->packingSlipsGet($order_id, $accept, $shipment_labels_layout, $package_id);
+    $result = $apiInstance->packingSlipsGet($order_id, $shipment_labels_layout, $package_id, $accept);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->packingSlipsGet: ', $e->getMessage(), PHP_EOL;
@@ -633,9 +633,9 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **order_id** | [**string[]**](../Model/string.md)| The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. | |
-| **accept** | **string**| Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. | |
 | **shipment_labels_layout** | **string**| How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. | [optional] |
 | **package_id** | [**string[]**](../Model/string.md)| The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. | [optional] |
+| **accept** | **string**| Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. Without this header the packing slip is downloaded. | [optional] |
 
 ### Return type
 
@@ -648,7 +648,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/pdf`, `application/json`
+- **Accept**: `application/pdf`, `application/problem+json`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -678,7 +678,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\OrderApi\Api\DefaultApi(
     new GuzzleHttp\Client()
 );
 $order_id = array('order_id_example'); // string[] | The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request.
-$accept = 'accept_example'; // string | Use `application/pdf` to download the picklist. Use `application/pdf+print; printer-group-id=<uuid>` to send the picklist directly to a printer group.
+$accept = 'accept_example'; // string | Use `application/pdf` to download the picklist. Use `application/pdf+print; printer-group-id=<uuid>` to send the picklist directly to a printer group. Without this header the picklist is downloaded.
 
 try {
     $result = $apiInstance->picklistGet($order_id, $accept);
@@ -693,7 +693,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **order_id** | [**string[]**](../Model/string.md)| The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. | |
-| **accept** | **string**| Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. | |
+| **accept** | **string**| Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. Without this header the picklist is downloaded. | [optional] |
 
 ### Return type
 
@@ -706,7 +706,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/pdf`, `application/json`
+- **Accept**: `application/pdf`, `application/problem+json`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -715,7 +715,7 @@ No authorization required
 ## `preparePackagesForShipmentPost()`
 
 ```php
-preparePackagesForShipmentPost($prepare_packages_for_shipment): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+preparePackagesForShipmentPost($prepare_packages_for_shipment): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Prepares packages for shipment
@@ -753,7 +753,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -762,7 +762,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -771,7 +771,7 @@ No authorization required
 ## `removeNotesPost()`
 
 ```php
-removeNotesPost($remove_notes_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+removeNotesPost($remove_notes_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Remove notes from an order.
@@ -809,7 +809,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -818,7 +818,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -827,7 +827,7 @@ No authorization required
 ## `unassignFromUserPost()`
 
 ```php
-unassignFromUserPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+unassignFromUserPost($cancel_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 
@@ -865,7 +865,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -874,7 +874,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -883,7 +883,7 @@ No authorization required
 ## `unpreparePackagesForShipmentPost()`
 
 ```php
-unpreparePackagesForShipmentPost($unprepare_packages_for_shipment_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]
+unpreparePackagesForShipmentPost($unprepare_packages_for_shipment_post_request_inner): \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]
 ```
 
 Unprepares packages for shipment
@@ -921,7 +921,7 @@ try {
 
 ### Return type
 
-[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]**](../Model/AssignToUserPost200ResponseInner.md)
+[**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]**](../Model/CommandResponseMutatingBodyInner.md)
 
 ### Authorization
 
@@ -930,7 +930,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

@@ -705,15 +705,15 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['created'] === null) {
             $invalidProperties[] = "'created' can't be null";
         }
-        if (!is_null($this->container['created']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['created'])) {
-            $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
+        if (!is_null($this->container['created']) && !preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/", $this->container['created'])) {
+            $invalidProperties[] = "invalid value for 'created', must be conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/.";
         }
 
         if ($this->container['modified'] === null) {
             $invalidProperties[] = "'modified' can't be null";
         }
-        if (!is_null($this->container['modified']) && !preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", $this->container['modified'])) {
-            $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.";
+        if (!is_null($this->container['modified']) && !preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/", $this->container['modified'])) {
+            $invalidProperties[] = "invalid value for 'modified', must be conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/.";
         }
 
         if ($this->container['created_by'] === null) {
@@ -1994,8 +1994,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable created cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($created)))) {
-            throw new \InvalidArgumentException("invalid value for \$created when calling SecondaryShipmentResource., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        if ((!preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/", ObjectSerializer::toString($created)))) {
+            throw new \InvalidArgumentException("invalid value for \$created when calling SecondaryShipmentResource., must conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/.");
         }
 
         $this->container['created'] = $created;
@@ -2026,8 +2026,8 @@ class SecondaryShipmentResource implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable modified cannot be null');
         }
 
-        if ((!preg_match("/\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/", ObjectSerializer::toString($modified)))) {
-            throw new \InvalidArgumentException("invalid value for \$modified when calling SecondaryShipmentResource., must conform to the pattern /\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(.\\d+)?)?/.");
+        if ((!preg_match("/^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/", ObjectSerializer::toString($modified)))) {
+            throw new \InvalidArgumentException("invalid value for \$modified when calling SecondaryShipmentResource., must conform to the pattern /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\\d|3[0-1]) ([0-1]\\d|2[0-4]):[0-5]\\d(:([0-5]\\d|60)(\\.\\d+)?)?$/.");
         }
 
         $this->container['modified'] = $modified;

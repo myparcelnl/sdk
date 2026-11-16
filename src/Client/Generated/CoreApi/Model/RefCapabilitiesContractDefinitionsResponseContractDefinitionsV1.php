@@ -60,6 +60,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
       */
     protected static $openAPITypes = [
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier',
+        'contract' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV1',
         'package_types' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType[]',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV1',
         'delivery_types' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType[]',
@@ -76,6 +77,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
       */
     protected static $openAPIFormats = [
         'carrier_id' => null,
+        'contract' => null,
         'package_types' => null,
         'options' => null,
         'delivery_types' => null,
@@ -90,6 +92,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
       */
     protected static array $openAPINullables = [
         'carrier_id' => false,
+        'contract' => false,
         'package_types' => false,
         'options' => false,
         'delivery_types' => false,
@@ -184,6 +187,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
      */
     protected static $attributeMap = [
         'carrier_id' => 'carrier_id',
+        'contract' => 'contract',
         'package_types' => 'package_types',
         'options' => 'options',
         'delivery_types' => 'delivery_types',
@@ -198,6 +202,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
      */
     protected static $setters = [
         'carrier_id' => 'setCarrierId',
+        'contract' => 'setContract',
         'package_types' => 'setPackageTypes',
         'options' => 'setOptions',
         'delivery_types' => 'setDeliveryTypes',
@@ -212,6 +217,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
      */
     protected static $getters = [
         'carrier_id' => 'getCarrierId',
+        'contract' => 'getContract',
         'package_types' => 'getPackageTypes',
         'options' => 'getOptions',
         'delivery_types' => 'getDeliveryTypes',
@@ -277,6 +283,7 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
     public function __construct(?array $data = null)
     {
         $this->setIfExists('carrier_id', $data ?? [], null);
+        $this->setIfExists('contract', $data ?? [], null);
         $this->setIfExists('package_types', $data ?? [], null);
         $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('delivery_types', $data ?? [], null);
@@ -367,6 +374,33 @@ class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV1 implements
             throw new \InvalidArgumentException('non-nullable carrier_id cannot be null');
         }
         $this->container['carrier_id'] = $carrier_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets contract
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV1|null
+     */
+    public function getContract()
+    {
+        return $this->container['contract'];
+    }
+
+    /**
+     * Sets contract
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedContractV1|null $contract contract
+     *
+     * @return self
+     */
+    public function setContract($contract)
+    {
+        if (is_null($contract)) {
+            throw new \InvalidArgumentException('non-nullable contract cannot be null');
+        }
+        $this->container['contract'] = $contract;
 
         return $this;
     }

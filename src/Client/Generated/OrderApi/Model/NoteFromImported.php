@@ -59,12 +59,12 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'type' => 'string',
         'id' => 'string',
-        'noted_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedNotedAt',
+        'noted_at' => '\DateTime',
         'origin' => 'string',
         'text' => 'string',
         'author' => 'string',
         'locale' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedLocale',
-        'updated_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedUpdatedAt'
+        'updated_at' => '\DateTime'
     ];
 
     /**
@@ -77,12 +77,12 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'type' => null,
         'id' => 'uuid',
-        'noted_at' => null,
+        'noted_at' => 'date-time',
         'origin' => null,
         'text' => null,
         'author' => null,
         'locale' => null,
-        'updated_at' => null
+        'updated_at' => 'date-time'
     ];
 
     /**
@@ -366,9 +366,17 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
+        if (!is_null($this->container['id']) && !preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", $this->container['id'])) {
+            $invalidProperties[] = "invalid value for 'id', must be conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.";
+        }
+
         if ($this->container['noted_at'] === null) {
             $invalidProperties[] = "'noted_at' can't be null";
         }
+        if (!is_null($this->container['noted_at']) && !preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", $this->container['noted_at'])) {
+            $invalidProperties[] = "invalid value for 'noted_at', must be conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.";
+        }
+
         if ($this->container['origin'] === null) {
             $invalidProperties[] = "'origin' can't be null";
         }
@@ -400,6 +408,10 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if (!is_null($this->container['author']) && (mb_strlen($this->container['author']) < 1)) {
             $invalidProperties[] = "invalid value for 'author', the character length must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['updated_at']) && !preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", $this->container['updated_at'])) {
+            $invalidProperties[] = "invalid value for 'updated_at', must be conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.";
         }
 
         return $invalidProperties;
@@ -466,6 +478,11 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
+        if ((!preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", ObjectSerializer::toString($id)))) {
+            throw new \InvalidArgumentException("invalid value for \$id when calling NoteFromImported., must conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.");
+        }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -474,7 +491,7 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets noted_at
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedNotedAt
+     * @return \DateTime
      */
     public function getNotedAt()
     {
@@ -484,7 +501,7 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets noted_at
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedNotedAt $noted_at noted_at
+     * @param \DateTime $noted_at The date and time the note was created.
      *
      * @return self
      */
@@ -493,6 +510,11 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($noted_at)) {
             throw new \InvalidArgumentException('non-nullable noted_at cannot be null');
         }
+
+        if ((!preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", ObjectSerializer::toString($noted_at)))) {
+            throw new \InvalidArgumentException("invalid value for \$noted_at when calling NoteFromImported., must conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.");
+        }
+
         $this->container['noted_at'] = $noted_at;
 
         return $this;
@@ -623,7 +645,7 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets updated_at
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedUpdatedAt|null
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
@@ -633,7 +655,7 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets updated_at
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\NoteFromImportedUpdatedAt|null $updated_at updated_at
+     * @param \DateTime|null $updated_at The date and time the note was last updated.
      *
      * @return self
      */
@@ -642,6 +664,11 @@ class NoteFromImported implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($updated_at)) {
             throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
         }
+
+        if ((!preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", ObjectSerializer::toString($updated_at)))) {
+            throw new \InvalidArgumentException("invalid value for \$updated_at when calling NoteFromImported., must conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.");
+        }
+
         $this->container['updated_at'] = $updated_at;
 
         return $this;

@@ -65,6 +65,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2',
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2Options',
         'delivery_type' => 'string',
@@ -87,6 +88,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         'pickup' => null,
         'carrier' => null,
         'package_type' => null,
+        'incoterms' => null,
         'physical_properties' => null,
         'options' => null,
         'delivery_type' => null,
@@ -107,6 +109,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         'pickup' => false,
         'carrier' => false,
         'package_type' => false,
+        'incoterms' => false,
         'physical_properties' => false,
         'options' => false,
         'delivery_type' => false,
@@ -207,6 +210,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         'pickup' => 'pickup',
         'carrier' => 'carrier',
         'package_type' => 'packageType',
+        'incoterms' => 'incoterms',
         'physical_properties' => 'physicalProperties',
         'options' => 'options',
         'delivery_type' => 'deliveryType',
@@ -227,6 +231,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         'pickup' => 'setPickup',
         'carrier' => 'setCarrier',
         'package_type' => 'setPackageType',
+        'incoterms' => 'setIncoterms',
         'physical_properties' => 'setPhysicalProperties',
         'options' => 'setOptions',
         'delivery_type' => 'setDeliveryType',
@@ -247,6 +252,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         'pickup' => 'getPickup',
         'carrier' => 'getCarrier',
         'package_type' => 'getPackageType',
+        'incoterms' => 'getIncoterms',
         'physical_properties' => 'getPhysicalProperties',
         'options' => 'getOptions',
         'delivery_type' => 'getDeliveryType',
@@ -358,6 +364,7 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
         $this->setIfExists('pickup', $data ?? [], null);
         $this->setIfExists('carrier', $data ?? [], null);
         $this->setIfExists('package_type', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
         $this->setIfExists('physical_properties', $data ?? [], null);
         $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('delivery_type', $data ?? [], null);
@@ -627,6 +634,33 @@ class RatesPostRatesRequestV2 implements ModelInterface, ArrayAccess, \JsonSeria
             throw new \InvalidArgumentException('non-nullable package_type cannot be null');
         }
         $this->container['package_type'] = $package_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
 
         return $this;
     }

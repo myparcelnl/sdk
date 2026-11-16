@@ -305,6 +305,10 @@ class PackageResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
+        if (!is_null($this->container['id']) && !preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", $this->container['id'])) {
+            $invalidProperties[] = "invalid value for 'id', must be conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.";
+        }
+
         if ($this->container['status'] === null) {
             $invalidProperties[] = "'status' can't be null";
         }
@@ -353,6 +357,11 @@ class PackageResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
+        if ((!preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", ObjectSerializer::toString($id)))) {
+            throw new \InvalidArgumentException("invalid value for \$id when calling PackageResponse., must conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.");
+        }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -371,7 +380,7 @@ class PackageResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageStatus $status status
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageStatus $status The status of the package.
      *
      * @return self
      */
@@ -398,7 +407,7 @@ class PackageResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets physical_properties
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties|null $physical_properties physical_properties
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties|null $physical_properties The dimensions of the package.
      *
      * @return self
      */
