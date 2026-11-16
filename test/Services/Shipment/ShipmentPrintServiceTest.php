@@ -32,9 +32,9 @@ final class ShipmentPrintServiceTest extends TestCase
         $service->print([], 'printer-group-1');
     }
 
-    public function testPrintSendsTheDirectPrintAcceptHeaderAndReadsTheIds(): void
+    public function testPrintAsksForVersion12AndReadsTheCreatedShipments(): void
     {
-        $result = $this->createService('{"data":{"ids":[{"id":5001,"reference_identifier":"order-1"}]}}')
+        $result = $this->createService('{"data":{"shipments":[{"id":5001,"reference_identifier":"order-1"}]}}')
             ->print([self::shipment('order-1')], 'printer-group-1');
 
         self::assertSame([5001 => 'order-1'], $result);
@@ -42,7 +42,7 @@ final class ShipmentPrintServiceTest extends TestCase
         self::assertSame('https://api.myparcel.nl/shipments', $this->requests[0]['url']);
         self::assertSame(
             [
-                'application/vnd.shipment_label+json+print;printer-group-id=printer-group-1',
+                'application/vnd.shipment_label+json+print;printer-group-id=printer-group-1;version=1.2',
                 'application/problem+json',
             ],
             $this->requests[0]['accept']
@@ -54,15 +54,29 @@ final class ShipmentPrintServiceTest extends TestCase
     {
         $shipment = self::shipment();
 
-        $this->createService('{"data":{"ids":[{"id":5002}]}}')->print([$shipment], 'printer-group-1');
+        $this->createService('{"data":{"shipments":[{"id":5002}]}}')->print([$shipment], 'printer-group-1');
 
         self::assertStringStartsWith('sdk_', (string) $shipment->referenceIdentifier);
         self::assertSame($shipment->referenceIdentifier, $this->requests[0]['body']['data']['shipments'][0]['reference_identifier']);
     }
 
-    public function testPrintThrowsOnUnexpectedResponse(): void
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function provideResponsesWithoutShipments(): array
     {
-        $service = $this->createService('{}');
+        return [
+            'an empty body'                         => ['{}'],
+            'the ids of a response without version' => ['{"data":{"ids":[{"id":5001,"reference_identifier":"order-1"}]}}'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideResponsesWithoutShipments
+     */
+    public function testPrintThrowsForAResponseWithoutShipments(string $body): void
+    {
+        $service = $this->createService($body);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unexpected response type returned while parsing direct print response.');
