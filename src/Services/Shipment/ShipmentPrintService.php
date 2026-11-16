@@ -6,8 +6,7 @@ namespace MyParcelNL\Sdk\Services\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
-use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentIds;
-use MyParcelNL\Sdk\Client\Jane\PostShipmentsDirectPrint;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
 use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
@@ -18,6 +17,11 @@ final class ShipmentPrintService
 {
     use CreatesCoreApiClient;
     use PreparesShipments;
+
+    // With `version=1.2`, the API answers a direct print with the created shipments in
+    // `data.shipments`, which the generated client reads. Without a version it answers with
+    // `data.ids`, which the generated client does not read.
+    private const ACCEPT = 'application/vnd.shipment_label+json+print;printer-group-id=%s;version=1.2';
 
     /**
      * Create shipments and send their labels to the printer group.
@@ -36,12 +40,18 @@ final class ShipmentPrintService
     {
         $request = $this->createRequest($shipments, 'print');
 
-        $response = $this->api()->executeEndpoint(new PostShipmentsDirectPrint($request, $printerGroupId));
+        // The second Accept value is one of the generated endpoint, so an error can come as
+        // `application/problem+json`.
+        $response = $this->api()->postShipments(
+            requestBody: $request,
+            accept: ['Accept' => [sprintf(self::ACCEPT, $printerGroupId), 'application/problem+json']]
+        );
 
-        if (! $response instanceof ShipmentResponsesShipmentIds || ! isset($response->data)) {
+        // The generated normalizer turns `"data": null` into an empty data model, so check the shipments.
+        if (! $response instanceof ShipmentResponsesPostShipmentsV12 || ! isset($response->data->shipments)) {
             throw new InvalidArgumentException('Unexpected response type returned while parsing direct print response.');
         }
 
-        return $this->mapCreatedIds($request->data->shipments, $response->data->ids ?? []);
+        return $this->mapCreatedIds($request->data->shipments, $response->data->shipments);
     }
 }
