@@ -9,5 +9,5 @@ docker-compose.yml export-ignore
 README.md          export-ignore
 package.json       export-ignore
 phpunit.xml        export-ignore
-yarn.lock          export-ignore
+pnpm-lock.yaml     export-ignore
 release.config.js  export-ignore

@@ -16,13 +16,6 @@ composer.lock
 .idea/**/dictionaries
 .idea/**/shelf
 
-.yarn/*
-!.yarn/releases
-!.yarn/patches
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
 # The connect PoC writes its state here.
 /dev/connect-poc/state.json
 

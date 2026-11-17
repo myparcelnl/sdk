@@ -4,12 +4,20 @@
 
 - Fork this repository and clone it to your machine
 
-## 2. Make your changes
+## 2. Prerequisites
+
+- Docker
+- Node.js 24, version 24.21 or later
+- pnpm 12, version 12.11 or later
+
+Volta must not be installed: its `yarn` ignores `packageManager` and `devEngines`.
+
+## 3. Make your changes
 
 - Try to conform to our code style
 - You should make only one change in each branch
 
-## 3. Add or update tests
+## 4. Add or update tests
 
 - Coverage % needs to be equal to or greater than that of the previous commit.
 - When adding tests, keep the same namespace as source files.
@@ -37,11 +45,11 @@ Enable XDebug:
 docker compose run --rm -it php php -dxdebug.mode=debug vendor/bin/phpunit
 ```
 
-## 4. Commit
+## 5. Commit
 
 We use [Conventional Commits] and [semantic-release] to automate release notes and changelogs, based on the rules of [@commitlint/config-conventional]. We squash a pull request into one commit by default. The PR title becomes the commit subject and the PR description the commit body, so write the title as a conventional commit. When each commit of a pull request needs its own changelog entry, we rebase it instead, and then every commit needs a valid conventional commit message.
 
-## 5. Create a pull request
+## 6. Create a pull request
 
 - Keep your pull requests focused on single subjects
 - Please explain what you changed and why
