@@ -65,7 +65,7 @@ jobs:
       - name: Setup app credentials
         if: steps.diff.outputs.changed == 'true'
         id: credentials
-        uses: myparcelnl/actions/setup-app-credentials@v4
+        uses: myparcelnl/actions/setup-app-credentials@v6
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}

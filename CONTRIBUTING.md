@@ -7,8 +7,10 @@
 ## Prerequisites
 You need to have the following installed on your machine:
 - Docker
-- Node, version 24.21 or higher
-- PNPM, version 12 or higher
+- Node.js 24, version 24.21 or later
+- pnpm 12, version 12.11 or later
+
+Volta must not be installed: its `yarn` ignores `packageManager` and `devEngines`.
 
 ## Make your changes
 
