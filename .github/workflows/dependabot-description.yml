@@ -18,4 +18,4 @@ jobs:
       pull-requests: write
       contents: read
     steps:
-      - uses: myparcelnl/actions/pr-dependabot-description@v5
+      - uses: myparcelnl/actions/pr-dependabot-description@v6

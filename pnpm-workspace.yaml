@@ -1,0 +1,11 @@
+autoDedupe: true
+
+lockfile:
+  includeResolutionSettings: true
+
+# Same patterns as the cooldown exclude in .github/dependabot.yml, so a new release of our own packages installs at once.
+minimumReleaseAgeExclude:
+  - '@myparcel/*'
+  - '@myparcel-dev/*'
+  - '@myparcel-eslint/*'
+  - '@myparcel-pdk/*'
