@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.9](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.8...v12.0.0-beta.9) (2026-11-17)
+
 ## [12.0.0-beta.8](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.7...v12.0.0-beta.8) (2026-11-02)
 
 ### :sparkles: New Features
