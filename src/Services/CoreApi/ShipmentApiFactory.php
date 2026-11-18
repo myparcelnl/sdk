@@ -8,6 +8,8 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Client as CoreApiClient;
+use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
 
 /**
  * Factory for creating the generated ShipmentApi client.
@@ -74,6 +76,33 @@ final class ShipmentApiFactory
         $http = new GuzzleClient($httpOptions);
 
         return new ShipmentApi($http, $config);
+    }
+
+    /**
+     * Create the Jane Core API client, with the same API key handling as make().
+     *
+     * @todo INT-2033: remove this method when make() returns the Jane client.
+     *
+     * @internal Used by the services that run on Jane.
+     *
+     * @param string|null           $apiKey    Optional API key.
+     * @param string|null           $host      Optional API host override.
+     * @param string|null           $userAgent Optional custom User-Agent.
+     * @param array<string, string> $headers   Sent on every request, such as `x-dmp-*` API feature flags.
+     */
+    public static function client(
+        ?string $apiKey = null,
+        ?string $host = null,
+        ?string $userAgent = null,
+        array $headers = []
+    ): CoreApiClient {
+        $resolvedKey = self::resolveApiKey($apiKey);
+
+        if ('' === $resolvedKey) {
+            throw new \InvalidArgumentException('API key cannot be empty');
+        }
+
+        return JaneClientFactory::coreApi($resolvedKey, $host, $userAgent, $headers);
     }
 
     private static function createHandlerStack(): HandlerStack
