@@ -37,9 +37,6 @@ class RefCapabilitiesResponseOptionsOptionsV2Normalizer implements DenormalizerI
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesResponseOptionsOptionsV2Constraint());
-        }
         if (\array_key_exists('additionalInsurance', $data)) {
             $object->additionalInsurance = $this->denormalizer->denormalize($data['additionalInsurance'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2::class, 'json', $context);
             unset($data['additionalInsurance']);

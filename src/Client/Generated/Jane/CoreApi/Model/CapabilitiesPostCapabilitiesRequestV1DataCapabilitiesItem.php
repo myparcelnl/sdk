@@ -35,9 +35,9 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItem
      */
     public RefCapabilitiesSharedCarrier|int $carrierId;
     /**
-     * @var float
+     * @var CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPackageType|int
      */
-    public float $packageType;
+    public CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPackageType|int $packageType;
     /**
      * Physical properties of the package.
      *
@@ -51,13 +51,13 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItem
      */
     public CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemOptions $options;
     /**
-     * @var float
+     * @var CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemDeliveryType|int
      */
-    public float $deliveryType;
+    public CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemDeliveryType|int $deliveryType;
     /**
-     * @var float
+     * @var CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemShipmentType|int
      */
-    public float $shipmentType;
+    public CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemShipmentType|int $shipmentType;
     /**
      * The shipment direction for which the capabilities are requested.
      *

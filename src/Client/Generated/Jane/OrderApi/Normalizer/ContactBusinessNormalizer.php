@@ -37,9 +37,6 @@ class ContactBusinessNormalizer implements DenormalizerInterface, NormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ContactBusinessConstraint());
-        }
         if (\array_key_exists('emailAddress', $data)) {
             $object->emailAddress = $data['emailAddress'];
             unset($data['emailAddress']);
@@ -93,7 +90,7 @@ class ContactBusinessNormalizer implements DenormalizerInterface, NormalizerInte
         if (array_key_exists('emailAddress', get_object_vars($data))) {
             $dataArray['emailAddress'] = $data->emailAddress;
         }
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
         if (array_key_exists('phoneNumber', get_object_vars($data))) {
@@ -109,9 +106,12 @@ class ContactBusinessNormalizer implements DenormalizerInterface, NormalizerInte
             $dataArray['attention'] = $data->attention;
         }
         if (array_key_exists('vatNumbersByCountry', get_object_vars($data))) {
-            $values = new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject();
-            foreach ($data->vatNumbersByCountry as $key => $value) {
-                $values[$key] = $value;
+            $values = null;
+            if (null !== $data->vatNumbersByCountry) {
+                $values = new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject();
+                foreach ($data->vatNumbersByCountry as $key => $value) {
+                    $values[$key] = $value;
+                }
             }
             $dataArray['vatNumbersByCountry'] = $values;
         }

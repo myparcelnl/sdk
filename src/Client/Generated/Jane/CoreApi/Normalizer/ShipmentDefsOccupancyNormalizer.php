@@ -37,9 +37,6 @@ class ShipmentDefsOccupancyNormalizer implements DenormalizerInterface, Normaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsOccupancyConstraint());
-        }
         if (\array_key_exists('monday', $data) && $data['monday'] !== null) {
             $value = $data['monday'];
             if (is_float($data['monday'])) {

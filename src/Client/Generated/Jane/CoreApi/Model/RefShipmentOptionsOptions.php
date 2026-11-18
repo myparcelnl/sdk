@@ -8,9 +8,9 @@ class RefShipmentOptionsOptions implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $ageCheck;
+    public RefTypesIntBoolean|int $ageCheck;
     /**
      * Money amount with currency
      *
@@ -18,73 +18,73 @@ class RefShipmentOptionsOptions implements AdditionalPropertiesInterface
      */
     public RefTypesMoney $cashOnDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $collect;
+    public RefTypesIntBoolean|int $collect;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $cooledDelivery;
+    public RefTypesIntBoolean|int $cooledDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $dropOffAtPostalPoint;
+    public RefTypesIntBoolean|int $dropOffAtPostalPoint;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $extraAssurance;
+    public RefTypesIntBoolean|int $extraAssurance;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $freshFood;
+    public RefTypesIntBoolean|int $freshFood;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $frozen;
+    public RefTypesIntBoolean|int $frozen;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $hideSender;
+    public RefTypesIntBoolean|int $hideSender;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $largeFormat;
+    public RefTypesIntBoolean|int $largeFormat;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $noTracking;
+    public RefTypesIntBoolean|int $noTracking;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $onlyRecipient;
+    public RefTypesIntBoolean|int $onlyRecipient;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $priorityDelivery;
+    public RefTypesIntBoolean|int $priorityDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $receiptCode;
+    public RefTypesIntBoolean|int $receiptCode;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $return;
+    public RefTypesIntBoolean|int $return;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $sameDayDelivery;
+    public RefTypesIntBoolean|int $sameDayDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $saturdayDelivery;
+    public RefTypesIntBoolean|int $saturdayDelivery;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $signature;
+    public RefTypesIntBoolean|int $signature;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $tracked;
+    public RefTypesIntBoolean|int $tracked;
     public function definedProperties(): array
     {
         return ['ageCheck' => 'age_check', 'cashOnDelivery' => 'cash_on_delivery', 'collect' => 'collect', 'cooledDelivery' => 'cooled_delivery', 'dropOffAtPostalPoint' => 'drop_off_at_postal_point', 'extraAssurance' => 'extra_assurance', 'freshFood' => 'fresh_food', 'frozen' => 'frozen', 'hideSender' => 'hide_sender', 'largeFormat' => 'large_format', 'noTracking' => 'no_tracking', 'onlyRecipient' => 'only_recipient', 'priorityDelivery' => 'priority_delivery', 'receiptCode' => 'receipt_code', 'return' => 'return', 'sameDayDelivery' => 'same_day_delivery', 'saturdayDelivery' => 'saturday_delivery', 'signature' => 'signature', 'tracked' => 'tracked'];

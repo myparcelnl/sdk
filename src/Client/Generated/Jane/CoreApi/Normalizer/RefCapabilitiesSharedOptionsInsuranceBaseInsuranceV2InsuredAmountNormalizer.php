@@ -37,9 +37,6 @@ class RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmountNormalize
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmountConstraint());
-        }
         if (\array_key_exists('default', $data)) {
             $object->default = $this->denormalizer->denormalize($data['default'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoney::class, 'json', $context);
         }

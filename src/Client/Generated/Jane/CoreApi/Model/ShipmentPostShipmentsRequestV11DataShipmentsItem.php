@@ -29,7 +29,7 @@ class ShipmentPostShipmentsRequestV11DataShipmentsItem
      */
     public RefShipmentSender $sender;
     /**
-     * @var list<float>
+     * @var list<int>
      */
     public array $recipients;
     /**

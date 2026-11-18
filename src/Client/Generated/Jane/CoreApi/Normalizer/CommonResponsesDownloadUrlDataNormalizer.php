@@ -37,9 +37,6 @@ class CommonResponsesDownloadUrlDataNormalizer implements DenormalizerInterface,
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CommonResponsesDownloadUrlDataConstraint());
-        }
         if (\array_key_exists('download_url', $data)) {
             $object->downloadUrl = $this->denormalizer->denormalize($data['download_url'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsDownloadUrl::class, 'json', $context);
         }

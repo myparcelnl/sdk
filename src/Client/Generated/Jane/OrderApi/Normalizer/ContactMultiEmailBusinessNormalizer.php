@@ -37,9 +37,6 @@ class ContactMultiEmailBusinessNormalizer implements DenormalizerInterface, Norm
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ContactMultiEmailBusinessConstraint());
-        }
         if (\array_key_exists('locale', $data)) {
             $object->locale = $data['locale'];
             unset($data['locale']);
@@ -94,7 +91,7 @@ class ContactMultiEmailBusinessNormalizer implements DenormalizerInterface, Norm
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
         if (array_key_exists('phoneNumber', get_object_vars($data))) {
@@ -110,9 +107,12 @@ class ContactMultiEmailBusinessNormalizer implements DenormalizerInterface, Norm
             $dataArray['attention'] = $data->attention;
         }
         if (array_key_exists('vatNumbersByCountry', get_object_vars($data))) {
-            $values = new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject();
-            foreach ($data->vatNumbersByCountry as $key => $value) {
-                $values[$key] = $value;
+            $values = null;
+            if (null !== $data->vatNumbersByCountry) {
+                $values = new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject();
+                foreach ($data->vatNumbersByCountry as $key => $value) {
+                    $values[$key] = $value;
+                }
             }
             $dataArray['vatNumbersByCountry'] = $values;
         }
@@ -123,9 +123,12 @@ class ContactMultiEmailBusinessNormalizer implements DenormalizerInterface, Norm
             $dataArray['eoriNumber'] = $data->eoriNumber;
         }
         if (array_key_exists('emailAddresses', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->emailAddresses as $value_1) {
-                $values_1[] = $value_1;
+            $values_1 = null;
+            if (null !== $data->emailAddresses) {
+                $values_1 = [];
+                foreach ($data->emailAddresses as $value_1) {
+                    $values_1[] = $value_1;
+                }
             }
             $dataArray['emailAddresses'] = $values_1;
         }

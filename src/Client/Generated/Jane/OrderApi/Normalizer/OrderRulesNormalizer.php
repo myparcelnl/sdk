@@ -37,9 +37,6 @@ class OrderRulesNormalizer implements DenormalizerInterface, NormalizerInterface
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrderRulesConstraint());
-        }
         if (\array_key_exists('setShippingPreferences', $data)) {
             $object->setShippingPreferences = $this->denormalizer->denormalize($data['setShippingPreferences'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\OrderRulesSetShippingPreferences::class, 'json', $context);
             unset($data['setShippingPreferences']);

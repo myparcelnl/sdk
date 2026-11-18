@@ -37,9 +37,6 @@ class CustomsDeclarationResponseNormalizer implements DenormalizerInterface, Nor
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\CustomsDeclarationResponseConstraint());
-        }
         if (\array_key_exists('groups', $data)) {
             $values = [];
             foreach ($data['groups'] as $value) {

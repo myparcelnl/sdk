@@ -37,9 +37,6 @@ class ShipmentDefsDeliveryOptionsPickupTimeNormalizer implements DenormalizerInt
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsDeliveryOptionsPickupTimeConstraint());
-        }
         if (\array_key_exists('start', $data) && $data['start'] !== null) {
             $value = $data['start'];
             if (is_string($data['start'])) {

@@ -37,9 +37,6 @@ class ShipmentResponsesDropOffPointNormalizer implements DenormalizerInterface, 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDropOffPointConstraint());
-        }
         if (\array_key_exists('location_code', $data)) {
             $object->locationCode = $data['location_code'];
             unset($data['location_code']);
@@ -396,15 +393,18 @@ class ShipmentResponsesDropOffPointNormalizer implements DenormalizerInterface, 
             $dataArray['latitude'] = $value_7;
         }
         if (array_key_exists('availableDays', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->availableDays as $value_8) {
-                $value_9 = $value_8;
-                if ($value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsDayOfWeek || is_int($value_8)) {
-                    $value_9 = $value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsDayOfWeek ? $value_8->value : $value_8;
-                } elseif ($value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsIsoDayOfWeek || is_int($value_8)) {
-                    $value_9 = $value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsIsoDayOfWeek ? $value_8->value : $value_8;
+            $values = null;
+            if (null !== $data->availableDays) {
+                $values = [];
+                foreach ($data->availableDays as $value_8) {
+                    $value_9 = $value_8;
+                    if ($value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsDayOfWeek || is_int($value_8)) {
+                        $value_9 = $value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsDayOfWeek ? $value_8->value : $value_8;
+                    } elseif ($value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsIsoDayOfWeek || is_int($value_8)) {
+                        $value_9 = $value_8 instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonDefsIsoDayOfWeek ? $value_8->value : $value_8;
+                    }
+                    $values[] = $value_9;
                 }
-                $values[] = $value_9;
             }
             $dataArray['available_days'] = $values;
         }

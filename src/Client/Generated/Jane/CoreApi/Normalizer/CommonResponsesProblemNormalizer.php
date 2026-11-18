@@ -37,9 +37,6 @@ class CommonResponsesProblemNormalizer implements DenormalizerInterface, Normali
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CommonResponsesProblemConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = $data['type'];
             unset($data['type']);
@@ -101,10 +98,13 @@ class CommonResponsesProblemNormalizer implements DenormalizerInterface, Normali
             $dataArray['request_id'] = $data->requestId;
         }
         if (array_key_exists('errors', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->errors as $value) {
-                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->errors) {
+                $values = [];
+                foreach ($data->errors as $value) {
+                    $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['errors'] = $values;
         }

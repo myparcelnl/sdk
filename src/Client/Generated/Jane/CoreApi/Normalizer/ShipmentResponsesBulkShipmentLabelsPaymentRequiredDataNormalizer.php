@@ -37,9 +37,6 @@ class ShipmentResponsesBulkShipmentLabelsPaymentRequiredDataNormalizer implement
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesBulkShipmentLabelsPaymentRequiredDataConstraint());
-        }
         if (\array_key_exists('shipments', $data)) {
             $object->shipments = $this->denormalizer->denormalize($data['shipments'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesBulkShipmentLabelsPaymentRequiredDataShipments::class, 'json', $context);
         }

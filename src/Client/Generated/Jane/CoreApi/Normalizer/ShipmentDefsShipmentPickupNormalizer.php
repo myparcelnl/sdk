@@ -37,9 +37,6 @@ class ShipmentDefsShipmentPickupNormalizer implements DenormalizerInterface, Nor
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsShipmentPickupConstraint());
-        }
         if (\array_key_exists('location_code', $data)) {
             $object->locationCode = $data['location_code'];
         }
@@ -138,7 +135,7 @@ class ShipmentDefsShipmentPickupNormalizer implements DenormalizerInterface, Nor
         if (array_key_exists('cc', get_object_vars($data))) {
             $dataArray['cc'] = $data->cc;
         }
-        if (array_key_exists('locationType', get_object_vars($data))) {
+        if (array_key_exists('locationType', get_object_vars($data)) && null !== ($data->locationType ?? null)) {
             $value_1 = $data->locationType;
             if ($data->locationType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLocationType || is_string($data->locationType)) {
                 $value_1 = $data->locationType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLocationType ? $data->locationType->value : $data->locationType;

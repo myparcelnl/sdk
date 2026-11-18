@@ -37,9 +37,6 @@ class ShipmentResponsesDeliveryOptionsDeliveryPossibilityNormalizer implements D
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesDeliveryOptionsDeliveryPossibilityConstraint());
-        }
         if (\array_key_exists('type', $data) && $data['type'] !== null) {
             $value = $data['type'];
             if (is_string($data['type'])) {

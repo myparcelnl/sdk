@@ -37,9 +37,6 @@ class ShipmentPutShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemDropO
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPutShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItemDropOffPointConstraint());
-        }
         if (\array_key_exists('postal_code', $data)) {
             $object->postalCode = $data['postal_code'];
         }

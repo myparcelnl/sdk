@@ -37,9 +37,6 @@ class WebhooksResponsesWebhookSubscriptionsV11DataNormalizer implements Denormal
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\WebhooksResponsesWebhookSubscriptionsV11DataConstraint());
-        }
         if (\array_key_exists('webhook_subscriptions', $data)) {
             $values = [];
             foreach ($data['webhook_subscriptions'] as $value) {

@@ -40,7 +40,7 @@ class GetWhoami extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Cli
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiInternalServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\BadResponseException
      *
-     * @return null
+     * @return \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop|\MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser
      */
     protected function transformResponseBody(\Symfony\Contracts\HttpClient\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -49,6 +49,14 @@ class GetWhoami extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Cli
         if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             try {
                 $decodedBody = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+                if (is_object($decodedBody)) {
+                    switch ($decodedBody->type ?? null) {
+                        case 'SHOP':
+                            return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop', 'json');
+                        case 'USER':
+                            return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser', 'json');
+                    }
+                }
                 return $decodedBody;
             } catch (\JsonException $jsonException) {
                 throw new \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException('Malformed JSON response body.', 0, $jsonException);

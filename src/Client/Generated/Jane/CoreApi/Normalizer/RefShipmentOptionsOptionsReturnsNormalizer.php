@@ -37,91 +37,52 @@ class RefShipmentOptionsOptionsReturnsNormalizer implements DenormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('age_check', $data) && \is_int($data['age_check'])) {
-            $data['age_check'] = (float) $data['age_check'];
-        }
-        if (\array_key_exists('cooled_delivery', $data) && \is_int($data['cooled_delivery'])) {
-            $data['cooled_delivery'] = (float) $data['cooled_delivery'];
-        }
-        if (\array_key_exists('drop_off_at_postal_point', $data) && \is_int($data['drop_off_at_postal_point'])) {
-            $data['drop_off_at_postal_point'] = (float) $data['drop_off_at_postal_point'];
-        }
-        if (\array_key_exists('extra_assurance', $data) && \is_int($data['extra_assurance'])) {
-            $data['extra_assurance'] = (float) $data['extra_assurance'];
-        }
-        if (\array_key_exists('hide_sender', $data) && \is_int($data['hide_sender'])) {
-            $data['hide_sender'] = (float) $data['hide_sender'];
-        }
-        if (\array_key_exists('large_format', $data) && \is_int($data['large_format'])) {
-            $data['large_format'] = (float) $data['large_format'];
-        }
-        if (\array_key_exists('only_recipient', $data) && \is_int($data['only_recipient'])) {
-            $data['only_recipient'] = (float) $data['only_recipient'];
-        }
-        if (\array_key_exists('receipt_code', $data) && \is_int($data['receipt_code'])) {
-            $data['receipt_code'] = (float) $data['receipt_code'];
-        }
-        if (\array_key_exists('return', $data) && \is_int($data['return'])) {
-            $data['return'] = (float) $data['return'];
-        }
-        if (\array_key_exists('same_day_delivery', $data) && \is_int($data['same_day_delivery'])) {
-            $data['same_day_delivery'] = (float) $data['same_day_delivery'];
-        }
-        if (\array_key_exists('saturday_delivery', $data) && \is_int($data['saturday_delivery'])) {
-            $data['saturday_delivery'] = (float) $data['saturday_delivery'];
-        }
-        if (\array_key_exists('signature', $data) && \is_int($data['signature'])) {
-            $data['signature'] = (float) $data['signature'];
-        }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentOptionsOptionsReturnsConstraint());
-        }
         if (\array_key_exists('age_check', $data)) {
-            $object->ageCheck = $data['age_check'];
+            $object->ageCheck = is_int($data['age_check']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['age_check']) ?? $data['age_check'] : $data['age_check'];
             unset($data['age_check']);
         }
         if (\array_key_exists('cooled_delivery', $data)) {
-            $object->cooledDelivery = $data['cooled_delivery'];
+            $object->cooledDelivery = is_int($data['cooled_delivery']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['cooled_delivery']) ?? $data['cooled_delivery'] : $data['cooled_delivery'];
             unset($data['cooled_delivery']);
         }
         if (\array_key_exists('drop_off_at_postal_point', $data)) {
-            $object->dropOffAtPostalPoint = $data['drop_off_at_postal_point'];
+            $object->dropOffAtPostalPoint = is_int($data['drop_off_at_postal_point']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['drop_off_at_postal_point']) ?? $data['drop_off_at_postal_point'] : $data['drop_off_at_postal_point'];
             unset($data['drop_off_at_postal_point']);
         }
         if (\array_key_exists('extra_assurance', $data)) {
-            $object->extraAssurance = $data['extra_assurance'];
+            $object->extraAssurance = is_int($data['extra_assurance']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['extra_assurance']) ?? $data['extra_assurance'] : $data['extra_assurance'];
             unset($data['extra_assurance']);
         }
         if (\array_key_exists('hide_sender', $data)) {
-            $object->hideSender = $data['hide_sender'];
+            $object->hideSender = is_int($data['hide_sender']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['hide_sender']) ?? $data['hide_sender'] : $data['hide_sender'];
             unset($data['hide_sender']);
         }
         if (\array_key_exists('large_format', $data)) {
-            $object->largeFormat = $data['large_format'];
+            $object->largeFormat = is_int($data['large_format']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['large_format']) ?? $data['large_format'] : $data['large_format'];
             unset($data['large_format']);
         }
         if (\array_key_exists('only_recipient', $data)) {
-            $object->onlyRecipient = $data['only_recipient'];
+            $object->onlyRecipient = is_int($data['only_recipient']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['only_recipient']) ?? $data['only_recipient'] : $data['only_recipient'];
             unset($data['only_recipient']);
         }
         if (\array_key_exists('receipt_code', $data)) {
-            $object->receiptCode = $data['receipt_code'];
+            $object->receiptCode = is_int($data['receipt_code']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['receipt_code']) ?? $data['receipt_code'] : $data['receipt_code'];
             unset($data['receipt_code']);
         }
         if (\array_key_exists('return', $data)) {
-            $object->return = $data['return'];
+            $object->return = is_int($data['return']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['return']) ?? $data['return'] : $data['return'];
             unset($data['return']);
         }
         if (\array_key_exists('same_day_delivery', $data)) {
-            $object->sameDayDelivery = $data['same_day_delivery'];
+            $object->sameDayDelivery = is_int($data['same_day_delivery']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['same_day_delivery']) ?? $data['same_day_delivery'] : $data['same_day_delivery'];
             unset($data['same_day_delivery']);
         }
         if (\array_key_exists('saturday_delivery', $data)) {
-            $object->saturdayDelivery = $data['saturday_delivery'];
+            $object->saturdayDelivery = is_int($data['saturday_delivery']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['saturday_delivery']) ?? $data['saturday_delivery'] : $data['saturday_delivery'];
             unset($data['saturday_delivery']);
         }
         if (\array_key_exists('signature', $data)) {
-            $object->signature = $data['signature'];
+            $object->signature = is_int($data['signature']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['signature']) ?? $data['signature'] : $data['signature'];
             unset($data['signature']);
         }
         foreach ($data as $key => $value) {
@@ -135,40 +96,40 @@ class RefShipmentOptionsOptionsReturnsNormalizer implements DenormalizerInterfac
     {
         $dataArray = [];
         if (array_key_exists('ageCheck', get_object_vars($data))) {
-            $dataArray['age_check'] = $data->ageCheck;
+            $dataArray['age_check'] = $data->ageCheck instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->ageCheck->value : $data->ageCheck;
         }
         if (array_key_exists('cooledDelivery', get_object_vars($data))) {
-            $dataArray['cooled_delivery'] = $data->cooledDelivery;
+            $dataArray['cooled_delivery'] = $data->cooledDelivery instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->cooledDelivery->value : $data->cooledDelivery;
         }
         if (array_key_exists('dropOffAtPostalPoint', get_object_vars($data))) {
-            $dataArray['drop_off_at_postal_point'] = $data->dropOffAtPostalPoint;
+            $dataArray['drop_off_at_postal_point'] = $data->dropOffAtPostalPoint instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->dropOffAtPostalPoint->value : $data->dropOffAtPostalPoint;
         }
         if (array_key_exists('extraAssurance', get_object_vars($data))) {
-            $dataArray['extra_assurance'] = $data->extraAssurance;
+            $dataArray['extra_assurance'] = $data->extraAssurance instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->extraAssurance->value : $data->extraAssurance;
         }
         if (array_key_exists('hideSender', get_object_vars($data))) {
-            $dataArray['hide_sender'] = $data->hideSender;
+            $dataArray['hide_sender'] = $data->hideSender instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->hideSender->value : $data->hideSender;
         }
         if (array_key_exists('largeFormat', get_object_vars($data))) {
-            $dataArray['large_format'] = $data->largeFormat;
+            $dataArray['large_format'] = $data->largeFormat instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->largeFormat->value : $data->largeFormat;
         }
         if (array_key_exists('onlyRecipient', get_object_vars($data))) {
-            $dataArray['only_recipient'] = $data->onlyRecipient;
+            $dataArray['only_recipient'] = $data->onlyRecipient instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->onlyRecipient->value : $data->onlyRecipient;
         }
         if (array_key_exists('receiptCode', get_object_vars($data))) {
-            $dataArray['receipt_code'] = $data->receiptCode;
+            $dataArray['receipt_code'] = $data->receiptCode instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->receiptCode->value : $data->receiptCode;
         }
         if (array_key_exists('return', get_object_vars($data))) {
-            $dataArray['return'] = $data->return;
+            $dataArray['return'] = $data->return instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->return->value : $data->return;
         }
         if (array_key_exists('sameDayDelivery', get_object_vars($data))) {
-            $dataArray['same_day_delivery'] = $data->sameDayDelivery;
+            $dataArray['same_day_delivery'] = $data->sameDayDelivery instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->sameDayDelivery->value : $data->sameDayDelivery;
         }
         if (array_key_exists('saturdayDelivery', get_object_vars($data))) {
-            $dataArray['saturday_delivery'] = $data->saturdayDelivery;
+            $dataArray['saturday_delivery'] = $data->saturdayDelivery instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->saturdayDelivery->value : $data->saturdayDelivery;
         }
         if (array_key_exists('signature', get_object_vars($data))) {
-            $dataArray['signature'] = $data->signature;
+            $dataArray['signature'] = $data->signature instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->signature->value : $data->signature;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

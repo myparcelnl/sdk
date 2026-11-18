@@ -37,9 +37,6 @@ class RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertyNormalizer implem
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertyConstraint());
-        }
         if (\array_key_exists('min', $data)) {
             $object->min = $this->denormalizer->denormalize($data['min'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesValueWithUnit::class, 'json', $context);
         }

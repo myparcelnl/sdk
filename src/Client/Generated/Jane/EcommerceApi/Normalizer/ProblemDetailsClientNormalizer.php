@@ -105,10 +105,13 @@ class ProblemDetailsClientNormalizer implements DenormalizerInterface, Normalize
         if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
-        $values = [];
-        foreach ($data->errors as $value) {
-            $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-            $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+        $values = null;
+        if (null !== $data->errors) {
+            $values = [];
+            foreach ($data->errors as $value) {
+                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+            }
         }
         $dataArray['errors'] = $values;
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {

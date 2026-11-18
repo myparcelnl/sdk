@@ -40,9 +40,6 @@ class RefShippingRulesShippingRuleNormalizer implements DenormalizerInterface, N
         if (\array_key_exists('active', $data) && \is_int($data['active'])) {
             $data['active'] = (float) $data['active'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\RefShippingRulesShippingRuleConstraint());
-        }
         if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $value = $data['id'];
             if (is_null($data['id'])) {

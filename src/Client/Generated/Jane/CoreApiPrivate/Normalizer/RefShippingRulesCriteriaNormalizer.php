@@ -37,9 +37,6 @@ class RefShippingRulesCriteriaNormalizer implements DenormalizerInterface, Norma
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\RefShippingRulesCriteriaConstraint());
-        }
         if (\array_key_exists('country', $data) && $data['country'] !== null) {
             $value = $data['country'];
             if (is_null($data['country'])) {

@@ -37,9 +37,6 @@ class OrderToCreateNormalizer implements DenormalizerInterface, NormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrderToCreateConstraint());
-        }
         if (\array_key_exists('billingDetails', $data)) {
             $object->billingDetails = $this->denormalizer->denormalize($data['billingDetails'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\OrderToCreateBillingDetails::class, 'json', $context);
         }
@@ -90,10 +87,13 @@ class OrderToCreateNormalizer implements DenormalizerInterface, NormalizerInterf
             $dataArray['customerReference'] = $data->customerReference;
         }
         if (array_key_exists('lines', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->lines as $value) {
-                $normalized_1 = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+            $values = null;
+            if (null !== $data->lines) {
+                $values = [];
+                foreach ($data->lines as $value) {
+                    $normalized_1 = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+                }
             }
             $dataArray['lines'] = $values;
         }
