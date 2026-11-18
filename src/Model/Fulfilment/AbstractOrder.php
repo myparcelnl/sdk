@@ -14,7 +14,8 @@ use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\PhysicalProperties;
 use MyParcelNL\Sdk\Model\PickupLocation;
 use MyParcelNL\Sdk\Model\Recipient;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Validator\Order\OrderValidator;
 use MyParcelNL\Sdk\Validator\ValidatorFactory;
@@ -25,10 +26,10 @@ class AbstractOrder extends BaseModel
     public const DATE_FORMAT_DATE = 'Y-m-d';
 
     /**
-     * The selected shipment options for this order.
-     * Keeps the legacy delivery_options property name for Order v1 hydration/payload compatibility.
+     * The shipment options of this order, as the generated model of the Core API. The property keeps
+     * the name `delivery_options` of the Order v1 payload.
      *
-     * @var \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions
+     * @var ShipmentOptionsModel
      */
     protected $delivery_options;
 
@@ -160,9 +161,9 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @return \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions
+     * Get the shipment options, a generated model with public properties such as `packageType`.
      */
-    public function getDeliveryOptions(): ShipmentOptions
+    public function getDeliveryOptions(): ShipmentOptionsModel
     {
         return $this->delivery_options;
     }
@@ -326,11 +327,11 @@ class AbstractOrder extends BaseModel
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
+     * @param  ShipmentOptionsModel $deliveryOptions The generated model. `CoreApiModels::toModel()` fills one from an array.
      *
      * @return self
      */
-    public function setDeliveryOptions(ShipmentOptions $deliveryOptions): self
+    public function setDeliveryOptions(ShipmentOptionsModel $deliveryOptions): self
     {
         $this->delivery_options = $deliveryOptions;
         return $this;
@@ -507,7 +508,7 @@ class AbstractOrder extends BaseModel
                 'invoice_address'               => $this->getInvoiceAddress()->toArray(),
                 'order_lines'                   => $this->getOrderLines()->toArray(),
                 'carrier_id'                    => $this->getCarrierId(),
-                'delivery_options'              => $this->getDeliveryOptions()->toArray(),
+                'delivery_options'              => CoreApiModels::toArray($this->getDeliveryOptions()),
             ],
             (null === $this->customs_declaration)
                 ? []

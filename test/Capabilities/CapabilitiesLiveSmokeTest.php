@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
@@ -99,9 +101,10 @@ final class CapabilitiesLiveSmokeTest extends TestCase
      */
     public function testFromShipmentLiveNlMinimal(): void
     {
-        $shipment = (new \MyParcelNL\Sdk\Model\Shipment\Shipment())
-            ->setRecipient(['cc' => 'NL'])
-            ->setPhysicalProperties(['weight' => 500]);
+        $shipment = CoreApiModels::toModel(
+            ['recipient' => ['cc' => 'NL'], 'physical_properties' => ['weight' => 500]],
+            ShipmentPostShipmentsRequestV11DataShipmentsItem::class
+        );
 
         try {
             $response = $this->service->fromShipment($shipment);

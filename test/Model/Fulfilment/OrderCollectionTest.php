@@ -6,8 +6,10 @@ namespace MyParcelNL\Sdk\Test\Model\Fulfilment;
 
 use DateTime;
 use Faker\Factory;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesDeliveryType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Model\CustomsDeclaration;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
@@ -15,7 +17,6 @@ use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
 use MyParcelNL\Sdk\Model\Fulfilment\Product;
 use MyParcelNL\Sdk\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\Model\Recipient;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Collection;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -93,14 +94,15 @@ class OrderCollectionTest extends TestCase
         // 3 orders
         for ($i = 0; $i < 3; $i++) {
             $deliveryTypes = [
-                RefTypesDeliveryTypeV2::MORNING,
-                RefTypesDeliveryTypeV2::STANDARD,
-                RefTypesDeliveryTypeV2::EVENING,
+                RefTypesDeliveryType::Morning,
+                RefTypesDeliveryType::Standard,
+                RefTypesDeliveryType::Evening,
             ];
-            $shipmentOptions = (new ShipmentOptions())
-                ->setDeliveryDate((new \DateTime())->format('Y-m-d H:i:s'))
-                ->setDeliveryType($deliveryTypes[$i])
-                ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+            $shipmentOptions = CoreApiModels::toModel([
+                'delivery_date' => (new \DateTime())->format('Y-m-d H:i:s'),
+                'delivery_type' => $deliveryTypes[$i]->value,
+                'package_type'  => RefShipmentPackageType::Package->value,
+            ], ShipmentOptionsModel::class);
 
             $order      = $this->generateOrder($shipmentOptions);
             $order->setCarrierId(1);
@@ -178,9 +180,10 @@ class OrderCollectionTest extends TestCase
     {
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
-        $shipmentOptions = (new ShipmentOptions())
-            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type' => RefTypesDeliveryType::Standard->value,
+            'package_type'  => RefShipmentPackageType::Package->value,
+        ], ShipmentOptionsModel::class);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();
@@ -247,12 +250,84 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
+     * A flag of the options model is an enum case or an int. The request sends the int, also for
+     * `False`.
+     *
+     * @throws \Exception
+     */
+    public function testSaveSendsTheValueOfAFlag(): void
+    {
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type'  => RefTypesDeliveryType::Standard->value,
+            'package_type'   => RefShipmentPackageType::Package->value,
+            'signature'      => 1,
+            'only_recipient' => 0,
+            'insurance'      => ['amount' => 5000, 'currency' => 'EUR'],
+        ], ShipmentOptionsModel::class);
+        // `toModel()` turns 1 and 0 into the enum cases. An integrator can also set a plain int, as here.
+        $shipmentOptions->collect = 1;
+
+        $options = $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration(null))['options'];
+
+        self::assertSame(1, $options['signature']);
+        self::assertSame(0, $options['only_recipient']);
+        self::assertSame(1, $options['collect']);
+        self::assertSame(0, $options['age_check']);
+        self::assertSame(RefShipmentPackageType::Package->value, $options['package_type']);
+        self::assertSame(['amount' => 5000, 'currency' => 'EUR'], $options['insurance']);
+    }
+
+    /**
+     * The request sends an option as the generated normalizer gives it, also for an int that no
+     * enum case has. An insurance without a currency gets the currency `EUR`.
+     *
+     * @dataProvider provideOptionsWithoutAnEnumCaseOrACurrency
+     *
+     * @param array<string, mixed> $fields   the options, with the API field names
+     * @param array<string, mixed> $expected the options of the request that must match
+     *
+     * @throws \Exception
+     */
+    public function testSaveSendsAnOptionThatHasNoEnumCaseOrNoCurrency(array $fields, array $expected): void
+    {
+        $shipmentOptions = CoreApiModels::toModel($fields, ShipmentOptionsModel::class);
+
+        $options = $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration(null))['options'];
+
+        foreach ($expected as $name => $value) {
+            self::assertSame($value, $options[$name]);
+        }
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>, array<string, mixed>}>
+     */
+    public static function provideOptionsWithoutAnEnumCaseOrACurrency(): array
+    {
+        return [
+            'an insurance without a currency'             => [['insurance' => ['amount' => 5000]], ['insurance' => ['amount' => 5000, 'currency' => 'EUR']]],
+            'a flag with an int that no case has'         => [['collect' => 2], ['collect' => 2]],
+            'a package type with an int that no case has' => [['package_type' => 99], ['package_type' => 99]],
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLeavesOutTheInsuranceOfOptionsWithoutAnInsurance(): void
+    {
+        $options = $this->saveAndCaptureShipment(new ShipmentOptionsModel(), $this->generateCustomsDeclaration(null))['options'];
+
+        self::assertArrayNotHasKey('insurance', $options);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testToArrayContainsTheCustomsDeclaration(): void
     {
         $this->faker = Factory::create('nl_NL');
-        $order       = $this->generateOrder(new ShipmentOptions())
+        $order       = $this->generateOrder(new ShipmentOptionsModel())
             ->setCarrierId(1)
             ->setOrderLines($this->generateOrderLines())
             ->setCustomsDeclaration($this->generateCustomsDeclaration('catalog_item_abc123def456g'));
@@ -268,25 +343,37 @@ class OrderCollectionTest extends TestCase
     /**
      * Saves one order with a customs declaration and returns the customs declaration from the request body.
      *
+     * @throws \Exception
+     */
+    protected function saveAndCaptureCustomsDeclaration(?string $externalProductReference): array
+    {
+        $shipmentOptions = CoreApiModels::toModel([
+            'delivery_type' => RefTypesDeliveryType::Standard->value,
+            'package_type'  => RefShipmentPackageType::Package->value,
+        ], ShipmentOptionsModel::class);
+
+        return $this->saveAndCaptureShipment($shipmentOptions, $this->generateCustomsDeclaration($externalProductReference))['customs_declaration'];
+    }
+
+    /**
+     * Saves one order and returns the `shipment` of the order from the request body.
+     *
      * @throws \MyParcelNL\Sdk\Exception\AccountNotActiveException
      * @throws \MyParcelNL\Sdk\Exception\ApiException
      * @throws \MyParcelNL\Sdk\Exception\MissingFieldException
      * @throws \Exception
      */
-    protected function saveAndCaptureCustomsDeclaration(?string $externalProductReference): array
+    protected function saveAndCaptureShipment(ShipmentOptionsModel $shipmentOptions, CustomsDeclaration $customsDeclaration): array
     {
         $this->faker     = Factory::create('nl_NL');
         $orderCollection = (new OrderCollection())->setApiKey($this->getApiKey());
-        $shipmentOptions = (new ShipmentOptions())
-            ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-            ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
 
         $order      = $this->generateOrder($shipmentOptions);
         $orderLines = $this->generateOrderLines();
         $order->setCarrierId(1);
         $order->setOrderLines($orderLines);
         $order->setWeight($orderLines->sum('weight'));
-        $order->setCustomsDeclaration($this->generateCustomsDeclaration($externalProductReference));
+        $order->setCustomsDeclaration($customsDeclaration);
         $orderCollection->push($order);
 
         $body     = [];
@@ -304,7 +391,7 @@ class OrderCollectionTest extends TestCase
 
         $orderCollection->save();
 
-        return $body['data']['orders'][0]['shipment']['customs_declaration'];
+        return $body['data']['orders'][0]['shipment'];
     }
 
     protected function generateCustomsDeclaration(?string $externalProductReference): CustomsDeclaration
@@ -328,12 +415,9 @@ class OrderCollectionTest extends TestCase
     }
 
     /**
-     * @param  \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $deliveryOptions
-     *
-     * @return \MyParcelNL\Sdk\Model\Fulfilment\Order
      * @throws \Exception
      */
-    protected function generateOrder(ShipmentOptions $deliveryOptions): Order
+    protected function generateOrder(ShipmentOptionsModel $deliveryOptions): Order
     {
         return (new Order())
             ->setStatus($this->faker->randomElement(['open', 'processing', 'completed']))

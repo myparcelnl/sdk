@@ -52,9 +52,76 @@ Some fields hold another type than the v11 getter returned:
 | `ShipmentQueryService` | `find()`, `findMany()`, `findByReferenceId()` and `query()` return a `CoreApi\Model\ShipmentDefsShipment` with getters, such as `getBarcode()` | They return a `Jane\CoreApi\Model\ShipmentDefsShipment` with public properties, such as `$shipment->barcode` |
 | `ShipmentTrackTraceService` | `fetchTrackTraceData()` returns `CoreApi\Model\ShipmentDefsTrackTrace` objects with getters, such as `getLinkTracktrace()` | It returns `Jane\CoreApi\Model\ShipmentDefsTrackTrace` objects with public properties, such as `$trace->linkTracktrace` |
 | `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | The constructor takes a `CoreApi\Api\ShipmentApi` | The constructor takes a `Jane\CoreApi\Client` |
-| The services on a Jane client, such as `ShipmentQueryService` | A service sends its User-Agent with each request, also through a client that you pass | The client that a service creates sends the User-Agent of the service: call `setUserAgentForProposition()` before the first request. A client that you pass keeps its own User-Agent |
+| `ShipmentQueryService`, `ShipmentDeleteService` and `ShipmentTrackTraceService` | They throw a `CoreApi\ApiException` for an error response, for a connection error and for a body that is not valid JSON | They throw a `Jane\CoreApi\Exception\ApiException` for an error response. Every such exception implements `WithResponseInterface`: read the status code with `getResponse()->getStatusCode()`. A connection error or a timeout throws a Symfony `TransportExceptionInterface`. A body that is not valid JSON throws a Symfony `NotEncodableValueException`, which is not an `ApiException` |
+| `ShipmentCreateService` and `ShipmentPrintService` | The constructor takes a `CoreApi\Api\ShipmentApi`. `ShipmentPrintService` also takes a PSR-18 HTTP client as the third argument | The constructor takes a `Jane\CoreApi\Client`, and the host as the third argument. PHP ignores a fourth argument, so a v11 `ShipmentPrintService` call with the host as the fourth argument sends to the default host without an error: move the host to the third argument. To use your own HTTP client, pass a client that was built with it |
+| `ShipmentCreateService` and `ShipmentPrintService` | The API rejects a shipment that does not match the spec. More than 100 shipments throw an `InvalidArgumentException` | The generated client checks the request before it sends it. It throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, for example for a shipment without a recipient, carrier or options, for options without `package_type`, for a recipient without `street` or `postal_code`, or for more than 100 shipments |
+| `ShipmentCreateService` and `ShipmentPrintService` | `ShipmentCreateService` throws a `CoreApi\ApiException` for an error response, with the status as `getCode()`. `ShipmentPrintService` throws an `InvalidArgumentException` | They throw a `Jane\CoreApi\Exception\ApiException`, such as `PostShipmentsClientErrorException`, with `getCode()` `0`: read the status with `getResponse()->getStatusCode()` |
+| `MultiColloShipmentService` | `splitShipment()` takes and returns a `Shipment`. The secondary shipments are `CoreApi\Model\SecondaryShipmentRequest` objects. A shipment with an int reference identifier, such as `42`, gets a new `multi_collo_` reference identifier | It takes and returns a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`. The secondary shipments are `ShipmentPostShipmentsRequestV11DataShipmentsItemSecondaryShipmentsItem` models. An int reference identifier is kept as the string `'42'` |
+| `CapabilitiesService` and `CapabilitiesRequest` | `fromShipment()` takes a `Shipment` | It takes a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem` |
+| `Order` (fulfilment) | `getDeliveryOptions()` returns a `ShipmentOptions`, and `setDeliveryOptions()` takes one | They return and take a `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions`. Build one with `new ...Options()`, and set `packageType` to `RefShipmentPackageType::Package` and `deliveryType` to `RefTypesDeliveryType::Standard->value`. For an order from the API with `"insurance": 500`, `getDeliveryOptions()->insurance` is a `RefTypesPriceEuro` with `amount` `50000`, where `getInsurance()` returned `500` in v11. A package type or delivery type that the order gives as a v2 name, such as `PACKAGE` or `STANDARD_DELIVERY`, becomes the id. For a name that the SDK does not know, the property is not set: read it with `??` |
 
 A class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`, and a name that starts with `CoreApi` or `IamApi` is in `MyParcelNL\Sdk\Client\Generated`. `UnexpectedValueException` is the PHP class, and `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime.
+
+### Creating shipments
+
+`ShipmentCreateService::create()` and `ShipmentPrintService::print()` take an array of the generated `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`. The `Shipment`, `ShipmentOptions` and `ShipmentCollection` classes of v11 are removed. Build a shipment with the generated models and their public properties, or fill one from an array with the API field names with `CoreApiModels::toModel()`:
+
+```php
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as Shipment;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemRecipient as Recipient;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
+
+// v11
+$shipment = (new Shipment())
+    ->setRecipient(['cc' => 'NL', 'postal_code' => '2132JE', 'city' => 'Hoofddorp', 'street' => 'Antareslaan', 'number' => '31', 'person' => 'John Doe'])
+    ->setCarrier(RefTypesCarrier::POSTNL)
+    ->withPackageType('PACKAGE');
+$mapping = $service->create((new ShipmentCollection())->push($shipment));
+
+// v12, with the generated models: PHP checks each type
+$recipient             = new Recipient();
+$recipient->cc         = 'NL';
+$recipient->postalCode = '2132JE';
+$recipient->city       = 'Hoofddorp';
+$recipient->street     = 'Antareslaan';
+$recipient->number     = '31';
+$recipient->person     = 'John Doe';
+
+$options              = new ShipmentOptions();
+$options->packageType = RefShipmentPackageType::Package;
+
+$shipment            = new Shipment();
+$shipment->carrier   = RefTypesCarrier::Postnl;
+$shipment->recipient = $recipient;
+$shipment->options   = $options;
+
+// v12, from an array with the API field names: the generated client checks the values when the request goes out
+$shipment = CoreApiModels::toModel([
+    'carrier'   => RefTypesCarrier::Postnl->value,
+    'options'   => ['package_type' => RefShipmentPackageType::Package->value],
+    'recipient' => ['cc' => 'NL', 'postal_code' => '2132JE', 'city' => 'Hoofddorp', 'street' => 'Antareslaan', 'number' => '31', 'person' => 'John Doe'],
+], Shipment::class);
+
+$mapping = $service->create([$shipment]);
+```
+
+A property has the camelCase name of the API field, such as `postalCode`. A property that you do not set is not initialized: reading it throws an `Error`, so read an optional property with `??` or `isset()`. A flag such as `$options->signature` takes the enum case `RefTypesIntBoolean::True` or `RefTypesIntBoolean::False`, or the int `1` or `0`. The generated enums are PHP enums: use the case, such as `RefTypesCarrier::Postnl`, instead of the class constant `RefTypesCarrier::POSTNL`. A carrier or a package type is the id or the enum case. A delivery type is the id, such as `RefTypesDeliveryType::Standard->value`. `setCarrier('POSTNL')` and `withPackageType('PACKAGE')` of v11 took a v2 name: use `ApiMapperService` to convert one, see [Value mapping](README.md#value-mapping).
+
+`CoreApiModels::toArray()` encodes a model as an array with the API field names, and `CoreApiModels::copy()` copies a model with its nested models, where `clone` copies only the top level. The v11 `Shipment` also had `__toString()` and `jsonSerialize()`: `(string) $shipment` and `json_encode($shipment)` gave the request JSON. Use `json_encode(CoreApiModels::toArray($shipment))`.
+
+`MyParcelNL\Sdk\Model\Shipment\Carrier` and `PackageType` are removed. Use `ApiMapperService::forCarrier()` and `ApiMapperService::forPackageType()`, see [Value mapping](README.md#value-mapping):
+
+| v11 `Carrier` and `PackageType` | v12 `ApiMapperService` |
+|---------------------------------|------------------------|
+| `toId()` | `idFromV2Name()`. It returns `null` for a name that it does not know, where `toId()` threw an `InvalidArgumentException`: check for `null` |
+| `fromId()` | `v2NameFromId()`. It returns `null` for an id that it does not know, where `fromId()` threw an `InvalidArgumentException` |
+| `isValid()` | `null !== ...->idFromV2Name()` |
+| `all()` | `v2ToIdMap()` |
+
+The generated client checks a shipment against the spec before it sends it. A shipment that does not match, for example without a recipient, throws a `Jane\CoreApi\Runtime\Normalizer\ValidationException`, and no request goes out. `getViolationList()` lists each field and the problem. The API still checks the shipment too. A shipment without a reference identifier gets one that starts with `sdk_`, as in v11. The services change nothing else on your models: they send copies.
 
 ### Order push
 
@@ -84,9 +151,7 @@ limits. When you pass the lines or the children in the constructor array, nothin
 
 | Service | Class with the change | v11 | v12 |
 |---------|-----------------------|-----|-----|
-| `ShipmentCreateService` and the other services that send a `Shipment` | 111 setters on the request models, such as `CoreApi\Model\RefShipmentShipmentOptions::setDeliveryDate()` | The setter throws an `InvalidArgumentException` for `null`, and a `null` in the constructor array is left out of the request | The setter accepts `null`, and the `null` is sent to the API |
-| `ShipmentCreateService` and the other services that send a request body | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
-| `MultiColloShipmentService` | `CoreApi\Model\SecondaryShipmentRequest` | `splitShipment()` sets the physical properties as `ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties` | `ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties` |
+| `ReturnShipmentService` and the other services that send a request body through `CoreApi\Api\ShipmentApi` | `CoreApi\Api\ShipmentApi` | A body that cannot be encoded as JSON, for example invalid UTF-8 in a note, throws a `JsonException` | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
 
 #### Direct use of `MyParcelNL\Sdk\Client\Generated`
 
