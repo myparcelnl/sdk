@@ -1,0 +1,11 @@
+<?php
+
+namespace MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator;
+
+class RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2Constraint extends \Symfony\Component\Validator\Constraints\Compound
+{
+    protected function getConstraints($options): array
+    {
+        return [new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.'), new \Symfony\Component\Validator\Constraints\Collection(fields: ['carrier' => new \Symfony\Component\Validator\Constraints\Required([new \Symfony\Component\Validator\Constraints\Type(type: ['string']), new \Symfony\Component\Validator\Constraints\Choice(choices: ['BPOST', 'BRT', 'CHEAP_CARGO', 'DHL_EUROPLUS', 'DHL_FOR_YOU', 'DHL_FREIGHT', 'DHL_PARCEL_CONNECT', 'DPD', 'GLS', 'INPOST', 'POSTE_ITALIANE', 'POSTNL', 'SPRING', 'TRUNKRS', 'UPS_EXPRESS_SAVER', 'UPS_STANDARD', 'VIA_TIM'], message: '"{{ value }}" is not part of the set of possible choices for this field: "{{ choices }}".'), new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.')]), 'packageTypes' => new \Symfony\Component\Validator\Constraints\Required([new \Symfony\Component\Validator\Constraints\Type(type: ['array']), new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.')]), 'options' => new \Symfony\Component\Validator\Constraints\Required([new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.')]), 'deliveryTypes' => new \Symfony\Component\Validator\Constraints\Required([new \Symfony\Component\Validator\Constraints\Type(type: ['array']), new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.')]), 'transactionTypes' => new \Symfony\Component\Validator\Constraints\Required([new \Symfony\Component\Validator\Constraints\Type(type: ['array']), new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.')]), 'collo' => new \Symfony\Component\Validator\Constraints\Required([new \Symfony\Component\Validator\Constraints\NotNull(message: 'This value should not be null.'), new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesResponseColloConstraint()])], allowExtraFields: false)];
+    }
+}
