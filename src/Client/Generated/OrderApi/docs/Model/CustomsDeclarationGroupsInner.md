@@ -7,9 +7,9 @@ Name | Type | Description | Notes
 **description** | **string** | A clear and detailed description of the goods within this group. |
 **hs_code** | **string** | The Harmonized System (HS) code for the goods in this group, a globally recognized classification for traded products. |
 **number_of_items** | **int** | The total quantity of individual items within this specific group. |
-**total_value** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue**](CustomsDeclarationGroupsInnerTotalValue.md) |  |
+**total_value** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money**](Money.md) | The total declared value of all items within this group. |
 **total_weight** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalWeight**](CustomsDeclarationGroupsInnerTotalWeight.md) |  |
-**country_code_of_origin** | [**StringMixed**](StringMixed.md) |  | [optional]
+**country_code_of_origin** | **string** | ISO 3166-1 alpha-2 country code. | [optional]
 **external_product_reference** | **string** | Reference to the product in an external product catalog. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

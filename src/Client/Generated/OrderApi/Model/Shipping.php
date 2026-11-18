@@ -35,7 +35,6 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * Shipping Class Doc Comment
  *
  * @category Class
- * @description The shipping preferences of the order. This should be used as default information when preparing packages for shipment.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,15 +60,15 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
         'additional_context' => 'string',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier',
         'custom_contract_id' => 'string',
-        'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse',
-        'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
+        'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingCustomsDeclarationResponse',
+        'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryOutput',
         'direction' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection',
         'disable_auto_detect_pickup' => 'bool',
         'number_of_labels' => 'int',
-        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsOutput',
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup',
-        'recipient' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRecipient'
+        'recipient' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingRecipient'
     ];
 
     /**
@@ -489,7 +488,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets customs_declaration
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingCustomsDeclarationResponse|null
      */
     public function getCustomsDeclaration()
     {
@@ -499,7 +498,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets customs_declaration
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse|null $customs_declaration customs_declaration
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingCustomsDeclarationResponse|null $customs_declaration customs_declaration
      *
      * @return self
      */
@@ -516,7 +515,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets delivery
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryOutput|null
      */
     public function getDelivery()
     {
@@ -526,7 +525,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets delivery
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery|null $delivery delivery
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryOutput|null $delivery delivery
      *
      * @return self
      */
@@ -632,7 +631,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets options
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsOutput|null
      */
     public function getOptions()
     {
@@ -642,7 +641,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets options
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions|null $options options
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsOutput|null $options options
      *
      * @return self
      */
@@ -713,7 +712,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets recipient
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRecipient|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingRecipient|null
      */
     public function getRecipient()
     {
@@ -723,7 +722,7 @@ class Shipping implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets recipient
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRecipient|null $recipient recipient
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShippingRecipient|null $recipient recipient
      *
      * @return self
      */

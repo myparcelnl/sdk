@@ -58,14 +58,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'account_id' => 'string',
+        'mfa_enabled' => 'bool',
         'platform' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform',
+        'principal' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\PrincipalType',
         'features' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]',
         'fulfilment_platforms' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]',
         'impersonator' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\PrincipalType',
         'id' => 'string',
-        'type' => 'string',
         'role' => '\MyParcelNL\Sdk\Client\Generated\IamApi\Model\RoleUser',
-        'shop_ids' => 'string[]'
+        'shop_ids' => 'string[]',
+        'type' => 'string'
     ];
 
     /**
@@ -77,14 +79,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'account_id' => null,
+        'mfa_enabled' => null,
         'platform' => null,
+        'principal' => null,
         'features' => null,
         'fulfilment_platforms' => null,
         'impersonator' => null,
         'id' => null,
-        'type' => null,
         'role' => null,
-        'shop_ids' => null
+        'shop_ids' => null,
+        'type' => null
     ];
 
     /**
@@ -94,14 +98,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static array $openAPINullables = [
         'account_id' => false,
+        'mfa_enabled' => false,
         'platform' => false,
+        'principal' => false,
         'features' => false,
         'fulfilment_platforms' => false,
         'impersonator' => false,
         'id' => false,
-        'type' => false,
         'role' => false,
-        'shop_ids' => false
+        'shop_ids' => false,
+        'type' => false
     ];
 
     /**
@@ -191,14 +197,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'account_id' => 'accountId',
+        'mfa_enabled' => 'mfaEnabled',
         'platform' => 'platform',
+        'principal' => 'principal',
         'features' => 'features',
         'fulfilment_platforms' => 'fulfilmentPlatforms',
         'impersonator' => 'impersonator',
         'id' => 'id',
-        'type' => 'type',
         'role' => 'role',
-        'shop_ids' => 'shopIds'
+        'shop_ids' => 'shopIds',
+        'type' => 'type'
     ];
 
     /**
@@ -208,14 +216,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'account_id' => 'setAccountId',
+        'mfa_enabled' => 'setMfaEnabled',
         'platform' => 'setPlatform',
+        'principal' => 'setPrincipal',
         'features' => 'setFeatures',
         'fulfilment_platforms' => 'setFulfilmentPlatforms',
         'impersonator' => 'setImpersonator',
         'id' => 'setId',
-        'type' => 'setType',
         'role' => 'setRole',
-        'shop_ids' => 'setShopIds'
+        'shop_ids' => 'setShopIds',
+        'type' => 'setType'
     ];
 
     /**
@@ -225,14 +235,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'account_id' => 'getAccountId',
+        'mfa_enabled' => 'getMfaEnabled',
         'platform' => 'getPlatform',
+        'principal' => 'getPrincipal',
         'features' => 'getFeatures',
         'fulfilment_platforms' => 'getFulfilmentPlatforms',
         'impersonator' => 'getImpersonator',
         'id' => 'getId',
-        'type' => 'getType',
         'role' => 'getRole',
-        'shop_ids' => 'getShopIds'
+        'shop_ids' => 'getShopIds',
+        'type' => 'getType'
     ];
 
     /**
@@ -306,14 +318,16 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('mfa_enabled', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
+        $this->setIfExists('principal', $data ?? [], null);
         $this->setIfExists('features', $data ?? [], null);
         $this->setIfExists('fulfilment_platforms', $data ?? [], null);
         $this->setIfExists('impersonator', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('role', $data ?? [], null);
         $this->setIfExists('shop_ids', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
     }
 
     /**
@@ -354,19 +368,17 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'account_id', the character length must be bigger than or equal to 1.";
         }
 
+        if ($this->container['mfa_enabled'] === null) {
+            $invalidProperties[] = "'mfa_enabled' can't be null";
+        }
         if ($this->container['platform'] === null) {
             $invalidProperties[] = "'platform' can't be null";
         }
-        if (!is_null($this->container['features']) && (count($this->container['features']) > 27)) {
-            $invalidProperties[] = "invalid value for 'features', number of items must be less than or equal to 27.";
+        if ($this->container['principal'] === null) {
+            $invalidProperties[] = "'principal' can't be null";
         }
-
         if (!is_null($this->container['features']) && (count($this->container['features']) < 1)) {
             $invalidProperties[] = "invalid value for 'features', number of items must be greater than or equal to 1.";
-        }
-
-        if (!is_null($this->container['fulfilment_platforms']) && (count($this->container['fulfilment_platforms']) > 1)) {
-            $invalidProperties[] = "invalid value for 'fulfilment_platforms', number of items must be less than or equal to 1.";
         }
 
         if (!is_null($this->container['fulfilment_platforms']) && (count($this->container['fulfilment_platforms']) < 1)) {
@@ -384,20 +396,6 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = "invalid value for 'id', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
-        }
-        $allowedValues = $this->getTypeAllowableValues();
-        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
-        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
-        if ($hasRealAllowedValues && !is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'type', must be one of '%s'",
-                $this->container['type'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         if ($this->container['role'] === null) {
             $invalidProperties[] = "'role' can't be null";
         }
@@ -410,6 +408,20 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
 
         if (!is_null($this->container['shop_ids']) && (count($this->container['shop_ids']) < 1)) {
             $invalidProperties[] = "invalid value for 'shop_ids', number of items must be greater than or equal to 1.";
+        }
+
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
+        }
+        $allowedValues = $this->getTypeAllowableValues();
+        // Skip value-less pseudo-enums produced by the anyOf(string | enum[null,""]) collapse.
+        $hasRealAllowedValues = [] !== array_filter($allowedValues, fn($v) => null !== $v && '' !== $v);
+        if ($hasRealAllowedValues && !is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
+                implode("', '", $allowedValues)
+            );
         }
 
         return $invalidProperties;
@@ -462,6 +474,33 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Gets mfa_enabled
+     *
+     * @return bool
+     */
+    public function getMfaEnabled()
+    {
+        return $this->container['mfa_enabled'];
+    }
+
+    /**
+     * Sets mfa_enabled
+     *
+     * @param bool $mfa_enabled Whether the account of the principal has MFA enabled.
+     *
+     * @return self
+     */
+    public function setMfaEnabled($mfa_enabled)
+    {
+        if (is_null($mfa_enabled)) {
+            throw new \InvalidArgumentException('non-nullable mfa_enabled cannot be null');
+        }
+        $this->container['mfa_enabled'] = $mfa_enabled;
+
+        return $this;
+    }
+
+    /**
      * Gets platform
      *
      * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Platform
@@ -489,6 +528,33 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Gets principal
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\PrincipalType
+     */
+    public function getPrincipal()
+    {
+        return $this->container['principal'];
+    }
+
+    /**
+     * Sets principal
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\PrincipalType $principal principal
+     *
+     * @return self
+     */
+    public function setPrincipal($principal)
+    {
+        if (is_null($principal)) {
+            throw new \InvalidArgumentException('non-nullable principal cannot be null');
+        }
+        $this->container['principal'] = $principal;
+
+        return $this;
+    }
+
+    /**
      * Gets features
      *
      * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]|null
@@ -501,7 +567,7 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets features
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]|null $features features
+     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature[]|null $features A collection of features.
      *
      * @return self
      */
@@ -511,9 +577,7 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable features cannot be null');
         }
 
-        if ((count($features) > 27)) {
-            throw new \InvalidArgumentException('invalid value for $features when calling PrincipalUser., number of items must be less than or equal to 27.');
-        }
+
         if ((count($features) < 1)) {
             throw new \InvalidArgumentException('invalid length for $features when calling PrincipalUser., number of items must be greater than or equal to 1.');
         }
@@ -535,7 +599,7 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets fulfilment_platforms
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]|null $fulfilment_platforms fulfilment_platforms
+     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\FulfilmentPlatform[]|null $fulfilment_platforms A collection of fulfilment platforms.
      *
      * @return self
      */
@@ -545,9 +609,7 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable fulfilment_platforms cannot be null');
         }
 
-        if ((count($fulfilment_platforms) > 1)) {
-            throw new \InvalidArgumentException('invalid value for $fulfilment_platforms when calling PrincipalUser., number of items must be less than or equal to 1.');
-        }
+
         if ((count($fulfilment_platforms) < 1)) {
             throw new \InvalidArgumentException('invalid length for $fulfilment_platforms when calling PrincipalUser., number of items must be greater than or equal to 1.');
         }
@@ -569,7 +631,7 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets impersonator
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\PrincipalType|null $impersonator impersonator
+     * @param \MyParcelNL\Sdk\Client\Generated\IamApi\Model\PrincipalType|null $impersonator The impersonator its principal ID.
      *
      * @return self
      */
@@ -618,33 +680,6 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->container['type'];
-    }
-
-    /**
-     * Sets type
-     *
-     * @param string $type The principal type.
-     *
-     * @return self
-     */
-    public function setType($type)
-    {
-        if (is_null($type)) {
-            throw new \InvalidArgumentException('non-nullable type cannot be null');
-        }
-        $this->container['type'] = $type;
-
-        return $this;
-    }
-
-    /**
      * Gets role
      *
      * @return \MyParcelNL\Sdk\Client\Generated\IamApi\Model\RoleUser
@@ -684,7 +719,7 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets shop_ids
      *
-     * @param string[] $shop_ids shop_ids
+     * @param string[] $shop_ids A collection of shop IDs that a user is allowed to access.
      *
      * @return self
      */
@@ -701,6 +736,33 @@ class PrincipalUser implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('invalid length for $shop_ids when calling PrincipalUser., number of items must be greater than or equal to 1.');
         }
         $this->container['shop_ids'] = $shop_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->container['type'];
+    }
+
+    /**
+     * Sets type
+     *
+     * @param string $type The principal type.
+     *
+     * @return self
+     */
+    public function setType($type)
+    {
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        }
+        $this->container['type'] = $type;
 
         return $this;
     }

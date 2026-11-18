@@ -63,7 +63,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
         'reference_identifier' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestDataShipmentsInnerRecipient',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender',
-        'recipients' => 'float[]',
+        'recipients' => 'int[]',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
@@ -643,7 +643,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Gets recipients
      *
-     * @return float[]|null
+     * @return int[]|null
      */
     public function getRecipients()
     {
@@ -653,7 +653,7 @@ class ShipmentPostShipmentsRequestDataShipmentsInner implements ModelInterface, 
     /**
      * Sets recipients
      *
-     * @param float[]|null $recipients recipients
+     * @param int[]|null $recipients recipients
      *
      * @return self
      */

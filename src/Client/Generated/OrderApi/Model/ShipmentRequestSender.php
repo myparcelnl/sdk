@@ -316,7 +316,7 @@ class ShipmentRequestSender implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets address
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address address
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address The address of the sender.
      *
      * @return self
      */
@@ -343,7 +343,7 @@ class ShipmentRequestSender implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets contact
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Contact $contact contact
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Contact $contact The contact details of the sender.
      *
      * @return self
      */

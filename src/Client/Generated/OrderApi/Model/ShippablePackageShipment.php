@@ -63,7 +63,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipient',
         'custom_contract_id' => 'string',
-        'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
+        'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryInput',
         'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender',
@@ -554,7 +554,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets delivery
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryInput|null
      */
     public function getDelivery()
     {
@@ -564,7 +564,7 @@ class ShippablePackageShipment implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets delivery
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery|null $delivery delivery
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryInput|null $delivery delivery
      *
      * @return self
      */

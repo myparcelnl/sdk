@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**address** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsAddress**](OrderToCreateBillingDetailsAddress.md) |  | [optional]
-**contact** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsContact**](OrderToCreateBillingDetailsContact.md) |  | [optional]
+**address** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address**](Address.md) | The billing address of an order. | [optional]
+**contact** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Contact**](Contact.md) | The billing contact of an order. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

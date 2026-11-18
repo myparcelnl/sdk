@@ -35,6 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * Contact Class Doc Comment
  *
  * @category Class
+ * @description A contact.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

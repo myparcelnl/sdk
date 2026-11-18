@@ -358,7 +358,7 @@ class CommonResponsesProblem implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets type
      *
-     * @param string $type URI reference identifying the problem type. Derived from the wrapping UserException constant name (e.g. `urn:problem:invalid-shipments`) or, when no matching constant exists, a status-based fallback URN.
+     * @param string $type URI reference identifying the problem type. Derived from the error code (e.g. `urn:problem:invalid-shipments`) or, when no matching code exists, a status-based fallback URN.
      *
      * @return self
      */
@@ -520,7 +520,7 @@ class CommonResponsesProblem implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets errors
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesProblemErrorsInner[]|null $errors Sub-problem list. Each entry is itself an RFC 9457 problem-detail object describing one failing field. The sub-error `type`/`title` narrow past the wrapping problem when the underlying validator code maps to its own UserException constant (e.g. `urn:problem:invalid-address`, `urn:problem:invalid-physical-properties`).
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonResponsesProblemErrorsInner[]|null $errors Sub-problem list. Each entry is itself an RFC 9457 problem-detail object describing one failing field. The sub-error `type`/`title` narrow past the wrapping problem when the underlying error code maps to a more specific type (e.g. `urn:problem:invalid-address`, `urn:problem:invalid-physical-properties`).
      *
      * @return self
      */

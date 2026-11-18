@@ -35,6 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * ContactMultiEmail Class Doc Comment
  *
  * @category Class
+ * @description A contact entity capable of holding multiple email addresses.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

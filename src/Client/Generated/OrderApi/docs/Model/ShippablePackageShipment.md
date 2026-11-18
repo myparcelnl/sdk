@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType**](PackageType.md) |  |
 **recipient** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipient**](ShipmentRequestRecipient.md) |  |
 **custom_contract_id** | **string** | The unique identifier of the contract. | [optional]
-**delivery** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery**](Delivery.md) |  | [optional]
+**delivery** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryInput**](DeliveryInput.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommon**](ShipmentOptionsCommon.md) |  | [optional]
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup**](Pickup.md) |  | [optional]
 **sender** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender**](ShipmentRequestSender.md) |  | [optional]

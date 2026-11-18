@@ -21,5 +21,6 @@ Name | Type | Description | Notes
 **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **signature** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesIntBoolean**](RefTypesIntBoolean.md) |  | [optional]
 **label_description** | **string** |  | [optional]
+**incoterms** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms**](RefShipmentIncoterms.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

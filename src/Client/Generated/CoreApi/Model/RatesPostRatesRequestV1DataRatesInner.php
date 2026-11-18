@@ -65,10 +65,11 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => 'mixed',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier',
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV1DataRatesInnerOptions',
-        'delivery_type' => 'float',
-        'shipment_type' => 'float',
+        'delivery_type' => 'int',
+        'shipment_type' => 'int',
         'direction' => 'string',
         'collo' => 'int'
     ];
@@ -88,6 +89,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => null,
         'carrier_id' => null,
         'package_type' => null,
+        'incoterms' => null,
         'physical_properties' => null,
         'options' => null,
         'delivery_type' => null,
@@ -109,6 +111,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => false,
         'carrier_id' => false,
         'package_type' => false,
+        'incoterms' => false,
         'physical_properties' => false,
         'options' => false,
         'delivery_type' => false,
@@ -210,6 +213,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => 'pickup',
         'carrier_id' => 'carrier_id',
         'package_type' => 'package_type',
+        'incoterms' => 'incoterms',
         'physical_properties' => 'physical_properties',
         'options' => 'options',
         'delivery_type' => 'delivery_type',
@@ -231,6 +235,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => 'setPickup',
         'carrier_id' => 'setCarrierId',
         'package_type' => 'setPackageType',
+        'incoterms' => 'setIncoterms',
         'physical_properties' => 'setPhysicalProperties',
         'options' => 'setOptions',
         'delivery_type' => 'setDeliveryType',
@@ -252,6 +257,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         'pickup' => 'getPickup',
         'carrier_id' => 'getCarrierId',
         'package_type' => 'getPackageType',
+        'incoterms' => 'getIncoterms',
         'physical_properties' => 'getPhysicalProperties',
         'options' => 'getOptions',
         'delivery_type' => 'getDeliveryType',
@@ -393,6 +399,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
         $this->setIfExists('pickup', $data ?? [], null);
         $this->setIfExists('carrier_id', $data ?? [], null);
         $this->setIfExists('package_type', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
         $this->setIfExists('physical_properties', $data ?? [], null);
         $this->setIfExists('options', $data ?? [], null);
         $this->setIfExists('delivery_type', $data ?? [], null);
@@ -679,6 +686,33 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     }
 
     /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
+
+        return $this;
+    }
+
+    /**
      * Gets physical_properties
      *
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties|null
@@ -735,7 +769,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Gets delivery_type
      *
-     * @return float|null
+     * @return int|null
      */
     public function getDeliveryType()
     {
@@ -745,7 +779,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Sets delivery_type
      *
-     * @param float|null $delivery_type delivery_type
+     * @param int|null $delivery_type delivery_type
      *
      * @return self
      */
@@ -762,7 +796,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Gets shipment_type
      *
-     * @return float|null
+     * @return int|null
      */
     public function getShipmentType()
     {
@@ -772,7 +806,7 @@ class RatesPostRatesRequestV1DataRatesInner implements ModelInterface, ArrayAcce
     /**
      * Sets shipment_type
      *
-     * @param float|null $shipment_type shipment_type
+     * @param int|null $shipment_type shipment_type
      *
      * @return self
      */

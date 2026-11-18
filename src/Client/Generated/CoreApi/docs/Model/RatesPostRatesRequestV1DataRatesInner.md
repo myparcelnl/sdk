@@ -11,10 +11,11 @@ Name | Type | Description | Notes
 **pickup** | [**mixed**](Null.md) |  | [optional]
 **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier**](RefCapabilitiesSharedCarrier.md) |  |
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType**](RefShipmentPackageType.md) |  |
+**incoterms** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms**](RefShipmentIncoterms.md) |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties**](RatesPostRatesRequestV2PhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV1DataRatesInnerOptions**](RatesPostRatesRequestV1DataRatesInnerOptions.md) |  | [optional]
-**delivery_type** | **float** |  | [optional]
-**shipment_type** | **float** |  | [optional]
+**delivery_type** | **int** |  | [optional]
+**shipment_type** | **int** |  | [optional]
 **direction** | **string** | The shipment direction for which the rates are requested. | [optional]
 **collo** | **int** | The number of collo for which the rates are requested. | [optional]
 

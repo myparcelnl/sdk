@@ -35,7 +35,6 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * ShipmentRequestRecipient Class Doc Comment
  *
  * @category Class
- * @description The recipient of the shipment.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,7 +58,7 @@ class ShipmentRequestRecipient implements ModelInterface, ArrayAccess, \JsonSeri
       */
     protected static $openAPITypes = [
         'address' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address',
-        'contact' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail'
+        'contact' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipientContact'
     ];
 
     /**
@@ -316,7 +315,7 @@ class ShipmentRequestRecipient implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets address
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address address
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address The address of the recipient.
      *
      * @return self
      */
@@ -333,7 +332,7 @@ class ShipmentRequestRecipient implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets contact
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipientContact
      */
     public function getContact()
     {
@@ -343,7 +342,7 @@ class ShipmentRequestRecipient implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets contact
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail $contact contact
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestRecipientContact $contact contact
      *
      * @return self
      */
