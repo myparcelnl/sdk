@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Model\Shipment\Mapping;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Model\Shipment\Mapping\CarrierApiMapping;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionClass;
 
 /**
  * Preserves the public conversion, validation and exception contracts of CarrierApiMapping.
@@ -26,15 +25,15 @@ class CarrierApiMappingTest extends TestCase
 
     public function testEnumToIdReturnsCorrectId(): void
     {
-        $this->assertSame(RefTypesCarrier::POSTNL, $this->mapping->enumToId(RefCapabilitiesSharedCarrierV2::POSTNL));
-        $this->assertSame(RefTypesCarrier::DHL_FOR_YOU, $this->mapping->enumToId(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU));
-        $this->assertSame(RefTypesCarrier::POSTE_ITALIANE, $this->mapping->enumToId(RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE));
+        $this->assertSame(RefTypesCarrier::Postnl->value, $this->mapping->enumToId(RefCapabilitiesSharedCarrierV2::Postnl->value));
+        $this->assertSame(RefTypesCarrier::DhlForYou->value, $this->mapping->enumToId(RefCapabilitiesSharedCarrierV2::DhlForYou->value));
+        $this->assertSame(RefTypesCarrier::PosteItaliane->value, $this->mapping->enumToId(RefCapabilitiesSharedCarrierV2::PosteItaliane->value));
     }
 
     public function testIdToEnumReturnsCorrectEnum(): void
     {
-        $this->assertSame(RefCapabilitiesSharedCarrierV2::POSTNL, $this->mapping->idToEnum(RefTypesCarrier::POSTNL));
-        $this->assertSame(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU, $this->mapping->idToEnum(RefTypesCarrier::DHL_FOR_YOU));
+        $this->assertSame(RefCapabilitiesSharedCarrierV2::Postnl->value, $this->mapping->idToEnum(RefTypesCarrier::Postnl->value));
+        $this->assertSame(RefCapabilitiesSharedCarrierV2::DhlForYou->value, $this->mapping->idToEnum(RefTypesCarrier::DhlForYou->value));
     }
 
     public function testRoundTripHoldsForEveryMappedCarrier(): void
@@ -66,8 +65,8 @@ class CarrierApiMappingTest extends TestCase
     {
         $this->assertCount(
             count(array_intersect_key(
-                (new ReflectionClass(RefTypesCarrier::class))->getConstants(),
-                (new ReflectionClass(RefCapabilitiesSharedCarrierV2::class))->getConstants()
+                array_flip(array_column(RefTypesCarrier::cases(), 'name')),
+                array_flip(array_column(RefCapabilitiesSharedCarrierV2::cases(), 'name'))
             )),
             $this->mapping->all()
         );
@@ -77,13 +76,13 @@ class CarrierApiMappingTest extends TestCase
     {
         $all = $this->mapping->all();
 
-        $this->assertArrayHasKey(RefCapabilitiesSharedCarrierV2::POSTNL, $all);
-        $this->assertSame(RefTypesCarrier::POSTNL, $all[RefCapabilitiesSharedCarrierV2::POSTNL]);
+        $this->assertArrayHasKey(RefCapabilitiesSharedCarrierV2::Postnl->value, $all);
+        $this->assertSame(RefTypesCarrier::Postnl->value, $all[RefCapabilitiesSharedCarrierV2::Postnl->value]);
     }
 
     public function testIsValidReturnsTrueForKnownValue(): void
     {
-        $this->assertTrue($this->mapping->isValid(RefCapabilitiesSharedCarrierV2::DPD));
+        $this->assertTrue($this->mapping->isValid(RefCapabilitiesSharedCarrierV2::Dpd->value));
     }
 
     public function testIsValidReturnsFalseForUnknownValue(): void
@@ -118,7 +117,7 @@ class CarrierApiMappingTest extends TestCase
         }
 
         $this->expectException(InvalidArgumentException::class);
-        $this->mapping->idToEnum(RefTypesCarrier::BOL);
+        $this->mapping->idToEnum(RefTypesCarrier::Bol->value);
     }
 
     /**
