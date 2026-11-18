@@ -4,115 +4,101 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Capabilities;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostCapabilitiesContractDefinitionsClientErrorException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2Carrier;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Services\Capabilities\CarrierContractDefinitionsService;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use TypeError;
 
 final class CarrierContractDefinitionsServiceTest extends TestCase
 {
-    public function testGetContractDefinitionsFetchesAllThroughGeneratedClient(): void
-    {
-        $items = [
-            $this->createDefinition(RefCapabilitiesSharedCarrierV2::POSTNL),
-            $this->createDefinition(RefCapabilitiesSharedCarrierV2::INPOST),
-        ];
+    use MocksHttpClient;
 
-        $api = $this->createMock(ShipmentApi::class);
-        $service = new CarrierContractDefinitionsService($this->getApiKey(), null, $api);
+    public function testGetContractDefinitionsFetchesAllDefinitions(): void
+    {
+        $service = $this->createService('{"items":[{"carrier":"POSTNL"},{"carrier":"INPOST"}]}');
         $service->setUserAgentForProposition('Shopify', '1.0.0');
-        $expectedUserAgent = $service->getUserAgentHeader();
 
-        $api->expects(self::once())
-            ->method('postCapabilitiesContractDefinitions')
-            ->with(
-                self::callback(static function ($request): bool {
-                    self::assertInstanceOf(CapabilitiesPostContractDefinitionsRequestV2::class, $request);
-                    self::assertNull($request->getCarrier());
+        $definitions = $service->getContractDefinitions();
 
-                    return true;
-                }),
-                self::identicalTo($expectedUserAgent)
-            )
-            ->willReturn(new CapabilitiesResponsesContractDefinitionsV2(['items' => $items]));
-
-        self::assertSame($items, $service->getContractDefinitions());
-    }
-
-    public function testGetContractDefinitionsPassesCarrierFilterToGeneratedRequest(): void
-    {
-        $inPost = $this->createDefinition(RefCapabilitiesSharedCarrierV2::INPOST);
-
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::once())
-            ->method('postCapabilitiesContractDefinitions')
-            ->with(
-                self::callback(static function ($request): bool {
-                    self::assertInstanceOf(CapabilitiesPostContractDefinitionsRequestV2::class, $request);
-                    self::assertSame(
-                        CapabilitiesPostContractDefinitionsRequestV2::CARRIER_INPOST,
-                        $request->getCarrier()
-                    );
-
-                    return true;
-                }),
-                self::anything()
-            )
-            ->willReturn(new CapabilitiesResponsesContractDefinitionsV2(['items' => [$inPost]]));
-
-        $service = new CarrierContractDefinitionsService($this->getApiKey(), null, $api);
-
+        self::assertSame('POST', $this->requests[0]['method']);
+        self::assertSame('https://api.myparcel.nl/shipments/capabilities/contract-definitions', $this->requests[0]['url']);
+        self::assertSame('application/json;version=2.0', $this->header('content-type'));
+        self::assertSame('MyPlugin/1.0', $this->header('user-agent'));
+        self::assertSame('{}', $this->requests[0]['options']['body']);
         self::assertSame(
-            [$inPost],
-            $service->getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2::CARRIER_INPOST)
+            [RefCapabilitiesSharedCarrierV2::Postnl, RefCapabilitiesSharedCarrierV2::Inpost],
+            array_map(static fn(object $definition) => $definition->carrier, $definitions)
         );
     }
 
-    public function testGetContractDefinitionsRejectsUnknownCarrierBeforeSending(): void
+    public function testGetContractDefinitionsSendsTheCarrierFilter(): void
     {
-        // Real client with an empty mock handler: request serialization runs (and must
-        // reject the unknown carrier) before any HTTP request is attempted.
-        // Use a fresh Configuration instance rather than mutating the global default
-        // singleton, which would leak auth state into other tests.
-        $api = new ShipmentApi(
-            new Client(['handler' => HandlerStack::create(new MockHandler([]))]),
-            (new Configuration())->setApiKey('Authorization', $this->getApiKey())
-        );
+        $service = $this->createService('{"items":[{"carrier":"INPOST"}]}');
 
-        $service = new CarrierContractDefinitionsService($this->getApiKey(), null, $api);
+        $service->getContractDefinitions(CapabilitiesPostContractDefinitionsRequestV2Carrier::Inpost);
 
-        $this->expectException(InvalidArgumentException::class);
-
-        $service->getContractDefinitions('inpost');
+        self::assertSame('{"carrier":"INPOST"}', $this->requests[0]['options']['body']);
     }
 
-    public function testGetContractDefinitionsThrowsWhenGeneratedClientReturnsUnexpectedResponse(): void
+    /**
+     * INT-2033 asks that an unknown enum value in a response gives no exception. The client reads a
+     * response without validation, so the raw string comes back.
+     */
+    public function testGetContractDefinitionsKeepsAValueThatTheSdkDoesNotKnow(): void
     {
-        $api = $this->createMock(ShipmentApi::class);
-        $api->expects(self::once())
-            ->method('postCapabilitiesContractDefinitions')
-            ->willReturn(new \stdClass());
+        $definitions = $this->createService('{"items":[{"carrier":"FUTURE_CARRIER","packageTypes":["FUTURE_PACKAGE"]}]}')->getContractDefinitions();
 
-        $service = new CarrierContractDefinitionsService($this->getApiKey(), null, $api);
+        self::assertSame('FUTURE_CARRIER', $definitions[0]->carrier);
+        self::assertSame(['FUTURE_PACKAGE'], $definitions[0]->packageTypes);
+    }
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unexpected response type returned by ShipmentApi::postCapabilitiesContractDefinitions().');
+    public function testGetContractDefinitionsReturnsAnEmptyListWithoutItems(): void
+    {
+        self::assertSame([], $this->createService('{}')->getContractDefinitions());
+    }
+
+    public function testAnErrorResponseThrowsTheGeneratedException(): void
+    {
+        $service = $this->createService('{"message":"Unauthorized"}', 401);
+
+        try {
+            $service->getContractDefinitions();
+            self::fail('A 401 response must throw.');
+        } catch (PostCapabilitiesContractDefinitionsClientErrorException $exception) {
+            self::assertSame(401, $exception->getResponse()->getStatusCode());
+        }
+    }
+
+    public function testAResponseWithoutJsonThrowsTheGeneratedException(): void
+    {
+        $service = $this->createService('{"items":[]}', 200, 'text/plain');
+
+        $this->expectException(BadResponseException::class);
 
         $service->getContractDefinitions();
     }
 
-    private function createDefinition(string $carrier): RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
+    /**
+     * The constructor of `CreatesCoreApiClient` takes the API key, the client and the host in this
+     * order. In v11, this service took the host as the second argument.
+     */
+    public function testAHostAsTheSecondArgumentThrowsATypeError(): void
     {
-        return new RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2([
-            'carrier' => $carrier,
-        ]);
+        $this->expectException(TypeError::class);
+
+        new CarrierContractDefinitionsService('my-api-key', 'https://api.acceptance.myparcel.nl');
+    }
+
+    private function createService(string $body, int $status = 200, string $contentType = 'application/json'): CarrierContractDefinitionsService
+    {
+        return new CarrierContractDefinitionsService(
+            'my-api-key',
+            ShipmentApiFactory::client('my-api-key', null, 'MyPlugin/1.0', [], $this->mockHttpClient($body, $status, $contentType))
+        );
     }
 }
