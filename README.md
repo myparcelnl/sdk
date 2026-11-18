@@ -349,12 +349,11 @@ Use `CarrierContractDefinitionsService` for new account-level carrier contract d
 ## Testing
 
 ```bash
-# Run all tests
+# Run the tests. The live smoke tests are not part of this run.
 ./vendor/bin/phpunit
-
-# Run without live API tests
-./vendor/bin/phpunit --exclude-group=live
 ```
+
+The live smoke tests run only on request, on a test host: see [CONTRIBUTING.md](CONTRIBUTING.md#live-smoke-tests).
 
 Tests use two mocking strategies:
 - **Legacy web services:** Mockery via `$this->mockCurl()` in `TestCase`

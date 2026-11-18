@@ -12,6 +12,8 @@ use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem;
 use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
+use MyParcelNL\Sdk\Services\CoreApi\HttpCapabilitiesClient;
+use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -21,6 +23,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * Minimal live smoke test to verify the Capabilities endpoint works
  * with a real API key. This test does not validate business logic,
  * only that the Core API responds with the expected data structure.
+ *
+ * It sends two capabilities requests and creates no data. It runs only on request, see
+ * `TestCase::liveApiHost()` and "Live smoke tests" in `CONTRIBUTING.md`.
  */
 final class CapabilitiesLiveSmokeTest extends TestCase
 {
@@ -30,13 +35,17 @@ final class CapabilitiesLiveSmokeTest extends TestCase
     {
         parent::setUp();
 
+        $host = self::liveApiHost();
+
         // Skip if no API key is present
         $hasAnyKey = getenv('API_KEY') || getenv('API_KEY_NL') || getenv('API_KEY_BE');
         if (! $hasAnyKey) {
             $this->markTestSkipped('Skipping live smoke tests: no API key found in env (API_KEY / API_KEY_NL / API_KEY_BE).');
         }
 
-        $this->service = new CapabilitiesService();
+        $this->service = new CapabilitiesService(
+            new HttpCapabilitiesClient(api: ShipmentApiFactory::make(null, $host))
+        );
     }
 
     /**
