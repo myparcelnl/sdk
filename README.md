@@ -243,11 +243,13 @@ $mapper->legacyNameFromV2Name('DPD');  // 'dpd'
 ```
 
 Use `forDeliveryType()` or `forPackageType()` for the other categories. Conversion methods return
-`null` if no mapping exists. Use `allRows()` for one category or `allDomains()` for all three.
+`null` if no mapping exists. Use `allRows()` for one category or `allDomains()` for all three. The
+rows are keyed by the case name of the generated enums, such as `DhlForYou`.
 
 Shipment option names are handled by `Services\Mapping\ShipmentOptionMapper`. Its
-`v2PropertyFromName()` method returns the generated capabilities v2 model property, or `null`.
-For example, `signature` and `requiresSignature` both map to `requires_signature`.
+`v2PropertyFromName()` method returns the property of the generated capabilities v2 options model,
+or `null`. For example, `signature`, `requires_signature` and `requiresSignature` all map to
+`requiresSignature`.
 
 ## Unsupported capabilities options
 

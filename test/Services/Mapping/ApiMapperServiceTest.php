@@ -6,6 +6,9 @@ namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\FutureId;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\FutureLegacyName;
+use MyParcelNL\Sdk\Test\Services\Mapping\Fixtures\FutureV2Name;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -20,7 +23,7 @@ class ApiMapperServiceTest extends TestCase
             $expected = [];
 
             foreach ($profile as $enumClass) {
-                $expected += (new ReflectionClass($enumClass))->getConstants();
+                $expected += array_column($enumClass::cases(), 'value', 'name');
             }
 
             ksort($expected);
@@ -29,7 +32,7 @@ class ApiMapperServiceTest extends TestCase
         }
     }
 
-    public function testRowsAreKeyedByTheSharedConstantName(): void
+    public function testRowsAreKeyedByTheCaseNameOfTheEnums(): void
     {
         $rows = ApiMapperService::forCarrier()->allRows();
 
@@ -39,7 +42,7 @@ class ApiMapperServiceTest extends TestCase
                 ApiMapperService::COLUMN_ID          => 9,
                 ApiMapperService::COLUMN_V2_NAME     => 'DHL_FOR_YOU',
             ],
-            $rows['DHL_FOR_YOU']
+            $rows['DhlForYou']
         );
     }
 
@@ -51,26 +54,26 @@ class ApiMapperServiceTest extends TestCase
     {
         $rows = ApiMapperService::forCarrier()->allRows();
 
-        foreach (['BOL', 'DHL_CHEAP_CARGO', 'INSTABOX', 'UPS'] as $constantName) {
-            $this->assertNull($rows[$constantName][ApiMapperService::COLUMN_V2_NAME], $constantName);
-            $this->assertNotNull($rows[$constantName][ApiMapperService::COLUMN_ID], $constantName);
+        foreach (['Bol', 'DhlCheapCargo', 'Instabox', 'Ups'] as $caseName) {
+            $this->assertNull($rows[$caseName][ApiMapperService::COLUMN_V2_NAME], $caseName);
+            $this->assertNotNull($rows[$caseName][ApiMapperService::COLUMN_ID], $caseName);
         }
     }
 
     /**
-     * PICKUP has no constant in ShipmentDefsDeliveryOptionsDeliveryNameV2, so its legacy name
+     * Pickup has no case in `ShipmentDefsDeliveryOptionsDeliveryNameV2`, so its legacy name
      * comes from the override. Its id and v2 name still come from the generated enums.
      */
     public function testPickupGetsItsLegacyNameFromTheOverride(): void
     {
         $rows = ApiMapperService::forDeliveryType()->allRows();
 
-        $this->assertSame('pickup', $rows['PICKUP'][ApiMapperService::COLUMN_LEGACY_NAME]);
-        $this->assertSame(4, $rows['PICKUP'][ApiMapperService::COLUMN_ID]);
-        $this->assertSame('PICKUP_DELIVERY', $rows['PICKUP'][ApiMapperService::COLUMN_V2_NAME]);
+        $this->assertSame('pickup', $rows['Pickup'][ApiMapperService::COLUMN_LEGACY_NAME]);
+        $this->assertSame(4, $rows['Pickup'][ApiMapperService::COLUMN_ID]);
+        $this->assertSame('PICKUP_DELIVERY', $rows['Pickup'][ApiMapperService::COLUMN_V2_NAME]);
     }
 
-    public function testRowsAreSortedByConstantNameForDeterminism(): void
+    public function testRowsAreSortedByCaseNameForDeterminism(): void
     {
         $keys = array_keys(ApiMapperService::forPackageType()->allRows());
 
@@ -130,22 +133,12 @@ class ApiMapperServiceTest extends TestCase
         }
     }
 
-    public function testNewEnumConstantsMapWithoutHandWrittenEntries(): void
+    public function testNewEnumCasesMapWithoutHandWrittenEntries(): void
     {
-        $legacy = new class {
-            public const FUTURE = 'future_service';
-        };
-        $ids = new class {
-            public const FUTURE = 99;
-        };
-        $v2 = new class {
-            public const FUTURE  = 'FUTURE_SERVICE';
-            public const V2_ONLY = 'V2_ONLY';
-        };
         $mapper = $this->compiledMapperFixture([
-            ApiMapperService::COLUMN_LEGACY_NAME => get_class($legacy),
-            ApiMapperService::COLUMN_ID          => get_class($ids),
-            ApiMapperService::COLUMN_V2_NAME     => get_class($v2),
+            ApiMapperService::COLUMN_LEGACY_NAME => FutureLegacyName::class,
+            ApiMapperService::COLUMN_ID          => FutureId::class,
+            ApiMapperService::COLUMN_V2_NAME     => FutureV2Name::class,
         ]);
 
         $this->assertSame('future_service', $mapper->legacyNameFromId(99));
@@ -154,7 +147,7 @@ class ApiMapperServiceTest extends TestCase
         $this->assertSame('FUTURE_SERVICE', $mapper->v2NameFromLegacyName('future_service'));
         $this->assertSame(99, $mapper->idFromV2Name('FUTURE_SERVICE'));
         $this->assertSame('future_service', $mapper->legacyNameFromV2Name('FUTURE_SERVICE'));
-        $this->assertSame($this->row(null, null, 'V2_ONLY'), $mapper->allRows()['V2_ONLY']);
+        $this->assertSame($this->row(null, null, 'V2_ONLY'), $mapper->allRows()['V2Only']);
         $this->assertNull($mapper->idFromV2Name('V2_ONLY'));
     }
 
@@ -163,7 +156,7 @@ class ApiMapperServiceTest extends TestCase
         $mapper = $this->compiledMapperFixture(
             ApiMapperService::profiles()[ApiMapperService::DOMAIN_PACKAGE_TYPE],
             [
-                'PACKAGE' => [
+                'Package' => [
                     ApiMapperService::COLUMN_LEGACY_NAME => ['value' => 'parcel', 'aliases' => ['package']],
                     ApiMapperService::COLUMN_ID          => ['value' => 99, 'aliases' => [1]],
                     ApiMapperService::COLUMN_V2_NAME     => ['value' => 'PARCEL', 'aliases' => ['PACKAGE']],
@@ -189,7 +182,7 @@ class ApiMapperServiceTest extends TestCase
         $mapper = $this->compiledMapperFixture(
             ApiMapperService::profiles()[ApiMapperService::DOMAIN_PACKAGE_TYPE],
             [
-                'PACKAGE' => [
+                'Package' => [
                     ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['parcel']],
                     ApiMapperService::COLUMN_V2_NAME     => ['value' => null],
                 ],
@@ -222,11 +215,11 @@ class ApiMapperServiceTest extends TestCase
         $this->assertSame(1, $map['POSTNL']);
         $this->assertSame(21, $map['DHL_FREIGHT']);
 
-        foreach (['BOL', 'DHL_CHEAP_CARGO', 'INSTABOX', 'UPS'] as $sparse) {
+        foreach (['Bol', 'DhlCheapCargo', 'Instabox', 'Ups'] as $sparse) {
             $this->assertArrayNotHasKey($sparse, $map, $sparse);
         }
 
-        $this->assertArrayHasKey('BOL', $carrier->allRows(), 'allRows() must keep the sparse rows.');
+        $this->assertArrayHasKey('Bol', $carrier->allRows(), 'allRows() must keep the sparse rows.');
     }
 
     /**
@@ -307,7 +300,7 @@ class ApiMapperServiceTest extends TestCase
     public function testV2ToIdMapAppendsACompleteOverrideOnlyRow(): void
     {
         $rows          = ApiMapperService::forPackageType()->allRows();
-        $rows['EXTRA'] = $this->row('extra', 99, 'EXTRA');
+        $rows['Extra'] = $this->row('extra', 99, 'EXTRA');
         $mapper        = $this->mapperFixture(ApiMapperService::DOMAIN_PACKAGE_TYPE, $rows);
         $map           = $mapper->v2ToIdMap();
 
@@ -422,7 +415,7 @@ class ApiMapperServiceTest extends TestCase
     }
 
     /**
-     * The pay-off of joining on the constant name: these two legacy names follow no rule at all,
+     * The pay-off of joining on the case name: these two legacy names follow no rule at all,
      * and they still resolve without a single hand-written entry.
      */
     public function testIrregularLegacyCarrierNamesResolveWithoutAnyOverride(): void
@@ -458,12 +451,12 @@ class ApiMapperServiceTest extends TestCase
     }
 
     /**
-     * The canonical key is an array key, not an API value. RefTypesDeliveryTypeV2::PICKUP is
-     * keyed 'PICKUP' but spelled 'PICKUP_DELIVERY', so the key itself does not resolve.
+     * The key of a row is a case name, not an API value. RefTypesDeliveryTypeV2::Pickup is
+     * keyed 'Pickup' but spelled 'PICKUP_DELIVERY', so the key itself does not resolve.
      */
-    public function testConstantNamesAreNotApiValues(): void
+    public function testCaseNamesAreNotApiValues(): void
     {
-        $this->assertNull(ApiMapperService::forDeliveryType()->idFromV2Name('PICKUP'));
+        $this->assertNull(ApiMapperService::forDeliveryType()->idFromV2Name('Pickup'));
         $this->assertSame(4, ApiMapperService::forDeliveryType()->idFromV2Name('PICKUP_DELIVERY'));
     }
 
@@ -487,8 +480,8 @@ class ApiMapperServiceTest extends TestCase
         $mapper = $this->mapperFixture(
             ApiMapperService::DOMAIN_PACKAGE_TYPE,
             [
-                'SOURCE_SPELLING' => $this->row('digitalStamp', null, null),
-                'TARGET_SPELLING' => $this->row(null, null, 'DIGITAL_STAMP'),
+                'SourceSpelling' => $this->row('digitalStamp', null, null),
+                'TargetSpelling' => $this->row(null, null, 'DIGITAL_STAMP'),
             ]
         );
 
@@ -500,10 +493,10 @@ class ApiMapperServiceTest extends TestCase
         $mapper = $this->mapperFixture(
             ApiMapperService::DOMAIN_PACKAGE_TYPE,
             [
-                'SOURCE_CONCEPT' => $this->row('new_name', 42, null),
-                'TARGET_CONCEPT' => $this->row(null, null, 'OLD_NAME'),
+                'SourceConcept' => $this->row('new_name', 42, null),
+                'TargetConcept' => $this->row(null, null, 'OLD_NAME'),
             ],
-            ['SOURCE_CONCEPT' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old_name']]]]
+            ['SourceConcept' => [ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old_name']]]]
         );
 
         $this->assertNull($mapper->v2NameFromLegacyName('old_name'));
@@ -514,10 +507,10 @@ class ApiMapperServiceTest extends TestCase
         $mapper = $this->mapperFixture(
             ApiMapperService::DOMAIN_PACKAGE_TYPE,
             [
-                'SOURCE_SPELLING' => $this->row('digitalStamp', null, null),
-                'TARGET_SPELLING' => $this->row(null, null, 'DIGITAL_STAMP'),
+                'SourceSpelling' => $this->row('digitalStamp', null, null),
+                'TargetSpelling' => $this->row(null, null, 'DIGITAL_STAMP'),
             ],
-            ['SOURCE_SPELLING' => [ApiMapperService::COLUMN_V2_NAME => ['value' => null]]]
+            ['SourceSpelling' => [ApiMapperService::COLUMN_V2_NAME => ['value' => null]]]
         );
 
         $this->assertNull($mapper->v2NameFromLegacyName('digitalStamp'));
@@ -528,10 +521,10 @@ class ApiMapperServiceTest extends TestCase
         $mapper = $this->mapperFixture(
             ApiMapperService::DOMAIN_PACKAGE_TYPE,
             [
-                'SOURCE_CONCEPT' => $this->row('manual_name', 42, null),
-                'TARGET_CONCEPT' => $this->row(null, null, 'MANUAL_NAME'),
+                'SourceConcept' => $this->row('manual_name', 42, null),
+                'TargetConcept' => $this->row(null, null, 'MANUAL_NAME'),
             ],
-            ['SOURCE_CONCEPT' => [ApiMapperService::COLUMN_LEGACY_NAME => ['value' => 'manual_name']]]
+            ['SourceConcept' => [ApiMapperService::COLUMN_LEGACY_NAME => ['value' => 'manual_name']]]
         );
 
         $this->assertNull($mapper->v2NameFromLegacyName('manual_name'));
@@ -546,9 +539,9 @@ class ApiMapperServiceTest extends TestCase
     {
         $mapper = $this->mapperFixture(
             ApiMapperService::DOMAIN_PACKAGE_TYPE,
-            ['EXAMPLE' => $this->row('new_name', 42, 'NEW_NAME')],
+            ['Example' => $this->row('new_name', 42, 'NEW_NAME')],
             [
-                'EXAMPLE' => [
+                'Example' => [
                     ApiMapperService::COLUMN_LEGACY_NAME => ['aliases' => ['old_name']],
                     ApiMapperService::COLUMN_V2_NAME     => ['aliases' => ['OLD_NAME']],
                 ],
