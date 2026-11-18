@@ -4,81 +4,57 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Labels;
 
-use GuzzleHttp\Client as GuzzleClient;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentLabelPrintingPosition;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentParametersPaperSize;
+use MyParcelNL\Sdk\Client\Jane\GetShipmentsLabelsRaw;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 use MyParcelNL\Sdk\Exception\ApiException;
 use MyParcelNL\Sdk\Exception\MissingFieldException;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
 
 /**
- * Service for retrieving shipment labels (link/PDF) by shipment IDs.
+ * Fetches the labels of shipments as a download link or as a PDF, through the Core API client.
  *
- * This service intentionally keeps the legacy link/PDF behavior intact.
- *
- * @todo Temporary workaround: use generated request-builder + manual sendRequest()
- *       because generated ShipmentApi::getShipmentsLabels() currently exposes a void return flow,
- *       while this SDK still needs the existing link/PDF response handling.
+ * An error response throws the generated exceptions, such as `GetShipmentsLabelsNotFoundException`.
+ * A 2xx response without a link or a PDF throws the `ApiException` of the SDK.
  */
 final class ShipmentLabelsService
 {
-    use HasUserAgent;
+    use CreatesCoreApiClient;
 
     private const PREFIX_PDF_FILENAME = 'myparcel-label-';
     private const LABEL_LINK_ACCEPT_HEADER = 'application/vnd.shipment_label_link+json';
+    // The spec documents the binary label as `application/*`. The API sends a PDF for this value.
     private const PDF_ACCEPT_HEADER = 'application/pdf';
     private const SHIPMENT_LABEL_PREPARE_ACTIVE_FROM = 25;
-    private const A4_FIRST_LABEL_POSITION = 1;
-    private const A4_LAST_LABEL_POSITION = 4;
-
-    private ShipmentApi $api;
-    private ClientInterface $httpClient;
 
     private string $labelLink = '';
 
     private string $labelPdf = '';
 
-    public function __construct(
-        string $apiKey,
-        ?ShipmentApi $api = null,
-        ?ClientInterface $httpClient = null,
-        ?string $host = null
-    ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-        $this->httpClient = $httpClient ?? new GuzzleClient(['timeout' => ShipmentApiFactory::DEFAULT_HTTP_TIMEOUT]);
-    }
-
     /**
-     * Fetch and store the label download link for the given shipments.
-     *
-     * Hybrid note: request construction comes from the generated client, but response parsing
-     * stays local for now because the generated labels operation does not expose a typed return model.
+     * Fetch and store the download link of the labels of the given shipments.
      *
      * @param int[] $shipmentIds
-     * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
+     * @param mixed $positions   The first label position on an A4 sheet, 1 to 4, or the positions as a
+     *                           list. Another value gives A6 labels.
      *
-     * @throws ApiException
+     * @throws ApiException For a 2xx response without a link.
      */
-    public function setLinkOfLabels(array $shipmentIds, $positions = 1): string
+    public function setLinkOfLabels(array $shipmentIds, mixed $positions = 1): string
     {
-        [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
-        $request = $this->buildLabelsRequest($shipmentIds, $format, $resolvedPositions)
-            ->withHeader('Accept', self::LABEL_LINK_ACCEPT_HEADER);
-        $response = $this->httpClient->sendRequest($request);
+        $response = $this->api()->executeEndpoint(new GetShipmentsLabelsRaw(
+            ids: self::idList($shipmentIds),
+            queryParameters: $this->labelsQuery($positions),
+            accept: ['Accept' => [self::LABEL_LINK_ACCEPT_HEADER]]
+        ));
+        $decoded  = json_decode($response->getContent(false), true);
+        $url      = is_array($decoded) ? ($decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null) : null;
 
-        $decoded = json_decode((string) $response->getBody(), true);
-        if (! is_array($decoded)) {
-            throw new ApiException('Did not receive expected label link response. Please contact MyParcel.');
-        }
-
-        $url = $decoded['data']['pdfs']['url'] ?? $decoded['data']['pdf']['url'] ?? null;
         if (! is_string($url) || '' === $url) {
             throw new ApiException('Did not receive expected label link response. Please contact MyParcel.');
         }
 
-        $this->labelLink = $this->resolveAbsoluteUrl($url, $request);
+        $this->labelLink = $this->resolveAbsoluteUrl($url, (string) $response->getInfo('url'));
 
         return $this->labelLink;
     }
@@ -92,30 +68,23 @@ final class ShipmentLabelsService
     }
 
     /**
-     * Fetch and store the raw PDF content for the given shipment labels.
-     *
-     * Hybrid note: this keeps the existing PDF flow intact and only overrides Accept to request
-     * the old PDF variant directly.
+     * Fetch and store the PDF of the labels of the given shipments.
      *
      * @param int[] $shipmentIds
-     * @param mixed $positions Label positions (numeric for A4, array for explicit slots, other for A6).
+     * @param mixed $positions   The first label position on an A4 sheet, 1 to 4, or the positions as a
+     *                           list. Another value gives A6 labels.
      *
-     * @throws ApiException
+     * @throws ApiException For a 2xx response that is not a PDF.
      */
-    public function setPdfOfLabels(array $shipmentIds, $positions = 1): string
+    public function setPdfOfLabels(array $shipmentIds, mixed $positions = 1): string
     {
-        [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
-        $request = $this->buildLabelsRequest($shipmentIds, $format, $resolvedPositions)
-            ->withHeader('Accept', self::PDF_ACCEPT_HEADER);
-        $response = $this->httpClient->sendRequest($request);
-        $result = (string) $response->getBody();
+        $result = $this->api()->getShipmentsLabels(
+            ids: self::idList($shipmentIds),
+            queryParameters: $this->labelsQuery($positions),
+            accept: ['Accept' => [self::PDF_ACCEPT_HEADER]]
+        );
 
         if (! is_string($result) || ! preg_match('/^%PDF-\d/', $result)) {
-            $decoded = json_decode($result, true);
-            if (is_array($decoded) && isset($decoded['data']['payment_instructions'])) {
-                throw new ApiException('Received payment link instead of pdf. Check your MyParcel account status.');
-            }
-
             throw new ApiException('Did not receive expected pdf response. Please contact MyParcel.');
         }
 
@@ -165,62 +134,61 @@ final class ShipmentLabelsService
     }
 
     /**
-     * Build label request using generated ShipmentApi request builder.
+     * Build the query parameters of the labels request.
      *
-     * The generated builder stays the source of truth for the request contract; this service only
-     * applies Accept negotiation on top for the legacy link/PDF flows.
-     *
-     * @param int[] $shipmentIds
+     * @return array{format: string, positions?: string}
      */
-    private function buildLabelsRequest(array $shipmentIds, string $format, ?string $positions): RequestInterface
+    private function labelsQuery(mixed $positions): array
     {
-        return $this->api->getShipmentsLabelsRequest(
-            implode(';', array_map('strval', $shipmentIds)),
-            $format,
-            $positions,
-            null,
-            null,
-            $this->getUserAgentHeader(),
-            ShipmentApi::contentTypes['getShipmentsLabels'][0]
-        );
+        [$format, $resolvedPositions] = $this->resolveFormatAndPositions($positions);
+
+        return null === $resolvedPositions ? ['format' => $format] : ['format' => $format, 'positions' => $resolvedPositions];
     }
 
     /**
-     * @param mixed $positions
+     * Turn the positions argument into the paper size and the `positions` parameter of the spec.
+     *
+     * A number is the first position on an A4 sheet: the labels take that position and the ones
+     * after it. A number that is not a position of the spec leaves the parameter out.
+     *
      * @return array{0: string, 1: string|null}
      */
-    private function resolveFormatAndPositions($positions): array
+    private function resolveFormatAndPositions(mixed $positions): array
     {
         if (is_numeric($positions)) {
-            $start = (int) $positions;
+            $first = RefShipmentLabelPrintingPosition::tryFrom((int) $positions);
+            $last  = max(array_column(RefShipmentLabelPrintingPosition::cases(), 'value'));
 
             return [
-                'A4',
-                $start >= self::A4_FIRST_LABEL_POSITION && $start <= self::A4_LAST_LABEL_POSITION
-                    ? implode(';', range($start, self::A4_LAST_LABEL_POSITION))
-                    : '',
+                ShipmentParametersPaperSize::A4->value,
+                null === $first ? null : implode(';', range($first->value, $last)),
             ];
         }
 
         if (is_array($positions)) {
-            return ['A4', implode(';', $positions)];
+            return [ShipmentParametersPaperSize::A4->value, implode(';', $positions)];
         }
 
-        return ['A6', null];
+        return [ShipmentParametersPaperSize::A6->value, null];
     }
 
-    private function resolveAbsoluteUrl(string $url, RequestInterface $request): string
+    /**
+     * Prefix a relative link with the scheme, host and port of the labels request.
+     */
+    private function resolveAbsoluteUrl(string $url, string $requestUrl): string
     {
         if (preg_match('/^https?:\/\//i', $url)) {
             return $url;
         }
 
-        $uri = $request->getUri();
-        $base = $uri->getScheme() . '://' . $uri->getHost();
-        if (null !== $uri->getPort()) {
-            $base .= ':' . $uri->getPort();
+        $parts = parse_url($requestUrl);
+        $base  = $parts['scheme'] . '://' . $parts['host'];
+
+        if (isset($parts['port'])) {
+            $base .= ':' . $parts['port'];
         }
 
         return rtrim($base, '/') . '/' . ltrim($url, '/');
     }
+
 }
