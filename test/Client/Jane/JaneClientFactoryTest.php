@@ -18,12 +18,14 @@ use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequ
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Normalizer\JaneObjectNormalizer as CoreApiNormalizer;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Client\FormEncoder as CoreApiFormEncoder;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Client as IamApiClient;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Normalizer\JaneObjectNormalizer as IamApiNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client\FormEncoder as IamApiFormEncoder;
 use MyParcelNL\Sdk\Client\Jane\JaneClientFactory;
+use MyParcelNL\Sdk\Test\Bootstrap\MocksHttpClient;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -35,10 +37,7 @@ use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 final class JaneClientFactoryTest extends TestCase
 {
-    /**
-     * @var array<int, array{method: string, url: string, options: array<string, mixed>}>
-     */
-    private array $requests = [];
+    use MocksHttpClient;
 
     public function testSendsTheApiKeyTheUserAgentAndTheHeaders(): void
     {
@@ -73,6 +72,24 @@ final class JaneClientFactoryTest extends TestCase
         $client->getShipments();
 
         self::assertSame('https://api.acceptance.myparcel.nl/shipments', $this->requests[0]['url']);
+    }
+
+    public function testSendsTheIamRequestsWithTheApiKeyTheUserAgentAndTheHostOverride(): void
+    {
+        $client = JaneClientFactory::iamApi(
+            'my-api-key',
+            'https://iam.acceptance.myparcel.nl',
+            'MyParcelNL-SDK/12.0.0',
+            ['x-dmp-test-feature' => 'enabled'],
+            $this->mockHttpClient('{"type":"SHOP"}')
+        );
+
+        $client->getWhoami();
+
+        self::assertSame('https://iam.acceptance.myparcel.nl/whoami', $this->requests[0]['url']);
+        self::assertSame('Bearer ' . base64_encode('my-api-key'), $this->header('authorization'));
+        self::assertSame('MyParcelNL-SDK/12.0.0', $this->header('user-agent'));
+        self::assertSame('enabled', $this->header('x-dmp-test-feature'));
     }
 
     public function testReadsAResponseWithAFieldThatTheSpecDoesNotHave(): void
@@ -166,10 +183,21 @@ final class JaneClientFactoryTest extends TestCase
      * When a regeneration adds or removes a class that Client::create() instantiates, this test fails,
      * so the factory can follow. The test also checks the server URL and the JSON decode options,
      * which the factory copies, and the JSON encode options, which the factory replaces on purpose.
+     *
+     * @dataProvider provideGeneratedClients
+     *
+     * @param class-string $clientClass
+     * @param class-string $normalizerClass
+     * @param class-string $formEncoderClass
+     * @param string       $host             The host constant of the factory for this client
      */
-    public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(): void
-    {
-        $create = new ReflectionMethod(CoreApiClient::class, 'create');
+    public function testBuildsTheSamePartsAsTheGeneratedCreateMethod(
+        string $clientClass,
+        string $normalizerClass,
+        string $formEncoderClass,
+        string $host
+    ): void {
+        $create = new ReflectionMethod($clientClass, 'create');
         $lines  = file((string) $create->getFileName());
         $source = implode('', array_slice($lines, $create->getStartLine() - 1, $create->getEndLine() - $create->getStartLine() + 1));
 
@@ -179,12 +207,12 @@ final class JaneClientFactoryTest extends TestCase
             [
                 ServerUrlHttpClient::class,
                 ArrayDenormalizer::class,
-                CoreApiNormalizer::class,
+                $normalizerClass,
                 Serializer::class,
                 JsonEncoder::class,
                 JsonEncode::class,
                 JsonDecode::class,
-                CoreApiFormEncoder::class,
+                $formEncoderClass,
             ],
             $matches[1],
             'The generated Client::create() changed. Update JaneClientFactory to build the same parts.'
@@ -193,9 +221,9 @@ final class JaneClientFactoryTest extends TestCase
         preg_match("/ServerUrlHttpClient\\('([^']+)'\\)/", $source, $serverUrl);
 
         self::assertSame(
-            JaneClientFactory::CORE_API_HOST,
+            $host,
             rtrim($serverUrl[1] ?? '', '/'),
-            'The generated Client::create() uses another server URL. Update JaneClientFactory::CORE_API_HOST.'
+            'The generated Client::create() uses another server URL. Update the host constant of JaneClientFactory.'
         );
         self::assertStringContainsString(
             "JsonDecode(['json_decode_associative' => true])",
@@ -208,6 +236,17 @@ final class JaneClientFactoryTest extends TestCase
             $source,
             'The generated Client::create() encodes JSON with options. Merge them into the JsonEncode options of JaneClientFactory::createSerializer().'
         );
+    }
+
+    /**
+     * @return array<string, array{class-string, class-string, class-string, string}>
+     */
+    public static function provideGeneratedClients(): array
+    {
+        return [
+            'Core API' => [CoreApiClient::class, CoreApiNormalizer::class, CoreApiFormEncoder::class, JaneClientFactory::CORE_API_HOST],
+            'IAM API'  => [IamApiClient::class, IamApiNormalizer::class, IamApiFormEncoder::class, JaneClientFactory::IAM_API_HOST],
+        ];
     }
 
     /**
@@ -259,22 +298,6 @@ final class JaneClientFactoryTest extends TestCase
         $client = JaneClientFactory::coreApi('my-api-key', null, null, [], $this->mockHttpClient(self::shipmentsResponse([$shipment])));
 
         return $client->getShipments()->data->shipments[0];
-    }
-
-    private function mockHttpClient(string $body): MockHttpClient
-    {
-        return new MockHttpClient(function (string $method, string $url, array $options) use ($body): MockResponse {
-            $this->requests[] = ['method' => $method, 'url' => $url, 'options' => $options];
-
-            return new MockResponse($body, ['http_code' => 200, 'response_headers' => ['content-type' => 'application/json']]);
-        });
-    }
-
-    private function header(string $name): ?string
-    {
-        $line = $this->requests[0]['options']['normalized_headers'][$name][0] ?? null;
-
-        return null === $line ? null : substr($line, strlen($name) + 2);
     }
 
     /**
