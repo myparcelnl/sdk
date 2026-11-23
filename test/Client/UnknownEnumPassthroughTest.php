@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Client;
 
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
+use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\OrderShipping;
+use MyParcelNL\Sdk\Client\Generated\EcommerceApi\ObjectSerializer;
 use MyParcelNL\Sdk\Support\EnumFallback;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 /**
- * Locks the asymmetric enum behavior: the response (read) path passes unknown
- * enum values through untouched, while the request (write) path stays strict.
+ * Locks the asymmetric enum behavior of the openapi-generator templates: the response (read) path
+ * passes unknown enum values through untouched, while the request (write) path stays strict.
+ *
+ * @todo INT-2034: remove this test with the openapi-generator e-commerce client.
  */
 class UnknownEnumPassthroughTest extends TestCase
 {
-    private const CAPABILITY = RefCapabilitiesResponseCapabilityV2::class;
+    private const SHIPPING = OrderShipping::class;
 
     protected function tearDown(): void
     {
@@ -24,34 +26,45 @@ class UnknownEnumPassthroughTest extends TestCase
         parent::tearDown();
     }
 
-    public function testUnknownCarrierOnRequiredFieldPassesThroughInsteadOfThrowing(): void
+    public function testUnknownCarrierPassesThroughInsteadOfThrowing(): void
     {
-        $capability = ObjectSerializer::deserialize(
-            '{"carrier":"FOOCARRIER","packageTypes":["PACKAGE"]}',
-            self::CAPABILITY
-        );
+        $shipping = ObjectSerializer::deserialize('{"carrier":"FOOCARRIER"}', self::SHIPPING);
 
-        self::assertSame('FOOCARRIER', $capability->getCarrier());
-    }
-
-    public function testUnknownEnumElementInsideAListPassesThroughAndKeepsTheList(): void
-    {
-        $capability = ObjectSerializer::deserialize(
-            '{"carrier":"DHL_FOR_YOU","packageTypes":["PACKAGE","FOOTYPE"]}',
-            self::CAPABILITY
-        );
-
-        self::assertSame(['PACKAGE', 'FOOTYPE'], $capability->getPackageTypes());
+        self::assertSame('FOOCARRIER', $shipping->getCarrier());
     }
 
     public function testKnownEnumValueStillDeserializes(): void
     {
-        $capability = ObjectSerializer::deserialize(
-            '{"carrier":"DHL_FOR_YOU","packageTypes":["PACKAGE"]}',
-            self::CAPABILITY
-        );
+        $shipping = ObjectSerializer::deserialize('{"carrier":"POSTNL"}', self::SHIPPING);
 
-        self::assertSame('DHL_FOR_YOU', $capability->getCarrier());
+        self::assertSame('POSTNL', $shipping->getCarrier());
+    }
+
+    /**
+     * An inline enum, such as `packageType`, is typed as a string with constants. It behaves like a
+     * referenced enum: the raw value on read, strict on write.
+     */
+    public function testUnknownInlineEnumValuePassesThroughOnRead(): void
+    {
+        $shipping = ObjectSerializer::deserialize('{"packageType":"FOOTYPE"}', self::SHIPPING);
+
+        self::assertSame('FOOTYPE', $shipping->getPackageType());
+    }
+
+    public function testKnownInlineEnumValueStillReads(): void
+    {
+        $shipping = ObjectSerializer::deserialize('{"packageType":"PACKAGE"}', self::SHIPPING);
+
+        self::assertSame('PACKAGE', $shipping->getPackageType());
+    }
+
+    public function testUnknownInlineEnumValueThrowsWhenBuildingARequest(): void
+    {
+        $shipping = (new OrderShipping())->setPackageType('FOOTYPE');
+
+        $this->expectException(InvalidArgumentException::class);
+
+        ObjectSerializer::sanitizeForSerialization($shipping);
     }
 
     public function testListenerObservesTheUnknownValue(): void
@@ -61,10 +74,7 @@ class UnknownEnumPassthroughTest extends TestCase
             $seen[] = $value;
         });
 
-        ObjectSerializer::deserialize(
-            '{"carrier":"FOOCARRIER","packageTypes":["PACKAGE"]}',
-            self::CAPABILITY
-        );
+        ObjectSerializer::deserialize('{"carrier":"FOOCARRIER"}', self::SHIPPING);
 
         self::assertContains('FOOCARRIER', $seen);
     }
@@ -76,10 +86,10 @@ class UnknownEnumPassthroughTest extends TestCase
      */
     public function testRequestSerializationStillRejectsUnknownEnum(): void
     {
-        $capability = new RefCapabilitiesResponseCapabilityV2();
-        $capability->setCarrier('FOOCARRIER');
+        $shipping = new OrderShipping();
+        $shipping->setCarrier('FOOCARRIER');
 
         $this->expectException(InvalidArgumentException::class);
-        ObjectSerializer::sanitizeForSerialization($capability);
+        ObjectSerializer::sanitizeForSerialization($shipping);
     }
 }
