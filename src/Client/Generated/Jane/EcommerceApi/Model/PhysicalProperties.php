@@ -8,13 +8,17 @@ class PhysicalProperties implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * @var PhysicalPropertiesHeight
+     * The physical dimension.
+     *
+     * @var Dimension
      */
-    public PhysicalPropertiesHeight $height;
+    public Dimension $height;
     /**
-     * @var PhysicalPropertiesLength
+     * The physical dimension.
+     *
+     * @var Dimension
      */
-    public PhysicalPropertiesLength $length;
+    public Dimension $length;
     /**
      * The weight.
      *
@@ -22,9 +26,11 @@ class PhysicalProperties implements AdditionalPropertiesInterface
      */
     public PhysicalPropertiesWeight $weight;
     /**
-     * @var PhysicalPropertiesWidth
+     * The physical dimension.
+     *
+     * @var Dimension
      */
-    public PhysicalPropertiesWidth $width;
+    public Dimension $width;
     public function definedProperties(): array
     {
         return ['height' => 'height', 'length' => 'length', 'weight' => 'weight', 'width' => 'width'];

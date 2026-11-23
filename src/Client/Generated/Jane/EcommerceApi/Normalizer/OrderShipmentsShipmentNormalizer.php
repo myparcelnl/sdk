@@ -37,10 +37,6 @@ class OrderShipmentsShipmentNormalizer implements DenormalizerInterface, Normali
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('shipmentId', $data)) {
-            $object->shipmentId = $data['shipmentId'];
-            unset($data['shipmentId']);
-        }
         if (\array_key_exists('orderLines', $data)) {
             $values = [];
             foreach ($data['orderLines'] as $value) {
@@ -48,6 +44,10 @@ class OrderShipmentsShipmentNormalizer implements DenormalizerInterface, Normali
             }
             $object->orderLines = $values;
             unset($data['orderLines']);
+        }
+        if (\array_key_exists('shipmentId', $data)) {
+            $object->shipmentId = $data['shipmentId'];
+            unset($data['shipmentId']);
         }
         foreach ($data as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
@@ -59,9 +59,6 @@ class OrderShipmentsShipmentNormalizer implements DenormalizerInterface, Normali
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (null !== ($data->shipmentId ?? null)) {
-            $dataArray['shipmentId'] = $data->shipmentId;
-        }
         if (null !== ($data->orderLines ?? null)) {
             $values = [];
             foreach ($data->orderLines as $value) {
@@ -69,6 +66,9 @@ class OrderShipmentsShipmentNormalizer implements DenormalizerInterface, Normali
                 $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
             }
             $dataArray['orderLines'] = $values;
+        }
+        if (null !== ($data->shipmentId ?? null)) {
+            $dataArray['shipmentId'] = $data->shipmentId;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {

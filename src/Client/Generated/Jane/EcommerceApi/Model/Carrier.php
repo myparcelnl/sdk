@@ -13,7 +13,9 @@ enum Carrier : string
     case DhlParcelConnect = 'DHL_PARCEL_CONNECT';
     case Dpd = 'DPD';
     case Gls = 'GLS';
+    case Gofo = 'GOFO';
     case Inpost = 'INPOST';
+    case Instabee = 'INSTABEE';
     case Postnl = 'POSTNL';
     case PosteItaliane = 'POSTE_ITALIANE';
     case Spring = 'SPRING';

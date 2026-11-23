@@ -4,17 +4,20 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Endpoint;
 
 class PostConnectToken extends \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\Endpoint
 {
+    protected $accept;
     /**
      * Redeems the one-time code from the connect flow for the first access token. The code is single-use.
      * @param \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostBody $requestBody
      * @param array{
-     *    "dpop": string,
+     *    "dpop": string, //DPoP proof JWT bound to the identity provider token endpoint.
      * } $headerParameters
+     * @param array $accept Accept content header application/json|application/problem+json
      */
-    public function __construct(\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostBody $requestBody, array $headerParameters)
+    public function __construct(\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostBody $requestBody, array $headerParameters, array $accept = [])
     {
         $this->body = $requestBody;
         $this->headerParameters = $headerParameters;
+        $this->accept = $accept;
     }
     use \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -34,7 +37,10 @@ class PostConnectToken extends \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceAp
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
@@ -50,6 +56,7 @@ class PostConnectToken extends \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceAp
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenBadRequestException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenUnauthorizedException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenUnsupportedMediaTypeException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenInternalServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\BadResponseException
      *
@@ -62,14 +69,32 @@ class PostConnectToken extends \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceAp
         if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse200', 'json');
         }
-        if ($contentType !== null && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenBadRequestException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInvalidRequestSyntax', 'json'), $response);
+        if (400 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                try {
+                    $decodedBody = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+                    throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenBadRequestException($response);
+                } catch (\JsonException $jsonException) {
+                    throw new \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException('Malformed JSON response body.', 0, $jsonException);
+                }
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenBadRequestException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInvalidRequestSyntax', 'json'), $response);
+            }
         }
         if ($contentType !== null && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenUnauthorizedException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse401', 'json'), $response);
         }
-        if ($contentType !== null && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenInternalServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse500', 'json'), $response);
+        if ($contentType !== null && (415 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
+            throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenUnsupportedMediaTypeException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsUnsupportedMediaType', 'json'), $response);
+        }
+        if (500 === $status) {
+            if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenInternalServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostJsonResponse500', 'json'), $response);
+            }
+            if (stripos(strtolower((string) $contentType), 'application/problem+json') !== false) {
+                throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostConnectTokenInternalServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerError', 'json'), $response);
+            }
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\BadResponseException($status, $body, $response);
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Ecommerce;
 
 use JsonException;
-use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Command;
 use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Normalizer\JaneObjectNormalizer;
 use MyParcelNL\Sdk\Exception\InvalidCommandException;
 use MyParcelNL\Sdk\Exception\UnknownCommandException;
@@ -49,12 +49,12 @@ final class CommandReader
      * not stop the read.
      *
      * @param  string $body The raw request body, exactly as received.
-     * @return \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope The model for the
-     *         command type, a subclass such as OrderShipmentsCommand. Never a plain CommandEnvelope.
+     * @return \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Command The model for the
+     *         command type, a subclass such as `OrderShipmentsCommand`. Never a plain `Command`.
      * @throws \MyParcelNL\Sdk\Exception\UnknownCommandException For a type this SDK version does not know.
      * @throws \MyParcelNL\Sdk\Exception\InvalidCommandException For a body that is not a command.
      */
-    public function read(string $body): CommandEnvelope
+    public function read(string $body): Command
     {
         try {
             $data = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
@@ -74,14 +74,14 @@ final class CommandReader
         // @todo janephp#1126: once the generated code throws for a missing required field, wrap that
         //  exception in InvalidCommandException here.
         try {
-            $command = $this->serializer->denormalize($data, CommandEnvelope::class);
+            $command = $this->serializer->denormalize($data, Command::class);
         } catch (TypeError $error) {
             throw new InvalidCommandException('A command field has the wrong type: ' . $error->getMessage(), 0, $error);
         }
 
         // The generated normalizer picks the model from the spec's discriminator mapping, and falls
-        // back to the envelope for a type the mapping does not name.
-        if (CommandEnvelope::class === get_class($command)) {
+        // back to the base model for a type the mapping does not name.
+        if (Command::class === get_class($command)) {
             throw new UnknownCommandException($command->type);
         }
 

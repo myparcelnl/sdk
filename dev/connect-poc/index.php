@@ -581,7 +581,7 @@ function commandPaths(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect, 
  *
  * @param array<int, array<string, mixed>> $log
  */
-function isDuplicate(array $log, \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope $command): bool
+function isDuplicate(array $log, \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Command $command): bool
 {
     foreach ($log as $entry) {
         if (202 === $entry['status']
@@ -786,7 +786,7 @@ function commandBody(string $body)
  * header: the SDK docs say not to log it, and this page is a log.
  *
  * @param array<int, array<string, mixed>>                                            $log
- * @param \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\CommandEnvelope|null $command
+ * @param \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Command|null $command
  * @param array<string, string>                                                       $headers
  */
 function logCommand(array $log, int $status, string $outcome, $command, array $headers, string $rawBody): void

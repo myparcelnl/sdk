@@ -4,13 +4,16 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Endpoint;
 
 class PostWebhookProduct extends \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\BaseEndpoint implements \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\Endpoint
 {
+    protected $accept;
     /**
      * Receives products from a connected sales channel plugin. The plugin calls this endpoint whenever products are created or changed in the shop.
      * @param \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Product[] $requestBody
+     * @param array $accept Accept content header application/json|application/problem+json
      */
-    public function __construct(array $requestBody)
+    public function __construct(array $requestBody, array $accept = [])
     {
         $this->body = $requestBody;
+        $this->accept = $accept;
     }
     use \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -30,13 +33,19 @@ class PostWebhookProduct extends \MyParcelNL\Sdk\Client\Generated\Jane\Ecommerce
     }
     public function getExtraHeaders(): array
     {
-        return ['Accept' => ['application/json']];
+        if (empty($this->accept)) {
+            return ['Accept' => ['application/json', 'application/problem+json']];
+        }
+        return $this->accept;
     }
     /**
      * {@inheritdoc}
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductBadRequestException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductUnauthorizedException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductNotFoundException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductUnsupportedMediaTypeException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductInternalServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\BadResponseException
      *
      * @return array
@@ -53,11 +62,28 @@ class PostWebhookProduct extends \MyParcelNL\Sdk\Client\Generated\Jane\Ecommerce
                 throw new \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException('Malformed JSON response body.', 0, $jsonException);
             }
         }
-        if ($contentType !== null && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if ($contentType !== null && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            try {
+                $decodedBody = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+                return $decodedBody;
+            } catch (\JsonException $jsonException) {
+                throw new \Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException('Malformed JSON response body.', 0, $jsonException);
+            }
+        }
+        if ($contentType !== null && (400 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductBadRequestException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInvalidRequestSyntax', 'json'), $response);
         }
-        if ($contentType !== null && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if ($contentType !== null && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductUnauthorizedException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\UnauthorizedResponse', 'json'), $response);
+        }
+        if ($contentType !== null && (404 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
             throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductNotFoundException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsNotFound', 'json'), $response);
+        }
+        if ($contentType !== null && (415 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
+            throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductUnsupportedMediaTypeException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsUnsupportedMediaType', 'json'), $response);
+        }
+        if ($contentType !== null && (500 === $status && stripos(strtolower($contentType), 'application/problem+json') !== false)) {
+            throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\PostWebhookProductInternalServerErrorException($serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerError', 'json'), $response);
         }
         throw new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Exception\BadResponseException($status, $body, $response);
     }

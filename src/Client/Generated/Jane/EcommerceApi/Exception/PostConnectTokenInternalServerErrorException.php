@@ -6,20 +6,20 @@ class PostConnectTokenInternalServerErrorException extends InternalServerErrorEx
 {
     public function __construct(
         /**
-         * @var \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse500
+         * @var \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostJsonResponse500|\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerError
          */
-        private readonly \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse500 $connectTokenPostResponse500,
+        private readonly \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostJsonResponse500|\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerError $problemDetailsInternalServerError,
         /**
          * @var \Symfony\Contracts\HttpClient\ResponseInterface
          */
         private readonly \Symfony\Contracts\HttpClient\ResponseInterface $response
     )
     {
-        parent::__construct('server_error.');
+        parent::__construct('server_error. Problem details for an error outside the token exchange.');
     }
-    public function getConnectTokenPostResponse500(): \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse500
+    public function getProblemDetailsInternalServerError(): \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostJsonResponse500|\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerError
     {
-        return $this->connectTokenPostResponse500;
+        return $this->problemDetailsInternalServerError;
     }
     public function getResponse(): \Symfony\Contracts\HttpClient\ResponseInterface
     {

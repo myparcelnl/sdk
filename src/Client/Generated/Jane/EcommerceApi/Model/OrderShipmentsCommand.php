@@ -2,7 +2,7 @@
 
 namespace MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model;
 
-class OrderShipmentsCommand extends CommandEnvelope
+class OrderShipmentsCommand extends Command
 {
     /**
      * @var OrderShipmentsOrder

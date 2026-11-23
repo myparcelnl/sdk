@@ -8,15 +8,15 @@ class OrderShipmentsOrderLine implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * @var string
-     */
-    public string $sourceId;
-    /**
      * @var int
      */
     public int $quantity;
+    /**
+     * @var string
+     */
+    public string $sourceId;
     public function definedProperties(): array
     {
-        return ['sourceId' => 'sourceId', 'quantity' => 'quantity'];
+        return ['quantity' => 'quantity', 'sourceId' => 'sourceId'];
     }
 }

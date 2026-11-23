@@ -665,7 +665,7 @@ final class ConnectService
     private function send(callable $send, string $proof): ConnectTokenResponse
     {
         // Set per call, not in the constructor: a consumer registers its plugin with
-        // setUserAgentForProposition() after the service exists. Left alone, the generated client
+        // `setUserAgentForProposition()` after the service exists. Left alone, the generated client
         // sends "OpenAPI-Generator/1.0.0/PHP".
         $this->api->getConfig()->setUserAgent($this->getUserAgentHeader());
 

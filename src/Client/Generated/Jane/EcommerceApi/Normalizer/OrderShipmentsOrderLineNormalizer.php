@@ -37,13 +37,13 @@ class OrderShipmentsOrderLineNormalizer implements DenormalizerInterface, Normal
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('sourceId', $data)) {
-            $object->sourceId = $data['sourceId'];
-            unset($data['sourceId']);
-        }
         if (\array_key_exists('quantity', $data)) {
             $object->quantity = $data['quantity'];
             unset($data['quantity']);
+        }
+        if (\array_key_exists('sourceId', $data)) {
+            $object->sourceId = $data['sourceId'];
+            unset($data['sourceId']);
         }
         foreach ($data as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
@@ -55,11 +55,11 @@ class OrderShipmentsOrderLineNormalizer implements DenormalizerInterface, Normal
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (null !== ($data->sourceId ?? null)) {
-            $dataArray['sourceId'] = $data->sourceId;
-        }
         if (null !== ($data->quantity ?? null)) {
             $dataArray['quantity'] = $data->quantity;
+        }
+        if (null !== ($data->sourceId ?? null)) {
+            $dataArray['sourceId'] = $data->sourceId;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

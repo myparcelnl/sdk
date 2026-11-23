@@ -8,11 +8,11 @@ class ShipmentOptionsInsurance implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
     /**
-     * The amount to insure.
+     * A monetary value represented by split integral and fractional parts to avoid floating point errors.
      *
-     * @var ShipmentOptionsInsuranceAmount
+     * @var Money
      */
-    public ShipmentOptionsInsuranceAmount $amount;
+    public Money $amount;
     public function definedProperties(): array
     {
         return ['amount' => 'amount'];

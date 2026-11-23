@@ -37,17 +37,8 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('platform', $data) && $data['platform'] !== null) {
-            $value = $data['platform'];
-            if (is_string($data['platform'])) {
-                $value = $data['platform'];
-            } elseif (is_null($data['platform'])) {
-                $value = $data['platform'];
-            }
-            $object->platform = $value;
-        }
-        elseif (\array_key_exists('platform', $data)) {
-            $object->platform = null;
+        if (\array_key_exists('platform', $data)) {
+            $object->platform = is_string($data['platform']) ? \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectStartConfigPlatform::tryFrom($data['platform']) ?? $data['platform'] : $data['platform'];
         }
         if (\array_key_exists('shopName', $data)) {
             $object->shopName = $data['shopName'];
@@ -55,17 +46,8 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
         if (\array_key_exists('shopUrl', $data)) {
             $object->shopUrl = $data['shopUrl'];
         }
-        if (\array_key_exists('version', $data) && $data['version'] !== null) {
-            $value_1 = $data['version'];
-            if (is_string($data['version'])) {
-                $value_1 = $data['version'];
-            } elseif (is_null($data['version'])) {
-                $value_1 = $data['version'];
-            }
-            $object->version = $value_1;
-        }
-        elseif (\array_key_exists('version', $data)) {
-            $object->version = null;
+        if (\array_key_exists('version', $data)) {
+            $object->version = $data['version'];
         }
         if (\array_key_exists('commandEndpoint', $data)) {
             $object->commandEndpoint = $data['commandEndpoint'];
@@ -76,13 +58,7 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
     {
         $dataArray = [];
         if (array_key_exists('platform', get_object_vars($data))) {
-            $value = $data->platform;
-            if (is_string($data->platform)) {
-                $value = $data->platform;
-            } elseif (is_null($data->platform)) {
-                $value = $data->platform;
-            }
-            $dataArray['platform'] = $value;
+            $dataArray['platform'] = $data->platform instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectStartConfigPlatform ? $data->platform->value : $data->platform;
         }
         if (null !== ($data->shopName ?? null)) {
             $dataArray['shopName'] = $data->shopName;
@@ -91,13 +67,7 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
             $dataArray['shopUrl'] = $data->shopUrl;
         }
         if (array_key_exists('version', get_object_vars($data))) {
-            $value_1 = $data->version;
-            if (is_string($data->version)) {
-                $value_1 = $data->version;
-            } elseif (is_null($data->version)) {
-                $value_1 = $data->version;
-            }
-            $dataArray['version'] = $value_1;
+            $dataArray['version'] = $data->version;
         }
         if (array_key_exists('commandEndpoint', get_object_vars($data))) {
             $dataArray['commandEndpoint'] = $data->commandEndpoint;

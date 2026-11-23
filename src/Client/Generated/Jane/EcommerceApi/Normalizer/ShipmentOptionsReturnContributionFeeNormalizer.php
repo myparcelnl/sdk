@@ -38,7 +38,7 @@ class ShipmentOptionsReturnContributionFeeNormalizer implements DenormalizerInte
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('amount', $data)) {
-            $object->amount = $this->denormalizer->denormalize($data['amount'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ShipmentOptionsReturnContributionFeeAmount::class, 'json', $context);
+            $object->amount = $this->denormalizer->denormalize($data['amount'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Money::class, 'json', $context);
             unset($data['amount']);
         }
         foreach ($data as $key => $value) {
