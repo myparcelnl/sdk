@@ -4,35 +4,26 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Webhook;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\WebhookApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefWebhookWebhookV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\WebhooksResponsesWebhookV11;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Services\CoreApi\WebhookApiFactory;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefWebhookWebhookV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksPostWebhookSubscriptionsRequestV11Data;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\WebhooksResponsesWebhookV11;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
 
 /**
- * Service for managing webhook subscriptions via the generated WebhookApi.
+ * Manages webhook subscriptions through the Core API client.
  *
- * Replaces the legacy AbstractWebhookWebService and its 5 concrete subclasses.
+ * `getAll()` and `getById()` return the generated models, with public properties such as `hook` and `url`.
  */
 final class WebhookService
 {
-    use HasUserAgent;
+    use CreatesCoreApiClient;
 
     public const HOOK_SHIPMENT_STATUS_CHANGE             = 'shipment_status_change';
     public const HOOK_SHIPMENT_LABEL_CREATED             = 'shipment_label_created';
     public const HOOK_ORDER_STATUS_CHANGE                = 'order_status_change';
     public const HOOK_SHOP_CARRIER_ACCESSIBILITY_UPDATED = 'shop_carrier_accessibility_updated';
     public const HOOK_SHOP_UPDATED                       = 'shop_updated';
-
-    private WebhookApi $api;
-
-    public function __construct(string $apiKey, ?WebhookApi $api = null, ?string $host = null)
-    {
-        $this->api = $api ?? WebhookApiFactory::make($apiKey, $host);
-    }
 
     /**
      * Subscribe to a webhook event.
@@ -44,31 +35,27 @@ final class WebhookService
      */
     public function subscribe(string $hook, string $url): int
     {
-        $webhook = new RefWebhookWebhookV11([
-            'hook' => $hook,
-            'url'  => $url,
-        ]);
+        $webhook       = new RefWebhookWebhookV11();
+        $webhook->hook = $hook;
+        $webhook->url  = $url;
 
-        $data = new WebhooksPostWebhookSubscriptionsRequestV11Data([
-            'webhook_subscriptions' => [$webhook],
-        ]);
+        $data                       = new WebhooksPostWebhookSubscriptionsRequestV11Data();
+        $data->webhookSubscriptions = [$webhook];
 
-        $request = new WebhooksPostWebhookSubscriptionsRequestV11([
-            'data' => $data,
-        ]);
+        $request       = new WebhooksPostWebhookSubscriptionsRequestV11();
+        $request->data = $data;
 
-        $response = $this->api->postWebhookSubscriptions(
-            $request,
-            $this->getUserAgentHeader()
+        $response = $this->api()->postWebhookSubscriptions(
+            requestBody: $request
         );
 
-        $data = $response->getData();
+        $ids = $response->data->ids ?? [];
 
-        if (null === $data || empty($data->getIds())) {
+        if (empty($ids)) {
             throw new \RuntimeException('Unexpected response: no subscription IDs returned.');
         }
 
-        return $data->getIds()[0]->getId();
+        return $ids[0]->id;
     }
 
     /**
@@ -84,26 +71,23 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $this->api->deleteWebhookSubscriptions($ids, $this->getUserAgentHeader());
+        $this->api()->deleteWebhookSubscriptions(ids: $ids);
     }
 
     /**
      * List all webhook subscriptions, optionally filtered by hook type.
      *
-     * @param string|null $hook Filter by hook type (one of the HOOK_* constants).
+     * @param string|null $hook Filter by hook type (one of the HOOK_* constants). Null or an empty string gives all subscriptions.
      *
      * @return WebhooksResponsesWebhookV11[]
      */
     public function getAll(?string $hook = null): array
     {
-        $response = $this->api->getWebhookSubscriptions(
-            $hook,
-            $this->getUserAgentHeader()
+        $response = $this->api()->getWebhookSubscriptions(
+            queryParameters: null !== $hook && '' !== $hook ? ['hook' => $hook] : []
         );
 
-        $data = $response->getData();
-
-        return null !== $data ? ($data->getWebhookSubscriptions() ?? []) : [];
+        return $response->data->webhookSubscriptions ?? [];
     }
 
     /**
@@ -121,13 +105,10 @@ final class WebhookService
 
         $ids = implode(';', $subscriptionIds);
 
-        $response = $this->api->getWebhookSubscriptionsById(
-            $ids,
-            $this->getUserAgentHeader()
+        $response = $this->api()->getWebhookSubscriptionsById(
+            ids: $ids
         );
 
-        $data = $response->getData();
-
-        return null !== $data ? ($data->getWebhookSubscriptions() ?? []) : [];
+        return $response->data->webhookSubscriptions ?? [];
     }
 }
