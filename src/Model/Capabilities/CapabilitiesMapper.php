@@ -172,6 +172,9 @@ class CapabilitiesMapper
         $options = new CoreOptionsV2();
         $mapper  = new ShipmentOptionMapper();
         $setters = CoreOptionsV2::setters();
+        // The mapper returns the JSON name, such as requiresSignature. The generated model names
+        // the property requires_signature.
+        $properties = array_flip(CoreOptionsV2::attributeMap());
 
         foreach ($optionsData as $key => $value) {
             $property = $mapper->v2PropertyFromName((string) $key);
@@ -180,7 +183,7 @@ class CapabilitiesMapper
                 continue;
             }
 
-            $setter = $setters[$property];
+            $setter = $setters[$properties[$property]];
             $options->{$setter}($this->normalizeOptionValue($value));
         }
 

@@ -4,37 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
-use ReflectionClass;
 
 /**
  * Detects orphaned source models, redundant overrides and ambiguous mappings after regeneration.
  */
 class SpecDriftTest extends TestCase
 {
-    private const REPO_ROOT = __DIR__ . '/../../..';
-
     /**
-     * Scoped deliberately to the nine classes the profiles name. A repo-wide sweep would flag
-     * the hand-written typeMappings overrides (FixedShipmentRecipient, FixedPrincipal) that
-     * legitimately live outside the manifest.
+     * Jane removes the files of a class that the spec no longer has (`clean-generated`), so an
+     * enum that still exists is still generated.
      */
-    public function testEverySourceEnumIsStillProducedByTheGenerator(): void
+    public function testEverySourceEnumIsStillGenerated(): void
     {
         foreach (ApiMapperService::profiles() as $domain => $profile) {
             foreach ($profile as $column => $enumClass) {
                 $this->assertTrue(
-                    $this->isInGeneratorManifest($enumClass),
+                    enum_exists($enumClass),
                     sprintf(
-                        "%s (%s.%s) is not listed in its client's .openapi-generator/FILES manifest, "
-                        . 'so the generator no longer produces it. It is an orphan: the file may still '
-                        . 'be on disk and class_exists() may still return true, but its values are frozen. '
-                        . 'Point this profile at the enum that replaced it.',
+                        '%s (%s.%s) is no longer generated. Point this profile at the enum that replaced it.',
                         $enumClass,
                         $domain,
                         $column
@@ -44,41 +36,45 @@ class SpecDriftTest extends TestCase
         }
     }
 
-    public function testOptionModelsAreStillProducedByTheGenerator(): void
+    /**
+     * `ShipmentOptionMapper` reads the shipment option names from this model.
+     */
+    public function testTheOptionModelIsStillGenerated(): void
     {
-        foreach ([CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions::class, CapabilitiesOptionsV2::class] as $modelClass) {
-            $this->assertTrue(
-                $this->isInGeneratorManifest($modelClass),
-                sprintf('%s is no longer generated. Review the shipment-option mapping sources.', $modelClass)
-            );
-        }
+        $this->assertTrue(
+            class_exists(CapabilitiesPostCapabilitiesRequestV2Options::class),
+            sprintf(
+                '%s is no longer generated. Review the shipment-option mapping sources.',
+                CapabilitiesPostCapabilitiesRequestV2Options::class
+            )
+        );
     }
 
     /**
      * The spec values behind the package-type overrides, recorded exactly.
      *
-     * If one changes, review the override before you touch it. SMALL_PACKAGE caught up with the
-     * delivery-options spelling, so only its old small_package alias remains. UNFRANKED and ENVELOPE
+     * If one changes, review the override before you touch it. SmallPackage caught up with the
+     * delivery-options spelling, so only its old small_package alias remains. Unfranked and Envelope
      * are never returned by delivery options, so their legacy names letter and envelope come from
      * the overrides.
      */
     public function testDisplacedPackageTypeSpecValuesAreUnchanged(): void
     {
-        $enumClass = ShipmentResponsesDeliveryOptionsPackageTypeV2::class;
+        $cases = self::cases(ShipmentResponsesDeliveryOptionsPackageTypeV2::class);
 
-        $this->assertSame('package_small', ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE);
-        $this->assertFalse(defined($enumClass . '::UNFRANKED'));
-        $this->assertFalse(defined($enumClass . '::ENVELOPE'));
+        $this->assertSame('package_small', $cases['SmallPackage'] ?? null);
+        $this->assertArrayNotHasKey('Unfranked', $cases);
+        $this->assertArrayNotHasKey('Envelope', $cases);
     }
 
     public function testPickupIsStillAbsentFromTheDeliveryOptionsEnum(): void
     {
-        $constants = (new ReflectionClass(ShipmentDefsDeliveryOptionsDeliveryNameV2::class))->getConstants();
+        $cases = self::cases(ShipmentDefsDeliveryOptionsDeliveryNameV2::class);
 
         $this->assertArrayNotHasKey(
-            'PICKUP',
-            $constants,
-            'The delivery-options enum now names PICKUP. Drop the PICKUP override so the value '
+            'Pickup',
+            $cases,
+            'The delivery-options enum now names Pickup. Drop the Pickup override so the value '
             . 'comes from the generated enum instead.'
         );
     }
@@ -93,7 +89,7 @@ class SpecDriftTest extends TestCase
         $this->addToAssertionCount(1);
 
         foreach (ApiMapperService::overrides() as $domain => $overrides) {
-            foreach ($overrides as $constantName => $columnOverrides) {
+            foreach ($overrides as $caseName => $columnOverrides) {
                 foreach ($columnOverrides as $column => $override) {
                     if (! array_key_exists('value', $override)) {
                         // Alias-only entries intentionally survive after the generated canonical
@@ -102,24 +98,24 @@ class SpecDriftTest extends TestCase
                     }
 
                     $enumClass = ApiMapperService::profiles()[$domain][$column];
-                    $generated = (new ReflectionClass($enumClass))->getConstants();
+                    $generated = self::cases($enumClass);
 
-                    if (! array_key_exists($constantName, $generated)) {
+                    if (! array_key_exists($caseName, $generated)) {
                         continue;
                     }
 
                     $this->assertNotSame(
-                        $generated[$constantName],
+                        $generated[$caseName],
                         $override['value'],
                         sprintf(
-                            'The %s.%s.%s override now equals %s::%s. Delete its value — the '
+                            'The %s.%s.%s override now equals %s::%s. Delete its value: the '
                             . 'generated enum supplies it on its own. Preserve aliases that are '
                             . 'still part of the backwards-compatibility contract.',
                             $domain,
-                            $constantName,
+                            $caseName,
                             $column,
                             $enumClass,
-                            $constantName
+                            $caseName
                         )
                     );
                 }
@@ -128,26 +124,26 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * Check exception keys against source constants so misspellings cannot create extra rows.
+     * Check the override keys against the source cases, so a misspelling cannot create an extra row.
      */
-    public function testEveryOverrideStillPointsAtAKnownConstant(): void
+    public function testEveryOverrideStillPointsAtAKnownCase(): void
     {
         foreach (ApiMapperService::overrides() as $domain => $overrides) {
             $known = [];
 
             foreach (ApiMapperService::profiles()[$domain] as $enumClass) {
-                $known += (new ReflectionClass($enumClass))->getConstants();
+                $known += self::cases($enumClass);
             }
 
-            foreach (array_keys($overrides) as $constantName) {
+            foreach (array_keys($overrides) as $caseName) {
                 $this->assertArrayHasKey(
-                    $constantName,
+                    $caseName,
                     $known,
                     sprintf(
-                        'The %s override for %s matches no constant in any of that profile\'s source '
+                        'The %s override for %s matches no case in any of that profile\'s source '
                         . 'enums. Either it is a typo, or the concept left the spec.',
                         $domain,
-                        $constantName
+                        $caseName
                     )
                 );
             }
@@ -159,12 +155,12 @@ class SpecDriftTest extends TestCase
         foreach (ApiMapperService::overrides() as $domain => $overrides) {
             $knownColumns = array_keys(ApiMapperService::profiles()[$domain]);
 
-            foreach ($overrides as $constantName => $columnOverrides) {
+            foreach ($overrides as $caseName => $columnOverrides) {
                 foreach (array_keys($columnOverrides) as $column) {
                     $this->assertContains(
                         $column,
                         $knownColumns,
-                        sprintf('The %s.%s override targets unknown column %s.', $domain, $constantName, $column)
+                        sprintf('The %s.%s override targets unknown column %s.', $domain, $caseName, $column)
                     );
                 }
             }
@@ -233,13 +229,13 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * A value present in only one source can indicate different constant names across versions.
+     * A value present in only one source can indicate different case names across versions.
      * Review such changes before accepting them as an incomplete mapping.
      */
     public function testNoConceptIsNamedByOnlyOneSource(): void
     {
         foreach (array_keys(ApiMapperService::profiles()) as $domain) {
-            foreach ($this->rowsFor($domain) as $constantName => $row) {
+            foreach ($this->rowsFor($domain) as $caseName => $row) {
                 $populated = array_filter(
                     $row,
                     static function ($value): bool {
@@ -253,10 +249,10 @@ class SpecDriftTest extends TestCase
                     sprintf(
                         '%s.%s is named by only one of its three source enums (%s). Usually this '
                         . 'means two enums spell the same concept differently, so it compiled into '
-                        . 'two half rows instead of one. Check for a near-identical constant name '
+                        . 'two half rows instead of one. Check for a near-identical case name '
                         . 'in the same domain; if the spelling really did change, add an override.',
                         $domain,
-                        $constantName,
+                        $caseName,
                         implode(', ', array_keys($populated))
                     )
                 );
@@ -269,7 +265,7 @@ class SpecDriftTest extends TestCase
         foreach (ApiMapperService::overrides() as $domain => $overrides) {
             $seen = [];
 
-            foreach ($overrides as $constantName => $columnOverrides) {
+            foreach ($overrides as $caseName => $columnOverrides) {
                 foreach ($columnOverrides as $column => $override) {
                     $canonical = array_column($this->rowsFor($domain), $column);
 
@@ -278,7 +274,7 @@ class SpecDriftTest extends TestCase
                             $this->assertNotSame(
                                 '',
                                 trim($alias),
-                                sprintf('Alias for %s.%s.%s is empty.', $domain, $constantName, $column)
+                                sprintf('Alias for %s.%s.%s is empty.', $domain, $caseName, $column)
                             );
                         }
 
@@ -297,12 +293,12 @@ class SpecDriftTest extends TestCase
                                 . 'concept would resolve to another.',
                                 $alias,
                                 $domain,
-                                $constantName,
+                                $caseName,
                                 $column
                             )
                         );
 
-                        $seen[$column][$typedAlias] = $constantName;
+                        $seen[$column][$typedAlias] = $caseName;
                     }
                 }
             }
@@ -310,14 +306,13 @@ class SpecDriftTest extends TestCase
     }
 
     /**
-     * The public API requires integer ids and non-empty string names. Generator metadata
-     * constants must not become mapping rows.
+     * The public API requires integer ids and non-empty string names.
      */
     public function testSourceEnumsExposeTheExpectedValueTypes(): void
     {
         foreach (ApiMapperService::profiles() as $domain => $profile) {
             foreach ($profile as $column => $enumClass) {
-                foreach ((new ReflectionClass($enumClass))->getConstants() as $name => $value) {
+                foreach (self::cases($enumClass) as $name => $value) {
                     $message = sprintf('%s::%s has an invalid type for %s.%s.', $enumClass, $name, $domain, $column);
 
                     if (ApiMapperService::COLUMN_ID === $column) {
@@ -332,29 +327,20 @@ class SpecDriftTest extends TestCase
     }
 
     /**
+     * @param  class-string<\BackedEnum> $enumClass
+     *
+     * @return array<string, int|string> Case name => value.
+     */
+    private static function cases(string $enumClass): array
+    {
+        return array_column($enumClass::cases(), 'value', 'name');
+    }
+
+    /**
      * @return array<string, array<string, int|string|null>>
      */
     private function rowsFor(string $domain): array
     {
         return ApiMapperService::allDomains()[$domain];
-    }
-
-    /**
-     * @param  class-string $enumClass
-     */
-    private function isInGeneratorManifest(string $enumClass): bool
-    {
-        $parts     = explode('\\', $enumClass);
-        $shortName = array_pop($parts);
-        $group     = array_pop($parts);          // Model
-        $client    = array_pop($parts);          // CoreApi, OrderApi, ...
-
-        $manifest = sprintf('%s/src/Client/Generated/%s/.openapi-generator/FILES', self::REPO_ROOT, $client);
-
-        $this->assertFileExists($manifest);
-
-        $entries = file($manifest, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
-
-        return in_array(sprintf('%s/%s.php', $group, $shortName), $entries, true);
     }
 }
