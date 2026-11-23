@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Connect;
 
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectRefreshPost200Response;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost200Response;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Model\Connect\ConnectCallbackError;
 use MyParcelNL\Sdk\Model\Connect\ConnectErrorCode;
@@ -71,14 +69,14 @@ class InterimTypesTest extends TestCase
 
     public function testTokenResponseReadsAnExchangeBody(): void
     {
-        $response = ConnectTokenResponse::fromExchange(new ConnectTokenPost200Response([
-            'access_token'       => 'a.b.c',
-            'connection_id'      => '6f1e6f3e-0000-4000-8000-000000000000',
-            'token_type'         => 'DPoP',
-            'expires_in'         => 86400,
-            'refresh_expires_in' => 31536000,
-            'scope'              => 'integration',
-        ]));
+        $response = ConnectTokenResponse::fromExchange([
+            'accessToken' => 'a.b.c',
+            'connectionId' => '6f1e6f3e-0000-4000-8000-000000000000',
+            'tokenType' => 'DPoP',
+            'expiresIn' => 86400,
+            'refreshExpiresIn' => 31536000,
+            'scope' => 'integration',
+        ]);
 
         self::assertSame('a.b.c', $response->getAccessToken());
         self::assertSame('6f1e6f3e-0000-4000-8000-000000000000', $response->getConnectionId());
@@ -118,18 +116,18 @@ class InterimTypesTest extends TestCase
     {
         $this->expectException(ConnectException::class);
 
-        ConnectTokenResponse::fromExchange(new ConnectTokenPost200Response($body));
+        ConnectTokenResponse::fromExchange($body);
     }
 
     public function provideIncompleteExchangeBodies(): array
     {
         $complete = [
-            'access_token'       => 'a.b.c',
-            'connection_id'      => '6f1e6f3e-0000-4000-8000-000000000000',
-            'token_type'         => 'DPoP',
-            'expires_in'         => 3600,
-            'refresh_expires_in' => 31536000,
-            'scope'              => 'integration',
+            'accessToken' => 'a.b.c',
+            'connectionId' => '6f1e6f3e-0000-4000-8000-000000000000',
+            'tokenType' => 'DPoP',
+            'expiresIn' => 3600,
+            'refreshExpiresIn' => 31536000,
+            'scope' => 'integration',
         ];
 
         $sets = ['nothing at all' => [[]]];
@@ -148,7 +146,7 @@ class InterimTypesTest extends TestCase
     {
         $this->expectException(ConnectException::class);
 
-        ConnectTokenResponse::fromRefresh(self::refreshBody(['access_token' => '']));
+        ConnectTokenResponse::fromRefresh(self::refreshBody(['accessToken' => '']));
     }
 
     public function testTokenResponseGivesTheExpiryMomentsInUtc(): void
@@ -170,7 +168,7 @@ class InterimTypesTest extends TestCase
 
     public function testTokenResponseAcceptsAnExpiryThatArrivesAsAString(): void
     {
-        $response = ConnectTokenResponse::fromRefresh(self::refreshBody(['expires_in' => '3600']));
+        $response = ConnectTokenResponse::fromRefresh(self::refreshBody(['expiresIn' => '3600']));
 
         self::assertSame(3600, $response->getExpiresIn());
     }
@@ -184,7 +182,7 @@ class InterimTypesTest extends TestCase
         // null, so this is the one field the wrapper still guards itself.
         $this->expectException(ConnectException::class);
 
-        ConnectTokenResponse::fromRefresh(self::refreshBody(['expires_in' => $expiresIn]));
+        ConnectTokenResponse::fromRefresh(self::refreshBody(['expiresIn' => $expiresIn]));
     }
 
     /**
@@ -194,7 +192,7 @@ class InterimTypesTest extends TestCase
     {
         $this->expectException(ConnectException::class);
 
-        ConnectTokenResponse::fromRefresh(self::refreshBody(['refresh_expires_in' => $refreshExpiresIn]));
+        ConnectTokenResponse::fromRefresh(self::refreshBody(['refreshExpiresIn' => $refreshExpiresIn]));
     }
 
     public function provideUnusableExpiries(): array
@@ -217,7 +215,7 @@ class InterimTypesTest extends TestCase
         // documents DPoP, so anything else means we are not talking to what we think we are.
         $this->expectException(ConnectException::class);
 
-        ConnectTokenResponse::fromRefresh(self::refreshBody(['token_type' => $tokenType]));
+        ConnectTokenResponse::fromRefresh(self::refreshBody(['tokenType' => $tokenType]));
     }
 
     public function provideWrongTokenTypes(): array
@@ -232,24 +230,24 @@ class InterimTypesTest extends TestCase
     public function testTokenResponseSaysWhichFieldTheServerGotWrong(): void
     {
         try {
-            ConnectTokenResponse::fromRefresh(self::refreshBody(['token_type' => 'Bearer']));
+            ConnectTokenResponse::fromRefresh(self::refreshBody(['tokenType' => 'Bearer']));
             self::fail('expected a ConnectException');
         } catch (ConnectException $exception) {
-            self::assertStringContainsString('token_type', $exception->getMessage());
+            self::assertStringContainsString('tokenType', $exception->getMessage());
         }
     }
 
     /**
      * @param array<string, mixed> $overrides
      */
-    private static function refreshBody(array $overrides = []): ConnectRefreshPost200Response
+    private static function refreshBody(array $overrides = []): array
     {
-        return new ConnectRefreshPost200Response($overrides + [
-            'access_token'       => 'a.b.c',
-            'token_type'         => 'DPoP',
-            'expires_in'         => 3600,
-            'refresh_expires_in' => 31536000,
-            'scope'              => 'integration',
-        ]);
+        return $overrides + [
+            'accessToken' => 'a.b.c',
+            'tokenType' => 'DPoP',
+            'expiresIn' => 3600,
+            'refreshExpiresIn' => 31536000,
+            'scope' => 'integration',
+        ];
     }
 }

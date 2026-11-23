@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Model\Connect;
 
 use DateTimeImmutable;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectRefreshPost200Response;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost200Response;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectRefreshPostResponse200;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse200;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Normalizer\JaneObjectNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Exception\ConnectException;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Throwable;
 
 /**
  * What /connect/token and /connect/refresh answer with.
@@ -21,7 +26,7 @@ use MyParcelNL\Sdk\Exception\ConnectException;
 final class ConnectTokenResponse
 {
     /**
-     * @var \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectRefreshPost200Response|\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost200Response
+     * @var \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectRefreshPostResponse200|\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse200
      */
     private $model;
 
@@ -41,29 +46,10 @@ final class ConnectTokenResponse
     private $receivedAt;
 
     /**
-     * @param  \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectRefreshPost200Response|\MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost200Response $model
-     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     * @param \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectRefreshPostResponse200|\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse200 $model
      */
     private function __construct($model, ?string $connectionId, ?string $dpopNonce)
     {
-        $invalid = $model->listInvalidProperties();
-
-        if ([] !== $invalid) {
-            throw ConnectException::invalidArgument(
-                sprintf('MyParcel returned an unusable token: %s', implode('; ', $invalid))
-            );
-        }
-
-        // The spec puts exclusiveMinimum 0 on expiresIn, but the generator emits only the null check.
-        if ((int) $model->getExpiresIn() < 1) {
-            throw ConnectException::invalidArgument('MyParcel returned no usable expiresIn');
-        }
-
-        // Same for refreshExpiresIn.
-        if ((int) $model->getRefreshExpiresIn() < 1) {
-            throw ConnectException::invalidArgument('MyParcel returned no usable refreshExpiresIn');
-        }
-
         $this->model        = $model;
         $this->connectionId = $connectionId;
         $this->dpopNonce    = $dpopNonce;
@@ -73,30 +59,39 @@ final class ConnectTokenResponse
     }
 
     /**
-     * @param  string|null $dpopNonce The DPoP-Nonce response header, when there was one.
-     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     * Wrap what /connect/token answered.
+     *
+     * @param  array<string, mixed> $body      The decoded body of the answer.
+     * @param  string|null          $dpopNonce The DPoP-Nonce response header, when one was sent.
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException When the body is not a token of the spec.
      */
-    public static function fromExchange(ConnectTokenPost200Response $model, ?string $dpopNonce = null): self
+    public static function fromExchange(array $body, ?string $dpopNonce = null): self
     {
-        return new self($model, $model->getConnectionId(), $dpopNonce);
+        /** @var ConnectTokenPostResponse200 $model */
+        $model = self::read($body, ConnectTokenPostResponse200::class);
+
+        return new self($model, $model->connectionId, $dpopNonce);
     }
 
     /**
-     * @param  string|null $dpopNonce The DPoP-Nonce response header, when there was one.
-     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     * Wrap what /connect/refresh answered.
+     *
+     * @param  array<string, mixed> $body      The decoded body of the answer.
+     * @param  string|null          $dpopNonce The DPoP-Nonce response header, when one was sent.
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException When the body is not a token of the spec.
      */
-    public static function fromRefresh(ConnectRefreshPost200Response $model, ?string $dpopNonce = null): self
+    public static function fromRefresh(array $body, ?string $dpopNonce = null): self
     {
-        return new self($model, null, $dpopNonce);
+        return new self(self::read($body, ConnectRefreshPostResponse200::class), null, $dpopNonce);
     }
 
     public function getAccessToken(): string
     {
-        return (string) $this->model->getAccessToken();
+        return $this->model->accessToken;
     }
 
     /**
-     * Null on a refresh answer. The value from the exchange stays valid, so keep the stored one.
+     * Null on a refresh: the connectionId is issued once, at the exchange.
      */
     public function getConnectionId(): ?string
     {
@@ -104,15 +99,15 @@ final class ConnectTokenResponse
     }
 
     /**
-     * How long the access token lasts, in seconds from now.
+     * Seconds until the access token expires, counted from when MyParcel issued it.
      */
     public function getExpiresIn(): int
     {
-        return (int) $this->model->getExpiresIn();
+        return $this->model->expiresIn;
     }
 
     /**
-     * Get when the access token expires, in UTC.
+     * When the access token expires, in UTC.
      */
     public function getExpiresAt(): DateTimeImmutable
     {
@@ -120,15 +115,16 @@ final class ConnectTokenResponse
     }
 
     /**
-     * Get how long the refresh token lasts, in seconds from now.
+     * Seconds until the refresh token expires, counted from when MyParcel issued it.
      */
     public function getRefreshExpiresIn(): int
     {
-        return (int) $this->model->getRefreshExpiresIn();
+        return $this->model->refreshExpiresIn;
     }
 
     /**
-     * Get when the refresh token expires, in UTC.
+     * When the refresh token expires, in UTC. After this moment a refresh fails and the shop has
+     * to connect again.
      */
     public function getRefreshExpiresAt(): DateTimeImmutable
     {
@@ -137,14 +133,54 @@ final class ConnectTokenResponse
 
     public function getScope(): string
     {
-        return (string) $this->model->getScope();
+        return $this->model->scope;
     }
 
-    /**
-     * The DPoP-Nonce header, when MyParcel sent one. Store it and put it in the next proof.
-     */
     public function getDpopNonce(): ?string
     {
         return $this->dpopNonce;
+    }
+
+    /**
+     * Read a body into its generated model and check it against the spec.
+     *
+     * The generated models check a value when it goes out, not when it comes in. So this normalizes
+     * the model that it read: that runs the check of the spec on what MyParcel sent.
+     *
+     * This is stricter than the other reads of the SDK, which keep a value that the spec does not
+     * have. The SDK sends the token as a DPoP token, so it refuses an answer with another
+     * `tokenType`.
+     *
+     * @param  array<string, mixed> $body
+     * @param  class-string         $class
+     * @return object
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     */
+    private static function read(array $body, string $class)
+    {
+        $serializer = new Serializer([new ArrayDenormalizer(), new JaneObjectNormalizer()]);
+
+        try {
+            $model = $serializer->denormalize($body, $class);
+
+            $serializer->normalize($model, 'json');
+        } catch (ValidationException $exception) {
+            $problems = [];
+
+            foreach ($exception->getViolationList() as $violation) {
+                $problems[] = trim($violation->getPropertyPath() . ' ' . $violation->getMessage());
+            }
+
+            throw ConnectException::invalidArgument(
+                sprintf('MyParcel returned an unusable token: %s', implode('; ', $problems))
+            );
+        } catch (Throwable $exception) {
+            // A field with the wrong type, such as text where the spec has a number.
+            throw ConnectException::invalidArgument(
+                sprintf('MyParcel returned an unusable token: %s', $exception->getMessage())
+            );
+        }
+
+        return $model;
     }
 }

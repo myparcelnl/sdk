@@ -417,7 +417,7 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         try {
             $service->handleCallback([
                 'nonce' => $this->storage->row('nonces')['startNonce'],
-                'code'  => 'a-code',
+                'code'  => self::CODE,
                 'htm'   => 'POST',
                 'htu'   => self::HTU,
             ]);
@@ -450,7 +450,7 @@ class ConnectServiceTokenTest extends ConnectServiceTestCase
         try {
             $service->handleCallback([
                 'nonce' => $this->storage->row('nonces')['startNonce'],
-                'code'  => 'a-code',
+                'code'  => self::CODE,
                 'htm'   => 'POST',
                 'htu'   => self::HTU,
             ]);

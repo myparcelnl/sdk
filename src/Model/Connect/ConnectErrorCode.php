@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Model\Connect;
 
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost400Response;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost400ResponseAnyOf;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost400ResponseAnyOf1;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost400ResponseAnyOf2;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost401Response;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost500Response;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostJsonResponse500Error;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse401Error;
 
 /**
  * The error values /connect/token and /connect/refresh return in the body.
@@ -17,46 +13,45 @@ use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPost500Respon
  * Only these come back as {"error": "..."}. A wrong request shape answers with a problem+json body
  * instead, which has no error member at all.
  *
- * One place to read them from. The generated client declares all six, but spread across six response
- * models with one value each, so there is nothing generated to import wholesale. Each constant here
- * points at the model that declares it, so a value the spec changes cannot drift from ours: the
- * constant names encode their values, so a renamed or reordered one fails to resolve at class load
- * rather than quietly changing.
+ * One place to read them from. The spec names the four values of a 400 inside an `anyOf` of inline
+ * objects, and the generator makes no model and no enum for those. So these four are written here
+ * as the spec has them. The 401 and the 500 have a generated enum each, and their constants point
+ * at it.
  *
- * The aggregate getErrorAllowableValues() on those models is not usable, because the generator
- * collapses each anyOf and keeps only the last branch. The individual constants are correct.
+ * @todo Point the four at a generated enum when the spec names the values of a 400 in a schema of
+ *       its own.
  */
 class ConnectErrorCode
 {
     /**
      * The identity provider wants a nonce in the proof. Retry once with the DPoP-Nonce it sent back.
      */
-    public const USE_DPOP_NONCE = ConnectTokenPost400Response::ERROR_USE_DPOP_NONCE;
+    public const USE_DPOP_NONCE = 'use_dpop_nonce';
 
     /**
      * At /connect/token: the code is unknown or expired. At /connect/refresh: the connection is gone.
      */
-    public const INVALID_GRANT = ConnectTokenPost400ResponseAnyOf1::ERROR_INVALID_GRANT;
+    public const INVALID_GRANT = 'invalid_grant';
 
     /**
      * Our proof was refused. A retry with the same proof cannot help.
      */
-    public const INVALID_DPOP_PROOF = ConnectTokenPost401Response::ERROR_INVALID_DPOP_PROOF;
+    public const INVALID_DPOP_PROOF = ConnectTokenPostResponse401Error::InvalidDpopProof->value;
 
     /**
      * MyParcel could not link the shop to a sales channel.
      */
-    public const INVALID_SALES_CHANNEL = ConnectTokenPost400ResponseAnyOf2::ERROR_INVALID_SALES_CHANNEL;
+    public const INVALID_SALES_CHANNEL = 'invalid_sales_channel';
 
     /**
      * Declared by the service but not thrown by it today.
      */
-    public const INVALID_CODE = ConnectTokenPost400ResponseAnyOf::ERROR_INVALID_CODE;
+    public const INVALID_CODE = 'invalid_code';
 
     /**
      * Anything MyParcel could not complete.
      */
-    public const SERVER_ERROR = ConnectTokenPost500Response::ERROR_SERVER_ERROR;
+    public const SERVER_ERROR = ConnectTokenPostJsonResponse500Error::ServerError->value;
 
     /**
      * @return string[]

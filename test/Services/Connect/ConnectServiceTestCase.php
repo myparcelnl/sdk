@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Connect;
 
+use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Sdk\Crypto\AesGcmCipher;
 use MyParcelNL\Sdk\Model\Connect\ConnectConfig;
@@ -20,11 +22,16 @@ use MyParcelNL\Sdk\Services\Connect\ConnectService;
 use MyParcelNL\Sdk\Support\Str;
 use MyParcelNL\Sdk\Test\Bootstrap\InMemoryConnectStorage;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use OutOfBoundsException;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Throwable;
 
 /**
- * Shared setup for the ConnectService tests: an in-memory storage, a known key pair, and a Guzzle
+ * Shared setup for the ConnectService tests: an in-memory storage, a known key pair, and an HTTP
  * client whose answers the test queues.
  *
  * Queue what MyParcel would answer, then read what went out with request() or proofClaims(). Time is
@@ -41,6 +48,11 @@ abstract class ConnectServiceTestCase extends TestCase
     protected const CONNECTION_ID = '6f1e6f3e-0000-4000-8000-000000000000';
 
     protected const COMMAND_ENDPOINT = 'https://shop.example.test/myparcel/commands';
+
+    /**
+     * A one-time code in the form of the spec: 43 characters.
+     */
+    protected const CODE = 'q-i7pxt49_vfkqxIel2oXjiQWOYUM2B7OyfyZUpA81c';
 
     /**
      * A real P-256 key and its thumbprint, so a test can mint a token bound to it.
@@ -98,12 +110,83 @@ abstract class ConnectServiceTestCase extends TestCase
      *
      * @param \GuzzleHttp\Psr7\Response|\Throwable ...$answers
      */
-    protected function httpAnswering(...$answers): Client
+    protected function httpAnswering(...$answers): MockHttpClient
+    {
+        return new MockHttpClient(function (string $method, string $url, array $options) use (&$answers): MockResponse {
+            if ([] === $answers) {
+                throw new OutOfBoundsException('Mock queue is empty');
+            }
+
+            $answer = array_shift($answers);
+
+            // A closure runs while the call is under way, and gives the answer.
+            if ($answer instanceof Closure) {
+                $answer = $answer();
+            }
+
+            // A test queues PSR-7 answers and reads PSR-7 requests. This keeps that form, so a test
+            // says what MyParcel answers and not how the HTTP client works.
+            $this->history[] = [
+                'request'  => new Request($method, $url, self::headersOf($options), self::bodyOf($options)),
+                'response' => $answer,
+            ];
+
+            if ($answer instanceof Throwable) {
+                // A failure before an answer arrived: no DNS, no route, no TLS, or a timeout.
+                throw new TransportException($answer->getMessage(), 0, $answer);
+            }
+
+            return new MockResponse((string) $answer->getBody(), [
+                'http_code'        => $answer->getStatusCode(),
+                'response_headers' => $answer->getHeaders(),
+            ]);
+        });
+    }
+
+    /**
+     * A Guzzle client that answers with what you queue and records what went out.
+     *
+     * @todo INT-2034: remove with Guzzle. CommandRequestVerifier and JwksProvider still take a
+     *       Guzzle client.
+     * @param \GuzzleHttp\Psr7\Response|\Throwable ...$answers
+     */
+    protected function guzzleAnswering(...$answers): Client
     {
         $handler = HandlerStack::create(new MockHandler($answers));
         $handler->push(Middleware::history($this->history));
 
         return new Client(['handler' => $handler]);
+    }
+
+    /**
+     * The request headers as name and values, from the form in which the mock client gets them.
+     *
+     * @param  array<string, mixed> $options
+     * @return array<string, string[]>
+     */
+    private static function headersOf(array $options): array
+    {
+        $headers = [];
+
+        foreach ($options['normalized_headers'] ?? [] as $lines) {
+            foreach ($lines as $line) {
+                [$name, $value] = explode(':', $line, 2);
+
+                $headers[$name][] = ltrim($value);
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private static function bodyOf(array $options): string
+    {
+        $body = $options['body'] ?? '';
+
+        return is_string($body) ? $body : '';
     }
 
     /**
@@ -238,7 +321,7 @@ abstract class ConnectServiceTestCase extends TestCase
 
         return $service->handleCallback([
             'nonce' => $this->storage->row('nonces')['startNonce'],
-            'code'  => 'a-code',
+            'code'  => self::CODE,
             'htm'   => 'POST',
             'htu'   => self::HTU,
         ]);

@@ -329,7 +329,7 @@ final class CommandRequestVerifierTest extends ConnectServiceTestCase
      */
     private function verifier(...$answers): CommandRequestVerifier
     {
-        return new CommandRequestVerifier($this->service(), $this->jwksStorage, $this->httpAnswering(...$answers));
+        return new CommandRequestVerifier($this->service(), $this->jwksStorage, $this->guzzleAnswering(...$answers));
     }
 
     /**
