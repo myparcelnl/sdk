@@ -37,9 +37,6 @@ class NoteFromPrincipalNormalizer implements DenormalizerInterface, NormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\NoteFromPrincipalConstraint());
-        }
         if (\array_key_exists('type', $data)) {
             $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\NoteFromPrincipalType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
@@ -93,10 +90,10 @@ class NoteFromPrincipalNormalizer implements DenormalizerInterface, NormalizerIn
         if (null !== ($data->text ?? null)) {
             $dataArray['text'] = $data->text;
         }
-        if (array_key_exists('locale', get_object_vars($data))) {
+        if (array_key_exists('locale', get_object_vars($data)) && null !== ($data->locale ?? null)) {
             $dataArray['locale'] = $data->locale;
         }
-        if (array_key_exists('updatedAt', get_object_vars($data))) {
+        if (array_key_exists('updatedAt', get_object_vars($data)) && null !== ($data->updatedAt ?? null)) {
             $dataArray['updatedAt'] = $data->updatedAt;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

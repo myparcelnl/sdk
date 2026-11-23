@@ -37,9 +37,6 @@ class CommonErrorUserNormalizer implements DenormalizerInterface, NormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CommonErrorUserConstraint());
-        }
         if (\array_key_exists('status', $data)) {
             $object->status = $data['status'];
             unset($data['status']);
@@ -75,7 +72,7 @@ class CommonErrorUserNormalizer implements DenormalizerInterface, NormalizerInte
         if (array_key_exists('status', get_object_vars($data))) {
             $dataArray['status'] = $data->status;
         }
-        if (array_key_exists('code', get_object_vars($data))) {
+        if (array_key_exists('code', get_object_vars($data)) && null !== ($data->code ?? null)) {
             $value = $data->code;
             if ($data->code instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonErrorUserCodeAuth || is_int($data->code)) {
                 $value = $data->code instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonErrorUserCodeAuth ? $data->code->value : $data->code;

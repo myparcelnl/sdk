@@ -37,9 +37,6 @@ class CapabilitiesPostCapabilitiesRequestV2PickupNormalizer implements Denormali
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesPostCapabilitiesRequestV2PickupConstraint());
-        }
         if (\array_key_exists('location', $data)) {
             $object->location = $this->denormalizer->denormalize($data['location'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2PickupLocation::class, 'json', $context);
         }

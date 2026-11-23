@@ -37,9 +37,6 @@ class ShipmentResponsesPickupLocationsDataNormalizer implements DenormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentResponsesPickupLocationsDataConstraint());
-        }
         if (\array_key_exists('pickup_locations', $data)) {
             $values = [];
             foreach ($data['pickup_locations'] as $value) {

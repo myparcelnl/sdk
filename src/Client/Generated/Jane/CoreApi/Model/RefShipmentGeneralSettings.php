@@ -5,21 +5,21 @@ namespace MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model;
 class RefShipmentGeneralSettings
 {
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $saveRecipientAddress;
+    public RefTypesIntBoolean|int $saveRecipientAddress;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $deliveryNotification;
+    public RefTypesIntBoolean|int $deliveryNotification;
     /**
      * @var list<string>
      */
     public array $deliveryNotificationEmail;
     /**
-     * @var float
+     * @var RefTypesIntBoolean|int
      */
-    public float $disableAutoDetectPickup;
+    public RefTypesIntBoolean|int $disableAutoDetectPickup;
     /**
      * @var string
      */

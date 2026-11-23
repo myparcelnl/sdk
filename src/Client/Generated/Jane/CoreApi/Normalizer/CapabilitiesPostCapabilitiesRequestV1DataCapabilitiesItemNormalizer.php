@@ -37,18 +37,6 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemNormalizer implem
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('package_type', $data) && \is_int($data['package_type'])) {
-            $data['package_type'] = (float) $data['package_type'];
-        }
-        if (\array_key_exists('delivery_type', $data) && \is_int($data['delivery_type'])) {
-            $data['delivery_type'] = (float) $data['delivery_type'];
-        }
-        if (\array_key_exists('shipment_type', $data) && \is_int($data['shipment_type'])) {
-            $data['shipment_type'] = (float) $data['shipment_type'];
-        }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemConstraint());
-        }
         if (\array_key_exists('shop_id', $data)) {
             $object->shopId = $data['shop_id'];
         }
@@ -65,7 +53,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemNormalizer implem
             $object->carrierId = is_int($data['carrier_id']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrier::tryFrom($data['carrier_id']) ?? $data['carrier_id'] : $data['carrier_id'];
         }
         if (\array_key_exists('package_type', $data)) {
-            $object->packageType = $data['package_type'];
+            $object->packageType = is_int($data['package_type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPackageType::tryFrom($data['package_type']) ?? $data['package_type'] : $data['package_type'];
         }
         if (\array_key_exists('physical_properties', $data)) {
             $object->physicalProperties = $this->denormalizer->denormalize($data['physical_properties'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPhysicalProperties::class, 'json', $context);
@@ -74,10 +62,10 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemNormalizer implem
             $object->options = $this->denormalizer->denormalize($data['options'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemOptions::class, 'json', $context);
         }
         if (\array_key_exists('delivery_type', $data)) {
-            $object->deliveryType = $data['delivery_type'];
+            $object->deliveryType = is_int($data['delivery_type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemDeliveryType::tryFrom($data['delivery_type']) ?? $data['delivery_type'] : $data['delivery_type'];
         }
         if (\array_key_exists('shipment_type', $data)) {
-            $object->shipmentType = $data['shipment_type'];
+            $object->shipmentType = is_int($data['shipment_type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemShipmentType::tryFrom($data['shipment_type']) ?? $data['shipment_type'] : $data['shipment_type'];
         }
         if (\array_key_exists('direction', $data)) {
             $object->direction = is_string($data['direction']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemDirection::tryFrom($data['direction']) ?? $data['direction'] : $data['direction'];
@@ -108,7 +96,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemNormalizer implem
             $dataArray['carrier_id'] = $data->carrierId instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrier ? $data->carrierId->value : $data->carrierId;
         }
         if (array_key_exists('packageType', get_object_vars($data))) {
-            $dataArray['package_type'] = $data->packageType;
+            $dataArray['package_type'] = $data->packageType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemPackageType ? $data->packageType->value : $data->packageType;
         }
         if (array_key_exists('physicalProperties', get_object_vars($data))) {
             $normalized_2 = $data->physicalProperties === null ? null : $this->normalizer->normalize($data->physicalProperties, 'json', $context);
@@ -119,10 +107,10 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemNormalizer implem
             $dataArray['options'] = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_3) : $normalized_3;
         }
         if (array_key_exists('deliveryType', get_object_vars($data))) {
-            $dataArray['delivery_type'] = $data->deliveryType;
+            $dataArray['delivery_type'] = $data->deliveryType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemDeliveryType ? $data->deliveryType->value : $data->deliveryType;
         }
         if (array_key_exists('shipmentType', get_object_vars($data))) {
-            $dataArray['shipment_type'] = $data->shipmentType;
+            $dataArray['shipment_type'] = $data->shipmentType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemShipmentType ? $data->shipmentType->value : $data->shipmentType;
         }
         if (array_key_exists('direction', get_object_vars($data))) {
             $dataArray['direction'] = $data->direction instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesItemDirection ? $data->direction->value : $data->direction;

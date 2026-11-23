@@ -92,7 +92,7 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
-     * @return null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink
+     * @return null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink|string
      */
     protected function transformResponseBody(\Symfony\Contracts\HttpClient\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -125,6 +125,30 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
             if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label_link+json') !== false) {
                 return $serializer->deserialize($body, 'MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink', 'json');
             }
+            if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label_link+json+print') !== false) {
+                return $body;
+            }
+            if (stripos(strtolower((string) $contentType), 'application/json+print') !== false) {
+                return $body;
+            }
+            if (stripos(strtolower((string) $contentType), 'application/pdf+print') !== false) {
+                return $body;
+            }
+            if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label+json+print') !== false) {
+                return $body;
+            }
+            if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label+pdf+print') !== false) {
+                return $body;
+            }
+            if (stripos(strtolower((string) $contentType), 'application/vnd.shipment_label+zpl+print') !== false) {
+                return $body;
+            }
+            if (stripos(strtolower((string) $contentType), 'application/vnd.zpl+print') !== false) {
+                return $body;
+            }
+            if (str_starts_with(strtolower((string) $contentType), 'application/')) {
+                return $body;
+            }
         }
         if ($status >= 400 && $status <= 499) {
             if (stripos(strtolower((string) $contentType), 'application/json') !== false) {
@@ -154,6 +178,6 @@ class GetShipmentsLabels extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\R
     }
     public function getTargetClass(): ?string
     {
-        return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink::class;
+        return null;
     }
 }

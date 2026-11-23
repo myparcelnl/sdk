@@ -37,9 +37,6 @@ class ShippingRulesPatchShippingRulesDataNormalizer implements DenormalizerInter
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\ShippingRulesPatchShippingRulesDataConstraint());
-        }
         if (\array_key_exists('shipping_rules', $data)) {
             $values = [];
             foreach ($data['shipping_rules'] as $value) {

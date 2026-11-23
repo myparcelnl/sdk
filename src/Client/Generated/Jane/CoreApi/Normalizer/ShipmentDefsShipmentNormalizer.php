@@ -37,9 +37,6 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('hidden', $data) && \is_int($data['hidden'])) {
-            $data['hidden'] = (float) $data['hidden'];
-        }
         if (\array_key_exists('carrier_active', $data) && \is_int($data['carrier_active'])) {
             $data['carrier_active'] = (bool) $data['carrier_active'];
         }
@@ -48,9 +45,6 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
         }
         if (\array_key_exists('delivered', $data) && \is_int($data['delivered'])) {
             $data['delivered'] = (bool) $data['delivered'];
-        }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentDefsShipmentConstraint());
         }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
@@ -139,7 +133,7 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
             $object->dropOffPoint = $this->denormalizer->denormalize($data['drop_off_point'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipmentDropOffPoint::class, 'json', $context);
         }
         if (\array_key_exists('hidden', $data)) {
-            $object->hidden = $data['hidden'];
+            $object->hidden = is_int($data['hidden']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean::tryFrom($data['hidden']) ?? $data['hidden'] : $data['hidden'];
         }
         if (\array_key_exists('price', $data)) {
             $object->price = $this->denormalizer->denormalize($data['price'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesMoneyNullableAmount::class, 'json', $context);
@@ -466,7 +460,7 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
             $dataArray['drop_off_point'] = \is_iterable($normalized_7) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_7) : $normalized_7;
         }
         if (null !== ($data->hidden ?? null)) {
-            $dataArray['hidden'] = $data->hidden;
+            $dataArray['hidden'] = $data->hidden instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesIntBoolean ? $data->hidden->value : $data->hidden;
         }
         if (null !== ($data->price ?? null)) {
             $normalized_8 = $this->normalizer->normalize($data->price, 'json', $context);
@@ -611,10 +605,13 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
             $dataArray['link_consumer_portal'] = $value_15;
         }
         if (array_key_exists('partnerTracktraces', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->partnerTracktraces as $value_16) {
-                $normalized_11 = $value_16 === null ? null : $this->normalizer->normalize($value_16, 'json', $context);
-                $values_1[] = \is_iterable($normalized_11) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_11) : $normalized_11;
+            $values_1 = null;
+            if (null !== $data->partnerTracktraces) {
+                $values_1 = [];
+                foreach ($data->partnerTracktraces as $value_16) {
+                    $normalized_11 = $value_16 === null ? null : $this->normalizer->normalize($value_16, 'json', $context);
+                    $values_1[] = \is_iterable($normalized_11) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_11) : $normalized_11;
+                }
             }
             $dataArray['partner_tracktraces'] = $values_1;
         }
@@ -646,10 +643,13 @@ class ShipmentDefsShipmentNormalizer implements DenormalizerInterface, Normalize
             $dataArray['order_shipment_identifier'] = $value_19;
         }
         if (array_key_exists('shippedItems', get_object_vars($data))) {
-            $values_2 = [];
-            foreach ($data->shippedItems as $value_20) {
-                $normalized_12 = $value_20 === null ? null : $this->normalizer->normalize($value_20, 'json', $context);
-                $values_2[] = \is_iterable($normalized_12) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_12) : $normalized_12;
+            $values_2 = null;
+            if (null !== $data->shippedItems) {
+                $values_2 = [];
+                foreach ($data->shippedItems as $value_20) {
+                    $normalized_12 = $value_20 === null ? null : $this->normalizer->normalize($value_20, 'json', $context);
+                    $values_2[] = \is_iterable($normalized_12) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_12) : $normalized_12;
+                }
             }
             $dataArray['shipped_items'] = $values_2;
         }

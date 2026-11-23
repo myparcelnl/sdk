@@ -37,9 +37,6 @@ class OrderNormalizer implements DenormalizerInterface, NormalizerInterface, Den
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrderConstraint());
-        }
         if (\array_key_exists('id', $data)) {
             $object->id = $data['id'];
             unset($data['id']);
@@ -157,37 +154,46 @@ class OrderNormalizer implements DenormalizerInterface, NormalizerInterface, Den
         if (array_key_exists('customerReference', get_object_vars($data))) {
             $dataArray['customerReference'] = $data->customerReference;
         }
-        if (array_key_exists('externalReferences', get_object_vars($data))) {
+        if (array_key_exists('externalReferences', get_object_vars($data)) && null !== ($data->externalReferences ?? null)) {
             $dataArray['externalReferences'] = $data->externalReferences;
         }
         if (array_key_exists('lines', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->lines as $value) {
-                $normalized_2 = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_2) : $normalized_2;
+            $values = null;
+            if (null !== $data->lines) {
+                $values = [];
+                foreach ($data->lines as $value) {
+                    $normalized_2 = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_2) : $normalized_2;
+                }
             }
             $dataArray['lines'] = $values;
         }
         if (array_key_exists('notes', get_object_vars($data))) {
-            $values_1 = [];
-            foreach ($data->notes as $value_1) {
-                $value_2 = $value_1;
-                if (is_object($value_1)) {
-                    $normalized_3 = $this->normalizer->normalize($value_1, 'json', $context);
-                    $value_2 = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_3) : $normalized_3;
-                } elseif (is_object($value_1)) {
-                    $normalized_4 = $this->normalizer->normalize($value_1, 'json', $context);
-                    $value_2 = \is_iterable($normalized_4) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_4) : $normalized_4;
+            $values_1 = null;
+            if (null !== $data->notes) {
+                $values_1 = [];
+                foreach ($data->notes as $value_1) {
+                    $value_2 = $value_1;
+                    if (is_object($value_1)) {
+                        $normalized_3 = $this->normalizer->normalize($value_1, 'json', $context);
+                        $value_2 = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_3) : $normalized_3;
+                    } elseif (is_object($value_1)) {
+                        $normalized_4 = $this->normalizer->normalize($value_1, 'json', $context);
+                        $value_2 = \is_iterable($normalized_4) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_4) : $normalized_4;
+                    }
+                    $values_1[] = $value_2;
                 }
-                $values_1[] = $value_2;
             }
             $dataArray['notes'] = $values_1;
         }
         if (array_key_exists('packages', get_object_vars($data))) {
-            $values_2 = [];
-            foreach ($data->packages as $value_3) {
-                $normalized_5 = $value_3 === null ? null : $this->normalizer->normalize($value_3, 'json', $context);
-                $values_2[] = \is_iterable($normalized_5) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_5) : $normalized_5;
+            $values_2 = null;
+            if (null !== $data->packages) {
+                $values_2 = [];
+                foreach ($data->packages as $value_3) {
+                    $normalized_5 = $value_3 === null ? null : $this->normalizer->normalize($value_3, 'json', $context);
+                    $values_2[] = \is_iterable($normalized_5) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_5) : $normalized_5;
+                }
             }
             $dataArray['packages'] = $values_2;
         }

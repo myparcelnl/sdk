@@ -37,9 +37,6 @@ class ErrorNormalizer implements DenormalizerInterface, NormalizerInterface, Den
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ErrorConstraint());
-        }
         if (\array_key_exists('status', $data)) {
             $value = $data['status'];
             if (is_int($data['status'])) {
@@ -78,7 +75,7 @@ class ErrorNormalizer implements DenormalizerInterface, NormalizerInterface, Den
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('status', get_object_vars($data))) {
+        if (array_key_exists('status', get_object_vars($data)) && null !== ($data->status ?? null)) {
             $value = $data->status;
             if (is_int($data->status)) {
                 $value = $data->status;

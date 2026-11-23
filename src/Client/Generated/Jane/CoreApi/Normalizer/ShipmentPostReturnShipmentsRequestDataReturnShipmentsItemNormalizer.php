@@ -37,9 +37,6 @@ class ShipmentPostReturnShipmentsRequestDataReturnShipmentsItemNormalizer implem
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\ShipmentPostReturnShipmentsRequestDataReturnShipmentsItemConstraint());
-        }
         if (\array_key_exists('account_id', $data)) {
             $object->accountId = $data['account_id'];
             unset($data['account_id']);
@@ -120,7 +117,7 @@ class ShipmentPostReturnShipmentsRequestDataReturnShipmentsItemNormalizer implem
         if (null !== ($data->parent ?? null)) {
             $dataArray['parent'] = $data->parent;
         }
-        if (array_key_exists('referenceIdentifier', get_object_vars($data))) {
+        if (array_key_exists('referenceIdentifier', get_object_vars($data)) && null !== ($data->referenceIdentifier ?? null)) {
             $value = $data->referenceIdentifier;
             if (is_int($data->referenceIdentifier)) {
                 $value = $data->referenceIdentifier;

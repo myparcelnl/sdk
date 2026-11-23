@@ -37,9 +37,6 @@ class CustomsDeclarationGroupsItemTotalValueNormalizer implements DenormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\CustomsDeclarationGroupsItemTotalValueConstraint());
-        }
         if (\array_key_exists('currency', $data)) {
             $object->currency = $data['currency'];
             unset($data['currency']);

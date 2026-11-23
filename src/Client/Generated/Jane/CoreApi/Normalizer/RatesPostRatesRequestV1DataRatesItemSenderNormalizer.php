@@ -40,9 +40,6 @@ class RatesPostRatesRequestV1DataRatesItemSenderNormalizer implements Denormaliz
         if (\array_key_exists('is_business', $data) && \is_int($data['is_business'])) {
             $data['is_business'] = (bool) $data['is_business'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1DataRatesItemSenderConstraint());
-        }
         if (\array_key_exists('cc', $data)) {
             $object->cc = $data['cc'];
         }

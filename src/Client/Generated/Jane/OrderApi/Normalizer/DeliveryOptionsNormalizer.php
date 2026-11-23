@@ -37,9 +37,6 @@ class DeliveryOptionsNormalizer implements DenormalizerInterface, NormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\DeliveryOptionsConstraint());
-        }
         if (\array_key_exists('notifyOnDelivery', $data)) {
             $object->notifyOnDelivery = $data['notifyOnDelivery'];
             unset($data['notifyOnDelivery']);
@@ -58,7 +55,7 @@ class DeliveryOptionsNormalizer implements DenormalizerInterface, NormalizerInte
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('notifyOnDelivery', get_object_vars($data))) {
+        if (array_key_exists('notifyOnDelivery', get_object_vars($data)) && null !== ($data->notifyOnDelivery ?? null)) {
             $dataArray['notifyOnDelivery'] = $data->notifyOnDelivery;
         }
         if (array_key_exists('preferredDate', get_object_vars($data))) {

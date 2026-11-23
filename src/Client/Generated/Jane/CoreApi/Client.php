@@ -50,7 +50,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *                               //> so that Monday will be shown.
      *    "dropoff_delay"?: int, //This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0.
      *    "deliverydays_window"?: int, //This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
-     *    "exclude_delivery_type"?: string, //Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
+     *    "exclude_delivery_type"?: string, //Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. The string `null` is treated as if the parameter were omitted.
      *    "exclude_parcel_lockers"?: mixed, //This option allows to filter out pickup locations that are parcel lockers.
      *    "latitude"?: int, //This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
      *    "longitude"?: int, //This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
@@ -138,7 +138,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      *                               //> so that Monday will be shown.
      *    "dropoff_delay"?: int, //This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0.
      *    "deliverydays_window"?: int, //This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
-     *    "exclude_delivery_type"?: string, //Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
+     *    "exclude_delivery_type"?: string, //Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. The string `null` is treated as if the parameter were omitted.
      *    "exclude_parcel_lockers"?: mixed, //This option allows to filter out pickup locations that are parcel lockers.
      *    "latitude"?: int, //This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
      *    "longitude"?: int, //This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
@@ -268,14 +268,14 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @param array{
      *    "User-Agent"?: string, //To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
      * } $headerParameters
-     * @param array $accept Accept content header application/json;charset=utf-8;version=1.2|application/json|application/vnd.shipment_label+json|application/*|application/problem+json
+     * @param array $accept Accept content header application/json;charset=utf-8;version=1.2|application/json|application/vnd.shipment_label+json|application/vnd.shipment_label+json+print|application/*|application/problem+json
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnsupportedMediaTypeException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsUnprocessableEntityException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsClientErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\PostShipmentsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12|null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentLabels
+     * @return \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12|null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesShipmentLabels|string
      */
     public function postShipments($requestBody, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {
@@ -430,7 +430,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Clien
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\GetShipmentsLabelsServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\BadResponseException
      *
-     * @return null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink
+     * @return null|\MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CommonResponsesDownloadLink|string
      */
     public function getShipmentsLabels($ids, array $queryParameters = [], array $headerParameters = [], array $accept = [])
     {

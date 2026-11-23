@@ -37,9 +37,6 @@ class OrderRulesSetShippingPreferencesNormalizer implements DenormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrderRulesSetShippingPreferencesConstraint());
-        }
         if (\array_key_exists('path', $data)) {
             $values = [];
             foreach ($data['path'] as $value) {

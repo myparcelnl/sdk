@@ -37,9 +37,6 @@ class RefShipmentPickupNormalizer implements DenormalizerInterface, NormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefShipmentPickupConstraint());
-        }
         if (\array_key_exists('postal_code', $data)) {
             $object->postalCode = $data['postal_code'];
         }
@@ -138,7 +135,7 @@ class RefShipmentPickupNormalizer implements DenormalizerInterface, NormalizerIn
         if (array_key_exists('locationCode', get_object_vars($data))) {
             $dataArray['location_code'] = $data->locationCode;
         }
-        if (array_key_exists('locationType', get_object_vars($data))) {
+        if (array_key_exists('locationType', get_object_vars($data)) && null !== ($data->locationType ?? null)) {
             $value_1 = $data->locationType;
             if ($data->locationType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentBpostBpostPugoType || is_int($data->locationType)) {
                 $value_1 = $data->locationType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentBpostBpostPugoType ? $data->locationType->value : $data->locationType;

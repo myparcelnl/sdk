@@ -43,9 +43,6 @@ class ShipmentRequestNormalizer implements DenormalizerInterface, NormalizerInte
         if (\array_key_exists('saveRecipientAddress', $data) && \is_int($data['saveRecipientAddress'])) {
             $data['saveRecipientAddress'] = (bool) $data['saveRecipientAddress'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShipmentRequestConstraint());
-        }
         if (\array_key_exists('carrier', $data)) {
             $object->carrier = is_string($data['carrier']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\Carrier::tryFrom($data['carrier']) ?? $data['carrier'] : $data['carrier'];
             unset($data['carrier']);
@@ -127,7 +124,7 @@ class ShipmentRequestNormalizer implements DenormalizerInterface, NormalizerInte
             $normalized_2 = $data->options === null ? null : $this->normalizer->normalize($data->options, 'json', $context);
             $dataArray['options'] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Runtime\JsonObject($normalized_2) : $normalized_2;
         }
-        if (array_key_exists('pickup', get_object_vars($data))) {
+        if (array_key_exists('pickup', get_object_vars($data)) && null !== ($data->pickup ?? null)) {
             $dataArray['pickup'] = $data->pickup;
         }
         if (array_key_exists('sender', get_object_vars($data))) {

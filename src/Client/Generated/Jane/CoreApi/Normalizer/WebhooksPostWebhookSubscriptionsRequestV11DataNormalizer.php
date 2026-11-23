@@ -37,9 +37,6 @@ class WebhooksPostWebhookSubscriptionsRequestV11DataNormalizer implements Denorm
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\WebhooksPostWebhookSubscriptionsRequestV11DataConstraint());
-        }
         if (\array_key_exists('webhook_subscriptions', $data)) {
             $values = [];
             foreach ($data['webhook_subscriptions'] as $value) {
@@ -53,10 +50,13 @@ class WebhooksPostWebhookSubscriptionsRequestV11DataNormalizer implements Denorm
     {
         $dataArray = [];
         if (array_key_exists('webhookSubscriptions', get_object_vars($data))) {
-            $values = [];
-            foreach ($data->webhookSubscriptions as $value) {
-                $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+            $values = null;
+            if (null !== $data->webhookSubscriptions) {
+                $values = [];
+                foreach ($data->webhookSubscriptions as $value) {
+                    $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
+                }
             }
             $dataArray['webhook_subscriptions'] = $values;
         }

@@ -11,7 +11,7 @@ class Client extends \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Runtime\Client
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\GetWhoamiInternalServerErrorException
      * @throws \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Exception\BadResponseException
      *
-     * @return null
+     * @return \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalShop|\MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\PrincipalUser
      */
     public function getWhoami(array $accept = [])
     {

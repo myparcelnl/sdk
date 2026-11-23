@@ -40,9 +40,6 @@ class ProductToCreateFulfilmentNormalizer implements DenormalizerInterface, Norm
         if (\array_key_exists('trackInventory', $data) && \is_int($data['trackInventory'])) {
             $data['trackInventory'] = (bool) $data['trackInventory'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ProductToCreateFulfilmentConstraint());
-        }
         if (\array_key_exists('platforms', $data)) {
             $values = [];
             foreach ($data['platforms'] as $value) {

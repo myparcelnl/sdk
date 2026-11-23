@@ -37,9 +37,6 @@ class OrdersGetResponse200AggregationsStatusItemNormalizer implements Denormaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\OrdersGetResponse200AggregationsStatusItemConstraint());
-        }
         if (\array_key_exists('key', $data)) {
             $object->key = is_string($data['key']) ? \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\OrderStatus::tryFrom($data['key']) ?? $data['key'] : $data['key'];
             unset($data['key']);

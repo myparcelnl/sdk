@@ -37,15 +37,6 @@ class RatesPostRatesRequestV1DataRatesItemNormalizer implements DenormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('delivery_type', $data) && \is_int($data['delivery_type'])) {
-            $data['delivery_type'] = (float) $data['delivery_type'];
-        }
-        if (\array_key_exists('shipment_type', $data) && \is_int($data['shipment_type'])) {
-            $data['shipment_type'] = (float) $data['shipment_type'];
-        }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1DataRatesItemConstraint());
-        }
         if (\array_key_exists('shop_id', $data)) {
             $object->shopId = $data['shop_id'];
         }
@@ -77,10 +68,10 @@ class RatesPostRatesRequestV1DataRatesItemNormalizer implements DenormalizerInte
             $object->options = $this->denormalizer->denormalize($data['options'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemOptions::class, 'json', $context);
         }
         if (\array_key_exists('delivery_type', $data)) {
-            $object->deliveryType = $data['delivery_type'];
+            $object->deliveryType = is_int($data['delivery_type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemDeliveryType::tryFrom($data['delivery_type']) ?? $data['delivery_type'] : $data['delivery_type'];
         }
         if (\array_key_exists('shipment_type', $data)) {
-            $object->shipmentType = $data['shipment_type'];
+            $object->shipmentType = is_int($data['shipment_type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemShipmentType::tryFrom($data['shipment_type']) ?? $data['shipment_type'] : $data['shipment_type'];
         }
         if (\array_key_exists('direction', $data)) {
             $object->direction = is_string($data['direction']) ? \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemDirection::tryFrom($data['direction']) ?? $data['direction'] : $data['direction'];
@@ -126,10 +117,10 @@ class RatesPostRatesRequestV1DataRatesItemNormalizer implements DenormalizerInte
             $dataArray['options'] = \is_iterable($normalized_4) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized_4) : $normalized_4;
         }
         if (array_key_exists('deliveryType', get_object_vars($data))) {
-            $dataArray['delivery_type'] = $data->deliveryType;
+            $dataArray['delivery_type'] = $data->deliveryType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemDeliveryType ? $data->deliveryType->value : $data->deliveryType;
         }
         if (array_key_exists('shipmentType', get_object_vars($data))) {
-            $dataArray['shipment_type'] = $data->shipmentType;
+            $dataArray['shipment_type'] = $data->shipmentType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemShipmentType ? $data->shipmentType->value : $data->shipmentType;
         }
         if (array_key_exists('direction', get_object_vars($data))) {
             $dataArray['direction'] = $data->direction instanceof \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RatesPostRatesRequestV1DataRatesItemDirection ? $data->direction->value : $data->direction;

@@ -37,9 +37,6 @@ class DeliveryNormalizer implements DenormalizerInterface, NormalizerInterface, 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\DeliveryConstraint());
-        }
         if (\array_key_exists('options', $data)) {
             $object->options = $this->denormalizer->denormalize($data['options'], \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\DeliveryOptions::class, 'json', $context);
             unset($data['options']);

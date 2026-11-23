@@ -94,9 +94,6 @@ class RefShippingRulesShipmentOptionsNormalizer implements DenormalizerInterface
         if (\array_key_exists('tracked', $data) && \is_int($data['tracked'])) {
             $data['tracked'] = (float) $data['tracked'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApiPrivate\Validator\RefShippingRulesShipmentOptionsConstraint());
-        }
         if (\array_key_exists('age_check', $data)) {
             $object->ageCheck = $data['age_check'];
         }

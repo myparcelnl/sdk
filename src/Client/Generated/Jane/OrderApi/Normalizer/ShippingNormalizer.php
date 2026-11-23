@@ -40,9 +40,6 @@ class ShippingNormalizer implements DenormalizerInterface, NormalizerInterface, 
         if (\array_key_exists('disableAutoDetectPickup', $data) && \is_int($data['disableAutoDetectPickup'])) {
             $data['disableAutoDetectPickup'] = (bool) $data['disableAutoDetectPickup'];
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Validator\ShippingConstraint());
-        }
         if (\array_key_exists('additionalContext', $data)) {
             $object->additionalContext = $data['additionalContext'];
             unset($data['additionalContext']);
@@ -134,7 +131,7 @@ class ShippingNormalizer implements DenormalizerInterface, NormalizerInterface, 
         if (array_key_exists('packageType', get_object_vars($data))) {
             $dataArray['packageType'] = $data->packageType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\OrderApi\Model\PackageType ? $data->packageType->value : $data->packageType;
         }
-        if (array_key_exists('pickup', get_object_vars($data))) {
+        if (array_key_exists('pickup', get_object_vars($data)) && null !== ($data->pickup ?? null)) {
             $dataArray['pickup'] = $data->pickup;
         }
         if (array_key_exists('recipient', get_object_vars($data))) {

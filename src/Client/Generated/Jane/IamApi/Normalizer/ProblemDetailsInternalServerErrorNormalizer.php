@@ -37,15 +37,12 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Validator\ProblemDetailsInternalServerErrorConstraint());
-        }
         if (\array_key_exists('type', $data)) {
-            $object->type = $data['type'];
+            $object->type = is_string($data['type']) ? \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorType::tryFrom($data['type']) ?? $data['type'] : $data['type'];
             unset($data['type']);
         }
         if (\array_key_exists('status', $data)) {
-            $object->status = $data['status'];
+            $object->status = is_int($data['status']) ? \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorStatus::tryFrom($data['status']) ?? $data['status'] : $data['status'];
             unset($data['status']);
         }
         if (\array_key_exists('title', $data)) {
@@ -75,10 +72,10 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
     {
         $dataArray = [];
         if (null !== ($data->type ?? null)) {
-            $dataArray['type'] = $data->type;
+            $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorType ? $data->type->value : $data->type;
         }
         if (null !== ($data->status ?? null)) {
-            $dataArray['status'] = $data->status;
+            $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\IamApi\Model\ProblemDetailsInternalServerErrorStatus ? $data->status->value : $data->status;
         }
         if (null !== ($data->title ?? null)) {
             $dataArray['title'] = $data->title;
@@ -89,7 +86,7 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
         if (null !== ($data->instance ?? null)) {
             $dataArray['instance'] = $data->instance;
         }
-        if (array_key_exists('cause', get_object_vars($data))) {
+        if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {

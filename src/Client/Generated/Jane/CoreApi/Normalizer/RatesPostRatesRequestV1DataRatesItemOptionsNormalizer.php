@@ -37,9 +37,6 @@ class RatesPostRatesRequestV1DataRatesItemOptionsNormalizer implements Denormali
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RatesPostRatesRequestV1DataRatesItemOptionsConstraint());
-        }
         if (\array_key_exists('age_check', $data)) {
             $object->ageCheck = $data['age_check'];
         }
@@ -99,59 +96,59 @@ class RatesPostRatesRequestV1DataRatesItemOptionsNormalizer implements Denormali
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('ageCheck', get_object_vars($data))) {
+        if (array_key_exists('ageCheck', get_object_vars($data)) && null !== ($data->ageCheck ?? null)) {
             $dataArray['age_check'] = $data->ageCheck;
         }
         if (array_key_exists('cashOnDelivery', get_object_vars($data))) {
             $normalized = $data->cashOnDelivery === null ? null : $this->normalizer->normalize($data->cashOnDelivery, 'json', $context);
             $dataArray['cash_on_delivery'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('collect', get_object_vars($data))) {
+        if (array_key_exists('collect', get_object_vars($data)) && null !== ($data->collect ?? null)) {
             $dataArray['collect'] = $data->collect;
         }
-        if (array_key_exists('cooledDelivery', get_object_vars($data))) {
+        if (array_key_exists('cooledDelivery', get_object_vars($data)) && null !== ($data->cooledDelivery ?? null)) {
             $dataArray['cooled_delivery'] = $data->cooledDelivery;
         }
-        if (array_key_exists('dropOffAtPostalPoint', get_object_vars($data))) {
+        if (array_key_exists('dropOffAtPostalPoint', get_object_vars($data)) && null !== ($data->dropOffAtPostalPoint ?? null)) {
             $dataArray['drop_off_at_postal_point'] = $data->dropOffAtPostalPoint;
         }
-        if (array_key_exists('extraAssurance', get_object_vars($data))) {
+        if (array_key_exists('extraAssurance', get_object_vars($data)) && null !== ($data->extraAssurance ?? null)) {
             $dataArray['extra_assurance'] = $data->extraAssurance;
         }
-        if (array_key_exists('hideSender', get_object_vars($data))) {
+        if (array_key_exists('hideSender', get_object_vars($data)) && null !== ($data->hideSender ?? null)) {
             $dataArray['hide_sender'] = $data->hideSender;
         }
-        if (array_key_exists('largeFormat', get_object_vars($data))) {
+        if (array_key_exists('largeFormat', get_object_vars($data)) && null !== ($data->largeFormat ?? null)) {
             $dataArray['large_format'] = $data->largeFormat;
         }
-        if (array_key_exists('noTracking', get_object_vars($data))) {
+        if (array_key_exists('noTracking', get_object_vars($data)) && null !== ($data->noTracking ?? null)) {
             $dataArray['no_tracking'] = $data->noTracking;
         }
-        if (array_key_exists('onlyRecipient', get_object_vars($data))) {
+        if (array_key_exists('onlyRecipient', get_object_vars($data)) && null !== ($data->onlyRecipient ?? null)) {
             $dataArray['only_recipient'] = $data->onlyRecipient;
         }
-        if (array_key_exists('priorityDelivery', get_object_vars($data))) {
+        if (array_key_exists('priorityDelivery', get_object_vars($data)) && null !== ($data->priorityDelivery ?? null)) {
             $dataArray['priority_delivery'] = $data->priorityDelivery;
         }
-        if (array_key_exists('receiptCode', get_object_vars($data))) {
+        if (array_key_exists('receiptCode', get_object_vars($data)) && null !== ($data->receiptCode ?? null)) {
             $dataArray['receipt_code'] = $data->receiptCode;
         }
-        if (array_key_exists('return', get_object_vars($data))) {
+        if (array_key_exists('return', get_object_vars($data)) && null !== ($data->return ?? null)) {
             $dataArray['return'] = $data->return;
         }
-        if (array_key_exists('sameDayDelivery', get_object_vars($data))) {
+        if (array_key_exists('sameDayDelivery', get_object_vars($data)) && null !== ($data->sameDayDelivery ?? null)) {
             $dataArray['same_day_delivery'] = $data->sameDayDelivery;
         }
-        if (array_key_exists('saturdayDelivery', get_object_vars($data))) {
+        if (array_key_exists('saturdayDelivery', get_object_vars($data)) && null !== ($data->saturdayDelivery ?? null)) {
             $dataArray['saturday_delivery'] = $data->saturdayDelivery;
         }
-        if (array_key_exists('signature', get_object_vars($data))) {
+        if (array_key_exists('signature', get_object_vars($data)) && null !== ($data->signature ?? null)) {
             $dataArray['signature'] = $data->signature;
         }
-        if (array_key_exists('tracked', get_object_vars($data))) {
+        if (array_key_exists('tracked', get_object_vars($data)) && null !== ($data->tracked ?? null)) {
             $dataArray['tracked'] = $data->tracked;
         }
-        if (array_key_exists('insurance', get_object_vars($data))) {
+        if (array_key_exists('insurance', get_object_vars($data)) && null !== ($data->insurance ?? null)) {
             $dataArray['insurance'] = $data->insurance;
         }
         if (!($context['skip_validation'] ?? false)) {

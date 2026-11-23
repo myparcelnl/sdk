@@ -37,9 +37,6 @@ class RefCapabilitiesSharedOptionsBaseOptionsV1Normalizer implements Denormalize
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (!($context['skip_validation'] ?? false)) {
-            $this->validate($data, new \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Validator\RefCapabilitiesSharedOptionsBaseOptionsV1Constraint());
-        }
         if (\array_key_exists('age_check', $data)) {
             $object->ageCheck = $this->denormalizer->denormalize($data['age_check'], \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV1::class, 'json', $context);
             unset($data['age_check']);
