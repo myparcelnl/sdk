@@ -55,12 +55,19 @@ class PhysicalPropertiesWeightNormalizer implements DenormalizerInterface, Norma
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['unit'] = $data->unit instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\PhysicalPropertiesWeightUnit ? $data->unit->value : $data->unit;
-        $dataArray['value'] = $data->value;
+        if (null !== ($data->unit ?? null)) {
+            $dataArray['unit'] = $data->unit instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\PhysicalPropertiesWeightUnit ? $data->unit->value : $data->unit;
+        }
+        if (null !== ($data->value ?? null)) {
+            $dataArray['value'] = $data->value;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\PhysicalPropertiesWeightConstraint());
         }
         return $dataArray;
     }

@@ -59,13 +59,22 @@ class SalesPriceNormalizer implements DenormalizerInterface, NormalizerInterface
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['currency'] = $data->currency;
-        $dataArray['micros'] = $data->micros;
-        $dataArray['taxRate'] = $data->taxRate;
+        if (null !== ($data->currency ?? null)) {
+            $dataArray['currency'] = $data->currency;
+        }
+        if (null !== ($data->micros ?? null)) {
+            $dataArray['micros'] = $data->micros;
+        }
+        if (null !== ($data->taxRate ?? null)) {
+            $dataArray['taxRate'] = $data->taxRate;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\SalesPriceConstraint());
         }
         return $dataArray;
     }

@@ -55,12 +55,19 @@ class OrderShipmentsOrderLineNormalizer implements DenormalizerInterface, Normal
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['sourceId'] = $data->sourceId;
-        $dataArray['quantity'] = $data->quantity;
+        if (null !== ($data->sourceId ?? null)) {
+            $dataArray['sourceId'] = $data->sourceId;
+        }
+        if (null !== ($data->quantity ?? null)) {
+            $dataArray['quantity'] = $data->quantity;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShipmentsOrderLineConstraint());
         }
         return $dataArray;
     }

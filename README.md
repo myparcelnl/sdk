@@ -338,10 +338,9 @@ request cannot send, such as `tracked`.
 
 ## Generated API clients
 
-[Jane](https://github.com/janephp/janephp) generates the clients of the Core API, the private Core API, the IAM API
-and the Order API from their OpenAPI specs into `src/Client/Generated/Jane/`. The configuration is in
-`.jane-openapi-core`. Jane also generates `Jane\EcommerceApi` there, from `.jane-openapi`.
-`composer generate:api` generates all of them again. The legacy e-commerce client in
+[Jane](https://github.com/janephp/janephp) generates the clients of the Core API, the private Core API, the IAM API,
+the Order API and the e-commerce API from their OpenAPI specs into `src/Client/Generated/Jane/`. The
+configuration is in `.jane-openapi`. `composer generate:api` generates all of them again. The legacy e-commerce client in
 `src/Client/Generated/EcommerceApi/` still comes from OpenAPI Generator, until the e-commerce client also
 runs on Jane.
 

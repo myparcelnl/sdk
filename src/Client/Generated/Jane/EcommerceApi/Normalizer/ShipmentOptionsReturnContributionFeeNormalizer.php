@@ -51,12 +51,17 @@ class ShipmentOptionsReturnContributionFeeNormalizer implements DenormalizerInte
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $normalized = $data->amount === null ? null : $this->normalizer->normalize($data->amount, 'json', $context);
-        $dataArray['amount'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+        if (null !== ($data->amount ?? null)) {
+            $normalized = $this->normalizer->normalize($data->amount, 'json', $context);
+            $dataArray['amount'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ShipmentOptionsReturnContributionFeeConstraint());
         }
         return $dataArray;
     }

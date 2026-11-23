@@ -63,18 +63,27 @@ class OrderLineNormalizer implements DenormalizerInterface, NormalizerInterface,
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $normalized = $data->product === null ? null : $this->normalizer->normalize($data->product, 'json', $context);
-        $dataArray['product'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
-        $dataArray['quantity'] = $data->quantity;
-        $dataArray['sourceId'] = $data->sourceId;
-        if (array_key_exists('price', get_object_vars($data)) && null !== ($data->price ?? null)) {
-            $normalized_1 = $this->normalizer->normalize($data->price, 'json', $context);
+        if (null !== ($data->product ?? null)) {
+            $normalized = $this->normalizer->normalize($data->product, 'json', $context);
+            $dataArray['product'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+        }
+        if (null !== ($data->quantity ?? null)) {
+            $dataArray['quantity'] = $data->quantity;
+        }
+        if (null !== ($data->sourceId ?? null)) {
+            $dataArray['sourceId'] = $data->sourceId;
+        }
+        if (array_key_exists('price', get_object_vars($data))) {
+            $normalized_1 = $data->price === null ? null : $this->normalizer->normalize($data->price, 'json', $context);
             $dataArray['price'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderLineConstraint());
         }
         return $dataArray;
     }

@@ -87,34 +87,43 @@ class AddressNormalizer implements DenormalizerInterface, NormalizerInterface, D
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['city'] = $data->city;
-        $dataArray['countryCode'] = $data->countryCode;
-        $dataArray['street'] = $data->street;
-        if (array_key_exists('additionalInformation', get_object_vars($data)) && null !== ($data->additionalInformation ?? null)) {
+        if (null !== ($data->city ?? null)) {
+            $dataArray['city'] = $data->city;
+        }
+        if (null !== ($data->countryCode ?? null)) {
+            $dataArray['countryCode'] = $data->countryCode;
+        }
+        if (null !== ($data->street ?? null)) {
+            $dataArray['street'] = $data->street;
+        }
+        if (array_key_exists('additionalInformation', get_object_vars($data))) {
             $dataArray['additionalInformation'] = $data->additionalInformation;
         }
-        if (array_key_exists('boxNumber', get_object_vars($data)) && null !== ($data->boxNumber ?? null)) {
+        if (array_key_exists('boxNumber', get_object_vars($data))) {
             $dataArray['boxNumber'] = $data->boxNumber;
         }
-        if (array_key_exists('houseNumber', get_object_vars($data)) && null !== ($data->houseNumber ?? null)) {
+        if (array_key_exists('houseNumber', get_object_vars($data))) {
             $dataArray['houseNumber'] = $data->houseNumber;
         }
-        if (array_key_exists('houseNumberSuffix', get_object_vars($data)) && null !== ($data->houseNumberSuffix ?? null)) {
+        if (array_key_exists('houseNumberSuffix', get_object_vars($data))) {
             $dataArray['houseNumberSuffix'] = $data->houseNumberSuffix;
         }
-        if (array_key_exists('postalCode', get_object_vars($data)) && null !== ($data->postalCode ?? null)) {
+        if (array_key_exists('postalCode', get_object_vars($data))) {
             $dataArray['postalCode'] = $data->postalCode;
         }
-        if (array_key_exists('region', get_object_vars($data)) && null !== ($data->region ?? null)) {
+        if (array_key_exists('region', get_object_vars($data))) {
             $dataArray['region'] = $data->region;
         }
-        if (array_key_exists('state', get_object_vars($data)) && null !== ($data->state ?? null)) {
+        if (array_key_exists('state', get_object_vars($data))) {
             $dataArray['state'] = $data->state;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\AddressConstraint());
         }
         return $dataArray;
     }

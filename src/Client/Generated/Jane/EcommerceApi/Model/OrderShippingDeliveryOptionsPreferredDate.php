@@ -10,9 +10,9 @@ class OrderShippingDeliveryOptionsPreferredDate implements AdditionalPropertiesI
     /**
      * Recipient specified preferred delivery date.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
-    public \DateTime $date;
+    public \DateTimeInterface $date;
     public function definedProperties(): array
     {
         return ['date' => 'date'];

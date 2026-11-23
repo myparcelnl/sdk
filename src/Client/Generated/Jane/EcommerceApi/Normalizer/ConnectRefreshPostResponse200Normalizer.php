@@ -67,15 +67,28 @@ class ConnectRefreshPostResponse200Normalizer implements DenormalizerInterface, 
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['accessToken'] = $data->accessToken;
-        $dataArray['tokenType'] = $data->tokenType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectRefreshPostResponse200TokenType ? $data->tokenType->value : $data->tokenType;
-        $dataArray['expiresIn'] = $data->expiresIn;
-        $dataArray['refreshExpiresIn'] = $data->refreshExpiresIn;
-        $dataArray['scope'] = $data->scope;
+        if (null !== ($data->accessToken ?? null)) {
+            $dataArray['accessToken'] = $data->accessToken;
+        }
+        if (null !== ($data->tokenType ?? null)) {
+            $dataArray['tokenType'] = $data->tokenType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectRefreshPostResponse200TokenType ? $data->tokenType->value : $data->tokenType;
+        }
+        if (null !== ($data->expiresIn ?? null)) {
+            $dataArray['expiresIn'] = $data->expiresIn;
+        }
+        if (null !== ($data->refreshExpiresIn ?? null)) {
+            $dataArray['refreshExpiresIn'] = $data->refreshExpiresIn;
+        }
+        if (null !== ($data->scope ?? null)) {
+            $dataArray['scope'] = $data->scope;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ConnectRefreshPostResponse200Constraint());
         }
         return $dataArray;
     }

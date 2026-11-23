@@ -63,26 +63,29 @@ class PhysicalPropertiesNormalizer implements DenormalizerInterface, NormalizerI
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('height', get_object_vars($data)) && null !== ($data->height ?? null)) {
-            $normalized = $this->normalizer->normalize($data->height, 'json', $context);
+        if (array_key_exists('height', get_object_vars($data))) {
+            $normalized = $data->height === null ? null : $this->normalizer->normalize($data->height, 'json', $context);
             $dataArray['height'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('length', get_object_vars($data)) && null !== ($data->length ?? null)) {
-            $normalized_1 = $this->normalizer->normalize($data->length, 'json', $context);
+        if (array_key_exists('length', get_object_vars($data))) {
+            $normalized_1 = $data->length === null ? null : $this->normalizer->normalize($data->length, 'json', $context);
             $dataArray['length'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
-        if (array_key_exists('weight', get_object_vars($data)) && null !== ($data->weight ?? null)) {
-            $normalized_2 = $this->normalizer->normalize($data->weight, 'json', $context);
+        if (array_key_exists('weight', get_object_vars($data))) {
+            $normalized_2 = $data->weight === null ? null : $this->normalizer->normalize($data->weight, 'json', $context);
             $dataArray['weight'] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_2) : $normalized_2;
         }
-        if (array_key_exists('width', get_object_vars($data)) && null !== ($data->width ?? null)) {
-            $normalized_3 = $this->normalizer->normalize($data->width, 'json', $context);
+        if (array_key_exists('width', get_object_vars($data))) {
+            $normalized_3 = $data->width === null ? null : $this->normalizer->normalize($data->width, 'json', $context);
             $dataArray['width'] = \is_iterable($normalized_3) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_3) : $normalized_3;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\PhysicalPropertiesConstraint());
         }
         return $dataArray;
     }

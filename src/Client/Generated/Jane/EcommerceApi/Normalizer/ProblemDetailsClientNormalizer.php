@@ -79,31 +79,39 @@ class ProblemDetailsClientNormalizer implements DenormalizerInterface, Normalize
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('type', get_object_vars($data)) && null !== ($data->type ?? null)) {
+        if (array_key_exists('type', get_object_vars($data))) {
             $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsClientType ? $data->type->value : $data->type;
         }
-        if (array_key_exists('status', get_object_vars($data)) && null !== ($data->status ?? null)) {
+        if (array_key_exists('status', get_object_vars($data))) {
             $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsClientStatus ? $data->status->value : $data->status;
         }
-        $dataArray['title'] = $data->title;
-        $dataArray['detail'] = $data->detail;
-        $dataArray['instance'] = $data->instance;
+        if (null !== ($data->title ?? null)) {
+            $dataArray['title'] = $data->title;
+        }
+        if (null !== ($data->detail ?? null)) {
+            $dataArray['detail'] = $data->detail;
+        }
+        if (null !== ($data->instance ?? null)) {
+            $dataArray['instance'] = $data->instance;
+        }
         if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
-        $values = null;
-        if (null !== $data->errors) {
+        if (null !== ($data->errors ?? null)) {
             $values = [];
             foreach ($data->errors as $value) {
                 $normalized = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
                 $values[] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
             }
+            $dataArray['errors'] = $values;
         }
-        $dataArray['errors'] = $values;
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value_1;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ProblemDetailsClientConstraint());
         }
         return $dataArray;
     }

@@ -58,14 +58,17 @@ class OrderShippingDeliveryOptionsNormalizer implements DenormalizerInterface, N
         if (array_key_exists('notifyOnDelivery', get_object_vars($data)) && null !== ($data->notifyOnDelivery ?? null)) {
             $dataArray['notifyOnDelivery'] = $data->notifyOnDelivery;
         }
-        if (array_key_exists('preferredDate', get_object_vars($data)) && null !== ($data->preferredDate ?? null)) {
-            $normalized = $this->normalizer->normalize($data->preferredDate, 'json', $context);
+        if (array_key_exists('preferredDate', get_object_vars($data))) {
+            $normalized = $data->preferredDate === null ? null : $this->normalizer->normalize($data->preferredDate, 'json', $context);
             $dataArray['preferredDate'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShippingDeliveryOptionsConstraint());
         }
         return $dataArray;
     }

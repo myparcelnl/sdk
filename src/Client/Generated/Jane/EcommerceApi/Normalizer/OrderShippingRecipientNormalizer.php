@@ -55,8 +55,8 @@ class OrderShippingRecipientNormalizer implements DenormalizerInterface, Normali
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('address', get_object_vars($data)) && null !== ($data->address ?? null)) {
-            $normalized = $this->normalizer->normalize($data->address, 'json', $context);
+        if (array_key_exists('address', get_object_vars($data))) {
+            $normalized = $data->address === null ? null : $this->normalizer->normalize($data->address, 'json', $context);
             $dataArray['address'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
         if (array_key_exists('contact', get_object_vars($data)) && null !== ($data->contact ?? null)) {
@@ -66,6 +66,9 @@ class OrderShippingRecipientNormalizer implements DenormalizerInterface, Normali
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShippingRecipientConstraint());
         }
         return $dataArray;
     }

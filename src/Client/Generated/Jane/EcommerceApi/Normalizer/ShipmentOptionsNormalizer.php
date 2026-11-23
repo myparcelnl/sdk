@@ -146,8 +146,8 @@ class ShipmentOptionsNormalizer implements DenormalizerInterface, NormalizerInte
         if (array_key_exists('hideSender', get_object_vars($data)) && null !== ($data->hideSender ?? null)) {
             $dataArray['hideSender'] = $data->hideSender;
         }
-        if (array_key_exists('insurance', get_object_vars($data)) && null !== ($data->insurance ?? null)) {
-            $normalized = $this->normalizer->normalize($data->insurance, 'json', $context);
+        if (array_key_exists('insurance', get_object_vars($data))) {
+            $normalized = $data->insurance === null ? null : $this->normalizer->normalize($data->insurance, 'json', $context);
             $dataArray['insurance'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
         if (array_key_exists('noTracking', get_object_vars($data)) && null !== ($data->noTracking ?? null)) {
@@ -177,8 +177,8 @@ class ShipmentOptionsNormalizer implements DenormalizerInterface, NormalizerInte
         if (array_key_exists('requiresSignature', get_object_vars($data)) && null !== ($data->requiresSignature ?? null)) {
             $dataArray['requiresSignature'] = $data->requiresSignature;
         }
-        if (array_key_exists('returnContributionFee', get_object_vars($data)) && null !== ($data->returnContributionFee ?? null)) {
-            $normalized_1 = $this->normalizer->normalize($data->returnContributionFee, 'json', $context);
+        if (array_key_exists('returnContributionFee', get_object_vars($data))) {
+            $normalized_1 = $data->returnContributionFee === null ? null : $this->normalizer->normalize($data->returnContributionFee, 'json', $context);
             $dataArray['returnContributionFee'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
         if (array_key_exists('returnOnFirstFailedDelivery', get_object_vars($data)) && null !== ($data->returnOnFirstFailedDelivery ?? null)) {
@@ -193,14 +193,17 @@ class ShipmentOptionsNormalizer implements DenormalizerInterface, NormalizerInte
         if (array_key_exists('scheduledCollection', get_object_vars($data)) && null !== ($data->scheduledCollection ?? null)) {
             $dataArray['scheduledCollection'] = $data->scheduledCollection;
         }
-        if (array_key_exists('customLabelText', get_object_vars($data)) && null !== ($data->customLabelText ?? null)) {
-            $normalized_2 = $this->normalizer->normalize($data->customLabelText, 'json', $context);
+        if (array_key_exists('customLabelText', get_object_vars($data))) {
+            $normalized_2 = $data->customLabelText === null ? null : $this->normalizer->normalize($data->customLabelText, 'json', $context);
             $dataArray['customLabelText'] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_2) : $normalized_2;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ShipmentOptionsConstraint());
         }
         return $dataArray;
     }

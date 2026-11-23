@@ -51,11 +51,16 @@ class ShipmentOptionsCustomLabelTextNormalizer implements DenormalizerInterface,
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['text'] = $data->text;
+        if (null !== ($data->text ?? null)) {
+            $dataArray['text'] = $data->text;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ShipmentOptionsCustomLabelTextConstraint());
         }
         return $dataArray;
     }

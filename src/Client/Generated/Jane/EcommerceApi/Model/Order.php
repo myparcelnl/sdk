@@ -10,9 +10,9 @@ class Order implements AdditionalPropertiesInterface
     /**
      * An ISO 8601 formatted datetime string with timezone offset.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
-    public \DateTime $orderedAt;
+    public \DateTimeInterface $orderedAt;
     /**
      * The order ID as defined in the source system.
      *

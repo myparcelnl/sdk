@@ -55,12 +55,19 @@ class ProblemDetailsClientErrorsItemNormalizer implements DenormalizerInterface,
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['detail'] = $data->detail;
-        $dataArray['pointer'] = $data->pointer;
+        if (null !== ($data->detail ?? null)) {
+            $dataArray['detail'] = $data->detail;
+        }
+        if (null !== ($data->pointer ?? null)) {
+            $dataArray['pointer'] = $data->pointer;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ProblemDetailsClientErrorsItemConstraint());
         }
         return $dataArray;
     }

@@ -65,13 +65,22 @@ class CommandEnvelopeNormalizer implements DenormalizerInterface, NormalizerInte
         if (null !== ($data->type ?? null) and 'ORDER_SHIPMENTS' === $data->type) {
             return $this->normalizer->normalize($data, $format, $context);
         }
-        $dataArray['commandId'] = $data->commandId;
-        $dataArray['connectionId'] = $data->connectionId;
-        $dataArray['type'] = $data->type;
+        if (null !== ($data->commandId ?? null)) {
+            $dataArray['commandId'] = $data->commandId;
+        }
+        if (null !== ($data->connectionId ?? null)) {
+            $dataArray['connectionId'] = $data->connectionId;
+        }
+        if (null !== ($data->type ?? null)) {
+            $dataArray['type'] = $data->type;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\CommandEnvelopeConstraint());
         }
         return $dataArray;
     }

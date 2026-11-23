@@ -75,7 +75,7 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('platform', get_object_vars($data)) && null !== ($data->platform ?? null)) {
+        if (array_key_exists('platform', get_object_vars($data))) {
             $value = $data->platform;
             if (is_string($data->platform)) {
                 $value = $data->platform;
@@ -84,9 +84,13 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
             }
             $dataArray['platform'] = $value;
         }
-        $dataArray['shopName'] = $data->shopName;
-        $dataArray['shopUrl'] = $data->shopUrl;
-        if (array_key_exists('version', get_object_vars($data)) && null !== ($data->version ?? null)) {
+        if (null !== ($data->shopName ?? null)) {
+            $dataArray['shopName'] = $data->shopName;
+        }
+        if (null !== ($data->shopUrl ?? null)) {
+            $dataArray['shopUrl'] = $data->shopUrl;
+        }
+        if (array_key_exists('version', get_object_vars($data))) {
             $value_1 = $data->version;
             if (is_string($data->version)) {
                 $value_1 = $data->version;
@@ -95,8 +99,11 @@ class ConnectStartConfigNormalizer implements DenormalizerInterface, NormalizerI
             }
             $dataArray['version'] = $value_1;
         }
-        if (array_key_exists('commandEndpoint', get_object_vars($data)) && null !== ($data->commandEndpoint ?? null)) {
+        if (array_key_exists('commandEndpoint', get_object_vars($data))) {
             $dataArray['commandEndpoint'] = $data->commandEndpoint;
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ConnectStartConfigConstraint());
         }
         return $dataArray;
     }

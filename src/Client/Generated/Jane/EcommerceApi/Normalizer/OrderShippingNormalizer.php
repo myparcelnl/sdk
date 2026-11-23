@@ -75,34 +75,37 @@ class OrderShippingNormalizer implements DenormalizerInterface, NormalizerInterf
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('additionalContext', get_object_vars($data)) && null !== ($data->additionalContext ?? null)) {
+        if (array_key_exists('additionalContext', get_object_vars($data))) {
             $dataArray['additionalContext'] = $data->additionalContext;
         }
-        if (array_key_exists('carrier', get_object_vars($data)) && null !== ($data->carrier ?? null)) {
+        if (array_key_exists('carrier', get_object_vars($data))) {
             $dataArray['carrier'] = $data->carrier instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Carrier ? $data->carrier->value : $data->carrier;
         }
-        if (array_key_exists('delivery', get_object_vars($data)) && null !== ($data->delivery ?? null)) {
-            $normalized = $this->normalizer->normalize($data->delivery, 'json', $context);
+        if (array_key_exists('delivery', get_object_vars($data))) {
+            $normalized = $data->delivery === null ? null : $this->normalizer->normalize($data->delivery, 'json', $context);
             $dataArray['delivery'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('options', get_object_vars($data)) && null !== ($data->options ?? null)) {
-            $normalized_1 = $this->normalizer->normalize($data->options, 'json', $context);
+        if (array_key_exists('options', get_object_vars($data))) {
+            $normalized_1 = $data->options === null ? null : $this->normalizer->normalize($data->options, 'json', $context);
             $dataArray['options'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
-        if (array_key_exists('packageType', get_object_vars($data)) && null !== ($data->packageType ?? null)) {
+        if (array_key_exists('packageType', get_object_vars($data))) {
             $dataArray['packageType'] = $data->packageType instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderShippingPackageType ? $data->packageType->value : $data->packageType;
         }
         if (array_key_exists('pickup', get_object_vars($data)) && null !== ($data->pickup ?? null)) {
             $dataArray['pickup'] = $data->pickup;
         }
-        if (array_key_exists('recipient', get_object_vars($data)) && null !== ($data->recipient ?? null)) {
-            $normalized_2 = $this->normalizer->normalize($data->recipient, 'json', $context);
+        if (array_key_exists('recipient', get_object_vars($data))) {
+            $normalized_2 = $data->recipient === null ? null : $this->normalizer->normalize($data->recipient, 'json', $context);
             $dataArray['recipient'] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_2) : $normalized_2;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShippingConstraint());
         }
         return $dataArray;
     }

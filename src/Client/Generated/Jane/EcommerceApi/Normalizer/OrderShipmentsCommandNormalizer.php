@@ -67,19 +67,30 @@ class OrderShipmentsCommandNormalizer implements DenormalizerInterface, Normaliz
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['commandId'] = $data->commandId;
-        $dataArray['connectionId'] = $data->connectionId;
-        if (array_key_exists('type', get_object_vars($data)) && null !== ($data->type ?? null)) {
+        if (null !== ($data->commandId ?? null)) {
+            $dataArray['commandId'] = $data->commandId;
+        }
+        if (null !== ($data->connectionId ?? null)) {
+            $dataArray['connectionId'] = $data->connectionId;
+        }
+        if (array_key_exists('type', get_object_vars($data))) {
             $dataArray['type'] = $data->type;
         }
-        $normalized = $data->order === null ? null : $this->normalizer->normalize($data->order, 'json', $context);
-        $dataArray['order'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
-        $normalized_1 = $data->shipment === null ? null : $this->normalizer->normalize($data->shipment, 'json', $context);
-        $dataArray['shipment'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+        if (null !== ($data->order ?? null)) {
+            $normalized = $this->normalizer->normalize($data->order, 'json', $context);
+            $dataArray['order'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+        }
+        if (null !== ($data->shipment ?? null)) {
+            $normalized_1 = $this->normalizer->normalize($data->shipment, 'json', $context);
+            $dataArray['shipment'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShipmentsCommandConstraint());
         }
         return $dataArray;
     }

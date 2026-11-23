@@ -55,17 +55,20 @@ class OrderShippingDeliveryNormalizer implements DenormalizerInterface, Normaliz
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('options', get_object_vars($data)) && null !== ($data->options ?? null)) {
-            $normalized = $this->normalizer->normalize($data->options, 'json', $context);
+        if (array_key_exists('options', get_object_vars($data))) {
+            $normalized = $data->options === null ? null : $this->normalizer->normalize($data->options, 'json', $context);
             $dataArray['options'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('type', get_object_vars($data)) && null !== ($data->type ?? null)) {
+        if (array_key_exists('type', get_object_vars($data))) {
             $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderShippingDeliveryType ? $data->type->value : $data->type;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShippingDeliveryConstraint());
         }
         return $dataArray;
     }

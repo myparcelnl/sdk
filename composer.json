@@ -26,8 +26,7 @@
             "composer dump-autoload -o"
         ],
         "generate:jane": [
-            "vendor/bin/jane-openapi generate",
-            "vendor/bin/jane-openapi generate --config-file=.jane-openapi-core"
+            "vendor/bin/jane-openapi generate"
         ]
     },
     "require": {

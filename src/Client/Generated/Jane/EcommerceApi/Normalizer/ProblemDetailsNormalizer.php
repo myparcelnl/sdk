@@ -71,11 +71,21 @@ class ProblemDetailsNormalizer implements DenormalizerInterface, NormalizerInter
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsType ? $data->type->value : $data->type;
-        $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsStatus ? $data->status->value : $data->status;
-        $dataArray['title'] = $data->title;
-        $dataArray['detail'] = $data->detail;
-        $dataArray['instance'] = $data->instance;
+        if (null !== ($data->type ?? null)) {
+            $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsType ? $data->type->value : $data->type;
+        }
+        if (null !== ($data->status ?? null)) {
+            $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsStatus ? $data->status->value : $data->status;
+        }
+        if (null !== ($data->title ?? null)) {
+            $dataArray['title'] = $data->title;
+        }
+        if (null !== ($data->detail ?? null)) {
+            $dataArray['detail'] = $data->detail;
+        }
+        if (null !== ($data->instance ?? null)) {
+            $dataArray['instance'] = $data->instance;
+        }
         if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
@@ -83,6 +93,9 @@ class ProblemDetailsNormalizer implements DenormalizerInterface, NormalizerInter
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ProblemDetailsConstraint());
         }
         return $dataArray;
     }

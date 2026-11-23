@@ -71,15 +71,21 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('type', get_object_vars($data)) && null !== ($data->type ?? null)) {
+        if (array_key_exists('type', get_object_vars($data))) {
             $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerErrorType ? $data->type->value : $data->type;
         }
-        if (array_key_exists('status', get_object_vars($data)) && null !== ($data->status ?? null)) {
+        if (array_key_exists('status', get_object_vars($data))) {
             $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerErrorStatus ? $data->status->value : $data->status;
         }
-        $dataArray['title'] = $data->title;
-        $dataArray['detail'] = $data->detail;
-        $dataArray['instance'] = $data->instance;
+        if (null !== ($data->title ?? null)) {
+            $dataArray['title'] = $data->title;
+        }
+        if (null !== ($data->detail ?? null)) {
+            $dataArray['detail'] = $data->detail;
+        }
+        if (null !== ($data->instance ?? null)) {
+            $dataArray['instance'] = $data->instance;
+        }
         if (array_key_exists('cause', get_object_vars($data)) && null !== ($data->cause ?? null)) {
             $dataArray['cause'] = $data->cause;
         }
@@ -87,6 +93,9 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ProblemDetailsInternalServerErrorConstraint());
         }
         return $dataArray;
     }

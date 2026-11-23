@@ -91,32 +91,44 @@ class OrderNormalizer implements DenormalizerInterface, NormalizerInterface, Den
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['orderedAt'] = $data->orderedAt->format('Y-m-d\TH:i:sP');
-        $dataArray['sourceId'] = $data->sourceId;
-        $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus ? $data->status->value : $data->status;
-        if (array_key_exists('billingDetails', get_object_vars($data)) && null !== ($data->billingDetails ?? null)) {
-            $normalized = $this->normalizer->normalize($data->billingDetails, 'json', $context);
+        if (null !== ($data->orderedAt ?? null)) {
+            $dataArray['orderedAt'] = $data->orderedAt->format('Y-m-d\TH:i:sP');
+        }
+        if (null !== ($data->sourceId ?? null)) {
+            $dataArray['sourceId'] = $data->sourceId;
+        }
+        if (null !== ($data->status ?? null)) {
+            $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus ? $data->status->value : $data->status;
+        }
+        if (array_key_exists('billingDetails', get_object_vars($data))) {
+            $normalized = $data->billingDetails === null ? null : $this->normalizer->normalize($data->billingDetails, 'json', $context);
             $dataArray['billingDetails'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
-        if (array_key_exists('customerReference', get_object_vars($data)) && null !== ($data->customerReference ?? null)) {
+        if (array_key_exists('customerReference', get_object_vars($data))) {
             $dataArray['customerReference'] = $data->customerReference;
         }
-        if (array_key_exists('lines', get_object_vars($data)) && null !== ($data->lines ?? null)) {
-            $values = [];
-            foreach ($data->lines as $value) {
-                $normalized_1 = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
-                $values[] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+        if (array_key_exists('lines', get_object_vars($data))) {
+            $values = null;
+            if (null !== $data->lines) {
+                $values = [];
+                foreach ($data->lines as $value) {
+                    $normalized_1 = $value === null ? null : $this->normalizer->normalize($value, 'json', $context);
+                    $values[] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
+                }
             }
             $dataArray['lines'] = $values;
         }
-        if (array_key_exists('shipping', get_object_vars($data)) && null !== ($data->shipping ?? null)) {
-            $normalized_2 = $this->normalizer->normalize($data->shipping, 'json', $context);
+        if (array_key_exists('shipping', get_object_vars($data))) {
+            $normalized_2 = $data->shipping === null ? null : $this->normalizer->normalize($data->shipping, 'json', $context);
             $dataArray['shipping'] = \is_iterable($normalized_2) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_2) : $normalized_2;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value_1;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderConstraint());
         }
         return $dataArray;
     }

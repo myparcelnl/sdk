@@ -55,11 +55,16 @@ class OrderShippingDeliveryOptionsPreferredDateNormalizer implements Denormalize
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['date'] = $data->date->format('Y-m-d');
+        if (null !== ($data->date ?? null)) {
+            $dataArray['date'] = $data->date->format('Y-m-d');
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\OrderShippingDeliveryOptionsPreferredDateConstraint());
         }
         return $dataArray;
     }

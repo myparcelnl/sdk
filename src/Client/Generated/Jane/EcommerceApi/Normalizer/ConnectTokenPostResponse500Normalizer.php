@@ -51,11 +51,16 @@ class ConnectTokenPostResponse500Normalizer implements DenormalizerInterface, No
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['error'] = $data->error instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse500Error ? $data->error->value : $data->error;
+        if (null !== ($data->error ?? null)) {
+            $dataArray['error'] = $data->error instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostResponse500Error ? $data->error->value : $data->error;
+        }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
+        }
+        if (!($context['skip_validation'] ?? false)) {
+            $this->validate($dataArray, new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Validator\ConnectTokenPostResponse500Constraint());
         }
         return $dataArray;
     }
