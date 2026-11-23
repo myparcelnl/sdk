@@ -3,6 +3,236 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0-beta.10](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.9...v12.0.0-beta.10) (2026-11-23)
+
+### ⚠ BREAKING CHANGES
+
+* **api:** The classes in
+`MyParcelNL\Sdk\Client\Generated\CoreApi`, `CoreApiPrivate`, `IamApi`
+and `OrderApi` are removed, such as `CoreApi\Api\ShipmentApi`,
+`CoreApi\Configuration` and `CoreApi\Model\RefTypesCarrierV2`. Use the
+services, or the Jane clients and models in
+`MyParcelNL\Sdk\Client\Generated\Jane`: read the models through their
+public properties, and use the enum cases, such as
+`RefTypesCarrier::Postnl`, instead of the class constants.
+`CoreApi\Api\NotificationApi` and the `Notification*` models have no
+replacement. A Jane client has other method names, such as `getWhoami()`
+for `whoamiGet()`, and no `*Async()` or `*WithHttpInfo()` methods. Pass
+the API key, the host, the User-Agent and the headers to
+`ShipmentApiFactory::make()` or `IamApiFactory::make()` instead of a
+`Configuration`. `EnumFallback::setListener()` no longer gets values of
+the Core API, the private Core API, the IAM API or the Order API.
+`UPGRADE.md` lists the models with another name, under "Generated
+OpenAPI models".
+* **shipment:** `ShipmentApiFactory::make()` returns a
+`Jane\CoreApi\Client` instead of a `CoreApi\Api\ShipmentApi`. Call the
+methods of the Jane client, such as `getShipments()`, or use the
+shipment services. The client stops a request when no data arrives for
+10 seconds, where v11 stopped it after 10 seconds in total, and it
+throws the exceptions of the Jane client: see "The Jane clients" in
+`UPGRADE.md`.
+* **webhook:** `WebhookService` takes a `Jane\CoreApi\Client` instead
+of a `CoreApi\Api\WebhookApi`, and `WebhookApiFactory::make()` returns a
+`Jane\CoreApi\Client`. `getAll()` and `getById()` return Jane models
+with public properties: read `$subscription->hook`, `->id` and `->url`
+instead of `getHook()`, `getId()` and `getUrl()`, and read
+`$subscription->payload ?? null`, because a property that the API leaves
+out is not set. `WebhookApiFactory::DEFAULT_HTTP_TIMEOUT` is removed: to
+set a timeout, pass your own Symfony `HttpClientInterface` to `make()`.
+The rules for every service and model on a Jane client are in
+`UPGRADE.md`, under "The Jane clients". Catch
+`Jane\CoreApi\Exception\ApiException`, the Symfony
+`NotEncodableValueException` and the Symfony
+`TransportExceptionInterface` instead of `CoreApi\ApiException`, and
+read the HTTP status with `getResponse()->getStatusCode()`, not with
+`getCode()`. A response with a status that the spec does not list, such
+as a 201 for `subscribe()`, or with a content type that is not JSON
+throws a `BadResponseException`, which is an `ApiException`: v11 did not
+throw for such a 2xx response. A client that you pass to
+`WebhookService` keeps its own User-Agent, where v11 sent the User-Agent
+of the service with every request. An empty API key throws at the first
+request, not in the constructor.
+* **capabilities:** `CapabilitiesRequest`, `CapabilitiesResponse` and
+`CapabilitiesMapper` are removed. `get()` of `CapabilitiesService` and
+`CapabilitiesServiceInterface`, and
+`CapabilitiesClientInterface::getCapabilities()`, take a
+`Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2` and return a
+`Jane\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2`.
+`fromShipment()` returns that model too. A class that implements one of
+these interfaces must change its signatures. Build the request with the
+generated models and enums, with the camelCase field names of the v2
+capabilities API, such as `postalCode` and `requiresSignature`, and use
+`ShipmentOptionMapper::v2PropertyFromName()` where you called
+`getUnsupportedOptions()`. Read `$response->results` instead of
+`getPackageTypes()` and the other getters. In
+`CapabilitiesService::get()`, a value that the spec does not know throws
+a `Jane\CoreApi\Runtime\Normalizer\ValidationException` instead of an
+`InvalidArgumentException`. `HttpCapabilitiesClient` takes `($apiKey,
+$api, $host)` instead of a `CapabilitiesMapper`, and reads `API_KEY`,
+`API_KEY_NL` or `API_KEY_BE` only once, at the first request, so a later
+change to the environment has no effect.
+`CarrierContractDefinitionsService` takes a `Jane\CoreApi\Client`
+instead of a `CoreApi\Api\ShipmentApi`, as the second constructor
+argument: it takes `($apiKey, $api, $host)` instead of `($apiKey, $host,
+$api)`, and a host as the second argument throws a `TypeError`.
+`getContractDefinitions()` takes a
+`CapabilitiesPostContractDefinitionsRequestV2Carrier` enum case and
+throws a PHP `TypeError` for a string, and returns Jane models with
+public properties. The rules for every service and model on a Jane
+client are in `UPGRADE.md`, under "The Jane clients": an error response
+throws a `Jane\CoreApi\Exception\ApiException` instead of a
+`CoreApi\ApiException`, and a client that you pass keeps its own
+User-Agent, where v11 sent the User-Agent of the service with every
+request.
+* **labels:** `ShipmentLabelsService` and `ReturnShipmentService`
+take a `Jane\CoreApi\Client` instead of a `CoreApi\Api\ShipmentApi`, and
+the host as the third constructor argument instead of a PSR-18 HTTP
+client. PHP ignores a fourth argument, so a v11 call with the host as
+the fourth argument sends to the default host without an error: pass the
+host as the third argument. For an error response they throw a
+`Jane\CoreApi\Exception\ApiException` instead of the SDK `ApiException`
+or an `InvalidArgumentException`: catch it. `ShipmentLabelsService`
+throws `GetShipmentsLabelsNotFoundException` for a 404,
+`GetShipmentsLabelsPaymentRequiredException` for a 402 with the content
+type `application/vnd.shipment_label_link+json`, and
+`GetShipmentsLabelsClientErrorException` or
+`GetShipmentsLabelsServerErrorException` for another error with the
+content type `application/json` or `application/problem+json`.
+`ReturnShipmentService` throws the exceptions of `postShipments()`, such
+as `PostShipmentsClientErrorException`. `createRelated()` throws a
+`ValidationException` for a row without `parent`, `carrier`, `email` or
+`name`, and `createUnrelated()` for a row without `carrier`. What a null
+value in a row does depends on the field, such as a `TypeError`, a
+`ValidationException` or an empty object in the request: leave the field
+out. A response without `shipments` throws an
+`InvalidArgumentException`, and a key that the API does not know goes to
+the API. The trait
+`Services\CoreApi\Concerns\ResolvesPostShipmentsContentType` is removed.
+The rules for every service and model on a Jane client are in
+`UPGRADE.md`, under "The Jane clients": a response with another content
+type throws a `BadResponseException`, a connection error throws a
+Symfony `TransportExceptionInterface`, a row with invalid UTF-8 throws a
+Symfony `NotEncodableValueException` before the request goes out, and a
+client that you pass keeps its own User-Agent. The label requests send
+only their own `Accept` value: for an `application/json` error, read
+`->message` on the model of the exception.
+* **shipment:** `Shipment`, `ShipmentOptions`, `ShipmentCollection`,
+`Model\Shipment\Carrier`, `Model\Shipment\PackageType` and the trait
+`Services\Shipment\Concerns\EnsuresShipmentReferenceIds` are removed.
+`ShipmentCreateService::create()` and `ShipmentPrintService::print()`
+take an array of
+`Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem`.
+`MultiColloShipmentService::splitShipment()`,
+`CapabilitiesService::fromShipment()` and
+`CapabilitiesServiceInterface::fromShipment()` take that model, so a
+class that implements the interface must change its signature.
+`Order::getDeliveryOptions()` returns the `...ItemOptions` model, and
+`Order::setDeliveryOptions()` takes it. Build a shipment with the
+generated models and enums. Use `CoreApiModels::toModel()` only for
+input that is already an array. Pass the carrier and the package type as
+an id or an enum case, and the delivery type as an id, instead of a v2
+name: `ApiMapperService::forCarrier()->idFromV2Name()` and
+`ApiMapperService::forPackageType()->idFromV2Name()` convert a name, and
+return `null` for a name that they do not know, where `Carrier::toId()`
+threw an `InvalidArgumentException`. The `number` of a recipient is a
+string, and an int reference identifier of a multi-collo shipment is
+kept as a string. The services take a `Jane\CoreApi\Client`.
+`ShipmentPrintService` takes the host as the third constructor argument
+and no PSR-18 client: PHP ignores a fourth argument, so a v11 call with
+the host as the fourth argument sends to the default host without an
+error. A shipment that does not match the spec throws a
+`Jane\CoreApi\Runtime\Normalizer\ValidationException` before the request
+goes out, also more than 100 shipments. The insurance of an order from
+the API is a `RefTypesPriceEuro` in cents, and a package type or
+delivery type name of an order that the SDK does not know is not set on
+its delivery options: read it with `??`. The rules for every service and
+model on a Jane client are in `UPGRADE.md`, under "The Jane clients": a
+flag of the shipment options, such as `signature`, is the enum case
+`RefTypesIntBoolean::True` or `RefTypesIntBoolean::False`, `hidden` of a
+shipment that you create takes
+`ShipmentPostShipmentsRequestV11DataShipmentsItemHidden::Value1` or the
+int, an error response throws a `Jane\CoreApi\Exception\ApiException`,
+and a client that you pass keeps its own User-Agent.
+* **shipment:** `ShipmentQueryService`, `ShipmentDeleteService` and
+`ShipmentTrackTraceService` take a `Jane\CoreApi\Client` instead of a
+`CoreApi\Api\ShipmentApi`. `ShipmentQueryService` returns
+`Jane\CoreApi\Model\ShipmentDefsShipment` and
+`ShipmentTrackTraceService` returns
+`Jane\CoreApi\Model\ShipmentDefsTrackTrace` models with public
+properties instead of the openapi-generator models with getters: read
+`$shipment->barcode` instead of `getBarcode()`, and
+`$shipment->recipient->postalCode` instead of
+`getRecipient()->getPostalCode()`. The rules for every service and model
+on a Jane client are in `UPGRADE.md`, under "The Jane clients": a field
+that the API did not send is not initialized, an enum field holds the
+enum case or the raw value, a flag of a shipment that
+`ShipmentQueryService` returns, such as `hidden`, holds
+`RefTypesIntBoolean::True` or `RefTypesIntBoolean::False`, a model has
+no setters or array access, a `null` that the spec does not allow makes
+the service call throw a PHP `TypeError`, an error response throws a
+`Jane\CoreApi\Exception\ApiException`, a client that you pass keeps its
+own User-Agent, and an empty API key throws at the first request. Some
+fields hold another type than the v11 getter returned, such as
+`referenceIdentifier`, `parentId` and `customsDeclaration`: see
+"Shipments and track & trace results that a service returns" in
+`UPGRADE.md`. `query()` throws an `InvalidArgumentException` for a key
+that it does not know or a type that the spec does not allow, sends
+`false` as `0` where v11 left the filter out, sends a list of integers
+for `carrier_id`, `package_type`, `shipment_type`, `shop_id` or `status`
+as `status=1;2` instead of `status=1&status=2`, leaves out one of these
+filters for an empty list, and throws for every other array, such as a
+list of barcodes: for a list of shipment ids, use `findMany()`. Read an
+error body from the model of the exception. For an `application/json`
+error, `getCommonResponsesProblem()` returns a
+`CommonResponsesUserError` in a `GetShipmentsClientErrorException` and a
+`CommonResponsesSystemError` in a `GetShipmentsServerErrorException`,
+both with `->message` and `->statusCode`. For an
+`application/problem+json` error, it returns a `CommonResponsesProblem`
+with `->detail` and `->status`. The PHP return type of the method names
+the models of each exception. Check which one you got with `instanceof`.
+Use `CoreApiModels::toArray()` where you called `json_encode()` on a
+shipment.
+* **mapping:** `ApiMapperService::allRows()` and `allDomains()` key a
+row by the Jane case name, such as `DhlForYou`, instead of the v11
+constant name `DHL_FOR_YOU`.
+`ShipmentOptionMapper::v2PropertyFromName()` returns the Jane property
+name, such as `requiresSignature`, instead of `requires_signature`. Read
+the rows by the new keys, and use the camelCase name where you used the
+snake_case name.
+* **iam:** `ApiKeyService` takes a `Jane\IamApi\Client` instead of
+an `IamApi\Api\DefaultApi`, and `IamApiFactory::make()` returns one.
+`getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or
+`PrincipalUser` with public properties instead of an
+`IamApi\Model\Principal` with getters: read `$principal->shopIds`
+instead of `getShopIds()`. `type`, `role`, `platform`, `features` and
+`fulfilmentPlatforms` hold enum cases, such as `PrincipalShopType::Shop`
+and `Feature::OrderManagement`, or the raw string for a value that the
+SDK does not know: compare with the case, or read `->value`. `features`
+and `fulfilmentPlatforms` are not set when IAM leaves them out: read
+them with `?? []`. `impersonator` is a string or `null` instead of an
+`IamApi\Model\PrincipalType`. `getWhoami()` of the client returns the
+same models, or the decoded JSON for a principal type that the SDK does
+not know. `getPrincipal()` and `isValid()` throw the exceptions of the
+Jane IAM client instead of an `IamApi\ApiException`, and `isValid()`
+throws a `ClientException` for a 200 without a JSON content type: the
+`ApiKeyService` rows of `UPGRADE.md` list each exception, catch them
+instead of `IamApi\ApiException`. The client of `IamApiFactory::make()`
+stops a request when no data arrives for 10 seconds, instead of after 10
+seconds in total: pass your own HTTP client to `make()` to keep a total
+timeout.
+
+### :sparkles: New Features
+
+* **api:** remove the openapi-generator Core API, IAM and Order clients ([#714](https://github.com/myparcelnl/sdk/issues/714)) ([d6a13cc](https://github.com/myparcelnl/sdk/commit/d6a13cc612c7a5f252bff26c9587bc55dafd2576)), closes [#697](https://github.com/myparcelnl/sdk/issues/697) [myparcelnl/developer-portal#93](https://github.com/myparcelnl/developer-portal/issues/93)
+* **capabilities:** return the capabilities per carrier contract ([#711](https://github.com/myparcelnl/sdk/issues/711)) ([56d6b85](https://github.com/myparcelnl/sdk/commit/56d6b85735d0c93e9f73930660a56e92e47c5282))
+* **iam:** return Jane principal models from ApiKeyService ([#705](https://github.com/myparcelnl/sdk/issues/705)) ([9a01f21](https://github.com/myparcelnl/sdk/commit/9a01f2196cc6489b575138e934b7a25d11d8f50f)), closes [#707](https://github.com/myparcelnl/sdk/issues/707)
+* **labels:** throw generated exceptions for label and return errors ([#710](https://github.com/myparcelnl/sdk/issues/710)) ([72f482e](https://github.com/myparcelnl/sdk/commit/72f482e27a0c01470e83d61d5ad5b2995533477b))
+* **mapping:** use Jane names in ApiMapperService and option mapping ([#706](https://github.com/myparcelnl/sdk/issues/706)) ([48fb8e7](https://github.com/myparcelnl/sdk/commit/48fb8e76f1183285af055d7c35d087c42f66eb96))
+* **shipment:** return Jane models from the shipment read services ([#708](https://github.com/myparcelnl/sdk/issues/708)) ([7047915](https://github.com/myparcelnl/sdk/commit/7047915407e38385341edf8dc79ed05491ec28bd))
+* **shipment:** return the Jane client from ShipmentApiFactory::make() ([#713](https://github.com/myparcelnl/sdk/issues/713)) ([adb72e5](https://github.com/myparcelnl/sdk/commit/adb72e51bb02815333a035fd7f132340f5949f54))
+* **shipment:** take Jane shipment models in create() and print() ([#709](https://github.com/myparcelnl/sdk/issues/709)) ([2a4c179](https://github.com/myparcelnl/sdk/commit/2a4c1796e0dc1d1c678011ef6605ef156ba04e9d))
+* **webhook:** return Jane subscription models from WebhookService ([#712](https://github.com/myparcelnl/sdk/issues/712)) ([5c0be30](https://github.com/myparcelnl/sdk/commit/5c0be300072ca0e2c8ef168480aff7d154ea1197)), closes [#714](https://github.com/myparcelnl/sdk/issues/714)
+
 ## [12.0.0-beta.9](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.8...v12.0.0-beta.9) (2026-11-17)
 
 ## [12.0.0-beta.8](https://github.com/myparcelnl/sdk/compare/v12.0.0-beta.7...v12.0.0-beta.8) (2026-11-02)
