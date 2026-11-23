@@ -218,10 +218,12 @@ final class ShipmentQueryServiceTest extends TestCase
     }
 
     /**
-     * A service creates its client on the first request. So an empty API key throws there, and not
-     * in the constructor.
+     * A service creates its client on the first request, so an empty API key throws there and not in
+     * the constructor. Without an API key, the service reads the environment.
+     *
+     * @dataProvider provideEmptyApiKeys
      */
-    public function testAnEmptyApiKeyThrowsAtTheFirstRequest(): void
+    public function testAnEmptyApiKeyThrowsAtTheFirstRequest(?string $apiKey): void
     {
         $previous = [];
 
@@ -231,7 +233,7 @@ final class ShipmentQueryServiceTest extends TestCase
         }
 
         try {
-            $service = new ShipmentQueryService('');
+            $service = new ShipmentQueryService($apiKey);
 
             $this->expectException(InvalidArgumentException::class);
             $this->expectExceptionMessage('API key cannot be empty');
@@ -242,6 +244,17 @@ final class ShipmentQueryServiceTest extends TestCase
                 putenv(false === $value ? $name : $name . '=' . $value);
             }
         }
+    }
+
+    /**
+     * @return array<string, array{string|null}>
+     */
+    public static function provideEmptyApiKeys(): array
+    {
+        return [
+            'an empty string' => [''],
+            'no API key'      => [null],
+        ];
     }
 
     public function testFindByReferenceIdLeavesThePageSizeToTheApi(): void

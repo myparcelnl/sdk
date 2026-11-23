@@ -81,6 +81,23 @@ $mapping = $service->create([$shipment]);
 $mapping = $service->create([$shipment], ShipmentParametersPaperSize::A6, null, ['send_return_mail' => 1]);
 ```
 
+## Models from an array
+
+`CoreApiModels::toModel()` fills a generated Core API model from an array with the API field names,
+as `fill()` does in Laravel. The second argument is the class of the model. A nested array becomes
+the nested model.
+
+```php
+$shipment = CoreApiModels::toModel(['carrier' => RefTypesCarrier::Postnl->value, 'recipient' => ['cc' => 'NL']], Shipment::class);
+```
+
+Use it for input that is already an array, such as a database record or a form. `toModel()` does not
+check the values. A model without additional properties drops a key that is not an API field name,
+and a model with additional properties, such as the shipment options, sends it. A value of the wrong
+PHP type throws a `TypeError`. The generated client checks the other values when the request goes
+out. When you write a request by hand, build it with the generated models and enums, as the examples
+in this file do. PHP then checks each type, and the enums list the values.
+
 ## Services
 
 | Service | Description |
@@ -278,22 +295,45 @@ Shipment option names are handled by `Services\Mapping\ShipmentOptionMapper`. It
 or `null`. For example, `signature`, `requires_signature` and `requiresSignature` all map to
 `requiresSignature`.
 
-## Unsupported capabilities options
+## Capabilities
 
-Capabilities requests omit unknown or unsupported option names. Check the request before sending
-it so your application can report these options or change the request.
+`CapabilitiesService::get()` takes the generated request model. Build it with the generated models
+and enums. The properties have the camelCase field names of the v2 capabilities API:
 
 ```php
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Recipient;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
 
-$request = CapabilitiesRequest::forCountry('NL')
-    ->withOptions(['signature' => null, 'tracked' => null]);
+$recipient              = new CapabilitiesPostCapabilitiesRequestV2Recipient();
+$recipient->countryCode = 'NL';
 
-$request->getUnsupportedOptions(); // ['tracked']
+$options                    = new CapabilitiesPostCapabilitiesRequestV2Options();
+$options->requiresSignature = new stdClass();
+
+$request            = new CapabilitiesPostCapabilitiesRequestV2();
+$request->recipient = $recipient;
+$request->carrier   = RefCapabilitiesSharedCarrierV2::Postnl;
+$request->options   = $options;
+
+$response = (new CapabilitiesService())->get($request);
+
+foreach ($response->results as $result) {
+    $result->carrier;          // RefCapabilitiesSharedCarrierV2::Postnl, or the raw string
+    $result->packageTypes;     // [RefShipmentPackageTypeV2::Package, ...]
+    $result->deliveryTypes;
+    $result->options;          // per option: isRequired, isSelectedByDefault, requires, excludes
+    $result->physicalProperties;
+}
 ```
 
-This check validates option names accepted by the request model. It does not validate option
-values or determine which options a carrier offers.
+The response has one result per carrier contract, so a package type and a delivery type in one
+result belong together. `fromShipment()` builds the request from the recipient country and the physical properties of a
+shipment. To translate an option name of the SDK, such as `signature`, use
+`ShipmentOptionMapper::v2PropertyFromName()`. It returns `null` for an option that a capabilities
+request cannot send, such as `tracked`.
 
 ## Legacy services
 
