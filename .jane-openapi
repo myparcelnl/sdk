@@ -12,7 +12,10 @@ return [
     ],
     'enums-as-objects' => true,
     'enums-unknown-value' => 'scalar', // treat unknown enum values as scalar instead of failing
-    'use-fixer' => true,
+    // The fixer is off, so the generated code keeps the style of Jane, and a regeneration shows
+    // only the changes of the spec.
+    // @todo INT-783: run the fixer on the generated code.
+    'use-fixer' => false,
     'clean-generated' => true,
     'default-fetch-mode' => 'eager',
 ];
