@@ -16,8 +16,15 @@ use RuntimeException;
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     use MockeryPHPUnitIntegration;
-    protected const ENV_CI          = 'CI';
-    protected const ENV_TEST_ORDERS = 'TEST_ORDERS';
+    protected const ENV_CI            = 'CI';
+    protected const ENV_TEST_ORDERS   = 'TEST_ORDERS';
+    protected const ENV_LIVE_API_HOST = 'MYPARCEL_API_BASE_URL';
+    protected const ENV_LIVE_TESTS    = 'MYPARCEL_LIVE_TESTS';
+
+    /**
+     * The hosts of the live smoke tests end with one of these suffixes.
+     */
+    private const LIVE_TEST_HOST_SUFFIXES = ['.acceptance.myparcel.nl', '.testing.myparcel.nl'];
 
     /**
      * @var \Faker\Factory
@@ -158,10 +165,60 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected static function skipUnlessEnabled(string $env, string $reason): void
     {
-        if (getenv($env)) {
+        // Only `true` and `1` enable a test, so a value such as `false` does not.
+        if (in_array(getenv($env), ['true', '1'], true)) {
             return;
         }
 
         self::markTestSkipped("Test skipped: $reason\n\nSet environment variable '$env=true' to override.");
+    }
+
+    /**
+     * Return the API host for a live smoke test, or skip the test: in CI, without
+     * `MYPARCEL_LIVE_TESTS`, or for a URL that is not `https` on a test host.
+     *
+     * @return string The value of `MYPARCEL_API_BASE_URL`.
+     */
+    protected static function liveApiHost(): string
+    {
+        if (getenv(self::ENV_CI)) {
+            self::markTestSkipped('Live smoke tests never run in a continuous integration environment.');
+        }
+
+        self::skipUnlessEnabled(self::ENV_LIVE_TESTS, 'Live smoke tests run only on request.');
+
+        $url = (string) getenv(self::ENV_LIVE_API_HOST);
+
+        // The smoke tests create data in the account of the API key, so they run only on a host
+        // that is known as a test host.
+        if (! self::isTestHost($url)) {
+            self::markTestSkipped(
+                'Live smoke tests run only on a test host. Set ' . self::ENV_LIVE_API_HOST
+                . ' to an https URL on ' . implode(' or ', self::LIVE_TEST_HOST_SUFFIXES)
+                . ', such as https://api.acceptance.myparcel.nl.'
+            );
+        }
+
+        return $url;
+    }
+
+    /**
+     * Check that the URL is `https` on a host that ends with one of `LIVE_TEST_HOST_SUFFIXES`.
+     */
+    private static function isTestHost(string $url): bool
+    {
+        if ('https' !== strtolower((string) parse_url($url, PHP_URL_SCHEME))) {
+            return false;
+        }
+
+        $host = rtrim(strtolower((string) parse_url($url, PHP_URL_HOST)), '.');
+
+        foreach (self::LIVE_TEST_HOST_SUFFIXES as $suffix) {
+            if (str_ends_with($host, $suffix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
