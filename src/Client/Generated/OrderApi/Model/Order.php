@@ -58,7 +58,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'id' => 'string',
-        'ordered_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderOrderedAt',
+        'ordered_at' => '\DateTime',
         'price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money',
         'shop_id' => 'string',
         'short_id' => 'string',
@@ -66,7 +66,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         'assigned_user_id' => 'string',
         'billing_details' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails',
         'customer_reference' => 'string',
-        'external_references' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences',
+        'external_references' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences',
         'lines' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Line[]',
         'notes' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Note[]',
         'packages' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageResponse[]',
@@ -83,7 +83,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'id' => 'uuid',
-        'ordered_at' => null,
+        'ordered_at' => 'date-time',
         'price' => null,
         'shop_id' => null,
         'short_id' => null,
@@ -375,9 +375,17 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
+        if (!is_null($this->container['id']) && !preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", $this->container['id'])) {
+            $invalidProperties[] = "invalid value for 'id', must be conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.";
+        }
+
         if ($this->container['ordered_at'] === null) {
             $invalidProperties[] = "'ordered_at' can't be null";
         }
+        if (!is_null($this->container['ordered_at']) && !preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", $this->container['ordered_at'])) {
+            $invalidProperties[] = "invalid value for 'ordered_at', must be conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.";
+        }
+
         if ($this->container['price'] === null) {
             $invalidProperties[] = "'price' can't be null";
         }
@@ -483,6 +491,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($id)) {
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
+
+        if ((!preg_match("/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/", ObjectSerializer::toString($id)))) {
+            throw new \InvalidArgumentException("invalid value for \$id when calling Order., must conform to the pattern /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/.");
+        }
+
         $this->container['id'] = $id;
 
         return $this;
@@ -491,7 +504,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets ordered_at
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderOrderedAt
+     * @return \DateTime
      */
     public function getOrderedAt()
     {
@@ -501,7 +514,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets ordered_at
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderOrderedAt $ordered_at ordered_at
+     * @param \DateTime $ordered_at The date and time the order was placed.
      *
      * @return self
      */
@@ -510,6 +523,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($ordered_at)) {
             throw new \InvalidArgumentException('non-nullable ordered_at cannot be null');
         }
+
+        if ((!preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", ObjectSerializer::toString($ordered_at)))) {
+            throw new \InvalidArgumentException("invalid value for \$ordered_at when calling Order., must conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.");
+        }
+
         $this->container['ordered_at'] = $ordered_at;
 
         return $this;
@@ -528,7 +546,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money $price The total price of the order.
      *
      * @return self
      */
@@ -684,7 +702,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets billing_details
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails|null $billing_details billing_details
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\BillingDetails|null $billing_details The billing details of the order.
      *
      * @return self
      */
@@ -735,7 +753,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets external_references
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences|null
      */
     public function getExternalReferences()
     {
@@ -745,7 +763,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets external_references
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderExternalReferences|null $external_references external_references
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ExternalReferences|null $external_references external_references
      *
      * @return self
      */
@@ -901,7 +919,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets shipping
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Shipping|null $shipping shipping
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Shipping|null $shipping The shipping details of the order. This should be used as default information when creating a new shipment.
      *
      * @return self
      */

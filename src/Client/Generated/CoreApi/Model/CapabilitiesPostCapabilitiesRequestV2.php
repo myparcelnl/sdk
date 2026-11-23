@@ -68,7 +68,8 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2',
         'delivery_type' => 'string',
         'direction' => 'string',
-        'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Pickup'
+        'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Pickup',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms'
     ];
 
     /**
@@ -89,7 +90,8 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         'options' => null,
         'delivery_type' => null,
         'direction' => null,
-        'pickup' => null
+        'pickup' => null,
+        'incoterms' => null
     ];
 
     /**
@@ -108,7 +110,8 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         'options' => false,
         'delivery_type' => false,
         'direction' => false,
-        'pickup' => false
+        'pickup' => false,
+        'incoterms' => false
     ];
 
     /**
@@ -207,7 +210,8 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         'options' => 'options',
         'delivery_type' => 'deliveryType',
         'direction' => 'direction',
-        'pickup' => 'pickup'
+        'pickup' => 'pickup',
+        'incoterms' => 'incoterms'
     ];
 
     /**
@@ -226,7 +230,8 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         'options' => 'setOptions',
         'delivery_type' => 'setDeliveryType',
         'direction' => 'setDirection',
-        'pickup' => 'setPickup'
+        'pickup' => 'setPickup',
+        'incoterms' => 'setIncoterms'
     ];
 
     /**
@@ -245,7 +250,8 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         'options' => 'getOptions',
         'delivery_type' => 'getDeliveryType',
         'direction' => 'getDirection',
-        'pickup' => 'getPickup'
+        'pickup' => 'getPickup',
+        'incoterms' => 'getIncoterms'
     ];
 
     /**
@@ -356,6 +362,7 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
         $this->setIfExists('delivery_type', $data ?? [], null);
         $this->setIfExists('direction', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
     }
 
     /**
@@ -718,6 +725,33 @@ class CapabilitiesPostCapabilitiesRequestV2 implements ModelInterface, ArrayAcce
             throw new \InvalidArgumentException('non-nullable pickup cannot be null');
         }
         $this->container['pickup'] = $pickup;
+
+        return $this;
+    }
+
+    /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
 
         return $this;
     }

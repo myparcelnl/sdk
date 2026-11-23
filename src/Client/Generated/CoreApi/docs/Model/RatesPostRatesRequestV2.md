@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **pickup** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPickupV2**](RefShipmentPickupV2.md) |  | [optional]
 **carrier** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2**](RefCapabilitiesSharedCarrierV2.md) |  |
 **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2**](RefShipmentPackageTypeV2.md) |  |
+**incoterms** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms**](RefShipmentIncoterms.md) |  | [optional]
 **physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2PhysicalProperties**](RatesPostRatesRequestV2PhysicalProperties.md) |  | [optional]
 **options** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RatesPostRatesRequestV2Options**](RatesPostRatesRequestV2Options.md) |  | [optional]
 **delivery_type** | **string** |  | [optional]

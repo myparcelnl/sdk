@@ -313,6 +313,10 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['value'] === null) {
             $invalidProperties[] = "'value' can't be null";
         }
+        if (!is_null($this->container['value']) && ($this->container['value'] > 9007199254740991)) {
+            $invalidProperties[] = "invalid value for 'value', must be smaller than or equal to 9007199254740991.";
+        }
+
         if (!is_null($this->container['value']) && ($this->container['value'] < 0)) {
             $invalidProperties[] = "invalid value for 'value', must be bigger than or equal to 0.";
         }
@@ -382,6 +386,9 @@ class OrdersGet200ResponseTotal implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable value cannot be null');
         }
 
+        if (($value > 9007199254740991)) {
+            throw new \InvalidArgumentException('invalid value for $value when calling OrdersGet200ResponseTotal., must be smaller than or equal to 9007199254740991.');
+        }
         if (($value < 0)) {
             throw new \InvalidArgumentException('invalid value for $value when calling OrdersGet200ResponseTotal., must be bigger than or equal to 0.');
         }

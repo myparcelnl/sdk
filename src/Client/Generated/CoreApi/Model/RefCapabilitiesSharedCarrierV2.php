@@ -90,6 +90,11 @@ class RefCapabilitiesSharedCarrierV2
     public const GLS = 'GLS';
 
     /**
+     * GOFO
+     */
+    public const GOFO = 'GOFO';
+
+    /**
      * InPost
      */
     public const INPOST = 'INPOST';
@@ -130,6 +135,11 @@ class RefCapabilitiesSharedCarrierV2
     public const VIA_TIM = 'VIA_TIM';
 
     /**
+     * Instabee
+     */
+    public const INSTABEE = 'INSTABEE';
+
+    /**
      * Gets allowable values of the enum
      * @return string[]
      */
@@ -145,6 +155,7 @@ class RefCapabilitiesSharedCarrierV2
             self::DHL_PARCEL_CONNECT,
             self::DPD,
             self::GLS,
+            self::GOFO,
             self::INPOST,
             self::POSTE_ITALIANE,
             self::POSTNL,
@@ -152,7 +163,8 @@ class RefCapabilitiesSharedCarrierV2
             self::TRUNKRS,
             self::UPS_EXPRESS_SAVER,
             self::UPS_STANDARD,
-            self::VIA_TIM
+            self::VIA_TIM,
+            self::INSTABEE
         ];
     }
 }

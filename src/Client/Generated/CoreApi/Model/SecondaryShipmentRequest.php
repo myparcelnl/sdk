@@ -62,7 +62,7 @@ class SecondaryShipmentRequest implements ModelInterface, ArrayAccess, \JsonSeri
         'shop_id' => 'int',
         'reference_identifier' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerRecipient',
-        'recipients' => 'float[]',
+        'recipients' => 'int[]',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerSecondaryShipmentsInnerPhysicalProperties',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
@@ -611,7 +611,7 @@ class SecondaryShipmentRequest implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets recipients
      *
-     * @return float[]|null
+     * @return int[]|null
      */
     public function getRecipients()
     {
@@ -621,7 +621,7 @@ class SecondaryShipmentRequest implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets recipients
      *
-     * @param float[]|null $recipients recipients
+     * @param int[]|null $recipients recipients
      *
      * @return self
      */

@@ -35,7 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * ExternalReferencesMyParcelShop Class Doc Comment
  *
  * @category Class
- * @description This external reference is set when the order originates from an \&quot;etiketten\&quot; shipment. The only actions allowed on this type of order is cancel
+ * @description References automatically assigned by the MyParcel Shop
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

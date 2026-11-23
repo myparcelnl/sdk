@@ -150,6 +150,16 @@ class ShipmentParametersCarrierId
     public const DHL_FREIGHT = '21';
 
     /**
+     * GOFO
+     */
+    public const GOFO = '22';
+
+    /**
+     * Instabee
+     */
+    public const INSTABEE = '23';
+
+    /**
      * Gets allowable values of the enum
      * @return string[]
      */
@@ -176,7 +186,9 @@ class ShipmentParametersCarrierId
             self::POSTE_ITALIANE,
             self::SPRING,
             self::VIA_TIM,
-            self::DHL_FREIGHT
+            self::DHL_FREIGHT,
+            self::GOFO,
+            self::INSTABEE
         ];
     }
 }

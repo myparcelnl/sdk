@@ -294,6 +294,10 @@ class OrderLineToCreate implements ModelInterface, ArrayAccess, \JsonSerializabl
         if ($this->container['quantity'] === null) {
             $invalidProperties[] = "'quantity' can't be null";
         }
+        if (!is_null($this->container['quantity']) && ($this->container['quantity'] > 9007199254740991)) {
+            $invalidProperties[] = "invalid value for 'quantity', must be smaller than or equal to 9007199254740991.";
+        }
+
         return $invalidProperties;
     }
 
@@ -385,6 +389,11 @@ class OrderLineToCreate implements ModelInterface, ArrayAccess, \JsonSerializabl
         if (is_null($quantity)) {
             throw new \InvalidArgumentException('non-nullable quantity cannot be null');
         }
+
+        if (($quantity > 9007199254740991)) {
+            throw new \InvalidArgumentException('invalid value for $quantity when calling OrderLineToCreate., must be smaller than or equal to 9007199254740991.');
+        }
+
         $this->container['quantity'] = $quantity;
 
         return $this;

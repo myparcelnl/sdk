@@ -54,7 +54,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
+$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple IDs with `;` or `,`, such as `1;2` or `1,2`.
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
@@ -68,7 +68,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple IDs with &#x60;;&#x60; or &#x60;,&#x60;, such as &#x60;1;2&#x60; or &#x60;1,2&#x60;. | |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
@@ -126,16 +126,16 @@ $number = 'number_example'; // string | The street number for which to fetch the
 $city = 'city_example'; // string | Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL.
 $street = 'street_example'; // string | This can be used to narrow the search results for locations outside NL.
 $platform = 'platform_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier | The platform where you want the data from.
-$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$shop_id = 56; // int | The ID of one shop.
 $carrier = 'carrier_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier
-$delivery_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | The date on which the package has to be delivered.
+$delivery_date = 'delivery_date_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryDate | The date on which the package has to be delivered.
 $delivery_time = 'delivery_time_example'; // string | The time on which a package has to be delivered. > __Note__: This is only an indication of time the package will be >           delivered on the selected date.
 $cutoff_time = 'cutoff_time_example'; // string | This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there's no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection.
-$dropoff_days = 'dropoff_days_example'; // string | This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.
+$dropoff_days = 'dropoff_days_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersWeekdayDigit | This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.  Give one weekday digit, a `;`-separated list such as `1;2;3`, or a `,`-separated list such as `1,2,3`.
 $monday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. > __Note__: To activate Monday delivery, value 6 must be given with > [dropoff_days], value 1 must be given by [monday_delivery]. And on > Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) > so that Monday will be shown.
 $dropoff_delay = 56; // int | This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0.
 $deliverydays_window = 56; // int | This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
-$exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
+$exclude_delivery_type = 'exclude_delivery_type_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryTypes | Exclude shipments with a specific delivery type. Give one delivery type, a `;`-separated list such as `1;3`, or a `,`-separated list such as `1,3`. The string `null` is treated as if the parameter were omitted.
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
 $latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
 $longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
@@ -144,7 +144,7 @@ $weight = 56; // int | Weight in grams. Used to determine which package types an
 $delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Delivery type to get the delivery options for.
 $same_day_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Include same day delivery options. Only available for carriers that support it.
 $saturday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Include Saturday delivery options. Only available for carriers that support it.
-$include = 'include_example'; // string | Semicolon-separated list of related resources to include in the response. Currently only `price` is supported.
+$include = 'include_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsIncludeParameter | Related resources to include in the response. Currently only `price` is supported. Give one value, a `;`-separated list, or a `,`-separated list.
 $shipment_id = 56; // int | Identifier of an existing shipment to base the delivery options on. Used by carriers such as UPS and bol.com.
 
 try {
@@ -165,16 +165,16 @@ try {
 | **city** | **string**| Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. | [optional] |
 | **street** | **string**| This can be used to narrow the search results for locations outside NL. | [optional] |
 | **platform** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier**| The platform where you want the data from. | [optional] |
-| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **shop_id** | **int**| The ID of one shop. | [optional] |
 | **carrier** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier**|  | [optional] |
-| **delivery_date** | **\DateTime**| The date on which the package has to be delivered. | [optional] |
+| **delivery_date** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryDate**| The date on which the package has to be delivered. | [optional] |
 | **delivery_time** | **string**| The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. | [optional] |
 | **cutoff_time** | **string**| This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. | [optional] |
-| **dropoff_days** | **string**| This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. | [optional] |
+| **dropoff_days** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersWeekdayDigit**| This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.  Give one weekday digit, a &#x60;;&#x60;-separated list such as &#x60;1;2;3&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2,3&#x60;. | [optional] |
 | **monday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. | [optional] |
 | **dropoff_delay** | **int**| This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. | [optional] |
 | **deliverydays_window** | **int**| This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). | [optional] |
-| **exclude_delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. | [optional] |
+| **exclude_delivery_type** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryTypes**| Exclude shipments with a specific delivery type. Give one delivery type, a &#x60;;&#x60;-separated list such as &#x60;1;3&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,3&#x60;. The string &#x60;null&#x60; is treated as if the parameter were omitted. | [optional] |
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
 | **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
 | **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
@@ -183,7 +183,7 @@ try {
 | **delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Delivery type to get the delivery options for. | [optional] |
 | **same_day_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Include same day delivery options. Only available for carriers that support it. | [optional] |
 | **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Include Saturday delivery options. Only available for carriers that support it. | [optional] |
-| **include** | **string**| Semicolon-separated list of related resources to include in the response. Currently only &#x60;price&#x60; is supported. | [optional] |
+| **include** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetDeliveryOptionsIncludeParameter**| Related resources to include in the response. Currently only &#x60;price&#x60; is supported. Give one value, a &#x60;;&#x60;-separated list, or a &#x60;,&#x60;-separated list. | [optional] |
 | **shipment_id** | **int**| Identifier of an existing shipment to base the delivery options on. Used by carriers such as UPS and bol.com. | [optional] |
 
 ### Return type
@@ -197,7 +197,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json;version=2.0`, `application/json`
+- **Accept**: `application/json;version=2.0`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -241,7 +241,7 @@ $distance = 56; // int | Provide the radius in kilometers for which you want to 
 $cc = 'cc_example'; // string | The country code for which to fetch the delivery options.
 $limit = 56; // int | Limit the number of resources returned.
 $carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId
-$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$shop_id = 56; // int | The ID of one shop.
 $reference = 'reference_example'; // string | Filter by `reference`.
 $location_name = 'location_name_example'; // string | Filter by location name.
 $external_identifier = 'external_identifier_example'; // string
@@ -272,7 +272,7 @@ try {
 | **cc** | **string**| The country code for which to fetch the delivery options. | [optional] |
 | **limit** | **int**| Limit the number of resources returned. | [optional] |
 | **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierId**](../Model/.md)|  | [optional] |
-| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **shop_id** | **int**| The ID of one shop. | [optional] |
 | **reference** | **string**| Filter by &#x60;reference&#x60;. | [optional] |
 | **location_name** | **string**| Filter by location name. | [optional] |
 | **external_identifier** | **string**|  | [optional] |
@@ -296,7 +296,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -305,7 +305,7 @@ try {
 ## `getPickupLocations()`
 
 ```php
-getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations
+getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $package_type, $weight, $saturday_delivery): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPickupLocations
 ```
 
 Get Pickup Locations
@@ -338,22 +338,25 @@ $number = 'number_example'; // string | The street number for which to fetch the
 $city = 'city_example'; // string | Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL.
 $street = 'street_example'; // string | This can be used to narrow the search results for locations outside NL.
 $platform = 'platform_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier | The platform where you want the data from.
-$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$shop_id = 56; // int | The ID of one shop.
 $carrier = 'carrier_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier
-$delivery_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | The date on which the package has to be delivered.
+$delivery_date = 'delivery_date_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryDate | The date on which the package has to be delivered.
 $delivery_time = 'delivery_time_example'; // string | The time on which a package has to be delivered. > __Note__: This is only an indication of time the package will be >           delivered on the selected date.
 $cutoff_time = 'cutoff_time_example'; // string | This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there's no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection.
-$dropoff_days = 'dropoff_days_example'; // string | This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.
+$dropoff_days = 'dropoff_days_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersWeekdayDigit | This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.  Give one weekday digit, a `;`-separated list such as `1;2;3`, or a `,`-separated list such as `1,2,3`.
 $monday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. > __Note__: To activate Monday delivery, value 6 must be given with > [dropoff_days], value 1 must be given by [monday_delivery]. And on > Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) > so that Monday will be shown.
 $dropoff_delay = 56; // int | This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0.
 $deliverydays_window = 56; // int | This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it's before the cutoff time, and they go to PostNL on Mondays).
-$exclude_delivery_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType | Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types.
+$exclude_delivery_type = 'exclude_delivery_type_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryTypes | Exclude shipments with a specific delivery type. Give one delivery type, a `;`-separated list such as `1;3`, or a `,`-separated list such as `1,3`. The string `null` is treated as if the parameter were omitted.
 $exclude_parcel_lockers = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | This option allows to filter out pickup locations that are parcel lockers.
 $latitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude | This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored.
 $longitude = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude | This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored.
+$package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType | Package type to get the delivery options for. When omitted a carrier-specific default is used.
+$weight = 56; // int | Weight in grams. Used to determine which package types and delivery options are available. Defaults to a carrier-specific weight when omitted.
+$saturday_delivery = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Include Saturday delivery options. Only available for carriers that support it.
 
 try {
-    $result = $apiInstance->getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude);
+    $result = $apiInstance->getPickupLocations($cc, $postal_code, $number, $city, $street, $platform, $shop_id, $carrier, $delivery_date, $delivery_time, $cutoff_time, $dropoff_days, $monday_delivery, $dropoff_delay, $deliverydays_window, $exclude_delivery_type, $exclude_parcel_lockers, $latitude, $longitude, $package_type, $weight, $saturday_delivery);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getPickupLocations: ', $e->getMessage(), PHP_EOL;
@@ -370,19 +373,22 @@ try {
 | **city** | **string**| Only available for carriers Bpost and DPD. This can be used to narrow the search results for locations outside NL. | [optional] |
 | **street** | **string**| This can be used to narrow the search results for locations outside NL. | [optional] |
 | **platform** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\AccountParametersPlatformIdentifier**| The platform where you want the data from. | [optional] |
-| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **shop_id** | **int**| The ID of one shop. | [optional] |
 | **carrier** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIdentifier**|  | [optional] |
-| **delivery_date** | **\DateTime**| The date on which the package has to be delivered. | [optional] |
+| **delivery_date** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryDate**| The date on which the package has to be delivered. | [optional] |
 | **delivery_time** | **string**| The time on which a package has to be delivered. &gt; __Note__: This is only an indication of time the package will be &gt;           delivered on the selected date. | [optional] |
 | **cutoff_time** | **string**| This option allows the **Merchant** to indicate the latest cutoff time before which a consumer order will still be picked, packed and dispatched on the same/first set drop-off day, taking into account the drop-off delay. Default time is 15:30. For example, if cutoff time is 15:30, Monday is a delivery day and there&#39;s no delivery delay; all orders placed Monday before 15:30 will be dropped of at PostNL on that same Monday in time for the Monday collection. | [optional] |
-| **dropoff_days** | **string**| This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded. | [optional] |
+| **dropoff_days** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersWeekdayDigit**| This options allows the **Merchant** to set the days she normally goes to PostNL to hand in her parcels. By default Saturday and Sunday are excluded.  Give one weekday digit, a &#x60;;&#x60;-separated list such as &#x60;1;2;3&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2,3&#x60;. | [optional] |
 | **monday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Monday delivery is only possible when the package is delivered before 15.00 on Saturday at the designated PostNL locations. &gt; __Note__: To activate Monday delivery, value 6 must be given with &gt; [dropoff_days], value 1 must be given by [monday_delivery]. And on &gt; Saturday the [cutoff_time] must be before 15:00 (14:30 recommended) &gt; so that Monday will be shown. | [optional] |
 | **dropoff_delay** | **int**| This options allows the **Merchant** to set the number of days it takes them to pick, pack and hand in their parcels at the carrier when ordered before the cutoff time. The default value is 0. | [optional] |
 | **deliverydays_window** | **int**| This options allows the Merchant to set the number of days into the future for which they want to show their consumers delivery options. For example, if set to 3 in their check-out, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and Thursday (provided there is no drop-off delay, it&#39;s before the cutoff time, and they go to PostNL on Mondays). | [optional] |
-| **exclude_delivery_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryType**](../Model/.md)| Exclude shipments with a specific delivery type. This parameter can be used multiple times to exclude multiple delivery types. | [optional] |
+| **exclude_delivery_type** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryTypes**| Exclude shipments with a specific delivery type. Give one delivery type, a &#x60;;&#x60;-separated list such as &#x60;1;3&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,3&#x60;. The string &#x60;null&#x60; is treated as if the parameter were omitted. | [optional] |
 | **exclude_parcel_lockers** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| This option allows to filter out pickup locations that are parcel lockers. | [optional] |
 | **latitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLatitude**| This provides the ability to search locations through the coordinates. If only latitude is provided without longitude, it will be ignored. | [optional] |
 | **longitude** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonDefsLongitude**| This provides the ability to search locations through the coordinates. If only longitude is provided without latitude, it will be ignored. | [optional] |
+| **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersDeliveryOptionsPackageType**](../Model/.md)| Package type to get the delivery options for. When omitted a carrier-specific default is used. | [optional] |
+| **weight** | **int**| Weight in grams. Used to determine which package types and delivery options are available. Defaults to a carrier-specific weight when omitted. | [optional] |
+| **saturday_delivery** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Include Saturday delivery options. Only available for carriers that support it. | [optional] |
 
 ### Return type
 
@@ -395,7 +401,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -404,7 +410,7 @@ try {
 ## `getShipments()`
 
 ```php
-getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $hidden, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
+getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $from, $hidden, $id, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $to, $transaction_status, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesShipments
 ```
 
 Gets a list of Shipments, optionally filtered using parameters.
@@ -434,32 +440,35 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     $config
 );
 $barcode = 'barcode_example'; // string
-$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds
+$carrier_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds | Filter by Carrier. Give one ID, a `;`-separated list such as `1;4`, or a `,`-separated list such as `1,4`.
 $created = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime | When set, only resources created after this date will be returned. Inclusive.
 $delayed = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean | Filter on whether the current event code means the shipment has been delayed.
 $delivered = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
 $dropoff_today = True; // bool | Use this parameter to only show Shipments that need to be dropped off today.
 $external_identifier = 'external_identifier_example'; // string
 $filter_hidden_shops = True; // bool
+$from = 'from_example'; // string | Only return shipments created on or after this date.
 $hidden = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool
+$id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | Only return shipments with these IDs. Give one ID, a `;`-separated list such as `1;2`, or a `,`-separated list such as `1,2`.
 $include_secondary_shipments = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean | Whether to include secondary (multicollo child) Shipments in the results. Pass `1` to include them; `0` (the default) excludes them.
 $link_consumer_portal = True; // bool
 $order = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter | Specify whether the results should be sorted in ascending or descending order.
-$package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType | Filter by Package Type.
+$package_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType | Filter by Package Type. Give one value, a `;`-separated list such as `1;2`, or a `,`-separated list such as `1,2`.
 $page = 56; // int | Request a specific page of the results, used for paginated results.
 $q = 'q_example'; // string | If this parameter is provided results will be filtered by the provided query or keyword.
 $reference_identifier = 'reference_identifier_example'; // string | Filter by `reference_identifier`, an optional arbitrary identifier to identify the Shipment.
 $region = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersRegion(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersRegion | The region grouping of a Shipment. The concrete country value corresponds to the home country of the Shipment's platform; other country values yield no results for that platform.
-$shipment_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType
-$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds
+$shipment_type = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType | Filter by Shipment type. Give one value, a `;`-separated list such as `1;2`, or a `,`-separated list such as `1,2`.
+$shop_id = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds | Only return shipments of these shops. Give one ID, a `;`-separated list such as `1;2`, or a `,`-separated list such as `1,2`.
 $size = 56; // int | Specify the number of resources returned per page, used for paginated results.
 $sort = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment | Sort Shipment results by a particular resource field.
-$status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus | Filter by Shipment status. This filter will return only Shipments with the specified status.
+$status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus | Filter by Shipment status. This filter will return only Shipments with the specified status. Give one value, a `;`-separated list such as `1;2`, or a `,`-separated list such as `1,2`.
+$to = 'to_example'; // string | Only return shipments created up to this date.
 $transaction_status = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $hidden, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $transaction_status, $user_agent);
+    $result = $apiInstance->getShipments($barcode, $carrier_id, $created, $delayed, $delivered, $dropoff_today, $external_identifier, $filter_hidden_shops, $from, $hidden, $id, $include_secondary_shipments, $link_consumer_portal, $order, $package_type, $page, $q, $reference_identifier, $region, $shipment_type, $shop_id, $size, $sort, $status, $to, $transaction_status, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->getShipments: ', $e->getMessage(), PHP_EOL;
@@ -471,27 +480,30 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **barcode** | **string**|  | [optional] |
-| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds**](../Model/.md)|  | [optional] |
+| **carrier_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersCarrierIds**](../Model/.md)| Filter by Carrier. Give one ID, a &#x60;;&#x60;-separated list such as &#x60;1;4&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,4&#x60;. | [optional] |
 | **created** | **\DateTime**| When set, only resources created after this date will be returned. Inclusive. | [optional] |
 | **delayed** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBoolean**](../Model/.md)| Filter on whether the current event code means the shipment has been delayed. | [optional] |
 | **delivered** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
 | **dropoff_today** | **bool**| Use this parameter to only show Shipments that need to be dropped off today. | [optional] |
 | **external_identifier** | **string**|  | [optional] |
 | **filter_hidden_shops** | **bool**|  | [optional] |
+| **from** | **string**| Only return shipments created on or after this date. | [optional] |
 | **hidden** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersFilterValidateBool**](../Model/.md)|  | [optional] |
+| **id** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| Only return shipments with these IDs. Give one ID, a &#x60;;&#x60;-separated list such as &#x60;1;2&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2&#x60;. | [optional] |
 | **include_secondary_shipments** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIntBoolean**](../Model/.md)| Whether to include secondary (multicollo child) Shipments in the results. Pass &#x60;1&#x60; to include them; &#x60;0&#x60; (the default) excludes them. | [optional] |
 | **link_consumer_portal** | **bool**|  | [optional] |
 | **order** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\GetShipmentsOrderParameter**](../Model/.md)| Specify whether the results should be sorted in ascending or descending order. | [optional] |
-| **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType**](../Model/.md)| Filter by Package Type. | [optional] |
+| **package_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersPackageType**](../Model/.md)| Filter by Package Type. Give one value, a &#x60;;&#x60;-separated list such as &#x60;1;2&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2&#x60;. | [optional] |
 | **page** | **int**| Request a specific page of the results, used for paginated results. | [optional] |
 | **q** | **string**| If this parameter is provided results will be filtered by the provided query or keyword. | [optional] |
 | **reference_identifier** | **string**| Filter by &#x60;reference_identifier&#x60;, an optional arbitrary identifier to identify the Shipment. | [optional] |
 | **region** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersRegion**](../Model/.md)| The region grouping of a Shipment. The concrete country value corresponds to the home country of the Shipment&#39;s platform; other country values yield no results for that platform. | [optional] |
-| **shipment_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType**](../Model/.md)|  | [optional] |
-| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)|  | [optional] |
+| **shipment_type** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersShipmentType**](../Model/.md)| Filter by Shipment type. Give one value, a &#x60;;&#x60;-separated list such as &#x60;1;2&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2&#x60;. | [optional] |
+| **shop_id** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersIds**](../Model/.md)| Only return shipments of these shops. Give one ID, a &#x60;;&#x60;-separated list such as &#x60;1;2&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2&#x60;. | [optional] |
 | **size** | **int**| Specify the number of resources returned per page, used for paginated results. | [optional] |
 | **sort** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersSortShipment**](../Model/.md)| Sort Shipment results by a particular resource field. | [optional] |
-| **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus**](../Model/.md)| Filter by Shipment status. This filter will return only Shipments with the specified status. | [optional] |
+| **status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersStatus**](../Model/.md)| Filter by Shipment status. This filter will return only Shipments with the specified status. Give one value, a &#x60;;&#x60;-separated list such as &#x60;1;2&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;1,2&#x60;. | [optional] |
+| **to** | **string**| Only return shipments created up to this date. | [optional] |
 | **transaction_status** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentTransactionStatus**](../Model/.md)|  | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
@@ -506,7 +518,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -544,7 +556,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
+$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple IDs with `;` or `,`, such as `1;2` or `1,2`.
 $link_consumer_portal = True; // bool
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
@@ -560,7 +572,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple IDs with &#x60;;&#x60; or &#x60;,&#x60;, such as &#x60;1;2&#x60; or &#x60;1,2&#x60;. | |
 | **link_consumer_portal** | **bool**|  | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
@@ -575,7 +587,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -613,9 +625,9 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
+$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple IDs with `;` or `,`, such as `1;2` or `1,2`.
 $format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
-$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
+$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`) or commas (`,`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
 $collect_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime
 $delivery_options_identifier = 'delivery_options_identifier_example'; // string
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
@@ -631,9 +643,9 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple IDs with &#x60;;&#x60; or &#x60;,&#x60;, such as &#x60;1;2&#x60; or &#x60;1,2&#x60;. | |
 | **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
-| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
+| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;) or commas (&#x60;,&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
 | **collect_date** | **\DateTime**|  | [optional] |
 | **delivery_options_identifier** | **string**|  | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
@@ -649,7 +661,7 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/*`, `application/json`, `application/vnd.shipment_label_link+json`, `application/vnd.shipment_label_link+json+print`, `application/json+print`, `application/pdf+print`, `application/vnd.shipment_label+json+print`, `application/vnd.shipment_label+pdf+print`, `application/vnd.shipment_label+zpl+print`, `application/vnd.zpl+print`, `*/*`
+- **Accept**: `application/*`, `application/json`, `application/vnd.shipment_label_link+json`, `application/vnd.shipment_label_link+json+print`, `application/json+print`, `application/pdf+print`, `application/vnd.shipment_label+json+print`, `application/vnd.shipment_label+pdf+print`, `application/vnd.shipment_label+zpl+print`, `application/vnd.zpl+print`, `*/*`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -690,7 +702,7 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
 $barcode = 'barcode_example'; // string
 $country_code = 'country_code_example'; // string
 $external_identifier = 'external_identifier_example'; // string
-$extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
+$extra_info = 'extra_info_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersTracktracesExtraInfo | Enables extra info in the response that is not included by default for performance reasons. Give one value, a `;`-separated list such as `delivery_moment;signature`, or a `,`-separated list such as `delivery_moment,signature`.
 $postal_code = 'postal_code_example'; // string | The postal code for which to fetch the resources.
 $sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
@@ -710,7 +722,7 @@ try {
 | **barcode** | **string**|  | [optional] |
 | **country_code** | **string**|  | [optional] |
 | **external_identifier** | **string**|  | [optional] |
-| **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
+| **extra_info** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersTracktracesExtraInfo**| Enables extra info in the response that is not included by default for performance reasons. Give one value, a &#x60;;&#x60;-separated list such as &#x60;delivery_moment;signature&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;delivery_moment,signature&#x60;. | [optional] |
 | **postal_code** | **string**| The postal code for which to fetch the resources. | [optional] |
 | **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
@@ -726,7 +738,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -764,9 +776,9 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
     new GuzzleHttp\Client(),
     $config
 );
-$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple shipment IDs using `;`.
+$ids = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids | One or more shipment IDs. Separate multiple IDs with `;` or `,`, such as `1;2` or `1,2`.
 $sort = 'sort_example'; // string | Sort order. Defaults to `desc`.
-$extra_info = 'extra_info_example'; // string | Enables extra info in the response that is not included by default for performance reasons.
+$extra_info = 'extra_info_example'; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersTracktracesExtraInfo | Enables extra info in the response that is not included by default for performance reasons. Give one value, a `;`-separated list such as `delivery_moment;signature`, or a `,`-separated list such as `delivery_moment,signature`.
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
@@ -781,9 +793,9 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple shipment IDs using &#x60;;&#x60;. | |
+| **ids** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CommonParametersBigids**| One or more shipment IDs. Separate multiple IDs with &#x60;;&#x60; or &#x60;,&#x60;, such as &#x60;1;2&#x60; or &#x60;1,2&#x60;. | |
 | **sort** | **string**| Sort order. Defaults to &#x60;desc&#x60;. | [optional] |
-| **extra_info** | **string**| Enables extra info in the response that is not included by default for performance reasons. | [optional] |
+| **extra_info** | **\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersTracktracesExtraInfo**| Enables extra info in the response that is not included by default for performance reasons. Give one value, a &#x60;;&#x60;-separated list such as &#x60;delivery_moment;signature&#x60;, or a &#x60;,&#x60;-separated list such as &#x60;delivery_moment,signature&#x60;. | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
@@ -797,7 +809,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -930,7 +942,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=2.0`, `application/json`
-- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -997,7 +1009,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=2.0`, `application/json`
-- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1064,7 +1076,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json;version=2.0`, `application/json`
-- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/*`, `application/json`
+- **Accept**: `application/json;charset=utf-8;version=2.0`, `application/json;charset=utf-8`, `application/json`, `application/problem+json`, `application/*`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1073,7 +1085,7 @@ try {
 ## `postShipments()`
 
 ```php
-postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
+postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $send_return_mail, $user_agent): \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12
 ```
 
 Add Shipment
@@ -1104,13 +1116,14 @@ $apiInstance = new MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi(
 );
 $shipment_post_shipments_request_v11 = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11 | Array of Shipment objects.
 $format = A4; // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter | The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format.
-$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
+$positions = new \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition(); // \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition | The positions of the label on an A4 sheet. A position is identified by a digit from `1` to `4`. You can specify up to four positions separated by semicolons (`;`) or commas (`,`).  __Note__: This parameter only works when you specify the `A4` __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning `1;2;3;4`.
 $collect_date = new \DateTime('2013-10-20T19:20:30+01:00'); // \DateTime
 $delivery_options_identifier = 'delivery_options_identifier_example'; // string
+$send_return_mail = 56; // int | Whether to send the return email to the consumer when creating return shipments. Defaults to `1`.
 $user_agent = User-Agent: MyFirstCMS/3.0.0 PHP/9.5.0; // string | To give us insight into where requests come from and API documentation usage, you should send a `User-Agent` header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using.
 
 try {
-    $result = $apiInstance->postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $user_agent);
+    $result = $apiInstance->postShipments($shipment_post_shipments_request_v11, $format, $positions, $collect_date, $delivery_options_identifier, $send_return_mail, $user_agent);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentApi->postShipments: ', $e->getMessage(), PHP_EOL;
@@ -1123,9 +1136,10 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **shipment_post_shipments_request_v11** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11**](../Model/ShipmentPostShipmentsRequestV11.md)| Array of Shipment objects. | |
 | **format** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\PostShipmentsFormatParameter**](../Model/.md)| The paper size of the PDF as specified in ISO216. Currently, A4 and A6 are supported. When A4 is chosen you can specify the label positions. When requesting the label for a shipment that contains a custom form, you can only request an A4 format. | [optional] |
-| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
+| **positions** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentParametersLabelPosition**](../Model/.md)| The positions of the label on an A4 sheet. A position is identified by a digit from &#x60;1&#x60; to &#x60;4&#x60;. You can specify up to four positions separated by semicolons (&#x60;;&#x60;) or commas (&#x60;,&#x60;).  __Note__: This parameter only works when you specify the &#x60;A4&#x60; __format__ and only applies to the first page when requesting multiple pages worth of labels. Subsequent pages use the default positioning &#x60;1;2;3;4&#x60;. | [optional] |
 | **collect_date** | **\DateTime**|  | [optional] |
 | **delivery_options_identifier** | **string**|  | [optional] |
+| **send_return_mail** | **int**| Whether to send the return email to the consumer when creating return shipments. Defaults to &#x60;1&#x60;. | [optional] |
 | **user_agent** | **string**| To give us insight into where requests come from and API documentation usage, you should send a &#x60;User-Agent&#x60; header with all your requests. This header should include information about your integration, the CMS/platform and the backend you are using. | [optional] |
 
 ### Return type
@@ -1139,7 +1153,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/vnd.shipment+json;version=1.1`, `application/vnd.shipment+json`, `application/vnd.return_shipment+json`, `application/vnd.unrelated_return_shipment+json`
-- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/vnd.shipment_label+json`, `application/*`, `application/problem+json`
+- **Accept**: `application/json;charset=utf-8;version=1.2`, `application/json`, `application/vnd.shipment_label+json`, `application/vnd.shipment_label+json+print`, `application/*`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -1204,7 +1218,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

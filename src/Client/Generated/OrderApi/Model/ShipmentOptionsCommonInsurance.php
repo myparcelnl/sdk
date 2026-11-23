@@ -58,7 +58,7 @@ class ShipmentOptionsCommonInsurance implements ModelInterface, ArrayAccess, \Js
       * @var string[]
       */
     protected static $openAPITypes = [
-        'amount' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonInsuranceAmount'
+        'amount' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money'
     ];
 
     /**
@@ -296,7 +296,7 @@ class ShipmentOptionsCommonInsurance implements ModelInterface, ArrayAccess, \Js
     /**
      * Gets amount
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonInsuranceAmount
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money
      */
     public function getAmount()
     {
@@ -306,7 +306,7 @@ class ShipmentOptionsCommonInsurance implements ModelInterface, ArrayAccess, \Js
     /**
      * Sets amount
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonInsuranceAmount $amount amount
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money $amount The amount to insure.
      *
      * @return self
      */

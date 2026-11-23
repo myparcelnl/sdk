@@ -61,7 +61,11 @@ class CarrierToCreate
 
     public const GLS = 'GLS';
 
+    public const GOFO = 'GOFO';
+
     public const INPOST = 'INPOST';
+
+    public const INSTABEE = 'INSTABEE';
 
     public const POSTNL = 'POSTNL';
 
@@ -93,7 +97,9 @@ class CarrierToCreate
             self::DHL_PARCEL_CONNECT,
             self::DPD,
             self::GLS,
+            self::GOFO,
             self::INPOST,
+            self::INSTABEE,
             self::POSTNL,
             self::POSTE_ITALIANE,
             self::SPRING,

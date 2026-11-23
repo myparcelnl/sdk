@@ -66,7 +66,8 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponsePhysicalPropertiesPhysicalPropertiesV2',
         'delivery_types' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2[]',
         'transaction_types' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesTransactionTypes[]',
-        'collo' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo'
+        'collo' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseIncotermsIncoterms'
     ];
 
     /**
@@ -84,7 +85,8 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         'physical_properties' => null,
         'delivery_types' => null,
         'transaction_types' => null,
-        'collo' => null
+        'collo' => null,
+        'incoterms' => null
     ];
 
     /**
@@ -100,7 +102,8 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         'physical_properties' => false,
         'delivery_types' => false,
         'transaction_types' => false,
-        'collo' => false
+        'collo' => false,
+        'incoterms' => false
     ];
 
     /**
@@ -196,7 +199,8 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         'physical_properties' => 'physicalProperties',
         'delivery_types' => 'deliveryTypes',
         'transaction_types' => 'transactionTypes',
-        'collo' => 'collo'
+        'collo' => 'collo',
+        'incoterms' => 'incoterms'
     ];
 
     /**
@@ -212,7 +216,8 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         'physical_properties' => 'setPhysicalProperties',
         'delivery_types' => 'setDeliveryTypes',
         'transaction_types' => 'setTransactionTypes',
-        'collo' => 'setCollo'
+        'collo' => 'setCollo',
+        'incoterms' => 'setIncoterms'
     ];
 
     /**
@@ -228,7 +233,8 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         'physical_properties' => 'getPhysicalProperties',
         'delivery_types' => 'getDeliveryTypes',
         'transaction_types' => 'getTransactionTypes',
-        'collo' => 'getCollo'
+        'collo' => 'getCollo',
+        'incoterms' => 'getIncoterms'
     ];
 
     /**
@@ -296,6 +302,7 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
         $this->setIfExists('delivery_types', $data ?? [], null);
         $this->setIfExists('transaction_types', $data ?? [], null);
         $this->setIfExists('collo', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
     }
 
     /**
@@ -573,6 +580,33 @@ class RefCapabilitiesResponseCapabilityV2 implements ModelInterface, ArrayAccess
             throw new \InvalidArgumentException('non-nullable collo cannot be null');
         }
         $this->container['collo'] = $collo;
+
+        return $this;
+    }
+
+    /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseIncotermsIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseIncotermsIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
 
         return $this;
     }

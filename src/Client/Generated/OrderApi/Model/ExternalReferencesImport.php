@@ -35,7 +35,7 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * ExternalReferencesImport Class Doc Comment
  *
  * @category Class
- * @description This external reference is set when the order originates from a generic ecommerce order import
+ * @description References derived from an external import, like a CSV upload
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

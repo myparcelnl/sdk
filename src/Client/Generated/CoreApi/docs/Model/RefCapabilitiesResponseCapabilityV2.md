@@ -12,5 +12,6 @@ Name | Type | Description | Notes
 **delivery_types** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2[]**](RefTypesDeliveryTypeV2.md) |  |
 **transaction_types** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesTransactionTypes[]**](RefTypesTransactionTypes.md) |  |
 **collo** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo**](RefCapabilitiesResponseCollo.md) |  |
+**incoterms** | [**\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseIncotermsIncoterms**](RefCapabilitiesResponseIncotermsIncoterms.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

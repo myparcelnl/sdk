@@ -36,7 +36,7 @@ use \MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
  * ShipmentParametersCarrierIds Class Doc Comment
  *
  * @category Class
- * @description One or more Carrier ids. Accepts a single value, a repeated parameter, or a single string of &#x60;;&#x60;-separated values.
+ * @description One or more Carrier ids. Give one ID, or a list separated by &#x60;;&#x60; or &#x60;,&#x60;.
  * @package  MyParcelNL\Sdk\Client\Generated\CoreApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

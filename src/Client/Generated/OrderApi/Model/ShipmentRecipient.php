@@ -282,6 +282,12 @@ class ShipmentRecipient implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         $invalidProperties = [];
 
+        if ($this->container['address'] === null) {
+            $invalidProperties[] = "'address' can't be null";
+        }
+        if ($this->container['contact'] === null) {
+            $invalidProperties[] = "'contact' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -300,7 +306,7 @@ class ShipmentRecipient implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets address
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address
      */
     public function getAddress()
     {
@@ -310,7 +316,7 @@ class ShipmentRecipient implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets address
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address|null $address address
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address The address of the recipient.
      *
      * @return self
      */
@@ -327,7 +333,7 @@ class ShipmentRecipient implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets contact
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail
      */
     public function getContact()
     {
@@ -337,7 +343,7 @@ class ShipmentRecipient implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets contact
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail|null $contact contact
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ContactMultiEmail $contact The contact details of the recipient.
      *
      * @return self
      */

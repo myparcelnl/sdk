@@ -5,8 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** | The unique identifier of the package. |
-**status** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageStatus**](PackageStatus.md) |  |
-**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties**](PhysicalProperties.md) |  | [optional]
+**status** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageStatus**](PackageStatus.md) | The status of the package. |
+**physical_properties** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalProperties**](PhysicalProperties.md) | The dimensions of the package. | [optional]
 **lines** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageResponseLinesInner[]**](PackageResponseLinesInner.md) | The order lines related to the package. | [optional]
 **shipment** | [**\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Shipment**](Shipment.md) |  | [optional]
 

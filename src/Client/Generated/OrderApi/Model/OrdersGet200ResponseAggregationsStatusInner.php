@@ -287,6 +287,10 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
         if ($this->container['count'] === null) {
             $invalidProperties[] = "'count' can't be null";
         }
+        if (!is_null($this->container['count']) && ($this->container['count'] > 9007199254740991)) {
+            $invalidProperties[] = "invalid value for 'count', must be smaller than or equal to 9007199254740991.";
+        }
+
         if (!is_null($this->container['count']) && ($this->container['count'] < 0)) {
             $invalidProperties[] = "invalid value for 'count', must be bigger than or equal to 0.";
         }
@@ -356,6 +360,9 @@ class OrdersGet200ResponseAggregationsStatusInner implements ModelInterface, Arr
             throw new \InvalidArgumentException('non-nullable count cannot be null');
         }
 
+        if (($count > 9007199254740991)) {
+            throw new \InvalidArgumentException('invalid value for $count when calling OrdersGet200ResponseAggregationsStatusInner., must be smaller than or equal to 9007199254740991.');
+        }
         if (($count < 0)) {
             throw new \InvalidArgumentException('invalid value for $count when calling OrdersGet200ResponseAggregationsStatusInner., must be bigger than or equal to 0.');
         }

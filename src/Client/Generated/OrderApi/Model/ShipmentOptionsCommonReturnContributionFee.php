@@ -58,7 +58,7 @@ class ShipmentOptionsCommonReturnContributionFee implements ModelInterface, Arra
       * @var string[]
       */
     protected static $openAPITypes = [
-        'amount' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonReturnContributionFeeAmount'
+        'amount' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money'
     ];
 
     /**
@@ -296,7 +296,7 @@ class ShipmentOptionsCommonReturnContributionFee implements ModelInterface, Arra
     /**
      * Gets amount
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonReturnContributionFeeAmount
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money
      */
     public function getAmount()
     {
@@ -306,7 +306,7 @@ class ShipmentOptionsCommonReturnContributionFee implements ModelInterface, Arra
     /**
      * Sets amount
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsCommonReturnContributionFeeAmount $amount amount
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money $amount The amount of the contribution.
      *
      * @return self
      */

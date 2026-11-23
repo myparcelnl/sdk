@@ -60,18 +60,18 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'id' => 'string',
         'carrier' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier',
-        'created_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentCreatedAt',
+        'created_at' => '\DateTime',
         'direction' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection',
         'hidden' => 'bool',
         'package_type' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRecipient',
         'custom_contract_id' => 'string',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponse',
-        'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery',
+        'delivery' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryOutput',
         'drop_off' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DropOff',
         'label' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentLabel',
         'multicollo' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentMulticollo',
-        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions',
+        'options' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsOutput',
         'pickup' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Pickup',
         'price' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentRequestSender'
@@ -87,7 +87,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'id' => null,
         'carrier' => null,
-        'created_at' => null,
+        'created_at' => 'date-time',
         'direction' => null,
         'hidden' => null,
         'package_type' => null,
@@ -400,6 +400,10 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['created_at'] === null) {
             $invalidProperties[] = "'created_at' can't be null";
         }
+        if (!is_null($this->container['created_at']) && !preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", $this->container['created_at'])) {
+            $invalidProperties[] = "invalid value for 'created_at', must be conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.";
+        }
+
         if ($this->container['direction'] === null) {
             $invalidProperties[] = "'direction' can't be null";
         }
@@ -497,7 +501,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets created_at
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentCreatedAt
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -507,7 +511,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets created_at
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentCreatedAt $created_at created_at
+     * @param \DateTime $created_at The date when the shipment was created.
      *
      * @return self
      */
@@ -516,6 +520,11 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($created_at)) {
             throw new \InvalidArgumentException('non-nullable created_at cannot be null');
         }
+
+        if ((!preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", ObjectSerializer::toString($created_at)))) {
+            throw new \InvalidArgumentException("invalid value for \$created_at when calling Shipment., must conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.");
+        }
+
         $this->container['created_at'] = $created_at;
 
         return $this;
@@ -693,7 +702,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets delivery
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryOutput|null
      */
     public function getDelivery()
     {
@@ -703,7 +712,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets delivery
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Delivery|null $delivery delivery
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryOutput|null $delivery delivery
      *
      * @return self
      */
@@ -801,7 +810,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets options
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsOutput|null
      */
     public function getOptions()
     {
@@ -811,7 +820,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets options
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions|null $options options
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptionsOutput|null $options options
      *
      * @return self
      */
@@ -865,7 +874,7 @@ class Shipment implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money|null $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money|null $price The price indication of the shipment.
      *
      * @return self
      */

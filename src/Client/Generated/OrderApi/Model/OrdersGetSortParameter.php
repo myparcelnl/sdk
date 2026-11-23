@@ -35,7 +35,6 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * OrdersGetSortParameter Class Doc Comment
  *
  * @category Class
- * @description When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -324,7 +323,7 @@ class OrdersGetSortParameter implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets customer_reference
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $customer_reference customer_reference
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $customer_reference The sort order and direction on the customer reference property.
      *
      * @return self
      */
@@ -351,7 +350,7 @@ class OrdersGetSortParameter implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets ordered_at
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $ordered_at ordered_at
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $ordered_at The sort order and direction on ordered at property. The default when `query` is not provided.
      *
      * @return self
      */
@@ -378,7 +377,7 @@ class OrdersGetSortParameter implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets price
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $price price
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $price The sort order and direction on the price property.
      *
      * @return self
      */
@@ -405,7 +404,7 @@ class OrdersGetSortParameter implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets source_id
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $source_id source_id
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\SortDirection|null $source_id The sort order and direction on the source ID property.
      *
      * @return self
      */
