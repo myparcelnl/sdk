@@ -57,6 +57,7 @@ This table names what differs from the rules above, per class.
 | `ApiKeyService`        | `getPrincipal()` returns an `IamApi\Model\Principal` with getters, such as `getShopIds()` | `getPrincipal()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser` with public properties, such as `$principal->shopIds`. `type` is the enum case `PrincipalShopType::Shop` or `PrincipalUserType::User`. `role` and `platform` are enums, or the raw string for a value that the SDK does not know. `features` and `fulfilmentPlatforms` hold `Jane\IamApi\Model\Feature` and `FulfilmentPlatform` enum cases, or the raw string for a value that the SDK does not know: compare with `Feature::OrderManagement`, or read `->value`. They are optional: read them with `$principal->features ?? []`, because a Jane model does not initialize a field that IAM leaves out. `impersonator` is the string that IAM sends, or `null`, where `getImpersonator()` returned an empty `IamApi\Model\PrincipalType` |
 | `ApiKeyService`        | `getPrincipal()` throws an `IamApi\ApiException` for every error, also for a network error. `isValid()` returns `false` for a 401 and throws the `ApiException` for every other error | `getPrincipal()` throws a `Jane\IamApi\Exception\ServerException` for a 500 with an `application/problem+json` body, a `Jane\IamApi\Exception\ClientException` for another error status or for a 200 without a JSON content type, a Symfony `TransportExceptionInterface` for a network error or a timeout, and a `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` for a 200 with a JSON content type and a body that is not valid JSON. `isValid()` returns `false` for a 401 and throws the others, also for a 200 without a JSON content type, where v11 returned `true` when the body was valid JSON. A 401 or a 500 with a JSON content type and a body that is not valid JSON throws a Symfony `NotEncodableValueException` in both methods. Every `Jane\IamApi` exception for an error response has the HTTP status as `getCode()`: read the body with `getResponse()->getContent(false)` where you called `getResponseBody()`. For a principal type that the SDK does not know, `getPrincipal()` throws an `UnexpectedValueException`, and `isValid()` returns `true`, because the 200 proves the key |
 | `IamApiFactory`        | `make()` returns an `IamApi\Api\DefaultApi` | `make()` returns a `Jane\IamApi\Client`. Its `getWhoami()` returns a `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser`, or the decoded JSON for a principal type that the SDK does not know |
+| `EcommerceApiFactory`  | `make()` returns an `EcommerceApi\Api\DefaultApi` on a Guzzle client. `webhookOrdersPost()` takes `EcommerceApi\Model\Order` models and returns `FixedWebhookOrderResult` models. It throws an `EcommerceApi\ApiException` when MyParcel refuses the request | `make()` returns a `Jane\EcommerceApi\Client` on a Symfony HTTP client, and takes an `HttpClientInterface` as its fourth argument. `postWebhookOrder()` takes `Jane\EcommerceApi\Model\Order` models and returns the decoded JSON: `PushResultReader::read()` turns it into one `PushResult` per order. It throws a generated exception from `Jane\EcommerceApi\Exception`, such as `PostWebhookOrderBadRequestException`, when MyParcel refuses the request. It throws a `Jane\EcommerceApi\Runtime\Normalizer\ValidationException`, and sends nothing, for an order that does not match the spec. See [Order push](#order-push) |
 | `ApiMapperService`     | `allRows()` and `allDomains()` key a row by the constant name of the openapi-generator enum, such as `DHL_FOR_YOU` | They key a row by the case name of the Jane enum, such as `DhlForYou`. The values of a row do not change |
 | `ShipmentOptionMapper` | `v2PropertyFromName()` returns the property name of the openapi-generator model, such as `requires_signature` | It returns the property name of the Jane model, such as `requiresSignature`. A snake_case name, such as `requires_signature`, is still accepted as input |
 | `ShipmentQueryService` | `query()` ignores a key it does not know, leaves out a filter with the value `false`, and sends an array as `status=1&status=2` | `query()` throws an `InvalidArgumentException` for a key it does not know, or for a type that the spec does not allow, such as `'hidden' => 1`: pass `true`. It sends `false` as `0`. `carrier_id`, `package_type`, `shipment_type`, `shop_id` and `status` take a list of integers, which goes as the `;`-separated string that the spec documents, such as `status=1;2`. An empty list leaves the filter out. Another array throws an `InvalidArgumentException`, such as a list of barcodes. For a list of shipment ids, use `findMany()` |
@@ -166,22 +167,43 @@ A shipment without a reference identifier gets one that starts with `sdk_`, as i
 
 ### Order push
 
-The e-commerce service now requires a status on every order that you push with
-`EcommerceApiFactory`. It refuses the whole request with HTTP 400 when one order has no status. Set
-it with `Order::setStatus()` or the `status` key of the constructor array:
+`EcommerceApiFactory::make()` returns the Jane e-commerce client. Build an order with the Jane model,
+push it with `postWebhookOrder()`, and read the answer with `PushResultReader`:
 
 ```php
-$order->setStatus(Order::STATUS_OPEN);
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Order;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus;
+use MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory;
+use MyParcelNL\Sdk\Services\Ecommerce\PushResultReader;
+
+$order            = new Order();
+$order->orderedAt = new DateTimeImmutable('now');
+$order->sourceId  = 'ORDER-2026-01042';
+$order->status    = OrderStatus::Open;
+
+$response = EcommerceApiFactory::make($connect)->postWebhookOrder(requestBody: [$order]);
+
+foreach ((new PushResultReader())->read($response) as $result) {
+    if (!$result->isAccepted()) {
+        // $result->getTitle(), $result->getDetail() and $result->getErrors()
+    }
+}
 ```
 
-Use `Order::STATUS_CANCELED` when the order is cancelled in the shop, and push the order again with
-the same `source_id`. MyParcel sees the second push as an update of the order. See "Pushing orders"
-in `README.md`.
+| v11 | v12 |
+|-----|-----|
+| `new Order(['source_id' => 'ORDER-1', 'status' => Order::STATUS_OPEN])` and setters such as `setStatus()` | `new Order()` with public camelCase properties, such as `$order->sourceId`. The status is the enum case `OrderStatus::Open` or `OrderStatus::Canceled` |
+| `$api->webhookOrdersPost([$order])` | `$api->postWebhookOrder(requestBody: [$order])`. Pass a list: for an array whose keys do not start at 0, the generated client sends the request without a body |
+| A `FixedWebhookOrderResult` per order, with `getStatus()`, `getTitle()`, `getDetail()` and `getErrors()` | A `PushResult` per order from `PushResultReader::read()`, with `isAccepted()`, `getStatus()`, `getType()`, `getTitle()`, `getDetail()` and `getErrors()`. An error is an array with the keys `detail` and `pointer` |
+| `$order->listInvalidProperties()` | None. The client checks an order when it sends it, and throws a `Jane\EcommerceApi\Runtime\Normalizer\ValidationException` for an order that does not match the spec |
 
-The spec now also limits an order to 100 lines and a product to 50 children.
-`Order::setLines()` and `Product::setChildren()` throw an `InvalidArgumentException` above these
-limits. When you pass the lines or the children in the constructor array, nothing throws:
-`listInvalidProperties()` reports the error instead.
+The e-commerce service requires a status on every order. The client throws the `ValidationException`
+for an order without a status, and no request goes out. Use `OrderStatus::Canceled` when the order is cancelled in the shop,
+and push the order again with the same `sourceId`. MyParcel sees the second push as an update of the
+order. See "Pushing orders" in `README.md`.
+
+The spec limits an order to 100 lines and a product to 50 children. The client throws the
+`ValidationException` for an order above the limit of 100 lines.
 
 ### Generated OpenAPI models
 
