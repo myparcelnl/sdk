@@ -4,134 +4,66 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Services\Shipment;
 
+use BackedEnum;
 use InvalidArgumentException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11Data;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
-use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
-use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
-use MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType;
-use MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentResponsesPostShipmentsV12;
+use MyParcelNL\Sdk\Concerns\CreatesCoreApiClient;
+use MyParcelNL\Sdk\Services\Shipment\Concerns\PreparesShipments;
 
+/**
+ * Creates shipments through the Core API client.
+ */
 final class ShipmentCreateService
 {
-    use HasUserAgent;
-    use EnsuresShipmentReferenceIds;
-    use ResolvesPostShipmentsContentType;
-
-    private ShipmentApi $api;
-
-    public function __construct(
-        string $apiKey,
-        ?ShipmentApi $api = null,
-        ?string $host = null
-    ) {
-        $this->api = $api ?? ShipmentApiFactory::make($apiKey, $host);
-    }
+    use CreatesCoreApiClient;
+    use PreparesShipments;
 
     /**
-     * Create shipments through the generated ShipmentApi client.
+     * Create shipments.
      *
-     * Builds the generated request model, applies SDK defaults such as reference identifiers,
-     * and maps the typed generated success response back to the SDK's
-     * id => reference_identifier return shape.
+     * A shipment without a reference identifier gets one that starts with `sdk_`. The generated
+     * client checks the shipments against the spec before it sends them.
      *
-     * @param ShipmentCollection $collection Collection of shipments to create.
-     * @param mixed              $format     Label format (e.g. "A4", "A6") or generated format reference.
-     * @param mixed              $positions  Label position(s) for A4 (e.g. "1;2;3;4") or generated position reference.
+     * @param ShipmentItem[]         $shipments The shipments. `CoreApiModels::toModel()` fills one from an array.
+     * @param string|BackedEnum|null $format    The label format, such as `A4` or `A6`.
+     * @param int|string|null        $positions The label positions on an A4 sheet, such as `1;2;3;4`.
+     * @param array<string, mixed>   $queryParameters Other query parameters of `POST /shipments`, such as
+     *                                                `send_return_mail`. The generated client rejects a
+     *                                                name or a type that the spec does not have. A
+     *                                                `format` or `positions` key is used only when the
+     *                                                argument of that name is null.
      *
-     * @return array<int, string|null> Mapping shipment id => reference identifier.
+     * @return array<int, string|null> Shipment id => reference identifier.
+     *
+     * @throws InvalidArgumentException For an empty list, or an item that is not a ShipmentItem.
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Runtime\Normalizer\ValidationException For a shipment that does not match the spec. No request goes out.
      */
-    public function create(ShipmentCollection $collection, $format = null, $positions = null): array
-    {
-        $shipments = $collection->values()->all();
+    public function create(
+        array $shipments,
+        string|BackedEnum|null $format = null,
+        int|string|null $positions = null,
+        array $queryParameters = []
+    ): array {
+        $request = $this->createRequest($shipments, 'create');
 
-        $this->validateBeforeCreate($shipments);
-        $this->ensureReferenceIds($shipments);
-
-        $request = $this->buildCreateRequest($shipments);
-        $userAgentHeader = $this->getUserAgentHeader();
-
-        $response = $this->api->postShipments(
-            $request,
-            $format,
-            $positions,
-            null,
-            null,
-            $userAgentHeader,
-            $this->resolvePostShipmentsContentType('application/vnd.shipment+json')
+        $response = $this->api()->postShipments(
+            requestBody: $request,
+            queryParameters: array_filter(
+                ['format' => $format instanceof BackedEnum ? $format->value : $format, 'positions' => $positions],
+                static fn (mixed $value): bool => null !== $value
+            ) + array_filter($queryParameters, static fn (mixed $value): bool => null !== $value)
         );
 
-        return $this->parseCreateResponse($shipments, $response);
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function validateBeforeCreate(array $shipments): void
-    {
-        if (empty($shipments)) {
-            throw new InvalidArgumentException('At least one shipment must be added before calling create().');
-        }
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     */
-    private function buildCreateRequest(array $shipments): ShipmentPostShipmentsRequestV11
-    {
-        $data = new ShipmentPostShipmentsRequestV11Data();
-        $data->setShipments($shipments);
-        $data->setUserAgent($this->getUserAgentHeader());
-
-        $request = new ShipmentPostShipmentsRequestV11();
-        $request->setData($data);
-
-        return $request;
-    }
-
-    /**
-     * @param Shipment[] $shipments
-     *
-     * Read only the current generated success model and translate it to the SDK convenience shape.
-     *
-     * @return array<int, string|null>
-     */
-    private function parseCreateResponse(array $shipments, $response): array
-    {
         if (! $response instanceof ShipmentResponsesPostShipmentsV12) {
-            throw new InvalidArgumentException('Unexpected response type returned by ShipmentApi::postShipments()');
+            throw new InvalidArgumentException('Unexpected response type returned by postShipments()');
         }
 
-        $responseData = $response->getData();
-        if (null === $responseData) {
-            throw new InvalidArgumentException('ShipmentApi::postShipments() returned a response without data.');
+        // The generated normalizer turns `"data": null` into an empty data model, so check the shipments.
+        if (! isset($response->data->shipments)) {
+            throw new InvalidArgumentException('postShipments() returned a response without data.');
         }
 
-        $requestReferences = array_values(array_map(
-            static fn (Shipment $shipment): ?string => $shipment->getReferenceIdentifier(),
-            $shipments
-        ));
-
-        $mapping = [];
-        foreach (($responseData->getShipments() ?? []) as $index => $createdShipment) {
-            $referenceIdentifier = $createdShipment->getReferenceIdentifier();
-
-            if (null === $referenceIdentifier && isset($requestReferences[$index])) {
-                $referenceIdentifier = $requestReferences[$index];
-            }
-
-            $shipmentId = $createdShipment->getId();
-            if (null === $shipmentId) {
-                continue;
-            }
-
-            $mapping[(int) $shipmentId] = $referenceIdentifier;
-        }
-
-        return $mapping;
+        return $this->mapCreatedIds($request->data->shipments, $response->data->shipments);
     }
 }

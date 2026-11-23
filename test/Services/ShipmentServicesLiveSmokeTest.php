@@ -8,13 +8,11 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierReturns;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Exception\WithResponseInterface;
-use MyParcelNL\Sdk\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Services\CoreApi\ShipmentApiFactory;
 use MyParcelNL\Sdk\Services\Labels\ShipmentLabelsService;
 use MyParcelNL\Sdk\Services\MultiCollo\MultiColloShipmentService;
@@ -24,7 +22,6 @@ use MyParcelNL\Sdk\Services\Shipment\ShipmentDeleteService;
 use MyParcelNL\Sdk\Services\Shipment\ShipmentQueryService;
 use MyParcelNL\Sdk\Services\TrackTrace\ShipmentTrackTraceService;
 use MyParcelNL\Sdk\Services\Webhook\WebhookService;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Collection\Fulfilment\OrderCollection;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
 use MyParcelNL\Sdk\Model\Fulfilment\OrderLine;
@@ -55,12 +52,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testSetLinkOfLabelsForCreatedShipment(): void
     {
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment('smoke-label-' . uniqid('', true)));
+        $shipments = [$this->createMinimalNlShipment('smoke-label-' . uniqid('', true))];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
 
             $labels = new ShipmentLabelsService($this->liveApiKey);
@@ -77,12 +73,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testSetPdfOfLabelsForCreatedShipment(): void
     {
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment('smoke-label-pdf-' . uniqid('', true)));
+        $shipments = [$this->createMinimalNlShipment('smoke-label-pdf-' . uniqid('', true))];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
 
             $labels = new ShipmentLabelsService($this->liveApiKey);
@@ -99,12 +94,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testGeneratedLabelsRequestWithExplicitAcceptReturnsBody(): void
     {
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment('smoke-generated-label-body-' . uniqid('', true)));
+        $shipments = [$this->createMinimalNlShipment('smoke-generated-label-body-' . uniqid('', true))];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
 
             $api = ShipmentApiFactory::make($this->liveApiKey);
@@ -136,12 +130,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testFetchTrackTraceDataForCreatedShipment(): void
     {
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true)));
+        $shipments = [$this->createMinimalNlShipment('smoke-tracktrace-' . uniqid('', true))];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $shipmentIds = array_keys($created);
             $shipmentId = (int) $shipmentIds[0];
 
@@ -165,12 +158,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     public function testQueryServiceFindsCreatedShipmentByIdAndReferenceIdentifier(): void
     {
         $referenceIdentifier = 'smoke-query-' . uniqid('', true);
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment($referenceIdentifier));
+        $shipments = [$this->createMinimalNlShipment($referenceIdentifier)];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $shipmentId = (int) array_keys($created)[0];
 
             $queryService = new ShipmentQueryService($this->liveApiKey);
@@ -200,12 +192,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testDeleteServiceDeletesCreatedShipmentConcept(): void
     {
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment('smoke-delete-' . uniqid('', true)));
+        $shipments = [$this->createMinimalNlShipment('smoke-delete-' . uniqid('', true))];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $shipmentId = (int) array_keys($created)[0];
 
             $deleteService = new ShipmentDeleteService($this->liveApiKey);
@@ -223,12 +214,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
 
     public function testCreateRelatedReturnShipment(): void
     {
-        $collection = new ShipmentCollection();
-        $collection->push($this->createMinimalNlShipment('smoke-related-return-parent-' . uniqid('', true)));
+        $shipments = [$this->createMinimalNlShipment('smoke-related-return-parent-' . uniqid('', true))];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
             $parentShipmentId = (int) array_keys($created)[0];
 
             $returnService = new ReturnShipmentService($this->liveApiKey);
@@ -278,22 +268,22 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     public function testCreateMultiColloShipmentViaService(): void
     {
         $referenceIdentifier = 'smoke-multicollo-' . uniqid('', true);
-        $baseShipment = $this->createMinimalNlShipment($referenceIdentifier)->withWeight(1500);
+        $baseShipment = $this->createMinimalNlShipment($referenceIdentifier);
+        $baseShipment->physicalProperties->weight = 1500;
         $multiColloService = new MultiColloShipmentService();
         $multiColloShipment = $multiColloService->splitShipment($baseShipment, 3);
 
-        $collection = new ShipmentCollection();
-        $collection->push($multiColloShipment);
+        $shipments = [$multiColloShipment];
 
         try {
             $createService = new ShipmentCreateService($this->liveApiKey);
-            $created = $createService->create($collection);
+            $created = $createService->create($shipments);
         } catch (\Throwable $e) {
             $this->handleLiveException($e);
             return;
         }
 
-        self::assertCount(2, $multiColloShipment->getSecondaryShipments());
+        self::assertCount(2, $multiColloShipment->secondaryShipments);
         self::assertNotEmpty($created);
     }
 
@@ -410,9 +400,8 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
     }
 
     /**
-     * Verifies OrderCollection::query() works with shared ShipmentOptions.
-     * Orders constructed from API responses must hydrate correctly via
-     * ShipmentOptions::fromOrderResponse().
+     * Verifies that `OrderCollection::query()` reads the shipment options of each order into the
+     * generated options model.
      */
     public function testFulfilmentOrderQueryReturnsOrders(): void
     {
@@ -438,11 +427,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         /** @var Order $order */
         $order = $collection->first();
         self::assertInstanceOf(Order::class, $order);
-        self::assertInstanceOf(ShipmentOptions::class, $order->getDeliveryOptions());
+        self::assertInstanceOf(ShipmentOptionsModel::class, $order->getDeliveryOptions());
     }
 
     /**
-     * Full round-trip: build an Order with shared ShipmentOptions, save via API,
+     * Full round-trip: build an Order with the generated options model, save via API,
      * and verify the response hydrates back correctly.
      * This is the critical path that consumers rely on.
      */
@@ -453,10 +442,11 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         try {
             $orderCollection = (new OrderCollection())->setApiKey($this->liveApiKey);
 
-            $shipmentOptions = (new ShipmentOptions())
-                ->setDeliveryDate((new \DateTime('+1 day'))->format('Y-m-d H:i:s'))
-                ->setDeliveryType(RefTypesDeliveryTypeV2::STANDARD)
-                ->setPackageType(RefShipmentPackageTypeV2::PACKAGE);
+            $shipmentOptions = CoreApiModels::toModel([
+                'delivery_date' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
+                'delivery_type' => 2,
+                'package_type'  => 1,
+            ], ShipmentOptionsModel::class);
 
             $order = (new Order())
                 ->setStatus('open')
@@ -499,7 +489,7 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
         $savedOrder = $saved->first();
         self::assertInstanceOf(Order::class, $savedOrder);
         self::assertIsString($savedOrder->getUuid(), 'Saved order should have a UUID.');
-        self::assertInstanceOf(ShipmentOptions::class, $savedOrder->getDeliveryOptions());
+        self::assertInstanceOf(ShipmentOptionsModel::class, $savedOrder->getDeliveryOptions());
 
         // Verify order lines came back
         self::assertGreaterThanOrEqual(1, $savedOrder->getOrderLines()->count());
@@ -517,13 +507,13 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
             ->setPhone('0612345678');
     }
 
-    private function createMinimalNlShipment(string $referenceIdentifier): Shipment
+    private function createMinimalNlShipment(string $referenceIdentifier): ShipmentItem
     {
-        return (new Shipment())
-            ->setCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-            ->withPackageType(RefShipmentPackageTypeV2::PACKAGE)
-            ->withWeight(1000)
-            ->setRecipient([
+        return CoreApiModels::toModel([
+            'carrier'              => 1,
+            'options'              => ['package_type' => 1],
+            'physical_properties'  => ['weight' => 1000],
+            'recipient'            => [
                 'cc'          => 'NL',
                 'city'        => 'Hoofddorp',
                 'street'      => 'Antareslaan',
@@ -532,8 +522,9 @@ final class ShipmentServicesLiveSmokeTest extends TestCase
                 'person'      => 'Smoke Test',
                 'email'       => 'smoke@myparcel.nl',
                 'phone'       => '0612345678',
-            ])
-            ->setReferenceIdentifier($referenceIdentifier);
+            ],
+            'reference_identifier' => $referenceIdentifier,
+        ], ShipmentItem::class);
     }
 
     private function handleLiveException(\Throwable $e): void

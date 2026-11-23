@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Capabilities;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem as ShipmentItem;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
-use MyParcelNL\Sdk\Model\Shipment\Shipment;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
 final class CapabilitiesRequestFromShipmentTest extends TestCase
@@ -15,16 +17,16 @@ final class CapabilitiesRequestFromShipmentTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Recipient with country code');
 
-        $shipment = new Shipment();
-        CapabilitiesRequest::fromShipment($shipment);
+        CapabilitiesRequest::fromShipment(new ShipmentItem());
     }
 
     public function testFromShipmentProjectionMinimal(): void
     {
-        $shipment = (new Shipment())
-            ->setRecipient(['cc' => 'NL'])
-            ->setShopId(18)
-            ->setPhysicalProperties(['weight' => 500]);
+        $shipment = CoreApiModels::toModel([
+            'recipient'           => ['cc' => 'NL'],
+            'shop_id'             => 18,
+            'physical_properties' => ['weight' => 500],
+        ], ShipmentItem::class);
 
         $req = CapabilitiesRequest::fromShipment($shipment)->withShopId(18);
 
@@ -36,15 +38,11 @@ final class CapabilitiesRequestFromShipmentTest extends TestCase
 
     public function testFromShipmentWithDimensions(): void
     {
-        $shipment = (new Shipment())
-            ->setRecipient(['cc' => 'NL'])
-            ->setShopId(42)
-            ->setPhysicalProperties([
-                'weight' => 750,
-                'height' => 10,
-                'length' => 20,
-                'width'  => 30,
-            ]);
+        $shipment = CoreApiModels::toModel([
+            'recipient'           => ['cc' => 'NL'],
+            'shop_id'             => 42,
+            'physical_properties' => ['weight' => 750, 'height' => 10, 'length' => 20, 'width' => 30],
+        ], ShipmentItem::class);
 
         $req = CapabilitiesRequest::fromShipment($shipment)->withShopId(42);
 
@@ -59,15 +57,24 @@ final class CapabilitiesRequestFromShipmentTest extends TestCase
         ], $req->getPhysicalProperties());
     }
 
+    public function testFromShipmentWithoutPhysicalPropertiesSetsNone(): void
+    {
+        $req = CapabilitiesRequest::fromShipment(CoreApiModels::toModel(['recipient' => ['cc' => 'BE']], ShipmentItem::class));
+
+        $this->assertSame('BE', $req->getCountryCode());
+        $this->assertNull($req->getPhysicalProperties());
+    }
+
     public function testFromShipmentWithExplicitCapabilitiesCarrier(): void
     {
-        $shipment = (new Shipment())
-            ->setRecipient(['cc' => 'NL'])
-            ->setPhysicalProperties(['weight' => 500]);
+        $shipment = CoreApiModels::toModel([
+            'recipient'           => ['cc' => 'NL'],
+            'physical_properties' => ['weight' => 500],
+        ], ShipmentItem::class);
 
         $req = CapabilitiesRequest::fromShipment($shipment)
             ->withShopId(18)
-            ->withCarrier(\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2::POSTNL);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::Postnl->value);
 
         $this->assertSame('NL', $req->getCountryCode());
         $this->assertSame(18, $req->getShopId());

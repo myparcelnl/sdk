@@ -8,10 +8,11 @@ use DateTime;
 use MyParcelNL\Sdk\Concerns\HasApiKey;
 use MyParcelNL\Sdk\Concerns\HasCountry;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesPriceEuro;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefTypesPriceEuroCurrency;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItemOptions as ShipmentOptionsModel;
+use MyParcelNL\Sdk\Client\Jane\CoreApiModels;
 use MyParcelNL\Sdk\Model\Fulfilment\AbstractOrder;
 use MyParcelNL\Sdk\Model\Fulfilment\Order;
-use MyParcelNL\Sdk\Model\Shipment\ShipmentOptions;
 use MyParcelNL\Sdk\Model\MyParcelRequest;
 use MyParcelNL\Sdk\Model\RequestBody;
 use MyParcelNL\Sdk\Support\Arr;
@@ -136,46 +137,41 @@ class OrderCollection extends Collection
     }
 
     /**
-     * @param \MyParcelNL\Sdk\Model\Shipment\ShipmentOptions $options
+     * Build the `shipment.options` of the Order v1 request from the generated model.
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws \Exception
      */
-    private function getShipmentOptions(ShipmentOptions $options): array
+    private function getShipmentOptions(ShipmentOptionsModel $options): array
     {
-        $deliveryDate = $options->getDeliveryDate();
+        // The generated normalizer gives the API field names, and the value of an enum case, such
+        // as `1` for `RefTypesIntBoolean::True`.
+        $fields       = CoreApiModels::toArray($options);
+        $deliveryDate = $fields['delivery_date'] ?? null;
 
         if ($deliveryDate) {
-            $date         = new DateTime($deliveryDate);
-            $deliveryDate = $date->format(AbstractOrder::DATE_FORMAT_FULL);
+            $deliveryDate = (new DateTime($deliveryDate))->format(AbstractOrder::DATE_FORMAT_FULL);
         }
 
         $result = [
-            'package_type'      => $options->getPackageType(),
-            'delivery_type'     => $options->getDeliveryType(),
+            'package_type'      => $fields['package_type'] ?? null,
+            'delivery_type'     => $fields['delivery_type'] ?? null,
             'delivery_date'     => $deliveryDate ?: null,
-            'signature'         => (int) $options->getSignature(),
-            'collect'           => (int) $options->getCollect(),
-            'receipt_code'      => (int) $options->getReceiptCode(),
-            'only_recipient'    => (int) $options->getOnlyRecipient(),
-            'age_check'         => (int) $options->getAgeCheck(),
-            'large_format'      => (int) $options->getLargeFormat(),
-            'return'            => (int) $options->getReturn(),
-            'priority_delivery' => (int) $options->getPriorityDelivery(),
-            'label_description' => (string) $options->getLabelDescription(),
+            'signature'         => $fields['signature'] ?? 0,
+            'collect'           => $fields['collect'] ?? 0,
+            'receipt_code'      => $fields['receipt_code'] ?? 0,
+            'only_recipient'    => $fields['only_recipient'] ?? 0,
+            'age_check'         => $fields['age_check'] ?? 0,
+            'large_format'      => $fields['large_format'] ?? 0,
+            'return'            => $fields['return'] ?? 0,
+            'priority_delivery' => $fields['priority_delivery'] ?? 0,
+            'label_description' => (string) ($fields['label_description'] ?? ''),
         ];
 
-        $insurance = $options->getInsurance();
-
-        if ($insurance instanceof RefTypesPriceEuro) {
+        if (isset($fields['insurance'])) {
             $result['insurance'] = [
-                'amount'   => (int) $insurance->getAmount(),
-                'currency' => $insurance->getCurrency() ?: 'EUR',
-            ];
-        } elseif (is_numeric($insurance)) {
-            $result['insurance'] = [
-                'amount'   => (int) $insurance * 100,
-                'currency' => 'EUR',
+                'amount'   => (int) ($fields['insurance']['amount'] ?? 0),
+                'currency' => $fields['insurance']['currency'] ?? RefTypesPriceEuroCurrency::Eur->value,
             ];
         }
 
