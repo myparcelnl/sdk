@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Ecommerce;
 
-use GuzzleHttp\Psr7\Response;
+use MyParcelNL\Sdk\Test\Bootstrap\Http\Response;
 use MyParcelNL\Sdk\Crypto\DpopKeyPair;
 use MyParcelNL\Sdk\Crypto\EcdsaSignature;
 use MyParcelNL\Sdk\Exception\CommandCheckUnavailableException;
@@ -325,11 +325,11 @@ final class CommandRequestVerifierTest extends ConnectServiceTestCase
     }
 
     /**
-     * @param \GuzzleHttp\Psr7\Response|\Throwable ...$answers What the JWKS URL answers.
+     * @param \MyParcelNL\Sdk\Test\Bootstrap\Http\Response|\Throwable ...$answers What the JWKS URL answers.
      */
     private function verifier(...$answers): CommandRequestVerifier
     {
-        return new CommandRequestVerifier($this->service(), $this->jwksStorage, $this->guzzleAnswering(...$answers));
+        return new CommandRequestVerifier($this->service(), $this->jwksStorage, $this->httpAnswering(...$answers));
     }
 
     /**

@@ -365,9 +365,7 @@ request cannot send, such as `tracked`.
 
 [Jane](https://github.com/janephp/janephp) generates the clients of the Core API, the private Core API, the IAM API,
 the Order API and the e-commerce API from their OpenAPI specs into `src/Client/Generated/Jane/`. The
-configuration is in `.jane-openapi`. `composer generate:api` generates all of them again. The legacy e-commerce client in
-`src/Client/Generated/EcommerceApi/` still comes from OpenAPI Generator, until the e-commerce client also
-runs on Jane.
+configuration is in `.jane-openapi`. `composer generate:api` generates all of them again.
 
 The services wrap these clients. To call the API yourself, build a client with a factory and call the generated
 method. A Jane model has public properties, and an enum of the spec is a PHP enum:
@@ -385,7 +383,7 @@ foreach ($response->data->shipments as $shipment) {
 ```
 
 `IamApiFactory::make()` builds the IAM client. `WebhookApiFactory::make()` returns the same Core API client as
-`ShipmentApiFactory::make()`. The SDK has no factory for the private Core API client and the Order API client. [UPGRADE.md](UPGRADE.md) lists the
+`ShipmentApiFactory::make()`. `EcommerceApiFactory::make()` builds the e-commerce client for a connected shop. The SDK has no factory for the private Core API client and the Order API client. [UPGRADE.md](UPGRADE.md) lists the
 differences with the openapi-generator clients of v11.
 
 ## Legacy services

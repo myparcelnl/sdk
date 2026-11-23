@@ -681,7 +681,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
     /**
      * Run a whole connect flow that starts with this command endpoint.
      *
-     * @param \GuzzleHttp\Psr7\Response|\Throwable ...$answers What /connect/token answers.
+     * @param \MyParcelNL\Sdk\Test\Bootstrap\Http\Response|\Throwable ...$answers What /connect/token answers.
      */
     private function connectWithCommandEndpoint(?string $commandEndpoint, ...$answers): ConnectState
     {

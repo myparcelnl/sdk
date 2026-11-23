@@ -6,11 +6,11 @@ namespace MyParcelNL\Sdk\Services\Connect;
 
 use Firebase\JWT\JWK;
 use Firebase\JWT\Key;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\ClientInterface;
 use MyParcelNL\Sdk\Exception\CommandCheckUnavailableException;
 use MyParcelNL\Sdk\Model\Connect\ConnectConfig;
 use MyParcelNL\Sdk\Model\Connect\JwksCache;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
 /**
@@ -48,21 +48,21 @@ final class JwksProvider
     private $storage;
 
     /**
-     * @var \GuzzleHttp\ClientInterface
+     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
      */
     private $http;
 
     /**
      * @param ConnectConfig        $config  The same config as ConnectService: it picks the host.
      * @param JwksStorageInterface $storage Your own implementation. See {@see JwksStorageInterface}.
-     * @param ClientInterface|null $http    The HTTP client the fetch goes out on. Pass one to set a
-     *                                      proxy or a CA bundle.
+     * @param HttpClientInterface|null $http The HTTP client the fetch goes out on. Pass one to set a
+     *                                       proxy or a CA bundle.
      */
-    public function __construct(ConnectConfig $config, JwksStorageInterface $storage, ?ClientInterface $http = null)
+    public function __construct(ConnectConfig $config, JwksStorageInterface $storage, ?HttpClientInterface $http = null)
     {
         $this->config  = $config;
         $this->storage = $storage;
-        $this->http    = $http ?? new GuzzleClient(['timeout' => self::HTTP_TIMEOUT]);
+        $this->http    = $http ?? HttpClient::create(['timeout' => self::HTTP_TIMEOUT]);
     }
 
     /**
@@ -103,12 +103,13 @@ final class JwksProvider
         $url = $this->config->getHost() . self::JWKS_PATH;
 
         try {
-            // No redirects: the keys come from this one URL and nowhere else.
+            // No redirects: the keys come from this one URL and nowhere else. `getContent()` throws
+            // for a status that is not a success, also for the redirect that is not followed.
             $response = $this->http->request('GET', $url, [
-                'headers'         => ['Accept' => 'application/json'],
-                'allow_redirects' => false,
+                'headers'       => ['Accept' => 'application/json'],
+                'max_redirects' => 0,
             ]);
-            $jwks     = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $jwks     = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (Throwable $exception) {
             throw new CommandCheckUnavailableException(
                 sprintf('Could not fetch the MyParcel keys from %s: %s', $url, $exception->getMessage()),

@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Connect;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException as GuzzleConnectException;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Sdk\Exception\CommandCheckUnavailableException;
 use MyParcelNL\Sdk\Model\Connect\ConnectConfig;
 use MyParcelNL\Sdk\Model\Connect\ConnectPlatform;
 use MyParcelNL\Sdk\Services\Connect\JwksProvider;
+use MyParcelNL\Sdk\Test\Bootstrap\AnswersHttp;
+use MyParcelNL\Sdk\Test\Bootstrap\Http\Response;
 use MyParcelNL\Sdk\Test\Bootstrap\InMemoryJwksStorage;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
+use RuntimeException;
 
 final class JwksProviderTest extends TestCase
 {
+    use AnswersHttp;
+
     /**
      * The test key of MyParcel's test vector for signed commands.
      */
@@ -39,11 +37,6 @@ final class JwksProviderTest extends TestCase
      * @var \MyParcelNL\Sdk\Test\Bootstrap\InMemoryJwksStorage
      */
     private $storage;
-
-    /**
-     * @var array<int, array{request: \Psr\Http\Message\RequestInterface, response: mixed}>
-     */
-    private $history = [];
 
     protected function setUp(): void
     {
@@ -203,7 +196,7 @@ final class JwksProviderTest extends TestCase
     public function provideFailedFetches(): array
     {
         return [
-            'network'       => [new GuzzleConnectException('timed out', new Request('GET', '/'))],
+            'network'       => [new RuntimeException('timed out')],
             '500'           => [new Response(500, [], '{"error":"server_error"}')],
             'not JSON'      => [new Response(200, [], '<html>')],
             'no keys'       => [new Response(200, [], '{"foo":[]}')],
@@ -214,17 +207,14 @@ final class JwksProviderTest extends TestCase
     }
 
     /**
-     * @param \GuzzleHttp\Psr7\Response|\Throwable ...$answers
+     * @param \MyParcelNL\Sdk\Test\Bootstrap\Http\Response|\Throwable ...$answers
      */
     private function provider(...$answers): JwksProvider
     {
-        $handler = HandlerStack::create(new MockHandler($answers));
-        $handler->push(Middleware::history($this->history));
-
         return new JwksProvider(
             (new ConnectConfig(ConnectPlatform::SHOPIFY, 'an encryption key'))->withAcceptance(true),
             $this->storage,
-            new Client(['handler' => $handler])
+            $this->httpAnswering(...$answers)
         );
     }
 

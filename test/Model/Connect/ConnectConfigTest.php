@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Model\Connect;
 
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectStartConfig;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectStartConfigPlatform;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Model\Connect\ConnectConfig;
 use MyParcelNL\Sdk\Model\Connect\ConnectPlatform;
@@ -147,7 +147,7 @@ class ConnectConfigTest extends TestCase
             [],
             array_diff(
                 ConnectPlatform::getAllowableEnumValues(),
-                (new ConnectStartConfig())->getPlatformAllowableValues()
+                array_column(ConnectStartConfigPlatform::cases(), 'value')
             )
         );
     }
@@ -157,13 +157,13 @@ class ConnectConfigTest extends TestCase
         // CSCART and LIGHTSPEED are in the spec, but no PHP plugin targets them.
         $this->expectException(ConnectException::class);
 
-        new ConnectConfig(ConnectStartConfig::PLATFORM_LIGHTSPEED, self::KEY);
+        new ConnectConfig(ConnectStartConfigPlatform::Lightspeed->value, self::KEY);
     }
 
     public function testSaysWhichPlatformsAreAcceptedWhenOneIsWrong(): void
     {
         try {
-            new ConnectConfig(ConnectStartConfig::PLATFORM_LIGHTSPEED, self::KEY);
+            new ConnectConfig(ConnectStartConfigPlatform::Lightspeed->value, self::KEY);
             self::fail('expected a ConnectException');
         } catch (ConnectException $exception) {
             // Every accepted platform is named, so a caller can see what to pass instead.

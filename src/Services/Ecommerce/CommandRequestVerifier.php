@@ -11,11 +11,11 @@ use gapple\StructuredFields\Item;
 use gapple\StructuredFields\Parser;
 use MyParcelNL\Sdk\Crypto\HttpMessageSignature;
 use MyParcelNL\Sdk\Exception\UnauthorizedCommandException;
-use GuzzleHttp\ClientInterface;
 use MyParcelNL\Sdk\Services\Connect\ConnectService;
 use MyParcelNL\Sdk\Services\Connect\JwksProvider;
 use MyParcelNL\Sdk\Services\Connect\JwksStorageInterface;
 use RuntimeException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Proves that a request to your commandEndpoint comes from MyParcel and is meant for this shop.
@@ -78,10 +78,10 @@ final class CommandRequestVerifier
      * @param ConnectService       $connect     Holds the stored connection id and command endpoint,
      *                                          and the config that names the host the keys come from.
      * @param JwksStorageInterface $jwksStorage Your own implementation. See {@see JwksStorageInterface}.
-     * @param ClientInterface|null $http        The HTTP client the key fetch goes out on. Pass one to
+     * @param HttpClientInterface|null $http    The HTTP client the key fetch goes out on. Pass one to
      *                                          set a proxy or a CA bundle.
      */
-    public function __construct(ConnectService $connect, JwksStorageInterface $jwksStorage, ?ClientInterface $http = null)
+    public function __construct(ConnectService $connect, JwksStorageInterface $jwksStorage, ?HttpClientInterface $http = null)
     {
         $this->connect = $connect;
         $this->keys    = new JwksProvider($connect->getConfig(), $jwksStorage, $http);

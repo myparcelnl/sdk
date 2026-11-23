@@ -50,20 +50,6 @@ services:
       traefik.http.services.connect-poc.loadbalancer.server.port: '80'
     profiles: [poc]
 
-  # Generates the legacy e-commerce client. Jane generates the other clients.
-  # @todo INT-2034: remove this service when the e-commerce client runs on Jane.
-  generate-api:
-    image: openapitools/openapi-generator-cli:v7.26.0
-    environment:
-      - JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=1
-    volumes:
-      - type: bind
-        source: ./
-        target: /local
-    command: >
-      batch /local/openapi/ecommerce.yaml --includes-base-dir=/local/openapi --root-dir=/local --threads=1
-    profiles: [openapi]
-
 networks:
   traefik: # The traefik from myparcel-core, started separately.
     external: true
