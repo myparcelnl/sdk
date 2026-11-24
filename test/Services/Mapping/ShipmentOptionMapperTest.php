@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Mapping;
 
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2;
 use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 use MyParcelNL\Sdk\Test\Bootstrap\TestCase;
 
@@ -39,5 +41,48 @@ final class ShipmentOptionMapperTest extends TestCase
             'unknown option'     => ['unknown_option', null],
             'empty name'         => ['', null],
         ];
+    }
+
+    /**
+     * @dataProvider provideTestV1NameFromV2PropertyData
+     *
+     * @param  string      $property
+     * @param  null|string $expected
+     *
+     * @return void
+     */
+    public function testV1NameFromV2Property(string $property, ?string $expected): void
+    {
+        $this->assertSame($expected, (new ShipmentOptionMapper())->v1NameFromV2Property($property));
+    }
+
+    /**
+     * @return array<string, array{string, null|string}>
+     */
+    public function provideTestV1NameFromV2PropertyData(): array
+    {
+        return [
+            'v2 property'     => ['requiresSignature', 'signature'],
+            'snake_case name' => ['requires_signature', 'signature'],
+            'shared name'     => ['sameDayDelivery', 'same_day_delivery'],
+            'returns option'  => ['printReturnLabelAtDropOff', 'printerless_return'],
+            'tracked'         => ['tracked', 'tracked'],
+            'unknown option'  => ['unknownOption', null],
+            'empty name'      => ['', null],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testEveryCapabilitiesResponseOptionHasAV1Name(): void
+    {
+        $mapper = new ShipmentOptionMapper();
+
+        foreach ([new RefCapabilitiesResponseOptionsOptionsV2(), new RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2()] as $options) {
+            foreach (array_keys($options->definedProperties()) as $property) {
+                $this->assertNotNull($mapper->v1NameFromV2Property($property), get_class($options) . "::$property");
+            }
+        }
     }
 }

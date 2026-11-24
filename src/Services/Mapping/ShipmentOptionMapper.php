@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Mapping;
 
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2Options;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentShipmentOptionsReturnsOptions;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * Maps shipment option names to the properties of the capabilities v2 options model, such as
- * requiresSignature.
+ * Maps option names to the properties of the capabilities v2 options model, such as `requiresSignature`,
+ * and back to the v1 option names of the shipments endpoint.
  *
  *     $mapper = new ShipmentOptionMapper();
- *     $mapper->v2PropertyFromName('signature'); // 'requiresSignature'
- *     $mapper->v2PropertyFromName('tracked');   // null
+ *     $mapper->v2PropertyFromName('signature');           // 'requiresSignature'
+ *     $mapper->v2PropertyFromName('tracked');             // null
+ *     $mapper->v1NameFromV2Property('requiresSignature'); // 'signature'
  *
- * Options have no numeric IDs. This mapper only covers names accepted by
+ * Options have no numeric IDs. `v2PropertyFromName()` only covers names accepted by
  * `CapabilitiesPostCapabilitiesRequestV2Options`: a name without a property, such as `tracked`, gives
  * null, so a caller can check option names before it fills the options of a capabilities request.
  *
@@ -57,6 +60,11 @@ final class ShipmentOptionMapper
     private static ?array $v2Properties = null;
 
     /**
+     * @var null|array<string, string>
+     */
+    private static ?array $v1Names = null;
+
+    /**
      * Return the v2 property for a legacy option name, a v2 JSON name or a snake_case name.
      * For example, signature, requiresSignature and requires_signature all resolve to requiresSignature.
      * Unknown and unsupported names return null.
@@ -88,6 +96,37 @@ final class ShipmentOptionMapper
         }
 
         return null;
+    }
+
+    /**
+     * Get the v1 option name of the shipments endpoint for an option of a capabilities v2 response, such as
+     * `signature` for `requiresSignature` or `requires_signature`. Returns null when the endpoint has none.
+     *
+     * @param  string $property The v2 property of the option.
+     *
+     * @return null|string
+     */
+    public function v1NameFromV2Property(string $property): ?string
+    {
+        return self::v1Names()[$this->v2PropertyFromName($property) ?? $property] ?? null;
+    }
+
+    /**
+     * Return the v1 option names of the shipment options and the returns options, by v2 property and by
+     * PHP property of the shipment options.
+     *
+     * @return array<string, string>
+     */
+    private static function v1Names(): array
+    {
+        if (null === self::$v1Names) {
+            $v1Names = (new RefShipmentShipmentOptions())->definedProperties()
+                + (new RefShipmentShipmentOptionsReturnsOptions())->definedProperties();
+
+            self::$v1Names = array_intersect(array_flip(self::LEGACY_TO_V2_PROPERTIES), $v1Names) + $v1Names;
+        }
+
+        return self::$v1Names;
     }
 
     /**
