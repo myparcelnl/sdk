@@ -295,6 +295,8 @@ Shipment option names are handled by `Services\Mapping\ShipmentOptionMapper`. It
 `v2PropertyFromName()` method returns the property of the generated capabilities v2 options model,
 or `null`. For example, `signature`, `requires_signature` and `requiresSignature` all map to
 `requiresSignature`.
+`v1NameFromV2Property()` maps the other way, to the v1 option name of the shipments endpoint:
+`requiresSignature` gives `signature`. It returns `null` when the shipments endpoint has no such option.
 
 ## Capabilities
 
@@ -335,6 +337,24 @@ result belong together. `fromShipment()` builds the request from the recipient c
 shipment. To translate an option name of the SDK, such as `signature`, use
 `ShipmentOptionMapper::v2PropertyFromName()`. It returns `null` for an option that a capabilities
 request cannot send, such as `tracked`.
+
+### Capabilities that the shipments endpoint does not have
+
+The capabilities API can return a value that this SDK version cannot send to the shipments endpoint,
+such as a new carrier. A shipment with that value fails when the request goes out.
+`SupportedCapabilitiesFilter::filter()` removes these carriers, delivery types, package types and
+options from a capabilities or contract definitions response, and returns copies. The services do not
+call it, so their responses stay complete.
+
+```php
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
+
+$results = SupportedCapabilitiesFilter::filter($response->results);
+```
+
+To check one value, use `isCarrierSupported()`, `isDeliveryTypeSupported()`,
+`isPackageTypeSupported()` or `isOptionSupported()`. They take the generated enum or the string that
+the API sent.
 
 ## Generated API clients
 

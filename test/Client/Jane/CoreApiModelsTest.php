@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Test\Client\Jane;
 
 use InvalidArgumentException;
+use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\RefShipmentCustomsDeclaration;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentDefsShipment;
 use MyParcelNL\Sdk\Client\Generated\Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem;
@@ -54,6 +55,20 @@ final class CoreApiModelsTest extends TestCase
         self::assertNull($shipment->shippedItems);
         self::assertArrayHasKey('shipped_items', CoreApiModels::toArray($shipment));
         self::assertNull(CoreApiModels::toArray($shipment)['shipped_items']);
+    }
+
+    public function testToArrayKeepsAnUnknownCarrierAndAnUnknownValueInAList(): void
+    {
+        $capability = $this->serializer()->denormalize(
+            ['carrier' => 'FOO_CARRIER', 'deliveryTypes' => ['STANDARD_DELIVERY', 'FOO_DELIVERY']],
+            RefCapabilitiesResponseCapabilityV2::class,
+            'json'
+        );
+
+        $array = CoreApiModels::toArray($capability);
+
+        self::assertSame('FOO_CARRIER', $array['carrier']);
+        self::assertSame(['STANDARD_DELIVERY', 'FOO_DELIVERY'], $array['deliveryTypes']);
     }
 
     public function testToModelTurnsAnArrayWithApiNamesIntoTheModel(): void
