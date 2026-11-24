@@ -106,8 +106,7 @@ Jane generates the following APIs:
 
 The configuration is in these files:
 
-- `.jane-openapi`: the Jane `EcommerceApi`.
-- `.jane-openapi-core`: the Jane `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi`.
+- `.jane-openapi`: all Jane clients.
 - `openapi/ecommerce.yaml`, `openapi/common.yaml`, `openapi/commonProperties.yaml` and `openapi/templates/`: the legacy e-commerce client.
 
 ### Regenerating Code
