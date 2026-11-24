@@ -150,6 +150,8 @@ Use `forDeliveryType()` or `forPackageType()` for the other categories. Conversi
 Shipment option names are handled by `Services\Mapping\ShipmentOptionMapper`. Its
 `v2PropertyFromName()` method returns the generated capabilities v2 model property, or `null`.
 For example, `signature` and `requiresSignature` both map to `requires_signature`.
+`v1NameFromV2Property()` maps the other way, to the v1 option name of the shipments endpoint:
+`requires_signature` gives `signature`. It returns `null` when the shipments endpoint has no such option.
 
 ## Unsupported capabilities options
 

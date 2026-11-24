@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Mapping;
 
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptionsReturnsOptions;
 
 /**
- * Maps shipment option names to properties of the capabilities v2 request model.
+ * Maps option names to properties of the capabilities v2 request model, and back to the v1 option names
+ * of the shipments endpoint.
  *
  *     $mapper = new ShipmentOptionMapper();
- *     $mapper->v2PropertyFromName('signature'); // 'requires_signature'
- *     $mapper->v2PropertyFromName('tracked');   // null
+ *     $mapper->v2PropertyFromName('signature');                // 'requires_signature'
+ *     $mapper->v2PropertyFromName('tracked');                  // null
+ *     $mapper->v1NameFromV2Property('requires_signature');     // 'signature'
  *
- * Options have no numeric IDs. This mapper only covers names accepted by CapabilitiesOptionsV2.
+ * Options have no numeric IDs. `v2PropertyFromName()` only covers names accepted by `CapabilitiesOptionsV2`.
  * Use CapabilitiesRequest::getUnsupportedOptions() to check a request before sending it.
  *
  * @see \MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest::getUnsupportedOptions()
@@ -77,6 +82,26 @@ final class ShipmentOptionMapper
         $property   = array_search($setterName, array_map('strtolower', $setters), true);
 
         return false === $property ? null : $property;
+    }
+
+    /**
+     * Get the v1 option name of the shipments endpoint for an option of a capabilities v2 response, such as
+     * `signature` for `requires_signature` or `requiresSignature`. Returns null when the endpoint has none.
+     *
+     * @param  string $property The generated PHP property or the v2 JSON name of the option.
+     *
+     * @return null|string
+     */
+    public function v1NameFromV2Property(string $property): ?string
+    {
+        // The contract definitions response options model has the same attribute map.
+        $property = array_search($property, RefCapabilitiesResponseOptionsOptionsV2::attributeMap(), true) ?: $property;
+        $name     = array_search($property, self::LEGACY_TO_V2_PROPERTIES, true) ?: $property;
+
+        return isset(RefShipmentShipmentOptions::openAPITypes()[$name])
+            || isset(RefShipmentShipmentOptionsReturnsOptions::openAPITypes()[$name])
+            ? $name
+            : null;
     }
 
     /**
