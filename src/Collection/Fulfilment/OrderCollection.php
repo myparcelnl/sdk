@@ -165,6 +165,10 @@ class OrderCollection extends Collection
             'large_format'      => $fields['large_format'] ?? 0,
             'return'            => $fields['return'] ?? 0,
             'priority_delivery' => $fields['priority_delivery'] ?? 0,
+            'hide_sender'       => $fields['hide_sender'] ?? 0,
+            'fresh_food'        => $fields['fresh_food'] ?? 0,
+            'frozen'            => $fields['frozen'] ?? 0,
+            'same_day_delivery' => $fields['same_day_delivery'] ?? 0,
             'label_description' => (string) ($fields['label_description'] ?? ''),
         ];
 

@@ -258,11 +258,15 @@ class OrderCollectionTest extends TestCase
     public function testSaveSendsTheValueOfAFlag(): void
     {
         $shipmentOptions = CoreApiModels::toModel([
-            'delivery_type'  => RefTypesDeliveryType::Standard->value,
-            'package_type'   => RefShipmentPackageType::Package->value,
-            'signature'      => 1,
-            'only_recipient' => 0,
-            'insurance'      => ['amount' => 5000, 'currency' => 'EUR'],
+            'delivery_type'     => RefTypesDeliveryType::Standard->value,
+            'package_type'      => RefShipmentPackageType::Package->value,
+            'signature'         => 1,
+            'only_recipient'    => 0,
+            'hide_sender'       => 1,
+            'fresh_food'        => 1,
+            'frozen'            => 1,
+            'same_day_delivery' => 1,
+            'insurance'         => ['amount' => 5000, 'currency' => 'EUR'],
         ], ShipmentOptionsModel::class);
         // `toModel()` turns 1 and 0 into the enum cases. An integrator can also set a plain int, as here.
         $shipmentOptions->collect = 1;
@@ -272,6 +276,10 @@ class OrderCollectionTest extends TestCase
         self::assertSame(1, $options['signature']);
         self::assertSame(0, $options['only_recipient']);
         self::assertSame(1, $options['collect']);
+        self::assertSame(1, $options['hide_sender']);
+        self::assertSame(1, $options['fresh_food']);
+        self::assertSame(1, $options['frozen']);
+        self::assertSame(1, $options['same_day_delivery']);
         self::assertSame(0, $options['age_check']);
         self::assertSame(RefShipmentPackageType::Package->value, $options['package_type']);
         self::assertSame(['amount' => 5000, 'currency' => 'EUR'], $options['insurance']);
