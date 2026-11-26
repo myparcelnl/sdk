@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.3.3](https://github.com/myparcelnl/sdk/compare/v11.3.2...v11.3.3) (2026-11-26)
+
+### :bug: Bug Fixes
+
+* **capabilities:** fix the request body and option names of get() ([#722](https://github.com/myparcelnl/sdk/issues/722)) ([03e7967](https://github.com/myparcelnl/sdk/commit/03e79676c47c70705e5c6dc76f735298b7272c3d)), closes [#711](https://github.com/myparcelnl/sdk/issues/711) [#711](https://github.com/myparcelnl/sdk/issues/711)
+
 ## [11.3.2](https://github.com/myparcelnl/sdk/compare/v11.3.1...v11.3.2) (2026-11-17)
 
 ## [11.3.1](https://github.com/myparcelnl/sdk/compare/v11.3.0...v11.3.1) (2026-11-12)
