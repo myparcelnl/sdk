@@ -129,7 +129,7 @@ orders are pushed.
 Connect covers the order push, `POST /webhook/orders`, and the product push,
 `POST /webhook/products`. Every other service in this SDK still takes an API key.
 
-See [PHP SDK v11] on the developer portal for how to use it. `dev/connect-poc` in this repository is
+See [MyParcel Connect in the PHP SDK v12 guide] on the developer portal for how to use it. `dev/connect-poc` in this repository is
 a page that runs the whole flow.
 
 ### Pushing orders
@@ -423,7 +423,7 @@ developers directly on [Slack].
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to this repository.
 
 [Slack]: https://join.slack.com/t/myparcel-dev/shared_invite/enQtNDkyNTg3NzA1MjM4LTM0Y2IzNmZlY2NkOWFlNTIyODY5YjFmNGQyYzZjYmQzMzliNDBjYzBkOGMwYzA0ZDYzNmM1NzAzNDY1ZjEzOTM
-[PHP SDK v11]: https://developer.myparcel.com/guides/php-sdk-v11.html
+[MyParcel Connect in the PHP SDK v12 guide]: https://developer.myparcel.com/guides/php-sdk-v12.html#myparcel-connect
 [Receiving commands]: https://developer.myparcel.com/guides/php-sdk-v12.html#receiving-commands
 [RFC 9421]: https://www.rfc-editor.org/rfc/rfc9421
 [RFC 9530]: https://www.rfc-editor.org/rfc/rfc9530
