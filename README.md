@@ -168,6 +168,20 @@ $request->getUnsupportedOptions(); // ['tracked']
 This check validates option names accepted by the request model. It does not validate option
 values or determine which options a carrier offers.
 
+## Storing a response
+
+`jsonSerialize()` throws on an enum value that this SDK version does not know, such as a new carrier
+in a capabilities response. To store a response, for example in a cache, use
+`CoreApiModels::toArray()`. It keeps such a value as it is and gives the fields with their API names.
+
+```php
+use MyParcelNL\Sdk\Client\CoreApiModels;
+
+$cached = array_map([CoreApiModels::class, 'toArray'], $service->getContractDefinitions());
+```
+
+A request with an unknown enum value still throws.
+
 ## Legacy services
 
 The following are still available but will be replaced in a future release:
