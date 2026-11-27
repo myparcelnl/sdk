@@ -26,9 +26,11 @@ class Order implements AdditionalPropertiesInterface
      */
     public OrderStatus|string $status;
     /**
-     * @var OrderBillingDetails
+     * Billing details of the order.
+     *
+     * @var BillingDetails
      */
-    public OrderBillingDetails $billingDetails;
+    public BillingDetails $billingDetails;
     /**
      * The customer reference of the order.
      *

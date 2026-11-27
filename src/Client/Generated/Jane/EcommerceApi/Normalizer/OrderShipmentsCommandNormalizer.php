@@ -73,7 +73,7 @@ class OrderShipmentsCommandNormalizer implements DenormalizerInterface, Normaliz
         if (null !== ($data->connectionId ?? null)) {
             $dataArray['connectionId'] = $data->connectionId;
         }
-        if (array_key_exists('type', get_object_vars($data))) {
+        if (null !== ($data->type ?? null)) {
             $dataArray['type'] = $data->type;
         }
         if (null !== ($data->order ?? null)) {

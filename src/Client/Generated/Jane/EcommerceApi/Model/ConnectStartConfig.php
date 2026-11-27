@@ -7,9 +7,9 @@ class ConnectStartConfig
     /**
      * Defaults to the platform of this deployment.
      *
-     * @var string|null
+     * @var ConnectStartConfigPlatform|string
      */
-    public ?string $platform;
+    public ConnectStartConfigPlatform|string $platform;
     /**
      * Display name of the shop.
      *
@@ -25,9 +25,9 @@ class ConnectStartConfig
     /**
      * Semver version of the plugin. Defaults to 0.0.1.
      *
-     * @var string|null
+     * @var string
      */
-    public ?string $version;
+    public string $version = '0.0.1';
     /**
      * Optional absolute HTTPS URL that receives every MyParcel command for this connection. A reconnect replaces it; without it the plugin gets no commands. Must be canonical (lowercase host, no default port, path starts with /, no user name or password); other forms are rejected.
      *

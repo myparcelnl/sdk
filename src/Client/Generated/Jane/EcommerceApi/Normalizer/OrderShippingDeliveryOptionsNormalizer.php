@@ -38,7 +38,7 @@ class OrderShippingDeliveryOptionsNormalizer implements DenormalizerInterface, N
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('notifyOnDelivery', $data)) {
-            $object->notifyOnDelivery = $data['notifyOnDelivery'];
+            $object->notifyOnDelivery = $this->denormalizer->denormalize($data['notifyOnDelivery'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderShippingDeliveryOptionsNotifyOnDelivery::class, 'json', $context);
             unset($data['notifyOnDelivery']);
         }
         if (\array_key_exists('preferredDate', $data)) {
@@ -55,12 +55,13 @@ class OrderShippingDeliveryOptionsNormalizer implements DenormalizerInterface, N
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('notifyOnDelivery', get_object_vars($data)) && null !== ($data->notifyOnDelivery ?? null)) {
-            $dataArray['notifyOnDelivery'] = $data->notifyOnDelivery;
+        if (array_key_exists('notifyOnDelivery', get_object_vars($data))) {
+            $normalized = $data->notifyOnDelivery === null ? null : $this->normalizer->normalize($data->notifyOnDelivery, 'json', $context);
+            $dataArray['notifyOnDelivery'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
         }
         if (array_key_exists('preferredDate', get_object_vars($data))) {
-            $normalized = $data->preferredDate === null ? null : $this->normalizer->normalize($data->preferredDate, 'json', $context);
-            $dataArray['preferredDate'] = \is_iterable($normalized) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized) : $normalized;
+            $normalized_1 = $data->preferredDate === null ? null : $this->normalizer->normalize($data->preferredDate, 'json', $context);
+            $dataArray['preferredDate'] = \is_iterable($normalized_1) ? new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\JsonObject($normalized_1) : $normalized_1;
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

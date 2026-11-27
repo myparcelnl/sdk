@@ -10,9 +10,9 @@ class OrderShippingDeliveryOptions implements AdditionalPropertiesInterface
     /**
      * Notify sender upon package delivery.
      *
-     * @var mixed
+     * @var OrderShippingDeliveryOptionsNotifyOnDelivery
      */
-    public $notifyOnDelivery;
+    public OrderShippingDeliveryOptionsNotifyOnDelivery $notifyOnDelivery;
     /**
      * This option allows you to set a preferred date for delivery, so a drop off date can be calculated.
      *

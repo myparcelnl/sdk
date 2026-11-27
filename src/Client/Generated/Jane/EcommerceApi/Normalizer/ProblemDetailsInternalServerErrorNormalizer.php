@@ -71,10 +71,10 @@ class ProblemDetailsInternalServerErrorNormalizer implements DenormalizerInterfa
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if (array_key_exists('type', get_object_vars($data))) {
+        if (null !== ($data->type ?? null)) {
             $dataArray['type'] = $data->type instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerErrorType ? $data->type->value : $data->type;
         }
-        if (array_key_exists('status', get_object_vars($data))) {
+        if (null !== ($data->status ?? null)) {
             $dataArray['status'] = $data->status instanceof \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ProblemDetailsInternalServerErrorStatus ? $data->status->value : $data->status;
         }
         if (null !== ($data->title ?? null)) {

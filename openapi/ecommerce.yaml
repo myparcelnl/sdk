@@ -1,11 +1,10 @@
 '!include': 'common.yaml'
 
 # OpenAPI Generator configuration
-# The e-commerce service spec: the connect endpoints and the webhooks in one document. The copy
-# comes from docs/api/openapi.yaml in mypadev/oauth-connect-library, updated by hand.
-# @todo replace inputSpec once the OFF team decides how the spec is published (public URL or
-# internal repo).
-inputSpec: /local/openapi/specs/oauth-connect.yaml
+# The legacy e-commerce client stays on the spec of 2026-10-30, so it does not change while the SDK
+# moves to the Jane client. The Jane client reads openapi/specs/oauth-connect.yaml.
+# @todo INT-2034: remove this file and openapi/specs/oauth-connect-legacy.yaml with the legacy client.
+inputSpec: /local/openapi/specs/oauth-connect-legacy.yaml
 outputDir: src/Client/Generated/EcommerceApi
 typeMappings:
   # @todo remove when the generator can represent the /webhook/orders 202 oneOf.

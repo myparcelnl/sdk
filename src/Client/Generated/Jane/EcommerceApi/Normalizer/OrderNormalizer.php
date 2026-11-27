@@ -62,7 +62,7 @@ class OrderNormalizer implements DenormalizerInterface, NormalizerInterface, Den
             unset($data['status']);
         }
         if (\array_key_exists('billingDetails', $data)) {
-            $object->billingDetails = $this->denormalizer->denormalize($data['billingDetails'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderBillingDetails::class, 'json', $context);
+            $object->billingDetails = $this->denormalizer->denormalize($data['billingDetails'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\BillingDetails::class, 'json', $context);
             unset($data['billingDetails']);
         }
         if (\array_key_exists('customerReference', $data)) {

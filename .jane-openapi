@@ -30,9 +30,11 @@ return [
             'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\OrderApi',
             'directory' => __DIR__ . '/src/Client/Generated/Jane/OrderApi',
         ],
-        // A local copy of docs/api/openapi.yaml in mypadev/oauth-connect-library, because that spec is
-        // not hosted yet.
+        // A local copy of docs/api/openapi.yaml in mypadev/oauth-connect-library, at commit 643fdc62 of
+        // 2026-11-19, because that spec is not hosted yet.
         // @todo INT-2076: use the hosted spec, and remove openapi/specs/oauth-connect.yaml.
+        // The copy has one local change: a `200` response for `/webhook/orders` and
+        // `/webhook/products`. Keep it when you update the copy. See the `@todo` in the copy.
         __DIR__ . '/openapi/specs/oauth-connect.yaml' => [
             'namespace' => 'MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi',
             'directory' => __DIR__ . '/src/Client/Generated/Jane/EcommerceApi',

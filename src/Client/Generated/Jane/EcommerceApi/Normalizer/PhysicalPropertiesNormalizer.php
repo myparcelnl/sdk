@@ -38,11 +38,11 @@ class PhysicalPropertiesNormalizer implements DenormalizerInterface, NormalizerI
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('height', $data)) {
-            $object->height = $this->denormalizer->denormalize($data['height'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\PhysicalPropertiesHeight::class, 'json', $context);
+            $object->height = $this->denormalizer->denormalize($data['height'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Dimension::class, 'json', $context);
             unset($data['height']);
         }
         if (\array_key_exists('length', $data)) {
-            $object->length = $this->denormalizer->denormalize($data['length'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\PhysicalPropertiesLength::class, 'json', $context);
+            $object->length = $this->denormalizer->denormalize($data['length'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Dimension::class, 'json', $context);
             unset($data['length']);
         }
         if (\array_key_exists('weight', $data)) {
@@ -50,7 +50,7 @@ class PhysicalPropertiesNormalizer implements DenormalizerInterface, NormalizerI
             unset($data['weight']);
         }
         if (\array_key_exists('width', $data)) {
-            $object->width = $this->denormalizer->denormalize($data['width'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\PhysicalPropertiesWidth::class, 'json', $context);
+            $object->width = $this->denormalizer->denormalize($data['width'], \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Dimension::class, 'json', $context);
             unset($data['width']);
         }
         foreach ($data as $key => $value) {
